@@ -111,7 +111,14 @@ export const useStore = create<AppState>()(
         }));
       },
       removeClass: (id) => {
-        set((s) => ({ classes: s.classes.filter((c) => c.id !== id) }));
+        // Kasujemy kaskadowo, zeby nie zostawiac osieroconych odwolan (klucze obce w bazie).
+        set((s) => ({
+          classes: s.classes.filter((c) => c.id !== id),
+          students: s.students.filter((st) => st.classId !== id),
+          lessons: s.lessons.filter((l) => l.classId !== id),
+          recapEvents: s.recapEvents.filter((e) => e.classId !== id),
+          questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
+        }));
       },
 
       addStudent: (student) => {
@@ -125,7 +132,10 @@ export const useStore = create<AppState>()(
         }));
       },
       removeStudent: (id) => {
-        set((s) => ({ students: s.students.filter((st) => st.id !== id) }));
+        set((s) => ({
+          students: s.students.filter((st) => st.id !== id),
+          recapEvents: s.recapEvents.filter((e) => e.studentId !== id),
+        }));
       },
       setActive: (id, active) => {
         set((s) => ({
@@ -147,6 +157,7 @@ export const useStore = create<AppState>()(
         set((s) => ({
           questionSets: s.questionSets.filter((qs) => qs.id !== id),
           questions: s.questions.filter((q) => q.setId !== id),
+          lessons: s.lessons.map((l) => (l.questionSetId === id ? { ...l, questionSetId: undefined } : l)),
         }));
       },
 

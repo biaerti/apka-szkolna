@@ -26,7 +26,22 @@ npm run build
 ## Wdrożenie na Vercel
 
 Projekt to statyczny build Vite. W Vercel: Framework = Vite, build `npm run build`, output `dist`.
-Plik `vercel.json` przekierowuje wszystkie ścieżki na `index.html` (routing po stronie klienta).
+Framework preset w Vercel: **Vite** (nie Next.js). Plik `vercel.json` przekierowuje wszystkie ścieżki na `index.html` (routing po stronie klienta).
+
+## Chmura (Supabase)
+
+Bez zmiennych środowiskowych aplikacja działa lokalnie (localStorage, bez logowania).
+Żeby włączyć synchronizację z Supabase:
+
+1. W panelu Supabase uruchom SQL z `supabase/migrations/0001_init.sql` (SQL Editor).
+2. Authentication -> Users -> dodaj użytkownika (e-mail + hasło). Rejestracji w aplikacji nie ma.
+3. Skopiuj `.env.example` do `.env.local` i wpisz `VITE_SUPABASE_ANON_KEY`
+   (Project Settings -> API -> anon public). W Vercel dodaj obie zmienne w Environment Variables.
+4. Po zalogowaniu: jeśli chmura ma dane, wygrywa chmura. Jeśli jest pusta, aplikacja zapyta,
+   czy wysłać dane z tej przeglądarki.
+
+Każda zmiana w aplikacji jest wysyłana do chmury z opóźnieniem 400 ms. Status widać na dole
+paska bocznego. Offline zmiany czekają i idą po powrocie sieci.
 
 ## Moduły
 

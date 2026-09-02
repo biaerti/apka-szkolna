@@ -1,10 +1,102 @@
 import { useRef, useState } from 'react';
 import { useStore } from '../data/store';
 import { downloadBackup, importBackupFromFile } from '../data/backup';
+import { isSupabaseConfigured } from '../data/supabase';
+import { useAuth } from '../data/auth';
+import { pullAllFromRemote, pushAllToRemote, useSyncStatus } from '../data/remote/sync';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+
+function formatTime(iso?: string): string {
+  if (!iso) return '';
+  return new Date(iso).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+}
+
+function CloudSection() {
+  const { session } = useAuth();
+  const status = useSyncStatus();
+  const [pullOpen, setPullOpen] = useState(false);
+  const [pushOpen, setPushOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  let statusText: string;
+  if (status.state === 'syncing') {
+    statusText = 'Zapisywanie...';
+  } else if (status.state === 'offline') {
+    statusText = `Offline, zmiany czekają (${status.pending})`;
+  } else if (status.state === 'error') {
+    statusText = `Błąd - ${status.error ?? 'nieznany błąd'}`;
+  } else {
+    statusText = status.lastSyncedAt ? `Zapisano ${formatTime(status.lastSyncedAt)}` : 'Gotowa';
+  }
+
+  async function handlePull() {
+    setPullOpen(false);
+    setBusy(true);
+    setActionError(null);
+    try {
+      await pullAllFromRemote();
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Nie udało się pobrać danych z chmury.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handlePush() {
+    setPushOpen(false);
+    setBusy(true);
+    setActionError(null);
+    try {
+      await pushAllToRemote();
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Nie udało się wysłać danych do chmury.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
+      <h2 className="mb-1 text-base font-semibold text-gray-900">Chmura</h2>
+      <p className="mb-1 text-sm text-gray-500">
+        Konto: {session?.user?.email ?? '-'}. Status: {statusText}.
+      </p>
+      <p className="mb-4 text-sm text-gray-500">
+        Dane synchronizują się automatycznie. Poniższe przyciski wymuszają pełne pobranie lub wysłanie danych.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Button variant="secondary" disabled={busy} onClick={() => setPullOpen(true)}>
+          Pobierz ponownie z chmury
+        </Button>
+        <Button variant="secondary" disabled={busy} onClick={() => setPushOpen(true)}>
+          Wyślij wszystko do chmury
+        </Button>
+      </div>
+      {actionError && <p className="mt-2 text-sm text-red-600">{actionError}</p>}
+
+      <ConfirmDialog
+        open={pullOpen}
+        title="Pobierz z chmury"
+        message="Czy na pewno pobrać dane z chmury? Nadpisze to lokalne dane w tej przeglądarce. Tej operacji nie można cofnąć."
+        confirmLabel="Pobierz"
+        onCancel={() => setPullOpen(false)}
+        onConfirm={handlePull}
+      />
+      <ConfirmDialog
+        open={pushOpen}
+        title="Wyślij do chmury"
+        message="Czy na pewno wysłać wszystkie lokalne dane do chmury? Nadpisze to dane w chmurze danymi z tej przeglądarki."
+        confirmLabel="Wyślij"
+        onCancel={() => setPushOpen(false)}
+        onConfirm={handlePush}
+      />
+    </section>
+  );
+}
 
 export function SettingsPage() {
   const settings = useStore((s) => s.settings);
@@ -85,6 +177,8 @@ export function SettingsPage() {
           </Button>
         </div>
       </section>
+
+      {isSupabaseConfigured() && <CloudSection />}
 
       <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
         <h2 className="mb-1 text-base font-semibold text-gray-900">Kopia zapasowa</h2>
