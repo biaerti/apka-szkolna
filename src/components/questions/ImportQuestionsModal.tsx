@@ -39,7 +39,7 @@ export function ImportQuestionsModal({
               setText('');
             }}
           >
-            Zatwierdz ({parsed.length})
+            Zatwierdź ({parsed.length})
           </Button>
         </>
       }
@@ -47,13 +47,13 @@ export function ImportQuestionsModal({
       <div className="space-y-3">
         <div>
           <label className="mb-1.5 block text-sm font-medium text-gray-700">
-            Wklej pytania (jedno na linie, opcjonalnie "pytanie | odpowiedz")
+            Wklej pytania (jedno na linię, opcjonalnie "pytanie | odpowiedź")
           </label>
           <Textarea rows={8} value={text} onChange={(e) => setText(e.target.value)} autoFocus />
         </div>
         {parsed.length > 0 && (
           <div>
-            <p className="mb-1.5 text-sm font-medium text-gray-700">Podglad ({parsed.length})</p>
+            <p className="mb-1.5 text-sm font-medium text-gray-700">Podgląd ({parsed.length})</p>
             <div className="max-h-56 overflow-y-auto rounded-md border border-gray-200">
               <table className="min-w-full text-sm">
                 <tbody className="divide-y divide-gray-100">

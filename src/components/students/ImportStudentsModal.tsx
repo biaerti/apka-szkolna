@@ -25,7 +25,7 @@ export function ImportStudentsModal({
     <Modal
       open={open}
       onClose={handleClose}
-      title="Importuj uczniow z tekstu"
+      title="Importuj uczniów z tekstu"
       widthClassName="max-w-2xl"
       footer={
         <>
@@ -39,7 +39,7 @@ export function ImportStudentsModal({
               setText('');
             }}
           >
-            Zatwierdz ({parsed.length})
+            Zatwierdź ({parsed.length})
           </Button>
         </>
       }
@@ -47,13 +47,13 @@ export function ImportStudentsModal({
       <div className="space-y-3">
         <div>
           <label className="mb-1.5 block text-sm font-medium text-gray-700">
-            Wklej liste (jedna osoba na linie, np. "1. Nazwisko Imie - uwaga")
+            Wklej listę (jedna osoba na linię, np. "1. Nazwisko Imię - uwaga")
           </label>
           <Textarea rows={8} value={text} onChange={(e) => setText(e.target.value)} autoFocus />
         </div>
         {parsed.length > 0 && (
           <div>
-            <p className="mb-1.5 text-sm font-medium text-gray-700">Podglad ({parsed.length})</p>
+            <p className="mb-1.5 text-sm font-medium text-gray-700">Podgląd ({parsed.length})</p>
             <div className="max-h-56 overflow-y-auto rounded-md border border-gray-200">
               <table className="min-w-full text-sm">
                 <tbody className="divide-y divide-gray-100">

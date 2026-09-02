@@ -32,20 +32,20 @@ export function SettingsPage() {
       await importBackupFromFile(pendingFile);
       setPendingFile(null);
     } catch (err) {
-      setImportError(err instanceof Error ? err.message : 'Nie udalo sie zaimportowac pliku.');
+      setImportError(err instanceof Error ? err.message : 'Nie udało się zaimportować pliku.');
       setPendingFile(null);
     }
   }
 
   return (
     <div className="max-w-2xl">
-      <PageHeader title="Ustawienia" description="Parametry powtorek oraz zarzadzanie danymi aplikacji." />
+      <PageHeader title="Ustawienia" description="Parametry powtórek oraz zarządzanie danymi aplikacji." />
 
       <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">Parametry powtorek</h2>
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Parametry powtórek</h2>
         <div className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Liczba pasow na tydzien</label>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Liczba pasów na tydzień</label>
             <Input
               type="number"
               min={0}
@@ -55,7 +55,7 @@ export function SettingsPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Czas krecenia kola (sekundy)</label>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Czas kręcenia koła (sekundy)</label>
             <Input
               type="number"
               min={1}
@@ -71,7 +71,7 @@ export function SettingsPage() {
               checked={settings.hintGivesMinus}
               onChange={(e) => updateSettings({ hintGivesMinus: e.target.checked })}
             />
-            Podpowiadanie liczy sie jako minus
+            Podpowiadanie liczy się jako minus
           </label>
           <Button
             size="sm"
@@ -88,7 +88,7 @@ export function SettingsPage() {
 
       <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
         <h2 className="mb-1 text-base font-semibold text-gray-900">Kopia zapasowa</h2>
-        <p className="mb-4 text-sm text-gray-500">Eksportuj cala baze danych do pliku JSON lub przywroc z pliku.</p>
+        <p className="mb-4 text-sm text-gray-500">Eksportuj całą bazę danych do pliku JSON lub przywróć z pliku.</p>
         <div className="flex flex-wrap gap-2">
           <Button variant="secondary" onClick={downloadBackup}>
             Eksportuj JSON
@@ -104,17 +104,17 @@ export function SettingsPage() {
       <section className="rounded-lg border border-gray-200 bg-white p-5">
         <h2 className="mb-1 text-base font-semibold text-gray-900">Reset danych</h2>
         <p className="mb-4 text-sm text-gray-500">
-          Usuwa wszystkie dane i przywraca stan poczatkowy (klasa IV A z uczniami oraz puste klasy IV B, IV C, V A).
+          Usuwa wszystkie dane i przywraca stan początkowy (klasa IV A z uczniami oraz puste klasy IV B, IV C, V A).
         </p>
         <Button variant="danger" onClick={() => setResetOpen(true)}>
-          Wyczysc dane i zaladuj seed
+          Wyczyść dane i załaduj seed
         </Button>
       </section>
 
       <ConfirmDialog
         open={!!pendingFile}
         title="Importuj dane"
-        message={`Czy na pewno nadpisac biezace dane zawartoscia pliku "${pendingFile?.name}"? Tej operacji nie mozna cofnac.`}
+        message={`Czy na pewno nadpisać bieżące dane zawartością pliku "${pendingFile?.name}"? Tej operacji nie można cofnąć.`}
         confirmLabel="Nadpisz"
         onCancel={() => setPendingFile(null)}
         onConfirm={confirmImport}
@@ -122,9 +122,9 @@ export function SettingsPage() {
 
       <ConfirmDialog
         open={resetOpen}
-        title="Wyczysc dane"
-        message="Czy na pewno usunac wszystkie dane i zaladowac dane startowe? Tej operacji nie mozna cofnac."
-        confirmLabel="Wyczysc"
+        title="Wyczyść dane"
+        message="Czy na pewno usunąć wszystkie dane i załadować dane startowe? Tej operacji nie można cofnąć."
+        confirmLabel="Wyczyść"
         onCancel={() => setResetOpen(false)}
         onConfirm={() => {
           resetToSeed();

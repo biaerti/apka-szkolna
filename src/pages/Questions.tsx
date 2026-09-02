@@ -43,7 +43,7 @@ export function Questions() {
     <div>
       <PageHeader
         title="Pytania"
-        description="Zestawy pytan uzywane na powtorkach."
+        description="Zestawy pytań używane na powtórkach."
         actions={
           <Button
             onClick={() => {
@@ -58,7 +58,7 @@ export function Questions() {
       />
 
       {sorted.length === 0 ? (
-        <EmptyState title="Brak zestawow pytan" description="Dodaj pierwszy zestaw, aby zaczac." />
+        <EmptyState title="Brak zestawów pytań" description="Dodaj pierwszy zestaw, aby zacząć." />
       ) : (
         <Table>
           <THead>
@@ -66,7 +66,7 @@ export function Questions() {
               <TH>Nazwa</TH>
               <TH>Temat</TH>
               <TH>Klasy</TH>
-              <TH>Liczba pytan</TH>
+              <TH>Liczba pytań</TH>
               <TH className="text-right">Akcje</TH>
             </TR>
           </THead>
@@ -91,7 +91,7 @@ export function Questions() {
                       Edytuj
                     </Button>
                     <Button size="sm" variant="danger" onClick={() => setToDelete({ id: qs.id, name: qs.name })}>
-                      Usun
+                      Usuń
                     </Button>
                   </div>
                 </TD>
@@ -104,7 +104,7 @@ export function Questions() {
       <Modal
         open={adding}
         onClose={() => setAdding(false)}
-        title="Nowy zestaw pytan"
+        title="Nowy zestaw pytań"
         footer={
           <>
             <Button variant="secondary" onClick={() => setAdding(false)}>
@@ -178,8 +178,8 @@ export function Questions() {
 
       <ConfirmDialog
         open={!!toDelete}
-        title="Usun zestaw pytan"
-        message={`Czy na pewno usunac zestaw "${toDelete?.name}" wraz ze wszystkimi pytaniami?`}
+        title="Usuń zestaw pytań"
+        message={`Czy na pewno usunąć zestaw "${toDelete?.name}" wraz ze wszystkimi pytaniami?`}
         onCancel={() => setToDelete(null)}
         onConfirm={() => {
           if (toDelete) removeQuestionSet(toDelete.id);

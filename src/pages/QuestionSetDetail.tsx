@@ -33,10 +33,10 @@ export function QuestionSetDetail() {
     return (
       <EmptyState
         title="Nie znaleziono zestawu"
-        description="Ten zestaw pytan mogl zostac usuniety."
+        description="Ten zestaw pytań mógł zostać usunięty."
         action={
           <Button variant="secondary" onClick={() => navigate('/pytania')}>
-            Wroc do listy zestawow
+            Wróć do listy zestawów
           </Button>
         }
       />
@@ -96,7 +96,7 @@ export function QuestionSetDetail() {
 
       <div className="rounded-lg border border-gray-200 bg-white">
         {setQuestions.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm text-gray-500">Brak pytan w tym zestawie.</div>
+          <div className="px-4 py-8 text-center text-sm text-gray-500">Brak pytań w tym zestawie.</div>
         ) : (
           setQuestions.map((q, idx) => (
             <QuestionRow
@@ -116,7 +116,7 @@ export function QuestionSetDetail() {
           <Input
             value={newText}
             onChange={(e) => setNewText(e.target.value)}
-            placeholder="Nowe pytanie - Enter, aby dodac"
+            placeholder="Nowe pytanie - Enter, aby dodać"
             className="flex-1"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {

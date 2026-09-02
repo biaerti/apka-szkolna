@@ -28,25 +28,25 @@ export function QuestionRow({
         <Input
           value={question.text}
           onChange={(e) => onChangeText(e.target.value)}
-          placeholder="Tresc pytania"
+          placeholder="Treść pytania"
           className="flex-1"
         />
         <Input
           value={question.answer ?? ''}
           onChange={(e) => onChangeAnswer(e.target.value)}
-          placeholder="Odpowiedz (opcjonalnie)"
+          placeholder="Odpowiedź (opcjonalnie)"
           className="flex-1"
         />
       </div>
       <div className="flex shrink-0 items-center gap-1">
-        <Button size="sm" variant="ghost" disabled={index === 0} onClick={onMoveUp} title="Przesun w gore">
-          Gora
+        <Button size="sm" variant="ghost" disabled={index === 0} onClick={onMoveUp} title="Przesuń w górę">
+          Góra
         </Button>
-        <Button size="sm" variant="ghost" disabled={index === total - 1} onClick={onMoveDown} title="Przesun w dol">
-          Dol
+        <Button size="sm" variant="ghost" disabled={index === total - 1} onClick={onMoveDown} title="Przesuń w dół">
+          Dół
         </Button>
         <Button size="sm" variant="danger" onClick={onRemove}>
-          Usun
+          Usuń
         </Button>
       </div>
     </div>

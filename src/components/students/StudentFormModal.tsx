@@ -82,7 +82,7 @@ export function StudentFormModal({
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Imie</label>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Imię</label>
             <Input value={value.firstName} onChange={(e) => setValue((v) => ({ ...v, firstName: e.target.value }))} />
           </div>
         </div>

@@ -38,7 +38,7 @@ export function Classes() {
     <div>
       <PageHeader
         title="Klasy"
-        description="Lista klas i liczba aktywnych uczniow."
+        description="Lista klas i liczba aktywnych uczniów."
         actions={
           <Button
             onClick={() => {
@@ -46,13 +46,13 @@ export function Classes() {
               setAdding(true);
             }}
           >
-            Dodaj klase
+            Dodaj klasę
           </Button>
         }
       />
 
       {sorted.length === 0 ? (
-        <EmptyState title="Brak klas" description="Dodaj pierwsza klase, aby zaczac." />
+        <EmptyState title="Brak klas" description="Dodaj pierwszą klasę, aby zacząć." />
       ) : (
         <Table>
           <THead>
@@ -80,10 +80,10 @@ export function Classes() {
                       size="sm"
                       variant="danger"
                       disabled={!canDelete(c.id)}
-                      title={!canDelete(c.id) ? 'Klasa ma uczniow lub lekcje - nie mozna usunac' : undefined}
+                      title={!canDelete(c.id) ? 'Klasa ma uczniów lub lekcje - nie można usunąć' : undefined}
                       onClick={() => setToDelete({ id: c.id, name: c.name })}
                     >
-                      Usun
+                      Usuń
                     </Button>
                   </div>
                 </TD>
@@ -132,7 +132,7 @@ export function Classes() {
       <Modal
         open={!!editing}
         onClose={() => setEditing(null)}
-        title="Edytuj klase"
+        title="Edytuj klasę"
         footer={
           <>
             <Button variant="secondary" onClick={() => setEditing(null)}>
@@ -160,8 +160,8 @@ export function Classes() {
 
       <ConfirmDialog
         open={!!toDelete}
-        title="Usun klase"
-        message={`Czy na pewno usunac klase "${toDelete?.name}"? Tej operacji nie mozna cofnac.`}
+        title="Usuń klasę"
+        message={`Czy na pewno usunąć klasę "${toDelete?.name}"? Tej operacji nie można cofnąć.`}
         onCancel={() => setToDelete(null)}
         onConfirm={() => {
           if (toDelete) removeClass(toDelete.id);

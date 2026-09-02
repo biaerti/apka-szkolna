@@ -41,10 +41,10 @@ export function ClassDetail() {
     return (
       <EmptyState
         title="Nie znaleziono klasy"
-        description="Ta klasa mogla zostac usunieta."
+        description="Ta klasa mogła zostać usunięta."
         action={
           <Button variant="secondary" onClick={() => navigate('/klasy')}>
-            Wroc do listy klas
+            Wróć do listy klas
           </Button>
         }
       />
@@ -110,18 +110,18 @@ export function ClassDetail() {
           checked={showInactive}
           onChange={(e) => setShowInactive(e.target.checked)}
         />
-        Pokaz nieaktywnych
+        Pokaż nieaktywnych
       </label>
 
       {classStudents.length === 0 ? (
-        <EmptyState title="Brak uczniow" description="Dodaj uczniow recznie lub zaimportuj liste z tekstu." />
+        <EmptyState title="Brak uczniów" description="Dodaj uczniów ręcznie lub zaimportuj listę z tekstu." />
       ) : (
         <Table>
           <THead>
             <TR>
               <TH>Nr</TH>
               <TH>Nazwisko</TH>
-              <TH>Imie</TH>
+              <TH>Imię</TH>
               <TH>Uwaga</TH>
               <TH>Aktywny</TH>
               <TH className="text-right">Akcje</TH>
@@ -151,7 +151,7 @@ export function ClassDetail() {
                       {s.active ? 'Dezaktywuj' : 'Aktywuj'}
                     </Button>
                     <Button size="sm" variant="danger" onClick={() => setToDelete(s)}>
-                      Usun
+                      Usuń
                     </Button>
                   </div>
                 </TD>
@@ -195,8 +195,8 @@ export function ClassDetail() {
 
       <ConfirmDialog
         open={!!toDelete}
-        title="Usun ucznia"
-        message={`Czy na pewno trwale usunac ucznia "${toDelete?.lastName} ${toDelete?.firstName}"? Historia recapow zostanie zachowana, ale ucznia nie da sie odzyskac.`}
+        title="Usuń ucznia"
+        message={`Czy na pewno trwale usunąć ucznia "${toDelete?.lastName} ${toDelete?.firstName}"? Historia powtórek zostanie zachowana, ale ucznia nie da się odzyskać.`}
         onCancel={() => setToDelete(null)}
         onConfirm={() => {
           if (toDelete) removeStudent(toDelete.id);

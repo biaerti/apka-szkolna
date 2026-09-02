@@ -16,7 +16,7 @@ export function ConfirmDialog({
   open,
   title,
   message,
-  confirmLabel = 'Potwierdz',
+  confirmLabel = 'Potwierdź',
   cancelLabel = 'Anuluj',
   danger = true,
   onConfirm,
