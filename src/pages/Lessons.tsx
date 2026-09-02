@@ -11,6 +11,7 @@ import { NewLessonModal, type NewLessonData } from '../components/lessons/NewLes
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
 import { duplicateSlide } from '../components/lessons/slideDefaults';
 import type { Lesson } from '../data/types';
+import { buildRecap13 } from '../data/recap13';
 
 export function Lessons() {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export function Lessons() {
   const updateLesson = useStore((s) => s.updateLesson);
   const removeLesson = useStore((s) => s.removeLesson);
   const reorderLesson = useStore((s) => s.reorderLesson);
+  const addQuestionSet = useStore((s) => s.addQuestionSet);
+  const addQuestion = useStore((s) => s.addQuestion);
 
   const sortedClasses = useMemo(() => [...classes].sort((a, b) => a.order - b.order), [classes]);
   const [activeClassId, setActiveClassId] = useState(sortedClasses[0]?.id ?? '');
@@ -29,6 +32,7 @@ export function Lessons() {
   const [newOpen, setNewOpen] = useState(false);
   const [copyLesson, setCopyLesson] = useState<Lesson | null>(null);
   const [removeTarget, setRemoveTarget] = useState<Lesson | null>(null);
+  const [recapConfirmOpen, setRecapConfirmOpen] = useState(false);
 
   const classLessons = useMemo(
     () => lessons.filter((l) => l.classId === currentClassId).sort((a, b) => a.order - b.order),
@@ -75,6 +79,49 @@ export function Lessons() {
     });
   }
 
+  function handleInsertRecap13() {
+    if (!currentClassId) return;
+    const bundle = buildRecap13(currentClassId);
+
+    // Wstaw zestawy pytan i zapamietaj mapowanie starych id -> nowe id.
+    const setIdMap = new Map<string, string>();
+    for (const set of bundle.questionSets) {
+      const created = addQuestionSet({
+        name: set.name,
+        topic: set.topic,
+        classIds: [currentClassId],
+      });
+      setIdMap.set(set.id, created.id);
+    }
+
+    // Dodaj pytania przypisane do nowych id zestawow (kolejnosc zachowana).
+    for (const q of bundle.questions) {
+      const newSetId = setIdMap.get(q.setId);
+      if (!newSetId) continue;
+      addQuestion({ setId: newSetId, text: q.text, answer: q.answer });
+    }
+
+    // Wstaw lekcje - podmien identyfikatory zestawow pytan w polu lekcji i w slajdach recap.
+    for (const lesson of bundle.lessons) {
+      const mappedQuestionSetId = lesson.questionSetId
+        ? setIdMap.get(lesson.questionSetId)
+        : undefined;
+      const mappedSlides = lesson.slides.map((slide) => {
+        if (slide.kind === 'recap') {
+          const newId = setIdMap.get(slide.questionSetId);
+          if (newId) return { ...slide, questionSetId: newId };
+        }
+        return slide;
+      });
+      addLesson({
+        ...lesson,
+        questionSetId: mappedQuestionSetId,
+        slides: mappedSlides,
+      });
+    }
+    setRecapConfirmOpen(false);
+  }
+
   function handleCopyToClass(lesson: Lesson, targetClassId: string) {
     addLesson({
       classId: targetClassId,
@@ -92,7 +139,12 @@ export function Lessons() {
       <PageHeader
         title="Lekcje"
         actions={
-          <Button onClick={() => setNewOpen(true)}>Nowa lekcja</Button>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => setRecapConfirmOpen(true)}>
+              Wstaw powtórkę klas 1-3
+            </Button>
+            <Button onClick={() => setNewOpen(true)}>Nowa lekcja</Button>
+          </div>
         }
       />
 
@@ -169,6 +221,16 @@ export function Lessons() {
           onCopy={(targetClassId) => handleCopyToClass(copyLesson, targetClassId)}
         />
       )}
+
+      <ConfirmDialog
+        open={recapConfirmOpen}
+        title="Wstaw powtórkę klas 1-3"
+        message={`Do klasy ${sortedClasses.find((c) => c.id === currentClassId)?.name ?? ''} zostaną dodane 3 lekcje-prezentacje (fonetyka/ortografia, gramatyka/interpunkcja, formy wypowiedzi) i 3 zestawy pytań do koła fortuny. Kontynuować?`}
+        confirmLabel="Wstaw"
+        danger={false}
+        onCancel={() => setRecapConfirmOpen(false)}
+        onConfirm={handleInsertRecap13}
+      />
 
       <ConfirmDialog
         open={!!removeTarget}
