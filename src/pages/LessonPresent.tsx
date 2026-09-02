@@ -135,8 +135,10 @@ export function LessonPresent() {
       </div>
 
       {isLast && (
-        <div className="absolute right-4 top-4" onClick={(e) => e.stopPropagation()}>
-          <Button onClick={finishLesson}>Zakończ lekcję</Button>
+        <div className="absolute bottom-4 left-4" onClick={(e) => e.stopPropagation()}>
+          <Button size="sm" onClick={finishLesson}>
+            Zakończ lekcję
+          </Button>
         </div>
       )}
 

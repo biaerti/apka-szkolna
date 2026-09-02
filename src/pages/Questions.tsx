@@ -83,12 +83,15 @@ export function Questions() {
                 <TD>{questionCount(qs.id)}</TD>
                 <TD className="text-right">
                   <div className="flex justify-end gap-2">
+                    <Link to={`/pytania/${qs.id}`}>
+                      <Button size="sm">Pytania</Button>
+                    </Link>
                     <Button
                       size="sm"
                       variant="secondary"
                       onClick={() => setEditing({ id: qs.id, name: qs.name, topic: qs.topic ?? '' })}
                     >
-                      Edytuj
+                      Zmień nazwę
                     </Button>
                     <Button size="sm" variant="danger" onClick={() => setToDelete({ id: qs.id, name: qs.name })}>
                       Usuń

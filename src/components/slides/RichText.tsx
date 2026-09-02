@@ -24,7 +24,7 @@ function Block({ block }: { block: MdBlock }) {
 
   const ListTag = block.ordered ? 'ol' : 'ul';
   return (
-    <ListTag className={block.ordered ? 'list-decimal pl-8' : 'list-disc pl-8'}>
+    <ListTag className={`inline-block text-left ${block.ordered ? 'list-decimal pl-8' : 'list-disc pl-8'}`}>
       {block.items.map((item, i) => (
         <li key={i}>
           <InlineNodes nodes={item} />

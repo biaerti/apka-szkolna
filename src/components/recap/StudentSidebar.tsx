@@ -74,7 +74,7 @@ export function StudentSidebar({
                   +{balance.plus} -{balance.minus} p{balance.pass}
                 </span>
                 <span>
-                  {absent ? 'nieobecny' : used ? 'już był' : ''}
+                  {absent ? 'nieobecny/a' : used ? 'już był/a' : ''}
                 </span>
               </div>
             </div>

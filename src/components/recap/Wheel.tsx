@@ -1,6 +1,10 @@
 // Kolo fortuny rysowane na canvasie 2D. Sektory = uczniowie z puli (naprzemienne
 // kolory). Wynik jest losowany PRZED animacja (przez useRecapSession) - tu tylko
 // animujemy obrot do zadanego kata koncowego (easing ease-out).
+//
+// Rysowanie w devicePixelRatio (ostrosc na projektorze) + etykiety radialne
+// (jedna linia, wyrownana do prawej przy promieniu 0.92), zeby nazwiska sie nie
+// nakladaly przy wiekszej liczbie sektorow. Wylosowany sektor jest podswietlony.
 
 import { useEffect, useRef } from 'react';
 import type { Student } from '../../data/types';
@@ -13,6 +17,8 @@ export interface WheelProps {
   spinSec: number;
   onSpinEnd: () => void;
   size?: number;
+  /** Id ucznia aktualnie wylosowanego (podswietlenie sektora po zatrzymaniu). */
+  highlightStudentId?: string | null;
 }
 
 const COLORS = ['#4f46e5', '#818cf8', '#312e81', '#6366f1'];
@@ -21,7 +27,16 @@ function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
 }
 
-export function Wheel({ students, spinning, targetAngle, spinToken, spinSec, onSpinEnd, size = 480 }: WheelProps) {
+export function Wheel({
+  students,
+  spinning,
+  targetAngle,
+  spinToken,
+  spinSec,
+  onSpinEnd,
+  size = 480,
+  highlightStudentId = null,
+}: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rotationRef = useRef(0);
   const animRef = useRef<number | null>(null);
@@ -31,8 +46,20 @@ export function Wheel({ students, spinning, targetAngle, spinToken, spinSec, onS
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const w = canvas.width;
-    const h = canvas.height;
+    const dpr = window.devicePixelRatio || 1;
+    const w = size;
+    const h = size;
+    // Bufor fizyczny w devicePixelRatio - ostry rysunek na projektorze.
+    const targetW = Math.max(1, Math.round(w * dpr));
+    const targetH = Math.max(1, Math.round(h * dpr));
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
     const cx = w / 2;
     const cy = h / 2;
     const radius = Math.min(w, h) / 2 - 8;
@@ -59,30 +86,48 @@ export function Wheel({ students, spinning, targetAngle, spinToken, spinSec, onS
     const rotationRad = (rotationDeg * Math.PI) / 180;
     const startOffset = -Math.PI / 2 + rotationRad;
 
+    // Rozmiar czcionki dobrany do liczby sektorow: przy 20 sektorach ~ size/28,
+    // nigdy mniej niz 12px.
+    const fontSize = Math.max(12, (size * 20) / (28 * count));
+    const highlightIdx = highlightStudentId
+      ? students.findIndex((s) => s.id === highlightStudentId)
+      : -1;
+
     for (let i = 0; i < count; i++) {
       const start = startOffset + i * segment;
       const end = start + segment;
+      const isHighlighted = !spinning && i === highlightIdx;
+
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.arc(cx, cy, radius, start, end);
       ctx.closePath();
-      ctx.fillStyle = COLORS[i % COLORS.length];
+      ctx.fillStyle = isHighlighted ? '#facc15' : COLORS[i % COLORS.length];
       ctx.fill();
-      ctx.strokeStyle = '#0f172a';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = isHighlighted ? '#fff7ed' : '#0f172a';
+      ctx.lineWidth = isHighlighted ? 4 : 2;
       ctx.stroke();
 
       const mid = start + segment / 2;
+
+      // Tekst radialny: od srodka na zewnatrz, jedna linia, wyrownana do prawej
+      // przy promieniu 0.92 (czyli koniec napisu przy krawedzi kola).
       ctx.save();
-      ctx.translate(cx + Math.cos(mid) * radius * 0.62, cy + Math.sin(mid) * radius * 0.62);
-      ctx.rotate(mid + Math.PI / 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'center';
+      ctx.translate(cx, cy);
+      ctx.rotate(mid);
+      ctx.fillStyle = isHighlighted ? '#1f2937' : '#ffffff';
+      ctx.font = `bold ${fontSize}px sans-serif`;
+      ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
+
       const student = students[i];
-      ctx.fillText(`${student.firstName}`, 0, -8);
-      ctx.fillText(`${student.lastName}`, 0, 12);
+      const fullText = `${student.firstName} ${student.lastName}`;
+      const maxWidth = radius * 0.7;
+      let label = fullText;
+      if (ctx.measureText(fullText).width > maxWidth) {
+        label = `${student.firstName} ${student.lastName.charAt(0)}.`;
+      }
+      ctx.fillText(label, radius * 0.92, 0);
       ctx.restore();
     }
 
@@ -108,7 +153,7 @@ export function Wheel({ students, spinning, targetAngle, spinToken, spinSec, onS
   useEffect(() => {
     draw(rotationRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [students]);
+  }, [students, size, highlightStudentId, spinning]);
 
   useEffect(() => {
     if (!spinning || spinToken === 0) return;
@@ -142,8 +187,6 @@ export function Wheel({ students, spinning, targetAngle, spinToken, spinSec, onS
   return (
     <canvas
       ref={canvasRef}
-      width={size}
-      height={size}
       className="mx-auto block"
       role="img"
       aria-label="Koło fortuny z uczniami"
