@@ -4,8 +4,23 @@
     {
       "name": "apka-szkolna-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5173
+    },
+    {
+      "name": "apka-szkolna-test",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "--port",
+        "5174",
+        "--mode",
+        "test"
+      ],
+      "port": 5174
     }
   ]
 }

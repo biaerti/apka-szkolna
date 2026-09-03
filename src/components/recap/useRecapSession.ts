@@ -5,13 +5,29 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from '../../data/store';
 import type { Question, RecapResult, Student } from '../../data/types';
-import { canPass, monthBalance, passesUsedThisWeek, wheelTargetAngle } from '../../lib/recap';
+import {
+  canPass,
+  monthBalance,
+  nextRandomIndex,
+  nextSequential,
+  passesUsedThisWeek,
+  shuffle,
+  wheelTargetAngle,
+} from '../../lib/recap';
 import { monthKey } from '../../lib/week';
+
+export type PickMode = 'wheel' | 'sequential';
 
 export interface UseRecapSessionArgs {
   classId: string;
   setId: string;
   absentIds?: string[];
+  /** Sposob wyboru ucznia: kolo fortuny albo po kolei wg numeru z dziennika. */
+  initialPickMode?: PickMode;
+  /** Czy sesja ocenia odpowiedzi (plus/minus/pas). Domyslnie true. */
+  initialGrading?: boolean;
+  /** Czy pytania sa losowane (zmieniaja sie automatycznie przy kazdym uczniu). */
+  initialRandomOrder?: boolean;
 }
 
 interface LastAction {
@@ -20,7 +36,14 @@ interface LastAction {
   wasUsed: boolean;
 }
 
-export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSessionArgs) {
+export function useRecapSession({
+  classId,
+  setId,
+  absentIds = [],
+  initialPickMode = 'wheel',
+  initialGrading = true,
+  initialRandomOrder = false,
+}: UseRecapSessionArgs) {
   const students = useStore((s) => s.students);
   const questions = useStore((s) => s.questions);
   const recapEvents = useStore((s) => s.recapEvents);
@@ -64,6 +87,8 @@ export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSess
   const [wheelTarget, setWheelTarget] = useState(0);
   const [spinToken, setSpinToken] = useState(0);
   const [lastAction, setLastAction] = useState<LastAction | null>(null);
+  const [pickMode, setPickMode] = useState<PickMode>(initialPickMode);
+  const [grading, setGrading] = useState(initialGrading);
 
   const pool = useMemo(
     () => presentStudents.filter((st) => allowRepeats || !usedIds.has(st.id)),
@@ -75,7 +100,7 @@ export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSess
     [questions, setId],
   );
 
-  const [randomOrder, setRandomOrder] = useState(false);
+  const [randomOrder, setRandomOrder] = useState(initialRandomOrder);
   const [shuffledIds, setShuffledIds] = useState<string[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -110,6 +135,20 @@ export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSess
     setQuestionIndex((i) => Math.max(0, i - 1));
   }
 
+  /**
+   * Przechodzi do kolejnego pytania z potasowanej listy (tryb losowy). Wywolywana
+   * automatycznie przy kazdym nowym uczniu - gdy lista zostanie wyczerpana, tasuje
+   * ja ponownie od nowa (zeby pytania sie nie powtarzaly az do konca zestawu).
+   */
+  function advanceRandomQuestion() {
+    setShowAnswer(false);
+    const { index, reshuffle } = nextRandomIndex(questionIndex, shuffledIds.length);
+    if (reshuffle) {
+      setShuffledIds(shuffle(setQuestions.map((q) => q.id)));
+    }
+    setQuestionIndex(index);
+  }
+
   const now = new Date();
   const currentMonthKey = monthKey(now);
 
@@ -133,11 +172,28 @@ export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSess
     setCurrentStudentId(student.id);
     setWheelTarget(angle);
     setSpinToken((t) => t + 1);
+    if (randomOrder) advanceRandomQuestion();
   }
 
   const handleSpinEnd = useCallback(() => {
     setSpinning(false);
   }, []);
+
+  /** Wybiera kolejnego ucznia wg numeru z dziennika (tryb "po kolei") - bez animacji. */
+  function pickSequentialStudent() {
+    if (!canSpin) return;
+    const student = nextSequential(pool);
+    if (!student) return;
+    setGraded(false);
+    setCurrentStudentId(student.id);
+    if (randomOrder) advanceRandomQuestion();
+  }
+
+  /** Wybiera kolejnego ucznia zgodnie z aktualnym trybem (kolo / po kolei). */
+  function pickNext() {
+    if (pickMode === 'sequential') pickSequentialStudent();
+    else spin();
+  }
 
   function grade(result: RecapResult) {
     if (!currentStudentId || graded) return;
@@ -162,6 +218,17 @@ export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSess
       result: 'hint_minus',
     });
     setLastAction({ eventId: event.id, studentId: otherStudentId, wasUsed: usedIds.has(otherStudentId) });
+  }
+
+  /**
+   * Tryb bez ocen ("Oceniaj: nie"): przenosi ucznia do puli "juz byl" BEZ zapisu
+   * RecapEvent i od razu odblokowuje wybor nastepnego ucznia.
+   */
+  function markDoneNoGrade() {
+    if (!currentStudentId) return;
+    setUsedIds((cur) => new Set(cur).add(currentStudentId));
+    setCurrentStudentId(null);
+    setGraded(false);
   }
 
   function readyForNext() {
@@ -206,6 +273,13 @@ export function useRecapSession({ classId, setId, absentIds = [] }: UseRecapSess
     spinToken,
     canSpin,
     spin,
+    pickMode,
+    setPickMode,
+    pickSequentialStudent,
+    pickNext,
+    grading,
+    setGrading,
+    markDoneNoGrade,
     handleSpinEnd,
     grade,
     addHint,

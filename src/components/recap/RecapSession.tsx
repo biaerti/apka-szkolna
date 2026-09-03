@@ -2,15 +2,16 @@
 // /powtorka/:classId/:setId, jak i przez slajd `recap` w prezentacji lekcji.
 // Implementacja: modul powtorki. Nie zmieniac sygnatury propsow.
 
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../../data/store';
 import { Wheel } from './Wheel';
 import { QuestionPanel } from './QuestionPanel';
 import { ScoreButtons } from './ScoreButtons';
 import { HintPicker } from './HintPicker';
 import { StudentSidebar } from './StudentSidebar';
-import { useRecapSession } from './useRecapSession';
+import { SequentialPicker } from './SequentialPicker';
+import { useRecapSession, type PickMode } from './useRecapSession';
 
 export interface RecapSessionProps {
   classId: string;
@@ -21,14 +22,71 @@ export interface RecapSessionProps {
   embedded?: boolean;
   /** Lista id nieobecnych uczniow (przekazana ze strony wyboru). Domyslnie: wszyscy obecni. */
   absentIds?: string[];
+  /** Domyslny sposob wyboru ucznia, gdy brak parametrow w query string. */
+  initialPickMode?: PickMode;
+  /** Domyslnie: czy sesja ocenia odpowiedzi, gdy brak parametrow w query string. */
+  initialGrading?: boolean;
+  /** Domyslnie: czy pytania sa losowe, gdy brak parametrow w query string. */
+  initialRandomQuestions?: boolean;
 }
 
-export function RecapSession({ classId, setId, onExit, embedded, absentIds }: RecapSessionProps) {
+export function RecapSession({
+  classId,
+  setId,
+  onExit,
+  embedded,
+  absentIds,
+  initialPickMode,
+  initialGrading,
+  initialRandomQuestions,
+}: RecapSessionProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const schoolClass = useStore((s) => s.classes.find((c) => c.id === classId));
   const questionSet = useStore((s) => s.questionSets.find((qs) => qs.id === setId));
 
-  const session = useRecapSession({ classId, setId, absentIds });
+  // Ustawienia trybow (wybor ucznia / pytania / ocenianie) czytane w kolejnosci:
+  // 1) query string (?pick=sequential&random=1&grading=0) - uzywane przez strone
+  //    /powtorka (RecapScreen po prostu przekazuje URL dalej);
+  // 2) propsy initial* (przekazywane np. przez inny embed);
+  // 3) heurystyka: lekcja zapoznawcza ("Poznajmy się", topic zestawu === 'Lekcja
+  //    zapoznawcza') bez jawnych parametrow startuje od razu w trybie po kolei,
+  //    z losowymi pytaniami i bez ocen - tak, zeby slajd recap w prezentacji tej
+  //    lekcji dzialal "z automatu";
+  // 4) wartosci domyslne modulu powtorki (kolo, pytania po kolei, ocenianie wl.).
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const queryPick = searchParams.get('pick');
+  const explicitPick: PickMode | undefined =
+    queryPick === 'sequential' || queryPick === 'wheel' ? queryPick : undefined;
+  const explicitRandom = searchParams.has('random') ? searchParams.get('random') === '1' : undefined;
+  const explicitGrading = searchParams.has('grading') ? searchParams.get('grading') === '1' : undefined;
+
+  const hasExplicitSettings =
+    explicitPick !== undefined ||
+    explicitRandom !== undefined ||
+    explicitGrading !== undefined ||
+    initialPickMode !== undefined ||
+    initialGrading !== undefined ||
+    initialRandomQuestions !== undefined;
+
+  const isIntroLesson = questionSet?.topic === 'Lekcja zapoznawcza';
+  const introDefaultPick: PickMode = 'sequential';
+
+  const resolvedPickMode: PickMode =
+    explicitPick ?? initialPickMode ?? (!hasExplicitSettings && isIntroLesson ? introDefaultPick : 'wheel');
+  const resolvedRandomOrder =
+    explicitRandom ?? initialRandomQuestions ?? (!hasExplicitSettings && isIntroLesson ? true : false);
+  const resolvedGrading =
+    explicitGrading ?? initialGrading ?? (!hasExplicitSettings && isIntroLesson ? false : true);
+
+  const session = useRecapSession({
+    classId,
+    setId,
+    absentIds,
+    initialPickMode: resolvedPickMode,
+    initialGrading: resolvedGrading,
+    initialRandomOrder: resolvedRandomOrder,
+  });
   const sessionRef = useRef(session);
   sessionRef.current = session;
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -88,13 +146,15 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
       const s = sessionRef.current;
       if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
-        if (s.canSpin) s.spin();
+        if (s.canSpin) s.pickNext();
+      } else if (e.key === 'Enter') {
+        if (!s.grading && s.currentStudent) s.markDoneNoGrade();
       } else if (e.key === '1') {
-        s.grade('plus');
+        if (s.grading) s.grade('plus');
       } else if (e.key === '2') {
-        s.grade('minus');
+        if (s.grading) s.grade('minus');
       } else if (e.key === '3') {
-        if (s.currentCanPass) s.grade('pass');
+        if (s.grading && s.currentCanPass) s.grade('pass');
       } else if (e.key === 'n' || e.key === 'N') {
         s.nextQuestion();
       } else if (e.key === 'o' || e.key === 'O') {
@@ -125,6 +185,26 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
           {schoolClass.name} - {questionSet.name}
         </div>
         <div className="flex items-center gap-3">
+          <label className="flex items-center gap-1.5">
+            wybór ucznia:
+            <select
+              value={session.pickMode}
+              onChange={(e) => session.setPickMode(e.target.value as 'wheel' | 'sequential')}
+              className="rounded border-gray-600 bg-gray-800 px-1.5 py-0.5 text-xs text-gray-200"
+            >
+              <option value="wheel">koło</option>
+              <option value="sequential">po kolei</option>
+            </select>
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              checked={session.grading}
+              onChange={(e) => session.setGrading(e.target.checked)}
+              className="rounded border-gray-500"
+            />
+            oceniaj
+          </label>
           <label className="flex items-center gap-1.5">
             <input
               type="checkbox"
@@ -180,6 +260,13 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
                     zacznij nową rundę
                   </button>
                 </div>
+              ) : session.pickMode === 'sequential' ? (
+                <SequentialPicker
+                  students={session.presentStudents}
+                  usedIds={session.usedIds}
+                  nextStudentId={session.pool[0]?.id ?? null}
+                  currentStudentId={session.currentStudent?.id ?? null}
+                />
               ) : (
                 <Wheel
                   students={session.pool}
@@ -196,11 +283,11 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
 
             <button
               type="button"
-              onClick={session.spin}
+              onClick={session.pickNext}
               disabled={!session.canSpin}
               className="shrink-0 rounded-lg bg-accent-600 px-8 py-2.5 text-xl font-semibold hover:bg-accent-700 disabled:opacity-40"
             >
-              Kręć (Spacja)
+              {session.pickMode === 'sequential' ? 'Następny uczeń (Spacja)' : 'Kręć (Spacja)'}
             </button>
           </div>
 
@@ -215,7 +302,9 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
                   {session.currentStudent.firstName} {session.currentStudent.lastName}
                 </span>
               ) : (
-                <span className="text-gray-400">Kręć kołem</span>
+                <span className="text-gray-400">
+                  {session.pickMode === 'sequential' ? 'Wybierz następnego ucznia' : 'Kręć kołem'}
+                </span>
               )}
             </p>
 
@@ -234,16 +323,27 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
             </div>
 
             <div className="shrink-0">
-              <ScoreButtons
-                disabled={!session.currentStudent}
-                graded={session.graded}
-                onGrade={session.grade}
-                canPass={session.currentCanPass}
-                passesUsed={session.currentPassesUsed}
-                passesPerWeek={session.settings.passesPerWeek}
-                hintGivesMinus={session.settings.hintGivesMinus}
-                onOpenHint={() => setHintOpen(true)}
-              />
+              {session.grading ? (
+                <ScoreButtons
+                  disabled={!session.currentStudent}
+                  graded={session.graded}
+                  onGrade={session.grade}
+                  canPass={session.currentCanPass}
+                  passesUsed={session.currentPassesUsed}
+                  passesPerWeek={session.settings.passesPerWeek}
+                  hintGivesMinus={session.settings.hintGivesMinus}
+                  onOpenHint={() => setHintOpen(true)}
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={session.markDoneNoGrade}
+                  disabled={!session.currentStudent}
+                  className="w-full rounded-lg bg-accent-600 px-4 py-4 text-2xl font-semibold text-white hover:bg-accent-700 disabled:opacity-40"
+                >
+                  Gotowe, następny (Enter)
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -257,11 +357,16 @@ export function RecapSession({ classId, setId, onExit, embedded, absentIds }: Re
           currentStudentId={session.currentStudent?.id ?? null}
           balanceFor={session.balanceFor}
           onTogglePresent={session.togglePresent}
+          showBalance={session.grading}
         />
       </div>
 
       <div className="shrink-0 border-t border-gray-800 px-4 py-1 text-xs text-gray-500">
-        Spacja: kręć - 1: dobrze - 2: źle - 3: pas - N: następne pytanie - O: pokaż odpowiedź
+        {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : 'Spacja: kręć'}
+        {session.grading
+          ? ' - 1: dobrze - 2: źle - 3: pas'
+          : ' - Enter: gotowe, następny'}
+        {' '}- N: następne pytanie - O: pokaż odpowiedź
         {!embedded && ' - F: pełny ekran'} - Esc: zakończ
       </div>
 

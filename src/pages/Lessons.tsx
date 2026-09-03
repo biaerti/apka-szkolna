@@ -9,9 +9,11 @@ import { Table, TBody, TH, THead, TR } from '../components/ui/Table';
 import { LessonRow } from '../components/lessons/LessonRow';
 import { NewLessonModal, type NewLessonData } from '../components/lessons/NewLessonModal';
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
+import { ClassQuestionSets } from '../components/lessons/ClassQuestionSets';
 import { duplicateSlide } from '../components/lessons/slideDefaults';
 import type { Lesson } from '../data/types';
 import { buildRecap13 } from '../data/recap13';
+import { buildIntroLesson, type IntroBundle } from '../data/intro';
 
 export function Lessons() {
   const navigate = useNavigate();
@@ -33,11 +35,33 @@ export function Lessons() {
   const [copyLesson, setCopyLesson] = useState<Lesson | null>(null);
   const [removeTarget, setRemoveTarget] = useState<Lesson | null>(null);
   const [recapConfirmOpen, setRecapConfirmOpen] = useState(false);
+  const [introConfirmOpen, setIntroConfirmOpen] = useState(false);
 
   const classLessons = useMemo(
     () => lessons.filter((l) => l.classId === currentClassId).sort((a, b) => a.order - b.order),
     [lessons, currentClassId],
   );
+
+  // Tytul pierwszej lekcji powtorki 1-3 - sluzy do wykrycia, ze materialy sa juz wstawione.
+  const recap13FirstTitle = useMemo(() => {
+    if (!currentClassId) return undefined;
+    return buildRecap13(currentClassId).lessons[0]?.title;
+  }, [currentClassId]);
+  const recap13AlreadyInserted =
+    !!recap13FirstTitle && classLessons.some((l) => l.title === recap13FirstTitle);
+
+  // buildIntroLesson jest kontraktem implementowanym rownolegle przez inny modul -
+  // dopoki nie jest gotowy, funkcja rzuca wyjatek, wiec zabezpieczamy sie try/catch.
+  const introBundle: IntroBundle | null = useMemo(() => {
+    if (!currentClassId) return null;
+    try {
+      return buildIntroLesson(currentClassId);
+    } catch {
+      return null;
+    }
+  }, [currentClassId]);
+  const introAlreadyInserted =
+    !!introBundle && classLessons.some((l) => l.title === introBundle.lesson.title);
 
   if (sortedClasses.length === 0) {
     return (
@@ -122,6 +146,38 @@ export function Lessons() {
     setRecapConfirmOpen(false);
   }
 
+  function handleInsertIntro() {
+    if (!currentClassId || !introBundle) return;
+
+    // Zestaw pytan zapoznawczy - wstaw i zapamietaj mapowanie starego id na nowe.
+    const created = addQuestionSet({
+      name: introBundle.questionSet.name,
+      topic: introBundle.questionSet.topic,
+      classIds: [currentClassId],
+    });
+    for (const q of introBundle.questions) {
+      addQuestion({ setId: created.id, text: q.text, answer: q.answer });
+    }
+
+    const mappedQuestionSetId =
+      introBundle.lesson.questionSetId === introBundle.questionSet.id
+        ? created.id
+        : introBundle.lesson.questionSetId;
+    const mappedSlides = introBundle.lesson.slides.map((slide) => {
+      if (slide.kind === 'recap' && slide.questionSetId === introBundle.questionSet.id) {
+        return { ...slide, questionSetId: created.id };
+      }
+      return slide;
+    });
+
+    addLesson({
+      ...introBundle.lesson,
+      questionSetId: mappedQuestionSetId,
+      slides: mappedSlides,
+    });
+    setIntroConfirmOpen(false);
+  }
+
   function handleCopyToClass(lesson: Lesson, targetClassId: string) {
     addLesson({
       classId: targetClassId,
@@ -138,14 +194,7 @@ export function Lessons() {
     <div>
       <PageHeader
         title="Lekcje"
-        actions={
-          <div className="flex gap-2">
-            <Button variant="secondary" onClick={() => setRecapConfirmOpen(true)}>
-              Wstaw powtórkę klas 1-3
-            </Button>
-            <Button onClick={() => setNewOpen(true)}>Nowa lekcja</Button>
-          </div>
-        }
+        actions={<Button onClick={() => setNewOpen(true)}>Nowa lekcja</Button>}
       />
 
       <div className="mb-4 flex flex-wrap gap-2">
@@ -203,6 +252,28 @@ export function Lessons() {
         </Table>
       )}
 
+      <ClassQuestionSets classId={currentClassId} />
+
+      <div className="mt-8">
+        <h2 className="mb-3 text-lg font-semibold text-gray-900">Gotowe materiały</h2>
+        <div className="flex flex-wrap gap-2 rounded-lg border border-gray-200 bg-white p-4">
+          <Button
+            variant="secondary"
+            disabled={introAlreadyInserted || !introBundle}
+            onClick={() => setIntroConfirmOpen(true)}
+          >
+            {introAlreadyInserted ? 'Lekcja zapoznawcza - już wstawione' : 'Wstaw lekcję zapoznawczą'}
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={recap13AlreadyInserted}
+            onClick={() => setRecapConfirmOpen(true)}
+          >
+            {recap13AlreadyInserted ? 'Powtórka klas 1-3 - już wstawione' : 'Wstaw powtórkę klas 1-3'}
+          </Button>
+        </div>
+      </div>
+
       <NewLessonModal
         open={newOpen}
         onClose={() => setNewOpen(false)}
@@ -230,6 +301,16 @@ export function Lessons() {
         danger={false}
         onCancel={() => setRecapConfirmOpen(false)}
         onConfirm={handleInsertRecap13}
+      />
+
+      <ConfirmDialog
+        open={introConfirmOpen}
+        title="Wstaw lekcję zapoznawczą"
+        message={`Do klasy ${sortedClasses.find((c) => c.id === currentClassId)?.name ?? ''} zostanie dodana lekcja zapoznawcza wraz z zestawem pytań "Poznajmy się". Kontynuować?`}
+        confirmLabel="Wstaw"
+        danger={false}
+        onCancel={() => setIntroConfirmOpen(false)}
+        onConfirm={handleInsertIntro}
       />
 
       <ConfirmDialog

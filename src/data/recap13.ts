@@ -1,6 +1,8 @@
 // Gotowa powtorka materialu klas 1-3 - jezyk polski.
-// Trzy lekcje po ~45 min (fonetyka+ortografia, gramatyka+interpunkcja, formy wypowiedzi)
-// + trzy zestawy pytan do kola fortuny. Wstawiane z ekranu Lekcje przyciskiem.
+// Trzy lekcje (modul = 1-2 godziny lekcyjne): fonetyka+ortografia, gramatyka+interpunkcja,
+// formy wypowiedzi i czytanie + trzy zestawy pytan do kola fortuny.
+// Rytm slajdow: krotka regula (text) -> zadanie do zeszytu ze stoperem (task) -> kolejna regula...
+// Wstawiane z ekranu Lekcje przyciskiem.
 
 import { newId } from './id';
 import type { Lesson, Question, QuestionSet, Slide } from './types';
@@ -48,18 +50,20 @@ export function buildRecap13(classId: string): SeedBundleResult {
     'Fonetyka i ortografia',
     classId,
     [
-      { text: 'Ile liter ma alfabet polski?', answer: '32 litery (razem z ą, ć, ę, ł, ń, ó, ś, ź, ż)' },
-      { text: 'Wymień wszystkie samogłoski w języku polskim.', answer: 'a, e, i, o, u, y, ą, ę' },
-      { text: 'Podziel na sylaby wyraz: "parasolka".', answer: 'pa-ra-sol-ka (4 sylaby)' },
-      { text: 'Podziel na sylaby wyraz: "kredka".', answer: 'kred-ka (2 sylaby)' },
-      { text: 'Ile głosek, a ile liter ma wyraz "dzień"?', answer: '3 głoski (dź-e-ń), 5 liter' },
-      { text: 'Ile głosek ma wyraz "szafa"?', answer: '4 głoski (sz-a-f-a)' },
-      { text: 'Jaką literę piszemy: "ch" czy "h" w słowie "___leb"?', answer: 'chleb - przez "ch"' },
-      { text: 'Jaką literę piszemy: "u" czy "ó" w słowie "kr___l"?', answer: 'król - przez "ó"' },
-      { text: 'Jaką literę piszemy w słowie "___aba"?', answer: 'żaba - przez "ż"' },
-      { text: 'Jaką literę piszemy w słowie "mo___e" (być może)?', answer: 'może - przez "ż"' },
-      { text: 'Podziel na sylaby: "biblioteka".', answer: 'bi-blio-te-ka (4 sylaby)' },
-      { text: 'Wymień 3 wyrazy, w których słychać głoskę "sz".', answer: 'np. szafa, kosz, myszka' },
+      { text: 'Ile liter ma alfabet polski?', answer: '32 litery (w tym ą, ć, ę, ł, ń, ó, ś, ź, ż)' },
+      { text: 'Wymień wszystkie samogłoski w języku polskim.', answer: 'a, e, i, o, u, y, ą, ę (8 samogłosek)' },
+      { text: 'Podziel na sylaby wyraz: biblioteka.', answer: 'bi-blio-te-ka (4 sylaby)' },
+      { text: 'Podziel na sylaby wyraz: kredka.', answer: 'kred-ka (2 sylaby)' },
+      { text: 'Ile głosek i ile liter ma wyraz dzień?', answer: '3 głoski (dź-e-ń), 5 liter' },
+      { text: 'Ile głosek i ile liter ma wyraz ciocia?', answer: '4 głoski (ć-o-ć-a), 6 liter' },
+      { text: 'Co to jest dwuznak? Podaj przykład.', answer: 'dwie litery zapisujące jedną głoskę, np. sz, cz, rz, ch, dz, dż, dź' },
+      { text: 'Jak piszemy: kr_l? ó czy u?', answer: 'król - ó, bo wymienia się na o: król - królowie' },
+      { text: 'Jak piszemy: w_zek? ó czy u?', answer: 'wózek - ó, bo wymienia się na o: wózek - wozy' },
+      { text: 'Jak piszemy: si_dmy? ó czy u?', answer: 'siódmy - ó, bo wymienia się na e: siódmy - siedem' },
+      { text: 'Jak piszemy: sk_ra? ó czy u?', answer: 'skóra - ó, pisownię trzeba zapamiętać (nie ma wymiany)' },
+      { text: 'Jak piszemy: mo_e (zbiornik wodny)? rz czy ż?', answer: 'morze - rz, bo wymienia się na r: morze - morski' },
+      { text: 'Jak piszemy: mo_e (być może)? rz czy ż?', answer: 'może - ż, bo wymienia się na g: może - mogę' },
+      { text: 'Jak piszemy: mu_a (owad)? ch czy h?', answer: 'mucha - ch, bo wymienia się na sz: mucha - muszka' },
     ],
   );
 
@@ -68,18 +72,20 @@ export function buildRecap13(classId: string): SeedBundleResult {
     'Gramatyka i interpunkcja',
     classId,
     [
-      { text: 'Na jakie pytanie odpowiada rzeczownik?', answer: 'kto? co?' },
-      { text: 'Na jakie pytanie odpowiada czasownik?', answer: 'co robi? co się z nim dzieje?' },
-      { text: 'Na jakie pytanie odpowiada przymiotnik?', answer: 'jaki? jaka? jakie?' },
-      { text: 'Powiedz, jaka to część mowy: "biegnie".', answer: 'czasownik' },
-      { text: 'Powiedz, jaka to część mowy: "wesoły".', answer: 'przymiotnik' },
-      { text: 'Powiedz, jaka to część mowy: "szkoła".', answer: 'rzeczownik' },
-      { text: 'Wymień 4 rodzaje zdań ze względu na cel wypowiedzi.', answer: 'oznajmujące, pytające, rozkazujące, wykrzyknikowe' },
-      { text: 'Jaki znak stawiamy na końcu zdania pytającego?', answer: 'znak zapytania: ?' },
-      { text: 'Jaki znak stawiamy na końcu zdania wykrzyknikowego?', answer: 'wykrzyknik: !' },
+      { text: 'Na jakie pytania odpowiada rzeczownik?', answer: 'kto? co?' },
+      { text: 'Na jakie pytania odpowiada czasownik?', answer: 'co robi? co się z nim dzieje?' },
+      { text: 'Na jakie pytania odpowiada przymiotnik?', answer: 'jaki? jaka? jakie?' },
+      { text: 'Jaka to część mowy: biegnie?', answer: 'czasownik' },
+      { text: 'Jaka to część mowy: wesoły?', answer: 'przymiotnik' },
+      { text: 'Jaka to część mowy: szkoła?', answer: 'rzeczownik' },
+      { text: 'Wymień trzy rodzaje zdań ze względu na cel wypowiedzi.', answer: 'oznajmujące, pytające, rozkazujące' },
+      { text: 'Jaki znak stawiamy na końcu zdania pytającego?', answer: 'znak zapytania (?)' },
+      { text: 'Jakim znakiem może kończyć się zdanie rozkazujące?', answer: 'kropką albo wykrzyknikiem' },
       { text: 'Podaj przykład zdania rozkazującego.', answer: 'np. "Usiądź spokojnie."' },
-      { text: 'Kiedy piszemy wielką literę? Podaj 3 sytuacje.', answer: 'na początku zdania, w imionach i nazwiskach, w nazwach miast/państw/rzek' },
-      { text: 'Napisz poprawnie: "warszawa jest stolicą polski".', answer: 'Warszawa jest stolicą Polski.' },
+      { text: 'Kiedy piszemy wielką literę? Podaj trzy sytuacje.', answer: 'na początku zdania, w imionach i nazwiskach, w nazwach miejscowości, państw i rzek' },
+      { text: 'Popraw zapis: warszawa jest stolicą polski.', answer: 'Warszawa jest stolicą Polski.' },
+      { text: 'Kiedy stawiamy przecinek przed słowem że?', answer: 'zawsze, np. "Wiem, że przyjdziesz."' },
+      { text: 'Kiedy stawiamy przecinek przed słowem ale?', answer: 'zawsze, np. "Chciałem iść, ale padał deszcz."' },
     ],
   );
 
@@ -88,135 +94,110 @@ export function buildRecap13(classId: string): SeedBundleResult {
     'Formy wypowiedzi',
     classId,
     [
-      { text: 'Czym różni się wiersz od opowiadania?', answer: 'wiersz ma wersy (linijki), często rymy; opowiadanie to tekst ciągły (proza)' },
-      { text: 'Co to jest rym?', answer: 'podobne zakończenia wyrazów na końcu wersów (np. kot - plot)' },
-      { text: 'Wymień elementy opowiadania.', answer: 'początek, rozwinięcie (co się działo), zakończenie; bohaterowie, miejsce, czas' },
-      { text: 'Kto to jest bohater tekstu?', answer: 'postać, o której opowiada tekst' },
-      { text: 'Czym różni się baśń od legendy?', answer: 'baśń jest zmyślona i pełna magii; legenda tłumaczy prawdziwe miejsce/wydarzenie (często z elementami fantastycznymi)' },
-      { text: 'Jak zaczyna się zwykle baśń?', answer: '"Dawno, dawno temu..." albo "Za górami, za lasami..."' },
-      { text: 'Do kogo piszemy życzenia?', answer: 'do konkretnej osoby - z okazji świąt, urodzin, imienin, sukcesu' },
-      { text: 'Co powinno zawierać zaproszenie?', answer: 'kogo zapraszamy, dokąd, kiedy (data i godzina), po co, kto zaprasza' },
-      { text: 'Wymień 3 elementy listu.', answer: 'np. data i miejscowość, powitanie ("Kochana Mamo"), treść, pożegnanie, podpis' },
-      { text: 'Co to jest opis?', answer: 'wypowiedź mówiąca, jak coś wygląda - osoba, przedmiot, krajobraz' },
-      { text: 'Podaj 3 przymiotniki opisujące kolegę lub koleżankę.', answer: 'np. wesoły, uczynny, mądry, sympatyczny' },
-      { text: 'Co to jest bajka?', answer: 'krótki utwór, często z morałem, w którym bohaterami są zwierzęta zachowujące się jak ludzie' },
+      { text: 'Czym różni się wiersz od opowiadania?', answer: 'wiersz ma wersy i często rymy; opowiadanie to tekst ciągły pisany prozą' },
+      { text: 'Co to jest rym?', answer: 'podobne zakończenie wyrazów na końcu wersów, np. kot - plot' },
+      { text: 'Wymień trzy części, z których składa się opowiadanie.', answer: 'wstęp, rozwinięcie, zakończenie' },
+      { text: 'Kim jest bohater główny?', answer: 'postacią, o której opowiada cała historia' },
+      { text: 'Czym różni się baśń od legendy?', answer: 'baśń jest zmyślona i pełna magii; legenda tłumaczy pochodzenie prawdziwego miejsca lub wydarzenia' },
+      { text: 'Jak zwykle zaczyna się baśń?', answer: 'np. "Dawno, dawno temu..." albo "Za górami, za lasami..."' },
+      { text: 'Kim są bohaterowie bajki jako gatunku?', answer: 'zwierzętami, które mówią i zachowują się jak ludzie' },
+      { text: 'Co znajduje się zwykle na końcu bajki?', answer: 'morał, czyli nauka płynąca z historii' },
+      { text: 'Wymień trzy elementy, jakie powinno zawierać zaproszenie.', answer: 'np. kogo zapraszamy, na co, kiedy, dokąd, kto zaprasza (dowolne trzy)' },
+      { text: 'Wymień trzy elementy listu.', answer: 'np. data i miejscowość, nagłówek, treść, pożegnanie, podpis (dowolne trzy)' },
+      { text: 'Co to jest opis?', answer: 'wypowiedź mówiąca, jak coś wygląda - osoba, przedmiot lub krajobraz' },
+      { text: 'Jakiej części mowy używamy najwięcej w opisie?', answer: 'przymiotników' },
+      { text: 'Co to jest plan wydarzeń?', answer: 'kolejno spisane punkty pokazujące, co działo się w tekście' },
+      { text: 'Do kogo piszemy życzenia?', answer: 'do konkretnej osoby, z okazji święta, urodzin lub sukcesu' },
     ],
   );
 
   // ---------- Lekcje ----------
   const lesson1: Omit<Lesson, 'id' | 'order'> = {
     classId,
-    title: 'Powtórka 1-3: Litery, głoski, sylaby, ortografia',
+    title: 'Powtórka 1-3: Głoski, litery, sylaby, ortografia',
     topic: 'Fonetyka i ortografia',
     status: 'planned',
     questionSetId: set1.set.id,
+    registerTopic: 'Powtórzenie wiadomości z klas 1-3: głoski, litery, sylaby, ortografia',
+    curriculum: ['II.3.5', 'II.4.1'],
     slides: [
-      slideTitle('Powtórka klas 1-3', 'Litery, głoski, sylaby i ortografia'),
-      slideText('Alfabet polski', `Alfabet polski liczy **32 litery**.
+      slideTitle('Powtórka klas 1-3', 'Głoski, litery, sylaby i ortografia - część 1/3'),
+      slideText('Co dziś powtarzamy', `- Głoski, litery i sylaby
+- Samogłoski, spółgłoski i dwuznaki
+- Zasady ó/u, rz/ż i ch/h`),
+      slideText('Samogłoski i spółgłoski', `Samogłosek jest **8**: **a, e, i, o, u, y, ą, ę**.
 
-Litery to znaki, które **piszemy**. Głoski to dźwięki, które **słyszymy** i **wymawiamy**.
+Reszta liter to **spółgłoski**, np. **b, k, m, s, t**.
 
-Uwaga: nie zawsze liczba liter = liczba głosek. Przykłady:
-- **dz**, **dż**, **dź**, **sz**, **cz**, **rz**, **ch** to **dwuznaki** - dwie litery, jedna głoska
-- **si**, **ci**, **zi**, **ni**, **dzi** przed samogłoską - dwie litery, jedna głoska (np. "**si**wy" -> głoski: ś,i,w,y)`),
-      slideText('Samogłoski i spółgłoski', `**Samogłoski** (jest ich 8): **a, e, i, o, u, y, ą, ę**
-
-Wszystkie pozostałe to **spółgłoski** (np. b, c, d, f, g, h, k, l, m...).
-
-Wskazówka: przy samogłosce buzia jest otwarta, powietrze płynie swobodnie.`),
-      slideTask('Z1', 'Nazwij samogłoski w wyrazach', `W każdym wyrazie **znajdź i policz samogłoski**:
+Przy samogłosce buzia jest otwarta, powietrze płynie swobodnie.`),
+      slideTask('Z1', 'Policz samogłoski', `Zapisz w zeszycie każdy wyraz i policz w nim samogłoski:
 
 - kot
-- książka
 - ekierka
 - parasolka
 - Antonina
 
-Zapisz w zeszycie: **wyraz - samogłoski - ile ich jest**.`, 4, 120),
-      slideText('Sylaby', `**Sylaba** to najmniejsza część wyrazu, którą można wymówić za jednym otwarciem ust.
+Zapisz tak: **wyraz - liczba samogłosek**.`, undefined, 90),
+      slideText('Sylaby', `**Sylaba** to część wyrazu, którą wymawiamy za jednym otwarciem ust.
 
-Każda sylaba musi mieć **przynajmniej jedną samogłoskę**.
+Każda sylaba ma co najmniej **jedną samogłoskę**.
 
-Przykłady:
-- **ma-ma** (2 sylaby)
-- **kre-dka** albo **kred-ka** (2 sylaby)
-- **te-le-fon** (3 sylaby)
-- **te-le-wi-zor** (4 sylaby)
-
-Podział na sylaby przydaje się, gdy **przenosimy wyraz** na końcu linijki - dzielimy tylko między sylabami.`),
-      slideTask('Z2', 'Podziel na sylaby', `Podziel wyrazy na sylaby (możesz klaskać):
+Przykłady: **ma-ma** (2), **te-le-fon** (3), **bi-blio-te-ka** (4).`),
+      slideTask('Z2', 'Podziel na sylaby', `Podziel wyrazy na sylaby, klaszcząc przy każdej z nich:
 
 1. dom
 2. lampa
 3. jabłko
 4. samolot
-5. biblioteka
-6. koleżanka
+5. koleżanka
 
-**Klaskajcie razem** - każda sylaba to jedno klaśnięcie.`, 5, 180),
-      slideText('Dwuznaki: sz, cz, rz, ch, dz, dż, dź', `**Dwuznak** = dwie litery, jedna głoska.
+Zapisz podział w zeszycie, np. **lam-pa**.`, undefined, 120),
+      slideText('Dwuznaki - jedna głoska, dwie litery', `**Dwuznaki**: **sz, cz, rz, ch, dz, dż, dź**.
 
-W języku polskim spotykamy:
-- **sz** (szafa, kosz)
-- **cz** (czajnik, klucz)
-- **rz** (rzeka, morze)
-- **ch** (chleb, dach)
-- **dz** (dzwon, bardzo)
-- **dż** (dżem, drożdże)
-- **dź** (dźwig, niedźwiedź)
+To jedna głoska zapisana dwiema literami.
 
-Uwaga: to wciąż **jedna głoska**, choć piszemy dwiema literami.`),
-      slideText('Zmiękczenia: si, ci, zi, ni, dzi', `Kiedy **s, c, z, n, dz** stoi przed samogłoską (a, e, o, u), a chcemy zmiękczyć - piszemy **si, ci, zi, ni, dzi**:
+Przykład: **szafa** ma głoski sz-a-f-a, czyli **4 głoski**, choć **5 liter**.`),
+      slideTask('Z3', 'Policz głoski i litery', `Dla każdego wyrazu zapisz w zeszycie liczbę głosek i liczbę liter:
 
-- **sia**no, **sie**dem, **sio**stra
-- **cia**stko, **cie**pło, **cio**cia
-- **zia**rno, **zie**mia, **zio**ło
-- **nia**nia, **nie**bo, **nio**sę
-- **dzia**dek, **dzie**cko, **dzió**b
+- dzień
+- ciocia
+- kosz
+- drzewo
 
-Przed spółgłoską lub na końcu wyrazu używamy kresek: **ś, ć, ź, ń, dź** - np. **ś**wieca, **koń**, **ćw**iartka.`),
-      slideText('Nosówki: ą, ę', `Litery **ą** i **ę** to **samogłoski nosowe** - powietrze uchodzi też przez nos.
+Wzór zapisu: **wyraz - głoski / litery**.`, undefined, 150),
+      slideText('Ortografia: ó czy u?', `**Ó** piszemy, gdy wymienia się na **o, e** albo **a**:
 
-- **ą**: **kąsać**, **piszą**, **wąż**
-- **ę**: **ręce**, **węże**, **więc**
+- **stół - stoły** (ó:o)
+- **siódmy - siedem** (ó:e)
+- **skrócić - skracać** (ó:a)
 
-Uwaga na wymowę: przed **b, p** czasem słychać "om, em" (np. "z**ę**by" -> wymowa "zemby"), ale piszemy **ę**.`),
-      slideText('Ortografia: ó czy u?', `**"Ó"** piszemy najczęściej:
-- na końcu wyrazu, gdy wymienia się na **"o"**: st**ó**ł - st**o**ły, m**ó**j - m**o**ja, wr**ó**bel - wr**o**ble
-- w końcówce **-ów, -ówka, -ówna**: Krak**ów**, ryb**ówka**, Nowak**ówna**
+Gdy wymiany nie ma, pisownię trzeba **zapamiętać** (np. ogórek, wróbel).`),
+      slideTask('Z4', 'Uzupełnij ó czy u', `Przepisz zdania do zeszytu, wstawiając w lukę (_) literę ó albo u:
 
-**"U"** piszemy:
-- w końcówkach **-uje, -unek, -uś, -usek**: mal**uje**, rat**unek**, dziadzi**uś**
-- na początku wielu wyrazów: **u**cho, **u**l, **u**ciekać (bez kreski)
+1. Byłem w kr_lestwie bajek.
+2. To mój ul_biony kolor.
+3. Kupiłem nowy w_zek.
+4. Ugotowałam pyszną z_pę.
 
-**Zasada złota**: gdy da się wymienić na **o**, **e** albo **a** - piszemy **ó**.`),
-      slideText('Ortografia: rz czy ż?', `**"Rz"** piszemy najczęściej:
-- gdy wymienia się na **r**: mo**rz**e - mo**r**ski, wia**tr** - wie**trz**ny, ma**rz**ec - ma**r**cowy
-- po literach **b, p, d, t, g, k, ch, j, w**: **brz**oza, **prz**yjaciel, **drz**ewo, **trz**y, **grz**yb
+Uzasadnij ustnie każdy wybór.`, undefined, 150),
+      slideText('Ortografia: rz-ż i ch-h', `**Rz** piszemy, gdy wymienia się na **r**: morze - morski.
 
-**"Ż"** piszemy:
-- gdy wymienia się na **g, z, dz, h, s**: kr**ą**żek - kr**ą**g, mo**ż**e - mo**g**ę, blisko - bli**ż**szy
-- w końcówkach **-arz, -erz** piszemy jednak **rz** (np. leka**rz**, pisa**rz**, żołnie**rz**)
+**Ż** piszemy, gdy wymienia się na **g** lub **z**: noga - nóżka, może - mogę.
 
-Wyjątki trzeba zapamiętać: **rz**adko, ja**rz**yna; **ż**onkil, ka**ż**dy.`),
-      slideText('Ortografia: ch czy h?', `**"Ch"** piszemy najczęściej:
-- gdy wymienia się na **sz**: mu**ch**a - mu**sz**ka (nie zawsze - reguła pomocnicza!)
-- po literze **s**: **sch**ody, **sch**owek
-- na końcu wyrazu: da**ch**, kocha**m**
+**Ch** wymienia się na **sz**: mucha - muszka. **H** piszemy w wyrazach obcych: hotel, herbata.`),
+      slideTask('Z5', 'Uzupełnij rz-ż i ch-h', `Przepisz do zeszytu, wstawiając właściwą literę w lukę (_):
 
-**"H"** piszemy:
-- gdy wymienia się na **g, ż, z**: wa**h**adło - wa**g**a (rzadko wymienne)
-- w wyrazach obcego pochodzenia: **h**erbata, **h**otel, **h**istoria, **h**okej
+1. Idziemy na spacer nad mo_e. (rz/ż)
+2. To mo_e się udać. (rz/ż)
+3. Zjadłem kawałek _leba. (ch/h)
+4. Byliśmy w nowym _otelu. (ch/h)
 
-Większość słów w polskim jest przez **ch** - **h** to często słowa zapożyczone.`),
-      slideRecap(set1.set.id),
-      slideText('Podsumowanie', `Zapamiętaj:
+Uzasadnij ustnie każdy wybór.`, undefined, 150),
+      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
 - **8 samogłosek**: a, e, i, o, u, y, ą, ę
-- **dwuznak** = 2 litery, 1 głoska (sz, cz, rz, ch, dz, dż, dź)
-- każda **sylaba** musi mieć samogłoskę
-- **ó** wymienia się na o/e/a; **u** nie wymienia
-- **rz** wymienia się na **r**; **ż** na **g, z, dz, h, s**
-- **ch** wymienia się na **sz**; **h** to często słowa obce`),
+- **dwuznak** to jedna głoska zapisana dwiema literami
+- **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz`),
+      slideRecap(set1.set.id),
     ],
   };
 
@@ -226,264 +207,156 @@ Większość słów w polskim jest przez **ch** - **h** to często słowa zapoż
     topic: 'Gramatyka i interpunkcja',
     status: 'planned',
     questionSetId: set2.set.id,
+    registerTopic: 'Powtórzenie wiadomości z klas 1-3: części mowy, rodzaje zdań, interpunkcja',
+    curriculum: ['II.1.1', 'II.1.11', 'II.4.2', 'II.4.1'],
     slides: [
-      slideTitle('Powtórka klas 1-3', 'Części mowy, zdania i interpunkcja'),
-      slideText('Wyraz i zdanie', `**Wyraz** = pojedyncze słowo (np. kot, biegnie, niebieski).
-
-**Zdanie** = grupa wyrazów, która mówi o czymś w sposób **skończony**. Zaczyna się **wielką literą**, kończy **kropką, znakiem zapytania albo wykrzyknikiem**.
-
-Przykłady:
-- "Ala ma kota." - zdanie
-- "Kot Ali" - to nie jest jeszcze zdanie (brakuje czasownika, nie ma pełnej myśli)`),
-      slideText('Rzeczownik', `**Rzeczownik** to część mowy, która nazywa **osoby, zwierzęta, rzeczy, zjawiska i uczucia**.
+      slideTitle('Powtórka klas 1-3', 'Części mowy, zdania i interpunkcja - część 2/3'),
+      slideText('Co dziś powtarzamy', `- Rzeczownik, czasownik, przymiotnik
+- Rodzaje zdań i znaki na ich końcu
+- Wielka litera i przecinek przed że, ale, bo`),
+      slideText('Rzeczownik', `**Rzeczownik** nazywa osoby, zwierzęta, rzeczy i uczucia.
 
 Odpowiada na pytania: **kto? co?**
 
-Przykłady:
-- osoby: **mama, tata, uczeń, Anna**
-- zwierzęta: **pies, kot, motyl**
-- rzeczy: **zeszyt, dom, komputer**
-- zjawiska: **deszcz, tęcza, wiatr**
-- uczucia: **radość, smutek, miłość**`),
-      slideText('Czasownik', `**Czasownik** nazywa **czynność** lub **stan**.
+Przykłady: **mama, pies, zeszyt, radość**.`),
+      slideText('Czasownik', `**Czasownik** nazywa czynność lub stan.
 
 Odpowiada na pytania: **co robi? co się z nim dzieje?**
 
-Przykłady:
-- czynności: **biegnie, pisze, śpiewa, czyta**
-- stany: **śpi, siedzi, choruje, myśli**
+Przykłady: **biegnie, śpiewa, śpi, choruje**.`),
+      slideText('Przymiotnik', `**Przymiotnik** określa, jaki jest ktoś lub coś.
 
-Czasownik mówi też, **kiedy** coś się dzieje:
-- **teraz** (czas teraźniejszy): pisze, biegnie
-- **wczoraj** (czas przeszły): pisał, biegł
-- **jutro** (czas przyszły): będzie pisał, pobiegnie`),
-      slideText('Przymiotnik', `**Przymiotnik** określa **jaki, jaka, jakie** jest ktoś lub coś.
+Odpowiada na pytania: **jaki? jaka? jakie?**
 
-Odpowiada na pytania: **jaki? jaka? jakie? jacy? jakie?**
-
-Przykłady:
-- **wysoki** budynek, **wesoła** dziewczynka, **czerwone** jabłko
-- **miły** kolega, **mądra** kobieta, **głupie** zwierzę
-
-Przymiotniki opisują: kolor, kształt, wielkość, charakter, wiek itd.`),
-      slideTask('Z1', 'Rozpoznaj część mowy', `Zapisz w zeszycie, jaka to część mowy (**R** - rzeczownik, **CZ** - czasownik, **P** - przymiotnik):
+Przykłady: **wesoły, czerwone, mądra, wysoki**.`),
+      slideTask('Z1', 'Rozpoznaj części mowy', `Zapisz w zeszycie, jaka to część mowy: **R** - rzeczownik, **CZ** - czasownik, **P** - przymiotnik.
 
 1. słońce
 2. świeci
 3. jasne
 4. dziecko
-5. uśmiecha
+5. uśmiecha się
 6. wesołe
-7. plecak
-8. ciężki
 
-Sprawdzimy razem.`, 12, 240),
-      slideText('Rodzaje zdań', `Ze względu na **cel wypowiedzi** rozróżniamy 4 rodzaje zdań:
+Sprawdzimy razem na głos.`, undefined, 180),
+      slideText('Rodzaje zdań', `Ze względu na cel wypowiedzi rozróżniamy:
 
-1. **oznajmujące** - o czymś mówi. Kończy je **kropka**.
-   *"Dzisiaj jest ładna pogoda."*
+- **oznajmujące** - o czymś mówią, np. "Pada deszcz."
+- **pytające** - o coś pytają, np. "Czy pada deszcz?"
+- **rozkazujące** - coś polecają, np. "Zamknij okno!"`),
+      slideTask('Z2', 'Jakie to zdanie?', `Do każdego zdania dopisz jego rodzaj: **O** - oznajmujące, **P** - pytające, **R** - rozkazujące. Dopisz też brakujący znak na końcu.
 
-2. **pytające** - o coś pyta. Kończy je **znak zapytania**.
-   *"Czy odrobiłeś lekcje?"*
+1. Ile masz lat
+2. Zamknij drzwi
+3. Lubię czekoladę
+4. Czy pojedziemy nad morze`, undefined, 180),
+      slideText('Wielka litera', `Wielką literą zaczynamy:
 
-3. **rozkazujące** - coś poleca. Kończy je **kropka** lub **wykrzyknik**.
-   *"Usiądź prosto!"*
+- **zdanie**: "Dzisiaj jest środa."
+- **imiona i nazwiska**: Jan Kowalski
+- **nazwy miejscowości, państw, rzek**: Warszawa, Polska, Wisła`),
+      slideTask('Z3', 'Popraw wielkie litery', `Przepisz zdania do zeszytu, poprawiając wielkie litery:
 
-4. **wykrzyknikowe** - wyraża emocje. Kończy je **wykrzyknik**.
-   *"Jak tu pięknie!"*`),
-      slideTask('Z2', 'Jakie to zdanie?', `Do każdego zdania dopisz jego rodzaj (**O** - oznajmujące, **P** - pytające, **R** - rozkazujące, **W** - wykrzyknikowe):
+1. w niedzielę jedziemy do warszawy.
+2. moja koleżanka ania mieszka w krakowie.
+3. najdłuższa rzeka w polsce to wisła.
 
-1. Ale zimno na dworze!
-2. Ile masz lat?
-3. Zamknij drzwi.
-4. Lubię czekoladę.
-5. Czy pojedziemy nad morze?
-6. Uwaga, samochód!
+Podkreśl poprawione litery.`, undefined, 180),
+      slideText('Przecinek przed że, ale, bo', `Przed spójnikami **że, ale, bo** zawsze stawiamy **przecinek**.
 
-Zapisz w zeszycie.`, 15, 240),
-      slideText('Znaki interpunkcyjne', `Na końcu zdania stawiamy:
-- **kropkę** (.) - zdanie oznajmujące lub spokojny rozkaz
-- **znak zapytania** (?) - zdanie pytające
-- **wykrzyknik** (!) - zdanie wykrzyknikowe lub mocny rozkaz
+Przykłady:
+- "Wiem, że przyjdziesz."
+- "Chciałem wyjść, ale padał deszcz."
+- "Zostałem w domu, bo byłem chory."`),
+      slideTask('Z4', 'Wstaw przecinki', `Przepisz zdania do zeszytu, wstawiając brakujący przecinek:
 
-W środku zdania:
-- **przecinek** (,) - oddziela wyrazy, wyliczenia, części zdania (np. "Kupiłem jabłka, gruszki i śliwki.")
-- **dwukropek** (:) - zapowiada wyliczenie lub czyjąś wypowiedź (np. "Mam trzy zwierzęta: psa, kota i chomika.")
-- **myślnik** (-) - używany w dialogach
-
-**Dialog** zapisujemy z myślnikiem na początku linijki:
-- Cześć! - powiedziałem.
-- Cześć, jak się masz? - odpowiedziała Ania.`),
-      slideText('Wielka litera - kiedy?', `Wielką literę piszemy:
-- **na początku zdania**: *"Dzisiaj jest środa."*
-- w **imionach i nazwiskach**: *Jan Kowalski, Anna Nowak*
-- w **nazwach miejscowości, państw, rzek, gór, mórz**: *Warszawa, Polska, Wisła, Tatry, Bałtyk*
-- w **nazwach planet**: *Ziemia, Mars, Słońce* (jako gwiazda)
-- w **tytułach książek, filmów**: *"Akademia Pana Kleksa"*
-- z **grzeczności** (w listach): *Ty, Twój, Ciebie, Pan, Pani*
-
-Małą literą piszemy nazwy dni tygodnia (poniedziałek), miesięcy (styczeń), narodowości przymiotnikowo (polski, angielski język), ale **narody rzeczownikowo - wielką**: Polak, Anglik.`),
-      slideTask('Z3', 'Popraw pisownię', `Przepisz zdania do zeszytu, wstawiając wielkie litery tam, gdzie trzeba:
-
-1. w niedzielę pojedziemy do warszawy.
-2. mama kupiła książkę "harry potter".
-3. moja siostra ania chodzi do klasy iv b.
-4. najdłuższa rzeka w polsce to wisła.
-5. mieszkamy w białymstoku.
-
-Ile poprawek zrobiłeś w każdym zdaniu?`, 18, 300),
-      slideText('Liczba pojedyncza i mnoga', `Rzeczowniki i czasowniki występują w **dwóch liczbach**:
-- **pojedyncza** - jedna osoba/rzecz: **kot, dziecko, biegnie, pisze**
-- **mnoga** - wiele osób/rzeczy: **koty, dzieci, biegną, piszą**
-
-Uwaga na dziwne liczby mnogie:
-- człowiek -> ludzie
-- dziecko -> dzieci
-- oko -> oczy
-- ucho -> uszy
-- ręka -> ręce
-- brat -> bracia`),
-      slideRecap(set2.set.id),
-      slideText('Podsumowanie', `Zapamiętaj:
+1. Wiem że masz rację.
+2. Chciałem grać ale musiałem się uczyć.
+3. Nie poszedłem do szkoły bo bolała mnie głowa.
+4. Cieszę się że przyjechałeś.`, undefined, 150),
+      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
 - **rzeczownik** (kto? co?), **czasownik** (co robi?), **przymiotnik** (jaki?)
-- **4 rodzaje zdań**: oznajmujące, pytające, rozkazujące, wykrzyknikowe
-- na końcu zdania: **. ? !**
-- wielka litera: **początek zdania, imiona, nazwy własne**
-- **liczba pojedyncza** i **mnoga**`),
+- zdanie **oznajmujące, pytające** albo **rozkazujące**
+- przecinek zawsze przed **że, ale, bo**`),
+      slideRecap(set2.set.id),
     ],
   };
 
   const lesson3: Omit<Lesson, 'id' | 'order'> = {
     classId,
-    title: 'Powtórka 1-3: Teksty i formy wypowiedzi',
+    title: 'Powtórka 1-3: Formy wypowiedzi i czytanie',
     topic: 'Formy wypowiedzi',
     status: 'planned',
     questionSetId: set3.set.id,
+    registerTopic: 'Powtórzenie wiadomości z klas 1-3: formy wypowiedzi, czytanie i opowiadanie tekstów',
+    curriculum: ['III.2.1', 'III.2.3', 'I.1.3', 'I.1.6', 'I.1.7'],
     slides: [
-      slideTitle('Powtórka klas 1-3', 'Teksty literackie i formy wypowiedzi'),
-      slideText('Wiersz i proza', `**Wiersz** to utwór pisany w linijkach zwanych **wersami**. Często ma **rymy** i **rytm**.
+      slideTitle('Powtórka klas 1-3', 'Czytanie i formy wypowiedzi - część 3/3'),
+      slideText('Co dziś powtarzamy', `- Wiersz, proza i rymy
+- Bohater, baśń, legenda i bajka
+- Plan wydarzeń, opis i zaproszenie`),
+      slideText('Wiersz i proza', `**Wiersz** jest zapisany w **wersach** (liniach) i często się **rymuje**.
 
-**Rym** to podobne zakończenia wyrazów, np.:
-- **kot** - **plot**
-- **droga** - **noga**
-- **niedziela** - **wesela**
+**Rym** to podobne zakończenie wyrazów, np. **kot - plot**.
 
-**Proza** to zwykły tekst pisany zdaniami po sobie - np. opowiadanie, baśń, artykuł.
+**Proza** to zwykły tekst pisany zdaniami, np. opowiadanie.`),
+      slideTask('Z1', 'Znajdź rymy', `Do każdego wyrazu dopisz w zeszycie rymujące się słowo:
 
-Jak rozpoznać wiersz? Ma **krótkie linijki** i **często się rymuje**.`),
-      slideText('Bohater, miejsce, czas', `Każde opowiadanie ma:
-- **bohatera** - osobę, o której opowiadamy (np. Ala, mama, pies Reksio)
-- **miejsce akcji** - gdzie się dzieje (dom, szkoła, las)
-- **czas akcji** - kiedy się dzieje (rano, latem, dawno temu)
+1. kot
+2. noga
+3. wiosna
+4. domek
 
-**Bohater główny** = ten, o kim jest cała historia.
-**Bohaterowie drugoplanowi** = ci, którzy pomagają lub są obok.`),
-      slideTask('Z1', 'Bohaterowie znanych tekstów', `Przypomnij sobie znane baśnie i opowiadania. Dopisz **głównego bohatera** każdego tekstu:
+Na koniec wymyśl jedną własną parę rymów.`, undefined, 120),
+      slideText('Bohater, baśń i legenda', `**Bohater główny** to postać, o której jest cała historia.
+
+**Baśń** jest zmyślona i ma magię ("Dawno, dawno temu...").
+
+**Legenda** tłumaczy pochodzenie prawdziwego miejsca, np. Legenda o Smoku Wawelskim.`),
+      slideTask('Z2', 'Bohaterowie znanych baśni', `Zapisz w zeszycie głównego bohatera każdego tytułu:
 
 1. "Czerwony Kapturek"
 2. "Kopciuszek"
 3. "Kubuś Puchatek"
-4. "Akademia Pana Kleksa"
-5. "Pippi Pończoszanka"
-6. "Królewna Śnieżka"
+4. "Królewna Śnieżka"
 
-Kto z nich jest **twoim ulubionym** bohaterem? Dlaczego?`, 25, 240),
-      slideText('Baśń i legenda', `**Baśń** to opowieść **wymyślona**, pełna magii i cudów. Zwykle:
-- zaczyna się: *"Dawno, dawno temu..."* / *"Za górami, za lasami..."*
-- kończy: *"...i żyli długo i szczęśliwie."*
-- złe jest ukarane, dobre nagrodzone
+Który z nich jest twoim ulubionym? Dlaczego?`, undefined, 150),
+      slideText('Opowiadanie i plan wydarzeń', `Opowiadanie ma trzy części: **wstęp, rozwinięcie, zakończenie**.
 
-Przykłady: *Kopciuszek, Śnieżka, Jaś i Małgosia*
+**Plan wydarzeń** to kolejno spisane punkty, co działo się w tekście.
 
-**Legenda** tłumaczy pochodzenie **prawdziwego miejsca** lub wydarzenia. Ma elementy fantastyczne, ale odnosi się do rzeczywistego świata.
+Używamy słów: **najpierw, potem, nagle, na koniec**.`),
+      slideTask('Z3', 'Uporządkuj plan wydarzeń', `Wydarzenia z baśni o Kopciuszku są pomieszane. Ustaw je w zeszycie w prawidłowej kolejności (1-4):
 
-Przykłady: *Legenda o Smoku Wawelskim, Legenda o Warsie i Sawie, Legenda o Lechu, Czechu i Rusie*`),
-      slideText('Bajka', `**Bajka** to krótki utwór, w którym:
-- bohaterami są **zwierzęta**, które mówią i zachowują się jak ludzie
-- na końcu jest **morał** - nauka, wskazówka
-- często pisana wierszem
+- Kopciuszek mierzy pantofelek.
+- Kopciuszek jedzie na bal.
+- Macocha każe jej sprzątać.
+- Książę zakochuje się w Kopciuszku.`, undefined, 150),
+      slideText('Opis', `**Opis** mówi, jak coś wygląda - osoba, przedmiot, zwierzę.
 
-Znane bajki napisał **Ignacy Krasicki** (np. "Wilk i owieczka", "Ptaszki w klatce") oraz **Jean de La Fontaine**.
+W opisie używamy dużo **przymiotników** (jaki? jaka?).
 
-Uwaga: w codziennym języku "bajka" znaczy też tyle co "baśń" - to normalne, ale w szkole warto znać różnicę.`),
-      slideText('Opowiadanie ustne i pisemne', `**Opowiadanie** mówi o wydarzeniach ułożonych **w kolejności** - **co było najpierw**, **co później**, **jak się skończyło**.
+Przykład: plecak jest **granatowy**, **duży** i **wygodny**.`),
+      slideTask('Z4', 'Napisz opis', `Napisz w zeszycie **2 zdania opisu** swojego plecaka lub piórnika.
 
-Każde opowiadanie ma trzy części:
-1. **Wstęp** - kto, gdzie, kiedy
-2. **Rozwinięcie** - co się działo
-3. **Zakończenie** - jak się skończyło
+Użyj co najmniej **3 przymiotników**, np. kolor, kształt, wielkość.
 
-Używamy słówek: **najpierw, potem, nagle, w końcu, na zakończenie**.
+Przeczytamy kilka opisów na głos.`, undefined, 180),
+      slideText('Zaproszenie', `Zaproszenie musi zawierać:
 
-Piszemy w **czasie przeszłym**: *pojechałem, zobaczyłem, wróciłem*.`),
-      slideTask('Z2', 'Ułóż opowiadanie', `Ułóż krótkie opowiadanie (5-6 zdań) na jeden z tematów:
-- **moja najlepsza wakacyjna przygoda**
-- **jak spędziłem ostatnią sobotę**
-- **najśmieszniejsza sytuacja z mojego życia**
+- **kogo** zapraszamy i **na co**
+- **kiedy** (data, godzina) i **dokąd**
+- **kto** zaprasza`),
+      slideTask('Z5', 'Napisz zaproszenie', `Napisz w zeszycie krótkie zaproszenie koleżanki lub kolegi na **swoje urodziny**.
 
-Pamiętaj:
-- **wstęp** (kto, gdzie, kiedy)
-- **rozwinięcie** (co się działo - użyj słów: najpierw, potem, nagle)
-- **zakończenie** (jak się skończyło)
+Pamiętaj o wszystkich elementach: kogo, na co, kiedy, dokąd, kto zaprasza.
 
-Zapisz w zeszycie.`, 30, 420),
-      slideText('Opis', `**Opis** mówi, **jak coś wygląda** - osoba, przedmiot, krajobraz, zwierzę.
-
-W opisie używamy dużo **przymiotników** (jaki? jaka? jakie?).
-
-**Opis osoby** - np. koleżanki:
-- wygląd: wysoka, ma długie brązowe włosy, ciemne oczy
-- ubiór: nosi jeansy i kolorowe bluzki
-- charakter: wesoła, uczynna, mądra, lubi zwierzęta
-
-**Opis przedmiotu** - np. plecaka:
-- kolor: granatowy w biały wzorek
-- kształt: prostokątny
-- do czego służy: noszę w nim książki i zeszyty`),
-      slideText('Życzenia i zaproszenie', `**Życzenia** piszemy z okazji: świąt, urodzin, imienin, sukcesu, ślubu, narodzin dziecka.
-
-Przykład:
-*Kochana Babciu!*
-*Z okazji urodzin życzę Ci dużo zdrowia, radości i wielu wspaniałych chwil w gronie rodziny.*
-*Twoja wnuczka Ania*
-
-**Zaproszenie** musi zawierać:
-- **kogo** zapraszamy
-- **na co** (urodziny, dyskoteka, przedstawienie)
-- **kiedy** (data i godzina)
-- **dokąd** (adres)
-- **kto** zaprasza
-
-*Zapraszam Cię, Aniu, na moje 10 urodziny w sobotę 12 marca o godz. 15:00, u mnie w domu (ul. Kwiatowa 5). Marta*`),
-      slideText('List i ogłoszenie', `**List** - do konkretnej osoby. Zawiera:
-- **miejscowość i datę** w prawym górnym rogu
-- **nagłówek** (Kochana Mamo, Drogi Wujku)
-- **treść** (co chcesz przekazać)
-- **pożegnanie** (Pozdrawiam, Ucałuj mocno)
-- **podpis**
-
-**Ogłoszenie** - dla wielu osób (na tablicy, w internecie). Musi być krótkie i konkretne:
-- **kto** działa (imię/nazwa)
-- **co** oferuje / czego szuka
-- **jak się skontaktować** (telefon, e-mail)
-
-Przykład: *"Uczeń klasy IV a odda za darmo szczeniaki. Kontakt: 500 100 200."*`),
-      slideTask('Z3', 'Napisz zaproszenie', `Napisz zaproszenie do koleżanki/kolegi na jedno z wydarzeń:
-- **twoje urodziny**
-- **przedstawienie szkolne**
-- **piknik klasowy**
-
-Pamiętaj o wszystkich pięciu elementach: **kogo, na co, kiedy, dokąd, kto zaprasza**.
-
-Masz 5 minut.`, 35, 300),
+Masz 5 minut.`, undefined, 300),
+      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
+- **wiersz** ma wersy i rymy, **proza** to zwykły tekst pisany zdaniami
+- **baśń** jest zmyślona, **legenda** tłumaczy prawdziwe miejsce
+- opowiadanie: **wstęp - rozwinięcie - zakończenie**`),
       slideRecap(set3.set.id),
-      slideText('Podsumowanie', `Zapamiętaj:
-- **wiersz** ma wersy i rymy; **proza** to zwykły tekst
-- każdy tekst ma: **bohatera, miejsce, czas**
-- **baśń** - wymyślona z magią; **legenda** - o prawdziwym miejscu; **bajka** - ze zwierzętami i morałem
-- **opowiadanie**: wstęp - rozwinięcie - zakończenie
-- **opis**: dużo przymiotników (jaki? jaka?)
-- **zaproszenie**: kogo, na co, kiedy, dokąd, kto zaprasza`),
     ],
   };
 

@@ -42,6 +42,35 @@ export function monthBalance(events: RecapEvent[], studentId: string, monthKey: 
   };
 }
 
+/** Zwraca kolejnego ucznia wg numeru z dziennika - pierwszy z puli (tryb "po kolei"). */
+export function nextSequential<T>(pool: T[]): T | undefined {
+  return pool[0];
+}
+
+/** Tasuje tablice (Fisher-Yates) przy pomocy dostarczonego generatora liczb losowych. */
+export function shuffle<T>(items: T[], rng: () => number = Math.random): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/**
+ * Zwraca kolejny indeks pytania w potasowanej liscie pytan. Gdy nastepny indeks
+ * wypadlby poza zakresem (lista wyczerpana), sygnalizuje potrzebe ponownego
+ * potasowania (`reshuffle: true`, indeks 0). Uzywane w trybie losowych pytan, gdzie
+ * pytanie ma sie zmieniac automatycznie przy kazdym nowym uczniu, az do wyczerpania
+ * calego zestawu, po czym nastepuje nowe tasowanie.
+ */
+export function nextRandomIndex(currentIndex: number, total: number): { index: number; reshuffle: boolean } {
+  if (total <= 0) return { index: 0, reshuffle: true };
+  const next = currentIndex + 1;
+  if (next >= total) return { index: 0, reshuffle: true };
+  return { index: next, reshuffle: false };
+}
+
 /**
  * Wylicza docelowy kat obrotu kola fortuny (w stopniach, rosnaco = zgodnie z ruchem
  * wskazowek zegara), tak aby po animacji wskaznik (u gory, kat 0) trafil w sektor

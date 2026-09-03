@@ -59,6 +59,9 @@ export interface Lesson {
   doneDate?: string;
   questionSetId?: ID; // recap na start (opcjonalny)
   slides: Slide[];
+  // Pod dziennik elektroniczny (Vulcan): temat do wpisania i kody podstawy programowej (np. II.1.1).
+  registerTopic?: string;
+  curriculum?: string[];
 }
 
 export type Slide =

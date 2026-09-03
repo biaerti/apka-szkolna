@@ -93,6 +93,8 @@ describe('lessons round-trip', () => {
         { id: 'sl2', kind: 'text', body: 'Tresc' },
         { id: 'sl3', kind: 'recap', questionSetId: 'qs1' },
       ],
+      registerTopic: 'Temat do dziennika',
+      curriculum: ['II.1.1', 'II.4.1'],
     };
     expect(rowToLesson(lessonToRow(l))).toEqual(l);
   });
@@ -111,6 +113,8 @@ describe('lessons round-trip', () => {
     expect(row.planned_date).toBeNull();
     expect(row.done_date).toBeNull();
     expect(row.question_set_id).toBeNull();
+    expect(row.register_topic).toBeNull();
+    expect(row.curriculum).toEqual([]);
     expect(rowToLesson(row)).toEqual(l);
   });
 });

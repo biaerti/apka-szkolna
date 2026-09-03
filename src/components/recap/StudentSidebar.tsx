@@ -13,6 +13,8 @@ export interface StudentSidebarProps {
   currentStudentId: string | null;
   balanceFor: (studentId: string) => MonthBalance;
   onTogglePresent: (studentId: string) => void;
+  /** false w trybie bez ocen - ukrywa bilans +/- i pokazuje tylko "już był/a". Domyslnie true. */
+  showBalance?: boolean;
 }
 
 export function StudentSidebar({
@@ -24,6 +26,7 @@ export function StudentSidebar({
   currentStudentId,
   balanceFor,
   onTogglePresent,
+  showBalance = true,
 }: StudentSidebarProps) {
   if (!open) {
     return (
@@ -70,9 +73,11 @@ export function StudentSidebar({
                 </span>
               </label>
               <div className="flex shrink-0 flex-col items-end text-xs text-gray-400">
-                <span>
-                  +{balance.plus} -{balance.minus} p{balance.pass}
-                </span>
+                {showBalance && (
+                  <span>
+                    +{balance.plus} -{balance.minus} p{balance.pass}
+                  </span>
+                )}
                 <span>
                   {absent ? 'nieobecny/a' : used ? 'już był/a' : ''}
                 </span>

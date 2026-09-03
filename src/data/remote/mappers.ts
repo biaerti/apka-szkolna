@@ -130,6 +130,8 @@ export interface LessonRow {
   done_date: string | null;
   question_set_id: string | null;
   slides: Slide[];
+  register_topic: string | null;
+  curriculum: string[];
 }
 
 export function lessonToRow(l: Lesson): LessonRow {
@@ -144,6 +146,8 @@ export function lessonToRow(l: Lesson): LessonRow {
     done_date: l.doneDate ?? null,
     question_set_id: l.questionSetId ?? null,
     slides: l.slides,
+    register_topic: l.registerTopic ?? null,
+    curriculum: l.curriculum ?? [],
   };
 }
 
@@ -159,6 +163,8 @@ export function rowToLesson(row: LessonRow): Lesson {
     doneDate: row.done_date ?? undefined,
     questionSetId: row.question_set_id ?? undefined,
     slides: row.slides ?? [],
+    registerTopic: row.register_topic ?? undefined,
+    curriculum: row.curriculum && row.curriculum.length > 0 ? row.curriculum : undefined,
   };
 }
 

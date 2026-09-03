@@ -24,6 +24,7 @@ export function QuestionSetDetail() {
   const [newText, setNewText] = useState('');
 
   const set = questionSets.find((qs) => qs.id === id);
+  const setClass = set ? classes.find((c) => set.classIds.includes(c.id)) : undefined;
   const setQuestions = useMemo(
     () => questions.filter((q) => q.setId === id).sort((a, b) => a.order - b.order),
     [questions, id],
@@ -61,9 +62,15 @@ export function QuestionSetDetail() {
   return (
     <div>
       <p className="mb-2 text-sm">
-        <Link to="/pytania" className="text-gray-500 hover:text-accent-700 hover:underline">
-          Pytania
+        <Link to="/lekcje" className="text-gray-500 hover:text-accent-700 hover:underline">
+          Lekcje
         </Link>
+        {setClass && (
+          <>
+            <span className="mx-1.5 text-gray-400">/</span>
+            <span className="text-gray-500">{setClass.name}</span>
+          </>
+        )}
         <span className="mx-1.5 text-gray-400">/</span>
         <span className="text-gray-700">{set.name}</span>
       </p>
@@ -71,9 +78,14 @@ export function QuestionSetDetail() {
         title={set.name}
         description={set.topic}
         actions={
-          <Button variant="secondary" onClick={() => setImportOpen(true)}>
-            Importuj z tekstu
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => navigate('/lekcje')}>
+              Wróć do lekcji
+            </Button>
+            <Button variant="secondary" onClick={() => setImportOpen(true)}>
+              Importuj z tekstu
+            </Button>
+          </div>
         }
       />
 

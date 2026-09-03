@@ -73,8 +73,11 @@ export function Classes() {
                 <TD>{activeCount(c.id)}</TD>
                 <TD className="text-right">
                   <div className="flex justify-end gap-2">
+                    <Link to={`/klasy/${c.id}`}>
+                      <Button size="sm">Uczniowie</Button>
+                    </Link>
                     <Button size="sm" variant="secondary" onClick={() => setEditing({ id: c.id, name: c.name })}>
-                      Edytuj
+                      Zmień nazwę
                     </Button>
                     <Button
                       size="sm"

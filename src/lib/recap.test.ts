@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import type { RecapEvent, Settings } from '../data/types';
-import { canPass, monthBalance, passesUsedThisWeek, pickRandom, wheelTargetAngle } from './recap';
+import {
+  canPass,
+  monthBalance,
+  nextRandomIndex,
+  nextSequential,
+  passesUsedThisWeek,
+  pickRandom,
+  shuffle,
+  wheelTargetAngle,
+} from './recap';
 
 function ev(partial: Partial<RecapEvent>): RecapEvent {
   return {
@@ -95,5 +104,51 @@ describe('wheelTargetAngle', () => {
 
   it('zwraca 0 dla pustego kola', () => {
     expect(wheelTargetAngle(0, 0, 3)).toBe(0);
+  });
+});
+
+describe('nextSequential', () => {
+  it('zwraca pierwszego ucznia z puli', () => {
+    expect(nextSequential(['a', 'b', 'c'])).toBe('a');
+  });
+
+  it('zwraca undefined dla pustej puli', () => {
+    expect(nextSequential([])).toBeUndefined();
+  });
+});
+
+describe('shuffle', () => {
+  it('zawiera te same elementy co wejscie', () => {
+    const input = [1, 2, 3, 4, 5];
+    const result = shuffle(input, () => 0.5);
+    expect(result).toHaveLength(input.length);
+    expect([...result].sort()).toEqual(input);
+  });
+
+  it('nie mutuje oryginalnej tablicy', () => {
+    const input = [1, 2, 3];
+    shuffle(input, () => 0.5);
+    expect(input).toEqual([1, 2, 3]);
+  });
+
+  it('jest deterministyczne dla stalego rng', () => {
+    const a = shuffle([1, 2, 3, 4], () => 0.1);
+    const b = shuffle([1, 2, 3, 4], () => 0.1);
+    expect(a).toEqual(b);
+  });
+});
+
+describe('nextRandomIndex', () => {
+  it('zwraca kolejny indeks, gdy lista nie jest wyczerpana', () => {
+    expect(nextRandomIndex(0, 3)).toEqual({ index: 1, reshuffle: false });
+    expect(nextRandomIndex(1, 3)).toEqual({ index: 2, reshuffle: false });
+  });
+
+  it('sygnalizuje potrzebe ponownego tasowania po wyczerpaniu listy', () => {
+    expect(nextRandomIndex(2, 3)).toEqual({ index: 0, reshuffle: true });
+  });
+
+  it('sygnalizuje reshuffle dla pustej listy', () => {
+    expect(nextRandomIndex(0, 0)).toEqual({ index: 0, reshuffle: true });
   });
 });

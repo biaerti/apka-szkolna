@@ -9,6 +9,7 @@ import { AddSlideMenu } from '../components/lessons/AddSlideMenu';
 import { SlideListItem } from '../components/lessons/SlideListItem';
 import { SlideForm } from '../components/lessons/SlideForm';
 import { SlidePreview } from '../components/lessons/SlidePreview';
+import { CurriculumPicker } from '../components/lessons/CurriculumPicker';
 import { createSlide, duplicateSlide, type SlideKind } from '../components/lessons/slideDefaults';
 import type { Slide } from '../data/types';
 
@@ -133,6 +134,27 @@ export function LessonEditor() {
                 </option>
               ))}
             </Select>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-5 rounded-lg border border-gray-200 bg-white p-4">
+        <p className="mb-3 text-sm font-semibold text-gray-900">Do dziennika</p>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Temat do wpisania w dzienniku</label>
+            <Input
+              value={lesson.registerTopic ?? ''}
+              onChange={(e) => updateLesson(lesson.id, { registerTopic: e.target.value || undefined })}
+              placeholder={lesson.title || 'Temat lekcji'}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Kody podstawy programowej</label>
+            <CurriculumPicker
+              selected={lesson.curriculum ?? []}
+              onChange={(codes) => updateLesson(lesson.id, { curriculum: codes.length > 0 ? codes : undefined })}
+            />
           </div>
         </div>
       </div>

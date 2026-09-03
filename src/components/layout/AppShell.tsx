@@ -7,7 +7,6 @@ import { useSyncStatus } from '../../data/remote/sync';
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
-  { to: '/pytania', label: 'Pytania' },
   { to: '/powtorka', label: 'Powtórka' },
   { to: '/lekcje', label: 'Lekcje' },
   { to: '/kalendarz', label: 'Kalendarz' },

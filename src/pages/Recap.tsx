@@ -19,6 +19,9 @@ export function Recap() {
   const [showAllSets, setShowAllSets] = useState(false);
   const [setId, setSetId] = useState<string>('');
   const [presentIds, setPresentIds] = useState<Set<string>>(new Set());
+  const [pickMode, setPickMode] = useState<'wheel' | 'sequential'>('wheel');
+  const [randomQuestions, setRandomQuestions] = useState(false);
+  const [grading, setGrading] = useState(true);
 
   const classStudents = useMemo(
     () =>
@@ -59,7 +62,12 @@ export function Recap() {
   function handleStart() {
     if (!classId || !setId) return;
     const absentIds = classStudents.filter((st) => !presentIds.has(st.id)).map((st) => st.id);
-    navigate(`/powtorka/${classId}/${setId}`, { state: { absentIds } });
+    const params = new URLSearchParams({
+      pick: pickMode,
+      random: randomQuestions ? '1' : '0',
+      grading: grading ? '1' : '0',
+    });
+    navigate(`/powtorka/${classId}/${setId}?${params.toString()}`, { state: { absentIds } });
   }
 
   if (sortedClasses.length === 0) {
@@ -138,6 +146,33 @@ export function Recap() {
               ))}
             </div>
           )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Wybór ucznia</label>
+            <Select value={pickMode} onChange={(e) => setPickMode(e.target.value as 'wheel' | 'sequential')}>
+              <option value="wheel">Koło</option>
+              <option value="sequential">Po kolei (wg numeru)</option>
+            </Select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Pytania</label>
+            <Select
+              value={randomQuestions ? '1' : '0'}
+              onChange={(e) => setRandomQuestions(e.target.value === '1')}
+            >
+              <option value="0">Po kolei</option>
+              <option value="1">Losowo</option>
+            </Select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Oceniaj</label>
+            <Select value={grading ? '1' : '0'} onChange={(e) => setGrading(e.target.value === '1')}>
+              <option value="1">Tak</option>
+              <option value="0">Nie</option>
+            </Select>
+          </div>
         </div>
 
         <Button onClick={handleStart} disabled={!classId || !setId || classStudents.length === 0} className="w-full">
