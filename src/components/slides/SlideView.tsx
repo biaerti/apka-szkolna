@@ -5,6 +5,8 @@ import type { Slide } from '../../data/types';
 import { TitleSlideView } from './TitleSlideView';
 import { TextSlideView } from './TextSlideView';
 import { TaskSlideView } from './TaskSlideView';
+import { ReadSlideView } from './ReadSlideView';
+import { NoteSlideView } from './NoteSlideView';
 import { RecapSlideView } from './RecapSlideView';
 import { ImageSlideView } from './ImageSlideView';
 
@@ -22,6 +24,8 @@ export function SlideView({
       {slide.kind === 'title' && <TitleSlideView slide={slide} />}
       {slide.kind === 'text' && <TextSlideView slide={slide} />}
       {slide.kind === 'task' && <TaskSlideView slide={slide} />}
+      {slide.kind === 'read' && <ReadSlideView slide={slide} />}
+      {slide.kind === 'note' && <NoteSlideView slide={slide} />}
       {slide.kind === 'image' && <ImageSlideView slide={slide} />}
       {slide.kind === 'recap' && <RecapSlideView slide={slide} classId={classId} onExit={onRecapExit} />}
     </div>

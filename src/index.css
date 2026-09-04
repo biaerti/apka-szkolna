@@ -9,3 +9,32 @@ html, body, #root {
 body {
   @apply bg-gray-50 text-gray-900;
 }
+
+/* Wydruk zasad (src/pages/RulesPrint.tsx) - A4, domyslnie bez kolorow i cieni. */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  html, body {
+    background: #fff;
+    color: #000;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  /* Reset kolorow dla calego wydruku - OMIJA elementy z klasa "print-color"
+     (rysunek kola fortuny, podpis linii ciecia), zeby zostaly czytelne na
+     wydruku zamiast zgasnac do czerni. Sektory kola i tak rozroznia sie
+     dodatkowo jasnoscia/kreskowaniem, wiec dzialaja tez w skali szarosci. */
+  *:not(.print-color):not(.print-color *) {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #000 !important;
+  }
+}

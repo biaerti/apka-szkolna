@@ -9,8 +9,10 @@ export const SLIDE_KIND_LABELS: Record<SlideKind, string> = {
   title: 'Tytuł',
   text: 'Tekst',
   task: 'Zadanie',
+  read: 'Praca z tekstem',
   recap: 'Powtórka',
   image: 'Obraz',
+  note: 'Notatka do zeszytu',
 };
 
 export function slideSummary(slide: Slide): string {
@@ -21,6 +23,13 @@ export function slideSummary(slide: Slide): string {
       return slide.title || slide.body.slice(0, 60) || '(pusty tekst)';
     case 'task':
       return `${slide.code}${slide.title ? ' - ' + slide.title : ''}`;
+    case 'read': {
+      const pageLabel = slide.page ? `s. ${slide.page}${slide.pageTo ? '-' + slide.pageTo : ''}` : '';
+      if (pageLabel && slide.source) return `${pageLabel} - ${slide.source}`;
+      return pageLabel || slide.title || '(praca z tekstem)';
+    }
+    case 'note':
+      return slide.title || slide.body.slice(0, 60) || 'Notatka do zeszytu';
     case 'recap':
       return 'Powtórka';
     case 'image':
@@ -50,6 +59,10 @@ export function createSlide(kind: SlideKind, existingSlides: Slide[]): Slide {
       return { id, kind: 'text', title: '', body: '' };
     case 'task':
       return { id, kind: 'task', code: suggestNextTaskCode(existingSlides), title: '', body: '' };
+    case 'read':
+      return { id, kind: 'read', title: '' };
+    case 'note':
+      return { id, kind: 'note', title: '', body: '' };
     case 'recap':
       return { id, kind: 'recap', questionSetId: '' };
     case 'image':

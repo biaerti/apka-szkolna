@@ -135,14 +135,17 @@ export function SettingsPage() {
 
       <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
         <h2 className="mb-4 text-base font-semibold text-gray-900">Parametry powtórek</h2>
+        <p className="mb-4 text-sm text-gray-500">
+          Pasy, uwagi i statystyki liczą się pełnymi miesiącami kalendarzowymi i zerują się 1. dnia miesiąca.
+        </p>
         <div className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Liczba pasów na tydzień</label>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Liczba pasów na miesiąc</label>
             <Input
               type="number"
               min={0}
-              value={settings.passesPerWeek}
-              onChange={(e) => updateSettings({ passesPerWeek: parseInt(e.target.value, 10) || 0 })}
+              value={settings.passesPerMonth}
+              onChange={(e) => updateSettings({ passesPerMonth: parseInt(e.target.value, 10) || 0 })}
               className="max-w-[10rem]"
             />
           </div>
@@ -156,6 +159,26 @@ export function SettingsPage() {
               className="max-w-[10rem]"
             />
           </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Ile plusów daje piątkę</label>
+            <Input
+              type="number"
+              min={1}
+              value={settings.plusesForFive}
+              onChange={(e) => updateSettings({ plusesForFive: parseInt(e.target.value, 10) || 1 })}
+              className="max-w-[10rem]"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Ile plomb daje jedynkę</label>
+            <Input
+              type="number"
+              min={1}
+              value={settings.plombyForOne}
+              onChange={(e) => updateSettings({ plombyForOne: parseInt(e.target.value, 10) || 1 })}
+              className="max-w-[10rem]"
+            />
+          </div>
           <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
@@ -163,7 +186,7 @@ export function SettingsPage() {
               checked={settings.hintGivesMinus}
               onChange={(e) => updateSettings({ hintGivesMinus: e.target.checked })}
             />
-            Podpowiadanie liczy się jako minus
+            Podpowiadanie = plomba dla podpowiadającego
           </label>
           <Button
             size="sm"

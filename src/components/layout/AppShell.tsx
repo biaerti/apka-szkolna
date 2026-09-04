@@ -4,13 +4,15 @@ import { isSupabaseConfigured } from '../../data/supabase';
 import { useAuth } from '../../data/auth';
 import { useSyncStatus } from '../../data/remote/sync';
 
+// Dokladnie szesc pozycji menu - nauczyciel ma nie byc "milionerem na zakladkach,
+// ktorych nie bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w
+// inne ekrany (lekcje / klasa ucznia) i nie sa juz osobnymi modulami.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
-  { to: '/powtorka', label: 'Powtórka' },
   { to: '/lekcje', label: 'Lekcje' },
-  { to: '/kalendarz', label: 'Kalendarz' },
-  { to: '/statystyki', label: 'Statystyki' },
+  { to: '/podrecznik', label: 'Podręcznik' },
+  { to: '/zasady/druk', label: 'Zasady' },
   { to: '/ustawienia', label: 'Ustawienia' },
 ];
 

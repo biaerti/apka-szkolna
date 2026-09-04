@@ -120,7 +120,7 @@ describe('lessons round-trip', () => {
 });
 
 describe('recap events round-trip', () => {
-  it('z opcjonalnymi polami', () => {
+  it('z opcjonalnymi polami (w tym note)', () => {
     const e: RecapEvent = {
       id: 'e1',
       studentId: 's1',
@@ -128,28 +128,47 @@ describe('recap events round-trip', () => {
       questionSetId: 'qs1',
       questionId: 'q1',
       result: 'plus',
+      note: 'adnotacja nauczyciela',
       at: '2026-09-01T12:00:00.000Z',
     };
     expect(rowToRecapEvent(recapEventToRow(e))).toEqual(e);
   });
 
-  it('bez questionSetId/questionId', () => {
+  it('bez questionSetId/questionId/note (undefined <-> null)', () => {
     const e: RecapEvent = {
       id: 'e2',
       studentId: 's1',
       classId: 'c1',
-      result: 'hint_minus',
+      result: 'hint_plomba',
       at: '2026-09-01T12:00:00.000Z',
     };
-    expect(rowToRecapEvent(recapEventToRow(e))).toEqual(e);
+    const row = recapEventToRow(e);
+    expect(row.note).toBeNull();
+    expect(rowToRecapEvent(row)).toEqual(e);
+  });
+
+  it('nowe wyniki (kropka, uwaga, rozliczenie, jedynka, piatka) przechodza bez zmian', () => {
+    const results: RecapEvent['result'][] = ['kropka', 'uwaga', 'rozliczenie', 'jedynka', 'piatka'];
+    for (const result of results) {
+      const e: RecapEvent = { id: `e-${result}`, studentId: 's1', classId: 'c1', result, at: '2026-09-01T12:00:00.000Z' };
+      expect(rowToRecapEvent(recapEventToRow(e))).toEqual(e);
+    }
   });
 });
 
 describe('settings round-trip', () => {
   it('encja -> wiersz -> encja', () => {
-    const settings: Settings = { passesPerWeek: 2, hintGivesMinus: true, wheelSpinSec: 4 };
+    const settings: Settings = {
+      passesPerMonth: 3,
+      hintGivesMinus: true,
+      wheelSpinSec: 4,
+      plusesForFive: 3,
+      plombyForOne: 3,
+    };
     const row = settingsToRow(settings);
     expect(row.id).toBe('default');
+    expect(row.pluses_for_five).toBe(3);
+    expect(row.plomby_for_one).toBe(3);
     expect(rowToSettings(row)).toEqual(settings);
   });
 });

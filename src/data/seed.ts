@@ -54,9 +54,11 @@ export function buildSeedData(): SeedData {
   }));
 
   const settings: Settings = {
-    passesPerWeek: 2,
+    passesPerMonth: 3,
     hintGivesMinus: true,
     wheelSpinSec: 4,
+    plusesForFive: 3,
+    plombyForOne: 3,
   };
 
   return {

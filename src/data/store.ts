@@ -97,7 +97,13 @@ export const useStore = create<AppState>()(
       questions: [],
       lessons: [],
       recapEvents: [],
-      settings: { passesPerWeek: 2, hintGivesMinus: true, wheelSpinSec: 4 },
+      settings: {
+        passesPerMonth: 3,
+        hintGivesMinus: true,
+        wheelSpinSec: 4,
+        plusesForFive: 3,
+        plombyForOne: 3,
+      },
 
       addClass: (name) => {
         const order = get().classes.length;
@@ -230,7 +236,52 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 1,
+      version: 3,
+      // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
+      // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
+      // plusow/plomb na oceny.
+      // v2 -> v3: pasy przechodza z limitu tygodniowego (passesPerWeek) na
+      // miesieczny (passesPerMonth, nowa domyslna wartosc 3). Jesli nauczyciel
+      // mial dawna wartosc domyslna (2, nieruszana recznie) - dostaje nowa
+      // domyslna (3). Jesli mial cokolwiek innego (zmienione recznie) - ta sama
+      // liczba zostaje, tylko pod nowym polem/znaczeniem (miesiac zamiast tygodnia).
+      migrate: (persistedState, version) => {
+        const state = persistedState as {
+          recapEvents?: Array<{ result?: string; [key: string]: unknown }>;
+          settings?: (Partial<Settings> & { passesPerWeek?: number }) | undefined;
+          [key: string]: unknown;
+        };
+        if (version < 2) {
+          if (Array.isArray(state.recapEvents)) {
+            state.recapEvents = state.recapEvents.map((e) => {
+              if (e.result === 'minus') return { ...e, result: 'plomba' };
+              if (e.result === 'hint_minus') return { ...e, result: 'hint_plomba' };
+              return e;
+            });
+          }
+          state.settings = {
+            passesPerWeek: 2,
+            hintGivesMinus: true,
+            wheelSpinSec: 4,
+            plusesForFive: 3,
+            plombyForOne: 3,
+            ...state.settings,
+          };
+        }
+        if (version < 3) {
+          const oldSettings = state.settings ?? {};
+          const oldPassesPerWeek = oldSettings.passesPerWeek;
+          const passesPerMonth = oldPassesPerWeek === undefined || oldPassesPerWeek === 2 ? 3 : oldPassesPerWeek;
+          state.settings = {
+            hintGivesMinus: oldSettings.hintGivesMinus ?? true,
+            wheelSpinSec: oldSettings.wheelSpinSec ?? 4,
+            plusesForFive: oldSettings.plusesForFive ?? 3,
+            plombyForOne: oldSettings.plombyForOne ?? 3,
+            passesPerMonth,
+          };
+        }
+        return state as unknown as AppState;
+      },
       onRehydrateStorage: () => (state) => {
         // Jesli po hydratacji store jest calkowicie pusty (pierwsze uruchomienie),
         // zaladuj dane startowe.

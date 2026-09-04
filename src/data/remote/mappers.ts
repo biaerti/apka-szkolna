@@ -177,6 +177,7 @@ export interface RecapEventRow {
   question_set_id: string | null;
   question_id: string | null;
   result: RecapEvent['result'];
+  note: string | null;
   at: string;
 }
 
@@ -188,6 +189,7 @@ export function recapEventToRow(e: RecapEvent): RecapEventRow {
     question_set_id: e.questionSetId ?? null,
     question_id: e.questionId ?? null,
     result: e.result,
+    note: e.note ?? null,
     at: e.at,
   };
 }
@@ -200,6 +202,7 @@ export function rowToRecapEvent(row: RecapEventRow): RecapEvent {
     questionSetId: row.question_set_id ?? undefined,
     questionId: row.question_id ?? undefined,
     result: row.result,
+    note: row.note ?? undefined,
     at: row.at,
   };
 }
@@ -210,24 +213,30 @@ export const SETTINGS_ROW_ID = 'default';
 
 export interface SettingsRow {
   id: string;
-  passes_per_week: number;
+  passes_per_month: number;
   hint_gives_minus: boolean;
   wheel_spin_sec: number;
+  pluses_for_five: number;
+  plomby_for_one: number;
 }
 
 export function settingsToRow(s: Settings): SettingsRow {
   return {
     id: SETTINGS_ROW_ID,
-    passes_per_week: s.passesPerWeek,
+    passes_per_month: s.passesPerMonth,
     hint_gives_minus: s.hintGivesMinus,
     wheel_spin_sec: s.wheelSpinSec,
+    pluses_for_five: s.plusesForFive,
+    plomby_for_one: s.plombyForOne,
   };
 }
 
 export function rowToSettings(row: SettingsRow): Settings {
   return {
-    passesPerWeek: row.passes_per_week,
+    passesPerMonth: row.passes_per_month,
     hintGivesMinus: row.hint_gives_minus,
     wheelSpinSec: row.wheel_spin_sec,
+    plusesForFive: row.pluses_for_five,
+    plombyForOne: row.plomby_for_one,
   };
 }

@@ -6,6 +6,7 @@ import { create } from 'zustand';
 import { useStore } from '../store';
 import { getSupabase } from '../supabase';
 import { buildSnapshot, diffCollections, type Snapshot } from './diff';
+import { describeSyncError, extractErrorMessage, type SyncOperation } from './errors';
 import {
   classToRow,
   lessonToRow,
@@ -49,7 +50,13 @@ export interface RemoteData {
   settings: Settings;
 }
 
-const DEFAULT_SETTINGS: Settings = { passesPerWeek: 2, hintGivesMinus: true, wheelSpinSec: 4 };
+const DEFAULT_SETTINGS: Settings = {
+  passesPerMonth: 3,
+  hintGivesMinus: true,
+  wheelSpinSec: 4,
+  plusesForFive: 3,
+  plombyForOne: 3,
+};
 
 async function fetchAllRows<T>(table: string): Promise<T[]> {
   const supabase = getSupabase();
@@ -254,6 +261,9 @@ async function syncNow(): Promise<void> {
     // nie gubi zmian dosylanych w trakcie biezacej wysylki.
     for (;;) {
       dirtyDuringSend = false;
+      // Zapamietujemy, przy ktorej tabeli i operacji jestesmy - jesli supabase rzuci
+      // blad, chcemy pokazac to w komunikacie, a nie tylko "Nieznany blad synchronizacji".
+      let failedContext: { table: string; operation: SyncOperation } | null = null;
       try {
         const state = useStore.getState();
         const diffs = diffAll(state);
@@ -272,6 +282,7 @@ async function syncNow(): Promise<void> {
             const rows = diffs[c].upserts;
             for (let i = 0; i < rows.length; i += UPSERT_BATCH_SIZE) {
               const batch = rows.slice(i, i + UPSERT_BATCH_SIZE);
+              failedContext = { table: TABLE_NAMES[c], operation: 'upsert' };
               const { error } = await supabase.from(TABLE_NAMES[c]).upsert(batch, { onConflict: 'id' });
               if (error) throw error;
             }
@@ -281,10 +292,13 @@ async function syncNow(): Promise<void> {
             const ids = diffs[c].deletes;
             for (let i = 0; i < ids.length; i += UPSERT_BATCH_SIZE) {
               const batch = ids.slice(i, i + UPSERT_BATCH_SIZE);
+              failedContext = { table: TABLE_NAMES[c], operation: 'delete' };
               const { error } = await supabase.from(TABLE_NAMES[c]).delete().in('id', batch);
               if (error) throw error;
             }
           }
+
+          failedContext = null;
 
           // Wysylka udana - aktualizujemy snapshoty do stanu w momencie wysylki.
           for (const c of UPSERT_ORDER) {
@@ -295,7 +309,9 @@ async function syncNow(): Promise<void> {
         retryAttempt = 0;
         setStatus({ state: 'idle', pending: 0, error: undefined, lastSyncedAt: new Date().toISOString() });
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'Nieznany błąd synchronizacji.';
+        const message = failedContext
+          ? describeSyncError(err, failedContext.table, failedContext.operation)
+          : extractErrorMessage(err);
         setStatus({ state: 'error', error: message });
         scheduleRetry();
         return;

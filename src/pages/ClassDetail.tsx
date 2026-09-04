@@ -8,7 +8,22 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { EmptyState } from '../components/ui/EmptyState';
 import { StudentFormModal, type StudentFormValue } from '../components/students/StudentFormModal';
 import { ImportStudentsModal } from '../components/students/ImportStudentsModal';
+import { ClassStats } from '../components/stats/ClassStats';
+import { Settlements } from '../components/stats/Settlements';
 import type { Student } from '../data/types';
+
+/**
+ * Widok klasy laczy trzy rzeczy, ktore wczesniej byly rozrzucone po aplikacji:
+ * liste uczniow, ich bilans miesiaca (dawna zakladka "Statystyki") i rozliczenia
+ * plomb. Nauczyciel chcial jedno miejsce - klasa - zamiast dublujacych sie ekranow.
+ */
+type ClassTab = 'uczniowie' | 'bilans' | 'rozliczenia';
+
+const TAB_LABELS: Record<ClassTab, string> = {
+  uczniowie: 'Uczniowie',
+  bilans: 'Bilans miesiąca',
+  rozliczenia: 'Do rozliczenia',
+};
 
 export function ClassDetail() {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +40,7 @@ export function ClassDetail() {
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [importOpen, setImportOpen] = useState(false);
   const [toDelete, setToDelete] = useState<Student | null>(null);
+  const [tab, setTab] = useState<ClassTab>('uczniowie');
 
   const schoolClass = classes.find((c) => c.id === id);
 
@@ -103,6 +119,28 @@ export function ClassDetail() {
         }
       />
 
+      <div className="mb-4 flex gap-1 border-b border-gray-200">
+        {(Object.keys(TAB_LABELS) as ClassTab[]).map((key) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => setTab(key)}
+            className={
+              tab === key
+                ? '-mb-px border-b-2 border-accent-600 px-3 py-2 text-sm font-medium text-accent-700'
+                : '-mb-px border-b-2 border-transparent px-3 py-2 text-sm text-gray-500 hover:text-gray-700'
+            }
+          >
+            {TAB_LABELS[key]}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'bilans' && <ClassStats students={classStudents} />}
+      {tab === 'rozliczenia' && id && <Settlements classId={id} />}
+
+      {tab === 'uczniowie' && (
+      <>
       <label className="mb-3 flex w-fit items-center gap-2 text-sm text-gray-600">
         <input
           type="checkbox"
@@ -159,6 +197,8 @@ export function ClassDetail() {
             ))}
           </TBody>
         </Table>
+      )}
+      </>
       )}
 
       <StudentFormModal

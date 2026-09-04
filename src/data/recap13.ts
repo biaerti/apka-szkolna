@@ -198,6 +198,16 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
 - **dwuznak** to jedna głoska zapisana dwiema literami
 - **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz`),
       slideRecap(set1.set.id),
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Głoski, litery, sylaby i ortografia**
+
+- Samogłosek jest 8: a, e, i, o, u, y, ą, ę.
+- Dwuznak to jedna głoska zapisana dwiema literami (np. sz, cz, rz, ch).
+- Ó piszemy, gdy wymienia się na o, e albo a.
+- Rz piszemy, gdy wymienia się na r; ż - gdy wymienia się na g lub z.
+- Ch piszemy, gdy wymienia się na sz; h - w wyrazach obcych.`,
+      ),
     ],
   };
 
@@ -279,6 +289,15 @@ Przykłady:
 - zdanie **oznajmujące, pytające** albo **rozkazujące**
 - przecinek zawsze przed **że, ale, bo**`),
       slideRecap(set2.set.id),
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Części mowy, zdania i wielka litera**
+
+- Rzeczownik (kto? co?), czasownik (co robi?), przymiotnik (jaki? jaka? jakie?).
+- Zdania: oznajmujące, pytające, rozkazujące.
+- Wielką literą piszemy: początek zdania, imiona i nazwiska, nazwy miejscowości.
+- Przecinek stawiamy zawsze przed że, ale, bo.`,
+      ),
     ],
   };
 
@@ -357,6 +376,16 @@ Masz 5 minut.`, undefined, 300),
 - **baśń** jest zmyślona, **legenda** tłumaczy prawdziwe miejsce
 - opowiadanie: **wstęp - rozwinięcie - zakończenie**`),
       slideRecap(set3.set.id),
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Formy wypowiedzi i czytanie tekstów**
+
+- Wiersz ma wersy i rymy, proza to zwykły tekst pisany zdaniami.
+- Baśń jest zmyślona, legenda tłumaczy pochodzenie prawdziwego miejsca.
+- Opowiadanie ma trzy części: wstęp, rozwinięcie, zakończenie.
+- W opisie używamy dużo przymiotników (jaki? jaka?).
+- Zaproszenie: kogo, na co, kiedy, dokąd i kto zaprasza.`,
+      ),
     ],
   };
 
@@ -397,4 +426,8 @@ function slideTask(
 
 function slideRecap(questionSetId: string): Slide {
   return { id: newId(), kind: 'recap', questionSetId };
+}
+
+function slideNote(title: string, body: string): Slide {
+  return { id: newId(), kind: 'note', title, body };
 }

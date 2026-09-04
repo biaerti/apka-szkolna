@@ -33,11 +33,22 @@ interface Student {
   active: boolean;        // false = usuniety/przeniesiony, nie kasujemy historii
 }
 
-// Zdarzenie na recapie - jedyne zrodlo prawdy dla statystyk
-type RecapResult = 'plus' | 'minus' | 'pass' | 'hint_minus';
+// Zdarzenie na recapie - jedyne zrodlo prawdy dla statystyk.
+// Slownictwo takie, jakim nauczyciel mowi do dzieci (patrz "Zasady gry" nizej).
+// UWAGA: "minus" zostal przemianowany na "plomba" - to slowo ma nie wystepowac w UI.
+type RecapResult =
+  | 'plus'         // bardzo dobra odpowiedz
+  | 'kropka'       // odpowiedz czesciowa: zaliczone, ani plus ani plomba
+  | 'plomba'       // zla odpowiedz albo jej brak
+  | 'pass'         // uczen bierze pas (limit miesieczny)
+  | 'hint_plomba'  // plomba dla podpowiadajacego
+  | 'uwaga'        // niegrzeczne zachowanie (eskalacja w kole)
+  | 'rozliczenie'  // uczen oddal zadania naprawcze - zeruje licznik plomb
+  | 'jedynka'      // plomby zamienione na ocene niedostateczna
+  | 'piatka';      // plusy zamienione na ocene bardzo dobra
 interface RecapEvent {
   id: ID; studentId: ID; classId: ID; questionSetId?: ID; questionId?: ID;
-  result: RecapResult; at: string; /* ISO */ 
+  result: RecapResult; note?: string; at: string; /* ISO */
 }
 
 interface QuestionSet { id: ID; name: string; topic?: string; classIds: ID[]; createdAt: string; }
@@ -50,49 +61,111 @@ interface Lesson {
   plannedDate?: string; doneDate?: string;
   questionSetId?: ID;     // recap na start (opcjonalny)
   slides: Slide[];
+  registerTopic?: string; // temat do wpisania w dzienniku Vulcan
+  curriculum?: string[];  // kody podstawy programowej (src/data/podstawa.ts)
 }
 
+// Wbudowane ilustracje SVG rysowane w kodzie (src/components/slides/art) - slajd tekstowy
+// bez grafiki to na projektorze pusta czarna plansza. Rysujemy w SVG, a nie wstawiamy plikow,
+// zeby dzialalo offline w szkole i dalo sie latwo poprawic.
+type SlideArt = 'gra' | 'kolo' | 'oceny' | 'stopnie' | 'eskalacja'
+              | 'pas' | 'zadania' | 'lawki' | 'przebieg' | 'zeszyt';
+
 type Slide =
-  | { id: ID; kind: 'title'; title: string; subtitle?: string }
-  | { id: ID; kind: 'text'; title?: string; body: string }               // markdown-lite: akapity, listy
+  | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }
+  | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt } // markdown-lite: akapity, listy
   | { id: ID; kind: 'task'; code: string; title?: string; body: string; page?: number; exerciseNo?: string; timerSec?: number }
+  // Praca z tekstem: strona i czas na przeczytanie sa GLOWNA trescia slajdu,
+  // widoczne od razu i z ostatniej lawki - nie dodatkiem na marginesie.
+  | { id: ID; kind: 'read'; title?: string; source?: string; page?: number; pageTo?: number; body?: string; timerSec?: number }
+  | { id: ID; kind: 'note'; title?: string; body: string }               // notatka do zeszytu, zamyka lekcje
   | { id: ID; kind: 'recap'; questionSetId: ID }                        // slajd uruchamia kolo fortuny
   | { id: ID; kind: 'image'; url: string; caption?: string };
 
 interface Settings {
-  passesPerWeek: number;          // domyslnie 2
-  hintGivesMinus: boolean;        // domyslnie true
+  passesPerMonth: number;         // domyslnie 3
+  hintGivesMinus: boolean;        // podpowiadanie = plomba; domyslnie true
   wheelSpinSec: number;           // domyslnie 4
+  plusesForFive: number;          // ile plusow daje piatke; domyslnie 3
+  plombyForOne: number;           // ile plomb daje jedynke; domyslnie 3
 }
 ```
 
-Tydzien do limitu pasow: poniedzialek-niedziela wg daty lokalnej.
+**Wszystko rozliczamy pelnymi miesiacami kalendarzowymi.** Pasy, uwagi (eskalacja) i statystyki
+zeruja sie 1. dnia miesiaca, wg daty lokalnej. Jeden rytm - nauczyciel nie ma pamietac dwoch.
+Licznik uwag wynika z zapisanych `RecapEvent`, nie ze stanu sesji: przeladowanie strony w srodku
+lekcji nie moze kasowac konsekwencji.
 
 ## Moduly / trasy
-- `/` - pulpit: dzisiejsze/kolejne lekcje per klasa, szybkie przejscie do recapu.
-- `/klasy` - tabela klas, CRUD; `/klasy/:id` - uczniowie klasy (CRUD, import z tekstu:
-  kazda linia "Nazwisko Imie" lub "1. Nazwisko Imie - uwaga"), aktywacja/dezaktywacja, statystyki ucznia.
-- `/pytania` - zestawy pytan; `/pytania/:id` - edytor pytan (dodawanie na biezaco, import z
-  tekstu: jedno pytanie na linie, opcjonalnie "pytanie | odpowiedz"), przypisanie do klas.
-- `/powtorka` - wybor klasy + zestawu, potem `/powtorka/:classId/:setId` - **ekran projektora**:
-  - kolo fortuny z aktywnymi (obecnymi) uczniami; nauczyciel przed startem odhacza nieobecnych
-  - przycisk "Kręć" -> animacja obrotu (canvas albo CSS transform, deterministyczny wynik losowany
-    przed animacja), wynik wyrazny, duza czcionka
-  - po wylosowaniu: pokaz nastepne pytanie z zestawu (kolejno lub losowo - przelacznik),
-    przyciski: Dobrze (+) / Źle (-) / Pas / Podpowiadał(a) (wybor innego ucznia -> minus)
-  - licznik pasow ucznia w tym tygodniu widoczny, blokada gdy wyczerpane
-  - uczen po odpowiedzi trafia do puli "juz byl" (mozna wlaczyc powtorki)
-  - pasek boczny (zwijany) z lista uczniow i biezacym bilansem miesiaca
-  - tryb pelnoekranowy (Fullscreen API) i skroty: Spacja = kręć, 1/2/3 = +/-/pas, F = fullscreen
-- `/lekcje` - lista lekcji per klasa (kolejka, przeciaganie kolejnosci opcjonalnie - min. gora/dol),
-  statusy, skip; `/lekcje/:id/edytuj` - edytor slajdow; `/lekcje/:id/pokaz` - **prezentacja**:
-  strzalki/spacja nawigacja, F fullscreen, slajd `task` ma duzy kod zadania, numer strony,
-  stoper (start/pauza/reset, dzwiek opcjonalny - brak assetow, wiec bez dzwieku, wizualny alarm),
-  slajd `recap` osadza ekran powtorki.
-- `/kalendarz` - widok tygodnia: lekcje z `plannedDate`, plus prosta kolejka "co dalej" per klasa,
-  przycisk "pomiń" / "zrobione".
-- `/statystyki` - per klasa, per miesiac: tabela uczen x (+, -, pas, podpowiedzi), eksport CSV.
+Menu ma **szesc** pozycji: Pulpit, Klasy, Lekcje, Podrecznik, Zasady, Ustawienia. Nauczyciel
+wprost prosil o mniej zakladek ("chce byc milionerem na zakladkach, ktorych nie bede uzywal"),
+wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
+
+- `/` - pulpit: gdzie jestem, co dalej.
+- `/klasy` - lista klas; `/klasy/:id` - **jedyne miejsce z uczniami**: lista uczniow klasy
+  (CRUD, import z tekstu, aktywacja/dezaktywacja) razem z ich bilansem miesiaca, wyborem
+  miesiaca, eksportem CSV i sekcja "Do rozliczenia". Nie ma osobnej zakladki Statystyki -
+  statystyki sa tam, gdzie uczniowie.
+- `/pytania`, `/pytania/:id` - zestawy pytan i edytor pytan (bez pozycji w menu, wchodzi sie
+  z poziomu lekcji).
+- `/lekcje` - lekcje per klasa (zakladki IV A / IV B / IV C / V A). Wszystkie czwarte klasy maja
+  te same lekcje i te same pytania, ale **postep jest liczony osobno dla kazdej klasy** - uczniowie
+  sa inni. Zamiast kalendarza: lekka informacja "gdzie jestem, co dalej"; bez siatki tygodnia i bez
+  planowania dat. Akcja "Odswiez gotowe materialy" podmienia wstawione wczesniej lekcje i zestawy
+  na aktualne z kodu, zachowujac status lekcji i nie kasujac `recapEvents`.
+- `/lekcje/:id/edytuj` - edytor slajdow; `/lekcje/:id/pokaz` - **prezentacja**: strzalki/spacja,
+  F fullscreen; slajd `task` ma duzy kod zadania i stoper, slajd `read` wielka strone i czas na
+  przeczytanie, slajd `note` wyglada jak kartka z zeszytu i zamyka lekcje, slajd `recap` osadza
+  ekran powtorki.
+- `/powtorka/:classId/:setId` - **ekran projektora** z kolem fortuny. Nie ma osobnej zakladki
+  "Powtorka": kolo uruchamia sie ze slajdu `recap` wpietego w konkretna lekcje, a po zamknieciu
+  wraca sie do prezentacji.
+  - kolo z obecnymi uczniami; nauczyciel odhacza nieobecnych w pasku bocznym
+  - "Kręć" -> animacja obrotu (wynik losowany przed animacja), wylosowana osoba wyraznie
+    wyrozniona az do kolejnego losowania
+  - przyciski: Dobrze (plus) / Częściowo (kropka) / Źle (plomba) / Pas / Podpowiadał(a) / Uwaga
+  - lista pytan zestawu do recznego wyboru pytania
+  - pasek boczny z lista uczniow i czytelnym bilansem miesiaca (plusy / kropki / plomby / pasy)
+  - skroty: Spacja = kręć, 1/2/3/4 = plus/kropka/plomba/pas, N = nastepne pytanie,
+    O = pokaz/ukryj odpowiedz, F = fullscreen, Esc = zakoncz
+- `/podrecznik` - wgrane PDF-y podrecznika (IndexedDB, podglad w przegladarce). Docelowo zrodlo
+  numerow stron i fragmentow do slajdow `read`.
+- `/zasady/druk` - **poza AppShell**: strona A4 z dwiema kopiami zasad do przeciecia nozyczkami
+  plus strona z rysunkiem kola fortuny. Zrodlo tresci: `src/data/zasady.ts`.
 - `/ustawienia` - Settings + eksport/import calej bazy do JSON.
+
+## Zasady gry (kolo fortuny)
+Jedno zrodlo prawdy dla tresci: `src/data/zasady.ts` - zasila i wydruk `/zasady/druk`, i slajdy
+lekcji zapoznawczej. Logika: `src/lib/recap.ts`.
+
+- Odpowiedz oceniamy jako **plus** (bardzo dobra), **kropka** (czesciowa - zaliczone, bez plusa)
+  albo **plomba** (zla albo brak). Slowo "minus" nie wystepuje w UI - ma nie budzic negatywnych
+  skojarzen u dzieci.
+- **3 plusy = piatka, 3 plomby = jedynka** (progi w `Settings.plusesForFive` / `plombyForOne`).
+- 3 plomby nie sa jednak od razu jedynka: uczen dostaje **3 zadania naprawcze** z tych pytan, na
+  ktore nie umial odpowiedziec (stad `RecapEvent.questionId`). Przyniesie -> `rozliczenie`
+  (licznik plomb wraca do zera). Nie przyniesie -> `jedynka`.
+- Nie zglaszamy sie do odpowiedzi - losuje kolo. To gra.
+- Za podpowiadanie plomba dla podpowiadajacego (`hint_plomba`).
+- Kazdy ma **3 pasy w miesiacu** (`passesPerMonth`).
+- **Eskalacja za przeszkadzanie** (licznik uwag liczony z `RecapEvent` typu `uwaga` w biezacym
+  miesiacu, zeruje sie 1. dnia miesiaca razem z pasami):
+  1. pierwsza uwaga - ostrzezenie, bez skutkow mechanicznych,
+  2. druga (`WARN_NO_PLUS_AT`) - uczen traci mozliwosc zdobywania plusow,
+  3. trzecia (`WARN_DOUBLE_AT`) - uczen trafia do kola **podwojnie**; kazde dodatkowe wejscie to
+     jedno losowanie i jedno pytanie wiecej dla calej klasy.
+- Zasada lawek: nie siadamy w ostatnich lawkach, wszyscy w najblizszych - zeby nie krzyczec
+  (mniej halasu i bodzcow).
+
+## Schemat lekcji (uklad tresci)
+Kolo fortuny **zamyka i otwiera** lekcje. Domyslny uklad slajdow modulu tematycznego:
+1. powtorka z poprzedniego tematu -> slajd `recap`,
+2. nowy temat: `title` / `text` / `read` / `task`,
+3. slajd `recap` z nowego tematu (kolo kreci sie 2-3 razy w ciagu tematu),
+4. slajd `note` - notatka do zeszytu ("zapisujecie notatke i jestescie wolni").
+
+Zestaw pytan do jednego bloku tematycznego: **5-6 krotkich pytan**. Bloki nie moga byc dlugie -
+to klasa czwarta.
 
 ## Seed
 Przy pierwszym uruchomieniu (pusty store) zaladowac klase "IV A" z 20 uczniami (plik

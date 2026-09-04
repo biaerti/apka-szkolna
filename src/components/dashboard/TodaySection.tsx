@@ -35,9 +35,14 @@ export function TodaySection({ lessons, classes }: { lessons: Lesson[]; classes:
                           Pokaż
                         </Button>
                       </Link>
-                      <Link to={l.questionSetId ? `/powtorka/${cls.id}/${l.questionSetId}` : '/powtorka'}>
-                        <Button size="sm">Powtórka</Button>
-                      </Link>
+                      {/* Powtorka nie jest juz osobnym modulem - kolo fortuny startuje ze
+                          slajdu "recap" wewnatrz prezentacji lekcji, wiec bez wlasnego
+                          zestawu pytan nie ma tu czego uruchamiac osobno. */}
+                      {l.questionSetId && (
+                        <Link to={`/powtorka/${cls.id}/${l.questionSetId}`}>
+                          <Button size="sm">Powtórka</Button>
+                        </Link>
+                      )}
                     </span>
                   </li>
                 ))}

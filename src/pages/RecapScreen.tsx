@@ -14,8 +14,8 @@ export function RecapScreen() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gray-950 text-white">
         <p className="text-xl">Nie znaleziono klasy lub zestawu pytań.</p>
-        <Link to="/powtorka" className="rounded-md bg-accent-600 px-4 py-2 text-sm font-medium hover:bg-accent-700">
-          Wróć do wyboru
+        <Link to="/lekcje" className="rounded-md bg-accent-600 px-4 py-2 text-sm font-medium hover:bg-accent-700">
+          Wróć do lekcji
         </Link>
       </div>
     );
@@ -29,7 +29,7 @@ export function RecapScreen() {
       classId={classId}
       setId={setId}
       absentIds={absentIds}
-      onExit={() => navigate('/powtorka')}
+      onExit={() => navigate('/lekcje')}
     />
   );
 }

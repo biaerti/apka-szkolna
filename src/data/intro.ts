@@ -1,8 +1,15 @@
 // Lekcja zapoznawcza: zestaw 20 pytan "Poznajmy sie" + lekcja z prezentacja.
 // Kontrakt: implementacja w module powtorki. Nie zmieniac sygnatury.
+//
+// Prezentacja to prawdziwe wprowadzenie do gry (kolo fortuny), ktora bedzie
+// towarzyszyc klasie caly rok: pytanie do dzieci -> definicja gry -> zasady.
+// Tresc zasad NIE jest duplikowana - slajdy, ktore powtarzaja regulamin,
+// czerpia bezposrednio z `RULE_SECTIONS` w src/data/zasady.ts (jedno zrodlo
+// prawdy, ta sama tresc trafia tez na wydruk A4).
 
 import { newId } from './id';
-import type { Lesson, Question, QuestionSet, Slide } from './types';
+import { RULE_SECTIONS, type RuleSection } from './zasady';
+import type { Lesson, Question, QuestionSet, Slide, SlideArt } from './types';
 
 export interface IntroBundle {
   lesson: Omit<Lesson, 'id' | 'order'>;
@@ -33,16 +40,50 @@ const QUESTION_TEXTS: string[] = [
   'Gdybyś mógł/mogła mieć dodatkową godzinę w ciągu dnia, co byś z nią zrobił/a?',
 ];
 
-function slideTitle(title: string, subtitle?: string): Slide {
-  return { id: newId(), kind: 'title', title, subtitle };
+// ---------- Pomocnicze fabryki slajdow ----------
+
+function slideTitle(title: string, subtitle?: string, art?: SlideArt): Slide {
+  return { id: newId(), kind: 'title', title, subtitle, art };
 }
 
-function slideText(title: string, body: string): Slide {
-  return { id: newId(), kind: 'text', title, body };
+function slideText(title: string, body: string, art?: SlideArt): Slide {
+  return { id: newId(), kind: 'text', title, body, art };
+}
+
+function slideImage(url: string, caption?: string): Slide {
+  return { id: newId(), kind: 'image', url, caption };
+}
+
+function slideNote(title: string, body: string): Slide {
+  return { id: newId(), kind: 'note', title, body };
 }
 
 function slideRecap(questionSetId: string): Slide {
   return { id: newId(), kind: 'recap', questionSetId };
+}
+
+/** Znajduje sekcje zasad po tytule - zrodlo prawdy dla slajdow, ktore je omawiaja. */
+function ruleSection(title: string): RuleSection {
+  const found = RULE_SECTIONS.find((s) => s.title === title);
+  if (!found) throw new Error(`Nie znaleziono sekcji zasad: ${title}`);
+  return found;
+}
+
+/** Zamienia liste punktow na markdown-lite: nieuporzadkowana lista "- ...". */
+function asBulletList(items: string[]): string {
+  return items.map((item) => `- ${item}`).join('\n');
+}
+
+/**
+ * Dzieli punkty sekcji na pasujace do wzorca i reszte. Uzywane, gdy jeden punkt
+ * zasad zasluguje na wlasny slajd z ilustracja (np. "3 plusy = piatka").
+ * Szukamy po tresci, a nie po indeksie - zasady bywaja przestawiane.
+ */
+function partitionItems(items: string[], match: RegExp): { matched: string[]; rest: string[] } {
+  return {
+    matched: items.filter((item) => match.test(item)),
+    rest: items.filter((item) => !match.test(item)),
+  };
 }
 
 /** Tworzy zestaw pytan i lekcje zapoznawcza (pierwsza lekcja integracyjna) dla wskazanej klasy. */
@@ -63,31 +104,125 @@ export function buildIntroLesson(classId: string): IntroBundle {
     order: i,
   }));
 
+  const secGraKolo = ruleSection('Gramy w koło fortuny');
+  const secWygranaPrzegrana = ruleSection('Co można wygrać, a co przegrać');
+  const secPasy = ruleSection('Pasy');
+  const secPlomby = ruleSection('Plomby da się odrobić');
+  const secPrzeszkadzanie = ruleSection('Kiedy ktoś przeszkadza');
+  const secLawki = ruleSection('Gdzie siedzimy');
+  // Punkt o przelicznikach na oceny dostaje wlasny slajd z ilustracja "stopnie",
+  // reszta zostaje przy definicjach plusa, kropki i plomby.
+  const { matched: ocenyStopnie, rest: ocenyBiezace } = partitionItems(
+    secWygranaPrzegrana.items,
+    /piątka|jedynka/i,
+  );
+  const secLekcja = ruleSection('Jak wygląda nasza lekcja');
+
   const lesson: Omit<Lesson, 'id' | 'order'> = {
     classId,
     title: 'Lekcja zapoznawcza',
     topic: 'Lekcja zapoznawcza',
     status: 'planned',
     questionSetId: setId,
-    registerTopic: 'Poznajmy się - lekcja organizacyjna i integracyjna',
-    curriculum: ['III.1.1', 'II.3.7'],
+    registerTopic: 'Poznajmy się - lekcja organizacyjna. Zasady pracy na lekcjach języka polskiego',
+    curriculum: ['III.1.1', 'II.3.7', 'II.3.3'],
     slides: [
+      // 1. Tytul
       slideTitle('Poznajmy się', 'Język polski - klasa IV'),
+
+      // 2. Zdjecie nauczyciela (plik w public/bart.jpg)
+      slideImage('/bart.jpg', 'Bartosz Kuniński'),
+
+      // 3. Kim jestem - bez ilustracji, bo zdjecie jest slajd wczesniej
       slideText(
-        'Jak to działa',
-        `- Każdy po kolei mówi swoje imię i jedną rzecz o sobie.
-- Odpowiada na wylosowane pytanie.
-- Słuchamy się nawzajem.`,
+        'Kim jestem',
+        `Jestem psychologiem i nauczycielem języka polskiego.
+
+Pracuję też z komputerami i sztuczną inteligencją. Ten program napisałem sam - za chwilę zobaczycie w nim koło fortuny z waszymi imionami.`,
       ),
+
+      // 4. Pytanie do klasy - tu mowia dzieci, slajd ma byc pusty celowo
+      slideText('Co to jest gra?', '**Jakie gry znacie?**'),
+
+      // 5. Definicja gry
       slideText(
-        'Zasady na naszych lekcjach',
-        `- Na lekcję przynosimy zeszyt i podręcznik.
-- Chcąc coś powiedzieć, podnosimy rękę.
-- Na powtórkach losujemy pytania kołem fortuny: 2 pasy na tydzień dla każdego.
-- Za podpowiadanie - minus.
-- Za dobrą odpowiedź - plus.`,
+        'Czym jest gra',
+        `W każdej grze:
+
+- są zasady
+- można wygrać
+- można przegrać
+- jest nagroda i jest kara
+
+Bez zasad nie ma gry.`,
+        'gra',
       ),
+
+      // 6. Przebieg lekcji (z zasady.ts)
+      slideText('My też będziemy grać', asBulletList(secLekcja.items), 'przebieg'),
+
+      // 7. Zapowiedz kola
+      slideText(
+        'Koło fortuny',
+        `Na kole są wasze imiona i nazwiska.
+
+Koło losuje, kto odpowiada.`,
+        'kolo',
+      ),
+
+      // 8. Pierwsze pokazanie kola - nauczyciel kreci raz-dwa i wychodzi (Esc)
       slideRecap(setId),
+
+      // 9. Plus, kropka, plomba (z zasady.ts, bez punktu o ocenach)
+      slideText('Co można wygrać, a co przegrać', asBulletList(ocenyBiezace), 'oceny'),
+
+      // 10. Przelicznik na oceny - wlasny slajd, bo to najwazniejsza konsekwencja
+      slideText('Kiedy plusy zamieniają się w ocenę', asBulletList(ocenyStopnie), 'stopnie'),
+
+      // 11. Nie zglaszamy sie + pasy (z zasady.ts)
+      slideText('Nie zgłaszamy się', asBulletList([secGraKolo.items[1], ...secPasy.items]), 'pas'),
+
+      // 12. Plomby da sie odrobic (z zasady.ts)
+      slideText('Plomby da się odrobić', asBulletList(secPlomby.items), 'zadania'),
+
+      // 13. Pytanie do klasy - znowu mowia dzieci
+      slideText('Czy zachowujecie się grzecznie na lekcjach?', '**Co to znaczy: przeszkadzać?**'),
+
+      // 14. Eskalacja 1-2-3 (z zasady.ts)
+      slideText('Kiedy ktoś przeszkadza', asBulletList(secPrzeszkadzanie.items), 'eskalacja'),
+
+      // 15. Gdzie siedzimy (z zasady.ts)
+      slideText('Gdzie siedzimy', asBulletList(secLawki.items), 'lawki'),
+
+      // 16. Instrukcja przed runda zapoznawcza - co uczen ma powiedziec
+      slideText(
+        'Kiedy koło cię wskaże',
+        `Powiedz trzy rzeczy:
+
+1. Jak się nazywasz.
+2. Co lubisz robić.
+3. Odpowiedz na pytanie, które wylosowało koło.
+
+Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
+        'kolo',
+      ),
+
+      // 17. Wlasciwa runda zapoznawcza - 20 pytan
+      slideRecap(setId),
+
+      // 18. Notatka do zeszytu
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Zasady pracy na lekcjach języka polskiego**
+
+- Koło losuje, kto odpowiada. Nie zgłaszamy się.
+- Plus - dobra odpowiedź. Kropka - częściowa. Plomba - zła albo jej brak.
+- 3 plusy = piątka. 3 plomby = jedynka.
+- 3 pasy w miesiącu.
+- Siadamy w najbliższych ławkach.`,
+      ),
+
+      // 19. Zakonczenie
       slideTitle('Do zobaczenia!', 'Na następnej lekcji: powtórka z klas 1-3'),
     ],
   };

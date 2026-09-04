@@ -63,7 +63,7 @@ export function TaskSlideForm({ slide, onChange }: { slide: TaskSlide; onChange:
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Stoper</label>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Stoper (czas na zadanie)</label>
         <Select
           value={customMode ? 'custom' : currentTimerStr}
           onChange={(e) => {

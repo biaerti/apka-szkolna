@@ -58,17 +58,16 @@ export function QuestionPanel({
 
       {question?.answer && (
         <div className="mt-2 shrink-0">
-          {showAnswer ? (
-            <p className="rounded-md bg-gray-800 px-3 py-2 text-xl text-accent-200">{question.answer}</p>
-          ) : (
-            <button
-              type="button"
-              onClick={onToggleShowAnswer}
-              className="rounded-md border border-gray-600 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-800"
-            >
-              pokaż odpowiedź (O)
-            </button>
+          {showAnswer && (
+            <p className="mb-1.5 rounded-md bg-gray-800 px-3 py-2 text-xl text-accent-200">{question.answer}</p>
           )}
+          <button
+            type="button"
+            onClick={onToggleShowAnswer}
+            className="rounded-md border border-gray-600 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-800"
+          >
+            {showAnswer ? 'ukryj odpowiedź (O)' : 'pokaż odpowiedź (O)'}
+          </button>
         </div>
       )}
 

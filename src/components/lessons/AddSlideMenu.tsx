@@ -3,7 +3,7 @@ import type { SlideKind } from './slideDefaults';
 import { SLIDE_KIND_LABELS } from './slideDefaults';
 import { Button } from '../ui/Button';
 
-const KINDS: SlideKind[] = ['title', 'text', 'task', 'recap', 'image'];
+const KINDS: SlideKind[] = ['title', 'text', 'read', 'task', 'recap', 'image', 'note'];
 
 export function AddSlideMenu({ onAdd }: { onAdd: (kind: SlideKind) => void }) {
   const [open, setOpen] = useState(false);

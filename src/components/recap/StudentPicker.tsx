@@ -1,21 +1,24 @@
-// Modal wyboru ucznia, ktory podpowiadal - dodaje mu zdarzenie hint_minus.
+// Modal wyboru ucznia - uzywany zarowno przy "kto podpowiadal" (hint_plomba dla
+// wybranego ucznia), jak i przy "komu wpisac uwage" (result: uwaga). Tresc
+// naglowka podaje wywolujacy przez prop `title`.
 
 import { Modal } from '../ui/Modal';
 import type { Student } from '../../data/types';
 
-export interface HintPickerProps {
+export interface StudentPickerProps {
   open: boolean;
+  title: string;
   students: Student[];
-  excludeStudentId: string | null;
+  excludeStudentId?: string | null;
   onPick: (studentId: string) => void;
   onClose: () => void;
 }
 
-export function HintPicker({ open, students, excludeStudentId, onPick, onClose }: HintPickerProps) {
+export function StudentPicker({ open, title, students, excludeStudentId, onPick, onClose }: StudentPickerProps) {
   const options = students.filter((st) => st.id !== excludeStudentId);
 
   return (
-    <Modal open={open} onClose={onClose} title="Kto podpowiadał?">
+    <Modal open={open} onClose={onClose} title={title}>
       {options.length === 0 ? (
         <p className="text-sm text-gray-500">Brak innych uczniów do wyboru.</p>
       ) : (

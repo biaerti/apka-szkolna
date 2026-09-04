@@ -1,41 +1,46 @@
-// Kolo fortuny rysowane na canvasie 2D. Sektory = uczniowie z puli (naprzemienne
-// kolory). Wynik jest losowany PRZED animacja (przez useRecapSession) - tu tylko
-// animujemy obrot do zadanego kata koncowego (easing ease-out).
+// Kolo fortuny rysowane na canvasie 2D. Sektory = wpisy do puli (PoolEntry) -
+// uczen z podwojnym wejsciem (3 uwagi) ma dwa sasiadujace lub rozrzucone
+// sektory, wiec rysujemy po wpisach, nie po uczniach. Wynik jest losowany
+// PRZED animacja (przez useRecapSession) - tu tylko animujemy obrot do
+// zadanego kata koncowego (easing ease-out).
 //
 // Rysowanie w devicePixelRatio (ostrosc na projektorze) + etykiety radialne
 // (jedna linia, wyrownana do prawej przy promieniu 0.92), zeby nazwiska sie nie
-// nakladaly przy wiekszej liczbie sektorow. Wylosowany sektor jest podswietlony.
+// nakladaly przy wiekszej liczbie sektorow. Wylosowany sektor jest podswietlony
+// (zolty), a sektory ucznia z podwojnym wejsciem sa bursztynowe, zeby dzieci
+// widzialy, ze ktos jest na kole dwa razy.
 
 import { useEffect, useRef } from 'react';
-import type { Student } from '../../data/types';
+import type { PoolEntry } from '../../lib/recap';
 
 export interface WheelProps {
-  students: Student[];
+  entries: PoolEntry[];
   spinning: boolean;
   targetAngle: number;
   spinToken: number;
   spinSec: number;
   onSpinEnd: () => void;
   size?: number;
-  /** Id ucznia aktualnie wylosowanego (podswietlenie sektora po zatrzymaniu). */
-  highlightStudentId?: string | null;
+  /** Klucz wpisu aktualnie wylosowanego (podswietlenie DOKLADNIE tego sektora). */
+  highlightKey?: string | null;
 }
 
 const COLORS = ['#4f46e5', '#818cf8', '#312e81', '#6366f1'];
+const DOUBLE_COLORS = ['#b45309', '#d97706'];
 
 function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
 }
 
 export function Wheel({
-  students,
+  entries,
   spinning,
   targetAngle,
   spinToken,
   spinSec,
   onSpinEnd,
   size = 480,
-  highlightStudentId = null,
+  highlightKey = null,
 }: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rotationRef = useRef(0);
@@ -66,7 +71,7 @@ export function Wheel({
 
     ctx.clearRect(0, 0, w, h);
 
-    const count = students.length;
+    const count = entries.length;
     if (count === 0) {
       ctx.beginPath();
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -80,6 +85,13 @@ export function Wheel({
       return;
     }
 
+    // Uczniowie z wiecej niz jednym wpisem w biezacej puli - ich sektory
+    // rysujemy bursztynowo, zeby bylo widac podwojne wejscie na kole.
+    const countByStudent = new Map<string, number>();
+    for (const entry of entries) {
+      countByStudent.set(entry.student.id, (countByStudent.get(entry.student.id) ?? 0) + 1);
+    }
+
     const segment = (Math.PI * 2) / count;
     // Konwersja: 0 stopni (kat z wheelTargetAngle) = gora (wskaznik). Canvas 0 rad = prawo,
     // wiec przesuwamy o -90 stopni oraz o kat obrotu (w radianach), zgodnie z ruchem wskazowek zegara.
@@ -89,20 +101,21 @@ export function Wheel({
     // Rozmiar czcionki dobrany do liczby sektorow: przy 20 sektorach ~ size/28,
     // nigdy mniej niz 12px.
     const fontSize = Math.max(12, (size * 20) / (28 * count));
-    const highlightIdx = highlightStudentId
-      ? students.findIndex((s) => s.id === highlightStudentId)
-      : -1;
+    const highlightIdx = highlightKey ? entries.findIndex((en) => en.key === highlightKey) : -1;
 
     for (let i = 0; i < count; i++) {
       const start = startOffset + i * segment;
       const end = start + segment;
       const isHighlighted = !spinning && i === highlightIdx;
+      const entry = entries[i];
+      const isDouble = (countByStudent.get(entry.student.id) ?? 0) > 1;
+      const colorSet = isDouble ? DOUBLE_COLORS : COLORS;
 
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.arc(cx, cy, radius, start, end);
       ctx.closePath();
-      ctx.fillStyle = isHighlighted ? '#facc15' : COLORS[i % COLORS.length];
+      ctx.fillStyle = isHighlighted ? '#facc15' : colorSet[i % colorSet.length];
       ctx.fill();
       ctx.strokeStyle = isHighlighted ? '#fff7ed' : '#0f172a';
       ctx.lineWidth = isHighlighted ? 4 : 2;
@@ -120,7 +133,7 @@ export function Wheel({
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
 
-      const student = students[i];
+      const student = entry.student;
       const fullText = `${student.firstName} ${student.lastName}`;
       const maxWidth = radius * 0.7;
       let label = fullText;
@@ -153,7 +166,7 @@ export function Wheel({
   useEffect(() => {
     draw(rotationRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [students, size, highlightStudentId, spinning]);
+  }, [entries, size, highlightKey, spinning]);
 
   useEffect(() => {
     if (!spinning || spinToken === 0) return;
