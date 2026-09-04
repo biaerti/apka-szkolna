@@ -68,8 +68,16 @@ interface Lesson {
 // Wbudowane ilustracje SVG rysowane w kodzie (src/components/slides/art) - slajd tekstowy
 // bez grafiki to na projektorze pusta czarna plansza. Rysujemy w SVG, a nie wstawiamy plikow,
 // zeby dzialalo offline w szkole i dalo sie latwo poprawic.
+// Dwa zestawy: zasady gry (lekcja zapoznawcza, wydruk) i tresci przedmiotowe (powtorka 1-3).
 type SlideArt = 'gra' | 'kolo' | 'oceny' | 'stopnie' | 'eskalacja'
-              | 'pas' | 'zadania' | 'lawki' | 'przebieg' | 'zeszyt';
+              | 'pas' | 'zadania' | 'lawki' | 'przebieg' | 'zeszyt'
+              // powtorka 1-3: fonetyka i ortografia
+              | 'samogloski' | 'sylaby' | 'dwuznak' | 'wymianaOu' | 'wymianaRzCh'
+              // powtorka 1-3: gramatyka i interpunkcja
+              | 'rzeczownik' | 'czasownik' | 'przymiotnik' | 'rodzajeZdan'
+              | 'wielkaLitera' | 'przecinek'
+              // powtorka 1-3: formy wypowiedzi
+              | 'wiersz' | 'basn' | 'opowiadanie' | 'opis' | 'zaproszenie';
 
 type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }

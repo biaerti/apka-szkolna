@@ -105,7 +105,24 @@ export type SlideArt =
   | 'zadania' // zadania naprawcze z pytan, ktorych uczen nie umial
   | 'lawki' // plan klasy: siadamy w najblizszych lawkach
   | 'przebieg' // przebieg lekcji: powtorka - temat - kolo - notatka
-  | 'zeszyt'; // notatka do zeszytu
+  | 'zeszyt' // notatka do zeszytu
+  // Ilustracje przedmiotowe do powtorki 1-3 (src/data/recap13.ts).
+  | 'samogloski' // 8 samoglosek na tle spolglosek
+  | 'sylaby' // podzial wyrazu na sylaby
+  | 'dwuznak' // jedna gloska zapisana dwiema literami
+  | 'wymianaOu' // o wymienia sie na o, e, a
+  | 'wymianaRzCh' // rz na r, z na g/z, ch na sz
+  | 'rzeczownik' // kto? co?
+  | 'czasownik' // co robi? co sie z nim dzieje?
+  | 'przymiotnik' // jaki? jaka? jakie?
+  | 'rodzajeZdan' // oznajmujace, pytajace, rozkazujace
+  | 'wielkaLitera' // poczatek zdania, imie, nazwa miejscowosci
+  | 'przecinek' // przecinek przed ze, ale, bo
+  | 'wiersz' // wiersz kontra proza, rymy
+  | 'basn' // basn, legenda i bohater glowny
+  | 'opowiadanie' // wstep - rozwiniecie - zakonczenie
+  | 'opis' // przymiotniki opisujace przedmiot
+  | 'zaproszenie'; // kogo, na co, kiedy, dokad, kto zaprasza
 
 export type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }

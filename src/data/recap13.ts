@@ -5,7 +5,7 @@
 // Wstawiane z ekranu Lekcje przyciskiem.
 
 import { newId } from './id';
-import type { Lesson, Question, QuestionSet, Slide } from './types';
+import type { Lesson, Question, QuestionSet, Slide, SlideArt } from './types';
 
 interface QuestionSeed {
   text: string;
@@ -129,7 +129,7 @@ export function buildRecap13(classId: string): SeedBundleResult {
 
 Reszta liter to **spółgłoski**, np. **b, k, m, s, t**.
 
-Przy samogłosce buzia jest otwarta, powietrze płynie swobodnie.`),
+Przy samogłosce buzia jest otwarta, powietrze płynie swobodnie.`, 'samogloski'),
       slideTask('Z1', 'Policz samogłoski', `Zapisz w zeszycie każdy wyraz i policz w nim samogłoski:
 
 - kot
@@ -142,7 +142,7 @@ Zapisz tak: **wyraz - liczba samogłosek**.`, undefined, 90),
 
 Każda sylaba ma co najmniej **jedną samogłoskę**.
 
-Przykłady: **ma-ma** (2), **te-le-fon** (3), **bi-blio-te-ka** (4).`),
+Przykłady: **ma-ma** (2), **te-le-fon** (3), **bi-blio-te-ka** (4).`, 'sylaby'),
       slideTask('Z2', 'Podziel na sylaby', `Podziel wyrazy na sylaby, klaszcząc przy każdej z nich:
 
 1. dom
@@ -156,7 +156,7 @@ Zapisz podział w zeszycie, np. **lam-pa**.`, undefined, 120),
 
 To jedna głoska zapisana dwiema literami.
 
-Przykład: **szafa** ma głoski sz-a-f-a, czyli **4 głoski**, choć **5 liter**.`),
+Przykład: **szafa** ma głoski sz-a-f-a, czyli **4 głoski**, choć **5 liter**.`, 'dwuznak'),
       slideTask('Z3', 'Policz głoski i litery', `Dla każdego wyrazu zapisz w zeszycie liczbę głosek i liczbę liter:
 
 - dzień
@@ -171,7 +171,7 @@ Wzór zapisu: **wyraz - głoski / litery**.`, undefined, 150),
 - **siódmy - siedem** (ó:e)
 - **skrócić - skracać** (ó:a)
 
-Gdy wymiany nie ma, pisownię trzeba **zapamiętać** (np. ogórek, wróbel).`),
+Gdy wymiany nie ma, pisownię trzeba **zapamiętać** (np. ogórek, wróbel).`, 'wymianaOu'),
       slideTask('Z4', 'Uzupełnij ó czy u', `Przepisz zdania do zeszytu, wstawiając w lukę (_) literę ó albo u:
 
 1. Byłem w kr_lestwie bajek.
@@ -184,7 +184,7 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
 
 **Ż** piszemy, gdy wymienia się na **g** lub **z**: noga - nóżka, może - mogę.
 
-**Ch** wymienia się na **sz**: mucha - muszka. **H** piszemy w wyrazach obcych: hotel, herbata.`),
+**Ch** wymienia się na **sz**: mucha - muszka. **H** piszemy w wyrazach obcych: hotel, herbata.`, 'wymianaRzCh'),
       slideTask('Z5', 'Uzupełnij rz-ż i ch-h', `Przepisz do zeszytu, wstawiając właściwą literę w lukę (_):
 
 1. Idziemy na spacer nad mo_e. (rz/ż)
@@ -228,17 +228,17 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
 
 Odpowiada na pytania: **kto? co?**
 
-Przykłady: **mama, pies, zeszyt, radość**.`),
+Przykłady: **mama, pies, zeszyt, radość**.`, 'rzeczownik'),
       slideText('Czasownik', `**Czasownik** nazywa czynność lub stan.
 
 Odpowiada na pytania: **co robi? co się z nim dzieje?**
 
-Przykłady: **biegnie, śpiewa, śpi, choruje**.`),
+Przykłady: **biegnie, śpiewa, śpi, choruje**.`, 'czasownik'),
       slideText('Przymiotnik', `**Przymiotnik** określa, jaki jest ktoś lub coś.
 
 Odpowiada na pytania: **jaki? jaka? jakie?**
 
-Przykłady: **wesoły, czerwone, mądra, wysoki**.`),
+Przykłady: **wesoły, czerwone, mądra, wysoki**.`, 'przymiotnik'),
       slideTask('Z1', 'Rozpoznaj części mowy', `Zapisz w zeszycie, jaka to część mowy: **R** - rzeczownik, **CZ** - czasownik, **P** - przymiotnik.
 
 1. słońce
@@ -253,7 +253,7 @@ Sprawdzimy razem na głos.`, undefined, 180),
 
 - **oznajmujące** - o czymś mówią, np. "Pada deszcz."
 - **pytające** - o coś pytają, np. "Czy pada deszcz?"
-- **rozkazujące** - coś polecają, np. "Zamknij okno!"`),
+- **rozkazujące** - coś polecają, np. "Zamknij okno!"`, 'rodzajeZdan'),
       slideTask('Z2', 'Jakie to zdanie?', `Do każdego zdania dopisz jego rodzaj: **O** - oznajmujące, **P** - pytające, **R** - rozkazujące. Dopisz też brakujący znak na końcu.
 
 1. Ile masz lat
@@ -264,7 +264,7 @@ Sprawdzimy razem na głos.`, undefined, 180),
 
 - **zdanie**: "Dzisiaj jest środa."
 - **imiona i nazwiska**: Jan Kowalski
-- **nazwy miejscowości, państw, rzek**: Warszawa, Polska, Wisła`),
+- **nazwy miejscowości, państw, rzek**: Warszawa, Polska, Wisła`, 'wielkaLitera'),
       slideTask('Z3', 'Popraw wielkie litery', `Przepisz zdania do zeszytu, poprawiając wielkie litery:
 
 1. w niedzielę jedziemy do warszawy.
@@ -277,7 +277,7 @@ Podkreśl poprawione litery.`, undefined, 180),
 Przykłady:
 - "Wiem, że przyjdziesz."
 - "Chciałem wyjść, ale padał deszcz."
-- "Zostałem w domu, bo byłem chory."`),
+- "Zostałem w domu, bo byłem chory."`, 'przecinek'),
       slideTask('Z4', 'Wstaw przecinki', `Przepisz zdania do zeszytu, wstawiając brakujący przecinek:
 
 1. Wiem że masz rację.
@@ -318,7 +318,7 @@ Przykłady:
 
 **Rym** to podobne zakończenie wyrazów, np. **kot - plot**.
 
-**Proza** to zwykły tekst pisany zdaniami, np. opowiadanie.`),
+**Proza** to zwykły tekst pisany zdaniami, np. opowiadanie.`, 'wiersz'),
       slideTask('Z1', 'Znajdź rymy', `Do każdego wyrazu dopisz w zeszycie rymujące się słowo:
 
 1. kot
@@ -331,7 +331,7 @@ Na koniec wymyśl jedną własną parę rymów.`, undefined, 120),
 
 **Baśń** jest zmyślona i ma magię ("Dawno, dawno temu...").
 
-**Legenda** tłumaczy pochodzenie prawdziwego miejsca, np. Legenda o Smoku Wawelskim.`),
+**Legenda** tłumaczy pochodzenie prawdziwego miejsca, np. Legenda o Smoku Wawelskim.`, 'basn'),
       slideTask('Z2', 'Bohaterowie znanych baśni', `Zapisz w zeszycie głównego bohatera każdego tytułu:
 
 1. "Czerwony Kapturek"
@@ -344,7 +344,7 @@ Który z nich jest twoim ulubionym? Dlaczego?`, undefined, 150),
 
 **Plan wydarzeń** to kolejno spisane punkty, co działo się w tekście.
 
-Używamy słów: **najpierw, potem, nagle, na koniec**.`),
+Używamy słów: **najpierw, potem, nagle, na koniec**.`, 'opowiadanie'),
       slideTask('Z3', 'Uporządkuj plan wydarzeń', `Wydarzenia z baśni o Kopciuszku są pomieszane. Ustaw je w zeszycie w prawidłowej kolejności (1-4):
 
 - Kopciuszek mierzy pantofelek.
@@ -355,7 +355,7 @@ Używamy słów: **najpierw, potem, nagle, na koniec**.`),
 
 W opisie używamy dużo **przymiotników** (jaki? jaka?).
 
-Przykład: plecak jest **granatowy**, **duży** i **wygodny**.`),
+Przykład: plecak jest **granatowy**, **duży** i **wygodny**.`, 'opis'),
       slideTask('Z4', 'Napisz opis', `Napisz w zeszycie **2 zdania opisu** swojego plecaka lub piórnika.
 
 Użyj co najmniej **3 przymiotników**, np. kolor, kształt, wielkość.
@@ -365,7 +365,7 @@ Przeczytamy kilka opisów na głos.`, undefined, 180),
 
 - **kogo** zapraszamy i **na co**
 - **kiedy** (data, godzina) i **dokąd**
-- **kto** zaprasza`),
+- **kto** zaprasza`, 'zaproszenie'),
       slideTask('Z5', 'Napisz zaproszenie', `Napisz w zeszycie krótkie zaproszenie koleżanki lub kolegi na **swoje urodziny**.
 
 Pamiętaj o wszystkich elementach: kogo, na co, kiedy, dokąd, kto zaprasza.
@@ -402,8 +402,8 @@ function slideTitle(title: string, subtitle?: string): Slide {
   return { id: newId(), kind: 'title', title, subtitle };
 }
 
-function slideText(title: string, body: string): Slide {
-  return { id: newId(), kind: 'text', title, body };
+function slideText(title: string, body: string, art?: SlideArt): Slide {
+  return { id: newId(), kind: 'text', title, body, art };
 }
 
 function slideTask(
