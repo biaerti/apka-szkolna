@@ -25,7 +25,9 @@ export function RecapSlideForm({
           ))}
         </Select>
         {questionSets.length === 0 && (
-          <p className="mt-1 text-xs text-gray-500">Brak zestawów pytań - dodaj je w module Pytania.</p>
+          <p className="mt-1 text-xs text-gray-500">
+            Brak zestawów pytań. Zestaw dodaje się z listy lekcji: „dodaj pytania do koła" przy lekcji.
+          </p>
         )}
       </div>
     </div>

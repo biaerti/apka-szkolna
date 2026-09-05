@@ -1,113 +1,71 @@
+// Nowa lekcja: tylko tytul. Rocznik wynika z aktywnej zakladki, reszta (slajdy,
+// pytania do kola, wpis do dziennika) robi sie w edytorze - jedno pole zamiast
+// piecu, bo nauczyciel i tak zaraz laduje w edytorze.
+
 import { useState } from 'react';
-import type { QuestionSet, SchoolClass } from '../../data/types';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
-
-export interface NewLessonData {
-  title: string;
-  topic?: string;
-  classId: string;
-  plannedDate?: string;
-  questionSetId?: string;
-}
 
 export function NewLessonModal({
   open,
   onClose,
-  classes,
-  questionSets,
-  defaultClassId,
+  classNames,
   onCreate,
 }: {
   open: boolean;
   onClose: () => void;
-  classes: SchoolClass[];
-  questionSets: QuestionSet[];
-  defaultClassId: string;
-  onCreate: (data: NewLessonData) => void;
+  /** Nazwy klas rocznika, np. "IV A, IV B, IV C" - trafia do zdania pod polem. */
+  classNames: string;
+  onCreate: (title: string) => void;
 }) {
   const [title, setTitle] = useState('');
-  const [topic, setTopic] = useState('');
-  const [classId, setClassId] = useState(defaultClassId);
-  const [plannedDate, setPlannedDate] = useState('');
-  const [questionSetId, setQuestionSetId] = useState('');
+  const canCreate = title.trim().length > 0;
 
-  function reset() {
+  function close() {
     setTitle('');
-    setTopic('');
-    setClassId(defaultClassId);
-    setPlannedDate('');
-    setQuestionSetId('');
+    onClose();
   }
 
-  function handleCreate() {
-    if (!title.trim() || !classId) return;
-    onCreate({
-      title: title.trim(),
-      topic: topic.trim() || undefined,
-      classId,
-      plannedDate: plannedDate || undefined,
-      questionSetId: questionSetId || undefined,
-    });
-    reset();
+  function create() {
+    if (!canCreate) return;
+    onCreate(title.trim());
+    setTitle('');
   }
 
   return (
     <Modal
       open={open}
-      onClose={() => {
-        reset();
-        onClose();
-      }}
+      onClose={close}
       title="Nowa lekcja"
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
+          <Button variant="secondary" onClick={close}>
             Anuluj
           </Button>
-          <Button onClick={handleCreate} disabled={!title.trim() || !classId}>
-            Dodaj i przejdź do edytora
+          <Button onClick={create} disabled={!canCreate}>
+            Utwórz i edytuj
           </Button>
         </>
       }
     >
-      <div className="space-y-3">
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Tytuł</label>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
-        </div>
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Temat (opcjonalnie)</label>
-          <Input value={topic} onChange={(e) => setTopic(e.target.value)} />
-        </div>
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Klasa</label>
-          <Select value={classId} onChange={(e) => setClassId(e.target.value)}>
-            {classes.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Planowana data (opcjonalnie)</label>
-          <Input type="date" value={plannedDate} onChange={(e) => setPlannedDate(e.target.value)} />
-        </div>
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Zestaw pytań na recap (opcjonalnie)</label>
-          <Select value={questionSetId} onChange={(e) => setQuestionSetId(e.target.value)}>
-            <option value="">Brak</option>
-            {questionSets.map((qs) => (
-              <option key={qs.id} value={qs.id}>
-                {qs.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-      </div>
+      <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="new-lesson-title">
+        Tytuł
+      </label>
+      <Input
+        id="new-lesson-title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            create();
+          }
+        }}
+        autoFocus
+        placeholder="np. Rzeczownik - odmiana przez przypadki"
+      />
+      <p className="mt-2 text-xs text-gray-500">Lekcja pojawi się w: {classNames}. Postęp każda klasa ma osobny.</p>
     </Modal>
   );
 }

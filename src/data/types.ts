@@ -72,17 +72,33 @@ export interface Question {
   order: number;
 }
 
-// Lekcje = moduly tematyczne, niekoniecznie 1 lekcja = 45 min
+export type LessonStatus = 'planned' | 'in_progress' | 'done' | 'skipped';
+
+/** Postep jednej klasy w jednej lekcji. Brak wpisu w `Lesson.progress` = 'planned'. */
+export interface LessonProgress {
+  status: LessonStatus;
+  doneDate?: string; // YYYY-MM-DD
+}
+
+/**
+ * Lekcje = moduly tematyczne, niekoniecznie 1 lekcja = 45 min.
+ *
+ * Lekcja nalezy do ROCZNIKA (`grade`), nie do pojedynczej klasy: wszystkie czwarte
+ * klasy maja te same lekcje i te same pytania, a osobno liczony jest tylko postep
+ * (`progress`, klucz = classId). Rocznik to pierwszy wyraz nazwy klasy
+ * ("IV A" -> "IV"), patrz src/lib/grade.ts. Nauczyciel: "te same lekcje sa dla
+ * 4a, 4b i 4c; dla 5 beda inne" - kopiowanie lekcji miedzy klasami rownoleglymi
+ * bylo zbednym krokiem.
+ */
 export interface Lesson {
   id: ID;
-  classId: ID;
+  grade: string;
   title: string;
   topic?: string;
-  order: number;
-  status: 'planned' | 'in_progress' | 'done' | 'skipped';
+  order: number; // kolejnosc w obrebie rocznika
+  progress: Record<ID, LessonProgress>;
   plannedDate?: string;
-  doneDate?: string;
-  questionSetId?: ID; // recap na start (opcjonalny)
+  questionSetId?: ID; // zestaw pytan do kola wpiety w lekcje (opcjonalny)
   slides: Slide[];
   // Pod dziennik elektroniczny (Vulcan): temat do wpisania i kody podstawy programowej (np. II.1.1).
   registerTopic?: string;
@@ -106,6 +122,7 @@ export type SlideArt =
   | 'lawki' // plan klasy: siadamy w najblizszych lawkach
   | 'przebieg' // przebieg lekcji: powtorka - temat - kolo - notatka
   | 'zeszyt' // notatka do zeszytu
+  | 'procenty' // progi procentowe ocen ze sprawdzianow
   // Ilustracje przedmiotowe do powtorki 1-3 (src/data/recap13.ts).
   | 'samogloski' // 8 samoglosek na tle spolglosek
   | 'sylaby' // podzial wyrazu na sylaby

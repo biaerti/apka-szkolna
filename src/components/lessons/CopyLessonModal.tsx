@@ -1,5 +1,7 @@
+// Kopia lekcji do INNEGO rocznika (np. powtorka klasy 4 przydaje sie tez piatym).
+// W obrebie rocznika kopiowanie nie istnieje - lekcja i tak jest wspolna.
+
 import { useState } from 'react';
-import type { SchoolClass } from '../../data/types';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Select } from '../ui/Select';
@@ -7,55 +9,44 @@ import { Select } from '../ui/Select';
 export function CopyLessonModal({
   open,
   onClose,
-  classes,
-  excludeClassId,
+  grades,
   onCopy,
 }: {
   open: boolean;
   onClose: () => void;
-  classes: SchoolClass[];
-  excludeClassId: string;
-  onCopy: (targetClassId: string) => void;
+  /** Roczniki docelowe (bez biezacego), etykiety typu "klasy V". */
+  grades: Array<{ grade: string; label: string }>;
+  onCopy: (grade: string) => void;
 }) {
-  const targets = classes.filter((c) => c.id !== excludeClassId);
-  const [targetClassId, setTargetClassId] = useState(targets[0]?.id ?? '');
+  const [target, setTarget] = useState(grades[0]?.grade ?? '');
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="Skopiuj lekcję do innej klasy"
+      title="Skopiuj lekcję do innego rocznika"
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
             Anuluj
           </Button>
-          <Button
-            onClick={() => {
-              if (!targetClassId) return;
-              onCopy(targetClassId);
-            }}
-            disabled={!targetClassId}
-          >
+          <Button onClick={() => target && onCopy(target)} disabled={!target}>
             Kopiuj
           </Button>
         </>
       }
     >
-      {targets.length === 0 ? (
-        <p className="text-sm text-gray-500">Brak innych klas do wyboru.</p>
-      ) : (
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Klasa docelowa</label>
-          <Select value={targetClassId} onChange={(e) => setTargetClassId(e.target.value)}>
-            {targets.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
-        </div>
-      )}
+      <label className="mb-1 block text-sm font-medium text-gray-700" htmlFor="copy-target-grade">
+        Rocznik docelowy
+      </label>
+      <Select id="copy-target-grade" value={target} onChange={(e) => setTarget(e.target.value)}>
+        {grades.map((g) => (
+          <option key={g.grade} value={g.grade}>
+            {g.label}
+          </option>
+        ))}
+      </Select>
+      <p className="mt-2 text-xs text-gray-500">Kopia dostaje własne slajdy i własny zestaw pytań - zmiany w jednej nie ruszą drugiej.</p>
     </Modal>
   );
 }

@@ -8,6 +8,7 @@ import { TodaySection } from '../components/dashboard/TodaySection';
 import { QueuePreview } from '../components/dashboard/QueuePreview';
 import { StatTiles } from '../components/dashboard/StatTiles';
 import { QuickStart } from '../components/dashboard/QuickStart';
+import { classesOfGrade, lessonProgress } from '../lib/grade';
 
 export function Dashboard() {
   const classes = useStore((s) => s.classes);
@@ -52,7 +53,14 @@ export function Dashboard() {
         classCount={classes.length}
         activeStudentCount={students.filter((s) => s.active).length}
         questionSetCount={questionSets.length}
-        plannedLessonCount={lessons.filter((l) => l.status === 'planned' && !!l.plannedDate).length}
+        plannedLessonCount={
+          lessons.filter((l) =>
+            classesOfGrade(classes, l.grade).some((c) => {
+              const status = lessonProgress(l, c.id).status;
+              return status !== 'done' && status !== 'skipped';
+            }),
+          ).length
+        }
       />
 
       <QuickStart />

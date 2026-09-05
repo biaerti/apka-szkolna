@@ -14,6 +14,7 @@ import { Zadania } from './Zadania';
 import { Lawki } from './Lawki';
 import { Przebieg } from './Przebieg';
 import { Zeszyt } from './Zeszyt';
+import { Procenty } from './Procenty';
 import { Samogloski } from './Samogloski';
 import { Sylaby } from './Sylaby';
 import { Dwuznak } from './Dwuznak';
@@ -57,6 +58,7 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   lawki: Lawki,
   przebieg: Przebieg,
   zeszyt: Zeszyt,
+  procenty: Procenty,
   // Ilustracje przedmiotowe do powtorki 1-3.
   samogloski: Samogloski,
   sylaby: Sylaby,

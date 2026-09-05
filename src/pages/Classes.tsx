@@ -28,10 +28,13 @@ export function Classes() {
     return students.filter((s) => s.classId === classId && s.active).length;
   }
 
+  function hasProgress(classId: string) {
+    return lessons.some((l) => classId in l.progress);
+  }
+
   function canDelete(classId: string) {
     const hasStudents = students.some((s) => s.classId === classId);
-    const hasLessons = lessons.some((l) => l.classId === classId);
-    return !hasStudents && !hasLessons;
+    return !hasStudents && !hasProgress(classId);
   }
 
   return (
@@ -83,7 +86,7 @@ export function Classes() {
                       size="sm"
                       variant="danger"
                       disabled={!canDelete(c.id)}
-                      title={!canDelete(c.id) ? 'Klasa ma uczniów lub lekcje - nie można usunąć' : undefined}
+                      title={!canDelete(c.id) ? 'Klasa ma uczniów lub postęp w lekcjach - nie można usunąć' : undefined}
                       onClick={() => setToDelete({ id: c.id, name: c.name })}
                     >
                       Usuń
@@ -164,7 +167,7 @@ export function Classes() {
       <ConfirmDialog
         open={!!toDelete}
         title="Usuń klasę"
-        message={`Czy na pewno usunąć klasę "${toDelete?.name}"? Tej operacji nie można cofnąć.`}
+        message={`Usunięcie klasy "${toDelete?.name}" skasuje jej uczniów oraz jej postęp w lekcjach. Lekcje rocznika zostaną dla pozostałych klas. Tej operacji nie można cofnąć.`}
         onCancel={() => setToDelete(null)}
         onConfirm={() => {
           if (toDelete) removeClass(toDelete.id);

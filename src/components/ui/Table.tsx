@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
 
-export function Table({ children }: { children: ReactNode }) {
+export function Table({ children, fixed = false }: { children: ReactNode; fixed?: boolean }) {
+  // `fixed` = kolumny biora szerokosc z naglowkow (w-*), a nie z tresci - dzieki
+  // temu dlugi tekst w komorce da sie uciac (truncate) zamiast rozpychac tabele.
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-      <table className="min-w-full divide-y divide-gray-200 text-sm">{children}</table>
+      <table className={`min-w-full divide-y divide-gray-200 text-sm ${fixed ? 'w-full table-fixed' : ''}`}>{children}</table>
     </div>
   );
 }

@@ -13,18 +13,24 @@ describe('buildIntroLesson', () => {
   const CLASS_ID = 'class-1';
 
   it('buduje sie bez wyjatku - wszystkie sekcje zasad, do ktorych siega, istnieja', () => {
-    expect(() => buildIntroLesson(CLASS_ID)).not.toThrow();
+    expect(() => buildIntroLesson('IV', [CLASS_ID])).not.toThrow();
   });
 
-  it('zwraca zestaw 20 pytan przypisany do wskazanej klasy', () => {
-    const { questionSet, questions } = buildIntroLesson(CLASS_ID);
+  it('zwraca zestaw 20 pytan przypisany do wskazanych klas', () => {
+    const { questionSet, questions } = buildIntroLesson('IV', [CLASS_ID]);
     expect(questionSet.classIds).toEqual([CLASS_ID]);
     expect(questions).toHaveLength(20);
     expect(questions.every((q) => q.setId === questionSet.id)).toBe(true);
   });
 
+  it('lekcja nalezy do rocznika i nie ma jeszcze postepu w zadnej klasie', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    expect(lesson.grade).toBe('IV');
+    expect(lesson.progress).toEqual({});
+  });
+
   it('slajdy recap wskazuja na zbudowany zestaw pytan', () => {
-    const { lesson, questionSet } = buildIntroLesson(CLASS_ID);
+    const { lesson, questionSet } = buildIntroLesson('IV', [CLASS_ID]);
     const recapSlides = lesson.slides.filter((s) => s.kind === 'recap');
     // Dwa kola: pierwsze na pokazanie ("zobaczcie, to wasze imiona"), drugie na
     // wlasciwa runde zapoznawcza.
@@ -35,7 +41,7 @@ describe('buildIntroLesson', () => {
   });
 
   it('konczy sie notatka do zeszytu, a potem slajdem pozegnalnym', () => {
-    const { lesson } = buildIntroLesson(CLASS_ID);
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const kinds = lesson.slides.map((s) => s.kind);
     expect(kinds).toContain('note');
     expect(kinds.indexOf('note')).toBe(kinds.length - 2);
@@ -43,7 +49,7 @@ describe('buildIntroLesson', () => {
   });
 
   it('uzywa wylacznie kodow podstawy programowej, ktore naprawde istnieja', () => {
-    const { lesson } = buildIntroLesson(CLASS_ID);
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     expect(lesson.curriculum && lesson.curriculum.length).toBeTruthy();
     for (const code of lesson.curriculum ?? []) {
       expect(curriculumByCode(code), `nieznany kod podstawy: ${code}`).toBeDefined();
@@ -51,8 +57,14 @@ describe('buildIntroLesson', () => {
   });
 
   it('ma wypelniony temat pod dziennik Vulcan', () => {
-    const { lesson } = buildIntroLesson(CLASS_ID);
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     expect(lesson.registerTopic).toBeTruthy();
+  });
+
+  it('ma slajd z ilustracja "procenty"', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const hasProcenty = lesson.slides.some((s) => 'art' in s && s.art === 'procenty');
+    expect(hasProcenty).toBe(true);
   });
 });
 
@@ -73,5 +85,16 @@ describe('RULE_SECTIONS', () => {
       .join(' ')
       .toLowerCase();
     expect(all).not.toContain('minus');
+  });
+
+  it('sekcja "Zeszyt i sprawdziany" istnieje i jest ostatnia w tablicy', () => {
+    expect(RULE_SECTIONS[RULE_SECTIONS.length - 1].title).toBe('Zeszyt i sprawdziany');
+  });
+
+  it('progi procentowe ocen (33, 50, 75, 90, 98) wystepuja w tresci zasad', () => {
+    const all = RULE_SECTIONS.map((s) => s.items.join(' ')).join(' ');
+    for (const percent of [33, 50, 75, 90, 98]) {
+      expect(all, `brak progu ${percent}% w tresci zasad`).toContain(`${percent}%`);
+    }
   });
 });

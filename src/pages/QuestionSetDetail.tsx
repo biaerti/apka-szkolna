@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
-import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -10,10 +9,11 @@ import { QuestionRow } from '../components/questions/QuestionRow';
 
 export function QuestionSetDetail() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const questionSets = useStore((s) => s.questionSets);
   const questions = useStore((s) => s.questions);
-  const classes = useStore((s) => s.classes);
+  const lessons = useStore((s) => s.lessons);
   const updateQuestionSet = useStore((s) => s.updateQuestionSet);
   const addQuestion = useStore((s) => s.addQuestion);
   const updateQuestion = useStore((s) => s.updateQuestion);
@@ -24,11 +24,19 @@ export function QuestionSetDetail() {
   const [newText, setNewText] = useState('');
 
   const set = questionSets.find((qs) => qs.id === id);
-  const setClass = set ? classes.find((c) => set.classIds.includes(c.id)) : undefined;
+  const lessonIdParam = searchParams.get('lekcja');
+  const lesson = lessonIdParam
+    ? lessons.find((l) => l.id === lessonIdParam)
+    : lessons.find((l) => l.questionSetId === set?.id);
   const setQuestions = useMemo(
     () => questions.filter((q) => q.setId === id).sort((a, b) => a.order - b.order),
     [questions, id],
   );
+
+  const [nameDraft, setNameDraft] = useState(set?.name ?? '');
+  useEffect(() => {
+    setNameDraft(set?.name ?? '');
+  }, [set?.id, set?.name]);
 
   if (!set) {
     return (
@@ -51,12 +59,9 @@ export function QuestionSetDetail() {
     setNewText('');
   }
 
-  function toggleClass(classId: string) {
+  function saveName(value: string) {
     if (!set) return;
-    const has = set.classIds.includes(classId);
-    updateQuestionSet(set.id, {
-      classIds: has ? set.classIds.filter((c) => c !== classId) : [...set.classIds, classId],
-    });
+    updateQuestionSet(set.id, { name: value });
   }
 
   return (
@@ -65,44 +70,45 @@ export function QuestionSetDetail() {
         <Link to="/lekcje" className="text-gray-500 hover:text-accent-700 hover:underline">
           Lekcje
         </Link>
-        {setClass && (
+        {lesson && (
           <>
             <span className="mx-1.5 text-gray-400">/</span>
-            <span className="text-gray-500">{setClass.name}</span>
+            <Link to={`/lekcje/${lesson.id}/edytuj`} className="text-gray-500 hover:text-accent-700 hover:underline">
+              {lesson.title}
+            </Link>
           </>
         )}
         <span className="mx-1.5 text-gray-400">/</span>
         <span className="text-gray-700">{set.name}</span>
       </p>
-      <PageHeader
-        title={set.name}
-        description={set.topic}
-        actions={
-          <div className="flex gap-2">
-            <Button variant="secondary" onClick={() => navigate('/lekcje')}>
-              Wróć do lekcji
-            </Button>
-            <Button variant="secondary" onClick={() => setImportOpen(true)}>
-              Importuj z tekstu
-            </Button>
-          </div>
-        }
-      />
 
-      <div className="mb-5 rounded-lg border border-gray-200 bg-white p-4">
-        <p className="mb-2 text-sm font-medium text-gray-700">Przypisz do klas</p>
-        <div className="flex flex-wrap gap-3">
-          {classes.map((c) => (
-            <label key={c.id} className="flex items-center gap-1.5 text-sm text-gray-700">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-accent-600 focus:ring-accent-500"
-                checked={set.classIds.includes(c.id)}
-                onChange={() => toggleClass(c.id)}
-              />
-              {c.name}
-            </label>
-          ))}
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <input
+          value={nameDraft}
+          onChange={(e) => {
+            setNameDraft(e.target.value);
+            if (e.target.value.trim()) saveName(e.target.value);
+          }}
+          onBlur={(e) => {
+            const trimmed = e.target.value.trim();
+            if (trimmed) {
+              if (trimmed !== e.target.value) {
+                setNameDraft(trimmed);
+                saveName(trimmed);
+              }
+            } else {
+              setNameDraft(set.name);
+            }
+          }}
+          className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 text-2xl font-semibold text-gray-900 hover:border-gray-300 focus:border-accent-500 focus:outline-none"
+        />
+        <div className="flex shrink-0 items-center gap-2">
+          <Button variant="secondary" onClick={() => navigate(lesson ? `/lekcje/${lesson.id}/edytuj` : '/lekcje')}>
+            Wróć do lekcji
+          </Button>
+          <Button variant="secondary" onClick={() => setImportOpen(true)}>
+            Importuj z tekstu
+          </Button>
         </div>
       </div>
 

@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import type { Lesson, SchoolClass } from '../../data/types';
 import { nextLessons } from '../../lib/queue';
 import { classBadgeClasses } from '../calendar/classColor';
+import { Button } from '../ui/Button';
 
 export function QueuePreview({ classes, lessons }: { classes: SchoolClass[]; lessons: Lesson[] }) {
   const sortedClasses = [...classes].sort((a, b) => a.order - b.order);
@@ -14,7 +16,7 @@ export function QueuePreview({ classes, lessons }: { classes: SchoolClass[]; les
         <div className="rounded-lg border border-gray-200 bg-white">
           <ul className="divide-y divide-gray-100">
             {sortedClasses.map((c) => {
-              const [next] = nextLessons(lessons, c.id, 1);
+              const [next] = nextLessons(lessons, classes, c.id, 1);
               return (
                 <li key={c.id} className="flex items-center gap-3 px-3 py-2.5">
                   <span
@@ -25,6 +27,13 @@ export function QueuePreview({ classes, lessons }: { classes: SchoolClass[]; les
                   <span className="truncate text-sm text-gray-800">
                     {next ? next.title : <span className="text-gray-400">Brak zaplanowanych lekcji</span>}
                   </span>
+                  {next && (
+                    <Link to={`/lekcje/${next.id}/pokaz/${c.id}`} className="ml-auto shrink-0">
+                      <Button size="sm" variant="secondary">
+                        Pokaż
+                      </Button>
+                    </Link>
+                  )}
                 </li>
               );
             })}

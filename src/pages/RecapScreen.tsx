@@ -29,7 +29,7 @@ export function RecapScreen() {
       classId={classId}
       setId={setId}
       absentIds={absentIds}
-      onExit={() => navigate('/lekcje')}
+      onExit={() => navigate(`/lekcje?klasa=${classId}`)}
     />
   );
 }

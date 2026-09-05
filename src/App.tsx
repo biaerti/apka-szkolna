@@ -20,6 +20,7 @@ export default function App() {
       {/* Ekrany projektora - bez paska bocznego, pelny ekran */}
       {/* Trasa zostaje: uruchamia ja slajd "recap" w prezentacji lekcji (LessonPresent) */}
       <Route path="/powtorka/:classId/:setId" element={<RecapScreen />} />
+      <Route path="/lekcje/:id/pokaz/:classId" element={<LessonPresent />} />
       <Route path="/lekcje/:id/pokaz" element={<LessonPresent />} />
       {/* Wydruk zasad - bez paska bocznego, wlasny uklad A4 */}
       <Route path="/zasady/druk" element={<RulesPrint />} />

@@ -13,7 +13,7 @@ export function StatTiles({
     { label: 'Klasy', value: classCount },
     { label: 'Aktywni uczniowie', value: activeStudentCount },
     { label: 'Zestawy pytań', value: questionSetCount },
-    { label: 'Zaplanowane lekcje', value: plannedLessonCount },
+    { label: 'Lekcje do zrobienia', value: plannedLessonCount },
   ];
 
   return (

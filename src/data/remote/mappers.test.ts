@@ -77,16 +77,18 @@ describe('questions round-trip', () => {
 });
 
 describe('lessons round-trip', () => {
-  it('pelna lekcja ze slajdami i datami', () => {
+  it('pelna lekcja ze slajdami, datami i postepem kilku klas', () => {
     const l: Lesson = {
       id: 'l1',
-      classId: 'c1',
+      grade: 'IV',
       title: 'Lekcja 1',
       topic: 'Wstep',
       order: 0,
-      status: 'planned',
+      progress: {
+        c1: { status: 'done', doneDate: '2026-09-05' },
+        c2: { status: 'in_progress' },
+      },
       plannedDate: '2026-09-05',
-      doneDate: undefined,
       questionSetId: 'qs1',
       slides: [
         { id: 'sl1', kind: 'title', title: 'Tytul', subtitle: 'Podtytul' },
@@ -102,20 +104,32 @@ describe('lessons round-trip', () => {
   it('lekcja minimalna, bez opcjonalnych pol', () => {
     const l: Lesson = {
       id: 'l2',
-      classId: 'c1',
+      grade: 'IV',
       title: 'Lekcja 2',
       order: 1,
-      status: 'done',
+      progress: {},
       slides: [],
     };
     const row = lessonToRow(l);
     expect(row.topic).toBeNull();
     expect(row.planned_date).toBeNull();
-    expect(row.done_date).toBeNull();
     expect(row.question_set_id).toBeNull();
     expect(row.register_topic).toBeNull();
     expect(row.curriculum).toEqual([]);
     expect(rowToLesson(row)).toEqual(l);
+  });
+
+  it('progress null/undefined w wierszu daje pusty obiekt', () => {
+    const row = lessonToRow({
+      id: 'l3',
+      grade: 'V',
+      title: 'Lekcja 3',
+      order: 0,
+      progress: {},
+      slides: [],
+    });
+    expect(rowToLesson({ ...row, progress: null as unknown as Record<string, never> }).progress).toEqual({});
+    expect(rowToLesson({ ...row, progress: undefined as unknown as Record<string, never> }).progress).toEqual({});
   });
 });
 

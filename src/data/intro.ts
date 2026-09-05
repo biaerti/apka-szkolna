@@ -1,5 +1,6 @@
 // Lekcja zapoznawcza: zestaw 20 pytan "Poznajmy sie" + lekcja z prezentacja.
-// Kontrakt: implementacja w module powtorki. Nie zmieniac sygnatury.
+// Kontrakt: implementacja w module powtorki. Sygnatura buildIntroLesson(grade, classIds)
+// - lekcja nalezy do rocznika (grade), classIds trafiaja tylko do QuestionSet.classIds.
 //
 // Prezentacja to prawdziwe wprowadzenie do gry (kolo fortuny), ktora bedzie
 // towarzyszyc klasie caly rok: pytanie do dzieci -> definicja gry -> zasady.
@@ -86,14 +87,26 @@ function partitionItems(items: string[], match: RegExp): { matched: string[]; re
   };
 }
 
-/** Tworzy zestaw pytan i lekcje zapoznawcza (pierwsza lekcja integracyjna) dla wskazanej klasy. */
-export function buildIntroLesson(classId: string): IntroBundle {
+// Progi procentowe ze sprawdzianow - jedno zrodlo dla slajdu "Sprawdziany i oceny"
+// oraz dla notatki do zeszytu. Tresc zrodlowa to punkt o procentach w sekcji
+// "Zeszyt i sprawdziany" (zasady.ts) - test w intro.test.ts pilnuje, zeby ta
+// tablica i tekst zasad nie rozjechaly sie.
+const GRADE_THRESHOLDS: { percent: number; grade: string }[] = [
+  { percent: 33, grade: 'dwójka' },
+  { percent: 50, grade: 'trójka' },
+  { percent: 75, grade: 'czwórka' },
+  { percent: 90, grade: 'piątka' },
+  { percent: 98, grade: 'szóstka' },
+];
+
+/** Tworzy zestaw pytan i lekcje zapoznawcza (pierwsza lekcja integracyjna) dla wskazanego rocznika. */
+export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle {
   const setId = newId();
   const questionSet: QuestionSet = {
     id: setId,
     name: 'Poznajmy się',
     topic: 'Lekcja zapoznawcza',
-    classIds: [classId],
+    classIds,
     createdAt: new Date().toISOString(),
   };
 
@@ -117,18 +130,23 @@ export function buildIntroLesson(classId: string): IntroBundle {
     /piątka|jedynka/i,
   );
   const secLekcja = ruleSection('Jak wygląda nasza lekcja');
+  const secZeszyt = ruleSection('Zeszyt i sprawdziany');
+  // Punkt o procentach dostaje wlasny slajd z ilustracja "procenty", reszta
+  // (numer i temat lekcji, notatki, powtorzenie przed sprawdzianem) zostaje
+  // przy zeszycie. Szukamy po tresci, nie po indeksie.
+  const { rest: zeszytBiezace } = partitionItems(secZeszyt.items, /procent/i);
 
   const lesson: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Lekcja zapoznawcza',
     topic: 'Lekcja zapoznawcza',
-    status: 'planned',
+    progress: {},
     questionSetId: setId,
     registerTopic: 'Poznajmy się - lekcja organizacyjna. Zasady pracy na lekcjach języka polskiego',
     curriculum: ['III.1.1', 'II.3.7', 'II.3.3'],
     slides: [
       // 1. Tytul
-      slideTitle('Poznajmy się', 'Język polski - klasa IV'),
+      slideTitle('Poznajmy się', `Język polski - klasa ${grade}`),
 
       // 2. Zdjecie nauczyciela (plik w public/bart.jpg)
       slideImage('/bart.jpg', 'Bartosz Kuniński'),
@@ -194,7 +212,17 @@ Koło losuje, kto odpowiada.`,
       // 15. Gdzie siedzimy (z zasady.ts)
       slideText('Gdzie siedzimy', asBulletList(secLawki.items), 'lawki'),
 
-      // 16. Instrukcja przed runda zapoznawcza - co uczen ma powiedziec
+      // 16. Zeszyt (z zasady.ts, bez punktu o procentach)
+      slideText('Zeszyt', asBulletList(zeszytBiezace), 'zeszyt'),
+
+      // 17. Progi procentowe sprawdzianow - wlasny slajd, czytelnie rozbity na liste
+      slideText(
+        'Sprawdziany i oceny',
+        asBulletList(GRADE_THRESHOLDS.map((t) => `${t.percent}% - ${t.grade}`)),
+        'procenty',
+      ),
+
+      // 18. Instrukcja przed runda zapoznawcza - co uczen ma powiedziec
       slideText(
         'Kiedy koło cię wskaże',
         `Powiedz trzy rzeczy:
@@ -207,10 +235,10 @@ Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
         'kolo',
       ),
 
-      // 17. Wlasciwa runda zapoznawcza - 20 pytan
+      // 19. Wlasciwa runda zapoznawcza - 20 pytan
       slideRecap(setId),
 
-      // 18. Notatka do zeszytu
+      // 20. Notatka do zeszytu
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Zasady pracy na lekcjach języka polskiego**
@@ -219,10 +247,12 @@ Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
 - Plus - dobra odpowiedź. Kropka - częściowa. Plomba - zła albo jej brak.
 - 3 plusy = piątka. 3 plomby = jedynka.
 - 3 pasy w miesiącu.
-- Siadamy w najbliższych ławkach.`,
+- Siadamy w najbliższych ławkach.
+- Zeszyt w linie: numer, temat, notatki.
+- Sprawdzian: 33% - 2, 50% - 3, 75% - 4, 90% - 5, 98% - 6.`,
       ),
 
-      // 19. Zakonczenie
+      // 21. Zakonczenie
       slideTitle('Do zobaczenia!', 'Na następnej lekcji: powtórka z klas 1-3'),
     ],
   };

@@ -1,18 +1,21 @@
 // Logika przycisku "Gotowe materialy" (wstawianie lekcji zapoznawczej i gotowych
 // powtorek oraz ich odswiezanie) wydzielona z Lessons.tsx, zeby strona zmiescila
 // sie w limicie 250 linii na komponent. Czysta logika + wywolania akcji store'a,
-// bez JSX - UI zyje w ReadyMaterialsPanel.tsx.
+// bez JSX - UI zyje w ReadyMaterialsMenu.tsx.
 //
-// Powtorki sa opisane danymi (RECAP_DEFINITIONS), a nie osobnymi polami hooka -
-// dolozenie kolejnej (np. powtorki klasy 5) to jeden wpis w tablicy.
+// Materialy sa opisane danymi (MATERIAL_DEFINITIONS), a nie osobnymi polami
+// hooka - dolozenie kolejnego (np. powtorki klasy 5) to jeden wpis w tablicy.
+// Lekcje naleza do rocznika (Lesson.grade), wiec hook pracuje na roczniku i
+// liscie klas tego rocznika, a nie na pojedynczej klasie.
 
 import { useMemo } from 'react';
 import { useStore } from '../../data/store';
 import type { Lesson } from '../../data/types';
 import { buildRecap13 } from '../../data/recap13';
 import { buildRecap4 } from '../../data/recap4';
-import { buildIntroLesson, type IntroBundle } from '../../data/intro';
+import { buildIntroLesson } from '../../data/intro';
 import {
+  isMatchStale,
   lessonQuestionSetId,
   matchLessonsForRefresh,
   remapRecapSlides,
@@ -20,45 +23,62 @@ import {
   type RefreshMatch,
 } from './refreshMaterials';
 
-interface RecapDefinition {
-  key: string;
-  /** Konczy zdanie "Wstaw ..." na przycisku. */
-  insertLabel: string;
-  /** Nazwa materialu w stanie "... - juz wstawione". */
-  name: string;
-  /** Co dokladnie zostanie dodane - trafia do dialogu potwierdzenia. */
-  contents: string;
-  build: (classId: string) => FreshMaterialsBundle;
+interface MaterialDefinition {
+  key: 'intro' | 'recap13' | 'recap4';
+  /** Nazwa do menu, np. "Lekcja zapoznawcza", "Powtórka klas 1-3". */
+  label: string;
+  /** Jedno zdanie do dialogu potwierdzenia: co dokladnie zostanie dodane. */
+  description: string;
+  build: (grade: string, classIds: string[]) => FreshMaterialsBundle;
 }
 
-const RECAP_DEFINITIONS: RecapDefinition[] = [
+/** buildIntroLesson zwraca jedna lekcje (nie paczke) - dopasowujemy ksztalt do FreshMaterialsBundle. */
+function buildIntroBundle(grade: string, classIds: string[]): FreshMaterialsBundle {
+  const bundle = buildIntroLesson(grade, classIds);
+  return {
+    lessons: [bundle.lesson],
+    questionSets: [bundle.questionSet],
+    questions: bundle.questions,
+  };
+}
+
+const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
+  {
+    key: 'intro',
+    label: 'Lekcja zapoznawcza',
+    description: 'Doda lekcję zapoznawczą wraz z zestawem 20 pytań "Poznajmy się".',
+    build: buildIntroBundle,
+  },
   {
     key: 'recap13',
-    insertLabel: 'powtórkę klas 1-3',
-    name: 'Powtórka klas 1-3',
-    contents: 'fonetyka/ortografia, gramatyka/interpunkcja, formy wypowiedzi',
+    label: 'Powtórka klas 1-3',
+    description:
+      'Doda 3 lekcje-prezentacje (fonetyka i ortografia, gramatyka i interpunkcja, formy wypowiedzi) i 3 zestawy pytań do koła fortuny.',
     build: buildRecap13,
   },
   {
     key: 'recap4',
-    insertLabel: 'powtórkę klasy 4',
-    name: 'Powtórka klasy 4',
-    contents: 'odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi',
+    label: 'Powtórka klasy 4',
+    description:
+      'Doda 3 lekcje-prezentacje (odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi) i 3 zestawy pytań do koła fortuny.',
     build: buildRecap4,
   },
 ];
 
-/** Jedna gotowa powtorka w stanie gotowym do wyswietlenia w panelu. */
-export interface ReadyRecap {
-  key: string;
-  insertLabel: string;
-  name: string;
-  contents: string;
+/** Jeden gotowy material w stanie gotowym do wyswietlenia w panelu. */
+export interface ReadyMaterial {
+  key: 'intro' | 'recap13' | 'recap4';
+  /** Nazwa do menu, np. "Lekcja zapoznawcza", "Powtórka klas 1-3", "Powtórka klasy 4" */
+  label: string;
+  /** Jedno zdanie do dialogu potwierdzenia: co dokładnie zostanie dodane */
+  description: string;
+  /** Ile lekcji wstawia (1 albo 3) */
+  lessonCount: number;
   alreadyInserted: boolean;
   insert: () => void;
 }
 
-export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
+export function useReadyMaterials(grade: string, classIds: string[], gradeLessons: Lesson[]) {
   const questionSets = useStore((s) => s.questionSets);
   const questions = useStore((s) => s.questions);
   const addLesson = useStore((s) => s.addLesson);
@@ -69,60 +89,57 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
   const updateQuestion = useStore((s) => s.updateQuestion);
   const removeQuestion = useStore((s) => s.removeQuestion);
 
-  // Powtorke uznajemy za wstawiona, gdy klasa ma juz lekcje o tytule jej pierwszej lekcji.
-  const insertedRecapKeys = useMemo(() => {
-    if (!classId) return new Set<string>();
-    const inserted = new Set<string>();
-    for (const def of RECAP_DEFINITIONS) {
-      const firstTitle = def.build(classId).lessons[0]?.title;
-      if (firstTitle && classLessons.some((l) => l.title === firstTitle)) inserted.add(def.key);
+  // Paczka danych z kodu per material. buildIntroLesson jest kontraktem
+  // implementowanym rownolegle przez inny modul - dopoki nie jest gotowy,
+  // funkcja rzuca wyjatek, wiec zabezpieczamy sie try/catch i po prostu
+  // pomijamy material (zniknie z listy, dopoki intro.ts nie bedzie gotowe).
+  const bundles = useMemo(() => {
+    const map = new Map<string, FreshMaterialsBundle>();
+    if (!grade) return map;
+    for (const def of MATERIAL_DEFINITIONS) {
+      try {
+        map.set(def.key, def.build(grade, classIds));
+      } catch {
+        // material chwilowo niedostepny - pomijamy
+      }
     }
-    return inserted;
-  }, [classId, classLessons]);
+    return map;
+  }, [grade, classIds]);
 
-  // buildIntroLesson jest kontraktem implementowanym rownolegle przez inny modul -
-  // dopoki nie jest gotowy, funkcja rzuca wyjatek, wiec zabezpieczamy sie try/catch.
-  const introBundle: IntroBundle | null = useMemo(() => {
-    if (!classId) return null;
-    try {
-      return buildIntroLesson(classId);
-    } catch {
-      return null;
+  // Wszystkie dostepne materialy razem - do dopasowania przy odswiezaniu.
+  const freshBundle: FreshMaterialsBundle = useMemo(() => {
+    const combined: FreshMaterialsBundle = { lessons: [], questionSets: [], questions: [] };
+    for (const def of MATERIAL_DEFINITIONS) {
+      const bundle = bundles.get(def.key);
+      if (!bundle) continue;
+      combined.lessons.push(...bundle.lessons);
+      combined.questionSets.push(...bundle.questionSets);
+      combined.questions.push(...bundle.questions);
     }
-  }, [classId]);
-  const introAlreadyInserted =
-    !!introBundle && classLessons.some((l) => l.title === introBundle.lesson.title);
+    return combined;
+  }, [bundles]);
 
-  const freshBundle: FreshMaterialsBundle | null = useMemo(() => {
-    if (!classId) return null;
-    const bundle: FreshMaterialsBundle = { lessons: [], questionSets: [], questions: [] };
-    for (const def of RECAP_DEFINITIONS) {
-      const recap = def.build(classId);
-      bundle.lessons.push(...recap.lessons);
-      bundle.questionSets.push(...recap.questionSets);
-      bundle.questions.push(...recap.questions);
-    }
-    if (introBundle) {
-      bundle.lessons.push(introBundle.lesson);
-      bundle.questionSets.push(introBundle.questionSet);
-      bundle.questions.push(...introBundle.questions);
-    }
-    return bundle;
-  }, [classId, introBundle]);
-
+  // Tylko lekcje, ktorych tresc naprawde rozni sie od kodu - dopasowanie po
+  // tytule samo w sobie nie znaczy, ze jest co odswiezac.
   const refreshMatches: RefreshMatch[] = useMemo(
-    () => (freshBundle ? matchLessonsForRefresh(classLessons, freshBundle) : []),
-    [freshBundle, classLessons],
+    () => matchLessonsForRefresh(gradeLessons, freshBundle).filter((m) => isMatchStale(m, questions)),
+    [freshBundle, gradeLessons, questions],
   );
 
-  function insertRecap(build: (classId: string) => FreshMaterialsBundle) {
-    if (!classId) return;
-    const bundle = build(classId);
+  // "Juz wstawione" = w lekcjach rocznika istnieje lekcja o tytule pierwszej
+  // lekcji materialu.
+  function isAlreadyInserted(bundle: FreshMaterialsBundle | undefined): boolean {
+    const firstTitle = bundle?.lessons[0]?.title;
+    return !!firstTitle && gradeLessons.some((l) => l.title === firstTitle);
+  }
 
-    // Wstaw zestawy pytan i zapamietaj mapowanie starych id -> nowe id.
+  function insert(bundle: FreshMaterialsBundle) {
+    if (!grade) return;
+
+    // Wstaw zestawy pytan i zapamietaj mapowanie starych (tymczasowych) id -> nowe id.
     const setIdMap = new Map<string, string>();
     for (const set of bundle.questionSets) {
-      const created = addQuestionSet({ name: set.name, topic: set.topic, classIds: [classId] });
+      const created = addQuestionSet({ name: set.name, topic: set.topic, classIds });
       setIdMap.set(set.id, created.id);
     }
 
@@ -145,38 +162,12 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
     }
   }
 
-  function insertIntro() {
-    if (!classId || !introBundle) return;
-
-    const created = addQuestionSet({
-      name: introBundle.questionSet.name,
-      topic: introBundle.questionSet.topic,
-      classIds: [classId],
-    });
-    for (const q of introBundle.questions) {
-      addQuestion({ setId: created.id, text: q.text, answer: q.answer });
-    }
-
-    const mappedQuestionSetId =
-      introBundle.lesson.questionSetId === introBundle.questionSet.id
-        ? created.id
-        : introBundle.lesson.questionSetId;
-    const mappedSlides = introBundle.lesson.slides.map((slide) => {
-      if (slide.kind === 'recap' && slide.questionSetId === introBundle.questionSet.id) {
-        return { ...slide, questionSetId: created.id };
-      }
-      return slide;
-    });
-
-    addLesson({ ...introBundle.lesson, questionSetId: mappedQuestionSetId, slides: mappedSlides });
-  }
-
   // Podmienia tresc juz wstawionych lekcji (dopasowanych po tytule) na aktualna
-  // wersje z kodu, zachowujac status/doneDate lekcji i nie ruszajac recapEvents.
+  // wersje z kodu, zachowujac postep (progress) i nie ruszajac recapEvents.
   // Zestaw pytan i pytania sa aktualizowane W MIEJSCU (te same id), zeby zapisane
   // wczesniej RecapEvent nadal wskazywaly na istniejace pytania/zestawy.
   function refresh() {
-    if (!classId) return;
+    if (!grade) return;
     for (const match of refreshMatches) {
       let effectiveSetId = lessonQuestionSetId(match.oldLesson);
 
@@ -203,7 +194,7 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
         const created = addQuestionSet({
           name: match.newQuestionSet.name,
           topic: match.newQuestionSet.topic,
-          classIds: [classId],
+          classIds,
         });
         for (const nq of match.newQuestions) {
           addQuestion({ setId: created.id, text: nq.text, answer: nq.answer });
@@ -223,26 +214,28 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
         curriculum: match.newLesson.curriculum,
         questionSetId: effectiveSetId,
         slides: mappedSlides,
-        // status, doneDate, plannedDate, order, classId - celowo pominiete w patchu.
+        // progress, order, grade, plannedDate - celowo pominiete w patchu.
       });
     }
   }
 
-  const recaps: ReadyRecap[] = RECAP_DEFINITIONS.map((def) => ({
-    key: def.key,
-    insertLabel: def.insertLabel,
-    name: def.name,
-    contents: def.contents,
-    alreadyInserted: insertedRecapKeys.has(def.key),
-    insert: () => insertRecap(def.build),
-  }));
+  const materials: ReadyMaterial[] = MATERIAL_DEFINITIONS.filter((def) => bundles.has(def.key)).map((def) => {
+    const bundle = bundles.get(def.key);
+    return {
+      key: def.key,
+      label: def.label,
+      description: def.description,
+      lessonCount: bundle?.lessons.length ?? 0,
+      alreadyInserted: isAlreadyInserted(bundle),
+      insert: () => {
+        if (bundle) insert(bundle);
+      },
+    };
+  });
 
   return {
-    introAvailable: !!introBundle,
-    introAlreadyInserted,
-    recaps,
+    materials,
     refreshMatches,
-    insertIntro,
     refresh,
   };
 }

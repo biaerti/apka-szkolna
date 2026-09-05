@@ -54,12 +54,17 @@ interface RecapEvent {
 interface QuestionSet { id: ID; name: string; topic?: string; classIds: ID[]; createdAt: string; }
 interface Question { id: ID; setId: ID; text: string; answer?: string; order: number; }
 
-// Lekcje = moduly tematyczne, niekoniecznie 1 lekcja = 45 min
+// Lekcje = moduly tematyczne, niekoniecznie 1 lekcja = 45 min. Lekcja nalezy do
+// ROCZNIKA (grade = pierwszy wyraz nazwy klasy, "IV A" -> "IV"), nie do jednej klasy:
+// wszystkie czwarte klasy widza te same lekcje i te same pytania, a osobno liczony
+// jest tylko postep kazdej klasy (progress, klucz = classId). Patrz src/lib/grade.ts.
+type LessonStatus = 'planned' | 'in_progress' | 'done' | 'skipped';
+interface LessonProgress { status: LessonStatus; doneDate?: string; }
 interface Lesson {
-  id: ID; classId: ID; title: string; topic?: string; order: number;
-  status: 'planned' | 'in_progress' | 'done' | 'skipped';
-  plannedDate?: string; doneDate?: string;
-  questionSetId?: ID;     // recap na start (opcjonalny)
+  id: ID; grade: string; title: string; topic?: string; order: number; // kolejnosc w roczniku
+  progress: Record<ID, LessonProgress>; // brak wpisu = 'planned'
+  plannedDate?: string;
+  questionSetId?: ID;     // zestaw pytan do kola wpiety w lekcje (opcjonalny)
   slides: Slide[];
   registerTopic?: string; // temat do wpisania w dzienniku Vulcan
   curriculum?: string[];  // kody podstawy programowej (src/data/podstawa.ts)
@@ -120,17 +125,24 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   (CRUD, import z tekstu, aktywacja/dezaktywacja) razem z ich bilansem miesiaca, wyborem
   miesiaca, eksportem CSV i sekcja "Do rozliczenia". Nie ma osobnej zakladki Statystyki -
   statystyki sa tam, gdzie uczniowie.
-- `/pytania`, `/pytania/:id` - zestawy pytan i edytor pytan (bez pozycji w menu, wchodzi sie
-  z poziomu lekcji).
-- `/lekcje` - lekcje per klasa (zakladki IV A / IV B / IV C / V A). Wszystkie czwarte klasy maja
-  te same lekcje i te same pytania, ale **postep jest liczony osobno dla kazdej klasy** - uczniowie
-  sa inni. Zamiast kalendarza: lekka informacja "gdzie jestem, co dalej"; bez siatki tygodnia i bez
-  planowania dat. Akcja "Odswiez gotowe materialy" podmienia wstawione wczesniej lekcje i zestawy
-  na aktualne z kodu, zachowujac status lekcji i nie kasujac `recapEvents`.
-- `/lekcje/:id/edytuj` - edytor slajdow; `/lekcje/:id/pokaz` - **prezentacja**: strzalki/spacja,
-  F fullscreen; slajd `task` ma duzy kod zadania i stoper, slajd `read` wielka strone i czas na
-  przeczytanie, slajd `note` wyglada jak kartka z zeszytu i zamyka lekcje, slajd `recap` osadza
-  ekran powtorki.
+- `/pytania` - lista zestawow pytan, bez menu wlasnego i bez przypisywania do klas (zestaw
+  siedzi w wierszu lekcji, ktora go uzywa); `/pytania/:id` - edytor pytan, nazwa zestawu
+  edytowalna wprost w naglowku. Wejscie tylko z poziomu lekcji ("dodaj pytania do kola" albo
+  "Edytuj pytania" przy juz wpietym zestawie).
+- `/lekcje?klasa=<classId>` - lekcje **rocznika** ogladane z perspektywy jednej klasy (zakladki
+  IV A / IV B / IV C / V A w adresie, zeby powrot z prezentacji/kola trafial na wlasciwa
+  zakladke). Wszystkie klasy rocznika maja te same lekcje i te same pytania, ale **postep jest
+  liczony osobno dla kazdej klasy** - uczniowie sa inni. Kolejnosc lekcji zmienia sie
+  przeciaganiem (drag&drop). Zamiast kalendarza: lekka informacja "gdzie jestem, co dalej"; bez
+  siatki tygodnia i bez planowania dat w naglowku lekcji. Zestaw pytan do kola jest wpiety w
+  wiersz lekcji (bez osobnej sekcji/zakladki). "Gotowe materialy" sa w menu obok "Nowa lekcja"
+  i tez w pustym stanie rocznika bez lekcji.
+- `/lekcje/:id/edytuj?klasa=<classId>` - edytor slajdow (klasa w query, do powrotu na wlasciwa
+  zakladke); `/lekcje/:id/pokaz/:classId` (z fallbackiem `/lekcje/:id/pokaz` na pierwsza klase
+  rocznika) - **prezentacja**: strzalki/spacja, F fullscreen; slajd `task` ma duzy kod zadania i
+  stoper, slajd `read` wielka strone i czas na przeczytanie, slajd `note` wyglada jak kartka z
+  zeszytu i zamyka lekcje, slajd `recap` osadza ekran powtorki. Start prezentacji przestawia
+  postep tej klasy w tej lekcji na `in_progress`, zakonczenie - na `done` z data.
 - `/powtorka/:classId/:setId` - **ekran projektora** z kolem fortuny. Nie ma osobnej zakladki
   "Powtorka": kolo uruchamia sie ze slajdu `recap` wpietego w konkretna lekcje, a po zamknieciu
   wraca sie do prezentacji.
@@ -186,16 +198,30 @@ Przy pierwszym uruchomieniu (pusty store) zaladowac klase "IV A" z 20 uczniami (
 `src/data/seed.ts`) oraz puste klasy "IV B", "IV C", "V A" (nazwy do zmiany przez usera).
 
 ## Gotowe materialy
-Sekcja "Gotowe materialy" na ekranie Lekcje wstawia do wybranej klasy komplet lekcji z pytaniami:
+Menu "Gotowe materialy" (obok "Nowa lekcja" i w pustym stanie rocznika) wstawia do rocznika
+komplet lekcji z pytaniami - **raz na rocznik**, wspolnie dla wszystkich jego klas:
 - lekcja zapoznawcza (`src/data/intro.ts`) - zasady gry, zasilana z `src/data/zasady.ts`,
 - powtorka klas 1-3 (`src/data/recap13.ts`) - dla czwartych klas,
 - powtorka klasy 4 (`src/data/recap4.ts`) - dla piatych klas.
 
 Powtorki sa opisane danymi w `RECAP_DEFINITIONS` (`src/components/lessons/useReadyMaterials.ts`) -
-dolozenie kolejnej to jeden wpis w tablicy, bez zmian w UI. Kazda powtorka to 3 lekcje + 3 zestawy
-pytan. **Tytuly lekcji musza byc unikalne miedzy powtorkami** - "Odswiez gotowe materialy"
-dopasowuje lekcje po znormalizowanym tytule (`refreshMaterials.titleMatchKey`); pilnuje tego test
-`src/data/recap4.test.ts`.
+dolozenie kolejnej to jeden wpis w tablicy, bez zmian w UI. Buildery przyjmuja
+`buildXxx(grade, classIds)` (rocznik i lista klas, ktore go tworza, zamiast pojedynczej klasy) i
+zwracaja lekcje bez klasowego przypisania. Hook `useReadyMaterials(grade, classIds, gradeLessons)`
+liczy, co juz jest wstawione dla rocznika, i co "Odswiezenie" ma podmienic. Kazda powtorka to
+3 lekcje + 3 zestawy pytan. **Tytuly lekcji musza byc unikalne miedzy powtorkami** - "Odswiez
+gotowe materialy" dopasowuje lekcje po znormalizowanym tytule (`refreshMaterials.titleMatchKey`);
+pilnuje tego test `src/data/recap4.test.ts`.
+
+## Migracje
+- Store (`src/data/store.ts`, `persist` v4): `migrateLessonsToGrades` przeksztalca lekcje z v3
+  (pojedyncza klasa: `classId` + `status`/`doneDate`) na v4 (rocznik: `grade` + `progress` per
+  klasa). Lekcje o tej samej tresci, ktore nauczyciel wstawil osobno do klas rownoleglych, sa
+  sklejane w jedna - dopasowanie po znormalizowanym tytule (`titleMatchKey`), a ich postep laczony
+  do jednego obiektu `progress`.
+- Supabase: `supabase/migrations/0005_lekcje_rocznika.sql` - odpowiadajaca zmiana schematu po
+  stronie bazy: kolumna `grade` zamiast `class_id`, a `status`/`done_date` zastapione kolumna
+  `progress jsonb` (mapa `class_id -> { status, doneDate }`).
 
 ## Jakosc
 - Kazdy modul dziala end-to-end, bez atrap. `npm run build` i `npm run typecheck` przechodza.

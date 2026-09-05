@@ -80,4 +80,17 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Notatka do zeszytu - zapisujecie i jesteście wolni.',
     ],
   },
+  // Nowa sekcja dopisana NA KONCU tablicy - zgodnie z uwaga na gorze pliku,
+  // zeby nie przesunac indeksow, po ktore siega src/data/intro.ts.
+  {
+    title: 'Zeszyt i sprawdziany',
+    items: [
+      'Każda lekcja ma numer i temat. Zapisujemy je w zeszycie w linie.',
+      'W zeszycie robimy notatki i zapisujemy podpowiedzi. Pracujemy na nich na bieżąco.',
+      'Przed sprawdzianem dostajecie całe powtórzenie na kartkach.',
+      // Progi 33/50/75 podal nauczyciel wprost. Progi 90 i 98 to typowe
+      // uzupelnienie do skali 1-6 - WSTEPNE, do potwierdzenia przez nauczyciela.
+      'Sprawdziany oceniamy w procentach: od 33% dwójka, od 50% trójka, od 75% czwórka, od 90% piątka, od 98% szóstka.',
+    ],
+  },
 ];

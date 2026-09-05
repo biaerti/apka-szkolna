@@ -7,6 +7,7 @@ import { SlideView } from '../components/slides/SlideView';
 import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
+import { classesOfGrade, lessonProgress, todayKey } from '../lib/grade';
 
 function isTypingTarget(el: EventTarget | null): boolean {
   if (!(el instanceof HTMLElement)) return false;
@@ -15,24 +16,27 @@ function isTypingTarget(el: EventTarget | null): boolean {
 }
 
 export function LessonPresent() {
-  const { id } = useParams<{ id: string }>();
+  const { id, classId: classIdParam } = useParams<{ id: string; classId?: string }>();
   const navigate = useNavigate();
   const lessons = useStore((s) => s.lessons);
-  const updateLesson = useStore((s) => s.updateLesson);
+  const classes = useStore((s) => s.classes);
+  const setLessonProgress = useStore((s) => s.setLessonProgress);
   const lesson = lessons.find((l) => l.id === id);
+
+  const classId = classIdParam ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
 
   const [index, setIndex] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    if (!lesson || startedRef.current) return;
+    if (!lesson || !classId || startedRef.current) return;
     startedRef.current = true;
-    if (lesson.status === 'planned') {
-      updateLesson(lesson.id, { status: 'in_progress' });
+    if (lessonProgress(lesson, classId).status === 'planned') {
+      setLessonProgress(lesson.id, classId, { status: 'in_progress' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lesson?.id]);
+  }, [lesson?.id, classId]);
 
   const total = lesson?.slides.length ?? 0;
 
@@ -63,14 +67,14 @@ export function LessonPresent() {
         toggleFullscreen();
       } else if (e.key === 'Escape') {
         if (!document.fullscreenElement) {
-          navigate('/lekcje');
+          navigate(classId ? `/lekcje?klasa=${classId}` : '/lekcje');
         }
       }
     }
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, total, lesson]);
+  }, [index, total, lesson, classId]);
 
   function toggleFullscreen() {
     if (document.fullscreenElement) {
@@ -81,9 +85,9 @@ export function LessonPresent() {
   }
 
   function finishLesson() {
-    if (!lesson) return;
-    updateLesson(lesson.id, { status: 'done', doneDate: new Date().toISOString().slice(0, 10) });
-    navigate('/lekcje');
+    if (!lesson || !classId) return;
+    setLessonProgress(lesson.id, classId, { status: 'done', doneDate: todayKey() });
+    navigate(`/lekcje?klasa=${classId}`);
   }
 
   if (!lesson) {
@@ -101,11 +105,26 @@ export function LessonPresent() {
     );
   }
 
+  if (!classId) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-950" style={{ height: '100vh' }}>
+        <EmptyState
+          title="Ta lekcja nie ma żadnej klasy"
+          action={
+            <Button variant="secondary" onClick={() => navigate('/lekcje')}>
+              Wróć do lekcji
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
+
   if (total === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 bg-gray-950 text-gray-200" style={{ height: '100vh' }}>
         <p className="text-2xl">Ta lekcja nie ma jeszcze slajdów.</p>
-        <Button variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/edytuj`)}>
+        <Button variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/edytuj?klasa=${classId}`)}>
           Przejdź do edytora
         </Button>
       </div>
@@ -131,7 +150,7 @@ export function LessonPresent() {
           }
         }}
       >
-        <SlideView slide={slide} classId={lesson.classId} onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))} />
+        <SlideView slide={slide} classId={classId} onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))} />
       </div>
 
       {isLast && (

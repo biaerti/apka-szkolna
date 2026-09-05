@@ -7,40 +7,8 @@
 
 import type { Lesson, Question, QuestionSet, Slide } from '../../data/types';
 
-const DIACRITICS: Record<string, string> = {
-  ą: 'a',
-  ć: 'c',
-  ę: 'e',
-  ł: 'l',
-  ń: 'n',
-  ó: 'o',
-  ś: 's',
-  ź: 'z',
-  ż: 'z',
-};
-
-function stripDiacritics(text: string): string {
-  return text
-    .toLowerCase()
-    .split('')
-    .map((ch) => DIACRITICS[ch] ?? ch)
-    .join('');
-}
-
-/**
- * Klucz porownawczy tytulu lekcji/zestawu: male litery, bez polskich znakow,
- * slowa posortowane alfabetycznie (dzieki temu kolejnosc slow w zdaniu nie ma
- * znaczenia przy dopasowywaniu starej wersji do nowej).
- */
-export function titleMatchKey(title: string): string {
-  return stripDiacritics(title)
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim()
-    .split(' ')
-    .filter(Boolean)
-    .sort()
-    .join(' ');
-}
+export { titleMatchKey } from '../../lib/titleMatchKey';
+import { titleMatchKey } from '../../lib/titleMatchKey';
 
 /** Paczka "swiezych" danych z kodu (buildRecap13 i/lub buildIntroLesson), gotowa do dopasowania. */
 export interface FreshMaterialsBundle {
@@ -90,4 +58,29 @@ export function remapRecapSlides(slides: Slide[], fromId: string, toId: string):
   return slides.map((s) =>
     s.kind === 'recap' && s.questionSetId === fromId ? { ...s, questionSetId: toId } : s,
   );
+}
+
+/** Usuwa pola `id` ze slajdow - id sa losowane przy kazdym buildXxx, wiec nie moga wchodzic do porownania. */
+function slidesFingerprint(slides: Slide[]): string {
+  return JSON.stringify(slides.map(({ id: _id, ...rest }) => rest));
+}
+
+/**
+ * Czy wstawiona lekcja rozni sie trescia od aktualnej definicji w kodzie
+ * (tytul, wpis do dziennika, slajdy, pytania). Dopasowanie po tytule mowi tylko
+ * "to ten sam material"; dopiero to mowi, czy jest co odswiezac.
+ */
+export function isMatchStale(match: RefreshMatch, oldQuestions: Question[]): boolean {
+  const o = match.oldLesson;
+  const n = match.newLesson;
+  if (o.title !== n.title) return true;
+  if ((o.registerTopic ?? '') !== (n.registerTopic ?? '')) return true;
+  if (JSON.stringify(o.curriculum ?? []) !== JSON.stringify(n.curriculum ?? [])) return true;
+  if (slidesFingerprint(o.slides) !== slidesFingerprint(n.slides)) return true;
+  const oldQ = oldQuestions
+    .filter((q) => q.setId === lessonQuestionSetId(o))
+    .sort((a, b) => a.order - b.order)
+    .map((q) => [q.text, q.answer ?? '']);
+  const newQ = match.newQuestions.map((q) => [q.text, q.answer ?? '']);
+  return JSON.stringify(oldQ) !== JSON.stringify(newQ);
 }

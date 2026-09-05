@@ -3,7 +3,7 @@
 // Kolumny "updated_at" sa zarzadzane przez baze (trigger) i nie sa czescia
 // encji aplikacji, wiec nie sa tu mapowane.
 
-import type { Lesson, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Slide, Student } from '../types';
+import type { Lesson, LessonProgress, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Slide, Student } from '../types';
 
 // --- classes ---------------------------------------------------------------
 
@@ -121,13 +121,12 @@ export function rowToQuestion(row: QuestionRow): Question {
 
 export interface LessonRow {
   id: string;
-  class_id: string;
+  grade: string;
   title: string;
   topic: string | null;
   order: number;
-  status: Lesson['status'];
+  progress: Record<string, LessonProgress>;
   planned_date: string | null;
-  done_date: string | null;
   question_set_id: string | null;
   slides: Slide[];
   register_topic: string | null;
@@ -137,13 +136,12 @@ export interface LessonRow {
 export function lessonToRow(l: Lesson): LessonRow {
   return {
     id: l.id,
-    class_id: l.classId,
+    grade: l.grade,
     title: l.title,
     topic: l.topic ?? null,
     order: l.order,
-    status: l.status,
+    progress: l.progress,
     planned_date: l.plannedDate ?? null,
-    done_date: l.doneDate ?? null,
     question_set_id: l.questionSetId ?? null,
     slides: l.slides,
     register_topic: l.registerTopic ?? null,
@@ -154,13 +152,12 @@ export function lessonToRow(l: Lesson): LessonRow {
 export function rowToLesson(row: LessonRow): Lesson {
   return {
     id: row.id,
-    classId: row.class_id,
+    grade: row.grade,
     title: row.title,
     topic: row.topic ?? undefined,
     order: row.order,
-    status: row.status,
+    progress: row.progress ?? {},
     plannedDate: row.planned_date ?? undefined,
-    doneDate: row.done_date ?? undefined,
     questionSetId: row.question_set_id ?? undefined,
     slides: row.slides ?? [],
     registerTopic: row.register_topic ?? undefined,

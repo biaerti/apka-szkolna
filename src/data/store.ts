@@ -6,8 +6,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { newId } from './id';
 import { buildSeedData } from './seed';
+import { classGrade } from '../lib/grade';
+import { titleMatchKey } from '../lib/titleMatchKey';
 import type {
   Lesson,
+  LessonProgress,
   Question,
   QuestionSet,
   RecapEvent,
@@ -49,11 +52,15 @@ interface AppState {
   removeQuestion: (id: string) => void;
   reorderQuestion: (id: string, direction: 'up' | 'down') => void;
 
-  // Lekcje
+  // Lekcje (naleza do rocznika; postep per klasa w `progress`)
   addLesson: (lesson: Omit<Lesson, 'id' | 'order'>) => Lesson;
   updateLesson: (id: string, patch: Partial<Omit<Lesson, 'id'>>) => void;
   removeLesson: (id: string) => void;
+  /** Przenosi lekcje na pozycje `toIndex` w kolejce jej rocznika (przeciaganie). */
+  moveLesson: (id: string, toIndex: number) => void;
   reorderLesson: (id: string, direction: 'up' | 'down') => void;
+  /** Ustawia postep jednej klasy w lekcji (status + data wykonania). */
+  setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
 
   // Zdarzenia recapu
   addRecapEvent: (event: Omit<RecapEvent, 'id' | 'at'>) => RecapEvent;
@@ -85,6 +92,87 @@ function reorderList<T extends { id: string; order: number }>(
     if (item.id === a.id) return { ...item, order: b.order };
     if (item.id === b.id) return { ...item, order: a.order };
     return item;
+  });
+}
+
+/** Przenosi lekcje `id` na pozycje `toIndex` w obrebie jej rocznika; reszta listy bez zmian. */
+export function moveLessonInGrade(lessons: Lesson[], id: string, toIndex: number): Lesson[] {
+  const lesson = lessons.find((l) => l.id === id);
+  if (!lesson) return lessons;
+  const gradeLessons = lessons.filter((l) => l.grade === lesson.grade).sort((a, b) => a.order - b.order);
+  const from = gradeLessons.findIndex((l) => l.id === id);
+  const to = Math.max(0, Math.min(gradeLessons.length - 1, toIndex));
+  if (from === -1 || from === to) return lessons;
+  const reordered = [...gradeLessons];
+  const [moved] = reordered.splice(from, 1);
+  reordered.splice(to, 0, moved);
+  const orderById = new Map(reordered.map((l, idx) => [l.id, idx]));
+  return lessons.map((l) => {
+    const order = orderById.get(l.id);
+    return order === undefined || order === l.order ? l : { ...l, order };
+  });
+}
+
+/** Usuwa postep klasy z lekcji; lekcje rocznika znikaja tylko, gdy to byla jego ostatnia klasa. */
+export function removeClassFromLessons(lessons: Lesson[], classes: SchoolClass[], classId: string): Lesson[] {
+  const removed = classes.find((c) => c.id === classId);
+  if (!removed) return lessons;
+  const grade = classGrade(removed.name);
+  const gradeStillHasClasses = classes.some((c) => c.id !== classId && classGrade(c.name) === grade);
+  return lessons
+    .filter((l) => gradeStillHasClasses || l.grade !== grade)
+    .map((l) => {
+      if (!(classId in l.progress)) return l;
+      const progress = { ...l.progress };
+      delete progress[classId];
+      return { ...l, progress };
+    });
+}
+
+interface LegacyLesson {
+  id: string;
+  classId?: string;
+  grade?: string;
+  title: string;
+  order: number;
+  status?: LessonProgress['status'];
+  doneDate?: string;
+  progress?: Record<string, LessonProgress>;
+  [key: string]: unknown;
+}
+
+/** Migracja store v3 -> v4 (eksportowana do testow). */
+export function migrateLessonsToGrades(raw: Array<Record<string, unknown>>, classes: SchoolClass[]): Lesson[] {
+  const byKey = new Map<string, Lesson>();
+  const out: Lesson[] = [];
+  const sorted = [...(raw as LegacyLesson[])].sort((a, b) => a.order - b.order);
+  for (const old of sorted) {
+    const cls = old.classId ? classes.find((c) => c.id === old.classId) : undefined;
+    const grade = old.grade ?? (cls ? classGrade(cls.name) : 'IV');
+    const progress: Record<string, LessonProgress> = { ...(old.progress ?? {}) };
+    if (old.classId && old.status) {
+      progress[old.classId] = old.doneDate ? { status: old.status, doneDate: old.doneDate } : { status: old.status };
+    }
+    const rest: Record<string, unknown> = { ...old };
+    delete rest.classId;
+    delete rest.status;
+    delete rest.doneDate;
+    const key = `${grade}|${titleMatchKey(old.title)}`;
+    const existing = byKey.get(key);
+    if (existing) {
+      existing.progress = { ...existing.progress, ...progress };
+      continue;
+    }
+    const lesson = { ...rest, grade, progress } as unknown as Lesson;
+    byKey.set(key, lesson);
+    out.push(lesson);
+  }
+  // Kolejnosc w obrebie rocznika od zera, bez dziur.
+  const counters = new Map<string, number>();
+  return out.map((l) => {
+    const n = counters.get(l.grade) ?? 0;
+    counters.set(l.grade, n + 1);
+    return { ...l, order: n };
   });
 }
 
@@ -121,7 +209,9 @@ export const useStore = create<AppState>()(
         set((s) => ({
           classes: s.classes.filter((c) => c.id !== id),
           students: s.students.filter((st) => st.classId !== id),
-          lessons: s.lessons.filter((l) => l.classId !== id),
+          // Lekcje naleza do rocznika - kasujemy tylko postep tej klasy, a cale
+          // lekcje dopiero wtedy, gdy w roczniku nie zostala zadna klasa.
+          lessons: removeClassFromLessons(s.lessons, s.classes, id),
           recapEvents: s.recapEvents.filter((e) => e.classId !== id),
           questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
         }));
@@ -187,8 +277,8 @@ export const useStore = create<AppState>()(
       },
 
       addLesson: (lesson) => {
-        const existing = get().lessons.filter((l) => l.classId === lesson.classId);
-        const order = existing.length;
+        const existing = get().lessons.filter((l) => l.grade === lesson.grade);
+        const order = existing.reduce((max, l) => Math.max(max, l.order + 1), 0);
         const item: Lesson = { ...lesson, id: newId(), order };
         set((s) => ({ lessons: [...s.lessons, item] }));
         return item;
@@ -201,8 +291,24 @@ export const useStore = create<AppState>()(
       removeLesson: (id) => {
         set((s) => ({ lessons: s.lessons.filter((l) => l.id !== id) }));
       },
+      moveLesson: (id, toIndex) => {
+        set((s) => ({ lessons: moveLessonInGrade(s.lessons, id, toIndex) }));
+      },
       reorderLesson: (id, direction) => {
-        set((s) => ({ lessons: reorderList(s.lessons, id, direction) }));
+        set((s) => {
+          const lesson = s.lessons.find((l) => l.id === id);
+          if (!lesson) return {};
+          const gradeLessons = s.lessons.filter((l) => l.grade === lesson.grade).sort((a, b) => a.order - b.order);
+          const idx = gradeLessons.findIndex((l) => l.id === id);
+          return { lessons: moveLessonInGrade(s.lessons, id, direction === 'up' ? idx - 1 : idx + 1) };
+        });
+      },
+      setLessonProgress: (lessonId, classId, progress) => {
+        set((s) => ({
+          lessons: s.lessons.map((l) =>
+            l.id === lessonId ? { ...l, progress: { ...l.progress, [classId]: progress } } : l,
+          ),
+        }));
       },
 
       addRecapEvent: (event) => {
@@ -236,7 +342,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 3,
+      version: 4,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -245,8 +351,14 @@ export const useStore = create<AppState>()(
       // mial dawna wartosc domyslna (2, nieruszana recznie) - dostaje nowa
       // domyslna (3). Jesli mial cokolwiek innego (zmienione recznie) - ta sama
       // liczba zostaje, tylko pod nowym polem/znaczeniem (miesiac zamiast tygodnia).
+      // v3 -> v4: lekcje przechodza z pojedynczej klasy (classId + status) na
+      // rocznik (grade + progress per klasa). Lekcje tej samej tresci, ktore
+      // nauczyciel wstawil osobno do klas rownoleglych, sa sklejane w jedna
+      // (dopasowanie po znormalizowanym tytule), a ich postep - laczony.
       migrate: (persistedState, version) => {
         const state = persistedState as {
+          classes?: SchoolClass[];
+          lessons?: Array<Record<string, unknown>>;
           recapEvents?: Array<{ result?: string; [key: string]: unknown }>;
           settings?: (Partial<Settings> & { passesPerWeek?: number }) | undefined;
           [key: string]: unknown;
@@ -279,6 +391,9 @@ export const useStore = create<AppState>()(
             plombyForOne: oldSettings.plombyForOne ?? 3,
             passesPerMonth,
           };
+        }
+        if (version < 4 && Array.isArray(state.lessons)) {
+          state.lessons = migrateLessonsToGrades(state.lessons, state.classes ?? []) as unknown as Array<Record<string, unknown>>;
         }
         return state as unknown as AppState;
       },

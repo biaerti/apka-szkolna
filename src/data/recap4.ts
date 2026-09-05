@@ -22,7 +22,7 @@ interface SeedBundleResult {
 function buildQuestionSet(
   name: string,
   topic: string,
-  classId: string,
+  classIds: string[],
   seeds: QuestionSeed[],
 ): { set: QuestionSet; questions: Question[] } {
   const setId = newId();
@@ -30,7 +30,7 @@ function buildQuestionSet(
     id: setId,
     name,
     topic,
-    classIds: [classId],
+    classIds,
     createdAt: new Date().toISOString(),
   };
   const questions: Question[] = seeds.map((s, i) => ({
@@ -43,13 +43,13 @@ function buildQuestionSet(
   return { set, questions };
 }
 
-/** Tworzy 3 lekcje + 3 zestawy pytan powtorki materialu klasy 4 dla wskazanej klasy. */
-export function buildRecap4(classId: string): SeedBundleResult {
+/** Tworzy 3 lekcje + 3 zestawy pytan powtorki materialu klasy 4 dla wskazanego rocznika. */
+export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   const set1 = buildQuestionSet(
     'Powtórka klasy 4: odmienne części mowy',
     'Odmienne części mowy',
-    classId,
+    classIds,
     [
       { text: 'Wymień cztery odmienne części mowy.', answer: 'rzeczownik, czasownik, przymiotnik, liczebnik (odmienia się też zaimek)' },
       { text: 'Ile przypadków ma język polski? Wymień pierwsze trzy.', answer: '7 przypadków; mianownik, dopełniacz, celownik' },
@@ -72,7 +72,7 @@ export function buildRecap4(classId: string): SeedBundleResult {
   const set2 = buildQuestionSet(
     'Powtórka klasy 4: zdanie i wyrazy nieodmienne',
     'Składnia i wyrazy nieodmienne',
-    classId,
+    classIds,
     [
       { text: 'Co to jest orzeczenie i jaką częścią mowy najczęściej jest wyrażone?', answer: 'mówi, co robi podmiot; najczęściej czasownikiem w formie osobowej' },
       { text: 'Na jakie pytania odpowiada podmiot?', answer: 'kto? co?' },
@@ -95,7 +95,7 @@ export function buildRecap4(classId: string): SeedBundleResult {
   const set3 = buildQuestionSet(
     'Powtórka klasy 4: środki poetyckie i formy wypowiedzi',
     'Środki poetyckie i formy wypowiedzi',
-    classId,
+    classIds,
     [
       { text: 'Co to jest epitet? Podaj przykład.', answer: 'określenie rzeczownika, najczęściej przymiotnik, np. "zielona łąka"' },
       { text: 'Po jakich wyrazach poznajemy porównanie?', answer: 'po wyrazach: jak, jakby, niby, niczym' },
@@ -117,10 +117,10 @@ export function buildRecap4(classId: string): SeedBundleResult {
 
   // ---------- Lekcje ----------
   const lesson1: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Powtórka klasy 4: Odmienne części mowy',
     topic: 'Odmienne części mowy',
-    status: 'planned',
+    progress: {},
     questionSetId: set1.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: odmienne części mowy i ich formy',
     curriculum: ['II.1.1', 'II.1.2', 'II.1.4', 'II.1.6', 'II.1.7'],
@@ -207,10 +207,10 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
   };
 
   const lesson2: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Powtórka klasy 4: Zdanie i wyrazy nieodmienne',
     topic: 'Składnia i wyrazy nieodmienne',
-    status: 'planned',
+    progress: {},
     questionSetId: set2.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: budowa zdania, wyrazy nieodmienne, pisownia "nie"',
     curriculum: ['II.1.8', 'II.1.12', 'II.1.2', 'II.4.1', 'II.4.2'],
@@ -296,10 +296,10 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
   };
 
   const lesson3: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Powtórka klasy 4: Środki poetyckie i formy wypowiedzi',
     topic: 'Środki poetyckie i formy wypowiedzi',
-    status: 'planned',
+    progress: {},
     questionSetId: set3.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: środki poetyckie, budowa wiersza, formy wypowiedzi',
     curriculum: ['I.1.4', 'I.1.6', 'I.1.9', 'I.1.10', 'III.2.1'],

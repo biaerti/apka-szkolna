@@ -21,7 +21,7 @@ interface SeedBundleResult {
 function buildQuestionSet(
   name: string,
   topic: string,
-  classId: string,
+  classIds: string[],
   seeds: QuestionSeed[],
 ): { set: QuestionSet; questions: Question[] } {
   const setId = newId();
@@ -29,7 +29,7 @@ function buildQuestionSet(
     id: setId,
     name,
     topic,
-    classIds: [classId],
+    classIds,
     createdAt: new Date().toISOString(),
   };
   const questions: Question[] = seeds.map((s, i) => ({
@@ -42,13 +42,13 @@ function buildQuestionSet(
   return { set, questions };
 }
 
-/** Tworzy 3 lekcje + 3 zestawy pytan powtorki klas 1-3 dla wskazanej klasy. */
-export function buildRecap13(classId: string): SeedBundleResult {
+/** Tworzy 3 lekcje + 3 zestawy pytan powtorki klas 1-3 dla wskazanego rocznika. */
+export function buildRecap13(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   const set1 = buildQuestionSet(
     'Powtórka 1-3: głoski, sylaby, ortografia',
     'Fonetyka i ortografia',
-    classId,
+    classIds,
     [
       { text: 'Ile liter ma alfabet polski?', answer: '32 litery (w tym ą, ć, ę, ł, ń, ó, ś, ź, ż)' },
       { text: 'Wymień wszystkie samogłoski w języku polskim.', answer: 'a, e, i, o, u, y, ą, ę (8 samogłosek)' },
@@ -70,7 +70,7 @@ export function buildRecap13(classId: string): SeedBundleResult {
   const set2 = buildQuestionSet(
     'Powtórka 1-3: części mowy i zdania',
     'Gramatyka i interpunkcja',
-    classId,
+    classIds,
     [
       { text: 'Na jakie pytania odpowiada rzeczownik?', answer: 'kto? co?' },
       { text: 'Na jakie pytania odpowiada czasownik?', answer: 'co robi? co się z nim dzieje?' },
@@ -92,7 +92,7 @@ export function buildRecap13(classId: string): SeedBundleResult {
   const set3 = buildQuestionSet(
     'Powtórka 1-3: formy wypowiedzi i teksty',
     'Formy wypowiedzi',
-    classId,
+    classIds,
     [
       { text: 'Czym różni się wiersz od opowiadania?', answer: 'wiersz ma wersy i często rymy; opowiadanie to tekst ciągły pisany prozą' },
       { text: 'Co to jest rym?', answer: 'podobne zakończenie wyrazów na końcu wersów, np. kot - plot' },
@@ -113,10 +113,10 @@ export function buildRecap13(classId: string): SeedBundleResult {
 
   // ---------- Lekcje ----------
   const lesson1: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Powtórka 1-3: Głoski, litery, sylaby, ortografia',
     topic: 'Fonetyka i ortografia',
-    status: 'planned',
+    progress: {},
     questionSetId: set1.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: głoski, litery, sylaby, ortografia',
     curriculum: ['II.3.5', 'II.4.1'],
@@ -212,10 +212,10 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
   };
 
   const lesson2: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Powtórka 1-3: Części mowy, zdania, wielka litera',
     topic: 'Gramatyka i interpunkcja',
-    status: 'planned',
+    progress: {},
     questionSetId: set2.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: części mowy, rodzaje zdań, interpunkcja',
     curriculum: ['II.1.1', 'II.1.11', 'II.4.2', 'II.4.1'],
@@ -302,10 +302,10 @@ Przykłady:
   };
 
   const lesson3: Omit<Lesson, 'id' | 'order'> = {
-    classId,
+    grade,
     title: 'Powtórka 1-3: Formy wypowiedzi i czytanie',
     topic: 'Formy wypowiedzi',
-    status: 'planned',
+    progress: {},
     questionSetId: set3.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: formy wypowiedzi, czytanie i opowiadanie tekstów',
     curriculum: ['III.2.1', 'III.2.3', 'I.1.3', 'I.1.6', 'I.1.7'],

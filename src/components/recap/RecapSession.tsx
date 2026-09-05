@@ -107,8 +107,9 @@ export function RecapSession({
   function handleExit() {
     if (onExit) onExit();
     // Osobnej zakladki "Powtorka" juz nie ma - kolo odpala sie ze slajdu w lekcji,
-    // wiec wyjscie bez `onExit` (otwarcie strony wprost z URL) wraca do lekcji.
-    else navigate('/lekcje');
+    // wiec wyjscie bez `onExit` (otwarcie strony wprost z URL) wraca do lekcji, na
+    // zakladke tej klasy, ktora to kolo prowadzila.
+    else navigate(`/lekcje?klasa=${classId}`);
   }
 
   function toggleFullscreen() {
