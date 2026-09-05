@@ -19,6 +19,7 @@ import {
   lessonQuestionSetId,
   matchLessonsForRefresh,
   remapRecapSlides,
+  titleMatchKey,
   type FreshMaterialsBundle,
   type RefreshMatch,
 } from './refreshMaterials';
@@ -53,14 +54,14 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
     key: 'recap13',
     label: 'Powtórka klas 1-3',
     description:
-      'Doda 3 lekcje-prezentacje (fonetyka i ortografia, gramatyka i interpunkcja, formy wypowiedzi) i 3 zestawy pytań do koła fortuny.',
+      'Doda 6 lekcji-prezentacji (fonetyka i ortografia, gramatyka i interpunkcja, formy wypowiedzi, alfabet i słownictwo, zmiękczenia i interpunkcja, czytanie ze zrozumieniem) i 6 zestawów pytań do koła fortuny.',
     build: buildRecap13,
   },
   {
     key: 'recap4',
     label: 'Powtórka klasy 4',
     description:
-      'Doda 3 lekcje-prezentacje (odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi) i 3 zestawy pytań do koła fortuny.',
+      'Doda 6 lekcji-prezentacji (odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi, słownictwo i frazeologia, ortografia i skróty, świat przedstawiony i teksty kultury) i 6 zestawów pytań do koła fortuny.',
     build: buildRecap4,
   },
 ];
@@ -72,8 +73,10 @@ export interface ReadyMaterial {
   label: string;
   /** Jedno zdanie do dialogu potwierdzenia: co dokładnie zostanie dodane */
   description: string;
-  /** Ile lekcji wstawia (1 albo 3) */
+  /** Ile lekcji ma material w komplecie */
   lessonCount: number;
+  /** Ile lekcji materialu jeszcze nie ma w roczniku - tyle wstawi klikniecie */
+  missingCount: number;
   alreadyInserted: boolean;
   insert: () => void;
 }
@@ -126,19 +129,29 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     [freshBundle, gradeLessons, questions],
   );
 
-  // "Juz wstawione" = w lekcjach rocznika istnieje lekcja o tytule pierwszej
-  // lekcji materialu.
-  function isAlreadyInserted(bundle: FreshMaterialsBundle | undefined): boolean {
-    const firstTitle = bundle?.lessons[0]?.title;
-    return !!firstTitle && gradeLessons.some((l) => l.title === firstTitle);
+  // Lekcje materialu, ktorych rocznik jeszcze nie ma. Material rozrasta sie w czasie
+  // (do powtorki 1-3 doszly lekcje 4-6), a nauczyciel mogl wstawic starsza wersje -
+  // dlatego wstawianie dokłada brakujace lekcje zamiast byc blokowane po pierwszej.
+  function missingLessons(bundle: FreshMaterialsBundle | undefined): FreshMaterialsBundle['lessons'] {
+    if (!bundle) return [];
+    const maja = new Set(gradeLessons.map((l) => titleMatchKey(l.title)));
+    return bundle.lessons.filter((l) => !maja.has(titleMatchKey(l.title)));
   }
 
   function insert(bundle: FreshMaterialsBundle) {
     if (!grade) return;
 
+    const doWstawienia = missingLessons(bundle);
+    if (doWstawienia.length === 0) return;
+
+    // Zestawy pytan tworzymy tylko te, ktorych uzywaja wstawiane lekcje - inaczej
+    // uzupelnienie materialu zostawiloby w bazie duplikaty zestawow juz istniejacych.
+    const potrzebneSety = new Set(doWstawienia.map((l) => l.questionSetId).filter(Boolean) as string[]);
+
     // Wstaw zestawy pytan i zapamietaj mapowanie starych (tymczasowych) id -> nowe id.
     const setIdMap = new Map<string, string>();
     for (const set of bundle.questionSets) {
+      if (!potrzebneSety.has(set.id)) continue;
       const created = addQuestionSet({ name: set.name, topic: set.topic, classIds });
       setIdMap.set(set.id, created.id);
     }
@@ -149,7 +162,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
       addQuestion({ setId: newSetId, text: q.text, answer: q.answer });
     }
 
-    for (const lesson of bundle.lessons) {
+    for (const lesson of doWstawienia) {
       const mappedQuestionSetId = lesson.questionSetId ? setIdMap.get(lesson.questionSetId) : undefined;
       const mappedSlides = lesson.slides.map((slide) => {
         if (slide.kind === 'recap') {
@@ -221,12 +234,21 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
 
   const materials: ReadyMaterial[] = MATERIAL_DEFINITIONS.filter((def) => bundles.has(def.key)).map((def) => {
     const bundle = bundles.get(def.key);
+    const brakujace = missingLessons(bundle);
+    const lessonCount = bundle?.lessons.length ?? 0;
+    // Czesc materialu juz jest (starsza wersja) - w dialogu mowimy wprost, ile lekcji dojdzie.
+    const description =
+      brakujace.length > 0 && brakujace.length < lessonCount
+        ? `Uzupełni materiał o ${brakujace.length} ${brakujace.length === 1 ? 'nową lekcję' : 'nowe lekcje'}: ` +
+          `${brakujace.map((l) => l.title).join(', ')}.`
+        : def.description;
     return {
       key: def.key,
       label: def.label,
-      description: def.description,
-      lessonCount: bundle?.lessons.length ?? 0,
-      alreadyInserted: isAlreadyInserted(bundle),
+      description,
+      lessonCount,
+      missingCount: brakujace.length,
+      alreadyInserted: brakujace.length === 0,
       insert: () => {
         if (bundle) insert(bundle);
       },

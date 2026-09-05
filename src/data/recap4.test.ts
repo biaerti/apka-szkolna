@@ -6,10 +6,10 @@ import { titleMatchKey } from '../components/lessons/refreshMaterials';
 const CLASS_ID = 'klasa-testowa';
 
 describe('buildRecap4', () => {
-  it('tworzy trzy lekcje i trzy zestawy pytan', () => {
+  it('tworzy szesc lekcji i szesc zestawow pytan', () => {
     const bundle = buildRecap4('V', [CLASS_ID]);
-    expect(bundle.lessons).toHaveLength(3);
-    expect(bundle.questionSets).toHaveLength(3);
+    expect(bundle.lessons).toHaveLength(6);
+    expect(bundle.questionSets).toHaveLength(6);
     for (const lesson of bundle.lessons) {
       expect(lesson.grade).toBe('V');
       expect(lesson.progress).toEqual({});
@@ -61,5 +61,41 @@ describe('buildRecap4', () => {
     const a = buildRecap4('V', [CLASS_ID]);
     const b = buildRecap4('V', [CLASS_ID]);
     expect(a.questionSets[0].id).not.toBe(b.questionSets[0].id);
+  });
+});
+
+describe('buildRecap13', () => {
+  it('tworzy szesc lekcji i szesc zestawow pytan', () => {
+    const bundle = buildRecap13('IV', [CLASS_ID]);
+    expect(bundle.lessons).toHaveLength(6);
+    expect(bundle.questionSets).toHaveLength(6);
+  });
+
+  it('kazda lekcja ma slajd powtorki wskazujacy na wlasny zestaw pytan', () => {
+    const bundle = buildRecap13('IV', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const recapSlides = lesson.slides.filter((s) => s.kind === 'recap');
+      expect(recapSlides).toHaveLength(1);
+      const recap = recapSlides[0];
+      if (recap.kind !== 'recap') throw new Error('spodziewany slajd recap');
+      expect(recap.questionSetId).toBe(lesson.questionSetId);
+      expect(bundle.questionSets.some((qs) => qs.id === recap.questionSetId)).toBe(true);
+    }
+  });
+
+  it('kazde pytanie ma odpowiedz i nalezy do istniejacego zestawu', () => {
+    const bundle = buildRecap13('IV', [CLASS_ID]);
+    const setIds = new Set(bundle.questionSets.map((qs) => qs.id));
+    expect(bundle.questions.length).toBeGreaterThan(0);
+    for (const question of bundle.questions) {
+      expect(question.text.trim()).not.toBe('');
+      expect(question.answer?.trim()).toBeTruthy();
+      expect(setIds.has(question.setId)).toBe(true);
+    }
+  });
+
+  it('tytuly lekcji sa unikalne wewnatrz powtorki', () => {
+    const klucze = buildRecap13('IV', [CLASS_ID]).lessons.map((l) => titleMatchKey(l.title));
+    expect(new Set(klucze).size).toBe(klucze.length);
   });
 });

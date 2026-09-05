@@ -140,6 +140,16 @@ export type SlideArt =
   | 'opowiadanie' // wstep - rozwiniecie - zakonczenie
   | 'opis' // przymiotniki opisujace przedmiot
   | 'zaproszenie' // kogo, na co, kiedy, dokad, kto zaprasza
+  | 'alfabet' // 32 litery i porzadek alfabetyczny
+  | 'slownik' // jak szukac wyrazu w slowniku ortograficznym
+  | 'bliskoznaczne' // wyrazy bliskoznaczne i przeciwstawne
+  | 'rodzinaWyrazow' // wspolna czastka i wyrazy pokrewne
+  | 'zmiekczenia' // c z kreska kontra ci, s kontra si...
+  | 'nosowki' // a i e z ogonkiem kontra om, on, em, en
+  | 'znakiInterpunkcyjne' // kropka, pytajnik, wykrzyknik, przecinek, dwukropek, myslnik
+  | 'dialog' // zapis rozmowy: nowa linia i myslnik
+  | 'zyczenia' // zyczenia i podziekowanie
+  | 'kolejnoscZdarzen' // najpierw - potem - nagle - na koniec
   // Ilustracje przedmiotowe do powtorki klasy 4 (src/data/recap4.ts).
   | 'przypadki' // 7 przypadkow z pytaniami
   | 'czasownikOdmiana' // osoba, liczba, czas
@@ -153,7 +163,15 @@ export type SlideArt =
   | 'strofa' // wers, strofa, rym, refren
   | 'narrator' // podmiot liryczny kontra narrator 1. i 3. osoby
   | 'list' // data, naglowek, tresc, podpis
-  | 'ogloszenie'; // co, kiedy i gdzie, kto
+  | 'ogloszenie' // co, kiedy i gdzie, kto
+  | 'wieloznaczne' // jeden wyraz, kilka znaczen (zamek)
+  | 'frazeologizm' // staly zwrot i jego znaczenie przenosne
+  | 'zdrobnienieZgrubienie' // domek - dom - domisko
+  | 'nazwyWlasne' // pospolite mala litera, wlasne wielka
+  | 'skroty' // np., itd., ul., dr
+  | 'swiatPrzedstawiony' // czas, miejsce, bohaterowie, wydarzenia
+  | 'gatunki' // basn, legenda, mit, bajka
+  | 'teatrFilm'; // elementy spektaklu i filmu
 
 export type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }

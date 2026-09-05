@@ -31,6 +31,16 @@ import { Basn } from './Basn';
 import { Opowiadanie } from './Opowiadanie';
 import { Opis } from './Opis';
 import { Zaproszenie } from './Zaproszenie';
+import { Alfabet } from './Alfabet';
+import { Slownik } from './Slownik';
+import { Bliskoznaczne } from './Bliskoznaczne';
+import { RodzinaWyrazow } from './RodzinaWyrazow';
+import { Zmiekczenia } from './Zmiekczenia';
+import { Nosowki } from './Nosowki';
+import { ZnakiInterpunkcyjne } from './ZnakiInterpunkcyjne';
+import { Dialog } from './Dialog';
+import { Zyczenia } from './Zyczenia';
+import { KolejnoscZdarzen } from './KolejnoscZdarzen';
 import { Przypadki } from './Przypadki';
 import { CzasownikOdmiana } from './CzasownikOdmiana';
 import { Stopniowanie } from './Stopniowanie';
@@ -44,6 +54,14 @@ import { Strofa } from './Strofa';
 import { Narrator } from './Narrator';
 import { List } from './List';
 import { Ogloszenie } from './Ogloszenie';
+import { Wieloznaczne } from './Wieloznaczne';
+import { Frazeologizm } from './Frazeologizm';
+import { ZdrobnienieZgrubienie } from './ZdrobnienieZgrubienie';
+import { NazwyWlasne } from './NazwyWlasne';
+import { Skroty } from './Skroty';
+import { SwiatPrzedstawiony } from './SwiatPrzedstawiony';
+import { Gatunki } from './Gatunki';
+import { TeatrFilm } from './TeatrFilm';
 
 type ArtComponent = ComponentType<{ className?: string }>;
 
@@ -76,6 +94,16 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   opowiadanie: Opowiadanie,
   opis: Opis,
   zaproszenie: Zaproszenie,
+  alfabet: Alfabet,
+  slownik: Slownik,
+  bliskoznaczne: Bliskoznaczne,
+  rodzinaWyrazow: RodzinaWyrazow,
+  zmiekczenia: Zmiekczenia,
+  nosowki: Nosowki,
+  znakiInterpunkcyjne: ZnakiInterpunkcyjne,
+  dialog: Dialog,
+  zyczenia: Zyczenia,
+  kolejnoscZdarzen: KolejnoscZdarzen,
   // Ilustracje przedmiotowe do powtorki klasy 4.
   przypadki: Przypadki,
   czasownikOdmiana: CzasownikOdmiana,
@@ -90,6 +118,14 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   narrator: Narrator,
   list: List,
   ogloszenie: Ogloszenie,
+  wieloznaczne: Wieloznaczne,
+  frazeologizm: Frazeologizm,
+  zdrobnienieZgrubienie: ZdrobnienieZgrubienie,
+  nazwyWlasne: NazwyWlasne,
+  skroty: Skroty,
+  swiatPrzedstawiony: SwiatPrzedstawiony,
+  gatunki: Gatunki,
+  teatrFilm: TeatrFilm,
 };
 
 /** Ilustracje o bardzo szerokim ukladzie - lepiej wygladaja pod tekstem na cala szerokosc niz obok. */

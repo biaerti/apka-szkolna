@@ -209,9 +209,16 @@ dolozenie kolejnej to jeden wpis w tablicy, bez zmian w UI. Buildery przyjmuja
 `buildXxx(grade, classIds)` (rocznik i lista klas, ktore go tworza, zamiast pojedynczej klasy) i
 zwracaja lekcje bez klasowego przypisania. Hook `useReadyMaterials(grade, classIds, gradeLessons)`
 liczy, co juz jest wstawione dla rocznika, i co "Odswiezenie" ma podmienic. Kazda powtorka to
-3 lekcje + 3 zestawy pytan. **Tytuly lekcji musza byc unikalne miedzy powtorkami** - "Odswiez
+6 lekcji + 6 zestawow pytan; zakres wynika z podstawy programowej (I etap dla powtorki 1-3,
+II etap dla powtorki klasy 4). **Tytuly lekcji musza byc unikalne miedzy powtorkami** - "Odswiez
 gotowe materialy" dopasowuje lekcje po znormalizowanym tytule (`refreshMaterials.titleMatchKey`);
 pilnuje tego test `src/data/recap4.test.ts`.
+
+Wstawianie jest **przyrostowe**: klikniecie dokłada tylko te lekcje materialu, ktorych rocznik
+jeszcze nie ma (dopasowanie po `titleMatchKey`), i tworzy zestawy pytan tylko dla nich. Dzieki
+temu material, ktory urosl w kodzie (do powtorki 1-3 doszly lekcje 4-6), trafia do nauczyciela,
+ktory wstawil starsza wersje - menu pokazuje wtedy "Uzupelnij" i liste brakujacych lekcji.
+"Odswiez" nadal sluzy do czegos innego: podmienia tresc lekcji juz wstawionych.
 
 ## Migracje
 - Store (`src/data/store.ts`, `persist` v4): `migrateLessonsToGrades` przeksztalca lekcje z v3

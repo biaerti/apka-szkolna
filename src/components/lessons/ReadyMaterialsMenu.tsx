@@ -20,6 +20,11 @@ interface Props {
   variant: 'menu' | 'buttons';
 }
 
+/** "Wstaw" dla calego materialu, "Uzupelnij" gdy czesc lekcji juz jest w roczniku. */
+function czasownik(m: ReadyMaterial): string {
+  return m.missingCount < m.lessonCount ? 'Uzupełnij' : 'Wstaw';
+}
+
 export function ReadyMaterialsMenu({ classNames, materials, refreshMatches, onRefresh, variant }: Props) {
   const [pending, setPending] = useState<ReadyMaterial | null>(null);
   const [refreshOpen, setRefreshOpen] = useState(false);
@@ -69,7 +74,7 @@ export function ReadyMaterialsMenu({ classNames, materials, refreshMatches, onRe
             .filter((m) => !m.alreadyInserted)
             .map((m) => (
               <Button key={m.key} variant="secondary" onClick={() => setPending(m)}>
-                Wstaw: {m.label.toLowerCase()}
+                {czasownik(m)}: {m.label.toLowerCase()}
               </Button>
             ))}
         </div>
@@ -77,9 +82,9 @@ export function ReadyMaterialsMenu({ classNames, materials, refreshMatches, onRe
 
       <ConfirmDialog
         open={!!pending}
-        title={pending ? `Wstaw: ${pending.label.toLowerCase()}` : ''}
+        title={pending ? `${czasownik(pending)}: ${pending.label.toLowerCase()}` : ''}
         message={pending ? `${pending.description} Pojawi się w: ${classNames}. Postęp każda klasa ma osobny.` : ''}
-        confirmLabel="Wstaw"
+        confirmLabel={pending ? czasownik(pending) : 'Wstaw'}
         danger={false}
         onCancel={() => setPending(null)}
         onConfirm={() => {

@@ -1,6 +1,8 @@
 // Gotowa powtorka materialu klasy 4 - jezyk polski, na start klasy 5.
-// Trzy lekcje (modul = 1-2 godziny lekcyjne): odmienne czesci mowy, zdanie i wyrazy
-// nieodmienne, srodki poetyckie i formy wypowiedzi + trzy zestawy pytan do kola fortuny.
+// Szesc lekcji (modul = 1-2 godziny lekcyjne): odmienne czesci mowy, zdanie i wyrazy
+// nieodmienne, srodki poetyckie i formy wypowiedzi, slownictwo i frazeologia,
+// ortografia z wielka litera i skrotami, swiat przedstawiony z gatunkami i tekstami
+// kultury - kazda z wlasnym zestawem pytan do kola fortuny.
 // Rytm slajdow taki sam jak w powtorce klas 1-3 (recap13.ts): krotka regula (text)
 // -> zadanie do zeszytu ze stoperem (task) -> kolejna regula...
 // Wstawiane z ekranu Lekcje przyciskiem.
@@ -43,7 +45,7 @@ function buildQuestionSet(
   return { set, questions };
 }
 
-/** Tworzy 3 lekcje + 3 zestawy pytan powtorki materialu klasy 4 dla wskazanego rocznika. */
+/** Tworzy 6 lekcji + 6 zestawow pytan powtorki materialu klasy 4 dla wskazanego rocznika. */
 export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   const set1 = buildQuestionSet(
@@ -115,6 +117,75 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     ],
   );
 
+  const set4 = buildQuestionSet(
+    'Powtórka klasy 4: słownictwo i frazeologia',
+    'Słownictwo',
+    classIds,
+    [
+      { text: 'Co to jest rodzina wyrazów?', answer: 'grupa wyrazów ze wspólną cząstką i wspólnym znaczeniem, np. dom, domek, domowy' },
+      { text: 'Jak nazywa się wspólna cząstka wszystkich wyrazów z jednej rodziny?', answer: 'rdzeń (wspólna cząstka)' },
+      { text: 'Podaj rdzeń wyrazów: pisać, pisarz, napis, pisemny.', answer: 'pis' },
+      { text: 'Który wyraz jest podstawowy, a który pochodny: las - leśniczy?', answer: 'podstawowy: las, pochodny: leśniczy (powstał od lasu)' },
+      { text: 'Co to jest wyraz wieloznaczny? Podaj przykład.', answer: 'wyraz o kilku różnych znaczeniach, np. zamek: budowla, w kurtce, w drzwiach' },
+      { text: 'Podaj dwa znaczenia wyrazu "klucz".', answer: 'np. klucz do drzwi, klucz żurawi, klucz wiolinowy, klucz do zadania' },
+      { text: 'Co to jest synonim? Podaj synonim słowa "mądry".', answer: 'wyraz bliskoznaczny; np. rozumny, bystry, inteligentny' },
+      { text: 'Co to jest antonim? Podaj antonim słowa "odważny".', answer: 'wyraz o znaczeniu przeciwnym; tchórzliwy' },
+      { text: 'Po co używamy synonimów w wypracowaniu?', answer: 'żeby nie powtarzać w kółko tego samego wyrazu' },
+      { text: 'Co to jest zdrobnienie? Podaj zdrobnienie od "kot".', answer: 'forma mniejsza i czulsza; kotek, koteczek' },
+      { text: 'Co to jest zgrubienie? Podaj zgrubienie od "pies".', answer: 'forma większa i niemiła; psisko' },
+      { text: 'Co to jest związek frazeologiczny?', answer: 'stałe połączenie wyrazów o znaczeniu przenośnym, np. wziąć nogi za pas' },
+      { text: 'Co znaczy "wziąć nogi za pas"?', answer: 'szybko uciec' },
+      { text: 'Co znaczy "mieć muchy w nosie"?', answer: 'być obrażonym, w złym humorze' },
+      { text: 'Co znaczy "biały kruk"?', answer: 'rzecz bardzo rzadka i cenna, np. stara książka' },
+    ],
+  );
+
+  const set5 = buildQuestionSet(
+    'Powtórka klasy 4: ortografia, wielka litera i skróty',
+    'Ortografia i interpunkcja',
+    classIds,
+    [
+      { text: 'Kiedy piszemy ó wymienne? Podaj przykład z wymianą.', answer: 'gdy wymienia się na o, e albo a: stół - stoły, siódmy - siedem, skrócić - skracać' },
+      { text: 'Podaj trzy wyrazy, w których ó trzeba zapamiętać.', answer: 'np. ogórek, wróbel, król, córka, chór, mózg' },
+      { text: 'Kiedy piszemy rz, a kiedy ż? Podaj wymianę dla obu.', answer: 'rz wymienia się na r (morze - morski), ż na g lub z (może - mogę, wożę - wozy)' },
+      { text: 'Po jakich literach piszemy rz? Podaj dwa przykłady.', answer: 'po b, p, d, t, g, k, ch, j, w: brzeg, przerwa, drzewo, krzak' },
+      { text: 'Kiedy piszemy ch? Podaj zasadę i przykład.', answer: 'gdy wymienia się na sz (mucha - muszka) i zawsze na końcu wyrazu (dach)' },
+      { text: 'Popraw zapis: "Mieszkam w krakowie przy ulicy długiej."', answer: 'Mieszkam w Krakowie przy ulicy Długiej.' },
+      { text: 'Czy nazwy świąt piszemy wielką literą? Podaj przykład.', answer: 'tak: Boże Narodzenie, Wielkanoc, Dzień Matki' },
+      { text: 'Jak zapisujemy tytuł książki?', answer: 'wielką literą pierwszy wyraz i w cudzysłowie: "Akademia pana Kleksa"' },
+      { text: 'Czy nazwy dni tygodnia i miesięcy piszemy wielką literą?', answer: 'nie, małą: poniedziałek, marzec' },
+      { text: 'Czym różni się nazwa własna od pospolitej? Podaj parę przykładów.', answer: 'własna nazywa konkretną osobę lub miejsce (Burek, Wisła), pospolita całą grupę (pies, rzeka)' },
+      { text: 'Co oznaczają skróty: np., itd., itp.?', answer: 'na przykład, i tak dalej, i tym podobne' },
+      { text: 'Dlaczego skrót "dr" piszemy bez kropki?', answer: 'bo kończy się ostatnią literą całego wyrazu (doktor)' },
+      { text: 'Jak zapisujemy wypowiedzi w dialogu?', answer: 'każdą od nowej linii, zaczynając od myślnika' },
+      { text: 'Do czego służy dwukropek? Podaj przykład.', answer: 'zapowiada wyliczenie lub czyjeś słowa: "Kupiłem: chleb, masło i ser"' },
+      { text: 'Popraw zapis: "Byłem u lekarza dr. kowalskiego."', answer: 'Byłem u lekarza dr. Kowalskiego - nazwisko wielką literą.' },
+    ],
+  );
+
+  const set6 = buildQuestionSet(
+    'Powtórka klasy 4: świat przedstawiony, gatunki, teatr i film',
+    'Odbiór tekstów kultury',
+    classIds,
+    [
+      { text: 'Wymień cztery elementy świata przedstawionego.', answer: 'czas, miejsce, bohaterowie, wydarzenia' },
+      { text: 'Na jakie pytanie odpowiada "miejsce" w świecie przedstawionym?', answer: 'gdzie dzieje się akcja?' },
+      { text: 'Co to jest fikcja literacka?', answer: 'świat wymyślony przez autora, choć może przypominać prawdziwy' },
+      { text: 'Czym różnią się elementy realistyczne od fantastycznych?', answer: 'realistyczne mogłyby zdarzyć się naprawdę, fantastyczne nie (magia, smoki, latający dywan)' },
+      { text: 'Po czym poznajesz baśń?', answer: 'po magii, zmyślonym świecie i zwrocie "dawno, dawno temu"' },
+      { text: 'Czym różni się legenda od baśni?', answer: 'legenda tłumaczy pochodzenie prawdziwego miejsca lub wydarzenia' },
+      { text: 'Co wyjaśnia mit? Podaj przykład.', answer: 'pochodzenie świata i zjawisk, opowiada o bogach; np. mit o Prometeuszu' },
+      { text: 'Kto jest bohaterem bajki i co jest na jej końcu?', answer: 'zwierzęta zachowujące się jak ludzie; na końcu morał' },
+      { text: 'Co to jest komiks?', answer: 'opowieść w kadrach, obrazkach, z tekstem w dymkach' },
+      { text: 'Jak nazywa się tekst w komiksie zapisany w chmurce przy postaci?', answer: 'dymek' },
+      { text: 'Wymień trzy elementy spektaklu teatralnego.', answer: 'np. scena, aktorzy, scenografia, kostiumy, reżyser, widownia' },
+      { text: 'Wymień trzy elementy dzieła filmowego.', answer: 'np. kamera i zdjęcia, montaż, muzyka, reżyser, plan filmowy, aktorzy' },
+      { text: 'Czym różni się teatr od filmu?', answer: 'w teatrze aktorzy grają na żywo na scenie, film jest nagrany i oglądamy go na ekranie' },
+      { text: 'Co to jest adaptacja?', answer: 'przerobienie utworu literackiego na film albo spektakl' },
+      { text: 'Kto kieruje pracą aktorów i w teatrze, i w filmie?', answer: 'reżyser' },
+    ],
+  );
+
   // ---------- Lekcje ----------
   const lesson1: Omit<Lesson, 'id' | 'order'> = {
     grade,
@@ -125,7 +196,7 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     registerTopic: 'Powtórzenie wiadomości z klasy 4: odmienne części mowy i ich formy',
     curriculum: ['II.1.1', 'II.1.2', 'II.1.4', 'II.1.6', 'II.1.7'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Odmienne części mowy - część 1/3'),
+      slideTitle('Powtórka klasy 4', 'Odmienne części mowy - część 1/6'),
       slideText('Co dziś powtarzamy', `- Rzeczownik i odmiana przez przypadki
 - Czasownik: osoba, liczba, czas
 - Przymiotnik i jego stopniowanie
@@ -215,7 +286,7 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: budowa zdania, wyrazy nieodmienne, pisownia "nie"',
     curriculum: ['II.1.8', 'II.1.12', 'II.1.2', 'II.4.1', 'II.4.2'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/3'),
+      slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/6'),
       slideText('Co dziś powtarzamy', `- Podmiot i orzeczenie
 - Zdanie pojedyncze, złożone i równoważnik
 - Przysłówek, przyimek, spójnik
@@ -304,7 +375,7 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: środki poetyckie, budowa wiersza, formy wypowiedzi',
     curriculum: ['I.1.4', 'I.1.6', 'I.1.9', 'I.1.10', 'III.2.1'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/3'),
+      slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/6'),
       slideText('Co dziś powtarzamy', `- Epitet, porównanie, przenośnia, ożywienie
 - Wers, strofa, rym, refren
 - Narrator i podmiot liryczny
@@ -393,10 +464,264 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
     ],
   };
 
+  const lesson4: Omit<Lesson, 'id' | 'order'> = {
+    grade,
+    title: 'Powtórka klasy 4: Słownictwo i frazeologia',
+    topic: 'Słownictwo',
+    progress: {},
+    questionSetId: set4.set.id,
+    registerTopic: 'Powtórzenie wiadomości z klasy 4: rodzina wyrazów, synonimy i antonimy, wyrazy wieloznaczne, związki frazeologiczne',
+    curriculum: ['II.2.4', 'II.2.5', 'II.2.8', 'I.1.4', 'IV.5'],
+    slides: [
+      slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/6'),
+      slideText('Co dziś powtarzamy', `- Rodzina wyrazów i rdzeń
+- Synonimy i antonimy
+- Wyrazy wieloznaczne
+- Zdrobnienia i zgrubienia
+- Związki frazeologiczne`),
+      slideText('Rodzina wyrazów', `**Rodzina wyrazów** to wyrazy o wspólnym znaczeniu i wspólnej cząstce.
+
+Ta wspólna cząstka to **rdzeń**: **dom**ek, **dom**owy, **dom**ownik, bez**dom**ny.
+
+Wyraz, od którego powstały pozostałe, to **wyraz podstawowy** (dom). Reszta to **wyrazy pochodne**.`, 'rodzinaWyrazow'),
+      slideTask('Z1', 'Znajdź rdzeń', `Zapisz w zeszycie rdzeń każdej rodziny i dopisz do niej **dwa** własne wyrazy:
+
+1. pisać, pisarz, napis, pisemny
+2. las, leśny, leśniczy
+3. szkoła, szkolny, przedszkole
+
+Rdzeń podkreśl w każdym wyrazie.`, undefined, 240),
+      slideText('Synonimy i antonimy', `**Synonimy** (wyrazy bliskoznaczne) znaczą prawie to samo: mądry - bystry - rozumny.
+
+Używamy ich, żeby **nie powtarzać** tego samego słowa w wypracowaniu.
+
+**Antonimy** znaczą odwrotnie: odważny - tchórzliwy, jasny - ciemny.`, 'bliskoznaczne'),
+      slideText('Wyrazy wieloznaczne', `Jeden wyraz, kilka **różnych** znaczeń.
+
+**zamek**: budowla, zamek w kurtce, zamek w drzwiach
+
+**klucz**: do drzwi, klucz żurawi, klucz wiolinowy
+
+O znaczeniu decyduje **całe zdanie**, a nie sam wyraz.`, 'wieloznaczne'),
+      slideTask('Z2', 'Dwa znaczenia', `Ułóż w zeszycie po **dwa zdania** z każdym wyrazem - w każdym zdaniu w innym znaczeniu:
+
+1. zamek
+2. języki
+3. korek
+4. bal
+
+Podkreśl fragment zdania, po którym wiadomo, o które znaczenie chodzi.`, undefined, 300),
+      slideText('Zdrobnienia i zgrubienia', `**Zdrobnienie** - forma mniejsza i czulsza: dom - **domek**, kot - **kotek**.
+
+**Zgrubienie** - forma większa i często niemiła: dom - **domisko**, pies - **psisko**.
+
+Autor wybiera je świadomie: zdrobnieniem pokazuje sympatię, zgrubieniem - niechęć.`, 'zdrobnienieZgrubienie'),
+      slideText('Związki frazeologiczne', `**Związek frazeologiczny** to stałe połączenie wyrazów o znaczeniu **przenośnym**.
+
+Nie tłumaczy się go dosłownie: "wziąć nogi za pas" nie znaczy, że ktoś wkłada nogi do paska.
+
+Frazeologizmów szukamy w **słowniku frazeologicznym**.`, 'frazeologizm'),
+      slideTask('Z3', 'Wyjaśnij frazeologizmy', `Zapisz w zeszycie, co znaczy każdy zwrot, a potem ułóż z jednym z nich zdanie:
+
+1. mieć węża w kieszeni
+2. rzucać słowa na wiatr
+3. musztarda po obiedzie
+4. złapać byka za rogi
+
+Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
+      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
+- **rodzina wyrazów** ma wspólny **rdzeń**
+- **synonim** znaczy prawie to samo, **antonim** odwrotnie
+- **wyraz wieloznaczny** ma kilka znaczeń - decyduje zdanie
+- **frazeologizm** rozumiemy **przenośnie**, nie dosłownie`),
+      slideRecap(set4.set.id),
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Słownictwo i frazeologia**
+
+- Rodzina wyrazów ma wspólny rdzeń: dom, domek, domowy, bezdomny.
+- Wyraz podstawowy to ten, od którego powstały pozostałe (wyrazy pochodne).
+- Synonimy znaczą prawie to samo (mądry - bystry), antonimy odwrotnie (jasny - ciemny).
+- Wyraz wieloznaczny ma kilka znaczeń, np. zamek, klucz - o znaczeniu decyduje zdanie.
+- Zdrobnienie: domek. Zgrubienie: domisko.
+- Związek frazeologiczny ma znaczenie przenośne, np. wziąć nogi za pas = szybko uciec.`,
+      ),
+    ],
+  };
+
+  const lesson5: Omit<Lesson, 'id' | 'order'> = {
+    grade,
+    title: 'Powtórka klasy 4: Ortografia, wielka litera i skróty',
+    topic: 'Ortografia i interpunkcja',
+    progress: {},
+    questionSetId: set5.set.id,
+    registerTopic: 'Powtórzenie wiadomości z klasy 4: pisownia ó-u, rz-ż, ch-h, wielka litera w nazwach własnych, skróty',
+    curriculum: ['II.4.1', 'II.4.2', 'IV.5'],
+    slides: [
+      slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/6'),
+      slideText('Co dziś powtarzamy', `- Ó i u, rz i ż, ch i h: wymiany oraz reguły
+- Wielka litera w nazwach własnych
+- Skróty i kropka w skrócie
+- Dwukropek i dialog`),
+      slideText('Ó, rz, ch - wymiany', `**Ó** wymienia się na **o, e, a**: stół - stoły, siódmy - siedem, skrócić - skracać.
+
+**Rz** wymienia się na **r**: morze - morski. **Ż** na **g** lub **z**: może - mogę, wożę - wozy.
+
+**Ch** wymienia się na **sz**: mucha - muszka.`, 'wymianaOu'),
+      slideText('Ó, rz, ch - reguły bez wymiany', `**Rz** piszemy po literach **b, p, d, t, g, k, ch, j, w**: brzeg, przerwa, drzewo, krzak.
+
+**Ch** piszemy zawsze na **końcu wyrazu**: dach, groch (wyjątek: druh).
+
+Reszty trzeba się **nauczyć na pamięć**: ogórek, wróbel, chór, hałas, herbata.`),
+      slideTask('Z1', 'Uzasadnij pisownię', `Przepisz do zeszytu i przy każdym wyrazie dopisz **uzasadnienie** (wymiana albo reguła):
+
+1. mr__z
+2. b__zeg
+3. da__ (ch/h)
+4. w__z (wóz/wuz)
+5. p__yjaciel (rz/ż)
+6. mu__ka (sz od mucha)
+
+Wzór: **mróz - ó, bo mrozy**.`, undefined, 300),
+      slideText('Wielka litera', `Wielką literą piszemy **nazwy własne**: Burek, Kraków, Wisła, Polska.
+
+Także: **nazwy świąt** (Boże Narodzenie, Wielkanoc), **tytuły** ("Akademia pana Kleksa"), **nazwy ulic** (ulica Długa).
+
+Małą literą: **dni tygodnia i miesiące** (poniedziałek, marzec) oraz nazwy pospolite (pies, rzeka, miasto).`, 'nazwyWlasne'),
+      slideTask('Z2', 'Popraw wielkie litery', `Przepisz zdania do zeszytu, poprawiając wielkie litery:
+
+1. w grudniu obchodzimy boże narodzenie.
+2. mieszkam w gdańsku przy ulicy słonecznej.
+3. w poniedziałek czytamy "akademię pana kleksa".
+4. moja koleżanka ania ma psa burka.
+
+Przy każdej poprawce powiedz, dlaczego.`, undefined, 270),
+      slideText('Skróty', `Skrót zwykle kończy się **kropką**: np., itd., itp., ul., godz., s., r.
+
+**Bez kropki** piszemy skrót zakończony **ostatnią literą** całego wyrazu: **dr** (dokto**r**), **mgr** (magiste**r**).
+
+Zasada: skrót urwany w środku wyrazu - z kropką; skrót sięgający ostatniej litery - bez kropki.`, 'skroty'),
+      slideText('Dwukropek i dialog', `**Dwukropek** zapowiada wyliczenie albo czyjeś słowa:
+
+"Do plecaka zapakowałem: zeszyt, długopis i linijkę."
+
+**Dialog**: każda wypowiedź od nowej linii, na początku **myślnik**.`, 'dialog'),
+      slideTask('Z3', 'Wstaw znaki', `Przepisz do zeszytu, wstawiając brakujące znaki:
+
+1. Kupiliśmy trzy rzeczy chleb masło i ser
+2. Ale ładnie dziś świeci słońce
+3. Czy zdążymy na autobus
+4. Wiem że dasz radę
+
+Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
+      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
+- **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz
+- **rz** po b, p, d, t, g, k, ch, j, w; **ch** na końcu wyrazu
+- **nazwy własne i święta** wielką literą, **dni i miesiące** małą
+- skrót obciętego wyrazu ma **kropkę**`),
+      slideRecap(set5.set.id),
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Ortografia, wielka litera i skróty**
+
+- Ó wymienia się na o, e, a (stół - stoły). Rz wymienia się na r (morze - morski), ż na g lub z (może - mogę).
+- Rz piszemy po b, p, d, t, g, k, ch, j, w: brzeg, przerwa, drzewo.
+- Ch piszemy na końcu wyrazu: dach, groch.
+- Wielką literą: nazwy własne, nazwy świąt, tytuły, nazwy ulic. Małą: dni tygodnia i miesiące.
+- Skrót obciętego wyrazu ma kropkę (np., itd., ul.); skrót z ostatnią literą wyrazu jej nie ma (dr, mgr).`,
+      ),
+    ],
+  };
+
+  const lesson6: Omit<Lesson, 'id' | 'order'> = {
+    grade,
+    title: 'Powtórka klasy 4: Świat przedstawiony, gatunki, teatr i film',
+    topic: 'Odbiór tekstów kultury',
+    progress: {},
+    questionSetId: set6.set.id,
+    registerTopic: 'Powtórzenie wiadomości z klasy 4: świat przedstawiony, baśń, legenda, mit, bajka, komiks, teatr i film',
+    curriculum: ['I.1.1', 'I.1.2', 'I.1.3', '2.7', '2.8', '2.9', '2.10'],
+    slides: [
+      slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/6'),
+      slideText('Co dziś powtarzamy', `- Świat przedstawiony utworu
+- Fikcja, elementy realistyczne i fantastyczne
+- Baśń, legenda, mit, bajka, komiks
+- Teatr, film i adaptacja`),
+      slideText('Świat przedstawiony', `Każdy utwór ma swój **świat przedstawiony** - cztery elementy, o które zawsze pytamy.
+
+**Czas** (kiedy?), **miejsce** (gdzie?), **bohaterowie** (kto?), **wydarzenia** (co się dzieje?).
+
+To pierwsze, co ustalasz po przeczytaniu tekstu.`, 'swiatPrzedstawiony'),
+      slideTask('Z1', 'Opisz świat przedstawiony', `Wybierz ostatnią przeczytaną lekturę albo tekst z podręcznika i zapisz w zeszycie cztery punkty:
+
+1. **czas** - kiedy dzieje się akcja
+2. **miejsce** - gdzie
+3. **bohaterowie** - główni i drugoplanowi
+4. **wydarzenia** - trzy najważniejsze, po kolei`, undefined, 300),
+      slideText('Fikcja, realizm i fantastyka', `**Fikcja literacka** - świat wymyślony przez autora, choć może przypominać prawdziwy.
+
+**Elementy realistyczne** mogłyby zdarzyć się naprawdę: szkoła, rower, kłótnia z bratem.
+
+**Elementy fantastyczne** nie mogłyby: latający dywan, gadające zwierzęta, magia.`),
+      slideTask('Z2', 'Realistyczne czy fantastyczne', `Zapisz w zeszycie: **R** - realistyczne, **F** - fantastyczne.
+
+1. chłopiec spóźnia się do szkoły
+2. kot rozmawia z myszą
+3. dziewczynka przenosi się w czasie
+4. rodzina jedzie na wakacje
+5. drzewo podaje bohaterowi rękę
+
+Przy dwóch wybranych napisz, po czym poznajesz.`, undefined, 210),
+      slideText('Gatunki', `Cztery gatunki, które trzeba umieć rozpoznać:
+
+**Baśń** - magia i zmyślony świat. **Legenda** - tłumaczy prawdziwe miejsce.
+
+**Mit** - wyjaśnia świat, występują bogowie. **Bajka** - zwierzęta i **morał** na końcu.`, 'gatunki'),
+      slideText('Komiks', `**Komiks** opowiada historię **obrazkami** ułożonymi w kadry.
+
+Tekst jest w **dymkach** (co postać mówi lub myśli) i w podpisach pod kadrem.
+
+Dźwięki zapisuje się wyrazami dźwiękonaśladowczymi: **bam!**, **wrrr**, **plum**.`),
+      slideTask('Z3', 'Zamień baśń w komiks', `Wybierz krótką baśń, którą znasz. Narysuj w zeszycie **4 kadry** komiksu.
+
+W każdym kadrze: prosty rysunek i **dymek** z wypowiedzią bohatera.
+
+Nie musi być ładnie - ma być czytelnie i po kolei.`, undefined, 420),
+      slideText('Teatr, film i adaptacja', `W **teatrze** aktorzy grają **na żywo** na scenie: scenografia, kostiumy, widownia.
+
+W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
+
+**Adaptacja** to książka przerobiona na film albo spektakl.`, 'teatrFilm'),
+      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
+- świat przedstawiony: **czas, miejsce, bohaterowie, wydarzenia**
+- **fantastyczne** nie mogłoby zdarzyć się naprawdę
+- **baśń** - magia, **legenda** - prawdziwe miejsce, **mit** - bogowie, **bajka** - morał
+- **adaptacja** - książka przerobiona na film albo spektakl`),
+      slideRecap(set6.set.id),
+      slideNote(
+        'Notatka do zeszytu',
+        `**Temat: Świat przedstawiony, gatunki, teatr i film**
+
+- Świat przedstawiony to czas, miejsce, bohaterowie i wydarzenia.
+- Fikcja literacka to świat wymyślony; elementy fantastyczne nie mogłyby zdarzyć się naprawdę.
+- Baśń ma magię, legenda tłumaczy prawdziwe miejsce, mit wyjaśnia świat i mówi o bogach, bajka kończy się morałem.
+- Komiks opowiada obrazkami w kadrach, tekst jest w dymkach.
+- W teatrze aktorzy grają na żywo, film jest nagrany. Adaptacja to książka przerobiona na film lub spektakl.`,
+      ),
+    ],
+  };
+
   return {
-    lessons: [lesson1, lesson2, lesson3],
-    questionSets: [set1.set, set2.set, set3.set],
-    questions: [...set1.questions, ...set2.questions, ...set3.questions],
+    lessons: [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6],
+    questionSets: [set1.set, set2.set, set3.set, set4.set, set5.set, set6.set],
+    questions: [
+      ...set1.questions,
+      ...set2.questions,
+      ...set3.questions,
+      ...set4.questions,
+      ...set5.questions,
+      ...set6.questions,
+    ],
   };
 }
 
