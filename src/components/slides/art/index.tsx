@@ -9,6 +9,7 @@ import { Kolo } from './Kolo';
 import { Oceny } from './Oceny';
 import { Stopnie } from './Stopnie';
 import { Eskalacja } from './Eskalacja';
+import { ZleZachowania } from './ZleZachowania';
 import { Pas } from './Pas';
 import { Zadania } from './Zadania';
 import { Lawki } from './Lawki';
@@ -71,6 +72,7 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   oceny: Oceny,
   stopnie: Stopnie,
   eskalacja: Eskalacja,
+  zleZachowania: ZleZachowania,
   pas: Pas,
   zadania: Zadania,
   lawki: Lawki,

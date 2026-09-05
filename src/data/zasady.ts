@@ -51,6 +51,22 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Nie przyniesiesz - jedynka.',
     ],
   },
+  // Sekcja wstawiona PRZED "Kiedy ktos przeszkadza" - najpierw nazywamy zachowanie,
+  // dopiero potem mowimy o konsekwencjach. Wstawienie calej sekcji nie przesuwa
+  // indeksow ITEMOW, po ktore siega intro.ts (te sa liczone w obrebie sekcji).
+  {
+    title: 'Co liczy się jako przeszkadzanie',
+    items: [
+      // Punkty sa celowo laczone po kilka zachowan - polowka A4 miesci ograniczona
+      // liczbe wierszy, a rozbicie tego na osiem osobnych punktow ucinalo na
+      // wydruku koncowke sekcji "Kiedy ktos przeszkadza".
+      'Krzyk, gadanie i przekrzykiwanie, kiedy ktoś odpowiada albo kiedy tłumaczę temat.',
+      'Podpowiadanie - kolega traci szansę na plusa, a podpowiadający dostaje plombę.',
+      'Ściągawki, odpisywanie na sprawdzianie, telefon na ławce albo w ręce.',
+      'Śmianie się z czyjejś odpowiedzi, przezywanie, chodzenie po klasie, rzucanie rzeczami.',
+      'To NIE jest przeszkadzanie: zła odpowiedź, "nie wiem", pytanie do mnie albo prośba o powtórzenie.',
+    ],
+  },
   {
     title: 'Kiedy ktoś przeszkadza',
     items: [

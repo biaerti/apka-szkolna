@@ -117,6 +117,7 @@ export type SlideArt =
   | 'oceny' // plus / kropka / plomba
   | 'stopnie' // 3 plusy = piatka, 3 plomby = jedynka
   | 'eskalacja' // 1. ostrzezenie, 2. bez plusow, 3. podwojnie w kole
+  | 'zleZachowania' // co liczy sie jako przeszkadzanie, a za co nigdy nie ma uwagi
   | 'pas' // pas: dzis nie odpowiadam
   | 'zadania' // zadania naprawcze z pytan, ktorych uczen nie umial
   | 'lawki' // plan klasy: siadamy w najblizszych lawkach

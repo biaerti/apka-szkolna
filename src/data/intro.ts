@@ -121,6 +121,13 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
   const secWygranaPrzegrana = ruleSection('Co można wygrać, a co przegrać');
   const secPasy = ruleSection('Pasy');
   const secPlomby = ruleSection('Plomby da się odrobić');
+  const secZleZachowania = ruleSection('Co liczy się jako przeszkadzanie');
+  // Ostatni punkt sekcji mowi, za co uwagi NIE ma - dostaje wlasny slajd, bo dla
+  // dziecka to najwazniejsze zdanie calej lekcji: nieumiejetnosc nie jest karana.
+  const { matched: bezUwagi, rest: zleZachowania } = partitionItems(
+    secZleZachowania.items,
+    /NIE jest przeszkadzanie/i,
+  );
   const secPrzeszkadzanie = ruleSection('Kiedy ktoś przeszkadza');
   const secLawki = ruleSection('Gdzie siedzimy');
   // Punkt o przelicznikach na oceny dostaje wlasny slajd z ilustracja "stopnie",
@@ -206,7 +213,24 @@ Koło losuje, kto odpowiada.`,
       // 13. Pytanie do klasy - znowu mowia dzieci
       slideText('Czy zachowujecie się grzecznie na lekcjach?', '**Co to znaczy: przeszkadzać?**'),
 
-      // 14. Eskalacja 1-2-3 (z zasady.ts)
+      // 14. Nazwanie zachowan (z zasady.ts) - zanim padnie slowo "konsekwencje",
+      // klasa ma wiedziec dokladnie, o czym mowimy. Bez tego "uwaga" jest workiem
+      // na wszystko i dzieci boja sie, ze dostana ja za zla odpowiedz.
+      slideText('Co to znaczy przeszkadzać', asBulletList(zleZachowania), 'zleZachowania'),
+
+      // 15. Kontra do poprzedniego slajdu - za co uwagi nie ma NIGDY (z zasady.ts).
+      // Celowo bez listy i bez ilustracji: jedno zdanie na calym ekranie, zeby
+      // wybrzmialo. Punkt zasad wchodzi tu jako akapit, nie jako kolejny bullet.
+      slideText(
+        'Za to nigdy nie ma uwagi',
+        `**${bezUwagi[0]}**
+
+Uwagi są wyłącznie za zachowanie - nigdy za to, że czegoś jeszcze nie umiesz.
+
+Nie wiesz? Powiedz "nie wiem" albo weź pas. To uczciwe zagranie, nie przegrana.`,
+      ),
+
+      // 16. Eskalacja 1-2-3 (z zasady.ts)
       slideText('Kiedy ktoś przeszkadza', asBulletList(secPrzeszkadzanie.items), 'eskalacja'),
 
       // 15. Gdzie siedzimy (z zasady.ts)

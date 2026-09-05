@@ -14,7 +14,7 @@ import { WheelDiagram } from '../components/print/WheelDiagram';
 function RuleSheet() {
   return (
     <div className="flex h-full flex-col">
-      <header className="mb-1.5 flex items-baseline justify-between border-b border-gray-900 pb-1">
+      <header className="mb-1 flex items-baseline justify-between border-b border-gray-900 pb-1">
         <div>
           <h1 className="text-[15px] font-bold leading-tight">Zasady naszych lekcji</h1>
           <p className="text-[9px] text-gray-600">Język polski</p>
@@ -24,13 +24,13 @@ function RuleSheet() {
 
       <div className="columns-3 gap-x-3">
         {RULE_SECTIONS.map((section) => (
-          <section key={section.title} className="mb-1.5 break-inside-avoid">
+          <section key={section.title} className="mb-1 break-inside-avoid">
             <h2 className="mb-0.5 text-[9.5px] font-bold uppercase tracking-wide text-accent-700">
               {section.title}
             </h2>
             <ul className="space-y-0.5">
               {section.items.map((item) => (
-                <li key={item} className="flex gap-1 text-[11px] leading-snug text-gray-800">
+                <li key={item} className="flex gap-1 text-[11px] leading-[1.2] text-gray-800">
                   <span aria-hidden="true">-</span>
                   <span>{item}</span>
                 </li>
