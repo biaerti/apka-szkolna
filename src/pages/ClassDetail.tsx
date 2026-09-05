@@ -100,22 +100,26 @@ export function ClassDetail() {
         <span className="mx-1.5 text-gray-400">/</span>
         <span className="text-gray-700">{schoolClass.name}</span>
       </p>
+      {/* Naglowek idzie za zakladka, a akcje od listy uczniow pokazujemy tylko na niej -
+          na bilansie i rozliczeniach "Dodaj ucznia" nie ma czego dodawac. */}
       <PageHeader
-        title={`Uczniowie - ${schoolClass.name}`}
+        title={`${TAB_LABELS[tab]} - ${schoolClass.name}`}
         actions={
-          <>
-            <Button variant="secondary" onClick={() => setImportOpen(true)}>
-              Importuj z tekstu
-            </Button>
-            <Button
-              onClick={() => {
-                setEditingStudent(null);
-                setFormOpen(true);
-              }}
-            >
-              Dodaj ucznia
-            </Button>
-          </>
+          tab === 'uczniowie' ? (
+            <>
+              <Button variant="secondary" onClick={() => setImportOpen(true)}>
+                Importuj z tekstu
+              </Button>
+              <Button
+                onClick={() => {
+                  setEditingStudent(null);
+                  setFormOpen(true);
+                }}
+              >
+                Dodaj ucznia
+              </Button>
+            </>
+          ) : undefined
         }
       />
 

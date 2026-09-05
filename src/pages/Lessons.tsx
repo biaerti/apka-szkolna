@@ -150,10 +150,9 @@ export function Lessons() {
         className={currentClassName}
         introAvailable={readyMaterials.introAvailable}
         introAlreadyInserted={readyMaterials.introAlreadyInserted}
-        recap13AlreadyInserted={readyMaterials.recap13AlreadyInserted}
+        recaps={readyMaterials.recaps}
         refreshMatches={readyMaterials.refreshMatches}
         onInsertIntro={readyMaterials.insertIntro}
-        onInsertRecap13={readyMaterials.insertRecap13}
         onRefresh={readyMaterials.refresh}
       />
 

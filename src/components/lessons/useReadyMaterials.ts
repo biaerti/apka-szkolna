@@ -1,12 +1,16 @@
-// Logika przycisku "Gotowe materialy" (wstawianie lekcji zapoznawczej / powtorki
-// klas 1-3 oraz ich odswiezanie) wydzielona z Lessons.tsx, zeby strona zmiescila
+// Logika przycisku "Gotowe materialy" (wstawianie lekcji zapoznawczej i gotowych
+// powtorek oraz ich odswiezanie) wydzielona z Lessons.tsx, zeby strona zmiescila
 // sie w limicie 250 linii na komponent. Czysta logika + wywolania akcji store'a,
 // bez JSX - UI zyje w ReadyMaterialsPanel.tsx.
+//
+// Powtorki sa opisane danymi (RECAP_DEFINITIONS), a nie osobnymi polami hooka -
+// dolozenie kolejnej (np. powtorki klasy 5) to jeden wpis w tablicy.
 
 import { useMemo } from 'react';
 import { useStore } from '../../data/store';
 import type { Lesson } from '../../data/types';
 import { buildRecap13 } from '../../data/recap13';
+import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson, type IntroBundle } from '../../data/intro';
 import {
   lessonQuestionSetId,
@@ -15,6 +19,44 @@ import {
   type FreshMaterialsBundle,
   type RefreshMatch,
 } from './refreshMaterials';
+
+interface RecapDefinition {
+  key: string;
+  /** Konczy zdanie "Wstaw ..." na przycisku. */
+  insertLabel: string;
+  /** Nazwa materialu w stanie "... - juz wstawione". */
+  name: string;
+  /** Co dokladnie zostanie dodane - trafia do dialogu potwierdzenia. */
+  contents: string;
+  build: (classId: string) => FreshMaterialsBundle;
+}
+
+const RECAP_DEFINITIONS: RecapDefinition[] = [
+  {
+    key: 'recap13',
+    insertLabel: 'powtórkę klas 1-3',
+    name: 'Powtórka klas 1-3',
+    contents: 'fonetyka/ortografia, gramatyka/interpunkcja, formy wypowiedzi',
+    build: buildRecap13,
+  },
+  {
+    key: 'recap4',
+    insertLabel: 'powtórkę klasy 4',
+    name: 'Powtórka klasy 4',
+    contents: 'odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi',
+    build: buildRecap4,
+  },
+];
+
+/** Jedna gotowa powtorka w stanie gotowym do wyswietlenia w panelu. */
+export interface ReadyRecap {
+  key: string;
+  insertLabel: string;
+  name: string;
+  contents: string;
+  alreadyInserted: boolean;
+  insert: () => void;
+}
 
 export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
   const questionSets = useStore((s) => s.questionSets);
@@ -27,12 +69,16 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
   const updateQuestion = useStore((s) => s.updateQuestion);
   const removeQuestion = useStore((s) => s.removeQuestion);
 
-  const recap13FirstTitle = useMemo(() => {
-    if (!classId) return undefined;
-    return buildRecap13(classId).lessons[0]?.title;
-  }, [classId]);
-  const recap13AlreadyInserted =
-    !!recap13FirstTitle && classLessons.some((l) => l.title === recap13FirstTitle);
+  // Powtorke uznajemy za wstawiona, gdy klasa ma juz lekcje o tytule jej pierwszej lekcji.
+  const insertedRecapKeys = useMemo(() => {
+    if (!classId) return new Set<string>();
+    const inserted = new Set<string>();
+    for (const def of RECAP_DEFINITIONS) {
+      const firstTitle = def.build(classId).lessons[0]?.title;
+      if (firstTitle && classLessons.some((l) => l.title === firstTitle)) inserted.add(def.key);
+    }
+    return inserted;
+  }, [classId, classLessons]);
 
   // buildIntroLesson jest kontraktem implementowanym rownolegle przez inny modul -
   // dopoki nie jest gotowy, funkcja rzuca wyjatek, wiec zabezpieczamy sie try/catch.
@@ -49,12 +95,13 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
 
   const freshBundle: FreshMaterialsBundle | null = useMemo(() => {
     if (!classId) return null;
-    const recap = buildRecap13(classId);
-    const bundle: FreshMaterialsBundle = {
-      lessons: [...recap.lessons],
-      questionSets: [...recap.questionSets],
-      questions: [...recap.questions],
-    };
+    const bundle: FreshMaterialsBundle = { lessons: [], questionSets: [], questions: [] };
+    for (const def of RECAP_DEFINITIONS) {
+      const recap = def.build(classId);
+      bundle.lessons.push(...recap.lessons);
+      bundle.questionSets.push(...recap.questionSets);
+      bundle.questions.push(...recap.questions);
+    }
     if (introBundle) {
       bundle.lessons.push(introBundle.lesson);
       bundle.questionSets.push(introBundle.questionSet);
@@ -68,9 +115,9 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
     [freshBundle, classLessons],
   );
 
-  function insertRecap13() {
+  function insertRecap(build: (classId: string) => FreshMaterialsBundle) {
     if (!classId) return;
-    const bundle = buildRecap13(classId);
+    const bundle = build(classId);
 
     // Wstaw zestawy pytan i zapamietaj mapowanie starych id -> nowe id.
     const setIdMap = new Map<string, string>();
@@ -181,13 +228,21 @@ export function useReadyMaterials(classId: string, classLessons: Lesson[]) {
     }
   }
 
+  const recaps: ReadyRecap[] = RECAP_DEFINITIONS.map((def) => ({
+    key: def.key,
+    insertLabel: def.insertLabel,
+    name: def.name,
+    contents: def.contents,
+    alreadyInserted: insertedRecapKeys.has(def.key),
+    insert: () => insertRecap(def.build),
+  }));
+
   return {
     introAvailable: !!introBundle,
     introAlreadyInserted,
-    recap13AlreadyInserted,
+    recaps,
     refreshMatches,
     insertIntro,
-    insertRecap13,
     refresh,
   };
 }

@@ -77,7 +77,13 @@ type SlideArt = 'gra' | 'kolo' | 'oceny' | 'stopnie' | 'eskalacja'
               | 'rzeczownik' | 'czasownik' | 'przymiotnik' | 'rodzajeZdan'
               | 'wielkaLitera' | 'przecinek'
               // powtorka 1-3: formy wypowiedzi
-              | 'wiersz' | 'basn' | 'opowiadanie' | 'opis' | 'zaproszenie';
+              | 'wiersz' | 'basn' | 'opowiadanie' | 'opis' | 'zaproszenie'
+              // powtorka klasy 4: odmienne czesci mowy
+              | 'przypadki' | 'czasownikOdmiana' | 'stopniowanie' | 'liczebnik'
+              // powtorka klasy 4: skladnia i wyrazy nieodmienne
+              | 'podmiotOrzeczenie' | 'zdanieZlozone' | 'nieodmienne' | 'nieZCzesciami'
+              // powtorka klasy 4: srodki poetyckie i formy wypowiedzi
+              | 'srodkiPoetyckie' | 'strofa' | 'narrator' | 'list' | 'ogloszenie';
 
 type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }
@@ -178,6 +184,18 @@ to klasa czwarta.
 ## Seed
 Przy pierwszym uruchomieniu (pusty store) zaladowac klase "IV A" z 20 uczniami (plik
 `src/data/seed.ts`) oraz puste klasy "IV B", "IV C", "V A" (nazwy do zmiany przez usera).
+
+## Gotowe materialy
+Sekcja "Gotowe materialy" na ekranie Lekcje wstawia do wybranej klasy komplet lekcji z pytaniami:
+- lekcja zapoznawcza (`src/data/intro.ts`) - zasady gry, zasilana z `src/data/zasady.ts`,
+- powtorka klas 1-3 (`src/data/recap13.ts`) - dla czwartych klas,
+- powtorka klasy 4 (`src/data/recap4.ts`) - dla piatych klas.
+
+Powtorki sa opisane danymi w `RECAP_DEFINITIONS` (`src/components/lessons/useReadyMaterials.ts`) -
+dolozenie kolejnej to jeden wpis w tablicy, bez zmian w UI. Kazda powtorka to 3 lekcje + 3 zestawy
+pytan. **Tytuly lekcji musza byc unikalne miedzy powtorkami** - "Odswiez gotowe materialy"
+dopasowuje lekcje po znormalizowanym tytule (`refreshMaterials.titleMatchKey`); pilnuje tego test
+`src/data/recap4.test.ts`.
 
 ## Jakosc
 - Kazdy modul dziala end-to-end, bez atrap. `npm run build` i `npm run typecheck` przechodza.

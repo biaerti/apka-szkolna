@@ -122,7 +122,21 @@ export type SlideArt =
   | 'basn' // basn, legenda i bohater glowny
   | 'opowiadanie' // wstep - rozwiniecie - zakonczenie
   | 'opis' // przymiotniki opisujace przedmiot
-  | 'zaproszenie'; // kogo, na co, kiedy, dokad, kto zaprasza
+  | 'zaproszenie' // kogo, na co, kiedy, dokad, kto zaprasza
+  // Ilustracje przedmiotowe do powtorki klasy 4 (src/data/recap4.ts).
+  | 'przypadki' // 7 przypadkow z pytaniami
+  | 'czasownikOdmiana' // osoba, liczba, czas
+  | 'stopniowanie' // rowny, wyzszy, najwyzszy
+  | 'liczebnik' // glowny (ile?) i porzadkowy (ktory z kolei?)
+  | 'podmiotOrzeczenie' // kto? co? i co robi?
+  | 'zdanieZlozone' // jedno orzeczenie kontra dwa
+  | 'nieodmienne' // przyslowek, przyimek, spojnik
+  | 'nieZCzesciami' // "nie" osobno z czasownikiem, razem z rzeczownikiem i przymiotnikiem
+  | 'srodkiPoetyckie' // epitet, porownanie, przenosnia, wyraz dzwiekonasladowczy
+  | 'strofa' // wers, strofa, rym, refren
+  | 'narrator' // podmiot liryczny kontra narrator 1. i 3. osoby
+  | 'list' // data, naglowek, tresc, podpis
+  | 'ogloszenie'; // co, kiedy i gdzie, kto
 
 export type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }

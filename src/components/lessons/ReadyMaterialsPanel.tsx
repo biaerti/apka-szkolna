@@ -1,35 +1,37 @@
 // Sekcja "Gotowe materialy" na ekranie Lekcje: wstawianie lekcji zapoznawczej i
-// powtorki klas 1-3 oraz (WAZNE) odswiezanie juz wstawionych materialow, gdy
+// gotowych powtorek oraz (WAZNE) odswiezanie juz wstawionych materialow, gdy
 // tresc w kodzie zdazyla sie poprawic (np. bledny tytul albo zla odpowiedz).
 // Wydzielone z Lessons.tsx, zeby zmiescic sie w limicie 250 linii na komponent.
+//
+// Lista powtorek przychodzi z useReadyMaterials - panel nie wie, ile ich jest.
 
 import { useState } from 'react';
 import { Button } from '../ui/Button';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import type { RefreshMatch } from './refreshMaterials';
+import type { ReadyRecap } from './useReadyMaterials';
 
 export function ReadyMaterialsPanel({
   className,
   introAvailable,
   introAlreadyInserted,
-  recap13AlreadyInserted,
+  recaps,
   refreshMatches,
   onInsertIntro,
-  onInsertRecap13,
   onRefresh,
 }: {
   className: string;
   introAvailable: boolean;
   introAlreadyInserted: boolean;
-  recap13AlreadyInserted: boolean;
+  recaps: ReadyRecap[];
   refreshMatches: RefreshMatch[];
   onInsertIntro: () => void;
-  onInsertRecap13: () => void;
   onRefresh: () => void;
 }) {
-  const [recapConfirmOpen, setRecapConfirmOpen] = useState(false);
+  const [openRecapKey, setOpenRecapKey] = useState<string | null>(null);
   const [introConfirmOpen, setIntroConfirmOpen] = useState(false);
   const [refreshConfirmOpen, setRefreshConfirmOpen] = useState(false);
+  const openRecap = recaps.find((r) => r.key === openRecapKey) ?? null;
 
   const refreshMessage =
     refreshMatches.length === 0
@@ -51,13 +53,16 @@ export function ReadyMaterialsPanel({
         >
           {introAlreadyInserted ? 'Lekcja zapoznawcza - już wstawione' : 'Wstaw lekcję zapoznawczą'}
         </Button>
-        <Button
-          variant="secondary"
-          disabled={recap13AlreadyInserted}
-          onClick={() => setRecapConfirmOpen(true)}
-        >
-          {recap13AlreadyInserted ? 'Powtórka klas 1-3 - już wstawione' : 'Wstaw powtórkę klas 1-3'}
-        </Button>
+        {recaps.map((recap) => (
+          <Button
+            key={recap.key}
+            variant="secondary"
+            disabled={recap.alreadyInserted}
+            onClick={() => setOpenRecapKey(recap.key)}
+          >
+            {recap.alreadyInserted ? `${recap.name} - już wstawione` : `Wstaw ${recap.insertLabel}`}
+          </Button>
+        ))}
         <Button
           variant="secondary"
           disabled={refreshMatches.length === 0}
@@ -73,15 +78,19 @@ export function ReadyMaterialsPanel({
       </div>
 
       <ConfirmDialog
-        open={recapConfirmOpen}
-        title="Wstaw powtórkę klas 1-3"
-        message={`Do klasy ${className} zostaną dodane 3 lekcje-prezentacje (fonetyka/ortografia, gramatyka/interpunkcja, formy wypowiedzi) i 3 zestawy pytań do koła fortuny. Kontynuować?`}
+        open={!!openRecap}
+        title={openRecap ? `Wstaw ${openRecap.insertLabel}` : ''}
+        message={
+          openRecap
+            ? `Do klasy ${className} zostaną dodane 3 lekcje-prezentacje (${openRecap.contents}) i 3 zestawy pytań do koła fortuny. Kontynuować?`
+            : ''
+        }
         confirmLabel="Wstaw"
         danger={false}
-        onCancel={() => setRecapConfirmOpen(false)}
+        onCancel={() => setOpenRecapKey(null)}
         onConfirm={() => {
-          onInsertRecap13();
-          setRecapConfirmOpen(false);
+          openRecap?.insert();
+          setOpenRecapKey(null);
         }}
       />
 

@@ -30,6 +30,19 @@ import { Basn } from './Basn';
 import { Opowiadanie } from './Opowiadanie';
 import { Opis } from './Opis';
 import { Zaproszenie } from './Zaproszenie';
+import { Przypadki } from './Przypadki';
+import { CzasownikOdmiana } from './CzasownikOdmiana';
+import { Stopniowanie } from './Stopniowanie';
+import { Liczebnik } from './Liczebnik';
+import { PodmiotOrzeczenie } from './PodmiotOrzeczenie';
+import { ZdanieZlozone } from './ZdanieZlozone';
+import { Nieodmienne } from './Nieodmienne';
+import { NieZCzesciami } from './NieZCzesciami';
+import { SrodkiPoetyckie } from './SrodkiPoetyckie';
+import { Strofa } from './Strofa';
+import { Narrator } from './Narrator';
+import { List } from './List';
+import { Ogloszenie } from './Ogloszenie';
 
 type ArtComponent = ComponentType<{ className?: string }>;
 
@@ -61,6 +74,20 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   opowiadanie: Opowiadanie,
   opis: Opis,
   zaproszenie: Zaproszenie,
+  // Ilustracje przedmiotowe do powtorki klasy 4.
+  przypadki: Przypadki,
+  czasownikOdmiana: CzasownikOdmiana,
+  stopniowanie: Stopniowanie,
+  liczebnik: Liczebnik,
+  podmiotOrzeczenie: PodmiotOrzeczenie,
+  zdanieZlozone: ZdanieZlozone,
+  nieodmienne: Nieodmienne,
+  nieZCzesciami: NieZCzesciami,
+  srodkiPoetyckie: SrodkiPoetyckie,
+  strofa: Strofa,
+  narrator: Narrator,
+  list: List,
+  ogloszenie: Ogloszenie,
 };
 
 /** Ilustracje o bardzo szerokim ukladzie - lepiej wygladaja pod tekstem na cala szerokosc niz obok. */
