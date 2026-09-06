@@ -89,6 +89,27 @@ describe('parseMarkdownLite', () => {
     expect(result[2].type).toBe('paragraph');
   });
 
+  it('oddziela zapowiedz listy od punktow bez pustej linii', () => {
+    const result = parseMarkdownLite('Zapamietaj:\n- a\n- b');
+    expect(result).toHaveLength(2);
+    expect(result[0]).toEqual({ type: 'paragraph', inline: [{ type: 'text', text: 'Zapamietaj:' }] });
+    expect(result[1].type).toBe('list');
+    expect(result[1]).toMatchObject({ ordered: false, items: [[{ text: 'a' }], [{ text: 'b' }]] });
+  });
+
+  it('oddziela zapowiedz od listy numerowanej', () => {
+    const result = parseMarkdownLite('Kolejnosc:\n1. raz\n2. dwa');
+    expect(result).toHaveLength(2);
+    expect(result[0].type).toBe('paragraph');
+    expect(result[1]).toMatchObject({ type: 'list', ordered: true });
+  });
+
+  it('zostawia akapit, gdy punkty listy sa roznego rodzaju', () => {
+    const result = parseMarkdownLite('Wstep:\n- a\n1. b');
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('paragraph');
+  });
+
   it('ignoruje wielokrotne puste linie', () => {
     const result = parseMarkdownLite('A.\n\n\n\nB.');
     expect(result).toHaveLength(2);

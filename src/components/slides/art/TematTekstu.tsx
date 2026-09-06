@@ -36,28 +36,28 @@ export function TematTekstu({ className }: { className?: string }) {
         <path d="M24 24 L48 48" stroke={C.kropka} strokeWidth={9} strokeLinecap="round" />
       </g>
 
-      <text x={141} y={236} textAnchor="middle" fontSize={17} fill={C.white}>
-        słowa z pytania znajdziesz w tekście
+      <text x={141} y={244} textAnchor="middle" fontSize={19} fill={C.white}>
+        szukaj słów z pytania
       </text>
 
       {/* Ramka z tematem */}
-      <rect x={288} y={52} width={168} height={116} rx={14} fill={C.panel} stroke={C.plus} strokeWidth={4} />
-      <text x={372} y={86} textAnchor="middle" fontSize={22} fontWeight={800} fill={C.plus}>
+      <rect x={288} y={44} width={176} height={132} rx={14} fill={C.panel} stroke={C.plus} strokeWidth={4} />
+      <text x={376} y={84} textAnchor="middle" fontSize={24} fontWeight={800} fill={C.plus}>
         TEMAT
       </text>
-      <text x={372} y={116} textAnchor="middle" fontSize={17} fill={C.white}>
+      <text x={376} y={120} textAnchor="middle" fontSize={17} fill={C.white}>
         o czym ten
       </text>
-      <text x={372} y={140} textAnchor="middle" fontSize={17} fill={C.white}>
+      <text x={376} y={148} textAnchor="middle" fontSize={17} fill={C.white}>
         tekst jest
       </text>
 
-      <text x={372} y={236} textAnchor="middle" fontSize={19} fontWeight={700} fill={C.plus}>
+      <text x={372} y={244} textAnchor="middle" fontSize={19} fontWeight={700} fill={C.plus}>
         jedno zdanie
       </text>
 
-      <text x={240} y={294} textAnchor="middle" fontSize={18} fill={C.panelLight}>
-        nie czytaj wszystkiego od nowa
+      <text x={240} y={296} textAnchor="middle" fontSize={18} fill={C.panelLight}>
+        nie czytaj całego tekstu od nowa
       </text>
     </svg>
   );

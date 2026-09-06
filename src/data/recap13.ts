@@ -4,7 +4,9 @@
 // czytanie ze zrozumieniem+krotkie formy - kazda z wlasnym zestawem pytan do kola fortuny.
 // Zakres wynika z podstawy programowej I etapu (edukacja polonistyczna: sluchanie,
 // mowienie, czytanie, pisanie, ksztalcenie jezykowe, samoksztalcenie).
-// Rytm slajdow: krotka regula (text) -> zadanie do zeszytu ze stoperem (task) -> kolejna regula...
+// Rytm slajdow: krotka regula z ilustracja (text) -> zadanie do zeszytu ze
+// stoperem i TA SAMA ilustracja (task) -> kolejna regula... W klasach 1-3 kazdy
+// slajd tresciowy ma obrazek, a notatka do zeszytu ma najwyzej trzy punkty.
 // Wstawiane z ekranu Lekcje przyciskiem.
 
 import { newId } from './id';
@@ -101,7 +103,7 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     classIds,
     [
       { text: 'Czym różni się wiersz od opowiadania?', answer: 'wiersz ma wersy i często rymy; opowiadanie to tekst ciągły pisany prozą' },
-      { text: 'Co to jest rym?', answer: 'podobne zakończenie wyrazów na końcu wersów, np. kot - plot' },
+      { text: 'Co to jest rym?', answer: 'podobne zakończenie wyrazów na końcu wersów, np. kot - płot' },
       { text: 'Wymień trzy części, z których składa się opowiadanie.', answer: 'wstęp, rozwinięcie, zakończenie' },
       { text: 'Kim jest bohater główny?', answer: 'postacią, o której opowiada cała historia' },
       { text: 'Czym różni się baśń od legendy?', answer: 'baśń jest zmyślona i pełna magii; legenda tłumaczy pochodzenie prawdziwego miejsca lub wydarzenia' },
@@ -146,7 +148,7 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     [
       { text: 'Kiedy piszemy ć, a kiedy ci?', answer: 'ć na końcu wyrazu i przed spółgłoską (nić), ci przed samogłoską (ciocia)' },
       { text: 'Jak zapiszemy zmiękczone s przed samogłoską? Podaj przykład.', answer: 'si, np. siostra, siano' },
-      { text: 'Popraw zapis: "Mój dziadek ma konia i koń."', answer: 'to zdanie jest poprawne - koń na końcu wyrazu, konia przed samogłoską' },
+      { text: 'Dlaczego piszemy "koń", ale "konia"?', answer: 'ń na końcu wyrazu, a przed samogłoską zmiękczenie zapisujemy przez ni: ko-ni-a' },
       { text: 'Jak zapiszemy: "zima" czy "źima"?', answer: 'zima - przed samogłoską piszemy zi, nie ź' },
       { text: 'Podaj dwa wyrazy z dź i dzi.', answer: 'np. gwóźdź, niedźwiedź (dź); dziadek, dziura (dzi)' },
       { text: 'Kiedy piszemy ą i ę, a kiedy om, on, em, en?', answer: 'ą i ę, gdy słychać jedną głoskę; om/on/em/en, gdy słychać osobne m albo n' },
@@ -197,9 +199,6 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     slides: [
       slideTitle('Powtórka klas 1-3', 'Głoski, litery, sylaby i ortografia - część 1/6'),
       slideTopic(),
-      slideText('Co dziś powtarzamy', `- Głoski, litery i sylaby
-- Samogłoski, spółgłoski i dwuznaki
-- Zasady ó/u, rz/ż i ch/h`),
       slideText('Samogłoski i spółgłoski', `Samogłosek jest **8**: **a, e, i, o, u, y, ą, ę**.
 
 Reszta liter to **spółgłoski**, np. **b, k, m, s, t**.
@@ -212,7 +211,7 @@ Przy samogłosce buzia jest otwarta, powietrze płynie swobodnie.`, 'samogloski'
 - parasolka
 - Antonina
 
-Zapisz tak: **wyraz - liczba samogłosek**.`, undefined, 90),
+Zapisz tak: **wyraz - liczba samogłosek**.`, undefined, 90, 'samogloski'),
       slideText('Sylaby', `**Sylaba** to część wyrazu, którą wymawiamy za jednym otwarciem ust.
 
 Każda sylaba ma co najmniej **jedną samogłoskę**.
@@ -226,7 +225,7 @@ Przykłady: **ma-ma** (2), **te-le-fon** (3), **bi-blio-te-ka** (4).`, 'sylaby')
 4. samolot
 5. koleżanka
 
-Zapisz podział w zeszycie, np. **lam-pa**.`, undefined, 120),
+Zapisz podział w zeszycie, np. **lam-pa**.`, undefined, 120, 'sylaby'),
       slideText('Dwuznaki - jedna głoska, dwie litery', `**Dwuznaki**: **sz, cz, rz, ch, dz, dż, dź**.
 
 To jedna głoska zapisana dwiema literami.
@@ -239,7 +238,7 @@ Przykład: **szafa** ma głoski sz-a-f-a, czyli **4 głoski**, choć **5 liter**
 - kosz
 - drzewo
 
-Wzór zapisu: **wyraz - głoski / litery**.`, undefined, 150),
+Wzór zapisu: **wyraz - głoski / litery**.`, undefined, 150, 'dwuznak'),
       slideText('Ortografia: ó czy u?', `**Ó** piszemy, gdy wymienia się na **o, e** albo **a**:
 
 - **stół - stoły** (ó:o)
@@ -254,7 +253,7 @@ Gdy wymiany nie ma, pisownię trzeba **zapamiętać** (np. ogórek, wróbel).`, 
 3. Kupiłem nowy w_zek.
 4. Ugotowałam pyszną z_pę.
 
-Uzasadnij ustnie każdy wybór.`, undefined, 150),
+Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaOu'),
       slideText('Ortografia: rz-ż i ch-h', `**Rz** piszemy, gdy wymienia się na **r**: morze - morski.
 
 **Ż** piszemy, gdy wymienia się na **g** lub **z**: noga - nóżka, może - mogę.
@@ -267,21 +266,19 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
 3. Zjadłem kawałek _leba. (ch/h)
 4. Byliśmy w nowym _otelu. (ch/h)
 
-Uzasadnij ustnie każdy wybór.`, undefined, 150),
+Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaRzCh'),
       slideText('Zanim zakręcimy kołem', `Zapamiętaj:
 - **8 samogłosek**: a, e, i, o, u, y, ą, ę
-- **dwuznak** to jedna głoska zapisana dwiema literami
-- **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz`),
+- **dwuznak** to jedna głoska, dwie litery
+- **ó** wymienia się na o, e, a`, 'wymianaOu'),
       slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Głoski, litery, sylaby i ortografia**
 
 - Samogłosek jest 8: a, e, i, o, u, y, ą, ę.
-- Dwuznak to jedna głoska zapisana dwiema literami (np. sz, cz, rz, ch).
-- Ó piszemy, gdy wymienia się na o, e albo a.
-- Rz piszemy, gdy wymienia się na r; ż - gdy wymienia się na g lub z.
-- Ch piszemy, gdy wymienia się na sz; h - w wyrazach obcych.`,
+- Dwuznak to jedna głoska zapisana dwiema literami: sz, cz, rz, ch, dz.
+- Ó wymienia się na o, e, a; rz na r; ż na g, z; ch na sz.`,
       ),
     ],
   };
@@ -301,9 +298,6 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
       slideTopic(),
       // Kolo na start: wracamy do ostatniego tematu (glaski, litery, sylaby) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set1.set.id, 'powtorzeniowe'),
-      slideText('Co dziś powtarzamy', `- Rzeczownik, czasownik, przymiotnik
-- Rodzaje zdań i znaki na ich końcu
-- Wielka litera i przecinek przed że, ale, bo`),
       slideText('Rzeczownik', `**Rzeczownik** nazywa osoby, zwierzęta, rzeczy i uczucia.
 
 Odpowiada na pytania: **kto? co?**
@@ -328,7 +322,7 @@ Przykłady: **wesoły, czerwone, mądra, wysoki**.`, 'przymiotnik'),
 5. uśmiecha się
 6. wesołe
 
-Sprawdzimy razem na głos.`, undefined, 180),
+Sprawdzimy razem na głos.`, undefined, 180, 'rzeczownik'),
       slideText('Rodzaje zdań', `Ze względu na cel wypowiedzi rozróżniamy:
 
 - **oznajmujące** - o czymś mówią, np. "Pada deszcz."
@@ -339,7 +333,7 @@ Sprawdzimy razem na głos.`, undefined, 180),
 1. Ile masz lat
 2. Zamknij drzwi
 3. Lubię czekoladę
-4. Czy pojedziemy nad morze`, undefined, 180),
+4. Czy pojedziemy nad morze`, undefined, 180, 'rodzajeZdan'),
       slideText('Wielka litera', `Wielką literą zaczynamy:
 
 - **zdanie**: "Dzisiaj jest środa."
@@ -351,7 +345,7 @@ Sprawdzimy razem na głos.`, undefined, 180),
 2. moja koleżanka ania mieszka w krakowie.
 3. najdłuższa rzeka w polsce to wisła.
 
-Podkreśl poprawione litery.`, undefined, 180),
+Podkreśl poprawione litery.`, undefined, 180, 'wielkaLitera'),
       slideText('Przecinek przed że, ale, bo', `Przed spójnikami **że, ale, bo** zawsze stawiamy **przecinek**.
 
 Przykłady:
@@ -363,20 +357,19 @@ Przykłady:
 1. Wiem że masz rację.
 2. Chciałem grać ale musiałem się uczyć.
 3. Nie poszedłem do szkoły bo bolała mnie głowa.
-4. Cieszę się że przyjechałeś.`, undefined, 150),
+4. Cieszę się że przyjechałeś.`, undefined, 150, 'przecinek'),
       slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **rzeczownik** (kto? co?), **czasownik** (co robi?), **przymiotnik** (jaki?)
-- zdanie **oznajmujące, pytające** albo **rozkazujące**
-- przecinek zawsze przed **że, ale, bo**`),
+- **kto? co?** rzeczownik, **co robi?** czasownik, **jaki?** przymiotnik
+- zdanie: **oznajmujące, pytające, rozkazujące**
+- przecinek przed **że, ale, bo**`, 'rodzajeZdan'),
       slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Części mowy, zdania i wielka litera**
 
-- Rzeczownik (kto? co?), czasownik (co robi?), przymiotnik (jaki? jaka? jakie?).
+- Rzeczownik (kto? co?), czasownik (co robi?), przymiotnik (jaki?).
 - Zdania: oznajmujące, pytające, rozkazujące.
-- Wielką literą piszemy: początek zdania, imiona i nazwiska, nazwy miejscowości.
-- Przecinek stawiamy zawsze przed że, ale, bo.`,
+- Wielka litera na początku zdania i w nazwach własnych; przecinek przed że, ale, bo.`,
       ),
     ],
   };
@@ -396,12 +389,9 @@ Przykłady:
       slideTopic(),
       // Kolo na start: wracamy do tematu z lekcji 2 (czesci mowy, zdania) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set2.set.id, 'powtorzeniowe'),
-      slideText('Co dziś powtarzamy', `- Wiersz, proza i rymy
-- Bohater, baśń, legenda i bajka
-- Plan wydarzeń, opis i zaproszenie`),
       slideText('Wiersz i proza', `**Wiersz** jest zapisany w **wersach** (liniach) i często się **rymuje**.
 
-**Rym** to podobne zakończenie wyrazów, np. **kot - plot**.
+**Rym** to podobne zakończenie wyrazów, np. **kot - płot**.
 
 **Proza** to zwykły tekst pisany zdaniami, np. opowiadanie.`, 'wiersz'),
       slideTask('Z1', 'Znajdź rymy', `Do każdego wyrazu dopisz w zeszycie rymujące się słowo:
@@ -411,7 +401,7 @@ Przykłady:
 3. wiosna
 4. domek
 
-Na koniec wymyśl jedną własną parę rymów.`, undefined, 120),
+Na koniec wymyśl jedną własną parę rymów.`, undefined, 120, 'wiersz'),
       slideText('Bohater, baśń i legenda', `**Bohater główny** to postać, o której jest cała historia.
 
 **Baśń** jest zmyślona i ma magię ("Dawno, dawno temu...").
@@ -424,7 +414,7 @@ Na koniec wymyśl jedną własną parę rymów.`, undefined, 120),
 3. "Kubuś Puchatek"
 4. "Królewna Śnieżka"
 
-Który z nich jest twoim ulubionym? Dlaczego?`, undefined, 150),
+Który z nich jest twoim ulubionym? Dlaczego?`, undefined, 150, 'basn'),
       slideText('Opowiadanie i plan wydarzeń', `Opowiadanie ma trzy części: **wstęp, rozwinięcie, zakończenie**.
 
 **Plan wydarzeń** to kolejno spisane punkty, co działo się w tekście.
@@ -435,7 +425,7 @@ Używamy słów: **najpierw, potem, nagle, na koniec**.`, 'opowiadanie'),
 - Kopciuszek mierzy pantofelek.
 - Kopciuszek jedzie na bal.
 - Macocha każe jej sprzątać.
-- Książę zakochuje się w Kopciuszku.`, undefined, 150),
+- Książę zakochuje się w Kopciuszku.`, undefined, 150, 'opowiadanie'),
       slideText('Opis', `**Opis** mówi, jak coś wygląda - osoba, przedmiot, zwierzę.
 
 W opisie używamy dużo **przymiotników** (jaki? jaka?).
@@ -445,7 +435,7 @@ Przykład: plecak jest **granatowy**, **duży** i **wygodny**.`, 'opis'),
 
 Użyj co najmniej **3 przymiotników**, np. kolor, kształt, wielkość.
 
-Przeczytamy kilka opisów na głos.`, undefined, 180),
+Przeczytamy kilka opisów na głos.`, undefined, 180, 'opis'),
       slideText('Zaproszenie', `Zaproszenie musi zawierać:
 
 - **kogo** zapraszamy i **na co**
@@ -455,21 +445,19 @@ Przeczytamy kilka opisów na głos.`, undefined, 180),
 
 Pamiętaj o wszystkich elementach: kogo, na co, kiedy, dokąd, kto zaprasza.
 
-Masz 5 minut.`, undefined, 300),
+Masz 5 minut.`, undefined, 300, 'zaproszenie'),
       slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **wiersz** ma wersy i rymy, **proza** to zwykły tekst pisany zdaniami
+- **wiersz** ma wersy i rymy
 - **baśń** jest zmyślona, **legenda** tłumaczy prawdziwe miejsce
-- opowiadanie: **wstęp - rozwinięcie - zakończenie**`),
+- opowiadanie: **wstęp - rozwinięcie - zakończenie**`, 'opowiadanie'),
       slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Formy wypowiedzi i czytanie tekstów**
 
 - Wiersz ma wersy i rymy, proza to zwykły tekst pisany zdaniami.
-- Baśń jest zmyślona, legenda tłumaczy pochodzenie prawdziwego miejsca.
-- Opowiadanie ma trzy części: wstęp, rozwinięcie, zakończenie.
-- W opisie używamy dużo przymiotników (jaki? jaka?).
-- Zaproszenie: kogo, na co, kiedy, dokąd i kto zaprasza.`,
+- Baśń jest zmyślona, legenda tłumaczy prawdziwe miejsce.
+- Opowiadanie: wstęp, rozwinięcie, zakończenie.`,
       ),
     ],
   };
@@ -489,10 +477,6 @@ Masz 5 minut.`, undefined, 300),
       slideTopic(),
       // Kolo na start: wracamy do tematu z lekcji 3 (formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set3.set.id, 'powtorzeniowe'),
-      slideText('Co dziś powtarzamy', `- Alfabet i porządek alfabetyczny
-- Szukanie wyrazu w słowniku ortograficznym
-- Wyrazy bliskoznaczne i przeciwstawne
-- Rodzina wyrazów`),
       slideText('Alfabet', `Alfabet polski ma **32 litery**. Dziewięć z nich to litery **tylko polskie**: ą, ć, ę, ł, ń, ó, ś, ź, ż.
 
 Każda z nich stoi w alfabecie **zaraz po** swojej "zwykłej" literze: a, **ą**, b, c, **ć**, d...
@@ -504,7 +488,7 @@ Porządek alfabetyczny ustalamy po pierwszej literze. Jeśli jest taka sama - po
 2. kot, koc, koń, kosz
 3. lato, lampa, las, lalka
 
-Przy drugiej i trzeciej grupie musisz patrzeć na drugą i trzecią literę.`, undefined, 210),
+Przy drugiej i trzeciej grupie musisz patrzeć na drugą i trzecią literę.`, undefined, 210, 'alfabet'),
       slideText('Słownik ortograficzny', `Gdy nie wiesz, jak zapisać wyraz - **sprawdź w słowniku**, nie zgaduj.
 
 Wyrazy stoją w nim w kolejności alfabetycznej, więc szukasz po kolejnych literach.
@@ -512,12 +496,12 @@ Wyrazy stoją w nim w kolejności alfabetycznej, więc szukasz po kolejnych lite
 Na górze strony są **żywe paginy** - pierwszy i ostatni wyraz z tej strony. Po nich poznasz, czy szukać dalej, czy cofnąć.`, 'slownik'),
       slideTask('Z2', 'Sprawdź w słowniku', `Weź słownik ortograficzny (albo koniec podręcznika) i sprawdź pisownię czterech wyrazów:
 
-- ż__łw
-- ogr__dek
-- __erbata
-- w__ozek
+- ż_łw
+- _erbata
+- ogr_dek
+- kalendar_
 
-Zapisz je w zeszycie poprawnie i podaj numer strony, na której je znalazłeś.`, undefined, 300),
+Zapisz je w zeszycie poprawnie i podaj numer strony, na której je znalazłeś.`, undefined, 300, 'slownik'),
       slideText('Bliskoznaczne i przeciwstawne', `**Wyrazy bliskoznaczne** znaczą prawie to samo: ładny - piękny, iść - kroczyć.
 
 Używamy ich, żeby **nie powtarzać** ciągle tego samego słowa.
@@ -527,7 +511,7 @@ Używamy ich, żeby **nie powtarzać** ciągle tego samego słowa.
 
 "Miałem ładny dzień. Pogoda była ładna, a park wyglądał ładnie."
 
-Potem dopisz wyrazy o znaczeniu przeciwnym do: **duży, wesoły, jasny**.`, undefined, 240),
+Potem dopisz wyrazy o znaczeniu przeciwnym do: **duży, wesoły, jasny**.`, undefined, 240, 'bliskoznaczne'),
       slideText('Rodzina wyrazów', `**Rodzina wyrazów** to wyrazy z tą samą cząstką i wspólnym znaczeniem.
 
 **dom** - domek, domowy, domownik, bezdomny
@@ -540,21 +524,19 @@ Uwaga na pułapkę: **domino** brzmi podobnie, ale znaczy coś zupełnie innego 
 3. szkoła
 4. woda
 
-Podkreśl w każdym wspólną cząstkę.`, undefined, 240),
+Podkreśl w każdym wspólną cząstkę.`, undefined, 240, 'rodzinaWyrazow'),
       slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- alfabet ma **32 litery**, w tym 9 tylko polskich
-- w słowniku szukamy po **kolejnych literach**
-- **bliskoznaczne** znaczą prawie to samo, **przeciwstawne** odwrotnie
-- **rodzina wyrazów** ma wspólną cząstkę i wspólne znaczenie`),
+- alfabet: **32 litery**, 9 tylko polskich
+- **bliskoznaczne** znaczą to samo, **przeciwstawne** odwrotnie
+- **rodzina wyrazów** ma wspólną cząstkę`, 'rodzinaWyrazow'),
       slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Alfabet, słownik i rodziny wyrazów**
 
-- Alfabet polski ma 32 litery, w tym 9 tylko polskich: ą, ć, ę, ł, ń, ó, ś, ź, ż.
-- Kolejność alfabetyczną ustalamy po pierwszej literze, a przy takiej samej - po następnej.
-- Wyrazy bliskoznaczne znaczą prawie to samo (ładny - piękny), przeciwstawne odwrotnie (dzień - noc).
-- Rodzina wyrazów to wyrazy ze wspólną cząstką i wspólnym znaczeniem: dom, domek, domowy.`,
+- Alfabet ma 32 litery, w tym 9 tylko polskich: ą, ć, ę, ł, ń, ó, ś, ź, ż.
+- W słowniku szukamy po kolejnych literach wyrazu.
+- Rodzina wyrazów ma wspólną cząstkę: dom, domek, domowy.`,
       ),
     ],
   };
@@ -574,9 +556,6 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240),
       slideTopic(),
       // Kolo na start: wracamy do tematu z lekcji 4 (alfabet i slownik) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set4.set.id, 'powtorzeniowe'),
-      slideText('Co dziś powtarzamy', `- Kreska czy litera i: ć - ci, ś - si, ź - zi, ń - ni, dź - dzi
-- Kiedy ą i ę, a kiedy om, on, em, en
-- Sześć znaków interpunkcyjnych i ich zadania`),
       slideText('Zmiękczenia: kreska czy i', `To jedna z najczęstszych pomyłek w zeszytach.
 
 **Kreska** - na końcu wyrazu i przed spółgłoską: ni**ć**, ko**ń**, we**ź**.
@@ -593,7 +572,7 @@ Jedna głoska, dwa sposoby zapisu - decyduje to, co stoi obok.`, 'zmiekczenia'),
 5. (zi / ź)ma
 6. we(ź / zi)
 
-Przy każdym dopisz, co stoi zaraz po zmiękczeniu: **samogłoska**, **spółgłoska** czy **koniec wyrazu**.`, undefined, 240),
+Przy każdym dopisz, co stoi zaraz po zmiękczeniu: **samogłoska**, **spółgłoska** czy **koniec wyrazu**.`, undefined, 240, 'zmiekczenia'),
       slideText('ą i ę czy om, on, em, en', `Sprawdzasz **uchem**: powiedz wyraz powoli.
 
 Słychać **jedną** głoskę - piszesz **ą** albo **ę**: wąsy, gęś, kąt, ręka.
@@ -608,7 +587,7 @@ Słychać **osobne n albo m** - piszesz dwie litery: bo**mb**a, ko**nd**uktor, t
 5. r__ka
 6. t__peratura
 
-Każdy wyraz powiedz najpierw na głos, powoli.`, undefined, 240),
+Każdy wyraz powiedz najpierw na głos, powoli.`, undefined, 240, 'nosowki'),
       slideText('Znaki interpunkcyjne', `Każdy znak ma **jedno zadanie**:
 
 - **kropka** kończy zdanie, **pytajnik** stawiamy przy pytaniu, **wykrzyknik** przy rozkazie i emocji
@@ -622,22 +601,19 @@ Każdy wyraz powiedz najpierw na głos, powoli.`, undefined, 240),
 4. Wiem że dasz radę
 5. Kupiłam trzy owoce jabłko gruszkę i śliwkę
 
-Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270),
+Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270, 'znakiInterpunkcyjne'),
       slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **kreska** na końcu i przed spółgłoską, **litera i** przed samogłoską
-- **ą, ę** gdy słychać jedną głoskę; **om, on, em, en** gdy słychać osobne m lub n
-- przecinek: **wyliczenie** oraz przed **że, ale, bo**
-- w dialogu każda wypowiedź od **myślnika**`),
+- **kreska** przed spółgłoską, **litera i** przed samogłoską
+- **ą, ę** gdy słychać jedną głoskę
+- przecinek: wyliczenie oraz przed **że, ale, bo**`, 'znakiInterpunkcyjne'),
       slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Zmiękczenia, ą i ę, znaki interpunkcyjne**
 
-- Zmiękczenie zapisujemy kreską na końcu wyrazu i przed spółgłoską (nić, koń), a literą i przed samogłoską (ciocia, zima).
-- ą i ę piszemy, gdy słychać jedną głoskę (kąt, gęś); om, on, em, en - gdy słychać osobne m lub n (bomba, konduktor).
-- Kropka kończy zdanie, pytajnik - pytanie, wykrzyknik - rozkaz i emocję.
-- Przecinek stawiamy w wyliczeniu oraz przed że, ale, bo.
-- Dwukropek zapowiada wyliczenie, myślnik rozpoczyna wypowiedź w dialogu.`,
+- Kreska na końcu wyrazu i przed spółgłoską (nić, koń), litera i przed samogłoską (ciocia, zima).
+- ą i ę, gdy słychać jedną głoskę (kąt, gęś); om, on, em, en - gdy słychać osobne m lub n.
+- Przecinek w wyliczeniu i przed że, ale, bo; myślnik zaczyna wypowiedź w dialogu.`,
       ),
     ],
   };
@@ -657,15 +633,12 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270),
       slideTopic(),
       // Kolo na start: wracamy do tematu z lekcji 5 (zmiekczenia, interpunkcja) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set5.set.id, 'powtorzeniowe'),
-      slideText('Co dziś powtarzamy', `- Temat tekstu i szukanie informacji
-- Kolejność zdarzeń
-- Dialog i jego zapis
-- Życzenia, podziękowanie i notatka`),
-      slideText('Czytanie ze zrozumieniem', `**Temat tekstu** to jedno zdanie: o czym ten tekst jest.
+      slideText('Temat tekstu', `**Temat tekstu** to jedno zdanie: o czym ten tekst jest.
 
-Gdy masz znaleźć konkretną informację, **nie czytaj wszystkiego od nowa**. Znajdź w tekście słowa z pytania i przeczytaj zdanie wokół nich.
+Gdy szukasz informacji, znajdź w tekście **słowa z pytania** i przeczytaj zdanie wokół nich.`, 'tematTekstu'),
+      slideText('Bohater główny i drugoplanowy', `**Bohater główny** jest w historii przez cały czas.
 
-Bohater **główny** jest przez cały czas, **drugoplanowy** tylko w części zdarzeń.`),
+**Drugoplanowy** pojawia się tylko w części zdarzeń.`, 'bohaterowie'),
       slideText('Kolejność zdarzeń', `Wydarzenia opowiadamy **po kolei**, tak jak się działy.
 
 Pomagają w tym słowa: **najpierw, potem, następnie, nagle, na koniec**.
@@ -675,7 +648,7 @@ Z takich punktów powstaje **plan wydarzeń**.`, 'kolejnoscZdarzen'),
 
 Każdy punkt zacznij od słowa porządkującego: najpierw, potem, nagle, na koniec.
 
-Punkty mają być krótkie - jedno zdanie każdy.`, undefined, 300),
+Punkty mają być krótkie - jedno zdanie każdy.`, undefined, 300, 'kolejnoscZdarzen'),
       slideText('Dialog', `**Dialog** to rozmowa co najmniej dwóch osób. **Monolog** - wypowiedź jednej.
 
 Zapis dialogu ma dwie zasady:
@@ -685,7 +658,7 @@ Zapis dialogu ma dwie zasady:
 
 Pamiętaj: nowa linia i myślnik przy każdej wypowiedzi.
 
-Dwie osoby przeczytają swój dialog na głos, na role.`, undefined, 300),
+Dwie osoby przeczytają swój dialog na głos, na role.`, undefined, 300, 'dialog'),
       slideText('Życzenia i podziękowanie', `**Życzenia**: do kogo, z jakiej okazji, czego życzysz, podpis.
 
 **Podziękowanie**: komu dziękujesz, za co konkretnie, podpis.
@@ -696,27 +669,24 @@ Obie formy są **krótkie** - kilka zdań wystarczy.`, 'zyczenia'),
 1. **życzenia** dla babci albo dziadka z okazji urodzin
 2. **podziękowanie** dla osoby, która ostatnio ci pomogła
 
-W obu podpisz się i napisz, z jakiej okazji albo za co dziękujesz.`, undefined, 360),
+W obu podpisz się i napisz, z jakiej okazji albo za co dziękujesz.`, undefined, 360, 'zyczenia'),
       slideText('Notatka', `**Notatka** to najważniejsze informacje w skrócie - punkty, nie całe wypracowanie.
 
 Dobra notatka odpowiada na pytania: **kto, co, kiedy, gdzie**.
 
 Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zrozumieć.`, 'zeszyt'),
       slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **temat tekstu** mówi jednym zdaniem, o czym on jest
-- wydarzenia porządkujemy: **najpierw - potem - nagle - na koniec**
-- dialog: **nowa linia i myślnik**
-- życzenia i podziękowanie zawsze kończymy **podpisem**`),
+- **temat tekstu** to jedno zdanie
+- kolejność: **najpierw - potem - nagle - na koniec**
+- dialog: **nowa linia i myślnik**`, 'dialog'),
       slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Czytanie ze zrozumieniem i krótkie formy użytkowe**
 
 - Temat tekstu mówi jednym zdaniem, o czym tekst jest.
-- Wydarzenia porządkujemy słowami: najpierw, potem, nagle, na koniec.
-- Dialog to rozmowa dwóch osób; każdą wypowiedź piszemy od nowej linii, od myślnika.
-- Życzenia: do kogo, z jakiej okazji, czego życzymy, podpis.
-- Podziękowanie: komu, za co, podpis. Notatka: kto, co, kiedy, gdzie - w punktach.`,
+- Wydarzenia porządkujemy: najpierw, potem, nagle, na koniec.
+- Dialog: każda wypowiedź od nowej linii, od myślnika; życzenia kończymy podpisem.`,
       ),
     ],
   };
@@ -767,6 +737,7 @@ function slideTask(
   body: string,
   exerciseNo?: number,
   timerSec?: number,
+  art?: SlideArt,
 ): Slide {
   return {
     id: newId(),
@@ -776,6 +747,7 @@ function slideTask(
     body,
     exerciseNo: exerciseNo ? String(exerciseNo) : undefined,
     timerSec,
+    art,
   };
 }
 
