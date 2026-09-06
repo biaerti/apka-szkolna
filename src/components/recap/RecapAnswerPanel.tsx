@@ -21,15 +21,15 @@ export function RecapAnswerPanel({ session, onOpenHint, onOpenUwaga }: RecapAnsw
       <div className="shrink-0">
         {session.currentStudent ? (
           <div className="rounded-xl border-4 border-accent-400 bg-accent-900/40 px-4 py-2 text-center">
-            <p className="text-xs uppercase tracking-widest text-accent-300">Odpowiada</p>
-            <p className="font-bold leading-tight text-white" style={{ fontSize: 'clamp(36px, 5.5vw, 76px)' }}>
+            <p className="text-sm uppercase tracking-widest text-accent-300">Odpowiada</p>
+            <p className="font-bold leading-tight text-white" style={{ fontSize: 'clamp(40px, 6.4vw, 112px)' }}>
               {session.currentStudent.firstName} {session.currentStudent.lastName}
             </p>
           </div>
         ) : (
           <p
             className="text-center font-bold leading-tight text-gray-400"
-            style={{ fontSize: 'clamp(40px, 6vw, 80px)' }}
+            style={{ fontSize: 'clamp(40px, 6vw, 100px)' }}
           >
             Kręć kołem
           </p>

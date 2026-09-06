@@ -99,8 +99,8 @@ export function Wheel({
     const startOffset = -Math.PI / 2 + rotationRad;
 
     // Rozmiar czcionki dobrany do liczby sektorow: przy 20 sektorach ~ size/28,
-    // nigdy mniej niz 12px.
-    const fontSize = Math.max(12, (size * 20) / (28 * count));
+    // nigdy mniej niz 16px (mniejsze nazwiska gina na projektorze).
+    const fontSize = Math.max(16, (size * 20) / (28 * count));
     const highlightIdx = highlightKey ? entries.findIndex((en) => en.key === highlightKey) : -1;
 
     for (let i = 0; i < count; i++) {

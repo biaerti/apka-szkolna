@@ -123,6 +123,7 @@ export interface LessonRow {
   id: string;
   grade: string;
   title: string;
+  code: string | null;
   topic: string | null;
   order: number;
   progress: Record<string, LessonProgress>;
@@ -138,6 +139,7 @@ export function lessonToRow(l: Lesson): LessonRow {
     id: l.id,
     grade: l.grade,
     title: l.title,
+    code: l.code ?? null,
     topic: l.topic ?? null,
     order: l.order,
     progress: l.progress,
@@ -154,6 +156,7 @@ export function rowToLesson(row: LessonRow): Lesson {
     id: row.id,
     grade: row.grade,
     title: row.title,
+    code: row.code ?? undefined,
     topic: row.topic ?? undefined,
     order: row.order,
     progress: row.progress ?? {},

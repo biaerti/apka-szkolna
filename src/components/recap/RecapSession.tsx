@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../../data/store';
+import { answersByQuestion } from '../../lib/recap';
 import { StudentPicker } from './StudentPicker';
 import { QuestionPicker } from './QuestionPicker';
 import { StudentSidebar } from './StudentSidebar';
@@ -93,6 +94,12 @@ export function RecapSession({
   const [uwagaOpen, setUwagaOpen] = useState(false);
   const [questionPickerOpen, setQuestionPickerOpen] = useState(false);
 
+  // Historia odpowiedzi tej klasy per pytanie - do panelu "wybierz pytanie".
+  const answersMap = useMemo(
+    () => answersByQuestion(session.recapEvents, classId),
+    [session.recapEvents, classId],
+  );
+
   // Ekran projektora: caly ekran ma byc ciemny i nie przewijac sie. Ustawiamy
   // tlo tez na <body>, zeby przy ew. odbiciu (rubber-band scroll) nie bylo
   // widac bialego tla strony. Przywracamy przy odmontowaniu.
@@ -177,13 +184,30 @@ export function RecapSession({
         />
       </div>
 
-      <div className="shrink-0 border-t border-gray-800 px-4 py-1 text-xs text-gray-500">
+      <div className="flex shrink-0 items-center gap-4 border-t border-gray-800 px-4 py-1 text-sm text-gray-500">
+        {/* Legenda symboli - te same znaki widac na przyciskach i w liscie uczniow. */}
+        <span className="shrink-0 space-x-3">
+          <span>
+            <span className="font-bold text-emerald-400">+</span> dobrze
+          </span>
+          <span>
+            <span className="font-bold text-sky-400">•</span> częściowo
+          </span>
+          <span>
+            <span className="font-bold text-red-400">▣</span> plomba
+          </span>
+          <span>
+            <span className="font-bold text-amber-400">P</span> pas
+          </span>
+        </span>
+        <span className="min-w-0 flex-1 truncate">
         {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : 'Spacja: kręć'}
         {session.grading
           ? ' - 1: dobrze - 2: częściowo - 3: źle - 4: pas'
           : ' - Enter: gotowe, następny'}
         {' '}- N: następne pytanie - O: pokaż/ukryj odpowiedź
         {!embedded && ' - F: pełny ekran'} - Esc: zakończ
+        </span>
       </div>
 
       <StudentPicker
@@ -206,6 +230,8 @@ export function RecapSession({
         questions={session.allQuestions}
         currentQuestionId={session.currentQuestion?.id ?? null}
         askedQuestionIds={session.askedQuestionIds}
+        answersFor={(questionId) => answersMap.get(questionId) ?? []}
+        students={session.classStudents}
         onPick={session.jumpToQuestion}
         onClose={() => setQuestionPickerOpen(false)}
       />

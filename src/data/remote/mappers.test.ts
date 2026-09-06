@@ -82,6 +82,7 @@ describe('lessons round-trip', () => {
       id: 'l1',
       grade: 'IV',
       title: 'Lekcja 1',
+      code: '4.3',
       topic: 'Wstep',
       order: 0,
       progress: {
@@ -93,6 +94,7 @@ describe('lessons round-trip', () => {
       slides: [
         { id: 'sl1', kind: 'title', title: 'Tytul', subtitle: 'Podtytul' },
         { id: 'sl2', kind: 'text', body: 'Tresc' },
+        { id: 'sl4', kind: 'topic', topic: 'Temat do zeszytu' },
         { id: 'sl3', kind: 'recap', questionSetId: 'qs1' },
       ],
       registerTopic: 'Temat do dziennika',

@@ -197,6 +197,7 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     curriculum: ['II.1.1', 'II.1.2', 'II.1.4', 'II.1.6', 'II.1.7'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Odmienne części mowy - część 1/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Rzeczownik i odmiana przez przypadki
 - Czasownik: osoba, liczba, czas
 - Przymiotnik i jego stopniowanie
@@ -287,6 +288,7 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
     curriculum: ['II.1.8', 'II.1.12', 'II.1.2', 'II.4.1', 'II.4.2'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Podmiot i orzeczenie
 - Zdanie pojedyncze, złożone i równoważnik
 - Przysłówek, przyimek, spójnik
@@ -376,6 +378,7 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
     curriculum: ['I.1.4', 'I.1.6', 'I.1.9', 'I.1.10', 'III.2.1'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Epitet, porównanie, przenośnia, ożywienie
 - Wers, strofa, rym, refren
 - Narrator i podmiot liryczny
@@ -474,6 +477,7 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
     curriculum: ['II.2.4', 'II.2.5', 'II.2.8', 'I.1.4', 'IV.5'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Rodzina wyrazów i rdzeń
 - Synonimy i antonimy
 - Wyrazy wieloznaczne
@@ -559,6 +563,7 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
     curriculum: ['II.4.1', 'II.4.2', 'IV.5'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Ó i u, rz i ż, ch i h: wymiany oraz reguły
 - Wielka litera w nazwach własnych
 - Skróty i kropka w skrócie
@@ -643,6 +648,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
     curriculum: ['I.1.1', 'I.1.2', 'I.1.3', '2.7', '2.8', '2.9', '2.10'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Świat przedstawiony utworu
 - Fikcja, elementy realistyczne i fantastyczne
 - Baśń, legenda, mit, bajka, komiks
@@ -729,6 +735,15 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
 
 function slideTitle(title: string, subtitle?: string): Slide {
   return { id: newId(), kind: 'title', title, subtitle };
+}
+
+/**
+ * Slajd z tematem lekcji do zeszytu. Bez wlasnej tresci - temat bierze sie z
+ * lekcji (registerTopic), a kod (np. 4.3) dokleja SlideView, wiec zeszyt,
+ * dziennik i lista lekcji zawsze mowia to samo.
+ */
+function slideTopic(): Slide {
+  return { id: newId(), kind: 'topic' };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {

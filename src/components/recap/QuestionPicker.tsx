@@ -6,15 +6,34 @@
 // Wysuwany panel, a nie stala kolumna: ekran powtorki idzie na projektor i
 // pytanie musi miec cala szerokosc.
 
-import type { Question } from '../../data/types';
+import type { Question, Student } from '../../data/types';
+import type { QuestionAnswer } from '../../lib/recap';
+import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface QuestionPickerProps {
   open: boolean;
   questions: Question[];
   currentQuestionId: string | null;
   askedQuestionIds: Set<string>;
+  /** Kto i z jakim wynikiem odpowiadal na dane pytanie (cala historia klasy). */
+  answersFor: (questionId: string) => QuestionAnswer[];
+  students: Student[];
   onPick: (questionId: string) => void;
   onClose: () => void;
+}
+
+/** Odznaka "Kowalska +" - nazwisko odpowiadajacego i symbol oceny. */
+function AnswerChip({ name, result }: { name: string; result: QuestionAnswer['result'] }) {
+  const sym = resultSymbol(result);
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-sm ${sym.bg} text-gray-200`}
+      title={`${name} - ${sym.label}`}
+    >
+      {name}
+      <span className={`text-base font-bold leading-none ${sym.color}`}>{sym.symbol}</span>
+    </span>
+  );
 }
 
 export function QuestionPicker({
@@ -22,10 +41,17 @@ export function QuestionPicker({
   questions,
   currentQuestionId,
   askedQuestionIds,
+  answersFor,
+  students,
   onPick,
   onClose,
 }: QuestionPickerProps) {
   if (!open) return null;
+
+  const nameOf = (studentId: string) => {
+    const st = students.find((s) => s.id === studentId);
+    return st ? `${st.lastName} ${st.firstName.charAt(0)}.` : 'uczeń';
+  };
 
   return (
     <div className="fixed inset-0 z-30 flex justify-end bg-black/60">
@@ -78,6 +104,17 @@ export function QuestionPicker({
                   {(current || asked) && (
                     <span className="mt-0.5 block text-xs text-gray-400">
                       {current ? 'teraz na ekranie' : 'już było w tej sesji'}
+                    </span>
+                  )}
+                  {/* Kto juz to pytanie dostal i jak mu poszlo - zeby nie pytac
+                      dwa razy tej samej osoby i widziec, czy klasa to umie. */}
+                  {answersFor(question.id).length > 0 && (
+                    <span className="mt-1.5 flex flex-wrap gap-1.5">
+                      {answersFor(question.id)
+                        .slice(-6)
+                        .map((answer, i) => (
+                          <AnswerChip key={i} name={nameOf(answer.studentId)} result={answer.result} />
+                        ))}
                     </span>
                   )}
                 </span>

@@ -114,7 +114,8 @@ export function LessonRow(p: LessonRowProps) {
           <GripIcon />
         </button>
       </TD>
-      <TD className="!px-1 tabular-nums text-gray-400">{index + 1}</TD>
+      {/* Kod lekcji ("4.3") - ten sam, ktory dzieci maja w zeszytach. */}
+      <TD className="!px-1 whitespace-nowrap tabular-nums text-gray-500">{lesson.code ?? index + 1}</TD>
       <TD>
         <p className={clsx('truncate font-medium', isSkipped ? 'text-gray-500 line-through' : 'text-gray-900')}>
           {lesson.title}

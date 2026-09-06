@@ -4,7 +4,7 @@
 // w menu obok "Nowa lekcja". Aktywna klasa zyje w adresie (?klasa=), zeby
 // powrot z prezentacji trafial z powrotem na wlasciwa zakladke.
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import type { Lesson, LessonStatus } from '../data/types';
@@ -24,6 +24,7 @@ import { useReadyMaterials } from '../components/lessons/useReadyMaterials';
 import { duplicateSlide } from '../components/lessons/slideDefaults';
 import { newId } from '../data/id';
 import { useLessonDrag } from '../components/lessons/useLessonDrag';
+import { backfillLessonCodes } from '../lib/lessonCode';
 
 export function Lessons() {
   const navigate = useNavigate();
@@ -55,6 +56,16 @@ export function Lessons() {
 
   const ready = useReadyMaterials(grade, gradeClasses.map((c) => c.id), gradeLessons);
   const drag = useLessonDrag(gradeLessons, moveLesson);
+
+  // Lekcje sprzed wprowadzenia kodow do zeszytu dostaja je przy pierwszym
+  // wejsciu na liste - wg kolejnosci w roczniku. Nadane kody juz sie nie zmieniaja.
+  useEffect(() => {
+    for (const { id, code } of backfillLessonCodes(lessons)) {
+      updateLesson(id, { code });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessons]);
+
 
   if (sortedClasses.length === 0) {
     return (
@@ -168,7 +179,8 @@ export function Lessons() {
               <TH className="w-9 !px-1">
                 <span className="sr-only">Kolejność</span>
               </TH>
-              <TH className="w-9 !px-1">Nr</TH>
+              {/* Kod lekcji - ten sam, ktory dzieci maja w zeszytach. */}
+              <TH className="w-14 !px-1">Kod</TH>
               <TH>Lekcja</TH>
               <TH className="w-32">Status</TH>
               <TH className="w-52 text-right">

@@ -7,6 +7,7 @@ import { persist } from 'zustand/middleware';
 import { newId } from './id';
 import { buildSeedData } from './seed';
 import { classGrade } from '../lib/grade';
+import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
 import type {
   Lesson,
@@ -279,7 +280,9 @@ export const useStore = create<AppState>()(
       addLesson: (lesson) => {
         const existing = get().lessons.filter((l) => l.grade === lesson.grade);
         const order = existing.reduce((max, l) => Math.max(max, l.order + 1), 0);
-        const item: Lesson = { ...lesson, id: newId(), order };
+        // Kod do zeszytu ("4.3") nadajemy raz, przy tworzeniu - patrz src/lib/lessonCode.ts.
+        const code = lesson.code ?? nextLessonCode(get().lessons, lesson.grade);
+        const item: Lesson = { ...lesson, id: newId(), order, code };
         set((s) => ({ lessons: [...s.lessons, item] }));
         return item;
       },

@@ -6,11 +6,11 @@ export function ImageSlideView({ slide }: { slide: Extract<Slide, { kind: 'image
       {slide.url ? (
         <img src={slide.url} alt={slide.caption ?? ''} className="max-h-[75%] max-w-full rounded-lg object-contain" />
       ) : (
-        <div className="flex h-2/3 w-2/3 items-center justify-center rounded-lg border-2 border-dashed border-gray-600 text-2xl text-gray-400">
+        <div className="flex h-2/3 w-2/3 items-center justify-center rounded-lg border-2 border-dashed border-gray-600 text-3xl text-gray-400">
           Brak obrazu
         </div>
       )}
-      {slide.caption && <p className="text-2xl text-gray-300">{slide.caption}</p>}
+      {slide.caption && <p className="text-3xl text-gray-300">{slide.caption}</p>}
     </div>
   );
 }

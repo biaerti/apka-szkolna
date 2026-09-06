@@ -7,6 +7,7 @@ export type SlideKind = Slide['kind'];
 
 export const SLIDE_KIND_LABELS: Record<SlideKind, string> = {
   title: 'Tytuł',
+  topic: 'Temat lekcji (do zeszytu)',
   text: 'Tekst',
   task: 'Zadanie',
   read: 'Praca z tekstem',
@@ -19,6 +20,8 @@ export function slideSummary(slide: Slide): string {
   switch (slide.kind) {
     case 'title':
       return slide.title || '(bez tytułu)';
+    case 'topic':
+      return slide.topic ? `Temat: ${slide.topic}` : 'Temat lekcji (z lekcji)';
     case 'text':
       return slide.title || slide.body.slice(0, 60) || '(pusty tekst)';
     case 'task':
@@ -55,6 +58,8 @@ export function createSlide(kind: SlideKind, existingSlides: Slide[]): Slide {
   switch (kind) {
     case 'title':
       return { id, kind: 'title', title: '' };
+    case 'topic':
+      return { id, kind: 'topic', topic: '' };
     case 'text':
       return { id, kind: 'text', title: '', body: '' };
     case 'task':

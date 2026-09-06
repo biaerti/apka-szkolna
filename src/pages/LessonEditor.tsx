@@ -109,11 +109,21 @@ export function LessonEditor() {
               Lekcje
             </button>
             <span className="mx-1.5 text-gray-400">/</span>
+            {lesson.code && <span className="mr-2 font-semibold tabular-nums text-gray-500">{lesson.code}</span>}
             <span className="text-gray-700">{lesson.title || 'Nowa lekcja'}</span>
           </p>
           <Button onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}`)}>Pokaż</Button>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[7rem_1fr] lg:grid-cols-[7rem_1fr_1fr]">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Kod</label>
+            {/* Kod trafia do zeszytow uczniow - zmieniaj tylko swiadomie. */}
+            <Input
+              value={lesson.code ?? ''}
+              onChange={(e) => updateLesson(lesson.id, { code: e.target.value.trim() || undefined })}
+              placeholder="4.1"
+            />
+          </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Tytuł</label>
             <Input value={lesson.title} onChange={(e) => updateLesson(lesson.id, { title: e.target.value })} />
@@ -196,9 +206,20 @@ export function LessonEditor() {
         <div>
           {selectedSlide ? (
             <div className="space-y-4">
-              <SlidePreview slide={selectedSlide} classId={classId ?? ''} />
+              <SlidePreview
+                slide={selectedSlide}
+                classId={classId ?? ''}
+                lessonCode={lesson.code}
+                lessonTopic={lesson.registerTopic || lesson.title}
+              />
               <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <SlideForm slide={selectedSlide} onChange={updateSlide} questionSets={questionSets} />
+                <SlideForm
+                  slide={selectedSlide}
+                  onChange={updateSlide}
+                  questionSets={questionSets}
+                  lessonTopic={lesson.registerTopic || lesson.title}
+                  lessonCode={lesson.code}
+                />
               </div>
             </div>
           ) : (

@@ -47,6 +47,15 @@ function slideTitle(title: string, subtitle?: string, art?: SlideArt): Slide {
   return { id: newId(), kind: 'title', title, subtitle, art };
 }
 
+/**
+ * Slajd z tematem lekcji do zeszytu. Bez wlasnej tresci - temat bierze sie z
+ * lekcji (registerTopic), a kod (np. 4.3) dokleja SlideView, wiec zeszyt,
+ * dziennik i lista lekcji zawsze mowia to samo.
+ */
+function slideTopic(): Slide {
+  return { id: newId(), kind: 'topic' };
+}
+
 function slideText(title: string, body: string, art?: SlideArt): Slide {
   return { id: newId(), kind: 'text', title, body, art };
 }
@@ -154,6 +163,9 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
     slides: [
       // 1. Tytul
       slideTitle('Poznajmy się', `Język polski - klasa ${grade}`),
+
+      // 1a. Temat do zeszytu - z kodem lekcji, ktory dzieci zapisuja przy temacie
+      slideTopic(),
 
       // 2. Zdjecie nauczyciela (plik w public/bart.jpg)
       slideImage('/bart.jpg', 'Bartosz Kuniński'),

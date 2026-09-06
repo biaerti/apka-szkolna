@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { RecapEvent, Settings, Student } from '../data/types';
 import {
+  answersByQuestion,
   buildPool,
   canEarnPlus,
   canPass,
@@ -438,5 +439,32 @@ describe('nextRandomIndex', () => {
 
   it('sygnalizuje reshuffle dla pustej listy', () => {
     expect(nextRandomIndex(0, 0)).toEqual({ index: 0, reshuffle: true });
+  });
+});
+
+
+describe('answersByQuestion', () => {
+  it('grupuje odpowiedzi klasy po pytaniu, od najstarszej', () => {
+    const events = [
+      ev({ studentId: 's2', questionId: 'q1', result: 'plomba', at: new Date(2026, 8, 2).toISOString() }),
+      ev({ studentId: 's1', questionId: 'q1', result: 'plus', at: new Date(2026, 8, 1).toISOString() }),
+      ev({ studentId: 's3', questionId: 'q2', result: 'kropka', at: new Date(2026, 8, 3).toISOString() }),
+    ];
+    const map = answersByQuestion(events, 'c1');
+    expect(map.get('q1')?.map((a) => [a.studentId, a.result])).toEqual([
+      ['s1', 'plus'],
+      ['s2', 'plomba'],
+    ]);
+    expect(map.get('q2')?.length).toBe(1);
+  });
+
+  it('pomija inne klasy, uwagi, podpowiedzi i zdarzenia bez pytania', () => {
+    const events = [
+      ev({ questionId: 'q1', classId: 'c2', result: 'plus' }),
+      ev({ questionId: 'q1', result: 'uwaga' }),
+      ev({ questionId: 'q1', result: 'hint_plomba' }),
+      ev({ result: 'plus' }),
+    ];
+    expect(answersByQuestion(events, 'c1').size).toBe(0);
   });
 });

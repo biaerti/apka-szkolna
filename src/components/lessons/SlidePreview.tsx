@@ -8,7 +8,17 @@ import { SlideView } from '../slides/SlideView';
 const BASE_WIDTH = 1280;
 const BASE_HEIGHT = 720;
 
-export function SlidePreview({ slide, classId }: { slide: Slide; classId: string }) {
+export function SlidePreview({
+  slide,
+  classId,
+  lessonCode,
+  lessonTopic,
+}: {
+  slide: Slide;
+  classId: string;
+  lessonCode?: string;
+  lessonTopic?: string;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.2);
 
@@ -32,7 +42,7 @@ export function SlidePreview({ slide, classId }: { slide: Slide; classId: string
         className="absolute left-0 top-0 origin-top-left"
         style={{ width: BASE_WIDTH, height: BASE_HEIGHT, transform: `scale(${scale})` }}
       >
-        <SlideView slide={slide} classId={classId} />
+        <SlideView slide={slide} classId={classId} lessonCode={lessonCode} lessonTopic={lessonTopic} />
       </div>
     </div>
   );

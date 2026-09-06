@@ -94,6 +94,13 @@ export interface Lesson {
   id: ID;
   grade: string;
   title: string;
+  /**
+   * Kod lekcji do zeszytu, np. "4.3" (rocznik.numer). Nadawany raz, przy
+   * tworzeniu lekcji, i juz sie nie zmienia - dziecko ma po nim odnalezc temat
+   * w zeszycie nawet wtedy, gdy nauczyciel przestawi kolejnosc lekcji. Kody
+   * zadan w slajdach (Z1, Z2...) numeruja sie osobno, wewnatrz lekcji.
+   */
+  code?: string;
   topic?: string;
   order: number; // kolejnosc w obrebie rocznika
   progress: Record<ID, LessonProgress>;
@@ -177,6 +184,10 @@ export type SlideArt =
 export type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }
   | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt } // markdown-lite: akapity, listy
+  // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + jedno zdanie
+  // tematu. Pusty `topic` znaczy "wez temat z lekcji" (registerTopic), zeby
+  // wpis do dziennika i wpis w zeszycie nie rozjechaly sie ze soba.
+  | { id: ID; kind: 'topic'; topic?: string; note?: string }
   | {
       id: ID;
       kind: 'task';

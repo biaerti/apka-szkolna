@@ -2,9 +2,10 @@
 // oznaczeniem "juz byl" / "nieobecny" / eskalacji uwag. Umozliwia tez
 // odhaczenie obecnosci.
 
-import type { Student } from '../../data/types';
+import type { RecapResult, Student } from '../../data/types';
 import type { MonthBalance } from '../../lib/recap';
 import { warnLevel, warnLevelLabel, wheelEntriesFor } from '../../lib/recap';
+import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface StudentSidebarProps {
   open: boolean;
@@ -22,13 +23,18 @@ export interface StudentSidebarProps {
 
 /**
  * Jedna liczba z podpisem. Wczesniej bilans byl skrotem "+0 .0 p0 pas0", ktorego
- * nauczyciel nie potrafil odczytac - liczby musza sie tlumaczyc same.
+ * nauczyciel nie potrafil odczytac - liczby musza sie tlumaczyc same. Symbol
+ * (src/lib/resultSymbol.ts) stoi PRZY slowie, a nie zamiast niego: dzieci ucza
+ * sie znaku, a podpis wciaz mowi wprost, co to za liczba.
  */
-function Tally({ label, value, color }: { label: string; value: number; color: string }) {
+function Tally({ label, value, result }: { label: string; value: number; result: RecapResult }) {
+  const sym = resultSymbol(result);
   return (
     <span className="flex flex-col items-center leading-tight">
-      <span className={`${color} text-sm font-semibold`}>{value}</span>
-      <span className="text-[10px] text-gray-500">{label}</span>
+      <span className={`${sym.color} text-base font-semibold`}>{value}</span>
+      <span className="text-[11px] text-gray-500">
+        <span className={`font-bold ${sym.color}`}>{sym.symbol}</span> {label}
+      </span>
     </span>
   );
 }
@@ -58,7 +64,7 @@ export function StudentSidebar({
   }
 
   return (
-    <div className="flex h-full w-80 flex-col border-l border-gray-700 bg-gray-900 text-sm text-gray-200">
+    <div className="flex h-full w-[22rem] flex-col border-l border-gray-700 bg-gray-900 text-base text-gray-200">
       <div className="flex items-center justify-between border-b border-gray-700 px-3 py-2">
         <span className="font-medium">
           Uczniowie
@@ -98,10 +104,10 @@ export function StudentSidebar({
               <div className="flex shrink-0 flex-col items-end gap-0.5 text-xs text-gray-400">
                 {showBalance && (
                   <span className="flex items-center gap-1.5">
-                    <Tally label="plusy" value={balance.plus} color="text-emerald-400" />
-                    <Tally label="kropki" value={balance.kropka} color="text-sky-400" />
-                    <Tally label="plomby" value={balance.plombyTotal} color="text-red-400" />
-                    <Tally label="pasy" value={balance.pass} color="text-amber-400" />
+                    <Tally label="plusy" value={balance.plus} result="plus" />
+                    <Tally label="kropki" value={balance.kropka} result="kropka" />
+                    <Tally label="plomby" value={balance.plombyTotal} result="plomba" />
+                    <Tally label="pasy" value={balance.pass} result="pass" />
                   </span>
                 )}
                 {level !== 'none' && <span className="text-amber-400">{warnLevelLabel(level)}</span>}

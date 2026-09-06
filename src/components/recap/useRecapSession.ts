@@ -91,6 +91,22 @@ export function useRecapSession({
     return monthBalance(recapEvents, studentId, currentMonthKey);
   }
 
+  // Zmiana pytania zdejmuje z ekranu ucznia, ktory ma juz ocene - inaczej nowe
+  // pytanie wisi pod nazwiskiem poprzedniej osoby i klasa mysli, ze to wciaz
+  // ona odpowiada. Uczen bez oceny zostaje (nauczyciel tylko zmienil mu pytanie).
+  function nextQuestion() {
+    draw.clearGradedStudent();
+    questionOrder.nextQuestion();
+  }
+  function prevQuestion() {
+    draw.clearGradedStudent();
+    questionOrder.prevQuestion();
+  }
+  function jumpToQuestion(questionId: string) {
+    draw.clearGradedStudent();
+    questionOrder.jumpToQuestion(questionId);
+  }
+
   return {
     classStudents,
     absentSet: attendance.absentSet,
@@ -110,6 +126,9 @@ export function useRecapSession({
     allQuestions: setQuestions,
     ...questionOrder,
     ...draw,
+    nextQuestion,
+    prevQuestion,
+    jumpToQuestion,
     balanceFor,
     recapEvents,
   };

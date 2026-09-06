@@ -150,7 +150,13 @@ export function LessonPresent() {
           }
         }}
       >
-        <SlideView slide={slide} classId={classId} onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))} />
+        <SlideView
+          slide={slide}
+          classId={classId}
+          lessonCode={lesson.code}
+          lessonTopic={lesson.registerTopic || lesson.title}
+          onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
+        />
       </div>
 
       {isLast && (

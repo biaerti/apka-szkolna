@@ -191,6 +191,7 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     curriculum: ['II.3.5', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Głoski, litery, sylaby i ortografia - część 1/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Głoski, litery i sylaby
 - Samogłoski, spółgłoski i dwuznaki
 - Zasady ó/u, rz/ż i ch/h`),
@@ -290,6 +291,7 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
     curriculum: ['II.1.1', 'II.1.11', 'II.4.2', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Części mowy, zdania i interpunkcja - część 2/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Rzeczownik, czasownik, przymiotnik
 - Rodzaje zdań i znaki na ich końcu
 - Wielka litera i przecinek przed że, ale, bo`),
@@ -380,6 +382,7 @@ Przykłady:
     curriculum: ['III.2.1', 'III.2.3', 'I.1.3', 'I.1.6', 'I.1.7'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie i formy wypowiedzi - część 3/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Wiersz, proza i rymy
 - Bohater, baśń, legenda i bajka
 - Plan wydarzeń, opis i zaproszenie`),
@@ -468,6 +471,7 @@ Masz 5 minut.`, undefined, 300),
     curriculum: ['IV.5', 'II.2.8', 'IV.3', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Alfabet, słownik i rodziny wyrazów - część 4/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Alfabet i porządek alfabetyczny
 - Szukanie wyrazu w słowniku ortograficznym
 - Wyrazy bliskoznaczne i przeciwstawne
@@ -548,6 +552,7 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240),
     curriculum: ['II.4.1', 'II.4.2', 'II.3.5'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Zmiękczenia, ą i ę, interpunkcja - część 5/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Kreska czy litera i: ć - ci, ś - si, ź - zi, ń - ni, dź - dzi
 - Kiedy ą i ę, a kiedy om, on, em, en
 - Sześć znaków interpunkcyjnych i ich zadania`),
@@ -626,6 +631,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270),
     curriculum: ['2.2', '2.3', 'I.1.7', 'I.1.8', 'III.2.1', 'III.2.4'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie ze zrozumieniem i krótkie formy - część 6/6'),
+      slideTopic(),
       slideText('Co dziś powtarzamy', `- Temat tekstu i szukanie informacji
 - Kolejność zdarzeń
 - Dialog i jego zapis
@@ -708,6 +714,15 @@ Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zroz
 
 function slideTitle(title: string, subtitle?: string): Slide {
   return { id: newId(), kind: 'title', title, subtitle };
+}
+
+/**
+ * Slajd z tematem lekcji do zeszytu. Bez wlasnej tresci - temat bierze sie z
+ * lekcji (registerTopic), a kod (np. 4.3) dokleja SlideView, wiec zeszyt,
+ * dziennik i lista lekcji zawsze mowia to samo.
+ */
+function slideTopic(): Slide {
+  return { id: newId(), kind: 'topic' };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {

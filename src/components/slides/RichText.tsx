@@ -1,5 +1,6 @@
 // Renderuje AST z markdownLite bez dangerouslySetInnerHTML.
 
+import type { CSSProperties } from 'react';
 import type { MdBlock, MdInline } from '../../lib/markdownLite';
 import { parseMarkdownLite } from '../../lib/markdownLite';
 
@@ -34,10 +35,19 @@ function Block({ block }: { block: MdBlock }) {
   );
 }
 
-export function RichText({ text, className }: { text: string; className?: string }) {
+export function RichText({
+  text,
+  className,
+  style,
+}: {
+  text: string;
+  className?: string;
+  /** Rozmiar czcionki dobrany przez slajd (fitText.ts) trafia tu jako styl. */
+  style?: CSSProperties;
+}) {
   const blocks = parseMarkdownLite(text);
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       {blocks.map((block, i) => (
         <Block key={i} block={block} />
       ))}

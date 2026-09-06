@@ -5,6 +5,7 @@
 
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
+import { fitFontSize } from './fitText';
 
 const RULED_LINES_STYLE = {
   backgroundImage:
@@ -13,13 +14,21 @@ const RULED_LINES_STYLE = {
 };
 
 export function NoteSlideView({ slide }: { slide: Extract<Slide, { kind: 'note' }> }) {
+  // Notatka jest przepisywana z tablicy, wiec ma byc tak duza, jak sie da -
+  // rozmiar dobieramy do dlugosci tresci (fitText.ts), w pikselach kartki 1280x720.
+  const bodySize = fitFontSize(slide.body, { width: 1120, height: 480, min: 24, max: 62, lineHeight: 1.6 });
+
   return (
-    <div className="flex h-full flex-col bg-amber-50 px-20 py-14 text-gray-900" style={RULED_LINES_STYLE}>
-      <h2 className="mb-8 text-5xl font-bold text-gray-900">{slide.title || 'Notatka do zeszytu'}</h2>
+    <div className="flex h-full flex-col bg-amber-50 px-20 py-12 text-gray-900" style={RULED_LINES_STYLE}>
+      <h2 className="mb-6 text-6xl font-bold text-gray-900">{slide.title || 'Notatka do zeszytu'}</h2>
 
-      <RichText text={slide.body} className="flex-1 space-y-4 text-[34px] leading-[64px] text-gray-800" />
+      <RichText
+        text={slide.body}
+        className="flex-1 space-y-[0.5em] leading-[1.6] text-gray-800"
+        style={{ fontSize: bodySize }}
+      />
 
-      <p className="mt-6 text-center text-2xl font-semibold text-gray-500">Przepisz do zeszytu</p>
+      <p className="mt-4 text-center text-3xl font-semibold text-gray-500">Przepisz do zeszytu</p>
     </div>
   );
 }

@@ -13,7 +13,7 @@
 // ktos, gdy nikt aktualnie nie odpowiada (pierwsze wejscie w tryb, start nowej
 // rundy, zaraz po ocenie) - bez czekania na klik "nastepny uczen".
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '../../data/store';
 import type { RecapEvent, RecapResult, Settings, Student } from '../../data/types';
 import {
@@ -86,6 +86,10 @@ export function useRecapDraw({
   // gaslby natychmiast po kliknieciu oceny. Aktualizuje sie tylko, gdy nikt
   // aktualnie nie jest wylosowany, czyli dokladnie w momencie nowego losowania.
   const [displayPool, setDisplayPool] = useState<PoolEntry[]>(pool);
+  // Wpis wylosowany, ale jeszcze nie ujawniony - kolo dopiero sie kreci.
+  // Nazwisko ma sie pokazac DOPIERO, gdy kolo stanie (patrz handleSpinEnd),
+  // inaczej dzieci czytaja wynik, zanim wskaznik dojedzie do sektora.
+  const pendingEntryRef = useRef<PoolEntry | null>(null);
   useEffect(() => {
     if (!currentEntry) setDisplayPool(pool);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,20 +113,47 @@ export function useRecapDraw({
     if (randomOrder) advanceRandomQuestion();
   }
 
+  // Zawsze najswiezsza wersja applyPick - handleSpinEnd trafia do <Wheel> raz,
+  // na starcie animacji, wiec nie moze zamykac starej kopii funkcji.
+  const applyPickRef = useRef(applyPick);
+  applyPickRef.current = applyPick;
+
   function spin() {
     if (!canSpin) return;
     const idx = Math.min(pool.length - 1, Math.floor(Math.random() * pool.length));
     const entry = pool[idx];
     const angle = wheelTargetAngle(idx, pool.length, 5, Math.random);
+    pendingEntryRef.current = entry;
     setSpinning(true);
     setWheelTarget(angle);
     setSpinToken((t) => t + 1);
-    applyPick(entry);
   }
 
   const handleSpinEnd = useCallback(() => {
     setSpinning(false);
+    const entry = pendingEntryRef.current;
+    pendingEntryRef.current = null;
+    if (entry) applyPickRef.current(entry);
   }, []);
+
+  // Bezpiecznik: gdy w trakcie krecenia nauczyciel przelaczy sie na tryb "po
+  // kolei", kolo znika z ekranu i nigdy nie zglosi konca animacji - konczymy ja
+  // recznie, zeby wylosowana osoba nie utknela w zawieszeniu.
+  useEffect(() => {
+    if (pickMode === 'wheel' || !spinning) return;
+    handleSpinEnd();
+  }, [pickMode, spinning, handleSpinEnd]);
+
+  /**
+   * Zdejmuje z ekranu ucznia, ktory ma juz wpisana ocene (np. przy przejsciu do
+   * kolejnego pytania) - zeby nowe pytanie nie wisialo pod nazwiskiem poprzedniej
+   * osoby. Uczen bez oceny zostaje: nauczyciel po prostu zmienil mu pytanie.
+   */
+  function clearGradedStudent() {
+    if (!currentEntry || !graded) return;
+    setCurrentEntry(null);
+    setGraded(false);
+  }
 
   /** Wybiera kolejny wpis wg numeru z dziennika (tryb "po kolei") - bez animacji. */
   function pickSequentialStudent() {
@@ -222,6 +253,7 @@ export function useRecapDraw({
     grading,
     setGrading,
     markDoneNoGrade,
+    clearGradedStudent,
     handleSpinEnd,
     grade,
     addHint,

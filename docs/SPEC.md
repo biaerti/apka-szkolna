@@ -62,6 +62,8 @@ type LessonStatus = 'planned' | 'in_progress' | 'done' | 'skipped';
 interface LessonProgress { status: LessonStatus; doneDate?: string; }
 interface Lesson {
   id: ID; grade: string; title: string; topic?: string; order: number; // kolejnosc w roczniku
+  code?: string;          // kod do zeszytu, "4.3" = rocznik.numer (src/lib/lessonCode.ts);
+                          // nadawany raz przy tworzeniu i niezmienny mimo przestawiania lekcji
   progress: Record<ID, LessonProgress>; // brak wpisu = 'planned'
   plannedDate?: string;
   questionSetId?: ID;     // zestaw pytan do kola wpiety w lekcje (opcjonalny)
@@ -93,6 +95,9 @@ type SlideArt = 'gra' | 'kolo' | 'oceny' | 'stopnie' | 'eskalacja'
 type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }
   | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt } // markdown-lite: akapity, listy
+  // Temat lekcji do zeszytu: wielki kod lekcji + jedno zdanie tematu. Pusty `topic`
+  // znaczy "wez temat z lekcji" (registerTopic) - zeszyt i dziennik maja mowic to samo.
+  | { id: ID; kind: 'topic'; topic?: string; note?: string }
   | { id: ID; kind: 'task'; code: string; title?: string; body: string; page?: number; exerciseNo?: string; timerSec?: number }
   // Praca z tekstem: strona i czas na przeczytanie sa GLOWNA trescia slajdu,
   // widoczne od razu i z ostatniej lawki - nie dodatkiem na marginesie.
@@ -140,17 +145,24 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
 - `/lekcje/:id/edytuj?klasa=<classId>` - edytor slajdow (klasa w query, do powrotu na wlasciwa
   zakladke); `/lekcje/:id/pokaz/:classId` (z fallbackiem `/lekcje/:id/pokaz` na pierwsza klase
   rocznika) - **prezentacja**: strzalki/spacja, F fullscreen; slajd `task` ma duzy kod zadania i
-  stoper, slajd `read` wielka strone i czas na przeczytanie, slajd `note` wyglada jak kartka z
-  zeszytu i zamyka lekcje, slajd `recap` osadza ekran powtorki. Start prezentacji przestawia
+  stoper, slajd `read` wielka strone i czas na przeczytanie, slajd `topic` temat z kodem lekcji do
+  zeszytu, slajd `note` wyglada jak kartka z zeszytu i zamyka lekcje, slajd `recap` osadza ekran
+  powtorki. Kazdy slajd (poza `topic` i `recap`) ma kod lekcji w prawym dolnym rogu. Slajdy sa
+  rysowane na kartce 1280x720 i skalowane do ekranu, a rozmiary czcionek dobiera dlugosc tekstu
+  (src/components/slides/fitText.ts) - krotki slajd ma byc OGROMNY, dlugi tylko sie miesci. Start prezentacji przestawia
   postep tej klasy w tej lekcji na `in_progress`, zakonczenie - na `done` z data.
 - `/powtorka/:classId/:setId` - **ekran projektora** z kolem fortuny. Nie ma osobnej zakladki
   "Powtorka": kolo uruchamia sie ze slajdu `recap` wpietego w konkretna lekcje, a po zamknieciu
   wraca sie do prezentacji.
   - kolo z obecnymi uczniami; nauczyciel odhacza nieobecnych w pasku bocznym
-  - "Kręć" -> animacja obrotu (wynik losowany przed animacja), wylosowana osoba wyraznie
-    wyrozniona az do kolejnego losowania
+  - "Kręć" -> animacja obrotu (wynik losowany przed animacja, ale **ujawniany dopiero po
+    zatrzymaniu kola**), wylosowana osoba wyrozniona az do kolejnego losowania albo do zmiany
+    pytania (nowe pytanie zdejmuje z ekranu ucznia, ktory ma juz ocene)
   - przyciski: Dobrze (plus) / Częściowo (kropka) / Źle (plomba) / Pas / Podpowiadał(a) / Uwaga
-  - lista pytan zestawu do recznego wyboru pytania
+  - symbole ocen (src/lib/resultSymbol.ts), te same wszedzie: `+` plus, `•` kropka, `▣` plomba,
+    `P` pas - na przyciskach, w pasku bocznym, w historii pytan i w legendzie na dole ekranu
+  - lista pytan zestawu do recznego wyboru pytania, z historia: kto juz to pytanie dostal
+    i z jakim wynikiem
   - pasek boczny z lista uczniow i czytelnym bilansem miesiaca (plusy / kropki / plomby / pasy)
   - skroty: Spacja = kręć, 1/2/3/4 = plus/kropka/plomba/pas, N = nastepne pytanie,
     O = pokaz/ukryj odpowiedz, F = fullscreen, Esc = zakoncz
@@ -186,9 +198,10 @@ lekcji zapoznawczej. Logika: `src/lib/recap.ts`.
 ## Schemat lekcji (uklad tresci)
 Kolo fortuny **zamyka i otwiera** lekcje. Domyslny uklad slajdow modulu tematycznego:
 1. powtorka z poprzedniego tematu -> slajd `recap`,
-2. nowy temat: `title` / `text` / `read` / `task`,
-3. slajd `recap` z nowego tematu (kolo kreci sie 2-3 razy w ciagu tematu),
-4. slajd `note` - notatka do zeszytu ("zapisujecie notatke i jestescie wolni").
+2. `topic` - temat z kodem lekcji do zapisania w zeszycie,
+3. nowy temat: `title` / `text` / `read` / `task`,
+4. slajd `recap` z nowego tematu (kolo kreci sie 2-3 razy w ciagu tematu),
+5. slajd `note` - notatka do zeszytu ("zapisujecie notatke i jestescie wolni").
 
 Zestaw pytan do jednego bloku tematycznego: **5-6 krotkich pytan**. Bloki nie moga byc dlugie -
 to klasa czwarta.

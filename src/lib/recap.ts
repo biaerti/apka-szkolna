@@ -12,7 +12,7 @@
 // - uzbierane plomby zamieniaja sie na zadania naprawcze -> rozliczenie albo jedynke,
 //   uzbierane plusy na piatke.
 
-import type { RecapEvent, Settings, Student } from '../data/types';
+import type { RecapEvent, RecapResult, Settings, Student } from '../data/types';
 import { monthKey as toMonthKey } from './week';
 
 // --- eskalacja uwag ---------------------------------------------------------
@@ -68,6 +68,12 @@ export interface PoolEntry {
   key: string;
   student: Student;
   copy: number;
+  /**
+   * true = to wejscie juz odpowiadalo w tej rundzie. Wpis NIE znika z kola -
+   * zostaje na nim na czerwono, zeby klasa widziala, ze ta osoba juz byla i
+   * wiecej jej nie wylosujemy. Z losowania wypada (patrz drawableEntries).
+   */
+  done: boolean;
 }
 
 export interface BuildPoolArgs {
@@ -76,21 +82,35 @@ export interface BuildPoolArgs {
   warningsFor: (studentId: string) => number;
   /** Ile razy uczen juz odpowiadal w biezacej rundzie. */
   usedFor: (studentId: string) => number;
-  /** true = ignoruj "juz odpowiadal" i wystawiaj wszystkie wejscia. */
+  /** true = ignoruj "juz odpowiadal", nikt nie jest `done` i wszyscy wracaja do losowania. */
   allowRepeats?: boolean;
 }
 
-/** Buduje liste wejsc do kola dla biezacej rundy (z duplikatami za uwagi). */
-export function buildPool({ students, warningsFor, usedFor, allowRepeats = false }: BuildPoolArgs): PoolEntry[] {
+/**
+ * Wszystkie wejscia do kola w tej rundzie - razem z tymi, ktore juz odpowiadaly
+ * (`done: true`). Lista jest stala przez cala runde (zmienia ja tylko obecnosc i
+ * nowe uwagi), wiec sektory na kole nie przeskakuja po kazdej ocenie.
+ */
+export function buildRoundEntries({
+  students,
+  warningsFor,
+  usedFor,
+  allowRepeats = false,
+}: BuildPoolArgs): PoolEntry[] {
   const entries: PoolEntry[] = [];
   for (const student of students) {
     const total = wheelEntriesFor(warningsFor(student.id));
-    const remaining = allowRepeats ? total : Math.max(0, total - usedFor(student.id));
-    for (let copy = 0; copy < remaining; copy++) {
-      entries.push({ key: `${student.id}#${copy}`, student, copy });
+    const used = allowRepeats ? 0 : usedFor(student.id);
+    for (let copy = 0; copy < total; copy++) {
+      entries.push({ key: `${student.id}#${copy}`, student, copy, done: copy < used });
     }
   }
   return entries;
+}
+
+/** Wejscia, ktore biora udzial w losowaniu - czyli te, ktore jeszcze nie odpowiadaly. */
+export function drawableEntries(entries: PoolEntry[]): PoolEntry[] {
+  return entries.filter((entry) => !entry.done);
 }
 
 /** Ile losowan (a wiec i pytan) przewiduje pelna runda dla podanych uczniow. */
@@ -165,6 +185,33 @@ export function monthBalance(events: RecapEvent[], studentId: string, monthKey: 
     uwaga: count('uwaga'),
     plombyTotal: plomba + hint,
   };
+}
+
+/** Jedna odpowiedz na konkretne pytanie - kto i z jakim wynikiem. */
+export interface QuestionAnswer {
+  studentId: string;
+  result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>;
+  at: string;
+}
+
+const GRADED_RESULTS: RecapResult[] = ['plus', 'kropka', 'plomba', 'pass'];
+
+/**
+ * Historia odpowiedzi klasy per pytanie: kto juz to pytanie dostal i jak mu
+ * poszlo. Uzywane w panelu "wybierz pytanie", zeby nauczyciel widzial, czy
+ * pytanie juz padlo i czy klasa je umiala. Kolejnosc: od najstarszej odpowiedzi.
+ */
+export function answersByQuestion(events: RecapEvent[], classId: string): Map<string, QuestionAnswer[]> {
+  const out = new Map<string, QuestionAnswer[]>();
+  const sorted = events
+    .filter((e) => e.classId === classId && e.questionId && GRADED_RESULTS.includes(e.result))
+    .sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
+  for (const e of sorted) {
+    const list = out.get(e.questionId as string) ?? [];
+    list.push({ studentId: e.studentId, result: e.result as QuestionAnswer['result'], at: e.at });
+    out.set(e.questionId as string, list);
+  }
+  return out;
 }
 
 /** Zdarzenia ucznia posortowane rosnaco po dacie. */
