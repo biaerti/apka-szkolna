@@ -51,7 +51,7 @@ export interface RemoteData {
 }
 
 const DEFAULT_SETTINGS: Settings = {
-  passesPerMonth: 3,
+  passesPerMonth: 2,
   hintGivesMinus: true,
   wheelSpinSec: 4,
   plusesForFive: 3,

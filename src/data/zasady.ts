@@ -21,7 +21,7 @@ export const RULE_SECTIONS: RuleSection[] = [
       // indeks 1 - wykorzystywany wprost w intro.ts, nie przesuwac
       'Kto się wylosuje, ten odpowiada. Nie zgłaszamy się - losuje koło. To jest gra.',
       'Każda lekcja zaczyna się i kończy kołem: na początku wracamy do ostatniego tematu, na końcu sprawdzamy nowy.',
-      'W czasie jednego tematu koło kręci się 2-3 razy.',
+      'W czasie jednego tematu koło kręci się 3-5 razy.',
       'Na początku może być stresująco. To normalne. Po kilku lekcjach się przyzwyczaicie i będzie dobrze.',
     ],
   },
@@ -39,16 +39,8 @@ export const RULE_SECTIONS: RuleSection[] = [
     title: 'Pasy',
     items: [
       // indeks 0 - wykorzystywany wprost w intro.ts, nie przesuwac
-      'Każdy ma 3 pasy w miesiącu. Pas znaczy "dzisiaj nie odpowiadam" - bez plomby.',
+      'Każdy ma 2 pasy w miesiącu. Pas znaczy "dzisiaj nie odpowiadam" - bez plomby.',
       'Limit pasów odnawia się na początku każdego miesiąca.',
-    ],
-  },
-  {
-    title: 'Plomby da się odrobić',
-    items: [
-      'Kto zbierze 3 plomby, dostaje 3 zadania naprawcze - dokładnie z tych pytań, na które nie umiał odpowiedzieć.',
-      'Przyniesiesz rozwiązania na następną lekcję - plomby znikają.',
-      'Nie przyniesiesz - jedynka.',
     ],
   },
   // Sekcja wstawiona PRZED "Kiedy ktos przeszkadza" - najpierw nazywamy zachowanie,
@@ -62,7 +54,7 @@ export const RULE_SECTIONS: RuleSection[] = [
       // wydruku koncowke sekcji "Kiedy ktos przeszkadza".
       'Krzyk, gadanie i przekrzykiwanie, kiedy ktoś odpowiada albo kiedy tłumaczę temat.',
       'Podpowiadanie - kolega traci szansę na plusa, a podpowiadający dostaje plombę.',
-      'Ściągawki, odpisywanie na sprawdzianie, telefon na ławce albo w ręce.',
+      'Ściągawki, odpisywanie na sprawdzianie, **telefon** na ławce albo w ręce.',
       'Śmianie się z czyjejś odpowiedzi, przezywanie, chodzenie po klasie, rzucanie rzeczami.',
       'To NIE jest przeszkadzanie: zła odpowiedź, "nie wiem", pytanie do mnie albo prośba o powtórzenie.',
     ],
@@ -91,9 +83,9 @@ export const RULE_SECTIONS: RuleSection[] = [
     items: [
       'Każda lekcja zaczyna się i kończy kołem fortuny.',
       'Najpierw powtórka z ostatniego tematu - kręcimy kołem.',
-      'Potem nowy temat: prezentacja i zadania.',
-      'Na koniec koło fortuny sprawdza to, czego się dzisiaj nauczyliście.',
-      'Notatka do zeszytu - zapisujecie i jesteście wolni.',
+      'Potem nowy temat: prezentacja i zadania na czas, ze stoperem. Rozwiązania zapisujemy do zeszytu.',
+      'Każda lekcja i każde zadanie ma swój kod - zapisujecie go przy notatce.',
+      'Na koniec koło fortuny sprawdza to, czego się dzisiaj nauczyliście, i notatka do zeszytu.',
     ],
   },
   // Nowa sekcja dopisana NA KONCU tablicy - zgodnie z uwaga na gorze pliku,
@@ -104,9 +96,8 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Każda lekcja ma numer i temat. Zapisujemy je w zeszycie w linie.',
       'W zeszycie robimy notatki i zapisujemy podpowiedzi. Pracujemy na nich na bieżąco.',
       'Przed sprawdzianem dostajecie całe powtórzenie na kartkach.',
-      // Progi 33/50/75 podal nauczyciel wprost. Progi 90 i 98 to typowe
-      // uzupelnienie do skali 1-6 - WSTEPNE, do potwierdzenia przez nauczyciela.
-      'Sprawdziany oceniamy w procentach: od 33% dwójka, od 50% trójka, od 75% czwórka, od 90% piątka, od 98% szóstka.',
+      // Progi procentowe zgodne z WZO szkoly.
+      'Sprawdziany oceniamy w procentach: 0-30% niedostateczny, 31-50% dopuszczający, 51-72% dostateczny, 73-85% dobry, 86-96% bardzo dobry, 97-100% celujący.',
     ],
   },
 ];

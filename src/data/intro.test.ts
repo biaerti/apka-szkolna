@@ -66,6 +66,46 @@ describe('buildIntroLesson', () => {
     const hasProcenty = lesson.slides.some((s) => 'art' in s && s.art === 'procenty');
     expect(hasProcenty).toBe(true);
   });
+
+  function allText(lesson: ReturnType<typeof buildIntroLesson>['lesson']): string {
+    return lesson.slides
+      .map((s) => ('body' in s ? s.body : 'title' in s ? (s.title ?? '') : ''))
+      .join(' \n ');
+  }
+
+  it('wspomina o 2 pasach, a nie o starym limicie 3 pasow', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const text = allText(lesson);
+    expect(text).toContain('2 pasy');
+  });
+
+  it('nie zawiera juz usunietego watku odrabiania plomb / zadan naprawczych', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const text = allText(lesson).toLowerCase();
+    expect(text).not.toContain('odrabia');
+    expect(text).not.toContain('zadanie naprawcze');
+    expect(text).not.toContain('decybelomierz');
+  });
+
+  it('wspomina, ze progi ocen obowiazuja w calej szkole (WZO)', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    expect(allText(lesson)).toContain('WZO');
+  });
+
+  it('dla klasy VIII wspomina egzamin osmoklasisty, dla innych klas nie', () => {
+    const { lesson: lesson8 } = buildIntroLesson('VIII', [CLASS_ID]);
+    expect(allText(lesson8)).toContain('egzamin ósmoklasisty');
+
+    const { lesson: lesson4 } = buildIntroLesson('IV', [CLASS_ID]);
+    expect(allText(lesson4)).not.toContain('egzamin ósmoklasisty');
+  });
+
+  it('ma slajd o pasach i slajd z przykladem rundy', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const titles = lesson.slides.map((s) => ('title' in s ? s.title : undefined));
+    expect(titles).toContain('Pasy');
+    expect(titles).toContain('Przykład rundy');
+  });
 });
 
 describe('RULE_SECTIONS', () => {
@@ -91,10 +131,10 @@ describe('RULE_SECTIONS', () => {
     expect(RULE_SECTIONS[RULE_SECTIONS.length - 1].title).toBe('Zeszyt i sprawdziany');
   });
 
-  it('progi procentowe ocen (33, 50, 75, 90, 98) wystepuja w tresci zasad', () => {
+  it('progi procentowe ocen (0-30, 31-50, 51-72, 73-85, 86-96, 97-100) wystepuja w tresci zasad', () => {
     const all = RULE_SECTIONS.map((s) => s.items.join(' ')).join(' ');
-    for (const percent of [33, 50, 75, 90, 98]) {
-      expect(all, `brak progu ${percent}% w tresci zasad`).toContain(`${percent}%`);
+    for (const range of ['0-30%', '31-50%', '51-72%', '73-85%', '86-96%', '97-100%']) {
+      expect(all, `brak progu ${range} w tresci zasad`).toContain(range);
     }
   });
 });

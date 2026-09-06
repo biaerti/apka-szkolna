@@ -187,7 +187,7 @@ export const useStore = create<AppState>()(
       lessons: [],
       recapEvents: [],
       settings: {
-        passesPerMonth: 3,
+        passesPerMonth: 2,
         hintGivesMinus: true,
         wheelSpinSec: 4,
         plusesForFive: 3,
@@ -345,7 +345,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 4,
+      version: 5,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -354,6 +354,9 @@ export const useStore = create<AppState>()(
       // mial dawna wartosc domyslna (2, nieruszana recznie) - dostaje nowa
       // domyslna (3). Jesli mial cokolwiek innego (zmienione recznie) - ta sama
       // liczba zostaje, tylko pod nowym polem/znaczeniem (miesiac zamiast tygodnia).
+      // v4 -> v5: limit pasow spada z 3 do 2 na miesiac (decyzja nauczyciela,
+      // spojna z tekstem zasad). Wartosc 3 (dawna domyslna) przechodzi na 2;
+      // inna wartosc (zmieniona recznie) zostaje.
       // v3 -> v4: lekcje przechodza z pojedynczej klasy (classId + status) na
       // rocznik (grade + progress per klasa). Lekcje tej samej tresci, ktore
       // nauczyciel wstawil osobno do klas rownoleglych, sa sklejane w jedna
@@ -397,6 +400,9 @@ export const useStore = create<AppState>()(
         }
         if (version < 4 && Array.isArray(state.lessons)) {
           state.lessons = migrateLessonsToGrades(state.lessons, state.classes ?? []) as unknown as Array<Record<string, unknown>>;
+        }
+        if (version < 5 && state.settings && state.settings.passesPerMonth === 3) {
+          state.settings = { ...state.settings, passesPerMonth: 2 };
         }
         return state as unknown as AppState;
       },

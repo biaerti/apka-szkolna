@@ -24,6 +24,27 @@ export function MoreIcon({ className }: { className?: string }) {
   );
 }
 
+/** Kolo fortuny - uruchomienie kola z pytaniami wprost z listy lekcji. */
+export function WheelIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={16}
+      height={16}
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.4}
+      strokeLinecap="round"
+    >
+      <circle cx={8} cy={8} r={6} />
+      <circle cx={8} cy={8} r={1.3} fill="currentColor" stroke="none" />
+      <path d="M8 2v3.2M8 10.8V14M2 8h3.2M10.8 8H14M3.76 3.76l2.26 2.26M9.98 9.98l2.26 2.26M12.24 3.76l-2.26 2.26M6.02 9.98l-2.26 2.26" />
+    </svg>
+  );
+}
+
 export function ChevronDownIcon({ className }: { className?: string }) {
   return (
     <svg

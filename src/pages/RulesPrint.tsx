@@ -9,17 +9,26 @@ import { useState } from 'react';
 import { RULE_SECTIONS } from '../data/zasady';
 import { Button } from '../components/ui/Button';
 import { WheelDiagram } from '../components/print/WheelDiagram';
+import { parseInline } from '../lib/markdownLite';
+
+/** Renderuje punkt zasad z obsluga **pogrubienia** (markdown-lite), bez pelnego RichText. */
+function RuleItemText({ text }: { text: string }) {
+  return (
+    <>
+      {parseInline(text).map((node, i) =>
+        node.type === 'bold' ? <strong key={i}>{node.text}</strong> : <span key={i}>{node.text}</span>,
+      )}
+    </>
+  );
+}
 
 /** Komplet zasad na jedna polowke kartki - uzywany dwukrotnie (do przeciecia). */
 function RuleSheet() {
   return (
     <div className="flex h-full flex-col">
-      <header className="mb-1 flex items-baseline justify-between border-b border-gray-900 pb-1">
-        <div>
-          <h1 className="text-[15px] font-bold leading-tight">Zasady naszych lekcji</h1>
-          <p className="text-[9px] text-gray-600">Język polski</p>
-        </div>
-        <p className="text-[9px] text-gray-500">Imię i nazwisko: ________________________</p>
+      <header className="mb-1 border-b border-gray-900 pb-1">
+        <h1 className="text-[15px] font-bold leading-tight">Zasady naszych lekcji</h1>
+        <p className="text-[9px] text-gray-600">Język polski</p>
       </header>
 
       <div className="columns-3 gap-x-3">
@@ -32,7 +41,9 @@ function RuleSheet() {
               {section.items.map((item) => (
                 <li key={item} className="flex gap-1 text-[11px] leading-[1.2] text-gray-800">
                   <span aria-hidden="true">-</span>
-                  <span>{item}</span>
+                  <span>
+                    <RuleItemText text={item} />
+                  </span>
                 </li>
               ))}
             </ul>

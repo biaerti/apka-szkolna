@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import type { Lesson, LessonProgress } from '../../data/types';
 import { Button } from '../ui/Button';
 import { Menu, type MenuItem } from '../ui/Menu';
-import { GripIcon, MoreIcon } from '../ui/icons';
+import { GripIcon, MoreIcon, WheelIcon } from '../ui/icons';
 import { TD } from '../ui/Table';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { copyToClipboard } from '../../lib/clipboard';
@@ -128,13 +128,27 @@ export function LessonRow(p: LessonRowProps) {
               dodaj pytania do koła
             </button>
           ) : (
-            <button
-              type="button"
-              onClick={() => navigate(`/pytania/${lesson.questionSetId}?lekcja=${lesson.id}`)}
-              className="shrink-0 text-accent-600 hover:underline"
-            >
-              <span className="tabular-nums">{plural(questionCount, 'pytanie', 'pytania', 'pytań')}</span> w kole
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => navigate(`/pytania/${lesson.questionSetId}?lekcja=${lesson.id}`)}
+                className="shrink-0 text-accent-600 hover:underline"
+              >
+                <span className="tabular-nums">{plural(questionCount, 'pytanie', 'pytania', 'pytań')}</span> w kole
+              </button>
+              {questionCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => navigate(`/powtorka/${classId}/${lesson.questionSetId}`)}
+                  title="Uruchom koło z tymi pytaniami"
+                  aria-label="Uruchom koło z tymi pytaniami"
+                  className="inline-flex shrink-0 items-center gap-0.5 rounded border border-accent-200 bg-accent-50 px-1.5 py-0.5 text-accent-700 hover:bg-accent-100"
+                >
+                  <WheelIcon className="shrink-0" />
+                  Koło
+                </button>
+              )}
+            </>
           )}
           <span aria-hidden="true">·</span>
           <span className="min-w-0 flex-1 truncate" title={registerTopic}>

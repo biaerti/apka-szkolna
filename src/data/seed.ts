@@ -54,7 +54,7 @@ export function buildSeedData(): SeedData {
   }));
 
   const settings: Settings = {
-    passesPerMonth: 3,
+    passesPerMonth: 2,
     hintGivesMinus: true,
     wheelSpinSec: 4,
     plusesForFive: 3,

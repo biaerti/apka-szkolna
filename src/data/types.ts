@@ -218,7 +218,7 @@ export type Slide =
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
   // zeruja sie 1. dnia miesiaca. Jeden rytm, zeby nie trzeba bylo pamietac dwoch.
-  passesPerMonth: number; // domyslnie 3
+  passesPerMonth: number; // domyslnie 2
   hintGivesMinus: boolean; // podpowiadanie = plomba dla podpowiadajacego; domyslnie true
   wheelSpinSec: number; // domyslnie 4
   plusesForFive: number; // ile plusow zamienia sie na piatke; domyslnie 3
