@@ -64,51 +64,52 @@ Wniosek: sześć lekcji dobrze domyka **kształcenie językowe i ortografię**
 | P.1.c | **słucha tekstów czytanych i wypowiada się na ich temat** | jest tylko w Z1 lekcji 6 - warto powtórzyć w kilku |
 | P.3.i | **czyta samodzielnie wybraną książkę** | osobny wątek, nie mieści się w powtórce |
 
-## Plan: lekcje 7-12
+## Lekcje 7-12 (zrobione)
 
-Sześć lekcji domyka to, czego brakuje. Kolejność wynika z trudności, a nie z
-kolejności w podstawie: najpierw praca z tekstem, potem tworzenie tekstu, na
-końcu drobiazgi zapisu.
+Sześć lekcji domykających powyższe braki jest już w `recap13.ts`. Kolejność
+wynika z trudności, a nie z kolejności w podstawie: najpierw praca z tekstem,
+potem tworzenie tekstu, na końcu drobiazgi zapisu.
 
-**7. Bohater: jaki jest i co czuję, gdy o nim czytam** - `P.3.d`, `P.2.d`
-Cechy bohatera i ocena z uzasadnieniem ("uważam, że... bo w tekście..."),
-nastrój utworu, nadawanie tytułu fragmentowi.
-Ilustracje: `bohaterowie` (jest), `swiatPrzedstawiony` (jest), nowa: cechy
-bohatera jako lista przymiotników przy postaci.
+**7. Bohater i nastrój utworu** - `P.3.d`, `P.2.d`
+Świat przedstawiony, cechy bohatera i ocena z uzasadnieniem ("uważam, że...,
+bo w tekście..."), nastrój utworu, nadawanie tytułu.
+Ilustracje: `swiatPrzedstawiony`, `cechyBohatera`, `nastroj`, `tematTekstu`.
 
 **8. Opowiadanie od początku do końca** - `P.4.a`, `P.3.f`
-Opowiadanie na 6-10 zdań, dalsze losy bohatera, dopisywanie początku albo
-zakończenia do ilustracji.
-Ilustracje: `opowiadanie` (jest), `kolejnoscZdarzen` (jest).
+Trzy części, słowa porządkujące, opowiadanie na 6-10 zdań, dalsze losy
+bohatera, dopisywanie zakończenia.
+Ilustracje: `opowiadanie`, `kolejnoscZdarzen`, `swiatPrzedstawiony`.
 
 **9. List, ogłoszenie i przeproszenie** - `P.4.a`
-Trzy formy użytkowe, których nie ma nigdzie indziej; adres nadawcy i odbiorcy
-na kopercie.
-Ilustracje: `list` (jest), `ogloszenie` (jest), nowa: koperta z adresami.
+Cztery elementy listu, adres nadawcy i odbiorcy na kopercie, ogłoszenie na
+trzy pytania, przeprosiny na trzy części.
+Ilustracje: `list`, `koperta`, `ogloszenie`, `przeproszenie`.
 
 **10. Wyrazy, które znaczą więcej** - `P.5.e`
-Związki frazeologiczne (rozumiane przenośnie, nie dosłownie) i wyrazy
-wieloznaczne (znaczenie rozstrzyga zdanie).
-Ilustracje: `frazeologizm` (jest), `wieloznaczne` (jest).
+Wyrazy wieloznaczne, związki frazeologiczne, zdrobnienia i zgrubienia.
+Ilustracje: `wieloznaczne`, `frazeologizm`, `zdrobnienieZgrubienie`.
 
-**11. Zdanie da się przerobić** - `P.5.c`, `P.5.f`
-Oznajmujące ↔ pytające, pojedyncze → złożone, równoważnik zdania,
-wykrzyknienie.
-Ilustracje: `rodzajeZdan` (jest), `zdanieZlozone` (jest), nowa: to samo zdanie
-w czterech postaciach.
+**11. Przerabiamy zdania** - `P.5.c`, `P.5.f`
+Oznajmujące, pytające i wykrzyknienie; równoważnik zdania; zdanie pojedyncze
+i złożone.
+Ilustracje: `przeksztalcanieZdan`, `zdanieZlozone`.
 
-**12. Piszę czysto i sprawdzam po sobie** - `P.4.b`, `P.4.c`, `P.4.d`, `P.4.e`
-Skróty, liczebniki zapisane słownie, wielka litera w tytułach utworów i
-książek, na koniec sprawdzanie i poprawianie własnego tekstu.
-Ilustracje: `skroty` (jest), `nazwyWlasne` (jest), `zeszyt` (jest).
+**12. Skróty, liczebniki i sprawdzanie po sobie** - `P.4.b`-`P.4.e`
+Kropka w skrócie, liczebniki zapisane słowami, wielka litera w tytułach,
+poprawianie własnego tekstu.
+Ilustracje: `skroty`, `liczebnikSlownie`, `nazwyWlasne`, `zeszyt`.
 
-## Ile z tego to nowa robota
+## Co zostało
 
-Z jedenastu ilustracji potrzebnych do lekcji 7-12 osiem już istnieje w
-`src/components/slides/art` (powstały do powtórki klasy 4 i dają się użyć bez
-zmian). Do zrobienia są trzy nowe: cechy bohatera, koperta z adresami,
-przekształcenia zdania.
+Braki mniejsze z tabeli powyżej - recytacja i wygłaszanie z pamięci, intonacja
+i siła głosu, ustne sprawozdanie, samodzielna lektura. Nie mieszczą się
+w rytmie "reguła - zadanie do zeszytu - koło" i nie da się ich sprawdzić kołem
+fortuny, więc są raczej na osobny typ lekcji niż na kolejną powtórkę.
 
-Każda lekcja to, jak dotychczas, około 12 slajdów (reguła z ilustracją +
-zadanie z tą samą ilustracją), jedna notatka na trzy punkty i jeden zestaw
-pytań do koła.
+## Zasada, która wyszła przy pisaniu lekcji 7-12
+
+Każde zadanie ma tę samą ilustrację, co reguła tuż przed nim - dziecko pisze
+w zeszycie i ma wzór przed oczami. **Ale wyrazy w zadaniu muszą być inne niż
+te na ilustracji.** Inaczej obrazek przestaje być wzorem, a staje się kluczem
+odpowiedzi (zadanie "zapisz słowami 600" obok obrazka z napisem
+"600 = sześćset").
