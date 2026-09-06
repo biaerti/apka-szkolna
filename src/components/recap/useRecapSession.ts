@@ -29,6 +29,11 @@ export interface UseRecapSessionArgs {
   initialRandomOrder?: boolean;
   /** Tryb rundy - decyduje o zasadach oceniania (patrz src/lib/recap.ts). Domyslnie 'po-lekcji'. */
   recapMode?: RecapMode;
+  /**
+   * Czy wylosowanie ucznia zmienia od razu pytanie (przy losowych pytaniach).
+   * Domyslnie true; lekcja zapoznawcza daje false - patrz useRecapDraw.
+   */
+  advanceQuestionOnPick?: boolean;
 }
 
 export function useRecapSession({
@@ -39,6 +44,7 @@ export function useRecapSession({
   initialGrading = true,
   initialRandomOrder = false,
   recapMode = 'po-lekcji',
+  advanceQuestionOnPick = true,
 }: UseRecapSessionArgs) {
   const students = useStore((s) => s.students);
   const questions = useStore((s) => s.questions);
@@ -84,6 +90,7 @@ export function useRecapSession({
     currentQuestionId: questionOrder.currentQuestion?.id,
     randomOrder: questionOrder.randomOrder,
     advanceRandomQuestion: questionOrder.advanceRandomQuestion,
+    advanceQuestionOnPick,
     recapEvents,
     settings,
     initialPickMode,

@@ -114,6 +114,10 @@ export function RecapSession({
     initialGrading: resolvedGrading,
     initialRandomOrder: resolvedRandomOrder,
     recapMode: resolvedRecapMode,
+    // Lekcja zapoznawcza: po zakreceniu kolem pytanie ZOSTAJE takie samo -
+    // zmienia je dopiero nauczyciel ("nastepne pytanie" / N). W zwyklych
+    // rundach z losowymi pytaniami kazdy nowy uczen dostaje nowe pytanie.
+    advanceQuestionOnPick: !isIntroTopic,
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hintOpen, setHintOpen] = useState(false);

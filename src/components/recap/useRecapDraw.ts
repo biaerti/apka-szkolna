@@ -58,6 +58,14 @@ export interface UseRecapDrawArgs {
   currentQuestionId: string | undefined;
   randomOrder: boolean;
   advanceRandomQuestion: () => void;
+  /**
+   * Czy wylosowanie ucznia ma od razu przerzucic na kolejne pytanie. Domyslnie
+   * true (tak dziala zwykla runda z losowymi pytaniami). Lekcja zapoznawcza
+   * ustawia false: pytanie zostaje na ekranie po zakreceniu kolem, a zmienia
+   * sie dopiero po "nastepne pytanie" (N) - inaczej dzieci nie zdazyly nawet
+   * przeczytac pytania, ktore widzialy przed losowaniem.
+   */
+  advanceQuestionOnPick?: boolean;
   recapEvents: RecapEvent[];
   settings: Settings;
   initialPickMode: PickMode;
@@ -83,6 +91,7 @@ export function useRecapDraw({
   currentQuestionId,
   randomOrder,
   advanceRandomQuestion,
+  advanceQuestionOnPick = true,
   recapEvents,
   settings,
   initialPickMode,
@@ -133,7 +142,7 @@ export function useRecapDraw({
   function applyPick(entry: PoolEntry) {
     setGraded(false);
     setCurrentEntry(entry);
-    if (randomOrder) advanceRandomQuestion();
+    if (randomOrder && advanceQuestionOnPick) advanceRandomQuestion();
   }
 
   // Zawsze najswiezsza wersja applyPick - handleSpinEnd trafia do <Wheel> raz,
