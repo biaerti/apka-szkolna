@@ -12,6 +12,20 @@ import { newId } from './id';
 import { RULE_SECTIONS, type RuleSection } from './zasady';
 import type { Lesson, Question, QuestionSet, Slide, SlideArt } from './types';
 
+/**
+ * Topic zestawu pytan lekcji zapoznawczej - po nim modul powtorki poznaje, ze
+ * to ta lekcja (RecapSession: tryb po kolei, pytania losowe, bez ocen).
+ */
+export const INTRO_SET_TOPIC = 'Lekcja zapoznawcza';
+
+/**
+ * Glowne polecenie na ekranie kola w tej lekcji. Dziecko ma przede wszystkim
+ * POWIEDZIEC, kim jest - wylosowane pytanie jest tylko dodatkiem, wiec na
+ * ekranie stoi mniejsze, pod poleceniem (patrz QuestionPanel `prompt`).
+ */
+export const INTRO_PROMPT = 'Przedstaw się';
+export const INTRO_PROMPT_HINT = 'imię i nazwisko, i co lubisz robić';
+
 export interface IntroBundle {
   lesson: Omit<Lesson, 'id' | 'order'>;
   questionSet: QuestionSet;
@@ -114,7 +128,7 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
   const questionSet: QuestionSet = {
     id: setId,
     name: 'Poznajmy się',
-    topic: 'Lekcja zapoznawcza',
+    topic: INTRO_SET_TOPIC,
     classIds,
     createdAt: new Date().toISOString(),
   };

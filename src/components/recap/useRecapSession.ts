@@ -72,6 +72,7 @@ export function useRecapSession({
   const draw = useRecapDraw({
     classId,
     setId,
+    entries: poolState.entries,
     pool: poolState.pool,
     warningsFor,
     bumpUsedCount: poolState.bumpUsedCount,
@@ -112,6 +113,9 @@ export function useRecapSession({
     absentSet: attendance.absentSet,
     togglePresent: attendance.togglePresent,
     presentStudents: attendance.presentStudents,
+    // Sektory kola: wszyscy z rundy, razem z tymi, ktorzy juz odpowiadali.
+    entries: poolState.entries,
+    // Kandydaci do losowania: `entries` bez tych, ktorzy juz byli.
     pool: poolState.pool,
     plannedTotal: poolState.plannedTotal,
     drawsCompleted: poolState.drawsCompleted,

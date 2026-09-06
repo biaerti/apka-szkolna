@@ -9,6 +9,12 @@
 // nakladaly przy wiekszej liczbie sektorow. Wylosowany sektor jest podswietlony
 // (zolty), a sektory ucznia z podwojnym wejsciem sa bursztynowe, zeby dzieci
 // widzialy, ze ktos jest na kole dwa razy.
+//
+// Kto juz odpowiadal (`entry.done`), NIE znika z kola - jego sektor robi sie
+// czerwony, a nazwisko przekreslone. Dzieci maja widziec, ze ta osoba jest juz
+// z glowy i wiecej jej nie wylosujemy (bez powtorek), zamiast zgadywac, czemu
+// kolo z lekcji na lekcje sie kurczy. Losowanie omija te sektory - patrz
+// drawableEntries w src/lib/recap.ts.
 
 import { useEffect, useRef } from 'react';
 import type { PoolEntry } from '../../lib/recap';
@@ -27,6 +33,9 @@ export interface WheelProps {
 
 const COLORS = ['#4f46e5', '#818cf8', '#312e81', '#6366f1'];
 const DOUBLE_COLORS = ['#b45309', '#d97706'];
+// "Juz byl/a" - czerwien, ktora z konca sali czyta sie jednoznacznie.
+const DONE_COLORS = ['#7f1d1d', '#991b1b'];
+const DONE_TEXT = '#fca5a5';
 
 function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
@@ -109,7 +118,10 @@ export function Wheel({
       const isHighlighted = !spinning && i === highlightIdx;
       const entry = entries[i];
       const isDouble = (countByStudent.get(entry.student.id) ?? 0) > 1;
-      const colorSet = isDouble ? DOUBLE_COLORS : COLORS;
+      // Wylosowany sektor zostaje zolty tak dlugo, jak uczen jest na ekranie -
+      // dopiero przy nastepnym losowaniu robi sie czerwony jak reszta "juz byli".
+      const isDone = entry.done && !isHighlighted;
+      const colorSet = isDone ? DONE_COLORS : isDouble ? DOUBLE_COLORS : COLORS;
 
       ctx.beginPath();
       ctx.moveTo(cx, cy);
@@ -117,7 +129,7 @@ export function Wheel({
       ctx.closePath();
       ctx.fillStyle = isHighlighted ? '#facc15' : colorSet[i % colorSet.length];
       ctx.fill();
-      ctx.strokeStyle = isHighlighted ? '#fff7ed' : '#0f172a';
+      ctx.strokeStyle = isHighlighted ? '#fff7ed' : isDone ? '#450a0a' : '#0f172a';
       ctx.lineWidth = isHighlighted ? 4 : 2;
       ctx.stroke();
 
@@ -128,7 +140,7 @@ export function Wheel({
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(mid);
-      ctx.fillStyle = isHighlighted ? '#1f2937' : '#ffffff';
+      ctx.fillStyle = isHighlighted ? '#1f2937' : isDone ? DONE_TEXT : '#ffffff';
       ctx.font = `bold ${fontSize}px sans-serif`;
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
@@ -141,6 +153,16 @@ export function Wheel({
         label = `${student.firstName} ${student.lastName.charAt(0)}.`;
       }
       ctx.fillText(label, radius * 0.92, 0);
+      // Przekreslenie - sam kolor to za malo, gdy sala patrzy pod katem.
+      if (isDone) {
+        const labelWidth = ctx.measureText(label).width;
+        ctx.strokeStyle = DONE_TEXT;
+        ctx.lineWidth = Math.max(1.5, fontSize / 12);
+        ctx.beginPath();
+        ctx.moveTo(radius * 0.92 - labelWidth, 0);
+        ctx.lineTo(radius * 0.92, 0);
+        ctx.stroke();
+      }
       ctx.restore();
     }
 

@@ -1,6 +1,10 @@
 // Lewa kolumna ekranu powtorki: kolo fortuny albo lista "po kolei" + przycisk
 // losowania. Wydzielone z RecapSession.tsx, zeby komponent zmiescil sie w
 // limicie 250 linii. Sam pilnuje rozmiaru kola (ResizeObserver na kontenerze).
+//
+// Kolo jest na ekranie do konca rundy - takze wtedy, gdy wszyscy juz
+// odpowiadali (wszystkie sektory na czerwono). Wtedy zmienia sie tylko przycisk
+// pod kolem: zamiast "Krec" pojawia sie "zacznij nowa runde".
 
 import { useEffect, useRef, useState } from 'react';
 import { SequentialPicker } from './SequentialPicker';
@@ -33,24 +37,16 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
     return () => observer.disconnect();
   }, []);
 
+  // Runda skonczona: nikogo juz nie da sie wylosowac i nikt nie czeka na ocene.
+  const roundOver = session.pool.length === 0 && (!session.currentStudent || session.graded);
+
   return (
     <div
       className="flex min-h-0 flex-col items-center justify-center gap-2 border-r border-gray-800 px-2 py-2"
       style={{ width: '50%' }}
     >
       <div ref={wheelAreaRef} className="flex min-h-0 w-full flex-1 items-center justify-center">
-        {session.pool.length === 0 && !session.currentStudent ? (
-          <div className="flex flex-col items-center gap-4">
-            <p className="text-xl text-gray-300">Wszyscy obecni uczniowie już odpowiadali.</p>
-            <button
-              type="button"
-              onClick={session.startNewRound}
-              className="rounded-md bg-accent-600 px-5 py-2.5 text-lg font-medium hover:bg-accent-700"
-            >
-              zacznij nową rundę
-            </button>
-          </div>
-        ) : session.pickMode === 'sequential' ? (
+        {session.pickMode === 'sequential' ? (
           <SequentialPicker
             students={session.presentStudents}
             usedCount={session.usedCount}
@@ -60,9 +56,9 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
           />
         ) : (
           <Wheel
-            /* Migawka puli z momentu losowania (displayPool), a nie zywa pula -
-               inaczej wylosowany sektor gasnie natychmiast po wpisaniu oceny. */
-            entries={session.displayPool}
+            /* Wszystkie wpisy rundy, nie sama pula losowania - kto juz
+               odpowiadal, zostaje na kole na czerwono. */
+            entries={session.entries}
             spinning={session.spinning}
             targetAngle={session.wheelTarget}
             spinToken={session.spinToken}
@@ -74,14 +70,27 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={session.pickNext}
-        disabled={!session.canSpin}
-        className="shrink-0 rounded-lg bg-accent-600 px-8 py-2.5 text-xl font-semibold hover:bg-accent-700 disabled:opacity-40"
-      >
-        {session.pickMode === 'sequential' ? 'Następny uczeń (Spacja)' : 'Kręć (Spacja)'}
-      </button>
+      {roundOver ? (
+        <div className="flex shrink-0 flex-col items-center gap-1">
+          <p className="text-base text-gray-400">Wszyscy obecni uczniowie już odpowiadali.</p>
+          <button
+            type="button"
+            onClick={session.startNewRound}
+            className="rounded-lg bg-accent-600 px-8 py-2.5 text-xl font-semibold hover:bg-accent-700"
+          >
+            zacznij nową rundę
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={session.pickNext}
+          disabled={!session.canSpin}
+          className="shrink-0 rounded-lg bg-accent-600 px-8 py-2.5 text-xl font-semibold hover:bg-accent-700 disabled:opacity-40"
+        >
+          {session.pickMode === 'sequential' ? 'Następny uczeń (Spacja)' : 'Kręć (Spacja)'}
+        </button>
+      )}
     </div>
   );
 }

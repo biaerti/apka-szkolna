@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../../data/store';
+import { INTRO_PROMPT, INTRO_PROMPT_HINT, INTRO_SET_TOPIC } from '../../data/intro';
 import { answersByQuestion } from '../../lib/recap';
 import { StudentPicker } from './StudentPicker';
 import { QuestionPicker } from './QuestionPicker';
@@ -71,7 +72,7 @@ export function RecapSession({
     initialGrading !== undefined ||
     initialRandomQuestions !== undefined;
 
-  const isIntroLesson = questionSet?.topic === 'Lekcja zapoznawcza';
+  const isIntroLesson = questionSet?.topic === INTRO_SET_TOPIC;
   const introDefaultPick: PickMode = 'sequential';
 
   const resolvedPickMode: PickMode =
@@ -167,6 +168,10 @@ export function RecapSession({
             session={session}
             onOpenHint={() => setHintOpen(true)}
             onOpenUwaga={() => setUwagaOpen(true)}
+            /* Lekcja zapoznawcza: na ekranie rzadzi "Przedstaw sie", a wylosowane
+               pytanie jest dodatkiem. */
+            prompt={isIntroLesson ? INTRO_PROMPT : null}
+            promptHint={isIntroLesson ? INTRO_PROMPT_HINT : null}
           />
         </div>
 

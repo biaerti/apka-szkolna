@@ -38,6 +38,9 @@ interface LastAction {
 export interface UseRecapDrawArgs {
   classId: string;
   setId: string;
+  /** Wszystkie wpisy rundy - rowniez te, ktore juz odpowiadaly. To one sa sektorami kola. */
+  entries: PoolEntry[];
+  /** Wpisy, ktore jeszcze moga byc wylosowane (entries bez `done`). */
   pool: PoolEntry[];
   warningsFor: (studentId: string) => number;
   bumpUsedCount: (studentId: string) => void;
@@ -55,6 +58,7 @@ export interface UseRecapDrawArgs {
 export function useRecapDraw({
   classId,
   setId,
+  entries,
   pool,
   warningsFor,
   bumpUsedCount,
@@ -80,20 +84,10 @@ export function useRecapDraw({
   const [pickMode, setPickMode] = useState<PickMode>(initialPickMode);
   const [grading, setGrading] = useState(initialGrading);
 
-  // Migawka puli z ostatniego losowania. Kolo/lista maja pokazywac wylosowana
-  // osobe wyraznie az do KOLEJNEGO losowania - ale po ocenie uczen znika z
-  // zywej puli `pool` (juz odpowiadal), wiec bez tej migawki sektor na kole
-  // gaslby natychmiast po kliknieciu oceny. Aktualizuje sie tylko, gdy nikt
-  // aktualnie nie jest wylosowany, czyli dokladnie w momencie nowego losowania.
-  const [displayPool, setDisplayPool] = useState<PoolEntry[]>(pool);
   // Wpis wylosowany, ale jeszcze nie ujawniony - kolo dopiero sie kreci.
   // Nazwisko ma sie pokazac DOPIERO, gdy kolo stanie (patrz handleSpinEnd),
   // inaczej dzieci czytaja wynik, zanim wskaznik dojedzie do sektora.
   const pendingEntryRef = useRef<PoolEntry | null>(null);
-  useEffect(() => {
-    if (!currentEntry) setDisplayPool(pool);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, currentEntry]);
 
   const now = new Date();
   const currentStudent: Student | null = currentEntry?.student ?? null;
@@ -120,9 +114,14 @@ export function useRecapDraw({
 
   function spin() {
     if (!canSpin) return;
-    const idx = Math.min(pool.length - 1, Math.floor(Math.random() * pool.length));
-    const entry = pool[idx];
-    const angle = wheelTargetAngle(idx, pool.length, 5, Math.random);
+    // Losujemy sposrod wpisow, ktore jeszcze nie odpowiadaly (`pool`), ale kat
+    // liczymy wzgledem PELNEJ listy sektorow (`entries`) - na kole zostaja tez
+    // ci, ktorzy juz byli (na czerwono), wiec indeks z puli nie jest indeksem
+    // sektora.
+    const poolIdx = Math.min(pool.length - 1, Math.floor(Math.random() * pool.length));
+    const entry = pool[poolIdx];
+    const sectorIdx = entries.findIndex((en) => en.key === entry.key);
+    const angle = wheelTargetAngle(Math.max(0, sectorIdx), entries.length, 5, Math.random);
     pendingEntryRef.current = entry;
     setSpinning(true);
     setWheelTarget(angle);
@@ -239,7 +238,6 @@ export function useRecapDraw({
   return {
     currentEntry,
     currentStudent,
-    displayPool,
     graded,
     spinning,
     wheelTarget,

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { RecapEvent, Settings, Student } from '../data/types';
 import {
   answersByQuestion,
-  buildPool,
+  buildRoundEntries,
+  drawableEntries,
   canEarnPlus,
   canPass,
   earnedFive,
@@ -183,56 +184,78 @@ describe('canEarnPlus', () => {
   });
 });
 
-describe('buildPool', () => {
+describe('buildRoundEntries', () => {
   const s1 = stu({ id: 's1', number: 1 });
   const s2 = stu({ id: 's2', number: 2 });
   const s3 = stu({ id: 's3', number: 3 });
 
   it('jedno wejscie na ucznia bez uwag i bez wczesniejszych odpowiedzi', () => {
-    const pool = buildPool({
+    const entries = buildRoundEntries({
       students: [s1, s2, s3],
       warningsFor: () => 0,
       usedFor: () => 0,
     });
-    expect(pool).toHaveLength(3);
-    expect(pool.map((p) => p.key)).toEqual(['s1#0', 's2#0', 's3#0']);
+    expect(entries).toHaveLength(3);
+    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's3#0']);
+    expect(entries.every((e) => !e.done)).toBe(true);
   });
 
   it('uczen z 3 uwagami dostaje dwa wejscia', () => {
     const warnings = new Map([['s2', 3]]);
-    const pool = buildPool({
+    const entries = buildRoundEntries({
       students: [s1, s2, s3],
       warningsFor: (id) => warnings.get(id) ?? 0,
       usedFor: () => 0,
     });
-    expect(pool.filter((p) => p.student.id === 's2')).toHaveLength(2);
-    expect(pool.filter((p) => p.student.id === 's1')).toHaveLength(1);
-    expect(pool.map((p) => p.key)).toEqual(['s1#0', 's2#0', 's2#1', 's3#0']);
+    expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(2);
+    expect(entries.filter((e) => e.student.id === 's1')).toHaveLength(1);
+    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's2#1', 's3#0']);
   });
 
-  it('pomija wejscia juz wykorzystane w rundzie', () => {
+  it('wykorzystane wejscia zostaja na kole, ale sa oznaczone jako done', () => {
     const warnings = new Map([['s2', 3]]);
     const used = new Map([
       ['s1', 1], // wykorzystane w calosci
       ['s2', 1], // z dwoch wejsc zostalo jedno
     ]);
-    const pool = buildPool({
+    const entries = buildRoundEntries({
       students: [s1, s2, s3],
       warningsFor: (id) => warnings.get(id) ?? 0,
       usedFor: (id) => used.get(id) ?? 0,
     });
-    expect(pool.map((p) => p.key)).toEqual(['s2#0', 's3#0']);
+    expect(entries.map((e) => [e.key, e.done])).toEqual([
+      ['s1#0', true],
+      ['s2#0', true],
+      ['s2#1', false],
+      ['s3#0', false],
+    ]);
   });
 
-  it('allowRepeats ignoruje juz wykorzystane wejscia', () => {
+  it('allowRepeats zdejmuje oznaczenie done ze wszystkich wejsc', () => {
     const used = new Map([['s1', 1]]);
-    const pool = buildPool({
+    const entries = buildRoundEntries({
       students: [s1, s2],
       warningsFor: () => 0,
       usedFor: (id) => used.get(id) ?? 0,
       allowRepeats: true,
     });
-    expect(pool.map((p) => p.student.id)).toEqual(['s1', 's2']);
+    expect(entries.map((e) => e.student.id)).toEqual(['s1', 's2']);
+    expect(entries.every((e) => !e.done)).toBe(true);
+  });
+});
+
+describe('drawableEntries', () => {
+  const s1 = stu({ id: 's1', number: 1 });
+  const s2 = stu({ id: 's2', number: 2 });
+
+  it('losowanie omija wejscia oznaczone jako done', () => {
+    const used = new Map([['s1', 1]]);
+    const entries = buildRoundEntries({
+      students: [s1, s2],
+      warningsFor: () => 0,
+      usedFor: (id) => used.get(id) ?? 0,
+    });
+    expect(drawableEntries(entries).map((e) => e.key)).toEqual(['s2#0']);
   });
 });
 

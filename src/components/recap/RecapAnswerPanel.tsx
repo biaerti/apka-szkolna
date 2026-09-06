@@ -10,9 +10,18 @@ export interface RecapAnswerPanelProps {
   session: RecapSessionState;
   onOpenHint: () => void;
   onOpenUwaga: () => void;
+  /** Stale polecenie rundy - wazniejsze niz wylosowane pytanie (patrz QuestionPanel). */
+  prompt?: string | null;
+  promptHint?: string | null;
 }
 
-export function RecapAnswerPanel({ session, onOpenHint, onOpenUwaga }: RecapAnswerPanelProps) {
+export function RecapAnswerPanel({
+  session,
+  onOpenHint,
+  onOpenUwaga,
+  prompt,
+  promptHint,
+}: RecapAnswerPanelProps) {
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden px-4 py-2">
       {/* Kto teraz odpowiada. Samo duze nazwisko okazalo sie nieoczywiste na
@@ -39,6 +48,8 @@ export function RecapAnswerPanel({ session, onOpenHint, onOpenUwaga }: RecapAnsw
       <div className="min-h-0 flex-1 overflow-hidden">
         <QuestionPanel
           question={session.currentQuestion}
+          prompt={prompt}
+          promptHint={promptHint}
           index={session.questionIndex}
           total={session.orderedQuestions.length}
           onNext={session.nextQuestion}

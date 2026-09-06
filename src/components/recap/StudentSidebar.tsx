@@ -1,6 +1,10 @@
 // Zwijany pasek boczny: lista uczniow klasy z bilansem miesiaca oraz
 // oznaczeniem "juz byl" / "nieobecny" / eskalacji uwag. Umozliwia tez
 // odhaczenie obecnosci.
+//
+// "Juz byl/a" jest CZERWONE i przekreslone - dokladnie tak samo jak sektor na
+// kole (Wheel.tsx). Jeden kolor znaczy w calej aplikacji to samo: ta osoba
+// wypada z losowania do konca rundy.
 
 import type { RecapResult, Student } from '../../data/types';
 import type { MonthBalance } from '../../lib/recap';
@@ -97,7 +101,11 @@ export function StudentSidebar({
                   onChange={() => onTogglePresent(st.id)}
                   className="rounded border-gray-500"
                 />
-                <span className={absent ? 'text-gray-500 line-through' : ''}>
+                <span
+                  className={
+                    absent ? 'text-gray-500 line-through' : used ? 'text-red-400 line-through' : ''
+                  }
+                >
                   {st.lastName} {st.firstName}
                 </span>
               </label>
@@ -111,7 +119,7 @@ export function StudentSidebar({
                   </span>
                 )}
                 {level !== 'none' && <span className="text-amber-400">{warnLevelLabel(level)}</span>}
-                <span>{absent ? 'nieobecny/a' : used ? 'już był/a' : ''}</span>
+                {absent ? <span>nieobecny/a</span> : used ? <span className="text-red-400">już był/a</span> : null}
               </div>
             </div>
           );
