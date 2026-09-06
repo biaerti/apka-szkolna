@@ -6,6 +6,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { newId } from './id';
 import { buildSeedData } from './seed';
+import { buildSeedMeetings } from './meetings';
 import { classGrade } from '../lib/grade';
 import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
@@ -13,6 +14,7 @@ import { monthKey as recapMonthKey } from '../lib/week';
 import type {
   Lesson,
   LessonProgress,
+  Meeting,
   Question,
   QuestionSet,
   RecapEvent,
@@ -40,6 +42,7 @@ interface AppState {
   questions: Question[];
   lessons: Lesson[];
   recapEvents: RecapEvent[];
+  meetings: Meeting[];
   settings: Settings;
   insertedFingerprints: InsertedFingerprints;
 
@@ -92,11 +95,16 @@ interface AppState {
    */
   resetBalance: (classId: string, month: string, studentId?: string) => void;
 
+  // Zebrania z rodzicami
+  addMeeting: (meeting: Omit<Meeting, 'id' | 'order'>) => Meeting;
+  updateMeeting: (id: string, patch: Partial<Omit<Meeting, 'id'>>) => void;
+  removeMeeting: (id: string) => void;
+
   // Ustawienia
   updateSettings: (patch: Partial<Settings>) => void;
 
   // Reset / import calego stanu
-  replaceAll: (data: Pick<AppState, 'classes' | 'students' | 'questionSets' | 'questions' | 'lessons' | 'recapEvents' | 'settings'>) => void;
+  replaceAll: (data: Pick<AppState, 'classes' | 'students' | 'questionSets' | 'questions' | 'lessons' | 'recapEvents' | 'meetings' | 'settings'>) => void;
   resetToSeed: () => void;
 }
 
@@ -230,6 +238,7 @@ export const useStore = create<AppState>()(
       questions: [],
       lessons: [],
       recapEvents: [],
+      meetings: [],
       settings: {
         passesPerMonth: 2,
         hintGivesMinus: true,
@@ -385,6 +394,19 @@ export const useStore = create<AppState>()(
         });
       },
 
+      addMeeting: (meeting) => {
+        const order = get().meetings.reduce((max, m) => Math.max(max, m.order), -1) + 1;
+        const created: Meeting = { ...meeting, id: newId(), order };
+        set((s) => ({ meetings: [...s.meetings, created] }));
+        return created;
+      },
+      updateMeeting: (id, patch) => {
+        set((s) => ({ meetings: s.meetings.map((m) => (m.id === id ? { ...m, ...patch } : m)) }));
+      },
+      removeMeeting: (id) => {
+        set((s) => ({ meetings: s.meetings.filter((m) => m.id !== id) }));
+      },
+
       updateSettings: (patch) => {
         set((s) => ({ settings: { ...s.settings, ...patch } }));
       },
@@ -401,6 +423,7 @@ export const useStore = create<AppState>()(
           questions: seed.questions,
           lessons: [],
           recapEvents: [],
+          meetings: buildSeedMeetings(),
           settings: seed.settings,
           insertedFingerprints: {},
         }));
@@ -408,7 +431,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 7,
+      version: 8,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -430,6 +453,8 @@ export const useStore = create<AppState>()(
       // to spada na dotychczasowe zachowanie (kazda roznica = "kod nowszy").
       // v6 -> v7: dochodzi reviewQuestionCount (miekki limit pytan kola
       // powtorzeniowego) - domyslnie 7, edytowalne w Ustawieniach.
+      // v7 -> v8: dochodzi kolekcja meetings (zakladka "Zebrania"). Stare dane
+      // dostaja skrypt pierwszego zebrania z buildSeedMeetings().
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -437,6 +462,7 @@ export const useStore = create<AppState>()(
           recapEvents?: Array<{ result?: string; [key: string]: unknown }>;
           settings?: (Partial<Settings> & { passesPerWeek?: number }) | undefined;
           insertedFingerprints?: InsertedFingerprints;
+          meetings?: Array<Record<string, unknown>>;
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -479,6 +505,14 @@ export const useStore = create<AppState>()(
         }
         if (version < 7 && state.settings) {
           state.settings = { ...state.settings, reviewQuestionCount: state.settings.reviewQuestionCount ?? 7 };
+        }
+        if (version < 8) {
+          // Zakladka "Zebrania" doszla pozniej niz reszta store - istniejace dane
+          // (localStorage / chmura) nie maja jej wcale. Skrypt pierwszego zebrania
+          // wstawiamy raz, przy migracji; od tej chwili nalezy do nauczyciela.
+          if (!Array.isArray(state.meetings)) {
+            state.meetings = buildSeedMeetings() as unknown as Array<Record<string, unknown>>;
+          }
         }
         return state as unknown as AppState;
       },

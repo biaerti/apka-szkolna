@@ -278,3 +278,19 @@ export interface Settings {
    */
   reviewQuestionCount: number;
 }
+
+/**
+ * Zebranie z rodzicami. Cala tresc siedzi w jednym polu `script` (markdown-lite:
+ * naglowki "## ", punkty "- ", **pogrubienie**) - nauczyciel edytuje je jak
+ * notatke, bez rozbijania na osobne encje punktow. Kafelek na liscie pokazuje
+ * `title` + `date`/`time`, reszta jest w widoku zebrania.
+ */
+export interface Meeting {
+  id: ID;
+  title: string;
+  date: string; // YYYY-MM-DD
+  time: string; // HH:MM
+  place?: string; // np. "sala 24"
+  script: string;
+  order: number;
+}

@@ -4,14 +4,17 @@ import { isSupabaseConfigured } from '../../data/supabase';
 import { useAuth } from '../../data/auth';
 import { useSyncStatus } from '../../data/remote/sync';
 
-// Dokladnie szesc pozycji menu - nauczyciel ma nie byc "milionerem na zakladkach,
-// ktorych nie bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w
-// inne ekrany (lekcje / klasa ucznia) i nie sa juz osobnymi modulami.
+// Krotkie menu - nauczyciel ma nie byc "milionerem na zakladkach, ktorych nie
+// bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w inne ekrany
+// (lekcje / klasa ucznia) i nie sa juz osobnymi modulami. "Zebrania" to osobna
+// pozycja, bo skrypt zebrania z rodzicami nie ma sie gdzie podpiac - nie nalezy
+// ani do lekcji, ani do klasy.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
   { to: '/lekcje', label: 'Lekcje' },
   { to: '/podrecznik', label: 'Podręcznik' },
+  { to: '/zebrania', label: 'Zebrania' },
   { to: '/zasady/druk', label: 'Zasady' },
   { to: '/ustawienia', label: 'Ustawienia' },
 ];

@@ -15,6 +15,15 @@ function InlineNodes({ nodes }: { nodes: MdInline[] }) {
 }
 
 function Block({ block }: { block: MdBlock }) {
+  if (block.type === 'heading') {
+    const Tag = block.level === 2 ? 'h2' : 'h3';
+    return (
+      <Tag className={block.level === 2 ? 'font-semibold' : 'font-semibold opacity-80'}>
+        <InlineNodes nodes={block.inline} />
+      </Tag>
+    );
+  }
+
   if (block.type === 'paragraph') {
     return (
       <p>

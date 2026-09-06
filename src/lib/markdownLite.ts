@@ -1,6 +1,7 @@
-// Bardzo prosty parser markdown -> AST, uzywany przez slajdy tekstowe.
-// Wspierane skladniki: akapity, listy "- " (nieuporzadkowane) i "1. " (uporzadkowane),
-// **pogrubienie** wewnatrz tekstu. Puste linie rozdzielaja bloki.
+// Bardzo prosty parser markdown -> AST, uzywany przez slajdy tekstowe i skrypt
+// zebrania. Wspierane skladniki: naglowki "## " / "### ", akapity, listy "- "
+// (nieuporzadkowane) i "1. " (uporzadkowane), **pogrubienie** wewnatrz tekstu.
+// Puste linie rozdzielaja bloki, naglowek jest zawsze osobnym blokiem.
 // Celowo bez dangerouslySetInnerHTML - wynik renderuje komponent RichText.
 
 export interface MdTextNode {
@@ -20,14 +21,21 @@ export interface MdParagraphBlock {
   inline: MdInline[];
 }
 
+export interface MdHeadingBlock {
+  type: 'heading';
+  level: 2 | 3;
+  inline: MdInline[];
+}
+
 export interface MdListBlock {
   type: 'list';
   ordered: boolean;
   items: MdInline[][];
 }
 
-export type MdBlock = MdParagraphBlock | MdListBlock;
+export type MdBlock = MdHeadingBlock | MdParagraphBlock | MdListBlock;
 
+const HEADING_RE = /^(#{2,3})\s+(.*)$/;
 const UNORDERED_RE = /^-\s+(.*)$/;
 const ORDERED_RE = /^\d+\.\s+(.*)$/;
 
@@ -59,6 +67,16 @@ function splitIntoBlocks(input: string): string[][] {
       }
       continue;
     }
+    // Naglowek nie sklei sie z sasiednimi liniami - konczy poprzedni blok
+    // i sam jest calym blokiem, nawet bez pustej linii dookola.
+    if (HEADING_RE.test(line.trim())) {
+      if (current.length > 0) {
+        blocks.push(current);
+        current = [];
+      }
+      blocks.push([line]);
+      continue;
+    }
     current.push(line);
   }
   if (current.length > 0) blocks.push(current);
@@ -88,6 +106,16 @@ export function parseMarkdownLite(input: string): MdBlock[] {
 
   for (const blockLines of blocks) {
     const trimmedLines = blockLines.map((l) => l.trim());
+
+    const heading = trimmedLines.length === 1 ? HEADING_RE.exec(trimmedLines[0]) : null;
+    if (heading) {
+      result.push({
+        type: 'heading',
+        level: heading[1].length === 2 ? 2 : 3,
+        inline: parseInline(heading[2]),
+      });
+      continue;
+    }
 
     const caly = listBlock(trimmedLines);
     if (caly) {

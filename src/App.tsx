@@ -10,6 +10,8 @@ import { Lessons } from './pages/Lessons';
 import { LessonEditor } from './pages/LessonEditor';
 import { LessonPresent } from './pages/LessonPresent';
 import { Textbook } from './pages/Textbook';
+import { Meetings } from './pages/Meetings';
+import { MeetingDetail } from './pages/MeetingDetail';
 import { SettingsPage } from './pages/Settings';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
 import { RulesPrint } from './pages/RulesPrint';
@@ -34,6 +36,8 @@ export default function App() {
         <Route path="/lekcje" element={<Lessons />} />
         <Route path="/lekcje/:id/edytuj" element={<LessonEditor />} />
         <Route path="/podrecznik" element={<Textbook />} />
+        <Route path="/zebrania" element={<Meetings />} />
+        <Route path="/zebrania/:id" element={<MeetingDetail />} />
         <Route path="/ustawienia" element={<SettingsPage />} />
         <Route path="*" element={<ModulePlaceholder title="Nie znaleziono strony" />} />
       </Route>

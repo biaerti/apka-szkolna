@@ -3,7 +3,7 @@
 // Kolumny "updated_at" sa zarzadzane przez baze (trigger) i nie sa czescia
 // encji aplikacji, wiec nie sa tu mapowane.
 
-import type { Lesson, LessonProgress, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Slide, Student } from '../types';
+import type { Lesson, LessonProgress, Meeting, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Slide, Student } from '../types';
 
 // --- classes ---------------------------------------------------------------
 
@@ -210,6 +210,42 @@ export function rowToRecapEvent(row: RecapEventRow): RecapEvent {
     result: row.result,
     note: row.note ?? undefined,
     at: row.at,
+  };
+}
+
+// --- meetings ---------------------------------------------------------------
+
+export interface MeetingRow {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  place: string | null;
+  script: string;
+  order: number;
+}
+
+export function meetingToRow(m: Meeting): MeetingRow {
+  return {
+    id: m.id,
+    title: m.title,
+    date: m.date,
+    time: m.time,
+    place: m.place ?? null,
+    script: m.script,
+    order: m.order,
+  };
+}
+
+export function rowToMeeting(row: MeetingRow): Meeting {
+  return {
+    id: row.id,
+    title: row.title,
+    date: row.date,
+    time: row.time,
+    place: row.place ?? undefined,
+    script: row.script,
+    order: row.order,
   };
 }
 

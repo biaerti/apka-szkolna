@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { Lesson, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Student } from '../types';
+import type { Lesson, Meeting, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Student } from '../types';
 import {
+  meetingToRow,
+  rowToMeeting,
   classToRow,
   lessonToRow,
   questionSetToRow,
@@ -200,5 +202,27 @@ describe('settings round-trip', () => {
       reviewQuestionCount: 7,
     });
     expect(rowToSettings({ ...row, review_question_count: null }).reviewQuestionCount).toBe(7);
+  });
+});
+
+describe('meetings', () => {
+  const meeting: Meeting = {
+    id: 'm1',
+    title: 'Pierwsze zebranie',
+    date: '2026-09-09',
+    time: '17:30',
+    place: 'sala 24',
+    script: ['## Obiady', '', '- umowa w portierni'].join('\n'),
+    order: 0,
+  };
+
+  it('mapuje zebranie tam i z powrotem', () => {
+    expect(rowToMeeting(meetingToRow(meeting))).toEqual(meeting);
+  });
+
+  it('puste miejsce zapisuje jako NULL i wraca jako undefined', () => {
+    const row = meetingToRow({ ...meeting, place: undefined });
+    expect(row.place).toBeNull();
+    expect(rowToMeeting(row).place).toBeUndefined();
   });
 });

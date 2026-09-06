@@ -120,3 +120,40 @@ describe('parseMarkdownLite', () => {
     expect(parseMarkdownLite('   \n\n  ')).toEqual([]);
   });
 });
+
+describe('parseMarkdownLite - naglowki', () => {
+  it('rozpoznaje "## " jako naglowek poziomu 2', () => {
+    expect(parseMarkdownLite('## Obiady')).toEqual([
+      { type: 'heading', level: 2, inline: [{ type: 'text', text: 'Obiady' }] },
+    ]);
+  });
+
+  it('rozpoznaje "### " jako naglowek poziomu 3 i parsuje pogrubienie w srodku', () => {
+    expect(parseMarkdownLite('### Rada **Rodzicow**')).toEqual([
+      {
+        type: 'heading',
+        level: 3,
+        inline: [
+          { type: 'text', text: 'Rada ' },
+          { type: 'bold', text: 'Rodzicow' },
+        ],
+      },
+    ]);
+  });
+
+  it('naglowek konczy poprzedni blok i nie sklei sie z lista pod spodem bez pustej linii', () => {
+    const skrypt = ['wstep', '## Obiady', '- umowa w portierni'].join('\n');
+    expect(parseMarkdownLite(skrypt)).toEqual([
+      { type: 'paragraph', inline: [{ type: 'text', text: 'wstep' }] },
+      { type: 'heading', level: 2, inline: [{ type: 'text', text: 'Obiady' }] },
+      { type: 'list', ordered: false, items: [[{ type: 'text', text: 'umowa w portierni' }]] },
+    ]);
+  });
+
+  it('pojedynczy "#" i "####" to nie naglowki - zostaja akapitem', () => {
+    expect(parseMarkdownLite('# tytul')).toEqual([{ type: 'paragraph', inline: [{ type: 'text', text: '# tytul' }] }]);
+    expect(parseMarkdownLite('#### tytul')).toEqual([
+      { type: 'paragraph', inline: [{ type: 'text', text: '#### tytul' }] },
+    ]);
+  });
+});

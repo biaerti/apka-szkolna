@@ -10,11 +10,13 @@ import { describeSyncError, extractErrorMessage, type SyncOperation } from './er
 import {
   classToRow,
   lessonToRow,
+  meetingToRow,
   questionSetToRow,
   questionToRow,
   recapEventToRow,
   rowToClass,
   rowToLesson,
+  rowToMeeting,
   rowToQuestion,
   rowToQuestionSet,
   rowToRecapEvent,
@@ -24,13 +26,14 @@ import {
   studentToRow,
   type ClassRow,
   type LessonRow,
+  type MeetingRow,
   type QuestionRow,
   type QuestionSetRow,
   type RecapEventRow,
   type SettingsRow,
   type StudentRow,
 } from './mappers';
-import type { Lesson, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Student } from '../types';
+import type { Lesson, Meeting, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Student } from '../types';
 
 const PAGE_SIZE = 1000;
 const UPSERT_BATCH_SIZE = 500;
@@ -47,6 +50,7 @@ export interface RemoteData {
   questions: Question[];
   lessons: Lesson[];
   recapEvents: RecapEvent[];
+  meetings: Meeting[];
   settings: Settings;
 }
 
@@ -78,7 +82,7 @@ async function fetchAllRows<T>(table: string): Promise<T[]> {
 }
 
 export async function loadAllFromRemote(): Promise<RemoteData> {
-  const [classRows, studentRows, questionSetRows, questionRows, lessonRows, recapEventRows, settingsRows] =
+  const [classRows, studentRows, questionSetRows, questionRows, lessonRows, recapEventRows, meetingRows, settingsRows] =
     await Promise.all([
       fetchAllRows<ClassRow>('classes'),
       fetchAllRows<StudentRow>('students'),
@@ -86,6 +90,7 @@ export async function loadAllFromRemote(): Promise<RemoteData> {
       fetchAllRows<QuestionRow>('questions'),
       fetchAllRows<LessonRow>('lessons'),
       fetchAllRows<RecapEventRow>('recap_events'),
+      fetchAllRows<MeetingRow>('meetings'),
       fetchAllRows<SettingsRow>('settings'),
     ]);
 
@@ -96,6 +101,7 @@ export async function loadAllFromRemote(): Promise<RemoteData> {
     questions: questionRows.map(rowToQuestion),
     lessons: lessonRows.map(rowToLesson),
     recapEvents: recapEventRows.map(rowToRecapEvent),
+    meetings: meetingRows.map(rowToMeeting),
     settings: settingsRows[0] ? rowToSettings(settingsRows[0]) : DEFAULT_SETTINGS,
   };
 }
@@ -122,7 +128,15 @@ function setStatus(patch: Partial<SyncStatusState>): void {
 
 // --- konfiguracja kolekcji (kolejnosc zaleznosci) ---------------------------
 
-type CollectionName = 'classes' | 'questionSets' | 'students' | 'questions' | 'lessons' | 'recapEvents' | 'settings';
+type CollectionName =
+  | 'classes'
+  | 'questionSets'
+  | 'students'
+  | 'questions'
+  | 'lessons'
+  | 'recapEvents'
+  | 'meetings'
+  | 'settings';
 
 // Kolejnosc dla upsertow - rodzice przed dziecmi (zgodnie z FK w 0001_init.sql).
 const UPSERT_ORDER: CollectionName[] = [
@@ -132,6 +146,7 @@ const UPSERT_ORDER: CollectionName[] = [
   'questions',
   'lessons',
   'recapEvents',
+  'meetings',
   'settings',
 ];
 const DELETE_ORDER: CollectionName[] = [...UPSERT_ORDER].reverse();
@@ -143,6 +158,7 @@ const TABLE_NAMES: Record<CollectionName, string> = {
   questions: 'questions',
   lessons: 'lessons',
   recapEvents: 'recap_events',
+  meetings: 'meetings',
   settings: 'settings',
 };
 
@@ -153,6 +169,7 @@ interface StoreSlice {
   questions: Question[];
   lessons: Lesson[];
   recapEvents: RecapEvent[];
+  meetings: Meeting[];
   settings: Settings;
 }
 
@@ -170,6 +187,8 @@ function rowsFor(collection: CollectionName, state: StoreSlice): Array<{ id: str
       return state.lessons.map(lessonToRow);
     case 'recapEvents':
       return state.recapEvents.map(recapEventToRow);
+    case 'meetings':
+      return state.meetings.map(meetingToRow);
     case 'settings':
       return [settingsToRow(state.settings)];
   }
@@ -183,6 +202,7 @@ function emptySnapshots(): Record<CollectionName, Snapshot> {
     questions: new Map(),
     lessons: new Map(),
     recapEvents: new Map(),
+    meetings: new Map(),
     settings: new Map(),
   };
 }
