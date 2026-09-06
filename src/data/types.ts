@@ -180,6 +180,12 @@ export type SlideArt =
   | 'kolejnoscZdarzen' // najpierw - potem - nagle - na koniec
   | 'tematTekstu' // o czym jest tekst + szukanie informacji lupa
   | 'bohaterowie' // bohater glowny w kazdej scenie, drugoplanowy tylko w niektorych
+  | 'cechyBohatera' // przymiotniki opisujace bohatera + uzasadnienie z tekstu
+  | 'nastroj' // wesoly, smutny, straszny - po slowach w tekscie
+  | 'koperta' // adres nadawcy i odbiorcy na kopercie
+  | 'przeproszenie' // za co, ze przykro, co zrobie inaczej
+  | 'przeksztalcanieZdan' // to samo zdanie: oznajmujace, pytajace, wykrzyknienie, rownowaznik
+  | 'liczebnikSlownie' // 600 = szescset, 400 = czterysta
   // Ilustracje przedmiotowe do powtorki klasy 4 (src/data/recap4.ts).
   | 'przypadki' // 7 przypadkow z pytaniami
   | 'czasownikOdmiana' // osoba, liczba, czas

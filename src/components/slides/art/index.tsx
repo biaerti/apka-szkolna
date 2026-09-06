@@ -44,6 +44,12 @@ import { Zyczenia } from './Zyczenia';
 import { KolejnoscZdarzen } from './KolejnoscZdarzen';
 import { TematTekstu } from './TematTekstu';
 import { Bohaterowie } from './Bohaterowie';
+import { CechyBohatera } from './CechyBohatera';
+import { Nastroj } from './Nastroj';
+import { Koperta } from './Koperta';
+import { Przeproszenie } from './Przeproszenie';
+import { PrzeksztalcanieZdan } from './PrzeksztalcanieZdan';
+import { LiczebnikSlownie } from './LiczebnikSlownie';
 import { Przypadki } from './Przypadki';
 import { CzasownikOdmiana } from './CzasownikOdmiana';
 import { Stopniowanie } from './Stopniowanie';
@@ -110,6 +116,12 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   kolejnoscZdarzen: KolejnoscZdarzen,
   tematTekstu: TematTekstu,
   bohaterowie: Bohaterowie,
+  cechyBohatera: CechyBohatera,
+  nastroj: Nastroj,
+  koperta: Koperta,
+  przeproszenie: Przeproszenie,
+  przeksztalcanieZdan: PrzeksztalcanieZdan,
+  liczebnikSlownie: LiczebnikSlownie,
   // Ilustracje przedmiotowe do powtorki klasy 4.
   przypadki: Przypadki,
   czasownikOdmiana: CzasownikOdmiana,

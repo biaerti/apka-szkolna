@@ -79,10 +79,10 @@ describe('buildRecap4', () => {
 });
 
 describe('buildRecap13', () => {
-  it('tworzy szesc lekcji i szesc zestawow pytan (jeden zestaw na lekcje - bez osobnych zestawow powtorkowych)', () => {
+  it('tworzy dwanascie lekcji i dwanascie zestawow pytan (jeden zestaw na lekcje - bez osobnych zestawow powtorkowych)', () => {
     const bundle = buildRecap13('IV', [CLASS_ID]);
-    expect(bundle.lessons).toHaveLength(6);
-    expect(bundle.questionSets).toHaveLength(6);
+    expect(bundle.lessons).toHaveLength(12);
+    expect(bundle.questionSets).toHaveLength(12);
     for (const lesson of bundle.lessons) {
       expect(lesson.dzial).toBe('Powtórka 1-3');
       expect(lesson.reviewQuestionSetId).toBe(lesson.questionSetId);

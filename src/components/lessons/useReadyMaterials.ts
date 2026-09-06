@@ -56,7 +56,7 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
     key: 'recap13',
     label: 'Powtórka klas 1-3',
     description:
-      'Doda 6 lekcji-prezentacji (fonetyka i ortografia, gramatyka i interpunkcja, formy wypowiedzi, alfabet i słownictwo, zmiękczenia i interpunkcja, czytanie ze zrozumieniem) i 6 zestawów pytań do koła fortuny.',
+      'Doda 12 lekcji-prezentacji (fonetyka i ortografia, gramatyka i interpunkcja, formy wypowiedzi, alfabet i słownictwo, zmiękczenia i interpunkcja, czytanie ze zrozumieniem, bohater i nastrój, opowiadanie, list i ogłoszenie, frazeologizmy, przekształcanie zdań, skróty i poprawianie tekstu) i 12 zestawów pytań do koła fortuny.',
     build: buildRecap13,
   },
   {
