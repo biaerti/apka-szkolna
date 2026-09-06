@@ -10,18 +10,20 @@
 
 import { useMemo } from 'react';
 import { useStore } from '../../data/store';
-import type { Lesson } from '../../data/types';
+import type { Lesson, Question, QuestionSet } from '../../data/types';
 import { buildRecap13 } from '../../data/recap13';
 import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson } from '../../data/intro';
 import {
+  classifyMatch,
   isMatchStale,
+  lessonFingerprint,
   lessonQuestionSetId,
   matchLessonsForRefresh,
   remapRecapSlides,
   titleMatchKey,
+  type ClassifiedRefreshMatch,
   type FreshMaterialsBundle,
-  type RefreshMatch,
 } from './refreshMaterials';
 
 interface MaterialDefinition {
@@ -84,6 +86,7 @@ export interface ReadyMaterial {
 export function useReadyMaterials(grade: string, classIds: string[], gradeLessons: Lesson[]) {
   const questionSets = useStore((s) => s.questionSets);
   const questions = useStore((s) => s.questions);
+  const insertedFingerprints = useStore((s) => s.insertedFingerprints);
   const addLesson = useStore((s) => s.addLesson);
   const updateLesson = useStore((s) => s.updateLesson);
   const addQuestionSet = useStore((s) => s.addQuestionSet);
@@ -91,6 +94,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
   const addQuestion = useStore((s) => s.addQuestion);
   const updateQuestion = useStore((s) => s.updateQuestion);
   const removeQuestion = useStore((s) => s.removeQuestion);
+  const setInsertedFingerprint = useStore((s) => s.setInsertedFingerprint);
 
   // Paczka danych z kodu per material. buildIntroLesson jest kontraktem
   // implementowanym rownolegle przez inny modul - dopoki nie jest gotowy,
@@ -123,10 +127,20 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
   }, [bundles]);
 
   // Tylko lekcje, ktorych tresc naprawde rozni sie od kodu - dopasowanie po
-  // tytule samo w sobie nie znaczy, ze jest co odswiezac.
-  const refreshMatches: RefreshMatch[] = useMemo(
-    () => matchLessonsForRefresh(gradeLessons, freshBundle).filter((m) => isMatchStale(m, questions)),
-    [freshBundle, gradeLessons, questions],
+  // tytule samo w sobie nie znaczy, ze jest co odswiezac. Kazde dopasowanie
+  // jest tez oklasyfikowane: "code-newer" (kod ma nowsza wersje - biezaca
+  // tresc lekcji odpowiada temu, co zostalo wstawione/odswiezone ostatnim
+  // razem) albo "manually-edited" (nauczyciel zmienil tresc recznie w
+  // edytorze - ciche odswiezenie zgubiloby jego zmiany).
+  const refreshMatches: ClassifiedRefreshMatch[] = useMemo(
+    () =>
+      matchLessonsForRefresh(gradeLessons, freshBundle)
+        .filter((m) => isMatchStale(m, questions))
+        .map((m) => ({
+          ...m,
+          classification: classifyMatch(m, questions, insertedFingerprints[m.oldLesson.id]),
+        })),
+    [freshBundle, gradeLessons, questions, insertedFingerprints],
   );
 
   // Lekcje materialu, ktorych rocznik jeszcze nie ma. Material rozrasta sie w czasie
@@ -138,6 +152,31 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     return bundle.lessons.filter((l) => !maja.has(titleMatchKey(l.title)));
   }
 
+  /**
+   * Rozwiazuje tymczasowe id zestawu pytan (z buildXxx) na id juz zapisane w
+   * bazie. Uzywane dla obu pol lekcji (questionSetId, reviewQuestionSetId) ORAZ
+   * dla slajdow recap - slajd otwierajacy lekcje N wskazuje na zestaw
+   * powtorkowy lekcji N-1, ktora przy wstawianiu CZESCIOWYM (doszly tylko nowe
+   * lekcje materialu) moze juz istniec w bazie pod innym (realnym) id. Dwa
+   * zrodla id: `setIdMap` (zestawy wstawiane w tym samym wywolaniu) i - gdy tam
+   * brak - dopasowanie po tytule lekcji-wlasciciela wsrod juz istniejacych
+   * `gradeLessons`.
+   */
+  function resolveSetId(
+    tempId: string | undefined,
+    bundle: FreshMaterialsBundle,
+    setIdMap: Map<string, string>,
+  ): string | undefined {
+    if (!tempId) return undefined;
+    const mapped = setIdMap.get(tempId);
+    if (mapped) return mapped;
+    const owner = bundle.lessons.find((l) => l.questionSetId === tempId || l.reviewQuestionSetId === tempId);
+    if (!owner) return undefined;
+    const existing = gradeLessons.find((l) => titleMatchKey(l.title) === titleMatchKey(owner.title));
+    if (!existing) return undefined;
+    return owner.questionSetId === tempId ? existing.questionSetId : existing.reviewQuestionSetId;
+  }
+
   function insert(bundle: FreshMaterialsBundle) {
     if (!grade) return;
 
@@ -146,7 +185,11 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
 
     // Zestawy pytan tworzymy tylko te, ktorych uzywaja wstawiane lekcje - inaczej
     // uzupelnienie materialu zostawiloby w bazie duplikaty zestawow juz istniejacych.
-    const potrzebneSety = new Set(doWstawienia.map((l) => l.questionSetId).filter(Boolean) as string[]);
+    // Kazda lekcja moze uzywac dwoch zestawow: wstepnego (questionSetId) i
+    // powtorkowego (reviewQuestionSetId).
+    const potrzebneSety = new Set(
+      doWstawienia.flatMap((l) => [l.questionSetId, l.reviewQuestionSetId]).filter(Boolean) as string[],
+    );
 
     // Wstaw zestawy pytan i zapamietaj mapowanie starych (tymczasowych) id -> nowe id.
     const setIdMap = new Map<string, string>();
@@ -163,72 +206,159 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     }
 
     for (const lesson of doWstawienia) {
-      const mappedQuestionSetId = lesson.questionSetId ? setIdMap.get(lesson.questionSetId) : undefined;
-      const mappedSlides = lesson.slides.map((slide) => {
-        if (slide.kind === 'recap') {
-          const newId = setIdMap.get(slide.questionSetId);
-          if (newId) return { ...slide, questionSetId: newId };
-        }
-        return slide;
+      const mappedQuestionSetId = resolveSetId(lesson.questionSetId, bundle, setIdMap);
+      const mappedReviewQuestionSetId = resolveSetId(lesson.reviewQuestionSetId, bundle, setIdMap);
+      const mappedSlides = remapRecapSlides(lesson.slides, (tempId) => resolveSetId(tempId, bundle, setIdMap));
+      const created = addLesson({
+        ...lesson,
+        questionSetId: mappedQuestionSetId,
+        reviewQuestionSetId: mappedReviewQuestionSetId,
+        slides: mappedSlides,
       });
-      addLesson({ ...lesson, questionSetId: mappedQuestionSetId, slides: mappedSlides });
+
+      // Zapamietaj fingerprint dokladnie tego, co zostalo zapisane (mappedSlides,
+      // czyli z realnymi id zestawow pytan) - pozniejsze porownanie w
+      // classifyMatch odbywa sie na tej samej, realnej reprezentacji.
+      const lessonQuestions = lesson.questionSetId
+        ? bundle.questions
+            .filter((q) => q.setId === lesson.questionSetId)
+            .sort((a, b) => a.order - b.order)
+        : [];
+      const lessonReviewQuestions = lesson.reviewQuestionSetId
+        ? bundle.questions
+            .filter((q) => q.setId === lesson.reviewQuestionSetId)
+            .sort((a, b) => a.order - b.order)
+        : [];
+      setInsertedFingerprint(
+        created.id,
+        lessonFingerprint(
+          { title: lesson.title, registerTopic: lesson.registerTopic, curriculum: lesson.curriculum, slides: mappedSlides },
+          lessonQuestions,
+          lessonReviewQuestions,
+        ),
+      );
     }
+  }
+
+  // Aktualizuje jeden zestaw pytan "w miejscu" (te same id zestawu i pytan, o
+  // ile juz istnieja), zeby zapisane wczesniej RecapEvent nadal wskazywaly na
+  // istniejace pytania/zestawy. Brak starego zestawu (np. dane sprzed
+  // wprowadzenia questionSetId/reviewQuestionSetId) tworzy nowy. Wspolna dla
+  // zestawu wstepnego i powtorkowego lekcji - obie polowy odswiezaja sie tak samo.
+  function syncQuestionSetInPlace(
+    effectiveSetId: string | undefined,
+    newSet: QuestionSet | undefined,
+    newQuestions: Question[],
+  ): string | undefined {
+    if (effectiveSetId && questionSets.some((qs) => qs.id === effectiveSetId)) {
+      if (newSet) {
+        updateQuestionSet(effectiveSetId, { name: newSet.name, topic: newSet.topic });
+      }
+      const oldQuestions = questions.filter((q) => q.setId === effectiveSetId).sort((a, b) => a.order - b.order);
+      const max = Math.max(oldQuestions.length, newQuestions.length);
+      for (let i = 0; i < max; i++) {
+        const nq = newQuestions[i];
+        const oq = oldQuestions[i];
+        if (nq && oq) updateQuestion(oq.id, { text: nq.text, answer: nq.answer });
+        else if (nq && !oq) addQuestion({ setId: effectiveSetId, text: nq.text, answer: nq.answer });
+        else if (!nq && oq) removeQuestion(oq.id);
+      }
+      return effectiveSetId;
+    }
+    if (newSet) {
+      const created = addQuestionSet({ name: newSet.name, topic: newSet.topic, classIds });
+      for (const nq of newQuestions) addQuestion({ setId: created.id, text: nq.text, answer: nq.answer });
+      return created.id;
+    }
+    return undefined;
+  }
+
+  /**
+   * Rozwiazuje tymczasowy id zestawu (z buildXxx) na id w bazie, dla slajdu
+   * recap OTWIERAJACEGO lekcje - wskazuje on na zestaw powtorkowy POPRZEDNIEJ
+   * lekcji materialu, ktora moze byc odswiezana w tej samej petli (wtedy jej
+   * nowy id jest w `updatedReviewSetIds`) albo juz istniec w bazie bez zmian
+   * (wtedy bierzemy jej biezacy `reviewQuestionSetId`).
+   */
+  function resolveForeignReviewSetId(
+    tempId: string,
+    freshBundle: FreshMaterialsBundle,
+    updatedReviewSetIds: ReadonlyMap<string, string>,
+  ): string | undefined {
+    const owner = freshBundle.lessons.find((l) => l.reviewQuestionSetId === tempId);
+    if (!owner) return undefined;
+    const ownerOldLesson = gradeLessons.find((l) => titleMatchKey(l.title) === titleMatchKey(owner.title));
+    if (!ownerOldLesson) return undefined;
+    return updatedReviewSetIds.get(ownerOldLesson.id) ?? ownerOldLesson.reviewQuestionSetId;
   }
 
   // Podmienia tresc juz wstawionych lekcji (dopasowanych po tytule) na aktualna
   // wersje z kodu, zachowujac postep (progress) i nie ruszajac recapEvents.
-  // Zestaw pytan i pytania sa aktualizowane W MIEJSCU (te same id), zeby zapisane
-  // wczesniej RecapEvent nadal wskazywaly na istniejace pytania/zestawy.
-  function refresh() {
+  // Zestaw pytan i pytania (wstepne ORAZ powtorkowe) sa aktualizowane W MIEJSCU
+  // (te same id) - patrz syncQuestionSetInPlace.
+  //
+  // `confirmedManualIds` to id lekcji sklasyfikowanych jako "manually-edited"
+  // (recznie zmienione przez nauczyciela), ktore mimo to nauczyciel zaznaczyl
+  // w dialogu do nadpisania. Lekcje "code-newer" odswiezaja sie zawsze;
+  // "manually-edited" bez zaznaczenia checkboxa sa pomijane, zeby ciche
+  // odswiezenie nie zgubilo recznych zmian.
+  function refresh(confirmedManualIds?: ReadonlySet<string>) {
     if (!grade) return;
-    for (const match of refreshMatches) {
-      let effectiveSetId = lessonQuestionSetId(match.oldLesson);
+    const toRefresh = refreshMatches.filter(
+      (m) => m.classification === 'code-newer' || confirmedManualIds?.has(m.oldLesson.id),
+    );
+    // lekcja.id (stare) -> nowy id zestawu powtorkowego - zeby slajd otwierajacy
+    // NASTEPNEJ odswiezanej lekcji w tej samej petli widzial swiezy id, a nie
+    // ten sprzed odswiezenia.
+    const updatedReviewSetIds = new Map<string, string>();
 
-      if (effectiveSetId && questionSets.some((qs) => qs.id === effectiveSetId)) {
-        if (match.newQuestionSet) {
-          updateQuestionSet(effectiveSetId, {
-            name: match.newQuestionSet.name,
-            topic: match.newQuestionSet.topic,
-          });
-        }
-        const oldQuestions = questions
-          .filter((q) => q.setId === effectiveSetId)
-          .sort((a, b) => a.order - b.order);
-        const max = Math.max(oldQuestions.length, match.newQuestions.length);
-        for (let i = 0; i < max; i++) {
-          const nq = match.newQuestions[i];
-          const oq = oldQuestions[i];
-          if (nq && oq) updateQuestion(oq.id, { text: nq.text, answer: nq.answer });
-          else if (nq && !oq) addQuestion({ setId: effectiveSetId, text: nq.text, answer: nq.answer });
-          else if (!nq && oq) removeQuestion(oq.id);
-        }
-      } else if (match.newQuestionSet) {
-        // Brak starego zestawu (np. dane sprzed wprowadzenia questionSetId) - utworz nowy.
-        const created = addQuestionSet({
-          name: match.newQuestionSet.name,
-          topic: match.newQuestionSet.topic,
-          classIds,
-        });
-        for (const nq of match.newQuestions) {
-          addQuestion({ setId: created.id, text: nq.text, answer: nq.answer });
-        }
-        effectiveSetId = created.id;
-      }
+    for (const match of toRefresh) {
+      const effectiveSetId = syncQuestionSetInPlace(
+        lessonQuestionSetId(match.oldLesson),
+        match.newQuestionSet,
+        match.newQuestions,
+      );
+      const effectiveReviewSetId = syncQuestionSetInPlace(
+        match.oldLesson.reviewQuestionSetId,
+        match.newReviewQuestionSet,
+        match.newReviewQuestions,
+      );
+      if (effectiveReviewSetId) updatedReviewSetIds.set(match.oldLesson.id, effectiveReviewSetId);
 
-      const mappedSlides =
-        effectiveSetId && match.newLesson.questionSetId
-          ? remapRecapSlides(match.newLesson.slides, match.newLesson.questionSetId, effectiveSetId)
-          : match.newLesson.slides;
+      const mappedSlides = remapRecapSlides(match.newLesson.slides, (tempId) => {
+        if (effectiveSetId && tempId === match.newLesson.questionSetId) return effectiveSetId;
+        if (effectiveReviewSetId && tempId === match.newLesson.reviewQuestionSetId) return effectiveReviewSetId;
+        return resolveForeignReviewSetId(tempId, freshBundle, updatedReviewSetIds);
+      });
 
       updateLesson(match.oldLesson.id, {
         title: match.newLesson.title,
         topic: match.newLesson.topic,
         registerTopic: match.newLesson.registerTopic,
         curriculum: match.newLesson.curriculum,
+        dzial: match.newLesson.dzial,
         questionSetId: effectiveSetId,
+        reviewQuestionSetId: effectiveReviewSetId,
         slides: mappedSlides,
         // progress, order, grade, plannedDate - celowo pominiete w patchu.
       });
+
+      // Fingerprint tego, co zostalo teraz zapisane (mappedSlides z realnymi
+      // id) - kolejne otwarcie menu porowna z tym, a nie z surowa definicja z
+      // kodu, zeby wykryc ewentualna reczna edycje PO tym odswiezeniu.
+      setInsertedFingerprint(
+        match.oldLesson.id,
+        lessonFingerprint(
+          {
+            title: match.newLesson.title,
+            registerTopic: match.newLesson.registerTopic,
+            curriculum: match.newLesson.curriculum,
+            slides: mappedSlides,
+          },
+          match.newQuestions,
+          match.newReviewQuestions,
+        ),
+      );
     }
   }
 

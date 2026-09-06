@@ -132,6 +132,8 @@ export interface LessonRow {
   slides: Slide[];
   register_topic: string | null;
   curriculum: string[];
+  dzial: string | null;
+  review_question_set_id: string | null;
 }
 
 export function lessonToRow(l: Lesson): LessonRow {
@@ -148,6 +150,8 @@ export function lessonToRow(l: Lesson): LessonRow {
     slides: l.slides,
     register_topic: l.registerTopic ?? null,
     curriculum: l.curriculum ?? [],
+    dzial: l.dzial ?? null,
+    review_question_set_id: l.reviewQuestionSetId ?? null,
   };
 }
 
@@ -165,6 +169,8 @@ export function rowToLesson(row: LessonRow): Lesson {
     slides: row.slides ?? [],
     registerTopic: row.register_topic ?? undefined,
     curriculum: row.curriculum && row.curriculum.length > 0 ? row.curriculum : undefined,
+    dzial: row.dzial ?? undefined,
+    reviewQuestionSetId: row.review_question_set_id ?? undefined,
   };
 }
 
@@ -218,6 +224,7 @@ export interface SettingsRow {
   wheel_spin_sec: number;
   pluses_for_five: number;
   plomby_for_one: number;
+  review_question_count: number | null;
 }
 
 export function settingsToRow(s: Settings): SettingsRow {
@@ -228,6 +235,7 @@ export function settingsToRow(s: Settings): SettingsRow {
     wheel_spin_sec: s.wheelSpinSec,
     pluses_for_five: s.plusesForFive,
     plomby_for_one: s.plombyForOne,
+    review_question_count: s.reviewQuestionCount,
   };
 }
 
@@ -238,5 +246,8 @@ export function rowToSettings(row: SettingsRow): Settings {
     wheelSpinSec: row.wheel_spin_sec,
     plusesForFive: row.pluses_for_five,
     plombyForOne: row.plomby_for_one,
+    // Kolumna doszla po starcie (0008_review_question_count.sql) - starsze
+    // wiersze w bazie maja NULL, dopoki nauczyciel nie zapisze ustawien.
+    reviewQuestionCount: row.review_question_count ?? 7,
   };
 }

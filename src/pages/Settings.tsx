@@ -179,6 +179,21 @@ export function SettingsPage() {
               className="max-w-[10rem]"
             />
           </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              Limit pytań koła powtórzeniowego
+            </label>
+            <p className="mb-1.5 text-xs text-gray-500">
+              Miękki limit - po jego osiągnięciu koło proponuje zakończenie, ale można kręcić dalej.
+            </p>
+            <Input
+              type="number"
+              min={1}
+              value={settings.reviewQuestionCount}
+              onChange={(e) => updateSettings({ reviewQuestionCount: parseInt(e.target.value, 10) || 1 })}
+              className="max-w-[10rem]"
+            />
+          </div>
           <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"

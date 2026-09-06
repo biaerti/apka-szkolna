@@ -8,7 +8,7 @@
 
 import type { RecapResult, Student } from '../../data/types';
 import type { MonthBalance } from '../../lib/recap';
-import { warnLevel, warnLevelLabel, wheelEntriesFor } from '../../lib/recap';
+import { warnBadgeLabel, wheelEntriesFor } from '../../lib/recap';
 import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface StudentSidebarProps {
@@ -85,7 +85,7 @@ export function StudentSidebar({
           const warnings = warningsFor(st.id);
           const totalEntries = wheelEntriesFor(warnings);
           const used = (usedCount.get(st.id) ?? 0) >= totalEntries;
-          const level = warnLevel(warnings);
+          const badge = warnBadgeLabel(warnings);
           const active = st.id === currentStudentId;
           return (
             <div
@@ -118,7 +118,7 @@ export function StudentSidebar({
                     <Tally label="pasy" value={balance.pass} result="pass" />
                   </span>
                 )}
-                {level !== 'none' && <span className="text-amber-400">{warnLevelLabel(level)}</span>}
+                {badge && <span className="text-amber-400">{badge}</span>}
                 {absent ? <span>nieobecny/a</span> : used ? <span className="text-red-400">już był/a</span> : null}
               </div>
             </div>

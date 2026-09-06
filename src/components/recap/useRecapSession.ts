@@ -8,7 +8,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useStore } from '../../data/store';
-import { monthBalance, warningsThisMonth } from '../../lib/recap';
+import { monthBalance, warningsThisMonth, type RecapMode } from '../../lib/recap';
 import { monthKey } from '../../lib/week';
 import { useAttendance } from './useAttendance';
 import { usePool } from './usePool';
@@ -23,10 +23,12 @@ export interface UseRecapSessionArgs {
   absentIds?: string[];
   /** Sposob wyboru ucznia: kolo fortuny albo po kolei wg numeru z dziennika. */
   initialPickMode?: PickMode;
-  /** Czy sesja ocenia odpowiedzi (plus/kropka/plomba/pas). Domyslnie true. */
+  /** Czy sesja ocenia odpowiedzi. Domyslnie true. */
   initialGrading?: boolean;
   /** Czy pytania sa losowane (zmieniaja sie automatycznie przy kazdym uczniu). */
   initialRandomOrder?: boolean;
+  /** Tryb rundy - decyduje o zasadach oceniania (patrz src/lib/recap.ts). Domyslnie 'po-lekcji'. */
+  recapMode?: RecapMode;
 }
 
 export function useRecapSession({
@@ -36,6 +38,7 @@ export function useRecapSession({
   initialPickMode = 'wheel',
   initialGrading = true,
   initialRandomOrder = false,
+  recapMode = 'po-lekcji',
 }: UseRecapSessionArgs) {
   const students = useStore((s) => s.students);
   const questions = useStore((s) => s.questions);
@@ -85,6 +88,7 @@ export function useRecapSession({
     settings,
     initialPickMode,
     initialGrading,
+    recapMode,
   });
 
   const currentMonthKey = monthKey(new Date());

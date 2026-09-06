@@ -4,7 +4,7 @@
 // w menu obok "Nowa lekcja". Aktywna klasa zyje w adresie (?klasa=), zeby
 // powrot z prezentacji trafial z powrotem na wlasciwa zakladke.
 
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import type { Lesson, LessonStatus } from '../data/types';
@@ -88,6 +88,11 @@ export function Lessons() {
   function questionCountFor(lesson: Lesson): number | null {
     if (!lesson.questionSetId) return null;
     return questions.filter((q) => q.setId === lesson.questionSetId).length;
+  }
+
+  function reviewQuestionCountFor(lesson: Lesson): number | null {
+    if (!lesson.reviewQuestionSetId) return null;
+    return questions.filter((q) => q.setId === lesson.reviewQuestionSetId).length;
   }
 
   function handleCreate(title: string) {
@@ -190,26 +195,37 @@ export function Lessons() {
           </THead>
           <TBody>
             {gradeLessons.map((lesson, idx) => (
-              <LessonRow
-                key={lesson.id}
-                lesson={lesson}
-                classId={classId}
-                progress={lessonProgress(lesson, classId)}
-                index={idx}
-                total={gradeLessons.length}
-                questionCount={questionCountFor(lesson)}
-                dropIndicator={drag.indicatorFor(idx, lesson.id)}
-                onDragStart={() => drag.start(lesson.id)}
-                onDragOver={(position) => drag.over(idx, position)}
-                onDrop={drag.finishDrop}
-                onDragEnd={drag.reset}
-                onMove={(dir) => moveLesson(lesson.id, dir === 'up' ? idx - 1 : idx + 1)}
-                onSetStatus={(status) => setStatus(lesson, status)}
-                onAddQuestions={() => handleAddQuestions(lesson)}
-                onDuplicate={() => copyLessonTo(lesson, grade, `${lesson.title} (kopia)`)}
-                onCopyToGrade={otherGrades.length > 0 ? () => setCopyLesson(lesson) : null}
-                onRemove={() => setRemoveTarget(lesson)}
-              />
+              <Fragment key={lesson.id}>
+                {/* Naglowek dzialu nad pierwsza lekcja danej grupy (np. "Powtorka 1-3") -
+                    lekcje bez dzialu (wlasne, tematyczne) nie dostaja naglowka. */}
+                {lesson.dzial && lesson.dzial !== gradeLessons[idx - 1]?.dzial && (
+                  <TR className="bg-gray-50/70">
+                    <td colSpan={5} className="border-t border-gray-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                      {lesson.dzial}
+                    </td>
+                  </TR>
+                )}
+                <LessonRow
+                  lesson={lesson}
+                  classId={classId}
+                  progress={lessonProgress(lesson, classId)}
+                  index={idx}
+                  total={gradeLessons.length}
+                  questionCount={questionCountFor(lesson)}
+                  reviewQuestionCount={reviewQuestionCountFor(lesson)}
+                  dropIndicator={drag.indicatorFor(idx, lesson.id)}
+                  onDragStart={() => drag.start(lesson.id)}
+                  onDragOver={(position) => drag.over(idx, position)}
+                  onDrop={drag.finishDrop}
+                  onDragEnd={drag.reset}
+                  onMove={(dir) => moveLesson(lesson.id, dir === 'up' ? idx - 1 : idx + 1)}
+                  onSetStatus={(status) => setStatus(lesson, status)}
+                  onAddQuestions={() => handleAddQuestions(lesson)}
+                  onDuplicate={() => copyLessonTo(lesson, grade, `${lesson.title} (kopia)`)}
+                  onCopyToGrade={otherGrades.length > 0 ? () => setCopyLesson(lesson) : null}
+                  onRemove={() => setRemoveTarget(lesson)}
+                />
+              </Fragment>
             ))}
           </TBody>
         </Table>

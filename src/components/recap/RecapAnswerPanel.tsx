@@ -29,7 +29,12 @@ export function RecapAnswerPanel({
           - widac ja z konca sali i nie gasnie po wpisaniu oceny. */}
       <div className="shrink-0">
         {session.currentStudent ? (
-          <div className="rounded-xl border-4 border-accent-400 bg-accent-900/40 px-4 py-2 text-center">
+          <div className="relative rounded-xl border-4 border-accent-400 bg-accent-900/40 px-4 py-2 text-center">
+            {/* Numer z dziennika - dyskretnie w rogu, zeby nauczyciel szybko
+                znalazl ucznia na liscie, ale nazwisko zostalo najwieksze. */}
+            <span className="absolute right-3 top-2 text-sm font-semibold tabular-nums text-accent-300/80">
+              nr {session.currentStudent.number}
+            </span>
             <p className="text-sm uppercase tracking-widest text-accent-300">Odpowiada</p>
             <p className="font-bold leading-tight text-white" style={{ fontSize: 'clamp(40px, 6.4vw, 112px)' }}>
               {session.currentStudent.firstName} {session.currentStudent.lastName}
@@ -66,9 +71,12 @@ export function RecapAnswerPanel({
           <ScoreButtons
             disabled={!session.currentStudent}
             graded={session.graded}
+            recapMode={session.recapMode}
             onGrade={session.grade}
+            onSkip={session.markDoneNoGrade}
             canPass={session.currentCanPass}
             canEarnPlus={session.currentCanEarnPlus}
+            canReceivePlomba={session.currentCanReceivePlomba}
             passesUsed={session.currentPassesUsed}
             passesPerMonth={session.settings.passesPerMonth}
             hintGivesMinus={session.settings.hintGivesMinus}

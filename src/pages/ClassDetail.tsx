@@ -140,7 +140,7 @@ export function ClassDetail() {
         ))}
       </div>
 
-      {tab === 'bilans' && <ClassStats students={classStudents} />}
+      {tab === 'bilans' && id && <ClassStats classId={id} students={classStudents} />}
       {tab === 'rozliczenia' && id && <Settlements classId={id} />}
 
       {tab === 'uczniowie' && (

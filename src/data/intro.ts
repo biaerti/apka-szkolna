@@ -74,16 +74,18 @@ function slideText(title: string, body: string, art?: SlideArt): Slide {
   return { id: newId(), kind: 'text', title, body, art };
 }
 
-function slideImage(url: string, caption?: string): Slide {
-  return { id: newId(), kind: 'image', url, caption };
+/** Slajd ze zdjeciem - opcjonalnie z naglowkiem i/albo tekstem obok (patrz ImageSlideView). */
+function slideImage(opts: { url: string; title?: string; body?: string; caption?: string }): Slide {
+  return { id: newId(), kind: 'image', ...opts };
 }
 
 function slideNote(title: string, body: string): Slide {
   return { id: newId(), kind: 'note', title, body };
 }
 
-function slideRecap(questionSetId: string): Slide {
-  return { id: newId(), kind: 'recap', questionSetId };
+/** variant 'demo' = pierwsze, "surowe" pokazanie kola - bez trybu "Przedstaw się". */
+function slideRecap(questionSetId: string, variant?: 'demo'): Slide {
+  return { id: newId(), kind: 'recap', questionSetId, ...(variant ? { variant } : {}) };
 }
 
 /** Znajduje sekcje zasad po tytule - zrodlo prawdy dla slajdow, ktore je omawiaja. */
@@ -96,6 +98,11 @@ function ruleSection(title: string): RuleSection {
 /** Zamienia liste punktow na markdown-lite: nieuporzadkowana lista "- ...". */
 function asBulletList(items: string[]): string {
   return items.map((item) => `- ${item}`).join('\n');
+}
+
+/** Zamienia liste punktow na markdown-lite: uporzadkowana lista "1. ...". */
+function asNumberedList(items: string[]): string {
+  return items.map((item, i) => `${i + 1}. ${item}`).join('\n');
 }
 
 /**
@@ -151,7 +158,8 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
     secZleZachowania.items,
     /NIE jest przeszkadzanie/i,
   );
-  const secPrzeszkadzanie = ruleSection('Kiedy ktoś przeszkadza');
+  // Dawna nazwa sekcji: "Kiedy ktos przeszkadza".
+  const secEskalacja = ruleSection('Specjalne utrudnienia za zachowanie');
   const secLawki = ruleSection('Gdzie siedzimy');
   // Punkt o przelicznikach na oceny dostaje wlasny slajd z ilustracja "stopnie",
   // reszta zostaje przy definicjach plusa, kropki i plomby.
@@ -160,11 +168,18 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
     /piątka|jedynka/i,
   );
   const secLekcja = ruleSection('Jak wygląda nasza lekcja');
+  // Punkt o kodach zadan/lekcji zostaje wspomniany na koniec slajdu jako
+  // osobne zdanie, trzy kroki (powtorka - temat - kolo) ida jako lista numerowana.
+  const { matched: przebiegKod, rest: przebiegKroki } = partitionItems(secLekcja.items, /kod/i);
   const secZeszyt = ruleSection('Zeszyt i sprawdziany');
+  // Punkty o kodach lekcji (wszystkie zawieraja slowo "kod") dostaja wlasny
+  // slajd "Kody lekcji" - dzieciom nalezy sie osobne, spokojne wytlumaczenie
+  // systemu spisu tematow, a nie jedna linijka wsrod wyposazenia.
+  const { matched: zeszytKody, rest: zeszytPoKodach } = partitionItems(secZeszyt.items, /kod/i);
   // Punkt o procentach zasila slajd z progami ocen (ilustracja "procenty"),
   // reszta (numer i temat lekcji, notatki, powtorzenie przed sprawdzianem)
   // trafia na slajd "Co bedzie potrzebne". Szukamy po tresci, nie po indeksie.
-  const { rest: zeszytBiezace } = partitionItems(secZeszyt.items, /procent/i);
+  const { rest: zeszytBiezace } = partitionItems(zeszytPoKodach, /procent/i);
 
   const jestOsmoklasista = grade === 'VIII';
 
@@ -183,29 +198,28 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
       // 2. Temat do zeszytu - z kodem lekcji, ktory dzieci zapisuja przy temacie
       slideTopic(),
 
-      // 3. Zdjecie nauczyciela (plik w public/bart.jpg)
-      slideImage('/bart.jpg', 'Bartosz Kuniński'),
+      // 3. Kim jestem - zdjecie i tekst na jednym slajdzie (plik w public/bart.jpg)
+      slideImage({
+        url: '/bart.jpg',
+        title: 'Kim jestem',
+        body: 'Jestem psychologiem i nauczycielem języka polskiego. Pracuję też z komputerami i sztuczną inteligencją.',
+      }),
 
-      // 4. Kim jestem - bez ilustracji, bo zdjecie jest slajd wczesniej
-      slideText(
-        'Kim jestem',
-        `Jestem psychologiem i nauczycielem języka polskiego.
-
-Pracuję też z komputerami i sztuczną inteligencją. Ten program napisałem sam - za chwilę zobaczycie w nim koło fortuny z waszymi imionami.`,
-      ),
-
-      // 5. Co bedzie potrzebne - zeszyt plus reszta sekcji "Zeszyt i sprawdziany"
-      // (bez punktu o procentach - ten ma wlasny slajd nizej)
+      // 4. Co bedzie potrzebne - zeszyt plus reszta sekcji "Zeszyt i sprawdziany"
+      // (bez punktow o kodach i o procentach - te maja wlasne slajdy)
       slideText(
         'Co będzie potrzebne',
         asBulletList(['Zeszyt w linie - podpisany, przynosimy na każdą lekcję.', ...zeszytBiezace]),
         'zeszyt',
       ),
 
-      // 6. Zapowiedz trzech kategorii ocen
+      // 5. Kody lekcji - osobny slajd, zeby wytlumaczenie bylo czytelne
+      slideText('Kody lekcji', asBulletList(zeszytKody), 'zeszyt'),
+
+      // 6. Zapowiedz trzech kategorii ocen - lista numerowana
       slideText(
         'Za co będą oceny',
-        asBulletList([
+        asNumberedList([
           'Klasówki i kartkówki.',
           'Dyktanda, projekty grupowe, recytacja - ich zasady poznacie w ciągu roku, kiedy przyjdzie na nie czas.',
           'Odpowiedzi ustne na lekcji - na każdej lekcji. O tym za chwilę więcej.',
@@ -250,15 +264,8 @@ Zasady są po to, żeby dało się grać uczciwie. Są jawne i takie same dla ws
         'gra',
       ),
 
-      // 11. Pytanie o teleturniej - wprowadzenie do mechaniki losowania
-      slideText(
-        'Znacie teleturniej Koło Fortuny?',
-        `**Widzieliście kiedyś ten program?**
-
-Był kiedyś taki teleturniej w telewizji: kręci się dużym kołem i to los decyduje, co się wydarzy.
-
-U nas działa tak samo, tylko zamiast nagród na kole są wasze imiona.`,
-      ),
+      // 11. Teleturniej Kolo Fortuny - sam naglowek i zdjecie, bez tekstu
+      slideImage({ url: '/kolo-fortuny.jpg', title: 'Znacie teleturniej Koło Fortuny?' }),
 
       // 12. Koło fortuny - jak dziala u nas (z zasady.ts)
       slideText(
@@ -267,8 +274,9 @@ U nas działa tak samo, tylko zamiast nagród na kole są wasze imiona.`,
         'kolo',
       ),
 
-      // 13. Pierwsze pokazanie kola - nauczyciel kreci raz-dwa i wychodzi (Esc)
-      slideRecap(setId),
+      // 13. Pierwsze pokazanie kola - nauczyciel kreci raz-dwa i wychodzi (Esc).
+      // Demo: dziala jak zwykla runda (bez "Przedstaw się", bez ocen).
+      slideRecap(setId, 'demo'),
 
       // 14. Plus, kropka, plomba (z zasady.ts, bez punktu o ocenach)
       slideText('Co można wygrać, a co przegrać', asBulletList(ocenyBiezace), 'oceny'),
@@ -279,26 +287,32 @@ U nas działa tak samo, tylko zamiast nagród na kole są wasze imiona.`,
       // 16. Pasy (z zasady.ts) - odrabianie plomb JUZ USUNIETE, nie przywracac
       slideText('Pasy', asBulletList(secPasy.items), 'pas'),
 
-      // 17. Przyklad rundy na jednym prostym pytaniu - cztery mozliwe scenariusze
+      // 17. Przyklad rundy na pytaniu, na ktorym widac roznice miedzy odpowiedziami.
+      // To przyklad kola powtorzeniowego - na kole po lekcji mozna tylko zyskac.
       slideText(
         'Przykład rundy',
-        `Pytanie: **"Jak nazywa się stolica Polski?"**
+        `Pytanie: **"Wymień trzy znaki interpunkcyjne."** (koło powtórzeniowe)
 
-- Odpowiadasz bardzo dobrze → plus
-- Odpowiadasz częściowo → kropka (ani plus, ani plomba)
+- Wymieniasz trzy (np. kropka, przecinek, pytajnik) → plus
+- Wymieniasz jeden albo dwa → kropka
 - Odpowiadasz źle albo wcale → plomba
-- Mówisz "pas" → nic się nie dzieje, ale zużywasz 1 z 2 pasów na ten miesiąc`,
+- Mówisz "pas" → nic się nie dzieje, ale zużywasz 1 z 2 pasów na ten miesiąc
+
+Na kole po lekcji, zaraz po nowym temacie, można tylko zyskać - nie ma tu kropki ani plomby.`,
       ),
 
       // 18. Pytanie do klasy - znowu mowia dzieci
       slideText('Czy zachowujecie się grzecznie na lekcjach?', '**Co to znaczy: przeszkadzać?**'),
 
-      // 19. Nazwanie zachowan (z zasady.ts) - zanim padnie slowo "konsekwencje",
-      // klasa ma wiedziec dokladnie, o czym mowimy. Bez tego "uwaga" jest workiem
-      // na wszystko i dzieci boja sie, ze dostana ja za zla odpowiedz.
+      // 19. Eskalacja 1-2-3 (z zasady.ts) - NAJPIERW konsekwencje, powaga tematu
+      slideText('Specjalne utrudnienia za zachowanie', asBulletList(secEskalacja.items), 'eskalacja'),
+
+      // 20. Nazwanie zachowan (z zasady.ts) - DOPIERO TERAZ jasna definicja, co
+      // dokladnie jest karane. Bez tego "uwaga" jest workiem na wszystko i dzieci
+      // boja sie, ze dostana ja za zla odpowiedz.
       slideText('Co to znaczy przeszkadzać', asBulletList(zleZachowania), 'zleZachowania'),
 
-      // 20. Kontra do poprzedniego slajdu - za co uwagi nie ma NIGDY (z zasady.ts).
+      // 21. Kontra do poprzedniego slajdu - za co uwagi nie ma NIGDY (z zasady.ts).
       // Celowo bez listy i bez ilustracji: jedno zdanie na calym ekranie, zeby
       // wybrzmialo. Punkt zasad wchodzi tu jako akapit, nie jako kolejny bullet.
       slideText(
@@ -310,16 +324,25 @@ Uwagi są wyłącznie za zachowanie - nigdy za to, że czegoś jeszcze nie umies
 Nie wiesz? Powiedz "nie wiem" albo weź pas. To uczciwe zagranie, nie przegrana.`,
       ),
 
-      // 21. Eskalacja 1-2-3 (z zasady.ts)
-      slideText('Kiedy ktoś przeszkadza', asBulletList(secPrzeszkadzanie.items), 'eskalacja'),
-
       // 22. Gdzie siedzimy (z zasady.ts)
       slideText('Gdzie siedzimy', asBulletList(secLawki.items), 'lawki'),
 
-      // 23. Przebieg lekcji (z zasady.ts) - stoper i kody lekcji/zadan
-      slideText('Jak wygląda nasza lekcja', asBulletList(secLekcja.items), 'przebieg'),
+      // 23. Przebieg lekcji (z zasady.ts) - trzy kroki jako lista numerowana + kody
+      slideText(
+        'Jak wygląda nasza lekcja',
+        `${asNumberedList(przebiegKroki)}
 
-      // 24. Instrukcja przed runda zapoznawcza - co uczen ma powiedziec
+${przebiegKod[0]}`,
+        'przebieg',
+      ),
+
+      // 24. Slajd kontraktowy - zanim zaczniemy grac, dzieci moga zglaszac uwagi
+      slideText(
+        'Wasz głos',
+        '**Czy coś jest niejasne? Co byście dodali albo zmienili?**\n\nZasady można wspólnie doszlifować.',
+      ),
+
+      // 25. Instrukcja przed runda zapoznawcza - co uczen ma powiedziec
       slideText(
         'Kiedy koło cię wskaże',
         `Powiedz trzy rzeczy:
@@ -332,24 +355,25 @@ Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
         'kolo',
       ),
 
-      // 25. Wlasciwa runda zapoznawcza - 20 pytan
+      // 26. Wlasciwa runda zapoznawcza - 20 pytan
       slideRecap(setId),
 
-      // 26. Notatka do zeszytu
+      // 27. Notatka do zeszytu
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Zasady pracy na lekcjach języka polskiego**
 
 - Koło losuje, kto odpowiada. Nie zgłaszamy się.
+- Koło po lekcji (po nowym temacie) - można tylko zyskać. Koło powtórzeniowe (na kolejnej lekcji) - gra się o wszystko.
 - Plus - dobra odpowiedź. Kropka - częściowa. Plomba - zła albo jej brak.
-- 3 plusy = piątka. 3 plomby = jedynka.
+- Rozliczenie na koniec miesiąca: 3 plusy = piątka, 3 plomby = jedynka.
 - 2 pasy w miesiącu.
 - Siadamy w najbliższych ławkach.
 - Zeszyt w linie: numer, temat, notatki.
 - Sprawdzian (progi WZO): 0-30% - 1, 31-50% - 2, 51-72% - 3, 73-85% - 4, 86-96% - 5, 97-100% - 6.`,
       ),
 
-      // 27. Zakonczenie
+      // 28. Zakonczenie
       // Podtytul bez numerow klas - lekcja jest wspolna dla roznych rocznikow,
       // a zakres powtorki zalezy od rocznika (kl. IV: 1-3, kl. V: 1-4 itd.).
       slideTitle('Do zobaczenia!', 'Na następnej lekcji: powtórka z poprzednich klas'),

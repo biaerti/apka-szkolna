@@ -106,6 +106,31 @@ describe('buildIntroLesson', () => {
     expect(titles).toContain('Pasy');
     expect(titles).toContain('Przykład rundy');
   });
+
+  it('rozroznia kolo po lekcji od kola powtorzeniowego', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const text = allText(lesson).toLowerCase();
+    expect(text).toContain('koło po lekcji');
+    expect(text).toContain('koło powtórzeniowe');
+  });
+
+  it('przyklad rundy dotyczy kola powtorzeniowego i zaznacza, ze na kole po lekcji mozna tylko zyskac', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Przykład rundy');
+    expect(slide && 'body' in slide ? slide.body : '').toContain('powtórzeniowe');
+    expect(slide && 'body' in slide ? slide.body : '').toContain('tylko zyskać');
+  });
+
+  it('wspomina o rozliczeniu plusow/plomb na koniec miesiaca', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    expect(allText(lesson)).toContain('koniec miesiąca');
+  });
+
+  it('nie zawiera juz usunietej odpowiedzialnosci zbiorowej za dodatkowe miejsca w kole', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const text = allText(lesson).toLowerCase();
+    expect(text).not.toContain('dla całej klasy');
+  });
 });
 
 describe('RULE_SECTIONS', () => {

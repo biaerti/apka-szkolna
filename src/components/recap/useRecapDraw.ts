@@ -9,9 +9,15 @@
 // (warningsFor przekazane z gory), wiec cofniecie uwagi w undoLast wystarczy
 // zalatwic usunieciem zdarzenia - poziom eskalacji obniza sie automatycznie.
 //
-// Tryb "po kolei" ma isc sam: efekt nizej pilnuje, zeby zawsze byl wybrany
-// ktos, gdy nikt aktualnie nie odpowiada (pierwsze wejscie w tryb, start nowej
-// rundy, zaraz po ocenie) - bez czekania na klik "nastepny uczen".
+// Wybor ucznia (kolo i "po kolei") jest ZAWSZE efektem akcji nauczyciela
+// (Krec/Spacja albo "nastepny uczen") - zaden tryb nie wybiera nikogo sam z
+// siebie (np. od razu po wejsciu na slajd, zaraz po ocenie czy po cofnieciu).
+// Dawniej tryb "po kolei" mial wlasny efekt auto-wyboru - usuniety, bo
+// zaznaczal pierwszego ucznia juz na starcie rundy, zanim ktokolwiek kliknal.
+//
+// Cofniecie ostatniej akcji (undoLast) dziala takze dla trybu bez ocen
+// (markDoneNoGrade nie zapisuje RecapEvent) - lastAction pamieta wtedy tylko
+// kogo cofnac z licznika uzyc, bez proby usuwania nieistniejacego zdarzenia.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '../../data/store';
@@ -19,18 +25,21 @@ import type { RecapEvent, RecapResult, Settings, Student } from '../../data/type
 import {
   canEarnPlus,
   canPass,
+  canReceivePlombaAfterLesson,
   nextSequential,
   passesUsedThisMonth,
   wheelTargetAngle,
   type PoolEntry,
+  type RecapMode,
 } from '../../lib/recap';
 
 export type PickMode = 'wheel' | 'sequential';
 
-type LastActionKind = 'grade' | 'hint' | 'uwaga';
+type LastActionKind = 'grade' | 'hint' | 'uwaga' | 'pick';
 
 interface LastAction {
-  eventId: string;
+  /** Brak dla kind 'pick' - markDoneNoGrade nie zapisuje RecapEvent. */
+  eventId?: string;
   studentId: string;
   kind: LastActionKind;
 }
@@ -53,6 +62,13 @@ export interface UseRecapDrawArgs {
   settings: Settings;
   initialPickMode: PickMode;
   initialGrading: boolean;
+  /**
+   * Tryb rundy - decyduje o zasadach oceniania (patrz src/lib/recap.ts):
+   * 'po-lekcji' (domyslnie) mozna tylko zyskac, 'powtorzeniowe' ocenia w
+   * pelni. 'demo' (lekcja zapoznawcza / "Przedstaw się") nie korzysta z tego
+   * rozroznienia - tam `grading` jest i tak wylaczone wyzej w drzewie.
+   */
+  recapMode: RecapMode;
 }
 
 export function useRecapDraw({
@@ -71,6 +87,7 @@ export function useRecapDraw({
   settings,
   initialPickMode,
   initialGrading,
+  recapMode,
 }: UseRecapDrawArgs) {
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
@@ -93,7 +110,19 @@ export function useRecapDraw({
   const currentStudent: Student | null = currentEntry?.student ?? null;
   const currentPassesUsed = currentStudent ? passesUsedThisMonth(recapEvents, currentStudent.id, now) : 0;
   const currentCanPass = currentStudent ? canPass(recapEvents, currentStudent.id, settings, now) : false;
-  const currentCanEarnPlus = currentStudent ? canEarnPlus(warningsFor(currentStudent.id)) : false;
+  // Kolo po lekcji: mozna tylko zyskac - plus jest zawsze dostepny. Kolo
+  // powtorzeniowe: uczen z >=2 uwagami w miesiacu traci mozliwosc plusa
+  // (canEarnPlus, patrz src/lib/recap.ts).
+  const currentCanEarnPlus =
+    recapMode === 'powtorzeniowe' ? (currentStudent ? canEarnPlus(warningsFor(currentStudent.id)) : false) : true;
+  // Kolo po lekcji: plomba to WYJATEK, tylko dla ucznia z juz >=3 uwagami w
+  // miesiacu. Kolo powtorzeniowe: plomba bez ograniczen (jak dotychczas).
+  const currentCanReceivePlomba =
+    recapMode === 'powtorzeniowe'
+      ? true
+      : currentStudent
+        ? canReceivePlombaAfterLesson(warningsFor(currentStudent.id))
+        : false;
 
   const canSpin = !spinning && (!currentEntry || graded) && pool.length > 0;
 
@@ -168,22 +197,22 @@ export function useRecapDraw({
     else spin();
   }
 
-  // Tryb "po kolei" ma po prostu isc po kolei: gdy nikt aktualnie nie
-  // odpowiada (start, przelaczenie na ten tryb, zaraz po ocenie, po cofnieciu,
-  // po nowej rundzie), a w puli ktos jeszcze jest - wybierz go automatycznie.
-  useEffect(() => {
-    if (pickMode !== 'sequential' || spinning) return;
-    if (currentEntry && !graded) return;
-    if (pool.length === 0) return;
-    const next = nextSequential(pool);
-    if (!next) return;
-    applyPick(next);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pickMode, pool, currentEntry, graded, spinning]);
-
   function grade(result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>) {
     if (!currentEntry || graded) return;
-    if (result === 'plus' && !canEarnPlus(warningsFor(currentEntry.student.id))) return;
+    if (result === 'plus' && recapMode === 'powtorzeniowe' && !canEarnPlus(warningsFor(currentEntry.student.id))) {
+      return;
+    }
+    // Kolo po lekcji: nie ma kropki ani pasa (przycisk "Dalej" zamiast nich -
+    // patrz markDoneNoGrade), a plomba jest wyjatkiem tylko dla ucznia z
+    // juz >=3 uwagami w miesiacu.
+    if (recapMode !== 'powtorzeniowe' && result !== 'plus' && result !== 'plomba') return;
+    if (
+      recapMode !== 'powtorzeniowe' &&
+      result === 'plomba' &&
+      !canReceivePlombaAfterLesson(warningsFor(currentEntry.student.id))
+    ) {
+      return;
+    }
     const studentId = currentEntry.student.id;
     const event = recordEvent(studentId, result);
     setLastAction({ eventId: event.id, studentId, kind: 'grade' });
@@ -209,15 +238,17 @@ export function useRecapDraw({
    */
   function markDoneNoGrade() {
     if (!currentEntry) return;
-    bumpUsedCount(currentEntry.student.id);
+    const studentId = currentEntry.student.id;
+    bumpUsedCount(studentId);
+    setLastAction({ studentId, kind: 'pick' });
     setCurrentEntry(null);
     setGraded(false);
   }
 
   function undoLast() {
     if (!lastAction) return;
-    removeRecapEvent(lastAction.eventId);
-    if (lastAction.kind === 'grade') {
+    if (lastAction.eventId) removeRecapEvent(lastAction.eventId);
+    if (lastAction.kind === 'grade' || lastAction.kind === 'pick') {
       undoUsedCount(lastAction.studentId);
       setCurrentEntry(null);
       setGraded(false);
@@ -262,5 +293,7 @@ export function useRecapDraw({
     currentPassesUsed,
     currentCanPass,
     currentCanEarnPlus,
+    currentCanReceivePlomba,
+    recapMode,
   };
 }

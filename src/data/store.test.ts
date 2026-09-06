@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import type { Lesson, SchoolClass } from './types';
+import type { Lesson, RecapEvent, SchoolClass } from './types';
 
 // zustand/persist czyta localStorage juz przy tworzeniu store'a (rehydratacja),
 // a to srodowisko testowe dziala w Node bez jsdom - stad brak globalnego
@@ -8,6 +8,7 @@ import type { Lesson, SchoolClass } from './types';
 let migrateLessonsToGrades: typeof import('./store')['migrateLessonsToGrades'];
 let moveLessonInGrade: typeof import('./store')['moveLessonInGrade'];
 let removeClassFromLessons: typeof import('./store')['removeClassFromLessons'];
+let recapEventsForReset: typeof import('./store')['recapEventsForReset'];
 
 beforeAll(async () => {
   if (typeof globalThis.localStorage === 'undefined') {
@@ -32,7 +33,12 @@ beforeAll(async () => {
   migrateLessonsToGrades = mod.migrateLessonsToGrades;
   moveLessonInGrade = mod.moveLessonInGrade;
   removeClassFromLessons = mod.removeClassFromLessons;
+  recapEventsForReset = mod.recapEventsForReset;
 });
+
+function recapEvent(partial: Partial<RecapEvent> & { id: string; classId: string; at: string }): RecapEvent {
+  return { studentId: 's1', result: 'plus', ...partial };
+}
 
 function lesson(partial: Partial<Lesson> & { id: string; grade: string; order: number }): Lesson {
   return { title: 'Lekcja', progress: {}, slides: [], ...partial };
@@ -175,5 +181,33 @@ describe('removeClassFromLessons', () => {
     ];
     const result = removeClassFromLessons(lessons, CLASSES, 'v1');
     expect(result).toEqual([]);
+  });
+});
+
+describe('recapEventsForReset', () => {
+  const events: RecapEvent[] = [
+    recapEvent({ id: '1', classId: 'a', studentId: 's1', result: 'plus', at: new Date(2026, 8, 1).toISOString() }),
+    recapEvent({ id: '2', classId: 'a', studentId: 's2', result: 'plomba', at: new Date(2026, 8, 5).toISOString() }),
+    recapEvent({ id: '3', classId: 'a', studentId: 's1', result: 'uwaga', at: new Date(2026, 7, 20).toISOString() }), // sierpien
+    recapEvent({ id: '4', classId: 'b', studentId: 's1', result: 'plus', at: new Date(2026, 8, 2).toISOString() }), // inna klasa
+  ];
+
+  it('wybiera zdarzenia calej klasy z podanego miesiaca, pomija inne miesiace i inne klasy', () => {
+    const result = recapEventsForReset(events, 'a', '2026-09');
+    expect(result.map((e) => e.id).sort()).toEqual(['1', '2']);
+  });
+
+  it('z podanym studentId zawęża do zdarzeń jednego ucznia', () => {
+    const result = recapEventsForReset(events, 'a', '2026-09', 's1');
+    expect(result.map((e) => e.id)).toEqual(['1']);
+  });
+
+  it('zwraca pusta liste, gdy nic nie pasuje do miesiaca', () => {
+    expect(recapEventsForReset(events, 'a', '2026-01')).toEqual([]);
+  });
+
+  it('nie rusza zdarzen innej klasy nawet dla tego samego ucznia i miesiaca', () => {
+    const result = recapEventsForReset(events, 'b', '2026-09', 's1');
+    expect(result.map((e) => e.id)).toEqual(['4']);
   });
 });

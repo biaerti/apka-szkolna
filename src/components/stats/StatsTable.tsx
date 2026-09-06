@@ -4,6 +4,9 @@
 import { Fragment, useState } from 'react';
 import { EmptyState } from '../ui/EmptyState';
 import { Table, THead, TBody, TR, TH, TD } from '../ui/Table';
+import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { Menu } from '../ui/Menu';
+import { MoreIcon } from '../ui/icons';
 import type { RecapEvent } from '../../data/types';
 import type { StudentStatsRow } from '../../lib/stats';
 
@@ -31,6 +34,8 @@ export function StatsTable({
   onToggleSort,
   eventsForStudent,
   onRemoveEvent,
+  monthLabel,
+  onResetStudent,
 }: {
   rows: StudentStatsRow[];
   sortKey: SortKey;
@@ -38,8 +43,13 @@ export function StatsTable({
   onToggleSort: (key: SortKey) => void;
   eventsForStudent: (studentId: string) => RecapEvent[];
   onRemoveEvent: (id: string) => void;
+  /** Etykieta biezacego miesiaca (np. "wrzesień 2026") do tresci potwierdzenia resetu. */
+  monthLabel: string;
+  /** "Wyzeruj bilans ucznia" - kasuje zdarzenia tego ucznia z biezacego miesiaca. */
+  onResetStudent: (studentId: string) => void;
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [pendingReset, setPendingReset] = useState<StudentStatsRow | null>(null);
 
   if (rows.length === 0) {
     return <EmptyState title="Brak uczniów" description="Ta klasa nie ma jeszcze uczniów." />;
@@ -61,6 +71,7 @@ export function StatsTable({
   }
 
   return (
+    <>
     <Table>
       <THead>
         <TR>
@@ -73,6 +84,9 @@ export function StatsTable({
           <TH>{headerButton('pass', 'Pasy')}</TH>
           <TH>{headerButton('uwaga', 'Uwagi')}</TH>
           <TH>{headerButton('bilans', 'Bilans')}</TH>
+          <TH className="w-10">
+            <span className="sr-only">Akcje</span>
+          </TH>
         </TR>
       </THead>
       <TBody>
@@ -104,10 +118,32 @@ export function StatsTable({
               <TD>{row.pass}</TD>
               <TD>{row.uwaga}</TD>
               <TD className="font-semibold">{row.bilans}</TD>
+              <TD className="text-right">
+                <Menu
+                  items={[
+                    {
+                      label: 'Wyzeruj bilans ucznia',
+                      danger: true,
+                      onSelect: () => setPendingReset(row),
+                    },
+                  ]}
+                  renderTrigger={(props) => (
+                    <button
+                      type="button"
+                      {...props}
+                      aria-label={`Więcej akcji: ${row.firstName} ${row.lastName}`}
+                      title="Więcej"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+                    >
+                      <MoreIcon />
+                    </button>
+                  )}
+                />
+              </TD>
             </TR>
             {expandedId === row.studentId && (
               <TR>
-                <td colSpan={9} className="bg-gray-50 px-4 py-2">
+                <td colSpan={10} className="bg-gray-50 px-4 py-2">
                   <div className="space-y-1 py-1">
                     {eventsForStudent(row.studentId).length === 0 ? (
                       <p className="text-xs text-gray-500">Brak zdarzeń w tym miesiącu.</p>
@@ -135,5 +171,22 @@ export function StatsTable({
         ))}
       </TBody>
     </Table>
+
+    <ConfirmDialog
+      open={!!pendingReset}
+      title="Wyzeruj bilans ucznia"
+      message={
+        pendingReset
+          ? `Usunięte zostaną wszystkie plusy, kropki, plomby, pasy i uwagi ${pendingReset.firstName} ${pendingReset.lastName} zapisane w ${monthLabel}. Tej operacji nie da się cofnąć.`
+          : ''
+      }
+      confirmLabel="Wyzeruj"
+      onCancel={() => setPendingReset(null)}
+      onConfirm={() => {
+        if (pendingReset) onResetStudent(pendingReset.studentId);
+        setPendingReset(null);
+      }}
+    />
+    </>
   );
 }

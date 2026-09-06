@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import type { RecapEvent, Settings, Student } from '../data/types';
+import type { RecapEvent, Settings, Slide, Student } from '../data/types';
 import {
   answersByQuestion,
   buildRoundEntries,
   drawableEntries,
   canEarnPlus,
   canPass,
+  canReceivePlombaAfterLesson,
   earnedFive,
   monthBalance,
   nextRandomIndex,
@@ -16,7 +17,9 @@ import {
   passesUsedThisMonth,
   pickRandom,
   plannedDraws,
+  resolveRecapMode,
   shuffle,
+  warnBadgeLabel,
   warnLevel,
   warningsThisMonth,
   wheelEntriesFor,
@@ -52,6 +55,7 @@ const settings: Settings = {
   wheelSpinSec: 4,
   plusesForFive: 3,
   plombyForOne: 3,
+  reviewQuestionCount: 7,
 };
 
 describe('passesUsedThisMonth', () => {
@@ -162,14 +166,16 @@ describe('warnLevel', () => {
 });
 
 describe('wheelEntriesFor', () => {
-  it('1 wejscie ponizej progu podwojenia', () => {
+  it('1 wejscie ponizej progu eskalacji', () => {
     expect(wheelEntriesFor(0)).toBe(1);
     expect(wheelEntriesFor(1)).toBe(1);
     expect(wheelEntriesFor(2)).toBe(1);
   });
-  it('2 wejscia od progu podwojenia (3 uwagi)', () => {
+  it('od progu eskalacji rosnie: n uwag daje n-1 miejsc', () => {
     expect(wheelEntriesFor(3)).toBe(2);
-    expect(wheelEntriesFor(4)).toBe(2);
+    expect(wheelEntriesFor(4)).toBe(3);
+    expect(wheelEntriesFor(5)).toBe(4);
+    expect(wheelEntriesFor(6)).toBe(5);
   });
 });
 
@@ -181,6 +187,57 @@ describe('canEarnPlus', () => {
   it('false od progu blokady plusow', () => {
     expect(canEarnPlus(2)).toBe(false);
     expect(canEarnPlus(3)).toBe(false);
+  });
+});
+
+describe('canReceivePlombaAfterLesson', () => {
+  it('false ponizej progu podwojenia (kolo po lekcji: mozna tylko zyskac)', () => {
+    expect(canReceivePlombaAfterLesson(0)).toBe(false);
+    expect(canReceivePlombaAfterLesson(1)).toBe(false);
+    expect(canReceivePlombaAfterLesson(2)).toBe(false);
+  });
+  it('true od progu podwojenia (>=3 uwagi w miesiacu)', () => {
+    expect(canReceivePlombaAfterLesson(3)).toBe(true);
+    expect(canReceivePlombaAfterLesson(4)).toBe(true);
+  });
+});
+
+describe('warnBadgeLabel', () => {
+  it('pusty string bez uwag', () => {
+    expect(warnBadgeLabel(0)).toBe('');
+  });
+  it('1 uwaga - dyskretne ostrzezenie', () => {
+    expect(warnBadgeLabel(1)).toBe('1. ostrzeżenie');
+  });
+  it('2 uwagi - bez plusa (dotyczy kola powtorzeniowego)', () => {
+    expect(warnBadgeLabel(2)).toBe('bez plusa (powtórki)');
+  });
+  it('3 uwagi - mozliwa plomba i dodatkowe miejsca w kole (2 miejsca)', () => {
+    expect(warnBadgeLabel(3)).toBe('plomba możliwa + 2 miejsca w kole');
+  });
+  it('4 uwagi - 3 miejsca (polska liczba mnoga)', () => {
+    expect(warnBadgeLabel(4)).toBe('plomba możliwa + 3 miejsca w kole');
+  });
+  it('6 uwag - 5 miejsc (polska liczba mnoga)', () => {
+    expect(warnBadgeLabel(6)).toBe('plomba możliwa + 5 miejsc w kole');
+  });
+});
+
+describe('resolveRecapMode', () => {
+  function recapSlide(partial: Partial<Extract<Slide, { kind: 'recap' }>> = {}): Extract<Slide, { kind: 'recap' }> {
+    return { id: 's1', kind: 'recap', questionSetId: 'qs1', ...partial };
+  }
+
+  it('uzywa pola mode, gdy jest ustawione', () => {
+    expect(resolveRecapMode(recapSlide({ mode: 'powtorzeniowe' }))).toBe('powtorzeniowe');
+    expect(resolveRecapMode(recapSlide({ mode: 'po-lekcji' }))).toBe('po-lekcji');
+    expect(resolveRecapMode(recapSlide({ mode: 'demo' }))).toBe('demo');
+  });
+  it('bez pola mode: variant "demo" daje tryb demo', () => {
+    expect(resolveRecapMode(recapSlide({ variant: 'demo' }))).toBe('demo');
+  });
+  it('stary slajd bez mode i bez variant - domyslnie po-lekcji (wsteczna zgodnosc)', () => {
+    expect(resolveRecapMode(recapSlide())).toBe('po-lekcji');
   });
 });
 
@@ -210,6 +267,17 @@ describe('buildRoundEntries', () => {
     expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(2);
     expect(entries.filter((e) => e.student.id === 's1')).toHaveLength(1);
     expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's2#1', 's3#0']);
+  });
+
+  it('uczen z 4 uwagami dostaje trzy wejscia (n-1 miejsc od progu eskalacji)', () => {
+    const warnings = new Map([['s2', 4]]);
+    const entries = buildRoundEntries({
+      students: [s1, s2, s3],
+      warningsFor: (id) => warnings.get(id) ?? 0,
+      usedFor: () => 0,
+    });
+    expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(3);
+    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's2#1', 's2#2', 's3#0']);
   });
 
   it('wykorzystane wejscia zostaja na kole, ale sa oznaczone jako done', () => {

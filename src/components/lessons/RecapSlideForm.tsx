@@ -1,4 +1,5 @@
 import type { QuestionSet, Slide } from '../../data/types';
+import { resolveRecapMode } from '../../lib/recap';
 import { Select } from '../ui/Select';
 
 type RecapSlide = Extract<Slide, { kind: 'recap' }>;
@@ -12,6 +13,7 @@ export function RecapSlideForm({
   onChange: (next: RecapSlide) => void;
   questionSets: QuestionSet[];
 }) {
+  const mode = resolveRecapMode(slide);
   return (
     <div className="space-y-3">
       <div>
@@ -30,6 +32,20 @@ export function RecapSlideForm({
           </p>
         )}
       </div>
+      {mode !== 'demo' && (
+        <div>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Tryb rundy</label>
+          <Select
+            value={mode}
+            onChange={(e) =>
+              onChange({ ...slide, mode: e.target.value === 'powtorzeniowe' ? 'powtorzeniowe' : 'po-lekcji' })
+            }
+          >
+            <option value="po-lekcji">koło po lekcji (można tylko zyskać)</option>
+            <option value="powtorzeniowe">koło powtórzeniowe (pełne ocenianie)</option>
+          </Select>
+        </div>
+      )}
     </div>
   );
 }

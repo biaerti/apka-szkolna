@@ -106,6 +106,26 @@ export interface Lesson {
   progress: Record<ID, LessonProgress>;
   plannedDate?: string;
   questionSetId?: ID; // zestaw pytan do kola wpiety w lekcje (opcjonalny)
+  /**
+   * Dzial (grupa) lekcji do naglowka na liscie, np. "Powtorka 1-3" albo
+   * "Powtorka klasy 4" - lekcje bez dzialu (zwykle lekcje tematyczne wlasne
+   * nauczyciela) nie dostaja naglowka. Grupowanie idzie po kolejnosci lekcji
+   * w roczniku, nie po osobnej licie dzialow.
+   */
+  dzial?: string;
+  /**
+   * Zestaw pytan powtorkowy TEJ lekcji - wskazuje na JEJ WLASNY `questionSetId`
+   * (te same pytania sluza i kolu po lekcji, i kolu powtorzeniowemu na
+   * poczatku nastepnej lekcji, patrz src/lib/recap.ts: RecapMode). Dawniej byl
+   * to osobny, lustrzany zestaw pytan - wycofany, zeby nauczyciel nie musial
+   * przygotowywac dwoch kompletow pytan na ten sam material. Zostaje jako
+   * osobne pole (kolumna w Supabase juz istnieje) - starsze, jeszcze
+   * nieodswiezone lekcje moga wciaz wskazywac na prawdziwie osobny zestaw.
+   * Odpytywany na kole NA POCZATKU NASTEPNEJ lekcji ("wracamy do ostatniego
+   * tematu"), zanim zacznie sie nowy material. Opcjonalny - lekcja
+   * zapoznawcza (intro.ts) go nie ma.
+   */
+  reviewQuestionSetId?: ID;
   slides: Slide[];
   // Pod dziennik elektroniczny (Vulcan): temat do wpisania i kody podstawy programowej (np. II.1.1).
   registerTopic?: string;
@@ -158,6 +178,8 @@ export type SlideArt =
   | 'dialog' // zapis rozmowy: nowa linia i myslnik
   | 'zyczenia' // zyczenia i podziekowanie
   | 'kolejnoscZdarzen' // najpierw - potem - nagle - na koniec
+  | 'tematTekstu' // o czym jest tekst + szukanie informacji lupa
+  | 'bohaterowie' // bohater glowny w kazdej scenie, drugoplanowy tylko w niektorych
   // Ilustracje przedmiotowe do powtorki klasy 4 (src/data/recap4.ts).
   | 'przypadki' // 7 przypadkow z pytaniami
   | 'czasownikOdmiana' // osoba, liczba, czas
@@ -197,6 +219,10 @@ export type Slide =
       page?: number;
       exerciseNo?: string;
       timerSec?: number;
+      // Ta sama ilustracja, co na slajdzie z regula tuz przed zadaniem - dziecko
+      // pisze w zeszycie i ma wzor przed oczami, zamiast patrzec na sama liste
+      // polecen. Szczegolnie wazne w klasach 1-3.
+      art?: SlideArt;
     }
   // Praca z tekstem: strona i czas na przeczytanie musza byc widoczne od razu,
   // duzymi cyframi - uczen ma wiedziec CO czyta i ILE MA CZASU bez pytania.
@@ -212,8 +238,29 @@ export type Slide =
     }
   // Notatka do zeszytu - zamyka lekcje ("zapisujecie notatkę i jesteście wolni").
   | { id: ID; kind: 'note'; title?: string; body: string }
-  | { id: ID; kind: 'recap'; questionSetId: ID } // slajd uruchamia kolo fortuny
-  | { id: ID; kind: 'image'; url: string; caption?: string };
+  // slajd uruchamia kolo fortuny; variant 'demo' = pierwsze pokazanie kola w
+  // lekcji zapoznawczej - dziala jak zwykla runda (bez naglowka "Przedstaw się"
+  // i bez "dodatkowego pytania"), tryb intro/przedstawiania wynika z topicu
+  // zestawu ORAZ braku tego pola. `variant` zostaje tylko dla lekcji
+  // zapoznawczej (src/data/intro.ts) - nowe rozroznienie zasad oceniania
+  // zaladowanych z `mode` (patrz nizej).
+  //
+  // `mode` rozroznia DWA WLASCIWE tryby rundy (nazewnictwo nauczyciela):
+  // - 'po-lekcji'    - kolo NA KONCU lekcji: mozna tylko zyskac (plus/Dalej,
+  //                    plomba tylko dla ucznia z >=3 uwagami w miesiacu),
+  // - 'powtorzeniowe' - kolo NA POCZATKU lekcji (albo wejscie "Koło powt."):
+  //                    pelne ocenianie plus/kropka/plomba/pas, uczen z >=2
+  //                    uwagami w miesiacu nie moze dostac plusa.
+  // Brak pola (stare dane sprzed tego rozroznienia) = 'po-lekcji', bo do tej
+  // pory KAZDY recap na koncu lekcji dzialal tak jak dzisiejsze 'po-lekcji'
+  // (patrz src/lib/recap.ts: resolveRecapMode). Odczyt starych danych nie moze
+  // sie wywalic - stad pole opcjonalne, a nie wymagane.
+  | { id: ID; kind: 'recap'; questionSetId: ID; variant?: 'demo'; mode?: 'po-lekcji' | 'powtorzeniowe' | 'demo' }
+  // `title`/`body` opcjonalne: pozwalaja polaczyc zdjecie z krotkim tekstem na
+  // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac
+  // sam naglowek nad zdjeciem (np. "Znacie teleturniej Kolo Fortuny?").
+  // `caption` zostaje jako podpis pod zdjeciem dla prostszych slajdow.
+  | { id: ID; kind: 'image'; url: string; caption?: string; title?: string; body?: string };
 
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
@@ -223,4 +270,11 @@ export interface Settings {
   wheelSpinSec: number; // domyslnie 4
   plusesForFive: number; // ile plusow zamienia sie na piatke; domyslnie 3
   plombyForOne: number; // ile plomb zamienia sie na jedynke; domyslnie 3
+  /**
+   * Miekki limit pytan w kole POWTORZENIOWYM (na poczatku lekcji): licznik w
+   * sesji pokazuje "pytanie X/limit" i po jego osiagnieciu proponuje
+   * zakonczenie rundy - nauczyciel moze kreic dalej, to nie jest blokada.
+   * Domyslnie 7.
+   */
+  reviewQuestionCount: number;
 }

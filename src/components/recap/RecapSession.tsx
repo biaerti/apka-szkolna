@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../../data/store';
 import { INTRO_PROMPT, INTRO_PROMPT_HINT, INTRO_SET_TOPIC } from '../../data/intro';
-import { answersByQuestion } from '../../lib/recap';
+import { answersByQuestion, type RecapMode } from '../../lib/recap';
 import { StudentPicker } from './StudentPicker';
 import { QuestionPicker } from './QuestionPicker';
 import { StudentSidebar } from './StudentSidebar';
@@ -31,6 +31,19 @@ export interface RecapSessionProps {
   initialGrading?: boolean;
   /** Domyslnie: czy pytania sa losowe, gdy brak parametrow w query string. */
   initialRandomQuestions?: boolean;
+  /**
+   * Slajd 'recap' z variant: 'demo' (pierwsze pokazanie kola w lekcji
+   * zapoznawczej) - dziala jak zwykla runda: bez naglowka "Przedstaw się" i
+   * bez "dodatkowego pytania", mimo ze zestaw ma topic lekcji zapoznawczej.
+   */
+  demoVariant?: boolean;
+  /**
+   * Tryb rundy - "koło po lekcji" (domyslnie, mozna tylko zyskac) albo "koło
+   * powtórzeniowe" (pelne ocenianie, patrz src/lib/recap.ts). Nadpisywany
+   * query stringiem `?tryb=` na trasie /powtorka/:classId/:setId (patrz
+   * RecapScreen) - dzieki temu ten sam link dziala tez spoza slajdu recap.
+   */
+  recapMode?: RecapMode;
 }
 
 export function RecapSession({
@@ -42,6 +55,8 @@ export function RecapSession({
   initialPickMode,
   initialGrading,
   initialRandomQuestions,
+  demoVariant,
+  recapMode,
 }: RecapSessionProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,9 +68,9 @@ export function RecapSession({
   //    URL dalej, wiec da sie wymusic tryb linkiem;
   // 2) propsy initial* (przekazywane np. przez inny embed);
   // 3) heurystyka: lekcja zapoznawcza ("Poznajmy się", topic zestawu === 'Lekcja
-  //    zapoznawcza') bez jawnych parametrow startuje od razu w trybie po kolei,
-  //    z losowymi pytaniami i bez ocen - tak, zeby slajd recap w prezentacji tej
-  //    lekcji dzialal "z automatu";
+  //    zapoznawcza') bez jawnych parametrow startuje od razu z losowymi pytaniami
+  //    i bez ocen - tak, zeby slajd recap w prezentacji tej lekcji dzialal
+  //    "z automatu" (wybor ucznia zawsze domyslnie kolem - patrz punkt 4);
   // 4) wartosci domyslne modulu powtorki (kolo, pytania po kolei, ocenianie wl.).
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const queryPick = searchParams.get('pick');
@@ -63,6 +78,11 @@ export function RecapSession({
     queryPick === 'sequential' || queryPick === 'wheel' ? queryPick : undefined;
   const explicitRandom = searchParams.has('random') ? searchParams.get('random') === '1' : undefined;
   const explicitGrading = searchParams.has('grading') ? searchParams.get('grading') === '1' : undefined;
+  const queryTryb = searchParams.get('tryb');
+  const explicitRecapMode: RecapMode | undefined =
+    queryTryb === 'powtorzeniowe' || queryTryb === 'po-lekcji' ? queryTryb : undefined;
+  // Kolejnosc jak przy pickMode/grading: query string > prop > domyslne 'po-lekcji'.
+  const resolvedRecapMode: RecapMode = explicitRecapMode ?? recapMode ?? 'po-lekcji';
 
   const hasExplicitSettings =
     explicitPick !== undefined ||
@@ -72,15 +92,19 @@ export function RecapSession({
     initialGrading !== undefined ||
     initialRandomQuestions !== undefined;
 
-  const isIntroLesson = questionSet?.topic === INTRO_SET_TOPIC;
-  const introDefaultPick: PickMode = 'sequential';
+  // Topic decyduje o domyslnych ustawieniach rundy (kolo, losowe pytania, bez
+  // ocen) - dotyczy zarowno slajdu demo, jak i wlasciwej rundy "Przedstaw się".
+  // Naglowek "Przedstaw się" natomiast NIE pojawia sie w wariancie demo - patrz
+  // isIntroLesson nizej.
+  const isIntroTopic = questionSet?.topic === INTRO_SET_TOPIC;
+  // Tryb intro (przedstawianie) = topic zestawu ORAZ brak variant: 'demo'.
+  const isIntroLesson = isIntroTopic && !demoVariant;
 
-  const resolvedPickMode: PickMode =
-    explicitPick ?? initialPickMode ?? (!hasExplicitSettings && isIntroLesson ? introDefaultPick : 'wheel');
+  const resolvedPickMode: PickMode = explicitPick ?? initialPickMode ?? 'wheel';
   const resolvedRandomOrder =
-    explicitRandom ?? initialRandomQuestions ?? (!hasExplicitSettings && isIntroLesson ? true : false);
+    explicitRandom ?? initialRandomQuestions ?? (!hasExplicitSettings && isIntroTopic ? true : false);
   const resolvedGrading =
-    explicitGrading ?? initialGrading ?? (!hasExplicitSettings && isIntroLesson ? false : true);
+    explicitGrading ?? initialGrading ?? (!hasExplicitSettings && isIntroTopic ? false : true);
 
   const session = useRecapSession({
     classId,
@@ -89,6 +113,7 @@ export function RecapSession({
     initialPickMode: resolvedPickMode,
     initialGrading: resolvedGrading,
     initialRandomOrder: resolvedRandomOrder,
+    recapMode: resolvedRecapMode,
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hintOpen, setHintOpen] = useState(false);
@@ -144,6 +169,9 @@ export function RecapSession({
       <RecapToolbar
         className={schoolClass.name}
         questionSetName={questionSet.name}
+        // Etykieta trybu tylko dla "prawdziwych" rund - demo/"Przedstaw się"
+        // maja grading wylaczone i nie korzystaja z tego rozroznienia (A.4).
+        recapMode={session.grading && !isIntroTopic ? session.recapMode : undefined}
         pickMode={session.pickMode}
         onChangePickMode={session.setPickMode}
         grading={session.grading}
@@ -153,6 +181,7 @@ export function RecapSession({
         drawsCompleted={session.drawsCompleted}
         plannedTotal={session.plannedTotal}
         inProgress={!!session.currentStudent && !session.graded}
+        reviewQuestionCount={session.settings.reviewQuestionCount}
         canUndo={session.canUndo}
         onUndo={session.undoLast}
         onOpenQuestionPicker={() => setQuestionPickerOpen(true)}
@@ -208,7 +237,9 @@ export function RecapSession({
         <span className="min-w-0 flex-1 truncate">
         {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : 'Spacja: kręć'}
         {session.grading
-          ? ' - 1: dobrze - 2: częściowo - 3: źle - 4: pas'
+          ? session.recapMode === 'powtorzeniowe'
+            ? ' - 1: dobrze - 2: częściowo - 3: źle - 4: pas'
+            : ' - 1: dobrze - 2: dalej - 3: źle (od 3. uwagi)'
           : ' - Enter: gotowe, następny'}
         {' '}- N: następne pytanie - O: pokaż/ukryj odpowiedź
         {!embedded && ' - F: pełny ekran'} - Esc: zakończ

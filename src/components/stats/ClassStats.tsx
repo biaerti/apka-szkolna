@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { useStore } from '../../data/store';
 import { Select } from '../ui/Select';
 import { Button } from '../ui/Button';
+import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { aggregateMonth, toCsv } from '../../lib/stats';
 import { monthKey } from '../../lib/week';
 import { StatsTable, type SortKey } from './StatsTable';
@@ -19,9 +20,10 @@ function monthLabel(key: string): string {
   return name;
 }
 
-export function ClassStats({ students }: { students: Student[] }) {
+export function ClassStats({ classId, students }: { classId: string; students: Student[] }) {
   const recapEvents = useStore((s) => s.recapEvents);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
+  const resetBalance = useStore((s) => s.resetBalance);
 
   const studentIds = useMemo(() => new Set(students.map((st) => st.id)), [students]);
 
@@ -40,6 +42,12 @@ export function ClassStats({ students }: { students: Student[] }) {
 
   const [sortKey, setSortKey] = useState<SortKey>('number');
   const [sortDir, setSortDir] = useState<1 | -1>(1);
+  const [resetClassOpen, setResetClassOpen] = useState(false);
+
+  const eventsToResetCount = useMemo(
+    () => recapEvents.filter((e) => e.classId === classId && monthKey(new Date(e.at)) === activeMonth).length,
+    [recapEvents, classId, activeMonth],
+  );
 
   const rows = useMemo(() => {
     const base = aggregateMonth(recapEvents, students, activeMonth);
@@ -89,9 +97,14 @@ export function ClassStats({ students }: { students: Student[] }) {
             ))}
           </Select>
         </div>
-        <Button variant="secondary" onClick={handleExportCsv}>
-          Eksport CSV
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={handleExportCsv}>
+            Eksport CSV
+          </Button>
+          <Button variant="danger" onClick={() => setResetClassOpen(true)} disabled={eventsToResetCount === 0}>
+            Wyzeruj bilans
+          </Button>
+        </div>
       </div>
 
       <p className="text-sm text-gray-500">
@@ -106,6 +119,20 @@ export function ClassStats({ students }: { students: Student[] }) {
         onToggleSort={toggleSort}
         eventsForStudent={eventsForStudent}
         onRemoveEvent={removeRecapEvent}
+        monthLabel={monthLabel(activeMonth)}
+        onResetStudent={(studentId) => resetBalance(classId, activeMonth, studentId)}
+      />
+
+      <ConfirmDialog
+        open={resetClassOpen}
+        title="Wyzeruj bilans klasy"
+        message={`Usunięte zostaną wszystkie plusy, kropki, plomby, pasy i uwagi całej klasy zapisane w ${monthLabel(activeMonth)} (${eventsToResetCount} ${eventsToResetCount === 1 ? 'zdarzenie' : 'zdarzeń'}). Poprzednie miesiące zostają bez zmian. Tej operacji nie da się cofnąć.`}
+        confirmLabel="Wyzeruj"
+        onCancel={() => setResetClassOpen(false)}
+        onConfirm={() => {
+          resetBalance(classId, activeMonth);
+          setResetClassOpen(false);
+        }}
       />
     </div>
   );

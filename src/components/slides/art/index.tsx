@@ -42,6 +42,8 @@ import { ZnakiInterpunkcyjne } from './ZnakiInterpunkcyjne';
 import { Dialog } from './Dialog';
 import { Zyczenia } from './Zyczenia';
 import { KolejnoscZdarzen } from './KolejnoscZdarzen';
+import { TematTekstu } from './TematTekstu';
+import { Bohaterowie } from './Bohaterowie';
 import { Przypadki } from './Przypadki';
 import { CzasownikOdmiana } from './CzasownikOdmiana';
 import { Stopniowanie } from './Stopniowanie';
@@ -106,6 +108,8 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   dialog: Dialog,
   zyczenia: Zyczenia,
   kolejnoscZdarzen: KolejnoscZdarzen,
+  tematTekstu: TematTekstu,
+  bohaterowie: Bohaterowie,
   // Ilustracje przedmiotowe do powtorki klasy 4.
   przypadki: Przypadki,
   czasownikOdmiana: CzasownikOdmiana,

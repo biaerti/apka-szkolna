@@ -31,6 +31,7 @@ function settings(partial: Partial<Settings> = {}): Settings {
     wheelSpinSec: 4,
     plusesForFive: 3,
     plombyForOne: 3,
+    reviewQuestionCount: 7,
     ...partial,
   };
 }

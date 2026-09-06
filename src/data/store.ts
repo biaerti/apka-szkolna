@@ -9,6 +9,7 @@ import { buildSeedData } from './seed';
 import { classGrade } from '../lib/grade';
 import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
+import { monthKey as recapMonthKey } from '../lib/week';
 import type {
   Lesson,
   LessonProgress,
@@ -22,6 +23,16 @@ import type {
 
 export const STORAGE_KEY = 'apka-szkolna';
 
+/**
+ * Fingerprinty wersji "gotowych materialow" wstawionych/ostatnio odswiezonych
+ * z kodu (buildRecap13/buildRecap4/buildIntroLesson), kluczowane id lekcji.
+ * Sluza do odrozniania w refreshMaterials.ts "kod ma nowsza wersje" od
+ * "nauczyciel edytowal lekcje recznie w edytorze" - patrz classifyMatch.
+ * Typ trzymany lokalnie (nie w types.ts), bo to szczegol implementacyjny
+ * odswiezania gotowych materialow, a nie ksztalt danych domenowych.
+ */
+type InsertedFingerprints = Record<string, string>;
+
 interface AppState {
   classes: SchoolClass[];
   students: Student[];
@@ -30,6 +41,7 @@ interface AppState {
   lessons: Lesson[];
   recapEvents: RecapEvent[];
   settings: Settings;
+  insertedFingerprints: InsertedFingerprints;
 
   // Klasy
   addClass: (name: string) => SchoolClass;
@@ -62,10 +74,23 @@ interface AppState {
   reorderLesson: (id: string, direction: 'up' | 'down') => void;
   /** Ustawia postep jednej klasy w lekcji (status + data wykonania). */
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
+  /**
+   * Zapisuje fingerprint wersji "gotowego materialu" wstawionej/odswiezonej do
+   * lekcji `lessonId` - patrz InsertedFingerprints. Wywolywane przez
+   * useReadyMaterials.ts przy wstawianiu i przy kazdym odswiezeniu.
+   */
+  setInsertedFingerprint: (lessonId: string, fingerprint: string) => void;
 
   // Zdarzenia recapu
   addRecapEvent: (event: Omit<RecapEvent, 'id' | 'at'>) => RecapEvent;
   removeRecapEvent: (id: string) => void;
+  /**
+   * "Wyzeruj bilans": kasuje zdarzenia recapu (plusy, kropki, plomby, pasy, uwagi)
+   * calej klasy - albo jednego ucznia, gdy podano `studentId` - zapisane w danym
+   * miesiacu ("RRRR-MM"). Tylko biezacy miesiac, bo bilans i tak liczy sie
+   * miesiacami (patrz src/lib/recap.ts) - poprzednie miesiace zostaja nietkniete.
+   */
+  resetBalance: (classId: string, month: string, studentId?: string) => void;
 
   // Ustawienia
   updateSettings: (patch: Partial<Settings>) => void;
@@ -130,6 +155,25 @@ export function removeClassFromLessons(lessons: Lesson[], classes: SchoolClass[]
     });
 }
 
+/**
+ * Zdarzenia recapu, ktore znikaja przy "Wyzeruj bilans": cala klasa (lub jeden
+ * uczen, gdy podano `studentId`) w danym miesiacu ("RRRR-MM"). Wydzielona jako
+ * czysta funkcja, zeby dalo sie ja przetestowac bez dotykania store'u/localStorage.
+ */
+export function recapEventsForReset(
+  events: RecapEvent[],
+  classId: string,
+  month: string,
+  studentId?: string,
+): RecapEvent[] {
+  return events.filter(
+    (e) =>
+      e.classId === classId &&
+      (studentId === undefined || e.studentId === studentId) &&
+      recapMonthKey(new Date(e.at)) === month,
+  );
+}
+
 interface LegacyLesson {
   id: string;
   classId?: string;
@@ -192,7 +236,9 @@ export const useStore = create<AppState>()(
         wheelSpinSec: 4,
         plusesForFive: 3,
         plombyForOne: 3,
+        reviewQuestionCount: 7,
       },
+      insertedFingerprints: {},
 
       addClass: (name) => {
         const order = get().classes.length;
@@ -292,7 +338,11 @@ export const useStore = create<AppState>()(
         }));
       },
       removeLesson: (id) => {
-        set((s) => ({ lessons: s.lessons.filter((l) => l.id !== id) }));
+        set((s) => {
+          const insertedFingerprints = { ...s.insertedFingerprints };
+          delete insertedFingerprints[id];
+          return { lessons: s.lessons.filter((l) => l.id !== id), insertedFingerprints };
+        });
       },
       moveLesson: (id, toIndex) => {
         set((s) => ({ lessons: moveLessonInGrade(s.lessons, id, toIndex) }));
@@ -313,6 +363,11 @@ export const useStore = create<AppState>()(
           ),
         }));
       },
+      setInsertedFingerprint: (lessonId, fingerprint) => {
+        set((s) => ({
+          insertedFingerprints: { ...s.insertedFingerprints, [lessonId]: fingerprint },
+        }));
+      },
 
       addRecapEvent: (event) => {
         const item: RecapEvent = { ...event, id: newId(), at: new Date().toISOString() };
@@ -321,6 +376,13 @@ export const useStore = create<AppState>()(
       },
       removeRecapEvent: (id) => {
         set((s) => ({ recapEvents: s.recapEvents.filter((e) => e.id !== id) }));
+      },
+      resetBalance: (classId, month, studentId) => {
+        set((s) => {
+          const toRemove = new Set(recapEventsForReset(s.recapEvents, classId, month, studentId).map((e) => e.id));
+          if (toRemove.size === 0) return {};
+          return { recapEvents: s.recapEvents.filter((e) => !toRemove.has(e.id)) };
+        });
       },
 
       updateSettings: (patch) => {
@@ -340,12 +402,13 @@ export const useStore = create<AppState>()(
           lessons: [],
           recapEvents: [],
           settings: seed.settings,
+          insertedFingerprints: {},
         }));
       },
     }),
     {
       name: STORAGE_KEY,
-      version: 5,
+      version: 7,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -361,12 +424,19 @@ export const useStore = create<AppState>()(
       // rocznik (grade + progress per klasa). Lekcje tej samej tresci, ktore
       // nauczyciel wstawil osobno do klas rownoleglych, sa sklejane w jedna
       // (dopasowanie po znormalizowanym tytule), a ich postep - laczony.
+      // v5 -> v6: dochodzi insertedFingerprints (fingerprinty wstawionych
+      // wersji gotowych materialow), zeby odroznic "kod ma nowsza wersje" od
+      // "nauczyciel edytowal lekcje recznie". Stare dane dostaja pusta mape -
+      // to spada na dotychczasowe zachowanie (kazda roznica = "kod nowszy").
+      // v6 -> v7: dochodzi reviewQuestionCount (miekki limit pytan kola
+      // powtorzeniowego) - domyslnie 7, edytowalne w Ustawieniach.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
           lessons?: Array<Record<string, unknown>>;
           recapEvents?: Array<{ result?: string; [key: string]: unknown }>;
           settings?: (Partial<Settings> & { passesPerWeek?: number }) | undefined;
+          insertedFingerprints?: InsertedFingerprints;
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -403,6 +473,12 @@ export const useStore = create<AppState>()(
         }
         if (version < 5 && state.settings && state.settings.passesPerMonth === 3) {
           state.settings = { ...state.settings, passesPerMonth: 2 };
+        }
+        if (version < 6) {
+          state.insertedFingerprints = state.insertedFingerprints ?? {};
+        }
+        if (version < 7 && state.settings) {
+          state.settings = { ...state.settings, reviewQuestionCount: state.settings.reviewQuestionCount ?? 7 };
         }
         return state as unknown as AppState;
       },

@@ -45,7 +45,10 @@ function buildQuestionSet(
   return { set, questions };
 }
 
-/** Tworzy 6 lekcji + 6 zestawow pytan powtorki klas 1-3 dla wskazanego rocznika. */
+/** Nazwa dzialu do naglowka na liscie lekcji - wszystkie lekcje tej powtorki naleza razem. */
+const DZIAL = 'Powtórka 1-3';
+
+/** Tworzy 6 lekcji + 6 zestawow pytan wstepnych + 6 zestawow powtorkowych powtorki klas 1-3 dla wskazanego rocznika. */
 export function buildRecap13(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   const set1 = buildQuestionSet(
@@ -186,7 +189,9 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     title: 'Powtórka 1-3: Głoski, litery, sylaby, ortografia',
     topic: 'Fonetyka i ortografia',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set1.set.id,
+    reviewQuestionSetId: set1.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: głoski, litery, sylaby, ortografia',
     curriculum: ['II.3.5', 'II.4.1'],
     slides: [
@@ -267,7 +272,7 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
 - **8 samogłosek**: a, e, i, o, u, y, ą, ę
 - **dwuznak** to jedna głoska zapisana dwiema literami
 - **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz`),
-      slideRecap(set1.set.id),
+      slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Głoski, litery, sylaby i ortografia**
@@ -286,12 +291,16 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150),
     title: 'Powtórka 1-3: Części mowy, zdania, wielka litera',
     topic: 'Gramatyka i interpunkcja',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set2.set.id,
+    reviewQuestionSetId: set2.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: części mowy, rodzaje zdań, interpunkcja',
     curriculum: ['II.1.1', 'II.1.11', 'II.4.2', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Części mowy, zdania i interpunkcja - część 2/6'),
       slideTopic(),
+      // Kolo na start: wracamy do ostatniego tematu (glaski, litery, sylaby) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set1.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Rzeczownik, czasownik, przymiotnik
 - Rodzaje zdań i znaki na ich końcu
 - Wielka litera i przecinek przed że, ale, bo`),
@@ -359,7 +368,7 @@ Przykłady:
 - **rzeczownik** (kto? co?), **czasownik** (co robi?), **przymiotnik** (jaki?)
 - zdanie **oznajmujące, pytające** albo **rozkazujące**
 - przecinek zawsze przed **że, ale, bo**`),
-      slideRecap(set2.set.id),
+      slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Części mowy, zdania i wielka litera**
@@ -377,12 +386,16 @@ Przykłady:
     title: 'Powtórka 1-3: Formy wypowiedzi i czytanie',
     topic: 'Formy wypowiedzi',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set3.set.id,
+    reviewQuestionSetId: set3.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: formy wypowiedzi, czytanie i opowiadanie tekstów',
     curriculum: ['III.2.1', 'III.2.3', 'I.1.3', 'I.1.6', 'I.1.7'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie i formy wypowiedzi - część 3/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 2 (czesci mowy, zdania) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set2.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Wiersz, proza i rymy
 - Bohater, baśń, legenda i bajka
 - Plan wydarzeń, opis i zaproszenie`),
@@ -447,7 +460,7 @@ Masz 5 minut.`, undefined, 300),
 - **wiersz** ma wersy i rymy, **proza** to zwykły tekst pisany zdaniami
 - **baśń** jest zmyślona, **legenda** tłumaczy prawdziwe miejsce
 - opowiadanie: **wstęp - rozwinięcie - zakończenie**`),
-      slideRecap(set3.set.id),
+      slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Formy wypowiedzi i czytanie tekstów**
@@ -466,12 +479,16 @@ Masz 5 minut.`, undefined, 300),
     title: 'Powtórka 1-3: Alfabet, słownik i rodziny wyrazów',
     topic: 'Alfabet i słownictwo',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set4.set.id,
+    reviewQuestionSetId: set4.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: alfabet, korzystanie ze słownika, wyrazy bliskoznaczne i pokrewne',
     curriculum: ['IV.5', 'II.2.8', 'IV.3', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Alfabet, słownik i rodziny wyrazów - część 4/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 3 (formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set3.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Alfabet i porządek alfabetyczny
 - Szukanie wyrazu w słowniku ortograficznym
 - Wyrazy bliskoznaczne i przeciwstawne
@@ -529,7 +546,7 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240),
 - w słowniku szukamy po **kolejnych literach**
 - **bliskoznaczne** znaczą prawie to samo, **przeciwstawne** odwrotnie
 - **rodzina wyrazów** ma wspólną cząstkę i wspólne znaczenie`),
-      slideRecap(set4.set.id),
+      slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Alfabet, słownik i rodziny wyrazów**
@@ -547,12 +564,16 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240),
     title: 'Powtórka 1-3: Zmiękczenia, ą i ę, znaki interpunkcyjne',
     topic: 'Ortografia i interpunkcja',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set5.set.id,
+    reviewQuestionSetId: set5.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: zmiękczenia, pisownia ą i ę, znaki interpunkcyjne',
     curriculum: ['II.4.1', 'II.4.2', 'II.3.5'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Zmiękczenia, ą i ę, interpunkcja - część 5/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 4 (alfabet i slownik) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set4.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Kreska czy litera i: ć - ci, ś - si, ź - zi, ń - ni, dź - dzi
 - Kiedy ą i ę, a kiedy om, on, em, en
 - Sześć znaków interpunkcyjnych i ich zadania`),
@@ -607,7 +628,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270),
 - **ą, ę** gdy słychać jedną głoskę; **om, on, em, en** gdy słychać osobne m lub n
 - przecinek: **wyliczenie** oraz przed **że, ale, bo**
 - w dialogu każda wypowiedź od **myślnika**`),
-      slideRecap(set5.set.id),
+      slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Zmiękczenia, ą i ę, znaki interpunkcyjne**
@@ -626,12 +647,16 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270),
     title: 'Powtórka 1-3: Czytanie ze zrozumieniem i krótkie formy',
     topic: 'Czytanie i formy użytkowe',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set6.set.id,
+    reviewQuestionSetId: set6.set.id,
     registerTopic: 'Powtórzenie wiadomości z klas 1-3: czytanie ze zrozumieniem, dialog, życzenia, podziękowanie, notatka',
     curriculum: ['2.2', '2.3', 'I.1.7', 'I.1.8', 'III.2.1', 'III.2.4'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie ze zrozumieniem i krótkie formy - część 6/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 5 (zmiekczenia, interpunkcja) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set5.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Temat tekstu i szukanie informacji
 - Kolejność zdarzeń
 - Dialog i jego zapis
@@ -682,7 +707,7 @@ Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zroz
 - wydarzenia porządkujemy: **najpierw - potem - nagle - na koniec**
 - dialog: **nowa linia i myślnik**
 - życzenia i podziękowanie zawsze kończymy **podpisem**`),
-      slideRecap(set6.set.id),
+      slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Czytanie ze zrozumieniem i krótkie formy użytkowe**
@@ -698,7 +723,14 @@ Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zroz
 
   return {
     lessons: [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6],
-    questionSets: [set1.set, set2.set, set3.set, set4.set, set5.set, set6.set],
+    questionSets: [
+      set1.set,
+      set2.set,
+      set3.set,
+      set4.set,
+      set5.set,
+      set6.set,
+    ],
     questions: [
       ...set1.questions,
       ...set2.questions,
@@ -747,8 +779,8 @@ function slideTask(
   };
 }
 
-function slideRecap(questionSetId: string): Slide {
-  return { id: newId(), kind: 'recap', questionSetId };
+function slideRecap(questionSetId: string, mode?: 'po-lekcji' | 'powtorzeniowe'): Slide {
+  return { id: newId(), kind: 'recap', questionSetId, ...(mode ? { mode } : {}) };
 }
 
 function slideNote(title: string, body: string): Slide {

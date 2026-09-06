@@ -1,5 +1,7 @@
-// Ilustracja "eskalacja": trzy stopnie konsekwencji za przeszkadzanie.
-// 1. ostrzezenie, 2. bez plusow, 3. podwojne wejscie do kola (dwa sektory tej samej osoby).
+// Ilustracja "eskalacja": rosnace stopnie konsekwencji za przeszkadzanie.
+// 1. ostrzezenie, 2. bez plusow do konca miesiaca, 3. i kazdy kolejny raz =
+// dodatkowe miejsce w kole (wiecej sektorow tej samej osoby, wiec i wieksza
+// szansa na losowanie).
 
 import { ART_COLORS as C, ART_FONT } from './colors';
 
@@ -9,7 +11,7 @@ export function Eskalacja({ className }: { className?: string }) {
       viewBox="0 0 480 300"
       className={className ?? 'h-auto w-full'}
       role="img"
-      aria-label="Ilustracja: trzy schodki eskalacji za przeszkadzanie - ostrzezenie, brak plusow, podwojne wejscie do kola"
+      aria-label="Ilustracja: rosnace schodki eskalacji za przeszkadzanie - ostrzezenie, brak plusow, coraz wiecej miejsc w kole"
       style={{ fontFamily: ART_FONT }}
     >
       {/* Schodki */}
@@ -24,7 +26,7 @@ export function Eskalacja({ className }: { className?: string }) {
         2
       </text>
       <text x={395} y={182} textAnchor="middle" fontSize={30} fontWeight={800} fill={C.white}>
-        3
+        3+
       </text>
 
       {/* Krok 1: ostrzezenie */}
@@ -43,17 +45,19 @@ export function Eskalacja({ className }: { className?: string }) {
         bez plusów
       </text>
 
-      {/* Krok 3: mini kolo z dwoma sektorami tej samej osoby */}
+      {/* Krok 3+: mini kolo z rosnaca liczba sektorow tej samej osoby (tu: cztery) */}
       <g transform="translate(395 88)">
-        <path d="M0 0 L0 -34 A34 34 0 0 1 29.4 -17 Z" fill={C.pas} stroke={C.white} strokeWidth={2} />
-        <path d="M0 0 L29.4 -17 A34 34 0 0 1 29.4 17 Z" fill={C.panel} stroke={C.white} strokeWidth={2} />
-        <path d="M0 0 L29.4 17 A34 34 0 0 1 0 34 Z" fill={C.panelLight} stroke={C.white} strokeWidth={2} />
-        <path d="M0 0 L0 34 A34 34 0 0 1 -29.4 17 Z" fill={C.pas} stroke={C.white} strokeWidth={2} />
-        <path d="M0 0 L-29.4 17 A34 34 0 0 1 -29.4 -17 Z" fill={C.panel} stroke={C.white} strokeWidth={2} />
-        <path d="M0 0 L-29.4 -17 A34 34 0 0 1 0 -34 Z" fill={C.panelLight} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L0 -34 A34 34 0 0 1 24.04 -24.04 Z" fill={C.pas} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L24.04 -24.04 A34 34 0 0 1 34 0 Z" fill={C.panel} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L34 0 A34 34 0 0 1 24.04 24.04 Z" fill={C.panelLight} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L24.04 24.04 A34 34 0 0 1 0 34 Z" fill={C.pas} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L0 34 A34 34 0 0 1 -24.04 24.04 Z" fill={C.panel} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L-24.04 24.04 A34 34 0 0 1 -34 0 Z" fill={C.panelLight} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L-34 0 A34 34 0 0 1 -24.04 -24.04 Z" fill={C.pas} stroke={C.white} strokeWidth={2} />
+        <path d="M0 0 L-24.04 -24.04 A34 34 0 0 1 0 -34 Z" fill={C.panel} stroke={C.white} strokeWidth={2} />
       </g>
       <text x={395} y={112} textAnchor="middle" fontSize={17} fontWeight={700} fill={C.pas}>
-        dwa razy w kole
+        coraz więcej miejsc w kole
       </text>
     </svg>
   );

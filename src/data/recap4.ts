@@ -45,7 +45,10 @@ function buildQuestionSet(
   return { set, questions };
 }
 
-/** Tworzy 6 lekcji + 6 zestawow pytan powtorki materialu klasy 4 dla wskazanego rocznika. */
+/** Nazwa dzialu do naglowka na liscie lekcji - wszystkie lekcje tej powtorki naleza razem. */
+const DZIAL = 'Powtórka klasy 4';
+
+/** Tworzy 6 lekcji + 6 zestawow pytan wstepnych + 6 zestawow powtorkowych powtorki materialu klasy 4 dla wskazanego rocznika. */
 export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   const set1 = buildQuestionSet(
@@ -192,7 +195,9 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     title: 'Powtórka klasy 4: Odmienne części mowy',
     topic: 'Odmienne części mowy',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set1.set.id,
+    reviewQuestionSetId: set1.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: odmienne części mowy i ich formy',
     curriculum: ['II.1.1', 'II.1.2', 'II.1.4', 'II.1.6', 'II.1.7'],
     slides: [
@@ -264,7 +269,7 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
 - rzeczownik odmienia się przez **7 przypadków**, liczby i rodzaje
 - czasownik ma **osobę, liczbę i czas**, a bez nich jest **bezokolicznikiem**
 - przymiotnik stopniujemy: **równy - wyższy - najwyższy**`),
-      slideRecap(set1.set.id),
+      slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Odmienne części mowy**
@@ -283,12 +288,16 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
     title: 'Powtórka klasy 4: Zdanie i wyrazy nieodmienne',
     topic: 'Składnia i wyrazy nieodmienne',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set2.set.id,
+    reviewQuestionSetId: set2.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: budowa zdania, wyrazy nieodmienne, pisownia "nie"',
     curriculum: ['II.1.8', 'II.1.12', 'II.1.2', 'II.4.1', 'II.4.2'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 1 (odmienne czesci mowy) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set1.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Podmiot i orzeczenie
 - Zdanie pojedyncze, złożone i równoważnik
 - Przysłówek, przyimek, spójnik
@@ -354,7 +363,7 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
 - zdanie **złożone** ma co najmniej **dwa orzeczenia**
 - **równoważnik** nie ma orzeczenia
 - **nie** z czasownikiem **osobno**, z rzeczownikiem i przymiotnikiem **razem**`),
-      slideRecap(set2.set.id),
+      slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Zdanie i wyrazy nieodmienne**
@@ -373,12 +382,16 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
     title: 'Powtórka klasy 4: Środki poetyckie i formy wypowiedzi',
     topic: 'Środki poetyckie i formy wypowiedzi',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set3.set.id,
+    reviewQuestionSetId: set3.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: środki poetyckie, budowa wiersza, formy wypowiedzi',
     curriculum: ['I.1.4', 'I.1.6', 'I.1.9', 'I.1.10', 'III.2.1'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 2 (zdanie, wyrazy nieodmienne) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set2.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Epitet, porównanie, przenośnia, ożywienie
 - Wers, strofa, rym, refren
 - Narrator i podmiot liryczny
@@ -452,7 +465,7 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
 - **wers** to linijka, **strofa** to zwrotka
 - w wierszu mówi **podmiot liryczny**, w opowiadaniu **narrator**
 - list: data, nagłówek, treść, podpis`),
-      slideRecap(set3.set.id),
+      slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Środki poetyckie i formy wypowiedzi**
@@ -472,12 +485,16 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
     title: 'Powtórka klasy 4: Słownictwo i frazeologia',
     topic: 'Słownictwo',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set4.set.id,
+    reviewQuestionSetId: set4.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: rodzina wyrazów, synonimy i antonimy, wyrazy wieloznaczne, związki frazeologiczne',
     curriculum: ['II.2.4', 'II.2.5', 'II.2.8', 'I.1.4', 'IV.5'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 3 (srodki poetyckie, formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set3.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Rodzina wyrazów i rdzeń
 - Synonimy i antonimy
 - Wyrazy wieloznaczne
@@ -538,7 +555,7 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
 - **synonim** znaczy prawie to samo, **antonim** odwrotnie
 - **wyraz wieloznaczny** ma kilka znaczeń - decyduje zdanie
 - **frazeologizm** rozumiemy **przenośnie**, nie dosłownie`),
-      slideRecap(set4.set.id),
+      slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Słownictwo i frazeologia**
@@ -558,12 +575,16 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
     title: 'Powtórka klasy 4: Ortografia, wielka litera i skróty',
     topic: 'Ortografia i interpunkcja',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set5.set.id,
+    reviewQuestionSetId: set5.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: pisownia ó-u, rz-ż, ch-h, wielka litera w nazwach własnych, skróty',
     curriculum: ['II.4.1', 'II.4.2', 'IV.5'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 4 (slownictwo i frazeologia) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set4.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Ó i u, rz i ż, ch i h: wymiany oraz reguły
 - Wielka litera w nazwach własnych
 - Skróty i kropka w skrócie
@@ -624,7 +645,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
 - **rz** po b, p, d, t, g, k, ch, j, w; **ch** na końcu wyrazu
 - **nazwy własne i święta** wielką literą, **dni i miesiące** małą
 - skrót obciętego wyrazu ma **kropkę**`),
-      slideRecap(set5.set.id),
+      slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Ortografia, wielka litera i skróty**
@@ -643,12 +664,16 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
     title: 'Powtórka klasy 4: Świat przedstawiony, gatunki, teatr i film',
     topic: 'Odbiór tekstów kultury',
     progress: {},
+    dzial: DZIAL,
     questionSetId: set6.set.id,
+    reviewQuestionSetId: set6.set.id,
     registerTopic: 'Powtórzenie wiadomości z klasy 4: świat przedstawiony, baśń, legenda, mit, bajka, komiks, teatr i film',
     curriculum: ['I.1.1', 'I.1.2', 'I.1.3', '2.7', '2.8', '2.9', '2.10'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/6'),
       slideTopic(),
+      // Kolo na start: wracamy do tematu z lekcji 5 (ortografia, wielka litera, skroty) tym samym zestawem, w trybie powtorzeniowym.
+      slideRecap(set5.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Świat przedstawiony utworu
 - Fikcja, elementy realistyczne i fantastyczne
 - Baśń, legenda, mit, bajka, komiks
@@ -703,7 +728,7 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
 - **fantastyczne** nie mogłoby zdarzyć się naprawdę
 - **baśń** - magia, **legenda** - prawdziwe miejsce, **mit** - bogowie, **bajka** - morał
 - **adaptacja** - książka przerobiona na film albo spektakl`),
-      slideRecap(set6.set.id),
+      slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `**Temat: Świat przedstawiony, gatunki, teatr i film**
@@ -719,7 +744,14 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
 
   return {
     lessons: [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6],
-    questionSets: [set1.set, set2.set, set3.set, set4.set, set5.set, set6.set],
+    questionSets: [
+      set1.set,
+      set2.set,
+      set3.set,
+      set4.set,
+      set5.set,
+      set6.set,
+    ],
     questions: [
       ...set1.questions,
       ...set2.questions,
@@ -768,8 +800,8 @@ function slideTask(
   };
 }
 
-function slideRecap(questionSetId: string): Slide {
-  return { id: newId(), kind: 'recap', questionSetId };
+function slideRecap(questionSetId: string, mode?: 'po-lekcji' | 'powtorzeniowe'): Slide {
+  return { id: newId(), kind: 'recap', questionSetId, ...(mode ? { mode } : {}) };
 }
 
 function slideNote(title: string, body: string): Slide {

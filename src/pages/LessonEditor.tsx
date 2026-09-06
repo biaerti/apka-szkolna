@@ -129,7 +129,18 @@ export function LessonEditor() {
             <Input value={lesson.title} onChange={(e) => updateLesson(lesson.id, { title: e.target.value })} />
           </div>
           <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Dział</label>
+            {/* Grupuje lekcje na liscie pod wspolnym naglowkiem, np. "Powtórka 1-3". Puste = bez naglowka. */}
+            <Input
+              value={lesson.dzial ?? ''}
+              onChange={(e) => updateLesson(lesson.id, { dzial: e.target.value || undefined })}
+              placeholder="np. Powtórka 1-3"
+            />
+          </div>
+          <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Zestaw pytań do koła</label>
+            {/* Ten sam zestaw sluzy i kolu po lekcji, i kolu powtorzeniowemu na
+                poczatku nastepnej lekcji - patrz src/lib/recap.ts (RecapMode). */}
             <div className="flex items-center gap-2">
               <Select
                 value={lesson.questionSetId ?? ''}

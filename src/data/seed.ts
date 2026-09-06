@@ -59,6 +59,7 @@ export function buildSeedData(): SeedData {
     wheelSpinSec: 4,
     plusesForFive: 3,
     plombyForOne: 3,
+    reviewQuestionCount: 7,
   };
 
   return {

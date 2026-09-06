@@ -4,6 +4,7 @@
 
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
+import { SlideArtView } from './art';
 import { StopwatchBar } from './StopwatchBar';
 import { estimateTextHeight, fitFontSize } from './fitText';
 
@@ -13,7 +14,8 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
   const hasSource = slide.page || slide.exerciseNo;
   const hasTimer = typeof slide.timerSec === 'number' && slide.timerSec > 0;
 
-  const width = 1000;
+  // Z ilustracja tekst dostaje wezsza kolumne - reszta kartki nalezy do obrazka.
+  const width = slide.art ? 620 : 1000;
   const available = hasTimer ? 380 : 470;
   const title = slide.title ?? '';
   const tSize = title ? fitFontSize(title, { width, height: 130, min: 34, max: 76, ...TITLE_FIT }) : 0;
@@ -37,17 +39,26 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
         )}
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
-        {slide.title && (
-          <h2 className="font-bold leading-tight text-white" style={{ fontSize: tSize }}>
-            {slide.title}
-          </h2>
+      <div className={`flex flex-1 items-center justify-center gap-10 ${slide.art ? 'px-2' : 'px-8'}`}>
+        <div
+          className={`flex flex-col justify-center gap-5 ${slide.art ? 'flex-1 text-left' : 'flex-1 items-center text-center'}`}
+        >
+          {slide.title && (
+            <h2 className="font-bold leading-tight text-white" style={{ fontSize: tSize }}>
+              {slide.title}
+            </h2>
+          )}
+          <RichText
+            text={slide.body}
+            className="space-y-[0.6em] leading-snug text-gray-100 [&_ul]:space-y-[0.3em] [&_ol]:space-y-[0.3em]"
+            style={{ fontSize: bSize }}
+          />
+        </div>
+        {slide.art && (
+          <div className="flex items-center justify-center" style={{ width: 460 }}>
+            <SlideArtView art={slide.art} className="h-auto w-full" />
+          </div>
         )}
-        <RichText
-          text={slide.body}
-          className="space-y-[0.6em] leading-snug text-gray-100 [&_ul]:space-y-[0.3em] [&_ol]:space-y-[0.3em]"
-          style={{ fontSize: bSize }}
-        />
       </div>
 
       {hasTimer && (
