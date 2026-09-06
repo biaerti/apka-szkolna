@@ -39,15 +39,49 @@ function questionsForTempSetId(fresh: FreshMaterialsBundle, tempSetId: string | 
   return { set, questions };
 }
 
-/** Znajduje pary (istniejaca lekcja w klasie <-> nowa definicja) po znormalizowanym tytule. */
+/**
+ * Aliasy starych tytulow gotowych materialow, ktore od czasu wstawienia
+ * zmienily sie na tyle, ze nawet titleMatchKey (tolerancyjny na diakrytyki i
+ * kolejnosc slow) ich nie znajdzie - bo zmienil sie sam ZESTAW SLOW w tytule.
+ * Klucz: titleMatchKey STAREGO tytulu (z jakim lekcja mogla zostac wstawiona
+ * u nauczyciela dawno temu), wartosc: titleMatchKey AKTUALNEGO tytulu z kodu,
+ * na ktory nalezy go zmapowac.
+ *
+ * Przyklad: pierwsza wersja src/data/recap13.ts (commit e3c9c37) nazywala
+ * trzecia lekcje "Powtórka 1-3: Teksty i formy wypowiedzi" - dzisiejsza,
+ * merytorycznie ta sama lekcja to "Powtórka 1-3: Formy wypowiedzi i
+ * czytanie" (ten sam zestaw pytan/temat: formy wypowiedzi, wiersz kontra
+ * proza, baśń i legenda, opowiadanie, opis, zaproszenie).
+ */
+const TITLE_ALIASES: Record<string, string> = {
+  [titleMatchKey('Powtorka 1-3: Teksty i formy wypowiedzi')]: titleMatchKey(
+    'Powtórka 1-3: Formy wypowiedzi i czytanie',
+  ),
+};
+
+/**
+ * Znajduje w `classLessons` lekcje odpowiadajaca `newLesson`: najpierw wprost
+ * po titleMatchKey (jak dotychczas), a gdy nic nie pasuje - po TITLE_ALIASES
+ * (stary tytul z kodu, ktory zdazyl sie zmienic bardziej niz tylko kolejnoscia
+ * slow/diakrytykami).
+ */
+function findOldLesson(classLessons: Lesson[], newLesson: Omit<Lesson, 'id' | 'order'>): Lesson | undefined {
+  const key = titleMatchKey(newLesson.title);
+  const direct = classLessons.find((l) => titleMatchKey(l.title) === key);
+  if (direct) return direct;
+  const aliasOldKey = Object.entries(TITLE_ALIASES).find(([, newKey]) => newKey === key)?.[0];
+  if (!aliasOldKey) return undefined;
+  return classLessons.find((l) => titleMatchKey(l.title) === aliasOldKey);
+}
+
+/** Znajduje pary (istniejaca lekcja w klasie <-> nowa definicja) po znormalizowanym tytule (patrz findOldLesson). */
 export function matchLessonsForRefresh(
   classLessons: Lesson[],
   fresh: FreshMaterialsBundle,
 ): RefreshMatch[] {
   const matches: RefreshMatch[] = [];
   for (const newLesson of fresh.lessons) {
-    const key = titleMatchKey(newLesson.title);
-    const oldLesson = classLessons.find((l) => titleMatchKey(l.title) === key);
+    const oldLesson = findOldLesson(classLessons, newLesson);
     if (!oldLesson) continue;
     const { set: newQuestionSet, questions: newQuestions } = questionsForTempSetId(fresh, newLesson.questionSetId);
     const { set: newReviewQuestionSet, questions: newReviewQuestions } = questionsForTempSetId(
@@ -96,23 +130,20 @@ function questionsFingerprint(questions: Question[]): Array<[string, string]> {
 type FingerprintableLesson = Pick<Lesson, 'title' | 'registerTopic' | 'curriculum' | 'slides'>;
 
 /**
- * Wersja formatu fingerprintu. Rosnie za kazdym razem, gdy zmienia sie zestaw
- * pol wchodzacych do `lessonFingerprint` (np. dolozenie pytan powtorkowych) -
- * stare fingerprinty (zapisane w store.insertedFingerprints) przestaja wtedy
- * pasowac formatem, a nie trescia. `classifyMatch` sprawdza `v` PRZED
- * porownaniem trescii: niezgodnosc wersji = traktujemy jak brak fingerprintu
- * ('code-newer'), zeby sama zmiana formatu nie oznaczala fałszywie "lekcja
- * zostala recznie edytowana".
+ * Wersja formatu fingerprintu - czysto informacyjna czesc `lessonFingerprint`,
+ * zeby dwa fingerprinty policzone roznymi wersjami formatu (np. przed i po
+ * dolozeniu pytan powtorkowych) nigdy nie wyszly przypadkiem rowne. Fingerprint
+ * nigdzie juz nie jest trwale zapisywany (patrz classifyMatch) - sluzy tylko
+ * doraznemu porownaniu w `isMatchStale`.
  */
 export const FINGERPRINT_VERSION = 2;
 
 /**
  * "Odcisk palca" tresci lekcji (tytul, wpis do dziennika, slajdy, pytania
- * zestawu wstepnego i pytania zestawu powtorkowego) - uzywany zarowno do
- * wykrywania "czy jest co odswiezac" (isMatchStale), jak i do zapamietywania w
- * store, jaka wersja z kodu zostala wstawiona (patrz store.ts:
- * insertedFingerprints), zeby po recznej edycji przez nauczyciela dalo sie
- * odroznic "kod ma nowsza wersje" od "nauczyciel edytowal recznie".
+ * zestawu wstepnego i pytania zestawu powtorkowego) - uzywany do wykrywania
+ * "czy jest co odswiezac" (isMatchStale): porownanie biezacej tresci lekcji z
+ * aktualna definicja z kodu. Rozroznieniem "kod nowszy" vs "recznie edytowane"
+ * zajmuje sie osobno classifyMatch (jawna flaga, nie fingerprint).
  */
 export function lessonFingerprint(
   lesson: FingerprintableLesson,
@@ -166,37 +197,62 @@ export interface ClassifiedRefreshMatch extends RefreshMatch {
   classification: RefreshClassification;
 }
 
-/** Czy zapisany fingerprint ma aktualna wersje formatu (patrz FINGERPRINT_VERSION). */
-function hasCurrentFingerprintVersion(fingerprint: string): boolean {
-  try {
-    const parsed = JSON.parse(fingerprint) as { v?: number };
-    return parsed.v === FINGERPRINT_VERSION;
-  } catch {
-    return false;
-  }
+/**
+ * Odroznia "lekcja rozni sie, bo kod ma nowsza wersje" od "lekcja rozni sie,
+ * bo nauczyciel zmienil ja recznie w edytorze". Dawniej wnioskowalismy to z
+ * porownania fingerprintow tresci - ale bug w samym mechanizmie odswiezania
+ * (np. zly remap zestawu powtorkowego przy jednym z wczesniejszych przebiegow)
+ * mogl zapisac fingerprint niezgodny z faktyczna trescia i falszywie oznaczyc
+ * lekcje jako "recznie edytowana", mimo ze nikt jej nie ruszal. Zamiast tego
+ * `manuallyEdited` to WPROST flaga z store.manuallyEditedLessonIds, ustawiana
+ * WYLACZNIE przy zapisie z LessonEditor (patrz updateLessonFromEditor) i
+ * czyszczona przy kazdym odswiezeniu tej lekcji - nie da sie jej ustawic
+ * przypadkiem samym refreshem/wstawieniem.
+ */
+export function classifyMatch(manuallyEdited: boolean): RefreshClassification {
+  return manuallyEdited ? 'manually-edited' : 'code-newer';
 }
 
 /**
- * Odrozniala "lekcja rozni sie, bo kod ma nowsza wersje" od "lekcja rozni sie,
- * bo nauczyciel zmienil ja recznie w edytorze". Porownuje AKTUALNA tresc
- * lekcji z fingerprintem wersji, ktora zostala wstawiona/ostatnio odswiezona
- * (zapisanym w store przy wstawianiu/odswiezaniu). Jesli sa rowne - nikt nie
- * ruszal lekcji recznie, wiec roznica bierze sie z samego kodu. Jesli sa rozne
- * - ktos zmienil tresc recznie (fingerprint zapisanej wersji nie pasuje do
- * tego, co faktycznie jest w lekcji), wiec ciche nadpisanie zgubiloby te
- * zmiany. Brak zapisanego fingerprintu (stare dane sprzed tej funkcji) ORAZ
- * fingerprint w starym formacie (sprzed dolozenia pytan powtorkowych) spadaja
- * na dotychczasowe zachowanie - traktujemy jak "kod nowszy".
+ * Rozwiazuje tymczasowy id zestawu (z buildXxx) na id w bazie, dla slajdu
+ * recap OTWIERAJACEGO lekcje - wskazuje on na zestaw powtorkowy POPRZEDNIEJ
+ * lekcji materialu, ktora moze byc odswiezana w tej samej petli (wtedy jej
+ * nowy id jest w `updatedReviewSetIds`) albo juz istniec w bazie bez zmian
+ * (wtedy bierzemy jej biezacy `reviewQuestionSetId`).
  */
-export function classifyMatch(
-  match: RefreshMatch,
-  oldQuestions: Question[],
-  insertedFingerprint: string | undefined,
-): RefreshClassification {
-  if (insertedFingerprint === undefined) return 'code-newer';
-  if (!hasCurrentFingerprintVersion(insertedFingerprint)) return 'code-newer';
-  const oldQ = questionsOf(match.oldLesson, oldQuestions);
-  const oldReviewQ = reviewQuestionsOf(match.oldLesson, oldQuestions);
-  const currentFingerprint = lessonFingerprint(match.oldLesson, oldQ, oldReviewQ);
-  return currentFingerprint === insertedFingerprint ? 'code-newer' : 'manually-edited';
+export function resolveForeignReviewSetId(
+  gradeLessons: Lesson[],
+  tempId: string,
+  freshBundle: FreshMaterialsBundle,
+  updatedReviewSetIds: ReadonlyMap<string, string>,
+): string | undefined {
+  const owner = freshBundle.lessons.find((l) => l.reviewQuestionSetId === tempId);
+  if (!owner) return undefined;
+  const ownerOldLesson = gradeLessons.find((l) => titleMatchKey(l.title) === titleMatchKey(owner.title));
+  if (!ownerOldLesson) return undefined;
+  return updatedReviewSetIds.get(ownerOldLesson.id) ?? ownerOldLesson.reviewQuestionSetId;
+}
+
+/**
+ * Zestawy pytan (z `questionSetIds`), na ktore po odswiezeniu (kazda lekcja ma
+ * reviewQuestionSetId = questionSetId, patrz useReadyMaterials.refresh) nie
+ * wskazuje juz ZADNA lekcja (questionSetId/reviewQuestionSetId) ani zaden
+ * slajd recap zadnej lekcji. W praktyce to lustrzane zestawy powtorkowe
+ * sprzed wycofania osobnych zestawow (patrz Lesson.reviewQuestionSetId) -
+ * osierocone przez normalizacje reviewQuestionSetId. Usuwane razem z
+ * pytaniami (store.removeQuestionSet kaskaduje), zeby "Odswiez wstawione
+ * materialy" sprzatalo po sobie zamiast zostawiac osierocone duplikaty w
+ * bazie. `lessons` powinno byc PELNA lista lekcji w store (nie tylko rocznika
+ * odswiezanego materialu) - zestaw teoretycznie moze byc uzywany gdzie indziej.
+ */
+export function orphanedQuestionSetIds(lessons: Lesson[], questionSetIds: string[]): string[] {
+  const referenced = new Set<string>();
+  for (const l of lessons) {
+    if (l.questionSetId) referenced.add(l.questionSetId);
+    if (l.reviewQuestionSetId) referenced.add(l.reviewQuestionSetId);
+    for (const s of l.slides) {
+      if (s.kind === 'recap') referenced.add(s.questionSetId);
+    }
+  }
+  return questionSetIds.filter((id) => !referenced.has(id));
 }

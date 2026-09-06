@@ -26,14 +26,18 @@ import type {
 export const STORAGE_KEY = 'apka-szkolna';
 
 /**
- * Fingerprinty wersji "gotowych materialow" wstawionych/ostatnio odswiezonych
- * z kodu (buildRecap13/buildRecap4/buildIntroLesson), kluczowane id lekcji.
- * Sluza do odrozniania w refreshMaterials.ts "kod ma nowsza wersje" od
- * "nauczyciel edytowal lekcje recznie w edytorze" - patrz classifyMatch.
- * Typ trzymany lokalnie (nie w types.ts), bo to szczegol implementacyjny
- * odswiezania gotowych materialow, a nie ksztalt danych domenowych.
+ * Lekcje zapisane wprost z LessonEditor (patrz updateLessonFromEditor),
+ * kluczowane id lekcji - flaga "nauczyciel edytowal ta lekcje recznie".
+ * Sluzy refreshMaterials.ts (classifyMatch) do odroznienia "kod ma nowsza
+ * wersje" od "nauczyciel edytowal lekcje recznie", zeby "Odswiez wstawione
+ * materialy" nie nadpisywalo cicho recznych zmian. Ustawiana WYLACZNIE przez
+ * updateLessonFromEditor (a nie zwykle updateLesson, ktorego uzywa refresh i
+ * wstawianie gotowych materialow) i czyszczona przy kazdym odswiezeniu danej
+ * lekcji (patrz clearManualEdit w useReadyMaterials.refresh). Typ trzymany
+ * lokalnie (nie w types.ts), bo to szczegol implementacyjny odswiezania
+ * gotowych materialow, a nie ksztalt danych domenowych.
  */
-type InsertedFingerprints = Record<string, string>;
+type ManuallyEditedLessonIds = Record<string, true>;
 
 interface AppState {
   classes: SchoolClass[];
@@ -44,7 +48,7 @@ interface AppState {
   recapEvents: RecapEvent[];
   meetings: Meeting[];
   settings: Settings;
-  insertedFingerprints: InsertedFingerprints;
+  manuallyEditedLessonIds: ManuallyEditedLessonIds;
 
   // Klasy
   addClass: (name: string) => SchoolClass;
@@ -71,18 +75,21 @@ interface AppState {
   // Lekcje (naleza do rocznika; postep per klasa w `progress`)
   addLesson: (lesson: Omit<Lesson, 'id' | 'order'>) => Lesson;
   updateLesson: (id: string, patch: Partial<Omit<Lesson, 'id'>>) => void;
+  /**
+   * Jak `updateLesson`, ale oznacza lekcje jako "edytowana recznie" - uzywane
+   * WYLACZNIE przez LessonEditor (zapis z ekranu edycji lekcji). Refresh i
+   * wstawianie gotowych materialow musza uzywac zwyklego `updateLesson`, zeby
+   * nie ustawiac tej flagi samym sobie - patrz ManuallyEditedLessonIds.
+   */
+  updateLessonFromEditor: (id: string, patch: Partial<Omit<Lesson, 'id'>>) => void;
+  /** Czysci flage "edytowana recznie" - wywolywane przy odswiezeniu danej lekcji z gotowych materialow. */
+  clearManualEdit: (id: string) => void;
   removeLesson: (id: string) => void;
   /** Przenosi lekcje na pozycje `toIndex` w kolejce jej rocznika (przeciaganie). */
   moveLesson: (id: string, toIndex: number) => void;
   reorderLesson: (id: string, direction: 'up' | 'down') => void;
   /** Ustawia postep jednej klasy w lekcji (status + data wykonania). */
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
-  /**
-   * Zapisuje fingerprint wersji "gotowego materialu" wstawionej/odswiezonej do
-   * lekcji `lessonId` - patrz InsertedFingerprints. Wywolywane przez
-   * useReadyMaterials.ts przy wstawianiu i przy kazdym odswiezeniu.
-   */
-  setInsertedFingerprint: (lessonId: string, fingerprint: string) => void;
 
   // Zdarzenia recapu
   addRecapEvent: (event: Omit<RecapEvent, 'id' | 'at'>) => RecapEvent;
@@ -247,7 +254,7 @@ export const useStore = create<AppState>()(
         plombyForOne: 3,
         reviewQuestionCount: 7,
       },
-      insertedFingerprints: {},
+      manuallyEditedLessonIds: {},
 
       addClass: (name) => {
         const order = get().classes.length;
@@ -346,11 +353,25 @@ export const useStore = create<AppState>()(
           lessons: s.lessons.map((l) => (l.id === id ? { ...l, ...patch } : l)),
         }));
       },
+      updateLessonFromEditor: (id, patch) => {
+        set((s) => ({
+          lessons: s.lessons.map((l) => (l.id === id ? { ...l, ...patch } : l)),
+          manuallyEditedLessonIds: { ...s.manuallyEditedLessonIds, [id]: true },
+        }));
+      },
+      clearManualEdit: (id) => {
+        set((s) => {
+          if (!(id in s.manuallyEditedLessonIds)) return {};
+          const manuallyEditedLessonIds = { ...s.manuallyEditedLessonIds };
+          delete manuallyEditedLessonIds[id];
+          return { manuallyEditedLessonIds };
+        });
+      },
       removeLesson: (id) => {
         set((s) => {
-          const insertedFingerprints = { ...s.insertedFingerprints };
-          delete insertedFingerprints[id];
-          return { lessons: s.lessons.filter((l) => l.id !== id), insertedFingerprints };
+          const manuallyEditedLessonIds = { ...s.manuallyEditedLessonIds };
+          delete manuallyEditedLessonIds[id];
+          return { lessons: s.lessons.filter((l) => l.id !== id), manuallyEditedLessonIds };
         });
       },
       moveLesson: (id, toIndex) => {
@@ -372,12 +393,6 @@ export const useStore = create<AppState>()(
           ),
         }));
       },
-      setInsertedFingerprint: (lessonId, fingerprint) => {
-        set((s) => ({
-          insertedFingerprints: { ...s.insertedFingerprints, [lessonId]: fingerprint },
-        }));
-      },
-
       addRecapEvent: (event) => {
         const item: RecapEvent = { ...event, id: newId(), at: new Date().toISOString() };
         set((s) => ({ recapEvents: [...s.recapEvents, item] }));
@@ -425,13 +440,13 @@ export const useStore = create<AppState>()(
           recapEvents: [],
           meetings: buildSeedMeetings(),
           settings: seed.settings,
-          insertedFingerprints: {},
+          manuallyEditedLessonIds: {},
         }));
       },
     }),
     {
       name: STORAGE_KEY,
-      version: 8,
+      version: 9,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -447,21 +462,26 @@ export const useStore = create<AppState>()(
       // rocznik (grade + progress per klasa). Lekcje tej samej tresci, ktore
       // nauczyciel wstawil osobno do klas rownoleglych, sa sklejane w jedna
       // (dopasowanie po znormalizowanym tytule), a ich postep - laczony.
-      // v5 -> v6: dochodzi insertedFingerprints (fingerprinty wstawionych
-      // wersji gotowych materialow), zeby odroznic "kod ma nowsza wersje" od
-      // "nauczyciel edytowal lekcje recznie". Stare dane dostaja pusta mape -
-      // to spada na dotychczasowe zachowanie (kazda roznica = "kod nowszy").
+      // v5 -> v6: dochodzily fingerprinty wstawionych wersji gotowych
+      // materialow (usuniete w v9 - patrz nizej).
       // v6 -> v7: dochodzi reviewQuestionCount (miekki limit pytan kola
       // powtorzeniowego) - domyslnie 7, edytowalne w Ustawieniach.
       // v7 -> v8: dochodzi kolekcja meetings (zakladka "Zebrania"). Stare dane
       // dostaja skrypt pierwszego zebrania z buildSeedMeetings().
+      // v8 -> v9: fingerprinty (klasyfikacja "kod nowszy" vs "recznie
+      // edytowane" w refreshMaterials.ts) zastapione jawna flaga
+      // manuallyEditedLessonIds, ustawiana tylko przy zapisie z LessonEditor -
+      // fingerprinty potrafily falszywie oznaczyc lekcje jako "recznie
+      // edytowana" przy bugu w samym mechanizmie odswiezania. Stare dane
+      // dostaja pusta mape (zadna lekcja nie jest oznaczona jako edytowana
+      // recznie - nauczyciel przy okazji odswiezy i zobaczy realny stan).
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
           lessons?: Array<Record<string, unknown>>;
           recapEvents?: Array<{ result?: string; [key: string]: unknown }>;
           settings?: (Partial<Settings> & { passesPerWeek?: number }) | undefined;
-          insertedFingerprints?: InsertedFingerprints;
+          manuallyEditedLessonIds?: ManuallyEditedLessonIds;
           meetings?: Array<Record<string, unknown>>;
           [key: string]: unknown;
         };
@@ -500,9 +520,6 @@ export const useStore = create<AppState>()(
         if (version < 5 && state.settings && state.settings.passesPerMonth === 3) {
           state.settings = { ...state.settings, passesPerMonth: 2 };
         }
-        if (version < 6) {
-          state.insertedFingerprints = state.insertedFingerprints ?? {};
-        }
         if (version < 7 && state.settings) {
           state.settings = { ...state.settings, reviewQuestionCount: state.settings.reviewQuestionCount ?? 7 };
         }
@@ -513,6 +530,10 @@ export const useStore = create<AppState>()(
           if (!Array.isArray(state.meetings)) {
             state.meetings = buildSeedMeetings() as unknown as Array<Record<string, unknown>>;
           }
+        }
+        if (version < 9) {
+          delete state.insertedFingerprints;
+          state.manuallyEditedLessonIds = state.manuallyEditedLessonIds ?? {};
         }
         return state as unknown as AppState;
       },

@@ -90,11 +90,6 @@ export function Lessons() {
     return questions.filter((q) => q.setId === lesson.questionSetId).length;
   }
 
-  function reviewQuestionCountFor(lesson: Lesson): number | null {
-    if (!lesson.reviewQuestionSetId) return null;
-    return questions.filter((q) => q.setId === lesson.reviewQuestionSetId).length;
-  }
-
   function handleCreate(title: string) {
     const lesson = addLesson({ grade, title, progress: {}, slides: [] });
     setNewOpen(false);
@@ -212,7 +207,6 @@ export function Lessons() {
                   index={idx}
                   total={gradeLessons.length}
                   questionCount={questionCountFor(lesson)}
-                  reviewQuestionCount={reviewQuestionCountFor(lesson)}
                   dropIndicator={drag.indicatorFor(idx, lesson.id)}
                   onDragStart={() => drag.start(lesson.id)}
                   onDragOver={(position) => drag.over(idx, position)}

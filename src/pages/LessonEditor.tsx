@@ -21,7 +21,10 @@ export function LessonEditor() {
   const lessons = useStore((s) => s.lessons);
   const classes = useStore((s) => s.classes);
   const questionSets = useStore((s) => s.questionSets);
-  const updateLesson = useStore((s) => s.updateLesson);
+  // updateLessonFromEditor (nie zwykle updateLesson) - zapis z tego ekranu ma
+  // oznaczyc lekcje jako "edytowana recznie" (patrz store.manuallyEditedLessonIds),
+  // zeby "Odswiez wstawione materialy" nie nadpisalo cicho zmian nauczyciela.
+  const updateLesson = useStore((s) => s.updateLessonFromEditor);
 
   const lesson = lessons.find((l) => l.id === id);
   const classId = searchParams.get('klasa') ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);

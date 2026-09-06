@@ -22,7 +22,6 @@ export interface LessonRowProps {
   index: number;
   total: number;
   questionCount: number | null; // null = lekcja nie ma zestawu pytan
-  reviewQuestionCount: number | null; // null = lekcja nie ma zestawu powtorkowego
   dropIndicator: 'above' | 'below' | null;
   onDragStart: () => void;
   onDragOver: (position: 'above' | 'below') => void;
@@ -37,7 +36,7 @@ export interface LessonRowProps {
 }
 
 export function LessonRow(p: LessonRowProps) {
-  const { lesson, classId, progress, index, total, questionCount, reviewQuestionCount } = p;
+  const { lesson, classId, progress, index, total, questionCount } = p;
   const navigate = useNavigate();
   const dragFromHandle = useRef(false);
   const registerTopic = lesson.registerTopic || lesson.title;
@@ -171,35 +170,6 @@ export function LessonRow(p: LessonRowProps) {
                   </button>
                   )}
                 </>
-              )}
-            </>
-          )}
-          {/* Osobny zestaw powtorkowy (lustrzany) - zostaje tylko dla lekcji sprzed
-              wycofania lustrzanych zestawow, dopoki nauczyciel nie odswiezy materialu
-              (patrz useReadyMaterials.ts). Nowe/odswiezone lekcje maja
-              reviewQuestionSetId rowne wlasnemu questionSetId - wtedy link znika,
-              bo nie ma juz nic osobnego do pokazania. */}
-          {reviewQuestionCount !== null && lesson.reviewQuestionSetId !== lesson.questionSetId && (
-            <>
-              <span aria-hidden="true">·</span>
-              <button
-                type="button"
-                onClick={() => navigate(`/pytania/${lesson.reviewQuestionSetId}?lekcja=${lesson.id}`)}
-                className="shrink-0 text-accent-600 hover:underline"
-              >
-                powt.: <span className="tabular-nums">{reviewQuestionCount}</span> pytań
-              </button>
-              {reviewQuestionCount > 0 && (
-                <button
-                  type="button"
-                  onClick={() => navigate(`/powtorka/${classId}/${lesson.reviewQuestionSetId}?tryb=powtorzeniowe`)}
-                  title="Uruchom koło z osobnymi pytaniami powtórkowymi (starsza wersja materiału)"
-                  aria-label="Uruchom koło z osobnymi pytaniami powtórkowymi"
-                  className="inline-flex shrink-0 items-center gap-0.5 rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-gray-600 hover:bg-gray-100"
-                >
-                  <WheelIcon className="shrink-0" />
-                  Koło powt. (stare)
-                </button>
               )}
             </>
           )}

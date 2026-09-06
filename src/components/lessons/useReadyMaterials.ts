@@ -17,10 +17,11 @@ import { buildIntroLesson } from '../../data/intro';
 import {
   classifyMatch,
   isMatchStale,
-  lessonFingerprint,
   lessonQuestionSetId,
   matchLessonsForRefresh,
+  orphanedQuestionSetIds,
   remapRecapSlides,
+  resolveForeignReviewSetId,
   titleMatchKey,
   type ClassifiedRefreshMatch,
   type FreshMaterialsBundle,
@@ -86,15 +87,16 @@ export interface ReadyMaterial {
 export function useReadyMaterials(grade: string, classIds: string[], gradeLessons: Lesson[]) {
   const questionSets = useStore((s) => s.questionSets);
   const questions = useStore((s) => s.questions);
-  const insertedFingerprints = useStore((s) => s.insertedFingerprints);
+  const manuallyEditedLessonIds = useStore((s) => s.manuallyEditedLessonIds);
   const addLesson = useStore((s) => s.addLesson);
   const updateLesson = useStore((s) => s.updateLesson);
+  const clearManualEdit = useStore((s) => s.clearManualEdit);
   const addQuestionSet = useStore((s) => s.addQuestionSet);
   const updateQuestionSet = useStore((s) => s.updateQuestionSet);
   const addQuestion = useStore((s) => s.addQuestion);
   const updateQuestion = useStore((s) => s.updateQuestion);
   const removeQuestion = useStore((s) => s.removeQuestion);
-  const setInsertedFingerprint = useStore((s) => s.setInsertedFingerprint);
+  const removeQuestionSet = useStore((s) => s.removeQuestionSet);
 
   // Paczka danych z kodu per material. buildIntroLesson jest kontraktem
   // implementowanym rownolegle przez inny modul - dopoki nie jest gotowy,
@@ -138,9 +140,9 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         .filter((m) => isMatchStale(m, questions))
         .map((m) => ({
           ...m,
-          classification: classifyMatch(m, questions, insertedFingerprints[m.oldLesson.id]),
+          classification: classifyMatch(manuallyEditedLessonIds[m.oldLesson.id] === true),
         })),
-    [freshBundle, gradeLessons, questions, insertedFingerprints],
+    [freshBundle, gradeLessons, questions, manuallyEditedLessonIds],
   );
 
   // Lekcje materialu, ktorych rocznik jeszcze nie ma. Material rozrasta sie w czasie
@@ -207,36 +209,16 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
 
     for (const lesson of doWstawienia) {
       const mappedQuestionSetId = resolveSetId(lesson.questionSetId, bundle, setIdMap);
-      const mappedReviewQuestionSetId = resolveSetId(lesson.reviewQuestionSetId, bundle, setIdMap);
       const mappedSlides = remapRecapSlides(lesson.slides, (tempId) => resolveSetId(tempId, bundle, setIdMap));
-      const created = addLesson({
+      addLesson({
         ...lesson,
         questionSetId: mappedQuestionSetId,
-        reviewQuestionSetId: mappedReviewQuestionSetId,
+        // Wymuszone rowne questionSetId (a nie osobno resolveSetId(lesson.reviewQuestionSetId, ...)) -
+        // nowe lekcje NIGDY nie dostaja osobnego, zdublowanego zestawu powtorkowego,
+        // nawet gdyby buildXxx kiedys pomylkowo uzyl dwoch roznych tymczasowych id.
+        reviewQuestionSetId: mappedQuestionSetId,
         slides: mappedSlides,
       });
-
-      // Zapamietaj fingerprint dokladnie tego, co zostalo zapisane (mappedSlides,
-      // czyli z realnymi id zestawow pytan) - pozniejsze porownanie w
-      // classifyMatch odbywa sie na tej samej, realnej reprezentacji.
-      const lessonQuestions = lesson.questionSetId
-        ? bundle.questions
-            .filter((q) => q.setId === lesson.questionSetId)
-            .sort((a, b) => a.order - b.order)
-        : [];
-      const lessonReviewQuestions = lesson.reviewQuestionSetId
-        ? bundle.questions
-            .filter((q) => q.setId === lesson.reviewQuestionSetId)
-            .sort((a, b) => a.order - b.order)
-        : [];
-      setInsertedFingerprint(
-        created.id,
-        lessonFingerprint(
-          { title: lesson.title, registerTopic: lesson.registerTopic, curriculum: lesson.curriculum, slides: mappedSlides },
-          lessonQuestions,
-          lessonReviewQuestions,
-        ),
-      );
     }
   }
 
@@ -273,29 +255,14 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     return undefined;
   }
 
-  /**
-   * Rozwiazuje tymczasowy id zestawu (z buildXxx) na id w bazie, dla slajdu
-   * recap OTWIERAJACEGO lekcje - wskazuje on na zestaw powtorkowy POPRZEDNIEJ
-   * lekcji materialu, ktora moze byc odswiezana w tej samej petli (wtedy jej
-   * nowy id jest w `updatedReviewSetIds`) albo juz istniec w bazie bez zmian
-   * (wtedy bierzemy jej biezacy `reviewQuestionSetId`).
-   */
-  function resolveForeignReviewSetId(
-    tempId: string,
-    freshBundle: FreshMaterialsBundle,
-    updatedReviewSetIds: ReadonlyMap<string, string>,
-  ): string | undefined {
-    const owner = freshBundle.lessons.find((l) => l.reviewQuestionSetId === tempId);
-    if (!owner) return undefined;
-    const ownerOldLesson = gradeLessons.find((l) => titleMatchKey(l.title) === titleMatchKey(owner.title));
-    if (!ownerOldLesson) return undefined;
-    return updatedReviewSetIds.get(ownerOldLesson.id) ?? ownerOldLesson.reviewQuestionSetId;
-  }
-
   // Podmienia tresc juz wstawionych lekcji (dopasowanych po tytule) na aktualna
   // wersje z kodu, zachowujac postep (progress) i nie ruszajac recapEvents.
-  // Zestaw pytan i pytania (wstepne ORAZ powtorkowe) sa aktualizowane W MIEJSCU
-  // (te same id) - patrz syncQuestionSetInPlace.
+  // Zestaw pytan i pytania sa aktualizowane W MIEJSCU (te same id) - patrz
+  // syncQuestionSetInPlace. reviewQuestionSetId lekcji jest WYMUSZONE rowne
+  // jej wlasnemu questionSetId (patrz Lesson.reviewQuestionSetId) - starsze
+  // lekcje z prawdziwie osobnym (lustrzanym) zestawem powtorkowym dostaja go
+  // tu skasowany na rzecz jednego, wspolnego zestawu; ich stary, osobny zestaw
+  // zostaje po petli osierocony i sprzatniety przez cleanupOrphanQuestionSets.
   //
   // `confirmedManualIds` to id lekcji sklasyfikowanych jako "manually-edited"
   // (recznie zmienione przez nauczyciela), ktore mimo to nauczyciel zaznaczyl
@@ -307,10 +274,11 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     const toRefresh = refreshMatches.filter(
       (m) => m.classification === 'code-newer' || confirmedManualIds?.has(m.oldLesson.id),
     );
-    // lekcja.id (stare) -> nowy id zestawu powtorkowego - zeby slajd otwierajacy
-    // NASTEPNEJ odswiezanej lekcji w tej samej petli widzial swiezy id, a nie
-    // ten sprzed odswiezenia.
+    // lekcja.id (stare) -> nowy id zestawu powtorkowego (= jej wlasny
+    // questionSetId) - zeby slajd otwierajacy NASTEPNEJ odswiezanej lekcji w
+    // tej samej petli widzial swiezy id, a nie ten sprzed odswiezenia.
     const updatedReviewSetIds = new Map<string, string>();
+    const beforeQuestionSetIds = questionSets.map((qs) => qs.id);
 
     for (const match of toRefresh) {
       const effectiveSetId = syncQuestionSetInPlace(
@@ -318,17 +286,17 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         match.newQuestionSet,
         match.newQuestions,
       );
-      const effectiveReviewSetId = syncQuestionSetInPlace(
-        match.oldLesson.reviewQuestionSetId,
-        match.newReviewQuestionSet,
-        match.newReviewQuestions,
-      );
+      // Wymuszone rowne effectiveSetId (bez osobnego syncQuestionSetInPlace na
+      // match.oldLesson.reviewQuestionSetId) - stary, prawdziwie osobny zestaw
+      // powtorkowy (jesli taki byl) juz nie jest przez nic wskazywany po tej
+      // petli i sprzata go cleanupOrphanQuestionSets ponizej.
+      const effectiveReviewSetId = effectiveSetId;
       if (effectiveReviewSetId) updatedReviewSetIds.set(match.oldLesson.id, effectiveReviewSetId);
 
       const mappedSlides = remapRecapSlides(match.newLesson.slides, (tempId) => {
         if (effectiveSetId && tempId === match.newLesson.questionSetId) return effectiveSetId;
         if (effectiveReviewSetId && tempId === match.newLesson.reviewQuestionSetId) return effectiveReviewSetId;
-        return resolveForeignReviewSetId(tempId, freshBundle, updatedReviewSetIds);
+        return resolveForeignReviewSetId(gradeLessons, tempId, freshBundle, updatedReviewSetIds);
       });
 
       updateLesson(match.oldLesson.id, {
@@ -343,22 +311,31 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         // progress, order, grade, plannedDate - celowo pominiete w patchu.
       });
 
-      // Fingerprint tego, co zostalo teraz zapisane (mappedSlides z realnymi
-      // id) - kolejne otwarcie menu porowna z tym, a nie z surowa definicja z
-      // kodu, zeby wykryc ewentualna reczna edycje PO tym odswiezeniu.
-      setInsertedFingerprint(
-        match.oldLesson.id,
-        lessonFingerprint(
-          {
-            title: match.newLesson.title,
-            registerTopic: match.newLesson.registerTopic,
-            curriculum: match.newLesson.curriculum,
-            slides: mappedSlides,
-          },
-          match.newQuestions,
-          match.newReviewQuestions,
-        ),
-      );
+      // Odswiezenie zastepuje ewentualne reczne zmiany trescia z kodu - flaga
+      // "edytowana recznie" juz nie opisuje tego, co teraz jest zapisane.
+      clearManualEdit(match.oldLesson.id);
+    }
+
+    if (toRefresh.length > 0) cleanupOrphanQuestionSets(beforeQuestionSetIds);
+  }
+
+  /**
+   * Usuwa (wraz z pytaniami) zestawy pytan, na ktore po normalizacji
+   * reviewQuestionSetId (patrz refresh) nie wskazuje juz zadna lekcja ani
+   * zaden slajd recap - typowo zdublowany, lustrzany zestaw powtorkowy sprzed
+   * wycofania osobnych zestawow. Sprawdza PELNA liste lekcji w store (nie
+   * tylko rocznika), zeby nie skasowac zestawu uzywanego gdzie indziej.
+   * `candidateIds` to zestawy sprzed refresh() - sprzatamy tylko wsrod nich,
+   * zeby nie przegladac (i przypadkiem nie ruszyc) calej bazy pytan.
+   */
+  function cleanupOrphanQuestionSets(candidateIds: string[]) {
+    // Swiezy stan lekcji PROSTO ZE STORE'A (nie `allLessons` z selektora
+    // hooka) - w tym momencie updateLesson z petli refresh() juz zapisal
+    // swoje zmiany w store, ale ten komponent jeszcze sie nie przerenderowal,
+    // wiec `allLessons` bylby wciaz sprzed odswiezenia.
+    const currentLessons = useStore.getState().lessons;
+    for (const id of orphanedQuestionSetIds(currentLessons, candidateIds)) {
+      removeQuestionSet(id);
     }
   }
 
