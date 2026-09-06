@@ -100,6 +100,15 @@ function asBulletList(items: string[]): string {
   return items.map((item) => `- ${item}`).join('\n');
 }
 
+/**
+ * Pogrubia nazwy obu kol w tresci zasad. Rozroznienie "koło po lekcji" vs
+ * "koło powtórzeniowe" to najwazniejsza nomenklatura calego systemu - na
+ * slajdzie musi rzucac sie w oczy, a sama tresc zostaje w zasady.ts.
+ */
+function boldNazwyKol(text: string): string {
+  return text.replace(/(Koł[oa]) (po lekcji|powtórzeniow\w+)/gi, '**$1 $2**');
+}
+
 /** Zamienia liste punktow na markdown-lite: uporzadkowana lista "1. ...". */
 function asNumberedList(items: string[]): string {
   return items.map((item, i) => `${i + 1}. ${item}`).join('\n');
@@ -171,6 +180,18 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
   // Punkt o kodach zadan/lekcji zostaje wspomniany na koniec slajdu jako
   // osobne zdanie, trzy kroki (powtorka - temat - kolo) ida jako lista numerowana.
   const { matched: przebiegKod, rest: przebiegKroki } = partitionItems(secLekcja.items, /kod/i);
+  // Slajd "Jak wyglada nasza lekcja" pojawia sie DWA RAZY: raz po przykladzie
+  // rundy (zeby dzieci od razu wiedzialy, kiedy ktore kolo sie kreci) i drugi
+  // raz po rozdziale o zachowaniu, jako przypomnienie calego przebiegu.
+  // Kazde wywolanie daje nowy slajd z wlasnym id.
+  const slideJakWygladaLekcja = () =>
+    slideText(
+      'Jak wygląda nasza lekcja',
+      `${asNumberedList(przebiegKroki.map(boldNazwyKol))}
+
+${przebiegKod[0]}`,
+      'przebieg',
+    );
   const secZeszyt = ruleSection('Zeszyt i sprawdziany');
   // Punkty o kodach lekcji (wszystkie zawieraja slowo "kod") dostaja wlasny
   // slajd "Kody lekcji" - dzieciom nalezy sie osobne, spokojne wytlumaczenie
@@ -301,40 +322,45 @@ Zasady są po to, żeby dało się grać uczciwie. Są jawne i takie same dla ws
 Na kole po lekcji, zaraz po nowym temacie, można tylko zyskać - nie ma tu kropki ani plomby.`,
       ),
 
-      // 18. Pytanie do klasy - znowu mowia dzieci
-      slideText('Czy zachowujecie się grzecznie na lekcjach?', '**Co to znaczy: przeszkadzać?**'),
+      // 18. Przebieg lekcji (z zasady.ts) - zaraz po przykladzie rundy, bo dopiero
+      // tu widac, KIEDY kreci sie ktore kolo. Nazwy obu kol pogrubione.
+      slideJakWygladaLekcja(),
 
-      // 19. Eskalacja 1-2-3 (z zasady.ts) - NAJPIERW konsekwencje, powaga tematu
+      // 19. Dwa koła - najwazniejsze rozroznienie calego systemu. Tresc obu
+      // punktow z zasady.ts (sekcja "Gramy w koło fortuny"), plus zdanie, ze
+      // kola po lekcji nie trzeba sie bac.
+      slideText(
+        'Dwa koła: po lekcji i powtórzeniowe',
+        `${asBulletList([secGraKolo.items[2], secGraKolo.items[3]].map(boldNazwyKol))}
+
+Na **kole po lekcji** nie ma się czego bać - można tylko zyskać, nic nie szkodzi.
+
+Na **kole powtórzeniowym** gra się o wszystko: plus, kropka albo plomba.`,
+        'kolo',
+      ),
+
+      // 20. Eskalacja 1-2-3 (z zasady.ts) - NAJPIERW konsekwencje, powaga tematu
       slideText('Specjalne utrudnienia za zachowanie', asBulletList(secEskalacja.items), 'eskalacja'),
 
-      // 20. Nazwanie zachowan (z zasady.ts) - DOPIERO TERAZ jasna definicja, co
+      // 21. Nazwanie zachowan (z zasady.ts) - DOPIERO TERAZ jasna definicja, co
       // dokladnie jest karane. Bez tego "uwaga" jest workiem na wszystko i dzieci
-      // boja sie, ze dostana ja za zla odpowiedz.
-      slideText('Co to znaczy przeszkadzać', asBulletList(zleZachowania), 'zleZachowania'),
-
-      // 21. Kontra do poprzedniego slajdu - za co uwagi nie ma NIGDY (z zasady.ts).
-      // Celowo bez listy i bez ilustracji: jedno zdanie na calym ekranie, zeby
-      // wybrzmialo. Punkt zasad wchodzi tu jako akapit, nie jako kolejny bullet.
+      // boja sie, ze dostana ja za zla odpowiedz. Punkt "to NIE jest
+      // przeszkadzanie" wchodzi na koncu jako akapit (dawniej mial wlasny slajd
+      // "Za to nigdy nie ma uwagi" - usuniety, zeby nie ciagnac tematu).
       slideText(
-        'Za to nigdy nie ma uwagi',
-        `**${bezUwagi[0]}**
+        'Co to znaczy przeszkadzać',
+        `${asBulletList(zleZachowania)}
 
-Uwagi są wyłącznie za zachowanie - nigdy za to, że czegoś jeszcze nie umiesz.
-
-Nie wiesz? Powiedz "nie wiem" albo weź pas. To uczciwe zagranie, nie przegrana.`,
+**${bezUwagi[0]}**`,
+        'zleZachowania',
       ),
 
-      // 22. Gdzie siedzimy (z zasady.ts)
+      // 22. Przypomnienie przebiegu lekcji - ten sam slajd co wyzej, tym razem
+      // po rozdziale o zachowaniu, zeby zamknac czesc o zasadach.
+      slideJakWygladaLekcja(),
+
+      // 23. Gdzie siedzimy (z zasady.ts)
       slideText('Gdzie siedzimy', asBulletList(secLawki.items), 'lawki'),
-
-      // 23. Przebieg lekcji (z zasady.ts) - trzy kroki jako lista numerowana + kody
-      slideText(
-        'Jak wygląda nasza lekcja',
-        `${asNumberedList(przebiegKroki)}
-
-${przebiegKod[0]}`,
-        'przebieg',
-      ),
 
       // 24. Slajd kontraktowy - zanim zaczniemy grac, dzieci moga zglaszac uwagi
       slideText(

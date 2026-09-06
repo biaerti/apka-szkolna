@@ -121,6 +121,52 @@ describe('buildIntroLesson', () => {
     expect(slide && 'body' in slide ? slide.body : '').toContain('tylko zyskać');
   });
 
+  it('po przykladzie rundy tlumaczy przebieg lekcji, a potem rozroznia dwa kola', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const titles = lesson.slides.map((s) => ('title' in s ? s.title : undefined));
+    const przyklad = titles.indexOf('Przykład rundy');
+    const przebieg = titles.indexOf('Jak wygląda nasza lekcja');
+    const dwaKola = titles.findIndex((t) => t?.startsWith('Dwa koła'));
+    expect(przyklad).toBeGreaterThan(-1);
+    expect(przebieg).toBe(przyklad + 1);
+    expect(dwaKola).toBe(przebieg + 1);
+  });
+
+  it('slajd o przebiegu lekcji jest dwa razy i ma pogrubione nazwy obu kol', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const przebieg = lesson.slides.filter((s) => 'title' in s && s.title === 'Jak wygląda nasza lekcja');
+    expect(przebieg).toHaveLength(2);
+    for (const slide of przebieg) {
+      const body = 'body' in slide ? slide.body : '';
+      expect(body).toContain('**Koło powtórzeniowe**');
+      expect(body).toContain('**Koło po lekcji**');
+    }
+  });
+
+  it('rozdzial o zachowaniu: najpierw utrudnienia, potem definicja przeszkadzania, bez pytania o grzecznosc', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const titles = lesson.slides.map((s) => ('title' in s ? s.title : undefined));
+    expect(titles).not.toContain('Czy zachowujecie się grzecznie na lekcjach?');
+    expect(titles).not.toContain('Za to nigdy nie ma uwagi');
+    expect(titles.indexOf('Co to znaczy przeszkadzać')).toBe(
+      titles.indexOf('Specjalne utrudnienia za zachowanie') + 1,
+    );
+  });
+
+  it('zdanie "to NIE jest przeszkadzanie" zostaje w lekcji mimo usunietego slajdu', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Co to znaczy przeszkadzać');
+    expect(slide && 'body' in slide ? slide.body : '').toContain('NIE jest przeszkadzanie');
+  });
+
+  it('konczy rozdzial o zasadach kolejnoscia: przebieg - gdzie siedzimy - wasz glos', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const titles = lesson.slides.map((s) => ('title' in s ? s.title : undefined));
+    const gdzie = titles.indexOf('Gdzie siedzimy');
+    expect(titles.lastIndexOf('Jak wygląda nasza lekcja')).toBe(gdzie - 1);
+    expect(titles.indexOf('Wasz głos')).toBe(gdzie + 1);
+  });
+
   it('wspomina o rozliczeniu plusow/plomb na koniec miesiaca', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     expect(allText(lesson)).toContain('koniec miesiąca');
