@@ -91,7 +91,7 @@ export function PanelStoper({
     return (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-3 pb-1">
         {polecenie.trim() !== '' && (
-          <p className="w-full shrink-0 truncate text-center text-sm text-gray-300">{polecenie}</p>
+          <p className="mb-2 w-full shrink-0 truncate text-center text-lg text-gray-200">{polecenie}</p>
         )}
         {czas}
       </div>

@@ -16,7 +16,7 @@ Dwa stany:
     i edytowalną długością. `Spacja` = start / pauza. Leci dalej po zwinięciu
     do pigułki - pigułka pokazuje wtedy pozostały czas. Środkowy przycisk w
     nagłówku (jak „przywróć w dół" w oknie Windows) ściąga stoper do okienka
-    300x124 z samym czasem i - jeśli jest wpisane - poleceniem; zostają w nim
+    300x138 z samym czasem i - jeśli jest wpisane - poleceniem; zostają w nim
     tylko trzy przyciski okna, a klik w czas = start / pauza.
 
   W nagłówku jest też wybór klasy i **Uwagi** (lista klasy z licznikiem uwag
