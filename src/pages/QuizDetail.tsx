@@ -15,7 +15,7 @@ import { QuizKindBadge } from '../components/quizzes/QuizKindBadge';
 import { QuizQuestionRow } from '../components/quizzes/QuizQuestionRow';
 import { OwnQuestionForm } from '../components/quizzes/OwnQuestionForm';
 import { PickQuestionsModal } from '../components/quizzes/PickQuestionsModal';
-import { moveQuizQuestion, ownQuizQuestion, quizQuestionFromQuestion, renumber } from '../lib/quiz';
+import { moveQuizQuestion, ownQuizQuestion, quizQuestionFromLessonItem, renumber } from '../lib/quiz';
 
 export function QuizDetail() {
   const { id } = useParams<{ id: string }>();
@@ -158,9 +158,9 @@ export function QuizDetail() {
         open={pickOpen}
         quiz={quiz}
         onClose={() => setPickOpen(false)}
-        onAdd={(picked) => {
+        onAdd={(lesson, picked) => {
           const start = questions.length;
-          setQuestions([...questions, ...picked.map((q, i) => quizQuestionFromQuestion(q, start + i))]);
+          setQuestions([...questions, ...picked.map((item, i) => quizQuestionFromLessonItem(lesson, item, start + i))]);
           setPickOpen(false);
         }}
       />

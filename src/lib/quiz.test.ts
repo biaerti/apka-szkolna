@@ -3,12 +3,12 @@ import type { Lesson, Question, QuestionSet, QuizQuestion, SchoolClass } from '.
 import {
   defaultQuizTitle,
   formatQuizDate,
-  lessonsWithQuestionSets,
+  lessonQuestionOptions,
   moveQuizQuestion,
   ownQuizQuestion,
   quizKindLabel,
   quizKindTitle,
-  quizQuestionFromQuestion,
+  quizQuestionFromLessonItem,
   renumber,
 } from './quiz';
 
@@ -48,16 +48,28 @@ describe('formatQuizDate / defaultQuizTitle', () => {
   });
 });
 
-describe('quizQuestionFromQuestion / ownQuizQuestion', () => {
-  it('kopiuje tresc i odpowiedz, zostawia slad do zrodla i nadaje nowe id', () => {
-    const src: Question = { id: 'src', setId: 's', text: 'Ile samogłosek?', answer: '8', order: 3 };
-    const copy = quizQuestionFromQuestion(src, 1);
-    expect(copy).toMatchObject({ text: 'Ile samogłosek?', answer: '8', sourceQuestionId: 'src', order: 1 });
-    expect(copy.id).not.toBe('src');
+describe('quizQuestionFromLessonItem / ownQuizQuestion', () => {
+  const src = lesson({ id: 'l', grade: 'IV', order: 0, code: '4.2' });
+
+  it('kopiuje tresc i odpowiedz, zostawia slad do zrodla, etykiete i nadaje nowe id', () => {
+    const copy = quizQuestionFromLessonItem(
+      src,
+      { id: 'q7', kind: 'powtorzeniowe', code: 'PZ2', text: 'Ile samogłosek?', answer: '8' },
+      1,
+    );
+    expect(copy).toMatchObject({
+      text: 'Ile samogłosek?',
+      answer: '8',
+      sourceQuestionId: 'q7',
+      sourceLabel: '4.2 PZ2',
+      order: 1,
+    });
+    expect(copy.id).not.toBe('q7');
   });
 
-  it('pytanie bez odpowiedzi nie dostaje pola answer', () => {
-    const copy = quizQuestionFromQuestion({ id: 'x', setId: 's', text: 't', order: 0 }, 0);
+  it('zadanie z lekcji dostaje etykiete "kod lekcji + kod zadania" i nie ma pola answer', () => {
+    const copy = quizQuestionFromLessonItem(src, { id: 'x', kind: 'zadanie', code: 'Z1', text: 't' }, 0);
+    expect(copy.sourceLabel).toBe('4.2 Z1');
     expect('answer' in copy).toBe(false);
   });
 
@@ -89,7 +101,7 @@ describe('renumber / moveQuizQuestion', () => {
   });
 });
 
-describe('lessonsWithQuestionSets', () => {
+describe('lessonQuestionOptions', () => {
   const sets: QuestionSet[] = [
     { id: 's1', name: 'Zestaw 1', classIds: [], createdAt: '' },
     { id: 's2', name: 'Zestaw 2', classIds: [], createdAt: '' },
@@ -102,25 +114,46 @@ describe('lessonsWithQuestionSets', () => {
   ];
   const lessons: Lesson[] = [
     lesson({ id: 'l2', grade: 'IV', order: 1, title: 'Druga', questionSetId: 's1' }),
-    lesson({ id: 'l1', grade: 'IV', order: 0, title: 'Bez zestawu' }),
-    lesson({ id: 'l3', grade: 'IV', order: 2, title: 'Pusty zestaw', questionSetId: 'sEmpty' }),
+    lesson({
+      id: 'l1',
+      grade: 'IV',
+      order: 0,
+      title: 'Same zadania',
+      slides: [
+        { id: 'sl1', kind: 'task', code: 'Z1', body: 'Podziel na sylaby' },
+        { id: 'sl2', kind: 'text', body: 'nie zadanie' },
+        { id: 'sl3', kind: 'task', code: 'Z2', body: 'Podkresl czasowniki' },
+      ],
+    }),
+    lesson({ id: 'l3', grade: 'IV', order: 2, title: 'Pusty zestaw, bez zadan', questionSetId: 'sEmpty' }),
     lesson({ id: 'l4', grade: 'IV', order: 3, title: 'Zestaw usuniety', questionSetId: 'brak' }),
     lesson({ id: 'l5', grade: 'V', order: 0, title: 'Piata', questionSetId: 's2' }),
   ];
 
-  it('zwraca tylko lekcje rocznika klasy z niepustym zestawem, w kolejnosci lekcji, pytania wg order', () => {
-    const out = lessonsWithQuestionSets(lessons, sets, questions, 'a', CLASSES);
-    expect(out.map((o) => o.lesson.id)).toEqual(['l2']);
-    expect(out[0].set.id).toBe('s1');
-    expect(out[0].questions.map((q) => q.id)).toEqual(['q1', 'q2']);
+  it('bierze lekcje rocznika klasy, ktore maja zadania ALBO pytania, w kolejnosci lekcji', () => {
+    const out = lessonQuestionOptions(lessons, sets, questions, 'a', CLASSES);
+    expect(out.map((o) => o.lesson.id)).toEqual(['l1', 'l2']);
+  });
+
+  it('zadania biora kody ze slajdow, pytania powtorzeniowe dostaja PZ1, PZ2... wg order', () => {
+    const out = lessonQuestionOptions(lessons, sets, questions, 'a', CLASSES);
+    const [tasksOnly, withSet] = out;
+    expect(tasksOnly.tasks.map((t) => t.code)).toEqual(['Z1', 'Z2']);
+    expect(tasksOnly.review).toEqual([]);
+    expect(tasksOnly.set).toBeUndefined();
+    expect(withSet.set?.id).toBe('s1');
+    expect(withSet.review.map((q) => [q.code, q.id])).toEqual([
+      ['PZ1', 'q1'],
+      ['PZ2', 'q2'],
+    ]);
   });
 
   it('inna klasa (rocznik V) widzi swoje lekcje', () => {
-    const out = lessonsWithQuestionSets(lessons, sets, questions, 'v', CLASSES);
+    const out = lessonQuestionOptions(lessons, sets, questions, 'v', CLASSES);
     expect(out.map((o) => o.lesson.id)).toEqual(['l5']);
   });
 
   it('nieznana klasa - pusta lista', () => {
-    expect(lessonsWithQuestionSets(lessons, sets, questions, 'nope', CLASSES)).toEqual([]);
+    expect(lessonQuestionOptions(lessons, sets, questions, 'nope', CLASSES)).toEqual([]);
   });
 });

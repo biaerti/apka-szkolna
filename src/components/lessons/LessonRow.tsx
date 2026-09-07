@@ -13,7 +13,6 @@ import { Menu, type MenuItem } from '../ui/Menu';
 import { GripIcon, MoreIcon, WheelIcon } from '../ui/icons';
 import { TD } from '../ui/Table';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
-import { copyToClipboard } from '../../lib/clipboard';
 import { resolveRecapMode } from '../../lib/recap';
 
 export interface LessonRowProps {
@@ -30,6 +29,8 @@ export interface LessonRowProps {
   onDragEnd: () => void;
   onMove: (direction: 'up' | 'down') => void;
   onSetStatus: (status: LessonProgress['status']) => void;
+  onShowRegister: () => void;
+  onShowQuestions: () => void;
   onAddQuestions: () => void;
   onDuplicate: () => void;
   onCopyToGrade: (() => void) | null;
@@ -45,11 +46,6 @@ export function LessonRow(p: LessonRowProps) {
   // Lekcja zapoznawcza: jej kolo to tryb 'demo' (patrz resolveRecapMode) - nie
   // ma z czego robic powtorki na ocene.
   const isIntroLesson = lesson.slides.some((s) => s.kind === 'recap' && resolveRecapMode(s) === 'demo');
-
-  async function copyRegister() {
-    const text = curriculum.length > 0 ? `${registerTopic}\nKody: ${curriculum.join(', ')}` : registerTopic;
-    await copyToClipboard(text);
-  }
 
   function handleDragStart(e: DragEvent<HTMLTableRowElement>) {
     if (!dragFromHandle.current) {
@@ -75,6 +71,11 @@ export function LessonRow(p: LessonRowProps) {
       ? { label: 'Przywróć do zrobienia', onSelect: () => p.onSetStatus('planned') }
       : { label: 'Oznacz jako zrobioną', onSelect: () => p.onSetStatus('done') },
     ...(!isDone && !isSkipped ? [{ label: 'Pomiń w tej klasie', onSelect: () => p.onSetStatus('skipped') }] : []),
+    'separator',
+    // Podglad "co ta lekcja ma" bez wchodzenia w edytor: temat i kody do
+    // dziennika (do skopiowania) oraz pytania w dwoch grupach (Z1..., PZ1...).
+    { label: 'Kody podstawy programowej', onSelect: p.onShowRegister, hint: 'Temat do dziennika i kody - do skopiowania' },
+    { label: 'Zestaw pytań', onSelect: p.onShowQuestions, hint: 'Zadania z lekcji i pytania powtórzeniowe' },
     'separator',
     { label: 'Przesuń wyżej', onSelect: () => p.onMove('up'), disabled: index === 0 },
     { label: 'Przesuń niżej', onSelect: () => p.onMove('down'), disabled: index === total - 1 },
@@ -163,12 +164,16 @@ export function LessonRow(p: LessonRowProps) {
             </>
           )}
           <span aria-hidden="true">·</span>
-          <span className="min-w-0 flex-1 truncate" title={registerTopic}>
+          {/* Skrot do dziennika: podglad w wierszu, a pelny temat i kody (do
+              zaznaczenia i skopiowania) w oknie z menu "wiecej". */}
+          <button
+            type="button"
+            onClick={p.onShowRegister}
+            title="Pokaż temat do dziennika i kody podstawy programowej"
+            className="min-w-0 flex-1 truncate text-left hover:text-accent-700 hover:underline"
+          >
             Dziennik: {registerTopic}
             {curriculum.length > 0 ? ` (${curriculum.join(', ')})` : ''}
-          </span>
-          <button type="button" onClick={copyRegister} className="shrink-0 text-accent-600 hover:underline">
-            Kopiuj
           </button>
         </p>
       </TD>

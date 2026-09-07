@@ -68,10 +68,14 @@ export function QuizQuestionRow({
           </form>
         ) : (
           <>
-            <p className="text-base text-gray-900">{question.text}</p>
+            <p className="whitespace-pre-line text-base text-gray-900">{question.text}</p>
             {question.answer && <p className="mt-0.5 text-sm text-gray-500">Odp.: {question.answer}</p>}
-            {question.sourceQuestionId === undefined && (
-              <p className="mt-0.5 text-xs text-gray-400">Pytanie własne</p>
+            {/* Skad pytanie przyszlo: "4.2 Z1" = zadanie robione na lekcji,
+                "4.2 PZ3" = pytanie powtorzeniowe z zestawu tej lekcji. */}
+            {question.sourceLabel ? (
+              <p className="mt-0.5 text-xs text-gray-400">{question.sourceLabel}</p>
+            ) : (
+              question.sourceQuestionId === undefined && <p className="mt-0.5 text-xs text-gray-400">Pytanie własne</p>
             )}
           </>
         )}

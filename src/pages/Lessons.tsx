@@ -15,6 +15,8 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { Table, TBody, TH, THead, TR } from '../components/ui/Table';
 import { LessonRow } from '../components/lessons/LessonRow';
+import { LessonRegisterModal } from '../components/lessons/LessonRegisterModal';
+import { LessonQuestionsModal } from '../components/lessons/LessonQuestionsModal';
 import { NewLessonModal } from '../components/lessons/NewLessonModal';
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
 import { ClassTabs } from '../components/lessons/ClassTabs';
@@ -38,6 +40,14 @@ export function Lessons() {
   const moveLesson = useStore((s) => s.moveLesson);
   const setLessonProgress = useStore((s) => s.setLessonProgress);
   const addQuestionSet = useStore((s) => s.addQuestionSet);
+  // Edycja z okien "Kody podstawy programowej" i "Zestaw pytań" to reczna
+  // zmiana nauczyciela, wiec idzie przez updateLessonFromEditor - inaczej
+  // "Odśwież wstawione materiały" nadpisaloby ja po cichu.
+  const updateLessonManually = useStore((s) => s.updateLessonFromEditor);
+  const addQuestion = useStore((s) => s.addQuestion);
+  const updateQuestion = useStore((s) => s.updateQuestion);
+  const removeQuestion = useStore((s) => s.removeQuestion);
+  const reorderQuestion = useStore((s) => s.reorderQuestion);
 
   const sortedClasses = useMemo(() => [...classes].sort((a, b) => a.order - b.order), [classes]);
   const requested = params.get('klasa');
@@ -53,6 +63,12 @@ export function Lessons() {
   const [newOpen, setNewOpen] = useState(false);
   const [copyLesson, setCopyLesson] = useState<Lesson | null>(null);
   const [removeTarget, setRemoveTarget] = useState<Lesson | null>(null);
+  // Okna podgladu z menu wiersza - trzymamy id, nie cala lekcje, zeby zawartosc
+  // odswiezala sie przy kazdej edycji w oknie.
+  const [registerLessonId, setRegisterLessonId] = useState<string | null>(null);
+  const [questionsLessonId, setQuestionsLessonId] = useState<string | null>(null);
+  const registerLesson = gradeLessons.find((l) => l.id === registerLessonId) ?? null;
+  const questionsLesson = gradeLessons.find((l) => l.id === questionsLessonId) ?? null;
 
   const ready = useReadyMaterials(grade, gradeClasses.map((c) => c.id), gradeLessons);
   const drag = useLessonDrag(gradeLessons, moveLesson);
@@ -98,14 +114,19 @@ export function Lessons() {
 
   // Zestaw pytan powstaje z lekcji i dostaje jej nazwe; jesli lekcja nie ma jeszcze
   // slajdu kola, dokladamy go na koniec - tam kolo sprawdza nowy temat.
-  function handleAddQuestions(lesson: Lesson) {
+  function createQuestionSetFor(lesson: Lesson): string {
     const set = addQuestionSet({ name: lesson.title, classIds: gradeClasses.map((c) => c.id) });
     const hasRecap = lesson.slides.some((s) => s.kind === 'recap');
     updateLesson(lesson.id, {
       questionSetId: set.id,
       slides: hasRecap ? lesson.slides : [...lesson.slides, { id: newId(), kind: 'recap', questionSetId: set.id }],
     });
-    navigate(`/pytania/${set.id}?lekcja=${lesson.id}`);
+    return set.id;
+  }
+
+  function handleAddQuestions(lesson: Lesson) {
+    const setId = createQuestionSetFor(lesson);
+    navigate(`/pytania/${setId}?lekcja=${lesson.id}`);
   }
 
   function copyLessonTo(lesson: Lesson, targetGrade: string, title: string) {
@@ -214,6 +235,8 @@ export function Lessons() {
                   onDragEnd={drag.reset}
                   onMove={(dir) => moveLesson(lesson.id, dir === 'up' ? idx - 1 : idx + 1)}
                   onSetStatus={(status) => setStatus(lesson, status)}
+                  onShowRegister={() => setRegisterLessonId(lesson.id)}
+                  onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}
                   onDuplicate={() => copyLessonTo(lesson, grade, `${lesson.title} (kopia)`)}
                   onCopyToGrade={otherGrades.length > 0 ? () => setCopyLesson(lesson) : null}
@@ -226,6 +249,32 @@ export function Lessons() {
       )}
 
       <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} />
+
+      {registerLesson && (
+        <LessonRegisterModal
+          lesson={registerLesson}
+          classNames={classNames}
+          onClose={() => setRegisterLessonId(null)}
+          onChange={(patch) => updateLessonManually(registerLesson.id, patch)}
+        />
+      )}
+
+      {questionsLesson && (
+        <LessonQuestionsModal
+          lesson={questionsLesson}
+          questions={questions}
+          classNames={classNames}
+          onClose={() => setQuestionsLessonId(null)}
+          onChangeSlides={(slides) => updateLessonManually(questionsLesson.id, { slides })}
+          onChangeQuestion={(qid, patch) => updateQuestion(qid, patch)}
+          onMoveQuestion={(qid, direction) => reorderQuestion(qid, direction)}
+          onRemoveQuestion={(qid) => removeQuestion(qid)}
+          onAddQuestion={(text) => {
+            if (questionsLesson.questionSetId) addQuestion({ setId: questionsLesson.questionSetId, text });
+          }}
+          onCreateQuestionSet={() => createQuestionSetFor(questionsLesson)}
+        />
+      )}
 
       {copyLesson && (
         <CopyLessonModal

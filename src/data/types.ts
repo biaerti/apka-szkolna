@@ -348,6 +348,14 @@ export interface QuizQuestion {
   text: string;
   answer?: string;
   sourceQuestionId?: ID;
+  /**
+   * Skad pytanie przyszlo, w jezyku nauczyciela: "4.2 Z1" (zadanie robione na
+   * lekcji) albo "4.2 PZ3" (pytanie powtorzeniowe z zestawu tej lekcji).
+   * Sama etykieta, nie odwolanie - jak cala reszta pytania jest to kopia z
+   * chwili dodania. Brak pola = pytanie wlasne albo dodane, zanim
+   * rozroznienie powstalo.
+   */
+  sourceLabel?: string;
   order: number;
 }
 
@@ -358,7 +366,7 @@ export interface QuizQuestion {
  * ustalonym z IV B. Klasy rownolegle pisza w rozne dni i z roznym zestawem
  * pytan, wiec wspolna encja dla rocznika nie mialaby sensu. Pytania sie
  * bierze z zestawow lekcji rocznika tej klasy (patrz src/lib/quiz.ts:
- * lessonsWithQuestionSets) albo dopisuje wlasne.
+ * lessonQuestionOptions) albo dopisuje wlasne.
  */
 export interface Quiz {
   id: ID;
