@@ -28,11 +28,12 @@ const RESULT_LABEL: Record<string, string> = {
 };
 
 /**
- * Reczna edycja bilansu (przycisk "Edytuj bilans" w ClassStats): "+" dodaje
- * zdarzenie danego typu (bez questionSetId - to reczna korekta, nie odpowiedz
- * na pytanie), "-" kasuje NAJNOWSZE zdarzenie tego typu w biezacym miesiacu
- * (findLatestEventId w src/lib/stats.ts). Podpowiedzi (hint_plomba) i bilans
- * (wyliczany) zostaja tylko do odczytu.
+ * Reczna edycja bilansu - kontrolki +/- sa widoczne ZAWSZE (decyzja nauczyciela:
+ * "cyk 1 dodaje, 1 odejmuje", bez przelacznika trybu). "+" dodaje zdarzenie
+ * danego typu (bez questionSetId - to reczna korekta, nie odpowiedz na pytanie),
+ * "-" kasuje NAJNOWSZE zdarzenie tego typu w biezacym miesiacu (findLatestEventId
+ * w src/lib/stats.ts). Edytowalne wszystkie kolumny zdarzen, z podpowiedziami
+ * wlacznie; tylko bilans (wyliczany) zostaje do odczytu.
  */
 
 /** Mala para przyciskow +/- przy liczbie - tryb recznej edycji bilansu. */
@@ -78,7 +79,6 @@ export function StatsTable({
   onRemoveEvent,
   monthLabel,
   onResetStudent,
-  editMode = false,
   onAdjust,
 }: {
   rows: StudentStatsRow[];
@@ -91,10 +91,8 @@ export function StatsTable({
   monthLabel: string;
   /** "Wyzeruj bilans ucznia" - kasuje zdarzenia tego ucznia z biezacego miesiaca. */
   onResetStudent: (studentId: string) => void;
-  /** Tryb recznej edycji bilansu ("Edytuj bilans" w ClassStats) - pokazuje przyciski +/-. */
-  editMode?: boolean;
   /** "+" dodaje zdarzenie danego typu uczniowi, "-" kasuje najnowsze zdarzenie tego typu w miesiacu. */
-  onAdjust?: (studentId: string, result: EditableResult, delta: 1 | -1) => void;
+  onAdjust: (studentId: string, result: EditableResult, delta: 1 | -1) => void;
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pendingReset, setPendingReset] = useState<StudentStatsRow | null>(null);
@@ -159,33 +157,32 @@ export function StatsTable({
                   {row.lastName} {row.firstName}
                 </button>
               </TD>
-              {(['plus', 'kropka', 'plomba'] as const).map((key) =>
-                editMode ? (
-                  <TD key={key}>
-                    <EditCell
-                      value={row[key]}
-                      onAdd={() => onAdjust?.(row.studentId, key, 1)}
-                      onRemove={() => onAdjust?.(row.studentId, key, -1)}
-                    />
-                  </TD>
-                ) : (
-                  <TD key={key}>{row[key]}</TD>
-                ),
-              )}
-              <TD>{row.hint}</TD>
-              {(['pass', 'uwaga'] as const).map((key) =>
-                editMode ? (
-                  <TD key={key}>
-                    <EditCell
-                      value={row[key]}
-                      onAdd={() => onAdjust?.(row.studentId, key, 1)}
-                      onRemove={() => onAdjust?.(row.studentId, key, -1)}
-                    />
-                  </TD>
-                ) : (
-                  <TD key={key}>{row[key]}</TD>
-                ),
-              )}
+              {(['plus', 'kropka', 'plomba'] as const).map((key) => (
+                <TD key={key}>
+                  <EditCell
+                    value={row[key]}
+                    onAdd={() => onAdjust(row.studentId, key, 1)}
+                    onRemove={() => onAdjust(row.studentId, key, -1)}
+                  />
+                </TD>
+              ))}
+              {/* Kolumna "Podpowiedzi" liczy zdarzenia hint_plomba - klucz wiersza to `hint`. */}
+              <TD>
+                <EditCell
+                  value={row.hint}
+                  onAdd={() => onAdjust(row.studentId, 'hint_plomba', 1)}
+                  onRemove={() => onAdjust(row.studentId, 'hint_plomba', -1)}
+                />
+              </TD>
+              {(['pass', 'uwaga'] as const).map((key) => (
+                <TD key={key}>
+                  <EditCell
+                    value={row[key]}
+                    onAdd={() => onAdjust(row.studentId, key, 1)}
+                    onRemove={() => onAdjust(row.studentId, key, -1)}
+                  />
+                </TD>
+              ))}
               <TD className="font-semibold">{row.bilans}</TD>
               <TD className="text-right">
                 <Menu

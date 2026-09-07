@@ -61,14 +61,14 @@ describe('buildIntroLesson', () => {
     expect(lesson.registerTopic).toBeTruthy();
   });
 
-  it('slajd topic ma krotki temat do zeszytu (krotszy niz temat do dziennika) i stoper', () => {
+  it('slajd topic ma krotki temat do zeszytu (krotszy niz temat do dziennika), bez stopera', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const topicSlide = lesson.slides.find((s) => s.kind === 'topic');
     expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
     if (topicSlide && topicSlide.kind === 'topic') {
       expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
       expect(topicSlide.topic!.length).toBeLessThan((lesson.registerTopic ?? '').length);
-      expect(topicSlide.timerSec).toBeGreaterThan(0);
+      expect(topicSlide.timerSec).toBeUndefined();
     }
   });
 

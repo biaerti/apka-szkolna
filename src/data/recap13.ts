@@ -1299,7 +1299,7 @@ function slideTitle(title: string, subtitle?: string): Slide {
  * dzienniku Vulcan. Stoper 180 s daje czas na przepisanie tematu i daty.
  */
 function slideTopic(topic: string): Slide {
-  return { id: newId(), kind: 'topic', topic, timerSec: 180 };
+  return { id: newId(), kind: 'topic', topic };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {

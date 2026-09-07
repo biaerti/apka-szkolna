@@ -64,10 +64,11 @@ function slideTitle(title: string, subtitle?: string, art?: SlideArt): Slide {
 /**
  * Slajd z tematem lekcji do zeszytu. `topic` to krotka, zeszytowa wersja
  * tematu (dzieci pisza wolno) - dluzszy `registerTopic` zostaje tylko w
- * dzienniku Vulcan. Stoper 180 s daje czas na przepisanie tematu i daty.
+ * dzienniku Vulcan. Bez stopera - decyzja nauczyciela (stoper mozna dodac
+ * recznie w edytorze, pole timerSec zostaje w typie).
  */
 function slideTopic(topic: string): Slide {
-  return { id: newId(), kind: 'topic', topic, timerSec: 180 };
+  return { id: newId(), kind: 'topic', topic };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {

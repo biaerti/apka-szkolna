@@ -45,7 +45,7 @@ export function aggregateMonth(events: RecapEvent[], students: Student[], monthK
 }
 
 /** Typy zdarzen, ktore nauczyciel moze recznie skorygowac w bilansie (przyciski +/-). */
-export type EditableResult = 'plus' | 'kropka' | 'plomba' | 'pass' | 'uwaga';
+export type EditableResult = 'plus' | 'kropka' | 'plomba' | 'hint_plomba' | 'pass' | 'uwaga';
 
 /**
  * Id NAJNOWSZEGO zdarzenia danego typu ucznia w danym miesiacu ("RRRR-MM") - albo

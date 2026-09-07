@@ -77,14 +77,14 @@ describe('buildRecap4', () => {
     expect(a.questionSets[0].id).not.toBe(b.questionSets[0].id);
   });
 
-  it('kazda lekcja ma slajd topic z krotkim tematem do zeszytu i stoperem, a notatke max na 5 linijek', () => {
+  it('kazda lekcja ma slajd topic z krotkim tematem do zeszytu (bez stopera), a notatke max na 5 linijek', () => {
     const bundle = buildRecap4('V', [CLASS_ID]);
     for (const lesson of bundle.lessons) {
       const topicSlide = lesson.slides.find((s) => s.kind === 'topic');
       expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
       if (topicSlide && topicSlide.kind === 'topic') {
         expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
-        expect(topicSlide.timerSec).toBeGreaterThan(0);
+        expect(topicSlide.timerSec).toBeUndefined();
       }
 
       const noteSlide = lesson.slides.find((s) => s.kind === 'note');
@@ -147,14 +147,14 @@ describe('buildRecap13', () => {
     expect(new Set(klucze).size).toBe(klucze.length);
   });
 
-  it('kazda lekcja ma slajd topic z krotkim tematem do zeszytu i stoperem, a notatke max na 5 linijek', () => {
+  it('kazda lekcja ma slajd topic z krotkim tematem do zeszytu (bez stopera), a notatke max na 5 linijek', () => {
     const bundle = buildRecap13('IV', [CLASS_ID]);
     for (const lesson of bundle.lessons) {
       const topicSlide = lesson.slides.find((s) => s.kind === 'topic');
       expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
       if (topicSlide && topicSlide.kind === 'topic') {
         expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
-        expect(topicSlide.timerSec).toBeGreaterThan(0);
+        expect(topicSlide.timerSec).toBeUndefined();
       }
 
       const noteSlide = lesson.slides.find((s) => s.kind === 'note');

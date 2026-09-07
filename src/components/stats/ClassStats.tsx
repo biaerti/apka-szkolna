@@ -25,7 +25,6 @@ export function ClassStats({ classId, students }: { classId: string; students: S
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
   const resetBalance = useStore((s) => s.resetBalance);
-  const [editMode, setEditMode] = useState(false);
 
   const studentIds = useMemo(() => new Set(students.map((st) => st.id)), [students]);
 
@@ -87,7 +86,7 @@ export function ClassStats({ classId, students }: { classId: string; students: S
       .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
 
   /**
-   * Reczna korekta bilansu (przycisk "Edytuj bilans"): "+" dodaje zdarzenie bez
+   * Reczna korekta bilansu (kontrolki +/- w tabeli): "+" dodaje zdarzenie bez
    * questionSetId (to reczna korekta nauczyciela, nie odpowiedz na pytanie), "-"
    * kasuje najnowsze zdarzenie tego typu z BIEZACO WYBRANEGO miesiaca - dziala
    * wiec tylko dopoki nauczyciel przeglada activeMonth, tak jak reszta bilansu.
@@ -115,9 +114,6 @@ export function ClassStats({ classId, students }: { classId: string; students: S
           </Select>
         </div>
         <div className="flex gap-2">
-          <Button variant={editMode ? 'primary' : 'secondary'} onClick={() => setEditMode((v) => !v)}>
-            {editMode ? 'Zakończ edycję' : 'Edytuj bilans'}
-          </Button>
           <Button variant="secondary" onClick={handleExportCsv}>
             Eksport CSV
           </Button>
@@ -128,9 +124,8 @@ export function ClassStats({ classId, students }: { classId: string; students: S
       </div>
 
       <p className="text-sm text-gray-500">
-        {editMode
-          ? 'Tryb edycji: "+" dodaje zdarzenie, "-" kasuje najnowsze zdarzenie tego typu w wybranym miesiącu.'
-          : 'Pasy, uwagi i bilans liczą się pełnymi miesiącami i zerują 1. dnia miesiąca. Kliknij wiersz, żeby zobaczyć pojedyncze zdarzenia.'}
+        Pasy, uwagi i bilans liczą się pełnymi miesiącami i zerują 1. dnia miesiąca. "+" dodaje zdarzenie, "-" kasuje
+        najnowsze tego typu w wybranym miesiącu. Kliknij nazwisko, żeby zobaczyć pojedyncze zdarzenia.
       </p>
 
       <StatsTable
@@ -142,7 +137,6 @@ export function ClassStats({ classId, students }: { classId: string; students: S
         onRemoveEvent={removeRecapEvent}
         monthLabel={monthLabel(activeMonth)}
         onResetStudent={(studentId) => resetBalance(classId, activeMonth, studentId)}
-        editMode={editMode}
         onAdjust={handleAdjust}
       />
 
