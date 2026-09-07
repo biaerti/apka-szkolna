@@ -19,6 +19,12 @@ html.panel-tryb body {
   overflow: hidden;
 }
 
+/* Panel juz sie zamontowal i ma wlasny naglowek (przeciaganie + zwin + zamknij),
+   wiec pasek ratunkowy z main.tsx nie jest juz potrzebny. */
+html.panel-gotowy .panel-pasek {
+  display: none;
+}
+
 /* Wydruk zasad (src/pages/RulesPrint.tsx) - A4, domyslnie bez kolorow i cieni. */
 @media print {
   @page {

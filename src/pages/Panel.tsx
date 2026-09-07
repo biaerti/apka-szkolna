@@ -54,9 +54,12 @@ export function Panel() {
 
   // Tlo strony musi byc przezroczyste - okno Tauri jest transparent, wiec
   // szare tlo body rysowaloby prostokat wokol zaokraglonych rogow panelu.
+  // `panel-gotowy` dodatkowo chowa pasek ratunkowy z main.tsx (PanelPasek):
+  // od tego momentu przeciaganie i zamykanie sa w naglowku panelu.
   useEffect(() => {
-    document.documentElement.classList.add('panel-tryb');
-    return () => document.documentElement.classList.remove('panel-tryb');
+    const html = document.documentElement;
+    html.classList.add('panel-tryb', 'panel-gotowy');
+    return () => html.classList.remove('panel-gotowy');
   }, []);
 
   // Minimalizacja z paska zadan = zwiniecie do pigulki (pasek_zadan.rs).
