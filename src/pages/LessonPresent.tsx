@@ -6,6 +6,7 @@ import { useStore } from '../data/store';
 import { SlideView } from '../components/slides/SlideView';
 import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
+import { PresentClock } from '../components/lessons/PresentClock';
 import { TaskWheelDrawer } from '../components/lessons/TaskWheelDrawer';
 import { useTaskWheel } from '../components/lessons/useTaskWheel';
 import { usePresentKeys } from '../components/lessons/usePresentKeys';
@@ -181,6 +182,8 @@ export function LessonPresent() {
       )}
 
       <PresentProgressBar index={index} total={total} />
+      {/* Na slajdzie kola prawy bok zajmuja pasek RecapToolbar i panel uczniow - zegar idzie w lewy gorny rog. */}
+      <PresentClock position={isRecap ? 'top-left' : 'top-right'} />
     </div>
   );
 }

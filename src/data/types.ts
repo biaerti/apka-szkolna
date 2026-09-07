@@ -370,3 +370,32 @@ export interface Quiz {
   note?: string;
   createdAt: string; // ISO
 }
+
+// --- Plan lekcji ---------------------------------------------------------------
+
+/**
+ * Godzina lekcyjna wg dzwonkow: numer (0, 1, 2...) i czas "HH:MM". Lista
+ * godzin jest globalna (jeden dzwonek dla calej szkoly), edytowalna w zakladce
+ * "Plan" - domyslnie dzwonki SP97 (patrz src/data/timetableSeed.ts). Numer jest
+ * jednoczesnie kluczem: dwie godziny o tym samym `no` nie maja sensu.
+ */
+export interface LessonPeriod {
+  no: number;
+  start: string; // "HH:MM"
+  end: string; // "HH:MM"
+}
+
+/**
+ * Jedna komorka tygodniowego planu nauczyciela: dzien tygodnia 1-5 (pon-pt),
+ * numer godziny lekcyjnej (LessonPeriod.no), klasa i sala. Para (weekday,
+ * period) jest unikalna - nauczyciel nie moze byc w dwoch klasach naraz.
+ * Plan sluzy pulpitowi ("co dzis mam") i zegarowi na projektorze ("ile
+ * zostalo do konca tej lekcji"), nie jest powiazany z kolejka lekcji.
+ */
+export interface TimetableEntry {
+  id: ID;
+  weekday: number; // 1 = poniedzialek ... 5 = piatek
+  period: number; // LessonPeriod.no
+  classId: ID;
+  room?: string; // np. "31"
+}

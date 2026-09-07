@@ -5,6 +5,7 @@ import { formatPl, toDateKey } from '../lib/dates';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Button } from '../components/ui/Button';
 import { TodaySection } from '../components/dashboard/TodaySection';
+import { TodayTimetableBar } from '../components/dashboard/TodayTimetableBar';
 import { QueuePreview } from '../components/dashboard/QueuePreview';
 import { StatTiles } from '../components/dashboard/StatTiles';
 import { QuickStart } from '../components/dashboard/QuickStart';
@@ -28,6 +29,7 @@ export function Dashboard() {
     return (
       <div>
         <h1 className="mb-6 text-2xl font-semibold text-gray-900">{formatPl(today)}</h1>
+        <TodayTimetableBar />
         <EmptyState
           title="Brak lekcji"
           description="Dodaj pierwszą lekcję, aby zobaczyć ją na pulpicie."
@@ -44,6 +46,9 @@ export function Dashboard() {
   return (
     <div>
       <h1 className="mb-6 text-2xl font-semibold text-gray-900">{formatPl(today)}</h1>
+
+      {/* Plan dzwonkowy (zakladka "Plan") - osobny od lekcji z kolejki ponizej. */}
+      <TodayTimetableBar />
 
       <TodaySection lessons={todayLessons} classes={classes} />
 

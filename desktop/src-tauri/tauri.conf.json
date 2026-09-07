@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Kolo fortuny",
+  "version": "0.1.0",
+  "identifier": "pl.apkaszkolna.panel",
+  "build": {
+    "frontendDist": "https://szkola.klippi.pl/panel"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Koło fortuny",
+        "width": 360,
+        "height": 600,
+        "alwaysOnTop": true,
+        "decorations": false,
+        "transparent": true,
+        "shadow": false,
+        "resizable": false
+      }
+    ],
+    "security": {
+      "csp": null,
+      "capabilities": ["panel-prod"]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico"],
+    "publisher": "Bartosz Kuninski",
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper" },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["Polish"],
+        "displayLanguageSelector": false
+      }
+    }
+  }
+}

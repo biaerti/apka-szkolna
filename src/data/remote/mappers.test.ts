@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import type { Lesson, Meeting, Question, QuestionSet, Quiz, RecapEvent, SchoolClass, Settings, Student } from '../types';
+import type {
+  Lesson,
+  LessonPeriod,
+  Meeting,
+  Question,
+  QuestionSet,
+  Quiz,
+  RecapEvent,
+  SchoolClass,
+  Settings,
+  Student,
+  TimetableEntry,
+} from '../types';
 import {
   meetingToRow,
   quizToRow,
@@ -20,6 +32,7 @@ import {
   settingsToRow,
   studentToRow,
 } from './mappers';
+import { periodToRow, rowToPeriod, rowToTimetableEntry, timetableEntryToRow } from './timetableMappers';
 
 describe('classes round-trip', () => {
   it('encja -> wiersz -> encja', () => {
@@ -262,5 +275,27 @@ describe('quizzes', () => {
   it('wiersz bez pytan (NULL z bazy) wraca z pusta lista', () => {
     const row = { ...quizToRow(quiz), questions: null as unknown as Quiz['questions'] };
     expect(rowToQuiz(row).questions).toEqual([]);
+  });
+});
+
+describe('lesson periods round-trip', () => {
+  it('id wiersza to numer godziny jako tekst', () => {
+    const p: LessonPeriod = { no: 3, start: '9:40', end: '10:25' };
+    const row = periodToRow(p);
+    expect(row).toEqual({ id: '3', no: 3, start_time: '9:40', end_time: '10:25' });
+    expect(rowToPeriod(row)).toEqual(p);
+  });
+});
+
+describe('timetable entries round-trip', () => {
+  it('z sala', () => {
+    const e: TimetableEntry = { id: 't1', weekday: 1, period: 2, classId: 'c1', room: '31' };
+    expect(rowToTimetableEntry(timetableEntryToRow(e))).toEqual(e);
+  });
+  it('bez sali (undefined <-> null)', () => {
+    const e: TimetableEntry = { id: 't2', weekday: 5, period: 6, classId: 'c2' };
+    const row = timetableEntryToRow(e);
+    expect(row.room).toBeNull();
+    expect(rowToTimetableEntry(row)).toEqual(e);
   });
 });

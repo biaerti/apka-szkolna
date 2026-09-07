@@ -10,11 +10,13 @@ import { useSyncStatus } from '../../data/remote/sync';
 // pozycja, bo skrypt zebrania z rodzicami nie ma sie gdzie podpiac - nie nalezy
 // ani do lekcji, ani do klasy. "Kartkowki" podobnie: kartkowka karna za halas
 // i klasowka po dziale to wydarzenia konkretnej klasy, z pytaniami z wielu lekcji.
+// "Plan" to tygodniowy plan dzwonkowy nauczyciela - karmi pulpit i zegar na projektorze.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
   { to: '/lekcje', label: 'Lekcje' },
   { to: '/kartkowki', label: 'Kartkówki' },
+  { to: '/plan', label: 'Plan' },
   { to: '/podrecznik', label: 'Podręcznik' },
   { to: '/zebrania', label: 'Zebrania' },
   { to: '/zasady/druk', label: 'Zasady' },

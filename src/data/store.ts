@@ -7,12 +7,15 @@ import { persist } from 'zustand/middleware';
 import { newId } from './id';
 import { buildSeedData } from './seed';
 import { buildSeedMeetings } from './meetings';
+import { DEFAULT_PERIODS, buildSeedTimetable } from './timetableSeed';
 import { classGrade } from '../lib/grade';
 import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
+import { timetableCellId } from '../lib/timetable';
 import { monthKey as recapMonthKey } from '../lib/week';
 import type {
   Lesson,
+  LessonPeriod,
   LessonProgress,
   Meeting,
   Question,
@@ -22,6 +25,7 @@ import type {
   SchoolClass,
   Settings,
   Student,
+  TimetableEntry,
 } from './types';
 
 export const STORAGE_KEY = 'apka-szkolna';
@@ -49,6 +53,8 @@ interface AppState {
   recapEvents: RecapEvent[];
   meetings: Meeting[];
   quizzes: Quiz[];
+  periods: LessonPeriod[];
+  timetable: TimetableEntry[];
   settings: Settings;
   manuallyEditedLessonIds: ManuallyEditedLessonIds;
 
@@ -114,11 +120,33 @@ interface AppState {
   updateQuiz: (id: string, patch: Partial<Omit<Quiz, 'id'>>) => void;
   removeQuiz: (id: string) => void;
 
+  // Plan lekcji (dzwonki + tygodniowa siatka; patrz types.ts)
+  /** Zamienia cala liste godzin lekcyjnych (zapisywana posortowana po `no`). */
+  setPeriods: (list: LessonPeriod[]) => void;
+  /** Upsert komorki planu po (weekday, period); pusty classId = usuniecie komorki. */
+  setTimetableEntry: (entry: Omit<TimetableEntry, 'id'>) => void;
+  removeTimetableEntry: (id: string) => void;
+
   // Ustawienia
   updateSettings: (patch: Partial<Settings>) => void;
 
   // Reset / import calego stanu
-  replaceAll: (data: Pick<AppState, 'classes' | 'students' | 'questionSets' | 'questions' | 'lessons' | 'recapEvents' | 'meetings' | 'quizzes' | 'settings'>) => void;
+  replaceAll: (
+    data: Pick<
+      AppState,
+      | 'classes'
+      | 'students'
+      | 'questionSets'
+      | 'questions'
+      | 'lessons'
+      | 'recapEvents'
+      | 'meetings'
+      | 'quizzes'
+      | 'periods'
+      | 'timetable'
+      | 'settings'
+    >,
+  ) => void;
   resetToSeed: () => void;
 }
 
@@ -254,6 +282,8 @@ export const useStore = create<AppState>()(
       recapEvents: [],
       meetings: [],
       quizzes: [],
+      periods: [],
+      timetable: [],
       settings: {
         passesPerMonth: 2,
         hintGivesMinus: true,
@@ -286,6 +316,7 @@ export const useStore = create<AppState>()(
           lessons: removeClassFromLessons(s.lessons, s.classes, id),
           recapEvents: s.recapEvents.filter((e) => e.classId !== id),
           quizzes: s.quizzes.filter((q) => q.classId !== id),
+          timetable: s.timetable.filter((e) => e.classId !== id),
           questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
         }));
       },
@@ -444,6 +475,27 @@ export const useStore = create<AppState>()(
         set((s) => ({ quizzes: s.quizzes.filter((q) => q.id !== id) }));
       },
 
+      setPeriods: (list) => {
+        set(() => ({ periods: [...list].sort((a, b) => a.no - b.no) }));
+      },
+      setTimetableEntry: ({ weekday, period, classId, room }) => {
+        set((s) => {
+          const rest = s.timetable.filter((e) => !(e.weekday === weekday && e.period === period));
+          if (!classId) return { timetable: rest };
+          const entry: TimetableEntry = {
+            id: timetableCellId(weekday, period),
+            weekday,
+            period,
+            classId,
+            room: room && room.trim() !== '' ? room.trim() : undefined,
+          };
+          return { timetable: [...rest, entry] };
+        });
+      },
+      removeTimetableEntry: (id) => {
+        set((s) => ({ timetable: s.timetable.filter((e) => e.id !== id) }));
+      },
+
       updateSettings: (patch) => {
         set((s) => ({ settings: { ...s.settings, ...patch } }));
       },
@@ -462,6 +514,8 @@ export const useStore = create<AppState>()(
           recapEvents: [],
           meetings: buildSeedMeetings(),
           quizzes: [],
+          periods: DEFAULT_PERIODS,
+          timetable: buildSeedTimetable(seed.classes),
           settings: seed.settings,
           manuallyEditedLessonIds: {},
         }));
@@ -469,7 +523,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 12,
+      version: 13,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -504,6 +558,9 @@ export const useStore = create<AppState>()(
       // zostaje bez zmian.
       // v11 -> v12: dochodzi kolekcja quizzes (zakladka "Kartkowki"). Stare
       // dane dostaja pusta liste - kartkowki nie maja zadnego seeda.
+      // v12 -> v13: dochodza periods (dzwonki) i timetable (plan tygodniowy,
+      // zakladka "Plan"). Stare dane dostaja domyslne dzwonki SP97 i plan
+      // nauczyciela dopasowany po nazwach klas (patrz timetableSeed.ts).
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -513,6 +570,8 @@ export const useStore = create<AppState>()(
           manuallyEditedLessonIds?: ManuallyEditedLessonIds;
           meetings?: Array<Record<string, unknown>>;
           quizzes?: Array<Record<string, unknown>>;
+          periods?: LessonPeriod[];
+          timetable?: TimetableEntry[];
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -575,6 +634,10 @@ export const useStore = create<AppState>()(
         }
         if (version < 12 && !Array.isArray(state.quizzes)) {
           state.quizzes = [];
+        }
+        if (version < 13) {
+          if (!Array.isArray(state.periods)) state.periods = DEFAULT_PERIODS;
+          if (!Array.isArray(state.timetable)) state.timetable = buildSeedTimetable(state.classes ?? []);
         }
         return state as unknown as AppState;
       },

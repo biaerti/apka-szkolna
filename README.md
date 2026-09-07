@@ -54,9 +54,16 @@ paska bocznego. Offline zmiany czekają i idą po powrocie sieci.
 | `/pytania/:id` | Zestaw pytań lekcji (import: jedno pytanie na linię, opcjonalnie `pytanie \| odpowiedź`) |
 | `/kartkowki` | Kartkówki i klasówki per klasa: pytania z zestawów lekcji + własne, pokaz na projektorze (`/kartkowki/:id/pokaz`) |
 | `/podrecznik` | Podręcznik (PDF w IndexedDB) |
+| `/panel` | Pływające koło fortuny dla aplikacji desktopowej (`desktop/`) - okno nad multipodręcznikiem |
 | `/zebrania` | Zebrania z rodzicami - kafelki i skrypt zebrania |
 | `/zasady/druk` | Wydruk zasad na A4 |
 | `/ustawienia` | Limit pasów na miesiąc, plomba za podpowiadanie, czas kręcenia, stoper odpowiedzi, eksport/import JSON |
+
+## Aplikacja desktopowa (pływające koło)
+
+Kiedy lekcja idzie w multipodręczniku GWO, a nie w prezentacji apki, koło musi być NAD tamtym oknem.
+Robi to mały shell Tauri z katalogu `desktop/`: okno zawsze na wierzchu, zwijane do pigułki, ładujące
+trasę `/panel` z produkcji. Szczegóły i uruchomienie: [`desktop/README.md`](desktop/README.md).
 
 ## Skróty na ekranie projektora
 

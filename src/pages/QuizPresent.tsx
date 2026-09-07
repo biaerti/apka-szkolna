@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
+import { PresentClock } from '../components/lessons/PresentClock';
 import { QuizAllView } from '../components/quizzes/QuizAllView';
 import { QuizOneView } from '../components/quizzes/QuizOneView';
 import { formatQuizDate, quizKindLabel, quizKindTitle, renumber } from '../lib/quiz';
@@ -98,7 +99,9 @@ export function QuizPresent() {
 
   return (
     <div ref={rootRef} className="relative flex flex-col bg-gray-950 px-[3vw] py-[2vh]" style={{ height: '100vh' }}>
-      <p className="shrink-0 truncate text-[1.6vw] text-gray-400">{header}</p>
+      <PresentClock />
+      {/* pr-28: miejsce na zegar w prawym gornym rogu, zeby nie zaslanial konca naglowka. */}
+      <p className="shrink-0 truncate pr-28 text-[1.6vw] text-gray-400">{header}</p>
 
       {total === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-4 text-gray-200">

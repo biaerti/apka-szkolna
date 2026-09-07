@@ -10,6 +10,15 @@ body {
   @apply bg-gray-50 text-gray-900;
 }
 
+/* Plywajacy panel desktopowy (/panel): okno Tauri jest przezroczyste, wiec tlo
+   strony musi zniknac - inaczej wokol zaokraglonych rogow panelu widac szary
+   prostokat. Klase wlacza sama trasa panelu. */
+html.panel-tryb,
+html.panel-tryb body {
+  background: transparent;
+  overflow: hidden;
+}
+
 /* Wydruk zasad (src/pages/RulesPrint.tsx) - A4, domyslnie bez kolorow i cieni. */
 @media print {
   @page {

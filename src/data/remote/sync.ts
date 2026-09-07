@@ -36,7 +36,28 @@ import {
   type SettingsRow,
   type StudentRow,
 } from './mappers';
-import type { Lesson, Meeting, Question, QuestionSet, Quiz, RecapEvent, SchoolClass, Settings, Student } from '../types';
+import {
+  periodToRow,
+  rowToPeriod,
+  rowToTimetableEntry,
+  timetableEntryToRow,
+  type LessonPeriodRow,
+  type TimetableEntryRow,
+} from './timetableMappers';
+import { DEFAULT_PERIODS, buildSeedTimetable } from '../timetableSeed';
+import type {
+  Lesson,
+  LessonPeriod,
+  Meeting,
+  Question,
+  QuestionSet,
+  Quiz,
+  RecapEvent,
+  SchoolClass,
+  Settings,
+  Student,
+  TimetableEntry,
+} from '../types';
 
 const PAGE_SIZE = 1000;
 const UPSERT_BATCH_SIZE = 500;
@@ -55,6 +76,8 @@ export interface RemoteData {
   recapEvents: RecapEvent[];
   meetings: Meeting[];
   quizzes: Quiz[];
+  periods: LessonPeriod[];
+  timetable: TimetableEntry[];
   settings: Settings;
 }
 
@@ -86,7 +109,17 @@ async function fetchAllRows<T>(table: string): Promise<T[]> {
   return out;
 }
 
-export async function loadAllFromRemote(): Promise<RemoteData> {
+interface RemoteLoad {
+  data: RemoteData;
+  /**
+   * true, gdy plan lekcji w chmurze byl PUSTY i data.periods/timetable to seed
+   * (patrz nizej) - wtedy snapshoty tych kolekcji musza zostac puste, zeby
+   * pierwszy syncNow() wyslal seed do chmury zamiast uznac go za juz zapisany.
+   */
+  timetableSeeded: boolean;
+}
+
+async function fetchRemote(): Promise<RemoteLoad> {
   const [
     classRows,
     studentRows,
@@ -96,6 +129,8 @@ export async function loadAllFromRemote(): Promise<RemoteData> {
     recapEventRows,
     meetingRows,
     quizRows,
+    periodRows,
+    timetableRows,
     settingsRows,
   ] =
     await Promise.all([
@@ -107,20 +142,40 @@ export async function loadAllFromRemote(): Promise<RemoteData> {
       fetchAllRows<RecapEventRow>('recap_events'),
       fetchAllRows<MeetingRow>('meetings'),
       fetchAllRows<QuizRow>('quizzes'),
+      fetchAllRows<LessonPeriodRow>('lesson_periods'),
+      fetchAllRows<TimetableEntryRow>('timetable_entries'),
       fetchAllRows<SettingsRow>('settings'),
     ]);
 
+  const classes = classRows.map(rowToClass);
+  // Plan lekcji doszedl pozniej niz reszta bazy. Po zalogowaniu chmura
+  // "wygrywa" (replaceAll), wiec przy pustych tabelach lokalny plan (z
+  // migracji store) zniknalby. Dlatego przy PUSTYCH dzwonkach zwracamy domyslne
+  // dzwonki i plan nauczyciela zbudowany z klas z chmury (dopasowanie po
+  // nazwach) - sync wysle je do chmury przy pierwszej okazji. Warunkiem jest
+  // brak dzwonkow, a nie brak wpisow planu: gdy dzwonki juz sa w chmurze, pusty
+  // plan znaczy, ze nauczyciel sam go wyczyscil, i nie ma go wskrzeszac.
+  const timetableSeeded = periodRows.length === 0;
   return {
-    classes: classRows.map(rowToClass),
-    students: studentRows.map(rowToStudent),
-    questionSets: questionSetRows.map(rowToQuestionSet),
-    questions: questionRows.map(rowToQuestion),
-    lessons: lessonRows.map(rowToLesson),
-    recapEvents: recapEventRows.map(rowToRecapEvent),
-    meetings: meetingRows.map(rowToMeeting),
-    quizzes: quizRows.map(rowToQuiz),
-    settings: settingsRows[0] ? rowToSettings(settingsRows[0]) : DEFAULT_SETTINGS,
+    timetableSeeded,
+    data: {
+      classes,
+      students: studentRows.map(rowToStudent),
+      questionSets: questionSetRows.map(rowToQuestionSet),
+      questions: questionRows.map(rowToQuestion),
+      lessons: lessonRows.map(rowToLesson),
+      recapEvents: recapEventRows.map(rowToRecapEvent),
+      meetings: meetingRows.map(rowToMeeting),
+      quizzes: quizRows.map(rowToQuiz),
+      periods: timetableSeeded ? DEFAULT_PERIODS : periodRows.map(rowToPeriod),
+      timetable: timetableSeeded ? buildSeedTimetable(classes) : timetableRows.map(rowToTimetableEntry),
+      settings: settingsRows[0] ? rowToSettings(settingsRows[0]) : DEFAULT_SETTINGS,
+    },
   };
+}
+
+export async function loadAllFromRemote(): Promise<RemoteData> {
+  return (await fetchRemote()).data;
 }
 
 // --- status synchronizacji (maly store zustand, czytany przez UI) ----------
@@ -154,6 +209,8 @@ type CollectionName =
   | 'recapEvents'
   | 'meetings'
   | 'quizzes'
+  | 'periods'
+  | 'timetable'
   | 'settings';
 
 // Kolejnosc dla upsertow - rodzice przed dziecmi (zgodnie z FK w 0001_init.sql).
@@ -166,6 +223,8 @@ const UPSERT_ORDER: CollectionName[] = [
   'recapEvents',
   'meetings',
   'quizzes', // FK do classes - po 'classes'
+  'periods',
+  'timetable', // FK do classes - po 'classes'
   'settings',
 ];
 const DELETE_ORDER: CollectionName[] = [...UPSERT_ORDER].reverse();
@@ -179,6 +238,8 @@ const TABLE_NAMES: Record<CollectionName, string> = {
   recapEvents: 'recap_events',
   meetings: 'meetings',
   quizzes: 'quizzes',
+  periods: 'lesson_periods',
+  timetable: 'timetable_entries',
   settings: 'settings',
 };
 
@@ -191,6 +252,8 @@ interface StoreSlice {
   recapEvents: RecapEvent[];
   meetings: Meeting[];
   quizzes: Quiz[];
+  periods: LessonPeriod[];
+  timetable: TimetableEntry[];
   settings: Settings;
 }
 
@@ -212,6 +275,10 @@ function rowsFor(collection: CollectionName, state: StoreSlice): Array<{ id: str
       return state.meetings.map(meetingToRow);
     case 'quizzes':
       return state.quizzes.map(quizToRow);
+    case 'periods':
+      return state.periods.map(periodToRow);
+    case 'timetable':
+      return state.timetable.map(timetableEntryToRow);
     case 'settings':
       return [settingsToRow(state.settings)];
   }
@@ -227,6 +294,8 @@ function emptySnapshots(): Record<CollectionName, Snapshot> {
     recapEvents: new Map(),
     meetings: new Map(),
     quizzes: new Map(),
+    periods: new Map(),
+    timetable: new Map(),
     settings: new Map(),
   };
 }
@@ -388,16 +457,22 @@ function handleOffline(): void {
 }
 
 /** Wgrywa dane z chmury do store, bez generowania wysylki (applyingRemote). Aktualizuje snapshoty. */
-function applyRemoteToStore(data: RemoteData): void {
+function applyRemoteToStore(remote: RemoteLoad): void {
   applyingRemote = true;
   try {
-    useStore.getState().replaceAll(data);
+    useStore.getState().replaceAll(remote.data);
   } finally {
     applyingRemote = false;
   }
   const state = useStore.getState();
   for (const c of UPSERT_ORDER) {
     snapshots[c] = buildSnapshot(rowsFor(c, state));
+  }
+  // Seed planu nie jest w chmurze - pusty snapshot sprawia, ze wyjdzie w
+  // pierwszej wysylce (patrz RemoteLoad.timetableSeeded).
+  if (remote.timetableSeeded) {
+    snapshots.periods = new Map();
+    snapshots.timetable = new Map();
   }
 }
 
@@ -413,7 +488,12 @@ export function startSync(): void {
   }
   if (!isOnline()) {
     setStatus({ state: 'offline' });
+    return;
   }
+  // Od razu wysylamy to, czego chmura jeszcze nie ma (np. seed planu lekcji
+  // albo caly stan przegladarki po potwierdzeniu w AuthGate). Gdy roznic nie
+  // ma, syncNow tylko odnotuje udana synchronizacje.
+  scheduleFlush(0);
 }
 
 /** Zatrzymuje synchronizacje (np. przy wylogowaniu). */
@@ -444,10 +524,10 @@ export function stopSync(): void {
  * - oba puste -> laduje seed lokalnie, needsUpload: false (sync i tak wyśle seed).
  */
 export async function initialSync(): Promise<{ needsUpload: boolean }> {
-  const remote = await loadAllFromRemote();
+  const remote = await fetchRemote();
   const localHasData = useStore.getState().classes.length > 0;
 
-  if (remote.classes.length > 0) {
+  if (remote.data.classes.length > 0) {
     applyRemoteToStore(remote);
     return { needsUpload: false };
   }
@@ -475,6 +555,5 @@ export async function pushAllToRemote(): Promise<void> {
 
 /** Pelny pull - nadpisuje store zawartoscia chmury (bez generowania wysylki). */
 export async function pullAllFromRemote(): Promise<void> {
-  const remote = await loadAllFromRemote();
-  applyRemoteToStore(remote);
+  applyRemoteToStore(await fetchRemote());
 }
