@@ -61,6 +61,7 @@ const DEFAULT_SETTINGS: Settings = {
   plusesForFive: 3,
   plombyForOne: 3,
   reviewQuestionCount: 5,
+  answerTimerSec: 30,
 };
 
 async function fetchAllRows<T>(table: string): Promise<T[]> {

@@ -60,6 +60,7 @@ export function buildSeedData(): SeedData {
     plusesForFive: 3,
     plombyForOne: 3,
     reviewQuestionCount: 5,
+    answerTimerSec: 30,
   };
 
   return {

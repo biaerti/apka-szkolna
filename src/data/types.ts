@@ -289,6 +289,12 @@ export interface Settings {
    * Domyslnie 5.
    */
   reviewQuestionCount: number;
+  /**
+   * Ile sekund ma wylosowany uczen na odpowiedz. Stoper startuje sam po
+   * wylosowaniu i tylko pokazuje czas - niczego nie ocenia i nie przelacza
+   * ucznia. 0 = bez stopera. Domyslnie 30.
+   */
+  answerTimerSec: number;
 }
 
 /**

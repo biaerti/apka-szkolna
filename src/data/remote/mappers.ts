@@ -261,6 +261,7 @@ export interface SettingsRow {
   pluses_for_five: number;
   plomby_for_one: number;
   review_question_count: number | null;
+  answer_timer_sec: number | null;
 }
 
 export function settingsToRow(s: Settings): SettingsRow {
@@ -272,6 +273,7 @@ export function settingsToRow(s: Settings): SettingsRow {
     pluses_for_five: s.plusesForFive,
     plomby_for_one: s.plombyForOne,
     review_question_count: s.reviewQuestionCount,
+    answer_timer_sec: s.answerTimerSec,
   };
 }
 
@@ -285,5 +287,8 @@ export function rowToSettings(row: SettingsRow): Settings {
     // Kolumna doszla po starcie (0008_review_question_count.sql) - starsze
     // wiersze w bazie maja NULL, dopoki nauczyciel nie zapisze ustawien.
     reviewQuestionCount: row.review_question_count ?? 5,
+    // Kolumna doszla razem ze stoperem odpowiedzi (0010_answer_timer.sql) -
+    // starsze wiersze maja NULL, dopoki nauczyciel nie zapisze ustawien.
+    answerTimerSec: row.answer_timer_sec ?? 30,
   };
 }

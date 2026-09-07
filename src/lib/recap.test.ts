@@ -52,6 +52,7 @@ const settings: Settings = {
   passesPerMonth: 3,
   hintGivesMinus: true,
   wheelSpinSec: 4,
+  answerTimerSec: 30,
   plusesForFive: 3,
   plombyForOne: 3,
   reviewQuestionCount: 5,

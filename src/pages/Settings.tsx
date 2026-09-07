@@ -194,6 +194,22 @@ export function SettingsPage() {
               className="max-w-[10rem]"
             />
           </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              Czas na odpowiedź (sekundy)
+            </label>
+            <p className="mb-1.5 text-xs text-gray-500">
+              Stoper startuje sam po wylosowaniu ucznia i tylko pokazuje czas - o ocenie decydujesz ty.
+              0 = bez stopera.
+            </p>
+            <Input
+              type="number"
+              min={0}
+              value={settings.answerTimerSec}
+              onChange={(e) => updateSettings({ answerTimerSec: parseInt(e.target.value, 10) || 0 })}
+              className="max-w-[10rem]"
+            />
+          </div>
           <label className="flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"

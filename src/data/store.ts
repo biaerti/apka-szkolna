@@ -253,6 +253,7 @@ export const useStore = create<AppState>()(
         plusesForFive: 3,
         plombyForOne: 3,
         reviewQuestionCount: 5,
+        answerTimerSec: 30,
       },
       manuallyEditedLessonIds: {},
 
@@ -446,7 +447,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 10,
+      version: 11,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -541,6 +542,11 @@ export const useStore = create<AppState>()(
         }
         if (version < 10 && state.settings && state.settings.reviewQuestionCount === 7) {
           state.settings = { ...state.settings, reviewQuestionCount: 5 };
+        }
+        if (version < 11 && state.settings) {
+          // Stoper odpowiedzi doszedl pozniej - istniejace instalacje dostaja
+          // domyslne 30 s (0 = nauczyciel go wylaczyl, tego nie ruszamy).
+          state.settings = { ...state.settings, answerTimerSec: state.settings.answerTimerSec ?? 30 };
         }
         return state as unknown as AppState;
       },

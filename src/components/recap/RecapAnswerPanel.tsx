@@ -2,6 +2,7 @@
 // przyciski oceny (albo "gotowe, nastepny" w trybie bez ocen). Wydzielone z
 // RecapSession.tsx, zeby komponent zmiescil sie w limicie 250 linii.
 
+import { AnswerTimer } from './AnswerTimer';
 import { QuestionPanel } from './QuestionPanel';
 import { ScoreButtons } from './ScoreButtons';
 import type { RecapSessionState } from './useRecapSession';
@@ -30,6 +31,16 @@ export function RecapAnswerPanel({
       <div className="shrink-0">
         {session.currentStudent ? (
           <div className="relative rounded-xl border-4 border-accent-400 bg-accent-900/40 px-4 py-2 text-center">
+            {/* Stoper odpowiedzi w lewym rogu ramki (numer z dziennika jest w
+                prawym) - startuje sam po wylosowaniu. 0 s w ustawieniach = bez
+                stopera. */}
+            {session.settings.answerTimerSec > 0 && (
+              <AnswerTimer
+                studentId={session.currentStudent.id}
+                totalSec={session.settings.answerTimerSec}
+                stopped={session.graded}
+              />
+            )}
             {/* Numer z dziennika - dyskretnie w rogu, zeby nauczyciel szybko
                 znalazl ucznia na liscie, ale nazwisko zostalo najwieksze. */}
             <span className="absolute right-3 top-2 text-sm font-semibold tabular-nums text-accent-300/80">
