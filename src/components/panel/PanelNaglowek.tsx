@@ -8,6 +8,11 @@
 // zjadaly polowe paska szerokiego na 360 px, a doszedl jeszcze przelacznik
 // trybu. Wybor klasy zostaje takze w trybie stopera, bo przycisk "Uwagi"
 // dotyczy konkretnej klasy.
+//
+// W trybie KOMPAKT (stoper sciagniety do paska) zostaja WYLACZNIE trzy
+// przyciski okna. Klasa, tryb i uwagi sa wtedy zbedne - kto chce ich uzyc,
+// najpierw powieksza panel, a kazdy dodatkowy element zjada miejsce, ktore ma
+// isc na czas widoczny z konca sali.
 
 import type { SchoolClass } from '../../data/types';
 import { useUchwytPrzeciagania } from './useUchwytPrzeciagania';
@@ -52,8 +57,10 @@ export function PanelNaglowek({
   return (
     <div
       {...uchwyt}
-      className="flex shrink-0 cursor-move select-none items-center gap-1 border-b border-gray-800 bg-gray-950 px-2 py-1.5"
+      className="flex shrink-0 cursor-move select-none items-center gap-1 border-b border-gray-800 bg-gray-950 px-2 py-1"
     >
+      {!kompakt && (
+        <>
       <select
         value={classId}
         onChange={(e) => onClassId(e.target.value)}
@@ -84,9 +91,12 @@ export function PanelNaglowek({
           </button>
         ))}
       </div>
+        </>
+      )}
 
       <div className="min-w-0 flex-1" />
 
+      {!kompakt && (
       <button
         type="button"
         onClick={() => onUwagi(!uwagiOtwarte)}
@@ -96,6 +106,7 @@ export function PanelNaglowek({
       >
         Uwagi
       </button>
+      )}
       {onKompakt && (
         <button
           type="button"

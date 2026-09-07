@@ -42,7 +42,7 @@ const PIGULKA = { width: 208, height: 44 };
 const ROZMIARY = {
   kolo: { width: 360, height: 600 },
   stoper: { width: 360, height: 300 },
-  stoperKompakt: { width: 360, height: 150 },
+  stoperKompakt: { width: 300, height: 124 },
 };
 
 const KLUCZ_KLASY = 'apka-szkolna:panel:classId';

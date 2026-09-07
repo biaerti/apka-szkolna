@@ -7,8 +7,10 @@
 //
 // Dwa rozmiary (srodkowy przycisk w naglowku, jak w pasku okna Windows):
 // - pelny - polecenie, czas, ustawianie dlugosci, Start i Od nowa;
-// - KOMPAKT - tylko polecenie i czas, bez pustych przestrzeni. Sterowanie idzie
-//   wtedy klikiem w sam czas (jak w AnswerTimer na ekranie kola) albo spacja.
+// - KOMPAKT - tylko czas i (jesli jest) polecenie. Sterowanie idzie wtedy
+//   klikiem w sam czas (jak w AnswerTimer na ekranie kola) albo spacja.
+//   Polecenie jest tu SAMYM TEKSTEM, nie polem: pustej ramki z podpowiedzia nie
+//   ma po co pokazywac klasie, a wpisuje sie je w widoku pelnym.
 //
 // Odliczanie nie siedzi tutaj, tylko w Panel (useCountdown) - dzieki temu
 // stoper leci dalej po przelaczeniu na kolo i po zwinieciu panelu do pigulki
@@ -79,7 +81,7 @@ export function PanelStoper({
               ? 'text-white'
               : 'text-gray-400',
       )}
-      style={{ fontSize: kompakt ? 'clamp(44px, 17vw, 72px)' : 'clamp(56px, 22vw, 96px)' }}
+      style={{ fontSize: kompakt ? 'clamp(36px, 15vw, 56px)' : 'clamp(56px, 22vw, 96px)' }}
     >
       {formatMmSs(remainingSec)}
     </button>
@@ -87,14 +89,10 @@ export function PanelStoper({
 
   if (kompakt) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 px-3 pb-2">
-        <input
-          value={polecenie}
-          onChange={(e) => onPolecenie(e.target.value)}
-          placeholder="Polecenie, np. Czytamy tekst ze s. 12"
-          aria-label="Polecenie"
-          className="w-full shrink-0 rounded-md bg-transparent px-2 py-0.5 text-center text-base text-gray-100 placeholder:text-gray-600 focus:bg-gray-950"
-        />
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-3 pb-1">
+        {polecenie.trim() !== '' && (
+          <p className="w-full shrink-0 truncate text-center text-sm text-gray-300">{polecenie}</p>
+        )}
         {czas}
       </div>
     );
