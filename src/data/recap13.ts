@@ -331,7 +331,7 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     curriculum: ['II.3.5', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Głoski, litery, sylaby i ortografia - część 1/12'),
-      slideTopic(),
+      slideTopic('Głoski, litery, sylaby'),
       slideText('Samogłoski i spółgłoski', `Samogłosek jest **8**: **a, e, i, o, u, y, ą, ę**.
 
 Reszta liter to **spółgłoski**, np. **b, k, m, s, t**.
@@ -407,11 +407,9 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaRzCh'),
       slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Głoski, litery, sylaby i ortografia**
-
-- Samogłosek jest 8: a, e, i, o, u, y, ą, ę.
-- Dwuznak to jedna głoska zapisana dwiema literami: sz, cz, rz, ch, dz.
-- Ó wymienia się na o, e, a; rz na r; ż na g, z; ch na sz.`,
+        `- Samogłoski (8): a, e, i, o, u, y, ą, ę.
+- Dwuznak - jedna głoska, dwie litery: sz, cz, rz, ch, dz.
+- Ó: wymiana na o, e, a. Rz: na r. Ż: na g, z. Ch: na sz.`,
       ),
     ],
   };
@@ -428,7 +426,7 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaRzCh'),
     curriculum: ['II.1.1', 'II.1.11', 'II.4.2', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Części mowy, zdania i interpunkcja - część 2/12'),
-      slideTopic(),
+      slideTopic('Części mowy i zdania'),
       // Kolo na start: wracamy do ostatniego tematu (glaski, litery, sylaby) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set1.set.id, 'powtorzeniowe'),
       slideText('Rzeczownik', `**Rzeczownik** nazywa osoby, zwierzęta, rzeczy i uczucia.
@@ -498,11 +496,10 @@ Przykłady:
       slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Części mowy, zdania i wielka litera**
-
-- Rzeczownik (kto? co?), czasownik (co robi?), przymiotnik (jaki?).
+        `- Rzeczownik (kto? co?), czasownik (co robi?), przymiotnik (jaki?).
 - Zdania: oznajmujące, pytające, rozkazujące.
-- Wielka litera na początku zdania i w nazwach własnych; przecinek przed że, ale, bo.`,
+- Wielka litera: początek zdania, nazwy własne.
+- Przecinek przed: że, ale, bo.`,
       ),
     ],
   };
@@ -519,7 +516,7 @@ Przykłady:
     curriculum: ['III.2.1', 'III.2.3', 'I.1.3', 'I.1.6', 'I.1.7'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie i formy wypowiedzi - część 3/12'),
-      slideTopic(),
+      slideTopic('Formy wypowiedzi'),
       // Kolo na start: wracamy do tematu z lekcji 2 (czesci mowy, zdania) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set2.set.id, 'powtorzeniowe'),
       slideText('Wiersz i proza', `**Wiersz** jest zapisany w **wersach** (liniach) i często się **rymuje**.
@@ -586,10 +583,8 @@ Masz 5 minut.`, undefined, 300, 'zaproszenie'),
       slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Formy wypowiedzi i czytanie tekstów**
-
-- Wiersz ma wersy i rymy, proza to zwykły tekst pisany zdaniami.
-- Baśń jest zmyślona, legenda tłumaczy prawdziwe miejsce.
+        `- Wiersz: wersy i rymy. Proza: zwykły tekst, zdania.
+- Baśń - zmyślona. Legenda - prawdziwe miejsce.
 - Opowiadanie: wstęp, rozwinięcie, zakończenie.`,
       ),
     ],
@@ -607,7 +602,7 @@ Masz 5 minut.`, undefined, 300, 'zaproszenie'),
     curriculum: ['IV.5', 'II.2.8', 'IV.3', 'II.4.1'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Alfabet, słownik i rodziny wyrazów - część 4/12'),
-      slideTopic(),
+      slideTopic('Alfabet i słownik'),
       // Kolo na start: wracamy do tematu z lekcji 3 (formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set3.set.id, 'powtorzeniowe'),
       slideText('Alfabet', `Alfabet polski ma **32 litery**. Dziewięć z nich to litery **tylko polskie**: ą, ć, ę, ł, ń, ó, ś, ź, ż.
@@ -665,11 +660,9 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240, 'rodzinaWyrazow'),
       slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Alfabet, słownik i rodziny wyrazów**
-
-- Alfabet ma 32 litery, w tym 9 tylko polskich: ą, ć, ę, ł, ń, ó, ś, ź, ż.
-- W słowniku szukamy po kolejnych literach wyrazu.
-- Rodzina wyrazów ma wspólną cząstkę: dom, domek, domowy.`,
+        `- Alfabet: 32 litery, 9 tylko polskich (ą, ć, ę, ł, ń, ó, ś, ź, ż).
+- W słowniku: szukamy po kolejnych literach.
+- Rodzina wyrazów - wspólna cząstka: dom, domek, domowy.`,
       ),
     ],
   };
@@ -686,7 +679,7 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240, 'rodzinaWyrazow'),
     curriculum: ['II.4.1', 'II.4.2', 'II.3.5'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Zmiękczenia, ą i ę, interpunkcja - część 5/12'),
-      slideTopic(),
+      slideTopic('Zmiękczenia i interpunkcja'),
       // Kolo na start: wracamy do tematu z lekcji 4 (alfabet i slownik) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set4.set.id, 'powtorzeniowe'),
       slideText('Zmiękczenia: kreska czy i', `To jedna z najczęstszych pomyłek w zeszytach.
@@ -742,11 +735,9 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270, 'znakiInterpunk
       slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Zmiękczenia, ą i ę, znaki interpunkcyjne**
-
-- Kreska na końcu wyrazu i przed spółgłoską (nić, koń), litera i przed samogłoską (ciocia, zima).
-- ą i ę, gdy słychać jedną głoskę (kąt, gęś); om, on, em, en - gdy słychać osobne m lub n.
-- Przecinek w wyliczeniu i przed że, ale, bo; myślnik zaczyna wypowiedź w dialogu.`,
+        `- Kreska: koniec wyrazu, przed spółgłoską (koń). Litera i: przed samogłoską (ciocia).
+- ą, ę - jedna głoska (kąt). om, on, em, en - osobne m/n.
+- Przecinek: wyliczenie, przed że/ale/bo. Myślnik - dialog.`,
       ),
     ],
   };
@@ -763,7 +754,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270, 'znakiInterpunk
     curriculum: ['2.2', '2.3', 'I.1.7', 'I.1.8', 'III.2.1', 'III.2.4'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie ze zrozumieniem i krótkie formy - część 6/12'),
-      slideTopic(),
+      slideTopic('Czytanie ze zrozumieniem'),
       // Kolo na start: wracamy do tematu z lekcji 5 (zmiekczenia, interpunkcja) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set5.set.id, 'powtorzeniowe'),
       slideText('Temat tekstu', `**Temat tekstu** to jedno zdanie: o czym ten tekst jest.
@@ -815,11 +806,9 @@ Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zroz
       slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Czytanie ze zrozumieniem i krótkie formy użytkowe**
-
-- Temat tekstu mówi jednym zdaniem, o czym tekst jest.
-- Wydarzenia porządkujemy: najpierw, potem, nagle, na koniec.
-- Dialog: każda wypowiedź od nowej linii, od myślnika; życzenia kończymy podpisem.`,
+        `- Temat tekstu - jedno zdanie, o czym jest.
+- Kolejność: najpierw, potem, nagle, na koniec.
+- Dialog: nowa linia, myślnik. Życzenia - z podpisem.`,
       ),
     ],
   };
@@ -837,7 +826,7 @@ Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zroz
     curriculum: ['I.1.1', 'I.1.11', 'I.1.19', 'I.1.14', 'I.1.5'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Bohater i nastrój utworu - część 7/12'),
-      slideTopic(),
+      slideTopic('Bohater i nastrój utworu'),
       slideRecap(set6.set.id, 'powtorzeniowe'),
       slideText('Świat przedstawiony', `Każda historia dzieje się **kiedyś** i **gdzieś**.
 
@@ -885,11 +874,9 @@ Tytuł ma mieć **najwyżej cztery słowa**.`, undefined, 240, 'tematTekstu'),
       slideRecap(set7.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Bohater i nastrój utworu**
-
-- Świat przedstawiony to czas, miejsce, bohaterowie i wydarzenia.
-- Cechę bohatera trzeba uzasadnić zdarzeniem z tekstu: odważny, bo...
-- Nastrój utworu (wesoły, smutny, straszny) poznajemy po słowach autora.`,
+        `- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.
+- Cecha bohatera - z dowodem: odważny, bo...
+- Nastrój (wesoły, smutny, straszny) - po słowach autora.`,
       ),
     ],
   };
@@ -907,7 +894,7 @@ Tytuł ma mieć **najwyżej cztery słowa**.`, undefined, 240, 'tematTekstu'),
     curriculum: ['III.2.1', 'III.2.3', 'III.2.7', 'I.1.7'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Opowiadanie od początku do końca - część 8/12'),
-      slideTopic(),
+      slideTopic('Opowiadanie'),
       slideRecap(set7.set.id, 'powtorzeniowe'),
       slideText('Trzy części opowiadania', `**Wstęp** - kto, kiedy i gdzie.
 
@@ -958,11 +945,9 @@ Bohater ma zostać taki, jaki był - sprawdzimy to przy czytaniu na głos.`, und
       slideRecap(set8.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Opowiadanie od początku do końca**
-
-- Opowiadanie ma wstęp (kto, kiedy, gdzie), rozwinięcie (co się działo) i zakończenie.
-- Wydarzenia porządkujemy słowami: najpierw, potem, nagle, na koniec.
-- Opowiadanie w klasie 3 ma od 6 do 10 zdań, każda część od nowego akapitu.`,
+        `- Wstęp (kto, kiedy, gdzie), rozwinięcie, zakończenie.
+- Kolejność: najpierw, potem, nagle, na koniec.
+- 6-10 zdań, każda część od nowego akapitu.`,
       ),
     ],
   };
@@ -980,7 +965,7 @@ Bohater ma zostać taki, jaki był - sprawdzimy to przy czytaniu na głos.`, und
     curriculum: ['III.2.1', 'II.3.7', 'III.2.6'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'List, ogłoszenie i przeproszenie - część 9/12'),
-      slideTopic(),
+      slideTopic('List, ogłoszenie, przeprosiny'),
       slideRecap(set8.set.id, 'powtorzeniowe'),
       slideText('List', `List ma **cztery stałe elementy**:
 
@@ -1033,11 +1018,9 @@ Trzy zdania - po jednym na każdą część.`, undefined, 300, 'przeproszenie'),
       slideRecap(set9.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: List, ogłoszenie i przeproszenie**
-
-- List: miejscowość i data, nagłówek zakończony przecinkiem, treść, pożegnanie i podpis.
-- Koperta: nadawca w lewym górnym rogu, odbiorca na środku, znaczek w prawym górnym.
-- Ogłoszenie: czego dotyczy, kiedy i gdzie, kto ogłasza. Przeprosiny: za co, że przykro, co zrobię inaczej.`,
+        `- List: data, nagłówek + przecinek, treść, podpis.
+- Koperta: nadawca lewy górny róg, odbiorca środek.
+- Ogłoszenie: co, kiedy i gdzie, kto. Przeprosiny: za co, przykro mi, poprawię.`,
       ),
     ],
   };
@@ -1055,7 +1038,7 @@ Trzy zdania - po jednym na każdą część.`, undefined, 300, 'przeproszenie'),
     curriculum: ['II.2.4', 'II.2.5', 'I.1.15'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Wyrazy, które znaczą więcej - część 10/12'),
-      slideTopic(),
+      slideTopic('Wyrazy, które znaczą więcej'),
       slideRecap(set9.set.id, 'powtorzeniowe'),
       slideText('Wyraz wieloznaczny', `Jeden wyraz, a kilka **różnych** znaczeń.
 
@@ -1103,11 +1086,9 @@ Potem powiedz, którego z nich użyłbyś w bajce dla malucha.`, undefined, 240,
       slideRecap(set10.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Wyrazy wieloznaczne, frazeologizmy, zdrobnienia**
-
-- Wyraz wieloznaczny ma kilka znaczeń (zamek), a rozstrzyga o nich całe zdanie.
-- Związek frazeologiczny to stałe połączenie wyrazów rozumiane przenośnie.
-- Zdrobnienie zmniejsza (domek), zgrubienie powiększa (domisko).`,
+        `- Wyraz wieloznaczny - kilka znaczeń (zamek); rozstrzyga zdanie.
+- Frazeologizm - znaczenie przenośne, nie dosłowne.
+- Zdrobnienie: domek. Zgrubienie: domisko.`,
       ),
     ],
   };
@@ -1125,7 +1106,7 @@ Potem powiedz, którego z nich użyłbyś w bajce dla malucha.`, undefined, 240,
     curriculum: ['II.1.11', 'II.1.12', 'II.1.13', 'II.4.2'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Przerabiamy zdania - część 11/12'),
-      slideTopic(),
+      slideTopic('Przekształcanie zdań'),
       slideRecap(set10.set.id, 'powtorzeniowe'),
       slideText('Cztery postacie jednego zdania', `To samo można powiedzieć na kilka sposobów:
 
@@ -1170,11 +1151,9 @@ Nie zapomnij o przecinku.`, undefined, 270, 'zdanieZlozone'),
       slideRecap(set11.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Przekształcanie zdań**
-
-- To samo zdanie może być oznajmujące, pytające albo wykrzyknieniem - zmienia się znak na końcu.
-- Równoważnik zdania nie ma orzeczenia: Cisza. Przerwa. Koniec lekcji.
-- Zdanie pojedyncze ma jedno orzeczenie, złożone co najmniej dwa; przecinek przed ale, bo, że, więc.`,
+        `- Zdanie: oznajmujące, pytające, wykrzyknienie - zmienia się znak.
+- Równoważnik bez orzeczenia: Cisza. Przerwa.
+- Pojedyncze - jedno orzeczenie, złożone - co najmniej dwa. Przecinek przed: ale, bo, że, więc.`,
       ),
     ],
   };
@@ -1192,7 +1171,7 @@ Nie zapomnij o przecinku.`, undefined, 270, 'zdanieZlozone'),
     curriculum: ['II.4.1', 'II.4.2', 'IV.2', 'IV.5'],
     slides: [
       slideTitle('Powtórka klas 1-3', 'Skróty, liczebniki i sprawdzanie po sobie - część 12/12'),
-      slideTopic(),
+      slideTopic('Skróty i liczebniki'),
       slideRecap(set11.set.id, 'powtorzeniowe'),
       slideText('Skróty', `Skrót to wyraz **urwany** w pisaniu, ale czytany w całości.
 
@@ -1254,11 +1233,9 @@ Poprawki zaznacz kolorem.`, undefined, 420, 'zeszyt'),
       slideRecap(set12.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Skróty, liczebniki i sprawdzanie po sobie**
-
-- Kropkę stawiamy w skrócie, który urywa wyraz: np., itd., ul., godz. Skrót dr kropki nie ma.
-- Liczebniki zapisujemy słowami: sześćset, czterysta, dziewięćdziesiąt.
-- Tytuły i nazwy własne wielką literą; po napisaniu tekst czytamy na głos i poprawiamy.`,
+        `- Kropka w skrócie urwanym: np., itd. Skrót dr - bez kropki.
+- Liczebniki słowami: sześćset, czterysta, dziewięćdziesiąt.
+- Tytuły i nazwy własne - wielką literą. Sprawdzam tekst na głos.`,
       ),
     ],
   };
@@ -1317,12 +1294,12 @@ function slideTitle(title: string, subtitle?: string): Slide {
 }
 
 /**
- * Slajd z tematem lekcji do zeszytu. Bez wlasnej tresci - temat bierze sie z
- * lekcji (registerTopic), a kod (np. 4.3) dokleja SlideView, wiec zeszyt,
- * dziennik i lista lekcji zawsze mowia to samo.
+ * Slajd z tematem lekcji do zeszytu. `topic` to krotka, zeszytowa wersja
+ * tematu (dzieci pisza wolno) - dluzszy `registerTopic` zostaje tylko w
+ * dzienniku Vulcan. Stoper 180 s daje czas na przepisanie tematu i daty.
  */
-function slideTopic(): Slide {
-  return { id: newId(), kind: 'topic' };
+function slideTopic(topic: string): Slide {
+  return { id: newId(), kind: 'topic', topic, timerSec: 180 };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {

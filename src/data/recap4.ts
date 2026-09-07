@@ -202,7 +202,7 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     curriculum: ['II.1.1', 'II.1.2', 'II.1.4', 'II.1.6', 'II.1.7'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Odmienne części mowy - część 1/6'),
-      slideTopic(),
+      slideTopic('Odmienne części mowy'),
       slideText('Co dziś powtarzamy', `- Rzeczownik i odmiana przez przypadki
 - Czasownik: osoba, liczba, czas
 - Przymiotnik i jego stopniowanie
@@ -272,13 +272,10 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
       slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Odmienne części mowy**
-
-- Odmienne: rzeczownik, czasownik, przymiotnik, liczebnik, zaimek.
-- Rzeczownik odmienia się przez 7 przypadków, liczby i rodzaje.
-- Czasownik odmienia się przez osoby, liczby i czasy; bezokolicznik nie ma osoby ani czasu.
-- Przymiotnik stopniujemy regularnie (miły - milszy - najmilszy), opisowo (bardziej) i nieregularnie (dobry - lepszy - najlepszy).
-- Liczebnik główny: ile? (pięć). Liczebnik porządkowy: który z kolei? (piąty).`,
+        `- Odmienne: rzeczownik, czasownik, przymiotnik, liczebnik, zaimek.
+- Rzeczownik: 7 przypadków, liczby, rodzaje.
+- Czasownik: osoba, liczba, czas. Bezokolicznik - bez nich.
+- Stopniowanie: miły - milszy - najmilszy. Liczebnik: główny (ile?), porządkowy (który?).`,
       ),
     ],
   };
@@ -295,7 +292,7 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
     curriculum: ['II.1.8', 'II.1.12', 'II.1.2', 'II.4.1', 'II.4.2'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/6'),
-      slideTopic(),
+      slideTopic('Zdanie i wyrazy nieodmienne'),
       // Kolo na start: wracamy do tematu z lekcji 1 (odmienne czesci mowy) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set1.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Podmiot i orzeczenie
@@ -366,13 +363,10 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
       slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Zdanie i wyrazy nieodmienne**
-
-- Orzeczenie mówi, co się dzieje (czasownik osobowy). Podmiot odpowiada na pytania kto? co?
-- Zdanie pojedyncze ma jedno orzeczenie, złożone - co najmniej dwa.
-- Równoważnik zdania nie ma orzeczenia, np. "Cisza!".
-- Nieodmienne: przysłówek (jak? gdzie? kiedy?), przyimek (w, na, pod), spójnik (i, ale, bo).
-- "Nie" z czasownikiem piszemy osobno, z rzeczownikiem i przymiotnikiem razem.`,
+        `- Orzeczenie - co robi. Podmiot - kto? co?
+- Pojedyncze - jedno orzeczenie, złożone - co najmniej dwa. Równoważnik - bez orzeczenia.
+- Nieodmienne: przysłówek, przyimek, spójnik.
+- Nie + czasownik osobno, nie + rzeczownik/przymiotnik razem.`,
       ),
     ],
   };
@@ -389,7 +383,7 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
     curriculum: ['I.1.4', 'I.1.6', 'I.1.9', 'I.1.10', 'III.2.1'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/6'),
-      slideTopic(),
+      slideTopic('Środki poetyckie'),
       // Kolo na start: wracamy do tematu z lekcji 2 (zdanie, wyrazy nieodmienne) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set2.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Epitet, porównanie, przenośnia, ożywienie
@@ -468,14 +462,10 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
       slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Środki poetyckie i formy wypowiedzi**
-
-- Epitet określa rzeczownik (zielona łąka), porównanie ma wyraz jak/niby/niczym.
-- Przenośnia mówi nie wprost (złote serce). Wyrazy dźwiękonaśladowcze naśladują dźwięk.
-- Ożywienie i uosobienie sprawiają, że rzeczy zachowują się jak istoty żywe i jak ludzie.
-- Wers to jedna linijka, strofa to zwrotka, refren się powtarza.
-- W wierszu mówi podmiot liryczny, w opowiadaniu narrator (1. lub 3. osoba).
-- List: miejscowość i data, nagłówek, treść, pożegnanie i podpis.`,
+        `- Epitet określa (zielona łąka), porównanie ma jak/niby.
+- Przenośnia - nie wprost. Wers - linijka, strofa - zwrotka.
+- Wiersz: podmiot liryczny. Opowiadanie: narrator.
+- List: data, nagłówek, treść, podpis.`,
       ),
     ],
   };
@@ -492,7 +482,7 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
     curriculum: ['II.2.4', 'II.2.5', 'II.2.8', 'I.1.4', 'IV.5'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/6'),
-      slideTopic(),
+      slideTopic('Słownictwo i frazeologia'),
       // Kolo na start: wracamy do tematu z lekcji 3 (srodki poetyckie, formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set3.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Rodzina wyrazów i rdzeń
@@ -558,14 +548,10 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
       slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Słownictwo i frazeologia**
-
-- Rodzina wyrazów ma wspólny rdzeń: dom, domek, domowy, bezdomny.
-- Wyraz podstawowy to ten, od którego powstały pozostałe (wyrazy pochodne).
-- Synonimy znaczą prawie to samo (mądry - bystry), antonimy odwrotnie (jasny - ciemny).
-- Wyraz wieloznaczny ma kilka znaczeń, np. zamek, klucz - o znaczeniu decyduje zdanie.
-- Zdrobnienie: domek. Zgrubienie: domisko.
-- Związek frazeologiczny ma znaczenie przenośne, np. wziąć nogi za pas = szybko uciec.`,
+        `- Rodzina wyrazów - wspólny rdzeń: dom, domek, domowy.
+- Synonim - prawie to samo, antonim - odwrotnie.
+- Wieloznaczny - kilka znaczeń (zamek), decyduje zdanie.
+- Frazeologizm - znaczenie przenośne: nogi za pas = uciec.`,
       ),
     ],
   };
@@ -582,7 +568,7 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
     curriculum: ['II.4.1', 'II.4.2', 'IV.5'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/6'),
-      slideTopic(),
+      slideTopic('Ortografia i wielka litera'),
       // Kolo na start: wracamy do tematu z lekcji 4 (slownictwo i frazeologia) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set4.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Ó i u, rz i ż, ch i h: wymiany oraz reguły
@@ -648,13 +634,10 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
       slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Ortografia, wielka litera i skróty**
-
-- Ó wymienia się na o, e, a (stół - stoły). Rz wymienia się na r (morze - morski), ż na g lub z (może - mogę).
-- Rz piszemy po b, p, d, t, g, k, ch, j, w: brzeg, przerwa, drzewo.
-- Ch piszemy na końcu wyrazu: dach, groch.
-- Wielką literą: nazwy własne, nazwy świąt, tytuły, nazwy ulic. Małą: dni tygodnia i miesiące.
-- Skrót obciętego wyrazu ma kropkę (np., itd., ul.); skrót z ostatnią literą wyrazu jej nie ma (dr, mgr).`,
+        `- Ó - wymiana na o/e/a. Rz - na r. Ż - na g/z. Ch - na sz.
+- Rz po: b, p, d, t, g, k, ch, j, w. Ch na końcu wyrazu.
+- Wielka litera: nazwy własne, święta, tytuły. Mała: dni, miesiące.
+- Kropka w skrócie urwanym (np., itd.), skrót dr - bez kropki.`,
       ),
     ],
   };
@@ -671,7 +654,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
     curriculum: ['I.1.1', 'I.1.2', 'I.1.3', '2.7', '2.8', '2.9', '2.10'],
     slides: [
       slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/6'),
-      slideTopic(),
+      slideTopic('Świat przedstawiony'),
       // Kolo na start: wracamy do tematu z lekcji 5 (ortografia, wielka litera, skroty) tym samym zestawem, w trybie powtorzeniowym.
       slideRecap(set5.set.id, 'powtorzeniowe'),
       slideText('Co dziś powtarzamy', `- Świat przedstawiony utworu
@@ -731,13 +714,10 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
       slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Świat przedstawiony, gatunki, teatr i film**
-
-- Świat przedstawiony to czas, miejsce, bohaterowie i wydarzenia.
-- Fikcja literacka to świat wymyślony; elementy fantastyczne nie mogłyby zdarzyć się naprawdę.
-- Baśń ma magię, legenda tłumaczy prawdziwe miejsce, mit wyjaśnia świat i mówi o bogach, bajka kończy się morałem.
-- Komiks opowiada obrazkami w kadrach, tekst jest w dymkach.
-- W teatrze aktorzy grają na żywo, film jest nagrany. Adaptacja to książka przerobiona na film lub spektakl.`,
+        `- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.
+- Baśń - magia. Legenda - prawdziwe miejsce. Mit - bogowie. Bajka - morał.
+- Komiks: obrazki w kadrach, tekst w dymkach.
+- Teatr - na żywo, film - nagrany. Adaptacja - przeróbka na film.`,
       ),
     ],
   };
@@ -770,12 +750,12 @@ function slideTitle(title: string, subtitle?: string): Slide {
 }
 
 /**
- * Slajd z tematem lekcji do zeszytu. Bez wlasnej tresci - temat bierze sie z
- * lekcji (registerTopic), a kod (np. 4.3) dokleja SlideView, wiec zeszyt,
- * dziennik i lista lekcji zawsze mowia to samo.
+ * Slajd z tematem lekcji do zeszytu. `topic` to krotka, zeszytowa wersja
+ * tematu (dzieci pisza wolno) - dluzszy `registerTopic` zostaje tylko w
+ * dzienniku Vulcan. Stoper 180 s daje czas na przepisanie tematu i daty.
  */
-function slideTopic(): Slide {
-  return { id: newId(), kind: 'topic' };
+function slideTopic(topic: string): Slide {
+  return { id: newId(), kind: 'topic', topic, timerSec: 180 };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {

@@ -8,6 +8,7 @@
 // zeby zeszyt i dziennik mowily to samo.
 
 import type { Slide } from '../../data/types';
+import { StopwatchBar } from './StopwatchBar';
 import { fitFontSize } from './fitText';
 
 const RULED_LINES_STYLE = {
@@ -27,6 +28,7 @@ export function TopicSlideView({
 }) {
   const topic = (slide.topic || lessonTopic || '').trim();
   const topicSize = fitFontSize(topic, { width: 1080, height: 300, min: 32, max: 84, lineHeight: 1.25 });
+  const hasTimer = typeof slide.timerSec === 'number' && slide.timerSec > 0;
 
   return (
     <div className="flex h-full flex-col bg-amber-50 px-16 py-10 text-gray-900" style={RULED_LINES_STYLE}>
@@ -48,6 +50,12 @@ export function TopicSlideView({
       <p className="text-center text-3xl font-semibold text-gray-500">
         {slide.note?.trim() || 'Zapiszcie temat z kodem i dzisiejszą datą w zeszycie'}
       </p>
+
+      {hasTimer && (
+        <div className="mt-4 flex justify-center">
+          <StopwatchBar key={slide.id} timerSec={slide.timerSec as number} />
+        </div>
+      )}
     </div>
   );
 }

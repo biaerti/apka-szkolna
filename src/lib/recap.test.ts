@@ -6,7 +6,6 @@ import {
   drawableEntries,
   canEarnPlus,
   canPass,
-  canReceivePlombaAfterLesson,
   earnedFive,
   monthBalance,
   nextRandomIndex,
@@ -55,7 +54,7 @@ const settings: Settings = {
   wheelSpinSec: 4,
   plusesForFive: 3,
   plombyForOne: 3,
-  reviewQuestionCount: 7,
+  reviewQuestionCount: 5,
 };
 
 describe('passesUsedThisMonth', () => {
@@ -102,11 +101,11 @@ describe('warningsThisMonth', () => {
       ev({ studentId: 's1', result: 'uwaga', at: new Date(2026, 7, 20).toISOString() }),
       ev({ studentId: 's1', result: 'uwaga', at: new Date(2026, 7, 25).toISOString() }),
     ];
-    // W sierpniu uczen mial trzy uwagi (podwojne wejscie do kola)...
-    expect(wheelEntriesFor(warningsThisMonth(events, 's1', new Date(2026, 7, 26)))).toBe(2);
+    // W sierpniu uczen mial trzy uwagi (blokada plusa - canEarnPlus false)...
+    expect(canEarnPlus(warningsThisMonth(events, 's1', new Date(2026, 7, 26)))).toBe(false);
     // ...ale 1. wrzesnia licznik startuje od zera.
     expect(warningsThisMonth(events, 's1', new Date(2026, 8, 1))).toBe(0);
-    expect(wheelEntriesFor(warningsThisMonth(events, 's1', new Date(2026, 8, 1)))).toBe(1);
+    expect(canEarnPlus(warningsThisMonth(events, 's1', new Date(2026, 8, 1)))).toBe(true);
   });
 });
 
@@ -156,26 +155,20 @@ describe('warnLevel', () => {
   it('warned dla 1 uwagi', () => {
     expect(warnLevel(1)).toBe('warned');
   });
-  it('no_plus dla 2 uwag', () => {
+  it('no_plus dla 2 i wiecej uwag', () => {
     expect(warnLevel(2)).toBe('no_plus');
-  });
-  it('doubled dla 3 i wiecej uwag', () => {
-    expect(warnLevel(3)).toBe('doubled');
-    expect(warnLevel(5)).toBe('doubled');
+    expect(warnLevel(3)).toBe('no_plus');
+    expect(warnLevel(5)).toBe('no_plus');
   });
 });
 
 describe('wheelEntriesFor', () => {
-  it('1 wejscie ponizej progu eskalacji', () => {
+  it('zawsze 1 wejscie, niezaleznie od liczby uwag - eskalacja juz nie mnozy miejsc w kole', () => {
     expect(wheelEntriesFor(0)).toBe(1);
     expect(wheelEntriesFor(1)).toBe(1);
     expect(wheelEntriesFor(2)).toBe(1);
-  });
-  it('od progu eskalacji rosnie: n uwag daje n-1 miejsc', () => {
-    expect(wheelEntriesFor(3)).toBe(2);
-    expect(wheelEntriesFor(4)).toBe(3);
-    expect(wheelEntriesFor(5)).toBe(4);
-    expect(wheelEntriesFor(6)).toBe(5);
+    expect(wheelEntriesFor(3)).toBe(1);
+    expect(wheelEntriesFor(6)).toBe(1);
   });
 });
 
@@ -184,21 +177,9 @@ describe('canEarnPlus', () => {
     expect(canEarnPlus(0)).toBe(true);
     expect(canEarnPlus(1)).toBe(true);
   });
-  it('false od progu blokady plusow', () => {
+  it('false od progu blokady plusow (dotyczy obu kol)', () => {
     expect(canEarnPlus(2)).toBe(false);
     expect(canEarnPlus(3)).toBe(false);
-  });
-});
-
-describe('canReceivePlombaAfterLesson', () => {
-  it('false ponizej progu podwojenia (kolo po lekcji: mozna tylko zyskac)', () => {
-    expect(canReceivePlombaAfterLesson(0)).toBe(false);
-    expect(canReceivePlombaAfterLesson(1)).toBe(false);
-    expect(canReceivePlombaAfterLesson(2)).toBe(false);
-  });
-  it('true od progu podwojenia (>=3 uwagi w miesiacu)', () => {
-    expect(canReceivePlombaAfterLesson(3)).toBe(true);
-    expect(canReceivePlombaAfterLesson(4)).toBe(true);
   });
 });
 
@@ -209,17 +190,12 @@ describe('warnBadgeLabel', () => {
   it('1 uwaga - dyskretne ostrzezenie', () => {
     expect(warnBadgeLabel(1)).toBe('1. ostrzeżenie');
   });
-  it('2 uwagi - bez plusa (dotyczy kola powtorzeniowego)', () => {
-    expect(warnBadgeLabel(2)).toBe('bez plusa (powtórki)');
+  it('2 uwagi - bez plusow do konca miesiaca', () => {
+    expect(warnBadgeLabel(2)).toBe('bez plusów do końca miesiąca');
   });
-  it('3 uwagi - mozliwa plomba i dodatkowe miejsca w kole (2 miejsca)', () => {
-    expect(warnBadgeLabel(3)).toBe('plomba możliwa + 2 miejsca w kole');
-  });
-  it('4 uwagi - 3 miejsca (polska liczba mnoga)', () => {
-    expect(warnBadgeLabel(4)).toBe('plomba możliwa + 3 miejsca w kole');
-  });
-  it('6 uwag - 5 miejsc (polska liczba mnoga)', () => {
-    expect(warnBadgeLabel(6)).toBe('plomba możliwa + 5 miejsc w kole');
+  it('wiecej niz 2 uwagi - ten sam komunikat co przy 2', () => {
+    expect(warnBadgeLabel(3)).toBe('bez plusów do końca miesiąca');
+    expect(warnBadgeLabel(6)).toBe('bez plusów do końca miesiąca');
   });
 });
 
@@ -257,44 +233,30 @@ describe('buildRoundEntries', () => {
     expect(entries.every((e) => !e.done)).toBe(true);
   });
 
-  it('uczen z 3 uwagami dostaje dwa wejscia', () => {
+  it('uczen z uwagami dostaje wciaz tylko jedno wejscie - eskalacja juz nie mnozy miejsc', () => {
     const warnings = new Map([['s2', 3]]);
     const entries = buildRoundEntries({
       students: [s1, s2, s3],
       warningsFor: (id) => warnings.get(id) ?? 0,
       usedFor: () => 0,
     });
-    expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(2);
+    expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(1);
     expect(entries.filter((e) => e.student.id === 's1')).toHaveLength(1);
-    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's2#1', 's3#0']);
-  });
-
-  it('uczen z 4 uwagami dostaje trzy wejscia (n-1 miejsc od progu eskalacji)', () => {
-    const warnings = new Map([['s2', 4]]);
-    const entries = buildRoundEntries({
-      students: [s1, s2, s3],
-      warningsFor: (id) => warnings.get(id) ?? 0,
-      usedFor: () => 0,
-    });
-    expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(3);
-    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's2#1', 's2#2', 's3#0']);
+    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's3#0']);
   });
 
   it('wykorzystane wejscia zostaja na kole, ale sa oznaczone jako done', () => {
-    const warnings = new Map([['s2', 3]]);
     const used = new Map([
-      ['s1', 1], // wykorzystane w calosci
-      ['s2', 1], // z dwoch wejsc zostalo jedno
+      ['s1', 1], // wykorzystane
     ]);
     const entries = buildRoundEntries({
       students: [s1, s2, s3],
-      warningsFor: (id) => warnings.get(id) ?? 0,
+      warningsFor: () => 0,
       usedFor: (id) => used.get(id) ?? 0,
     });
     expect(entries.map((e) => [e.key, e.done])).toEqual([
       ['s1#0', true],
-      ['s2#0', true],
-      ['s2#1', false],
+      ['s2#0', false],
       ['s3#0', false],
     ]);
   });
@@ -328,12 +290,12 @@ describe('drawableEntries', () => {
 });
 
 describe('plannedDraws', () => {
-  it('sumuje wejscia do kola dla wszystkich uczniow', () => {
+  it('sumuje wejscia do kola dla wszystkich uczniow - kazdy ma jedno wejscie, niezaleznie od uwag', () => {
     const s1 = stu({ id: 's1' });
     const s2 = stu({ id: 's2' });
     const s3 = stu({ id: 's3' });
     const warnings = new Map([['s2', 3]]);
-    expect(plannedDraws([s1, s2, s3], (id) => warnings.get(id) ?? 0)).toBe(4); // 1 + 2 + 1
+    expect(plannedDraws([s1, s2, s3], (id) => warnings.get(id) ?? 0)).toBe(3); // 1 + 1 + 1
   });
 
   it('0 dla pustej listy uczniow', () => {

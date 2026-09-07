@@ -1,8 +1,9 @@
 // Agregacja statystyk miesiecznych per uczen, eksport do CSV oraz zestawienie
 // "do rozliczenia" (nierozliczone plomby -> zadania naprawcze/jedynka, plusy -> piatka).
 
-import type { RecapEvent, Settings, Student } from '../data/types';
+import type { ID, RecapEvent, Settings, Student } from '../data/types';
 import { monthBalance, outstandingPlomby, outstandingPlusy } from './recap';
+import { monthKey as toMonthKey } from './week';
 
 export interface StudentStatsRow {
   studentId: string;
@@ -41,6 +42,31 @@ export function aggregateMonth(events: RecapEvent[], students: Student[], monthK
       };
     })
     .sort((a, b) => a.number - b.number);
+}
+
+/** Typy zdarzen, ktore nauczyciel moze recznie skorygowac w bilansie (przyciski +/-). */
+export type EditableResult = 'plus' | 'kropka' | 'plomba' | 'pass' | 'uwaga';
+
+/**
+ * Id NAJNOWSZEGO zdarzenia danego typu ucznia w danym miesiacu ("RRRR-MM") - albo
+ * undefined, gdy takiego zdarzenia w tym miesiacu nie ma. Uzywane do przycisku "-"
+ * w recznej edycji bilansu (StatsTable): cofamy zawsze ostatnio dodane zdarzenie,
+ * a nie losowe/najstarsze, zeby korekta odpowiadala temu, co nauczyciel widzial
+ * na ekranie przed chwila.
+ */
+export function findLatestEventId(
+  events: RecapEvent[],
+  studentId: string,
+  result: EditableResult,
+  monthKey: string,
+): ID | undefined {
+  let latest: RecapEvent | undefined;
+  for (const e of events) {
+    if (e.studentId !== studentId || e.result !== result) continue;
+    if (toMonthKey(new Date(e.at)) !== monthKey) continue;
+    if (!latest || new Date(e.at).getTime() > new Date(latest.at).getTime()) latest = e;
+  }
+  return latest?.id;
 }
 
 function csvEscape(value: string | number): string {

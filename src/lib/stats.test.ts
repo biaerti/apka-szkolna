@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { RecapEvent, Settings, Student } from '../data/types';
-import { aggregateMonth, settlementRows, toCsv } from './stats';
+import { aggregateMonth, findLatestEventId, settlementRows, toCsv } from './stats';
 
 function student(partial: Partial<Student>): Student {
   return {
@@ -196,5 +196,36 @@ describe('settlementRows', () => {
     const rows = settlementRows(events, [student({})], settings({ plombyForOne: 2 }));
     expect(rows).toHaveLength(1);
     expect(rows[0].owesTasks).toBe(true);
+  });
+});
+
+describe('findLatestEventId', () => {
+  it('zwraca id najnowszego zdarzenia danego typu w danym miesiacu', () => {
+    const older = ev({ id: 'e1', studentId: 's1', result: 'plus', at: new Date(2026, 8, 1).toISOString() });
+    const newer = ev({ id: 'e2', studentId: 's1', result: 'plus', at: new Date(2026, 8, 10).toISOString() });
+    const events = [older, newer];
+    expect(findLatestEventId(events, 's1', 'plus', '2026-09')).toBe('e2');
+  });
+
+  it('ignoruje zdarzenia innego typu, innego ucznia i spoza miesiaca', () => {
+    const events: RecapEvent[] = [
+      ev({ id: 'e1', studentId: 's1', result: 'kropka', at: new Date(2026, 8, 5).toISOString() }),
+      ev({ id: 'e2', studentId: 's2', result: 'plus', at: new Date(2026, 8, 5).toISOString() }),
+      ev({ id: 'e3', studentId: 's1', result: 'plus', at: new Date(2026, 7, 20).toISOString() }),
+    ];
+    expect(findLatestEventId(events, 's1', 'plus', '2026-09')).toBeUndefined();
+  });
+
+  it('zwraca undefined, gdy uczen nie ma zadnego zdarzenia danego typu', () => {
+    expect(findLatestEventId([], 's1', 'plomba', '2026-09')).toBeUndefined();
+  });
+
+  it('kolejnosc zdarzen w tablicy nie ma znaczenia - wygrywa najnowsza data', () => {
+    const events: RecapEvent[] = [
+      ev({ id: 'e1', studentId: 's1', result: 'uwaga', at: new Date(2026, 8, 15).toISOString() }),
+      ev({ id: 'e2', studentId: 's1', result: 'uwaga', at: new Date(2026, 8, 2).toISOString() }),
+      ev({ id: 'e3', studentId: 's1', result: 'uwaga', at: new Date(2026, 8, 20).toISOString() }),
+    ];
+    expect(findLatestEventId(events, 's1', 'uwaga', '2026-09')).toBe('e3');
   });
 });

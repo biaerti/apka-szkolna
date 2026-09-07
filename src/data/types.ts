@@ -212,10 +212,13 @@ export type SlideArt =
 export type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }
   | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt } // markdown-lite: akapity, listy
-  // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + jedno zdanie
-  // tematu. Pusty `topic` znaczy "wez temat z lekcji" (registerTopic), zeby
-  // wpis do dziennika i wpis w zeszycie nie rozjechaly sie ze soba.
-  | { id: ID; kind: 'topic'; topic?: string; note?: string }
+  // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + krotka wersja
+  // tematu do zeszytu (celowo krotsza niz `registerTopic` w dzienniku Vulcan -
+  // dzieci pisza wolno, wiec zeszytowy temat ma byc jak najkrotszy). Pusty
+  // `topic` znaczy "wez temat z lekcji" (registerTopic), zeby wpis do dziennika
+  // i wpis w zeszycie nie rozjechaly sie ze soba, gdy nikt nie ustawil krotszej
+  // wersji. `timerSec` - stoper na zapisanie tematu (jak na slajdach task/read).
+  | { id: ID; kind: 'topic'; topic?: string; note?: string; timerSec?: number }
   | {
       id: ID;
       kind: 'task';
@@ -280,7 +283,7 @@ export interface Settings {
    * Miekki limit pytan w kole POWTORZENIOWYM (na poczatku lekcji): licznik w
    * sesji pokazuje "pytanie X/limit" i po jego osiagnieciu proponuje
    * zakonczenie rundy - nauczyciel moze kreic dalej, to nie jest blokada.
-   * Domyslnie 7.
+   * Domyslnie 5.
    */
   reviewQuestionCount: number;
 }

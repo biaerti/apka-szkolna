@@ -192,16 +192,16 @@ describe('settings round-trip', () => {
     expect(rowToSettings(row)).toEqual(settings);
   });
 
-  it('brak review_question_count w wierszu (kolumna sprzed migracji) spada na domyslne 7', () => {
+  it('brak review_question_count w wierszu (kolumna sprzed migracji) spada na domyslne 5', () => {
     const row = settingsToRow({
       passesPerMonth: 3,
       hintGivesMinus: true,
       wheelSpinSec: 4,
       plusesForFive: 3,
       plombyForOne: 3,
-      reviewQuestionCount: 7,
+      reviewQuestionCount: 5,
     });
-    expect(rowToSettings({ ...row, review_question_count: null }).reviewQuestionCount).toBe(7);
+    expect(rowToSettings({ ...row, review_question_count: null }).reviewQuestionCount).toBe(5);
   });
 });
 

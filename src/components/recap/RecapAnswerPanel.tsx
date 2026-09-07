@@ -76,7 +76,6 @@ export function RecapAnswerPanel({
             onSkip={session.markDoneNoGrade}
             canPass={session.currentCanPass}
             canEarnPlus={session.currentCanEarnPlus}
-            canReceivePlomba={session.currentCanReceivePlomba}
             passesUsed={session.currentPassesUsed}
             passesPerMonth={session.settings.passesPerMonth}
             hintGivesMinus={session.settings.hintGivesMinus}

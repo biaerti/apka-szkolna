@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { SlideView } from '../components/slides/SlideView';
 import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
+import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
 import { classesOfGrade, lessonProgress, todayKey } from '../lib/grade';
@@ -26,6 +27,7 @@ export function LessonPresent() {
   const classId = classIdParam ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
 
   const [index, setIndex] = useState(0);
+  const [classPanelOpen, setClassPanelOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
@@ -47,6 +49,16 @@ export function LessonPresent() {
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (isTypingTarget(e.target)) return;
+
+      // Esc z otwartym panelem "Klasa" najpierw zamyka panel - dopiero kolejny
+      // Esc (panel juz zamkniety) wychodzi z prezentacji. Nawigacja strzalkami
+      // dziala niezaleznie od panelu (prosciej niz jej wstrzymywanie).
+      if (e.key === 'Escape' && classPanelOpen) {
+        e.preventDefault();
+        setClassPanelOpen(false);
+        return;
+      }
+
       const onRecap = lesson?.slides[index]?.kind === 'recap';
       if (onRecap && (e.key === ' ' || e.key === 'Escape')) return;
 
@@ -74,7 +86,7 @@ export function LessonPresent() {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, total, lesson, classId]);
+  }, [index, total, lesson, classId, classPanelOpen]);
 
   function toggleFullscreen() {
     if (document.fullscreenElement) {
@@ -158,6 +170,10 @@ export function LessonPresent() {
           onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
         />
       </div>
+
+      {!isRecap && (
+        <PresentClassPanel classId={classId} open={classPanelOpen} onOpenChange={setClassPanelOpen} />
+      )}
 
       {isLast && (
         <div className="absolute bottom-4 left-4" onClick={(e) => e.stopPropagation()}>

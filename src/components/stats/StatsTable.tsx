@@ -8,7 +8,7 @@ import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { Menu } from '../ui/Menu';
 import { MoreIcon } from '../ui/icons';
 import type { RecapEvent } from '../../data/types';
-import type { StudentStatsRow } from '../../lib/stats';
+import type { EditableResult, StudentStatsRow } from '../../lib/stats';
 
 export type SortKey = keyof Pick<
   StudentStatsRow,
@@ -27,6 +27,48 @@ const RESULT_LABEL: Record<string, string> = {
   piatka: 'Piątka',
 };
 
+/**
+ * Reczna edycja bilansu (przycisk "Edytuj bilans" w ClassStats): "+" dodaje
+ * zdarzenie danego typu (bez questionSetId - to reczna korekta, nie odpowiedz
+ * na pytanie), "-" kasuje NAJNOWSZE zdarzenie tego typu w biezacym miesiacu
+ * (findLatestEventId w src/lib/stats.ts). Podpowiedzi (hint_plomba) i bilans
+ * (wyliczany) zostaja tylko do odczytu.
+ */
+
+/** Mala para przyciskow +/- przy liczbie - tryb recznej edycji bilansu. */
+function EditCell({
+  value,
+  onAdd,
+  onRemove,
+}: {
+  value: number;
+  onAdd: () => void;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-center gap-1">
+      <button
+        type="button"
+        onClick={onRemove}
+        disabled={value <= 0}
+        aria-label="Odejmij"
+        className="flex h-5 w-5 items-center justify-center rounded border border-gray-300 text-xs leading-none text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-30"
+      >
+        −
+      </button>
+      <span className="w-4 text-center tabular-nums">{value}</span>
+      <button
+        type="button"
+        onClick={onAdd}
+        aria-label="Dodaj"
+        className="flex h-5 w-5 items-center justify-center rounded border border-gray-300 text-xs leading-none text-gray-600 hover:bg-gray-100"
+      >
+        +
+      </button>
+    </div>
+  );
+}
+
 export function StatsTable({
   rows,
   sortKey,
@@ -36,6 +78,8 @@ export function StatsTable({
   onRemoveEvent,
   monthLabel,
   onResetStudent,
+  editMode = false,
+  onAdjust,
 }: {
   rows: StudentStatsRow[];
   sortKey: SortKey;
@@ -47,6 +91,10 @@ export function StatsTable({
   monthLabel: string;
   /** "Wyzeruj bilans ucznia" - kasuje zdarzenia tego ucznia z biezacego miesiaca. */
   onResetStudent: (studentId: string) => void;
+  /** Tryb recznej edycji bilansu ("Edytuj bilans" w ClassStats) - pokazuje przyciski +/-. */
+  editMode?: boolean;
+  /** "+" dodaje zdarzenie danego typu uczniowi, "-" kasuje najnowsze zdarzenie tego typu w miesiacu. */
+  onAdjust?: (studentId: string, result: EditableResult, delta: 1 | -1) => void;
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pendingReset, setPendingReset] = useState<StudentStatsRow | null>(null);
@@ -111,12 +159,33 @@ export function StatsTable({
                   {row.lastName} {row.firstName}
                 </button>
               </TD>
-              <TD>{row.plus}</TD>
-              <TD>{row.kropka}</TD>
-              <TD>{row.plomba}</TD>
+              {(['plus', 'kropka', 'plomba'] as const).map((key) =>
+                editMode ? (
+                  <TD key={key}>
+                    <EditCell
+                      value={row[key]}
+                      onAdd={() => onAdjust?.(row.studentId, key, 1)}
+                      onRemove={() => onAdjust?.(row.studentId, key, -1)}
+                    />
+                  </TD>
+                ) : (
+                  <TD key={key}>{row[key]}</TD>
+                ),
+              )}
               <TD>{row.hint}</TD>
-              <TD>{row.pass}</TD>
-              <TD>{row.uwaga}</TD>
+              {(['pass', 'uwaga'] as const).map((key) =>
+                editMode ? (
+                  <TD key={key}>
+                    <EditCell
+                      value={row[key]}
+                      onAdd={() => onAdjust?.(row.studentId, key, 1)}
+                      onRemove={() => onAdjust?.(row.studentId, key, -1)}
+                    />
+                  </TD>
+                ) : (
+                  <TD key={key}>{row[key]}</TD>
+                ),
+              )}
               <TD className="font-semibold">{row.bilans}</TD>
               <TD className="text-right">
                 <Menu

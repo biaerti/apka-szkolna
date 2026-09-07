@@ -8,7 +8,7 @@
 
 import type { RecapResult, Student } from '../../data/types';
 import type { MonthBalance } from '../../lib/recap';
-import { warnBadgeLabel, wheelEntriesFor } from '../../lib/recap';
+import { warnBadgeLabel } from '../../lib/recap';
 import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface StudentSidebarProps {
@@ -83,8 +83,7 @@ export function StudentSidebar({
           const balance = balanceFor(st.id);
           const absent = absentSet.has(st.id);
           const warnings = warningsFor(st.id);
-          const totalEntries = wheelEntriesFor(warnings);
-          const used = (usedCount.get(st.id) ?? 0) >= totalEntries;
+          const used = (usedCount.get(st.id) ?? 0) >= 1;
           const badge = warnBadgeLabel(warnings);
           const active = st.id === currentStudentId;
           return (

@@ -284,6 +284,6 @@ export function rowToSettings(row: SettingsRow): Settings {
     plombyForOne: row.plomby_for_one,
     // Kolumna doszla po starcie (0008_review_question_count.sql) - starsze
     // wiersze w bazie maja NULL, dopoki nauczyciel nie zapisze ustawien.
-    reviewQuestionCount: row.review_question_count ?? 7,
+    reviewQuestionCount: row.review_question_count ?? 5,
   };
 }

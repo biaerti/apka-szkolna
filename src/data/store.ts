@@ -252,7 +252,7 @@ export const useStore = create<AppState>()(
         wheelSpinSec: 4,
         plusesForFive: 3,
         plombyForOne: 3,
-        reviewQuestionCount: 7,
+        reviewQuestionCount: 5,
       },
       manuallyEditedLessonIds: {},
 
@@ -446,7 +446,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 9,
+      version: 10,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -475,6 +475,10 @@ export const useStore = create<AppState>()(
       // edytowana" przy bugu w samym mechanizmie odswiezania. Stare dane
       // dostaja pusta mape (zadna lekcja nie jest oznaczona jako edytowana
       // recznie - nauczyciel przy okazji odswiezy i zobaczy realny stan).
+      // v9 -> v10: domyslny reviewQuestionCount spada z 7 na 5 (nauczyciel
+      // upraszcza kolo powtorzeniowe). Stara domyslna wartosc (7, nieruszana
+      // recznie) dostaje nowa domyslna (5); inna wartosc (zmieniona recznie)
+      // zostaje bez zmian.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -534,6 +538,9 @@ export const useStore = create<AppState>()(
         if (version < 9) {
           delete state.insertedFingerprints;
           state.manuallyEditedLessonIds = state.manuallyEditedLessonIds ?? {};
+        }
+        if (version < 10 && state.settings && state.settings.reviewQuestionCount === 7) {
+          state.settings = { ...state.settings, reviewQuestionCount: 5 };
         }
         return state as unknown as AppState;
       },

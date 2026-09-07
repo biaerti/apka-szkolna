@@ -243,7 +243,7 @@ export function RecapSession({
         {session.grading
           ? session.recapMode === 'powtorzeniowe'
             ? ' - 1: dobrze - 2: częściowo - 3: źle - 4: pas'
-            : ' - 1: dobrze - 2: dalej - 3: źle (od 3. uwagi)'
+            : ' - 1: dobrze - 2: dalej'
           : ' - Enter: gotowe, następny'}
         {' '}- N: następne pytanie - O: pokaż/ukryj odpowiedź
         {!embedded && ' - F: pełny ekran'} - Esc: zakończ

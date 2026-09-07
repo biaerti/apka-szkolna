@@ -1,11 +1,10 @@
 // Widok trybu "po kolei": duza lista uczniow w kolejnosci numerow z dziennika.
-// Nastepny w kolejnosci jest podswietlony, ci ktorzy juz wyczerpali wszystkie
-// swoje wejscia do rundy (patrz wheelEntriesFor - uczen z 3 uwagami ma dwa
-// wejscia) sa przekresleni na czerwono (tak samo jak sektory na kole -
+// Nastepny w kolejnosci jest podswietlony, ci ktorzy juz odpowiadali w tej
+// rundzie sa przekresleni na czerwono (tak samo jak sektory na kole -
 // Wheel.tsx), nieobecni/niegotowi sa pominieci (filtrowani wczesniej).
 
 import type { Student } from '../../data/types';
-import { warnLevel, warnLevelLabel, wheelEntriesFor } from '../../lib/recap';
+import { warnBadgeLabel } from '../../lib/recap';
 
 export interface SequentialPickerProps {
   students: Student[];
@@ -30,12 +29,10 @@ export function SequentialPicker({
     <div className="flex h-full w-full max-w-md flex-col overflow-y-auto rounded-xl border border-gray-700 bg-gray-900/70 p-2">
       {students.map((st) => {
         const warnings = warningsFor(st.id);
-        const totalEntries = wheelEntriesFor(warnings);
-        const used = (usedCount.get(st.id) ?? 0) >= totalEntries;
-        const isDouble = totalEntries > 1;
+        const used = (usedCount.get(st.id) ?? 0) >= 1;
+        const badge = warnBadgeLabel(warnings);
         const isNext = st.id === nextStudentId;
         const isCurrent = st.id === currentStudentId;
-        const level = warnLevel(warnings);
         return (
           <div
             key={st.id}
@@ -46,7 +43,7 @@ export function SequentialPicker({
                   ? 'bg-accent-900/50 text-white'
                   : used
                     ? 'text-red-400'
-                    : isDouble
+                    : badge
                       ? 'text-amber-300'
                       : 'text-gray-200'
             }`}
@@ -55,7 +52,7 @@ export function SequentialPicker({
             <span className={used && !isCurrent ? 'line-through' : ''}>
               {st.lastName} {st.firstName}
             </span>
-            {isDouble && <span className="text-xs text-amber-300">({warnLevelLabel(level)})</span>}
+            {badge && <span className="text-xs text-amber-300">({badge})</span>}
             {used && !isCurrent && <span className="ml-auto text-xs text-red-400">już był/a</span>}
             {isNext && !isCurrent && <span className="ml-auto text-xs text-accent-200">następny/a</span>}
           </div>

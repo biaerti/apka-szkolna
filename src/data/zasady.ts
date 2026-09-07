@@ -35,7 +35,7 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Koło po lekcji kręcimy zaraz po omówieniu tematu, na tej samej lekcji - tu można tylko zyskać: dobra odpowiedź to plus, słabsza albo brak odpowiedzi - nic się nie dzieje.',
       'Koło powtórzeniowe kręcimy na początku następnej lekcji, z pytaniami z poprzedniego tematu - tu gra się o wszystko: plus, kropkę i plombę.',
       'Uwagi za zachowanie można dostać zawsze, niezależnie od tego, które koło akurat kręcimy.',
-      'Po każdym temacie jest około 10 pytań.',
+      'Na każdym kole - po lekcji i powtórzeniowym - losujemy od 3 do 5 osób.',
       'Na początku może być stresująco. To normalne. Po kilku lekcjach się przyzwyczaicie i będzie dobrze.',
     ],
   },
@@ -63,8 +63,7 @@ export const RULE_SECTIONS: RuleSection[] = [
     title: 'Specjalne utrudnienia za zachowanie',
     items: [
       'Pierwszy raz: ostrzeżenie.',
-      'Drugi raz: na kole powtórzeniowym nie możesz już dostać plusa - najwyżej kropkę.',
-      'Trzeci raz i każdy kolejny: na kole po lekcji możesz też dostać plombę, a nie tylko zyskać. Dodatkowo zajmujesz dodatkowe miejsce w kole - za trzeci raz to 2 miejsca, za czwarty 3, i tak dalej.',
+      'Drugi raz i każdy kolejny: do końca miesiąca nie możesz już dostać plusa - ani na kole po lekcji, ani na kole powtórzeniowym.',
       'Uwagi zerują się z początkiem każdego miesiąca - nowy miesiąc, czysta kartka.',
     ],
   },

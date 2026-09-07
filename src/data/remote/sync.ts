@@ -60,7 +60,7 @@ const DEFAULT_SETTINGS: Settings = {
   wheelSpinSec: 4,
   plusesForFive: 3,
   plombyForOne: 3,
-  reviewQuestionCount: 7,
+  reviewQuestionCount: 5,
 };
 
 async function fetchAllRows<T>(table: string): Promise<T[]> {

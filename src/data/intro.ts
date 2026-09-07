@@ -62,12 +62,12 @@ function slideTitle(title: string, subtitle?: string, art?: SlideArt): Slide {
 }
 
 /**
- * Slajd z tematem lekcji do zeszytu. Bez wlasnej tresci - temat bierze sie z
- * lekcji (registerTopic), a kod (np. 4.3) dokleja SlideView, wiec zeszyt,
- * dziennik i lista lekcji zawsze mowia to samo.
+ * Slajd z tematem lekcji do zeszytu. `topic` to krotka, zeszytowa wersja
+ * tematu (dzieci pisza wolno) - dluzszy `registerTopic` zostaje tylko w
+ * dzienniku Vulcan. Stoper 180 s daje czas na przepisanie tematu i daty.
  */
-function slideTopic(): Slide {
-  return { id: newId(), kind: 'topic' };
+function slideTopic(topic: string): Slide {
+  return { id: newId(), kind: 'topic', topic, timerSec: 180 };
 }
 
 function slideText(title: string, body: string, art?: SlideArt): Slide {
@@ -217,7 +217,7 @@ ${przebiegKod[0]}`,
       slideTitle('Poznajmy się', `Język polski - klasa ${grade}`),
 
       // 2. Temat do zeszytu - z kodem lekcji, ktory dzieci zapisuja przy temacie
-      slideTopic(),
+      slideTopic('Zasady naszych lekcji'),
 
       // 3. Kim jestem - zdjecie i tekst na jednym slajdzie (plik w public/bart.jpg)
       slideImage({
@@ -387,16 +387,10 @@ Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
       // 27. Notatka do zeszytu
       slideNote(
         'Notatka do zeszytu',
-        `**Temat: Zasady pracy na lekcjach języka polskiego**
-
-- Koło losuje, kto odpowiada. Nie zgłaszamy się.
-- Koło po lekcji (po nowym temacie) - można tylko zyskać. Koło powtórzeniowe (na kolejnej lekcji) - gra się o wszystko.
-- Plus - dobra odpowiedź. Kropka - częściowa. Plomba - zła albo jej brak.
-- Rozliczenie na koniec miesiąca: 3 plusy = piątka, 3 plomby = jedynka.
-- 2 pasy w miesiącu.
-- Siadamy w najbliższych ławkach.
-- Zeszyt w linie: numer, temat, notatki.
-- Sprawdzian (progi WZO): 0-30% - 1, 31-50% - 2, 51-72% - 3, 73-85% - 4, 86-96% - 5, 97-100% - 6.`,
+        `- Koło losuje, kto odpowiada.
+- Koło po lekcji - tylko zysk. Koło powtórzeniowe - gra się o wszystko.
+- Plus, kropka, plomba. 3 plusy = 5, 3 plomby = 1 (koniec miesiąca).
+- 2 pasy w miesiącu.`,
       ),
 
       // 28. Zakonczenie

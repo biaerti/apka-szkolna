@@ -61,6 +61,17 @@ describe('buildIntroLesson', () => {
     expect(lesson.registerTopic).toBeTruthy();
   });
 
+  it('slajd topic ma krotki temat do zeszytu (krotszy niz temat do dziennika) i stoper', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const topicSlide = lesson.slides.find((s) => s.kind === 'topic');
+    expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
+    if (topicSlide && topicSlide.kind === 'topic') {
+      expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
+      expect(topicSlide.topic!.length).toBeLessThan((lesson.registerTopic ?? '').length);
+      expect(topicSlide.timerSec).toBeGreaterThan(0);
+    }
+  });
+
   it('ma slajd z ilustracja "procenty"', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const hasProcenty = lesson.slides.some((s) => 'art' in s && s.art === 'procenty');
@@ -177,6 +188,19 @@ describe('buildIntroLesson', () => {
     const text = allText(lesson).toLowerCase();
     expect(text).not.toContain('dla całej klasy');
   });
+
+  it('eskalacja ma tylko dwa stopnie: ostrzezenie, a od drugiego razu brak plusow do konca miesiaca', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Specjalne utrudnienia za zachowanie');
+    const body = (slide && 'body' in slide ? slide.body : '') ?? '';
+    expect(body).toContain('Pierwszy raz');
+    expect(body).toContain('Drugi raz i każdy kolejny');
+    expect(body).toContain('nie możesz już dostać plusa');
+    expect(body.toLowerCase()).not.toContain('trzeci raz');
+    expect(body.toLowerCase()).not.toContain('dodatkowe miejsce');
+    expect(body.toLowerCase()).not.toContain('podwójne wejście');
+  });
+
 });
 
 describe('RULE_SECTIONS', () => {
@@ -207,5 +231,21 @@ describe('RULE_SECTIONS', () => {
     for (const range of ['0-30%', '31-50%', '51-72%', '73-85%', '86-96%', '97-100%']) {
       expect(all, `brak progu ${range} w tresci zasad`).toContain(range);
     }
+  });
+
+  it('wspomina, ze na kazdym kole losuje sie od 3 do 5 osob, a nie stary limit "10 pytan"', () => {
+    const all = RULE_SECTIONS.map((s) => s.items.join(' ')).join(' ');
+    expect(all).toContain('od 3 do 5 osób');
+    expect(all.toLowerCase()).not.toContain('10 pytań');
+  });
+
+  it('eskalacja za zachowanie ma tylko dwa stopnie, bez dawnych "dodatkowych miejsc w kole"', () => {
+    const section = RULE_SECTIONS.find((s) => s.title === 'Specjalne utrudnienia za zachowanie');
+    expect(section).toBeDefined();
+    const text = (section?.items ?? []).join(' ').toLowerCase();
+    expect(text).not.toContain('trzeci raz');
+    expect(text).not.toContain('dodatkowe miejsce');
+    expect(text).not.toContain('podwójne wejście');
+    expect(text).toContain('do końca miesiąca nie możesz już dostać plusa');
   });
 });

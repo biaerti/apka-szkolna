@@ -4,8 +4,8 @@
 // Spacja = losuj/nastepny, Enter = gotowe-nastepny (tryb bez ocen). W trybie
 // ocen klawisze 1-4 zaleza od trybu rundy (recapMode, patrz src/lib/recap.ts):
 // - powtorzeniowe: 1/2/3/4 = dobrze/czesciowo/zle/pas (bez zmian),
-// - po-lekcji: 1 = dobrze, 2 = dalej (jak Enter w trybie bez ocen),
-//   3 = zle (tylko gdy uczen moze dostac plombe - patrz canReceivePlomba).
+// - po-lekcji: 1 = dobrze, 2 = dalej (jak Enter w trybie bez ocen) - to
+//   jedyne dwa przyciski, kolo po lekcji nigdy nie daje plomby.
 // N = nastepne pytanie, O = pokaz odpowiedz, F = pelny ekran, Esc = zakoncz.
 
 import { useEffect, useRef } from 'react';
@@ -34,7 +34,7 @@ export function useRecapKeys(session: RecapSessionState, embedded: boolean | und
         if (s.recapMode === 'powtorzeniowe') s.grade('kropka');
         else if (s.currentStudent && !s.graded) s.markDoneNoGrade();
       } else if (e.key === '3') {
-        if (s.grading && (s.recapMode === 'powtorzeniowe' || s.currentCanReceivePlomba)) s.grade('plomba');
+        if (s.grading && s.recapMode === 'powtorzeniowe') s.grade('plomba');
       } else if (e.key === '4') {
         if (s.grading && s.recapMode === 'powtorzeniowe' && s.currentCanPass) s.grade('pass');
       } else if (e.key === 'n' || e.key === 'N') {

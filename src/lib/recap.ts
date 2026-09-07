@@ -5,8 +5,9 @@
 // Zasady gry (patrz `src/data/zasady.ts` i wydruk /zasady/druk):
 // - odpowiedz oceniamy jako plus / kropka / plomba, mozna tez wziac pas,
 // - podpowiadanie = plomba dla podpowiadajacego,
-// - niegrzeczne zachowanie eskaluje: 1. ostrzezenie, 2. brak plusow, 3. podwojne
-//   wejscie do kola (a wiec i dodatkowe pytanie dla klasy),
+// - niegrzeczne zachowanie eskaluje TYLKO dwa stopnie: 1. ostrzezenie, 2. (i
+//   kazdy kolejny raz) brak mozliwosci zdobycia plusa do konca miesiaca - w
+//   ZADNYM kole (ani po lekcji, ani powtorzeniowym),
 // - wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
 //   zeruja sie 1. dnia miesiaca,
 // - uzbierane plomby zamieniaja sie na zadania naprawcze -> rozliczenie albo jedynke,
@@ -32,42 +33,30 @@ export function resolveRecapMode(slide: Extract<Slide, { kind: 'recap' }>): Reca
 
 // --- eskalacja uwag ---------------------------------------------------------
 
-/** Od tylu uwag w miesiacu uczen traci mozliwosc zdobywania plusow. */
+/** Od tylu uwag w miesiacu uczen traci mozliwosc zdobywania plusow (w OBU kolach). */
 export const WARN_NO_PLUS_AT = 2;
-/** Od tylu uwag w miesiacu uczen zaczyna dostawac dodatkowe miejsca w kole. */
-export const WARN_DOUBLE_AT = 3;
 
-export type WarnLevel = 'none' | 'warned' | 'no_plus' | 'doubled';
+export type WarnLevel = 'none' | 'warned' | 'no_plus';
 
-/** Poziom eskalacji dla podanej liczby uwag w biezacym miesiacu. */
+/** Poziom eskalacji dla podanej liczby uwag w biezacym miesiacu. Tylko dwa stopnie - patrz zasady.ts. */
 export function warnLevel(warnings: number): WarnLevel {
-  if (warnings >= WARN_DOUBLE_AT) return 'doubled';
   if (warnings >= WARN_NO_PLUS_AT) return 'no_plus';
   if (warnings >= 1) return 'warned';
   return 'none';
 }
 
 /**
- * Ile razy uczen trafia do kola przy podanej liczbie uwag w miesiacu. Ponizej
- * progu WARN_DOUBLE_AT - jedno miejsce. Od progu eskalacja rosnie: n uwag daje
- * n-1 miejsc (3 uwagi = 2 miejsca, 4 uwagi = 3 miejsca, i tak dalej).
+ * Ile razy uczen trafia do kola. Eskalacja uwag juz nie mnozy miejsc w kole -
+ * kazdy uczen ma zawsze jedno wejscie, niezaleznie od liczby uwag (patrz
+ * canEarnPlus - konsekwencja to wylacznie blokada plusa).
  */
-export function wheelEntriesFor(warnings: number): number {
-  return warnings >= WARN_DOUBLE_AT ? warnings - 1 : 1;
+export function wheelEntriesFor(_warnings: number): number {
+  return 1;
 }
 
-/** Czy uczen z taka liczba uwag moze jeszcze zdobyc plusa (kolo POWTORZENIOWE). */
+/** Czy uczen z taka liczba uwag moze jeszcze zdobyc plusa - dotyczy OBU kol (po lekcji i powtorzeniowego). */
 export function canEarnPlus(warnings: number): boolean {
   return warnings < WARN_NO_PLUS_AT;
-}
-
-/**
- * Czy wylosowany uczen moze dostac plombe w kole PO LEKCJI - tam plomba jest
- * WYJATKIEM (kolo po lekcji domyslnie tylko daje plusy): tylko dla ucznia z
- * juz przynajmniej WARN_DOUBLE_AT uwagami w tym miesiacu.
- */
-export function canReceivePlombaAfterLesson(warnings: number): boolean {
-  return warnings >= WARN_DOUBLE_AT;
 }
 
 /** Krotki opis konsekwencji dla poziomu eskalacji - do pokazania nauczycielowi. */
@@ -76,44 +65,29 @@ export function warnLevelLabel(level: WarnLevel): string {
     case 'warned':
       return 'ostrzeżenie';
     case 'no_plus':
-      return 'bez plusów';
-    case 'doubled':
-      return 'bez plusów, dodatkowe miejsca w kole';
+      return 'bez plusów do końca miesiąca';
     default:
       return '';
   }
 }
 
-/** Polska liczba mnoga "miejsce/miejsca/miejsc" - do warnBadgeLabel. */
-function placesWord(n: number): string {
-  const last = n % 10;
-  const lastTwo = n % 100;
-  if (n === 1) return 'miejsce';
-  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return 'miejsca';
-  return 'miejsc';
-}
-
 /**
- * Zwiezly, stopniowany opis eskalacji uwag do listy uczniow (StudentSidebar):
- * 1 uwaga - dyskretne ostrzezenie, 2 uwagi - "bez plusa" (dotyczy tylko kola
- * powtorzeniowego - patrz canEarnPlus), od 3 uwag - mozliwa plomba w kole po
- * lekcji (patrz canReceivePlombaAfterLesson) ORAZ dodatkowe miejsca w kole
- * (patrz wheelEntriesFor). Pusty string = brak uwag w tym miesiacu.
+ * Zwiezly opis eskalacji uwag do listy uczniow (StudentSidebar): 1 uwaga -
+ * dyskretne ostrzezenie, od 2 uwag - brak mozliwosci zdobycia plusa do konca
+ * miesiaca, w zadnym kole (patrz canEarnPlus). Pusty string = brak uwag w tym miesiacu.
  */
 export function warnBadgeLabel(warnings: number): string {
   if (warnings <= 0) return '';
   if (warnings === 1) return '1. ostrzeżenie';
-  if (warnings === 2) return 'bez plusa (powtórki)';
-  const slots = wheelEntriesFor(warnings);
-  return `plomba możliwa + ${slots} ${placesWord(slots)} w kole`;
+  return 'bez plusów do końca miesiąca';
 }
 
 // --- pula losowania ---------------------------------------------------------
 
 /**
- * Jedno wejscie do kola. Uczen z trzema uwagami ma dwa wejscia (`copy` 0 i 1),
- * dzieki czemu jego sektor pojawia sie na kole dwa razy - i o jedno pytanie
- * wiecej przypada na cala klase.
+ * Jedno wejscie do kola. Kazdy uczen ma dokladnie jedno wejscie (`copy` zawsze
+ * 0) - eskalacja uwag juz nie mnozy sektorow, tylko blokuje plusa (patrz
+ * canEarnPlus). Pole `copy` zostaje w typie dla stabilnosci klucza `key`.
  */
 export interface PoolEntry {
   /** Stabilny klucz wejscia (uczen + numer kopii) - React key i indeks sektora. */

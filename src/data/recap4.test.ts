@@ -76,6 +76,25 @@ describe('buildRecap4', () => {
     const b = buildRecap4('V', [CLASS_ID]);
     expect(a.questionSets[0].id).not.toBe(b.questionSets[0].id);
   });
+
+  it('kazda lekcja ma slajd topic z krotkim tematem do zeszytu i stoperem, a notatke max na 5 linijek', () => {
+    const bundle = buildRecap4('V', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const topicSlide = lesson.slides.find((s) => s.kind === 'topic');
+      expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
+      if (topicSlide && topicSlide.kind === 'topic') {
+        expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
+        expect(topicSlide.timerSec).toBeGreaterThan(0);
+      }
+
+      const noteSlide = lesson.slides.find((s) => s.kind === 'note');
+      expect(noteSlide && noteSlide.kind === 'note' ? noteSlide.body : undefined).toBeTruthy();
+      if (noteSlide && noteSlide.kind === 'note') {
+        const lines = noteSlide.body.split('\n').filter((l) => l.trim() !== '');
+        expect(lines.length).toBeLessThanOrEqual(5);
+      }
+    }
+  });
 });
 
 describe('buildRecap13', () => {
@@ -126,5 +145,24 @@ describe('buildRecap13', () => {
   it('tytuly lekcji sa unikalne wewnatrz powtorki', () => {
     const klucze = buildRecap13('IV', [CLASS_ID]).lessons.map((l) => titleMatchKey(l.title));
     expect(new Set(klucze).size).toBe(klucze.length);
+  });
+
+  it('kazda lekcja ma slajd topic z krotkim tematem do zeszytu i stoperem, a notatke max na 5 linijek', () => {
+    const bundle = buildRecap13('IV', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const topicSlide = lesson.slides.find((s) => s.kind === 'topic');
+      expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
+      if (topicSlide && topicSlide.kind === 'topic') {
+        expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
+        expect(topicSlide.timerSec).toBeGreaterThan(0);
+      }
+
+      const noteSlide = lesson.slides.find((s) => s.kind === 'note');
+      expect(noteSlide && noteSlide.kind === 'note' ? noteSlide.body : undefined).toBeTruthy();
+      if (noteSlide && noteSlide.kind === 'note') {
+        const lines = noteSlide.body.split('\n').filter((l) => l.trim() !== '');
+        expect(lines.length).toBeLessThanOrEqual(5);
+      }
+    }
   });
 });

@@ -3,9 +3,10 @@
 // RecapMode):
 // - 'powtorzeniowe' - pelne ocenianie plus/kropka/plomba/pas. "Dobrze" jest
 //   wylaczone, gdy uczen ma juz 2 lub wiecej uwag w tym miesiacu (canEarnPlus).
-// - 'po-lekcji' (domyslny) - mozna tylko zyskac: zamiast kropki/pasa jest
-//   neutralne "Dalej" (nic sie nie zapisuje), a plomba jest WYJATKIEM - aktywna
-//   tylko dla ucznia z juz >=3 uwagami w tym miesiacu (canReceivePlomba).
+// - 'po-lekcji' (domyslny) - mozna tylko zyskac: tylko dwa przyciski, "Dobrze"
+//   i "Dalej" (neutralne, nic sie nie zapisuje). Nie ma tu "Źle" wcale - kolo
+//   po lekcji nigdy nie daje plomby. "Dobrze" jest wylaczone na tych samych
+//   zasadach co w kole powtorzeniowym (canEarnPlus - blokada dziala w OBU trybach).
 
 import type { RecapResult } from '../../data/types';
 import type { RecapMode } from '../../lib/recap';
@@ -20,8 +21,6 @@ export interface ScoreButtonsProps {
   onSkip: () => void;
   canPass: boolean;
   canEarnPlus: boolean;
-  /** Czy wylosowany uczen moze dostac plombe w kole po lekcji (patrz canReceivePlombaAfterLesson). */
-  canReceivePlomba: boolean;
   passesUsed: number;
   passesPerMonth: number;
   hintGivesMinus: boolean;
@@ -37,7 +36,6 @@ export function ScoreButtons({
   onSkip,
   canPass,
   canEarnPlus,
-  canReceivePlomba,
   passesUsed,
   passesPerMonth,
   hintGivesMinus,
@@ -49,12 +47,12 @@ export function ScoreButtons({
 
   return (
     <div className="flex w-full flex-col gap-1.5">
-      <div className={isPowtorzeniowe ? 'grid grid-cols-4 gap-2' : 'grid grid-cols-3 gap-2'}>
+      <div className={isPowtorzeniowe ? 'grid grid-cols-4 gap-2' : 'grid grid-cols-2 gap-2'}>
         <button
           type="button"
           onClick={() => onGrade('plus')}
           disabled={gradeDisabled || !canEarnPlus}
-          title={!canEarnPlus ? '2. uwaga - bez plusa w tym miesiącu' : undefined}
+          title={!canEarnPlus ? '2. uwaga - bez plusa do końca miesiąca' : undefined}
           className="whitespace-nowrap rounded-lg bg-emerald-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-emerald-500 disabled:opacity-40 sm:text-3xl"
         >
           <span className="mr-2 font-black">{resultSymbol('plus').symbol}</span>
@@ -85,17 +83,18 @@ export function ScoreButtons({
           </button>
         )}
 
-        <button
-          type="button"
-          onClick={() => onGrade('plomba')}
-          disabled={gradeDisabled || (!isPowtorzeniowe && !canReceivePlomba)}
-          title={!isPowtorzeniowe && !canReceivePlomba ? 'Plomba w kole po lekcji dopiero od 3. uwagi w tym miesiącu' : undefined}
-          className="whitespace-nowrap rounded-lg bg-red-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-red-500 disabled:opacity-40 sm:text-3xl"
-        >
-          <span className="mr-2 font-black">{resultSymbol('plomba').symbol}</span>
-          Źle
-          <span className="block text-sm font-normal opacity-75">klawisz 3</span>
-        </button>
+        {isPowtorzeniowe && (
+          <button
+            type="button"
+            onClick={() => onGrade('plomba')}
+            disabled={gradeDisabled}
+            className="whitespace-nowrap rounded-lg bg-red-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-red-500 disabled:opacity-40 sm:text-3xl"
+          >
+            <span className="mr-2 font-black">{resultSymbol('plomba').symbol}</span>
+            Źle
+            <span className="block text-sm font-normal opacity-75">klawisz 3</span>
+          </button>
+        )}
 
         {isPowtorzeniowe && (
           <button

@@ -25,7 +25,6 @@ import type { RecapEvent, RecapResult, Settings, Student } from '../../data/type
 import {
   canEarnPlus,
   canPass,
-  canReceivePlombaAfterLesson,
   nextSequential,
   passesUsedThisMonth,
   wheelTargetAngle,
@@ -119,19 +118,10 @@ export function useRecapDraw({
   const currentStudent: Student | null = currentEntry?.student ?? null;
   const currentPassesUsed = currentStudent ? passesUsedThisMonth(recapEvents, currentStudent.id, now) : 0;
   const currentCanPass = currentStudent ? canPass(recapEvents, currentStudent.id, settings, now) : false;
-  // Kolo po lekcji: mozna tylko zyskac - plus jest zawsze dostepny. Kolo
-  // powtorzeniowe: uczen z >=2 uwagami w miesiacu traci mozliwosc plusa
-  // (canEarnPlus, patrz src/lib/recap.ts).
-  const currentCanEarnPlus =
-    recapMode === 'powtorzeniowe' ? (currentStudent ? canEarnPlus(warningsFor(currentStudent.id)) : false) : true;
-  // Kolo po lekcji: plomba to WYJATEK, tylko dla ucznia z juz >=3 uwagami w
-  // miesiacu. Kolo powtorzeniowe: plomba bez ograniczen (jak dotychczas).
-  const currentCanReceivePlomba =
-    recapMode === 'powtorzeniowe'
-      ? true
-      : currentStudent
-        ? canReceivePlombaAfterLesson(warningsFor(currentStudent.id))
-        : false;
+  // Blokada plusa dziala w OBU trybach: uczen z >=2 uwagami w miesiacu traci
+  // mozliwosc plusa (canEarnPlus, patrz src/lib/recap.ts) - w kole po lekcji
+  // dostaje wtedy tylko "Dalej" (nic), w kole powtorzeniowym - kropke/plombe/pas.
+  const currentCanEarnPlus = currentStudent ? canEarnPlus(warningsFor(currentStudent.id)) : false;
 
   const canSpin = !spinning && (!currentEntry || graded) && pool.length > 0;
 
@@ -208,20 +198,12 @@ export function useRecapDraw({
 
   function grade(result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>) {
     if (!currentEntry || graded) return;
-    if (result === 'plus' && recapMode === 'powtorzeniowe' && !canEarnPlus(warningsFor(currentEntry.student.id))) {
-      return;
-    }
-    // Kolo po lekcji: nie ma kropki ani pasa (przycisk "Dalej" zamiast nich -
-    // patrz markDoneNoGrade), a plomba jest wyjatkiem tylko dla ucznia z
-    // juz >=3 uwagami w miesiacu.
-    if (recapMode !== 'powtorzeniowe' && result !== 'plus' && result !== 'plomba') return;
-    if (
-      recapMode !== 'powtorzeniowe' &&
-      result === 'plomba' &&
-      !canReceivePlombaAfterLesson(warningsFor(currentEntry.student.id))
-    ) {
-      return;
-    }
+    // Blokada plusa dziala w OBU trybach - uczen z >=2 uwagami w miesiacu nie
+    // moze dostac plusa ani na kole po lekcji, ani na powtorzeniowym.
+    if (result === 'plus' && !canEarnPlus(warningsFor(currentEntry.student.id))) return;
+    // Kolo po lekcji: jedyna ocena to plus - nie ma kropki, plomby ani pasa
+    // (przycisk "Dalej" zamiast nich - patrz markDoneNoGrade).
+    if (recapMode !== 'powtorzeniowe' && result !== 'plus') return;
     const studentId = currentEntry.student.id;
     const event = recordEvent(studentId, result);
     setLastAction({ eventId: event.id, studentId, kind: 'grade' });
@@ -302,7 +284,6 @@ export function useRecapDraw({
     currentPassesUsed,
     currentCanPass,
     currentCanEarnPlus,
-    currentCanReceivePlomba,
     recapMode,
   };
 }
