@@ -43,7 +43,13 @@ export function Panel() {
   }, [classId]);
 
   const [rozwiniety, setRozwiniety] = useState(true);
-  const wheel = useTaskWheel({ classId });
+  // Stan listy uwag siedzi TU, a nie w PanelWheel, bo Esc musi najpierw zamknac
+  // liste, a dopiero potem zwijac panel - i bo przy otwartej liscie klawisze
+  // kola (Spacja/1/2) nie moga dzialac na niewidoczne kolo pod spodem.
+  const [uwagiOtwarte, setUwagiOtwarte] = useState(false);
+  // poolMemory 'local': panel ma wlasna pamiec "kto juz byl", kasowana przyciskiem
+  // Reset - nie dziedziczy skreslen po kole powtorzeniowym z rana (patrz useTaskWheel).
+  const wheel = useTaskWheel({ classId, poolMemory: 'local' });
 
   // Rozmiar okna idzie za stanem UI. Pierwsze wywolanie tez jest potrzebne:
   // okno startuje w rozmiarze panelu, ale po restarcie chcemy zgodnosc.
@@ -80,10 +86,11 @@ export function Panel() {
     (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement) return;
       if (e.key === 'Escape') {
-        setRozwiniety(false);
+        if (uwagiOtwarte) setUwagiOtwarte(false);
+        else setRozwiniety(false);
         return;
       }
-      if (!rozwiniety) return;
+      if (!rozwiniety || uwagiOtwarte) return;
       if (e.code === 'Space' || e.key === 'Enter') {
         e.preventDefault();
         if (canSpin) spin();
@@ -96,7 +103,7 @@ export function Panel() {
         if (canUndo) undoLast();
       }
     },
-    [rozwiniety, canSpin, spin, currentStudent, graded, currentCanEarnPlus, grade, canUndo, undoLast],
+    [rozwiniety, uwagiOtwarte, canSpin, spin, currentStudent, graded, currentCanEarnPlus, grade, canUndo, undoLast],
   );
   useEffect(() => {
     window.addEventListener('keydown', onKey);
@@ -116,7 +123,12 @@ export function Panel() {
       classes={sortedClasses}
       classId={classId}
       onClassId={setClassId}
-      onZwin={() => setRozwiniety(false)}
+      uwagiOtwarte={uwagiOtwarte}
+      onUwagi={setUwagiOtwarte}
+      onZwin={() => {
+        setUwagiOtwarte(false);
+        setRozwiniety(false);
+      }}
       onZamknij={isTauri() ? () => void zamknijOkno() : undefined}
     />
   );

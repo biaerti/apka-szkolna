@@ -5,10 +5,11 @@
 // zmiana slajdu nie moze gubic obecnosci, otwarcia szuflady ani osoby, ktora
 // wlasnie odpowiada.
 //
-// "Kto juz dzis odpowiadal" NIE jest stanem sesji, tylko wynika z zapisanych
-// RecapEvent (answeredOnDay): przeladowanie strony nie wraca nikogo na kolo, a
-// cofniecie oceny (usuniecie zdarzenia) samo zwalnia sektor. Wlicza sie tez
-// kolo powtorzeniowe z poczatku tej samej lekcji.
+// "Kto juz dzis odpowiadal" w prezentacji NIE jest stanem sesji, tylko wynika z
+// zapisanych RecapEvent (answeredOnDay): przeladowanie strony nie wraca nikogo
+// na kolo, a cofniecie oceny (usuniecie zdarzenia) samo zwalnia sektor. Wlicza
+// sie tez kolo powtorzeniowe z poczatku tej samej lekcji. Plywajacy panel ma to
+// inaczej - patrz `poolMemory` nizej.
 //
 // Przebieg losowania (spin -> handleSpinEnd -> applyPick) skopiowany z
 // useRecapDraw: nazwisko ujawniamy dopiero, gdy kolo stanie.
@@ -32,9 +33,22 @@ import { useAttendance } from '../recap/useAttendance';
 export interface UseTaskWheelArgs {
   classId: string;
   lessonCode?: string;
+  /**
+   * Skad bierze sie "kto juz byl" (sektory na czerwono, wypadniete z losowania):
+   * - `events` (domyslne, prezentacja) - z zapisanych zdarzen z dzisiaj, wiec
+   *   pula jest wspolna z kolem powtorzeniowym i przezywa przeladowanie strony;
+   * - `local` (plywajacy panel) - licznik zyje tylko w pamieci panelu i kasuje
+   *   go przycisk Reset. Panel chodzi obok apki, czesto przez cala lekcje przy
+   *   podreczniku, a nauczyciel sam decyduje, kiedy runda sie konczy - wiazanie
+   *   go ze zdarzeniami dnia znaczyloby, ze pol klasy startuje juz skreslone.
+   *
+   * Same OCENY ida w obu trybach tak samo, do wspolnego store - rozne jest
+   * tylko to, kogo kolo jeszcze losuje.
+   */
+  poolMemory?: 'events' | 'local';
 }
 
-export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
+export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: UseTaskWheelArgs) {
   const students = useStore((s) => s.students);
   const recapEvents = useStore((s) => s.recapEvents);
   const settings = useStore((s) => s.settings);
@@ -54,10 +68,20 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
   const [spinning, setSpinning] = useState(false);
   const [wheelTarget, setWheelTarget] = useState(0);
   const [spinToken, setSpinToken] = useState(0);
-  const [lastEventId, setLastEventId] = useState<string | null>(null);
+  // Ostatnia ocena zapamietana RAZEM z uczniem, nie samo id zdarzenia: po
+  // kolejnym krecie `currentEntry` wskazuje juz kogos innego, a Cofnij ma
+  // oddac sektor temu, kto te ocene dostal.
+  const [lastGrade, setLastGrade] = useState<{ eventId: string; studentId: string } | null>(null);
+
+  // Tryb `local`: ile razy uczen byl losowany OD OSTATNIEGO RESETU (patrz poolMemory).
+  const [localUsed, setLocalUsed] = useState<Record<string, number>>({});
 
   const answered = useMemo(() => answeredOnDay(recapEvents, classId, todayKey()), [recapEvents, classId]);
-  const usedFor = useCallback((studentId: string) => answered.get(studentId) ?? 0, [answered]);
+  const usedFor = useCallback(
+    (studentId: string) =>
+      poolMemory === 'local' ? localUsed[studentId] ?? 0 : answered.get(studentId) ?? 0,
+    [poolMemory, localUsed, answered],
+  );
   const warningsFor = useCallback(
     (studentId: string) => warningsThisMonth(recapEvents, studentId, new Date()),
     [recapEvents],
@@ -112,17 +136,47 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
     const studentId = currentEntry.student.id;
     if (result === 'plus' && !canEarnPlus(warningsFor(studentId))) return;
     const event = addRecapEvent({ studentId, classId, result, note: lessonWheelNote(lessonCode, taskCode) });
-    setLastEventId(event.id);
+    setLastGrade({ eventId: event.id, studentId });
     setGraded(true);
+    if (poolMemory === 'local') {
+      setLocalUsed((cur) => ({ ...cur, [studentId]: (cur[studentId] ?? 0) + 1 }));
+    }
   }
 
-  /** Cofa ostatnia ocene - pula odswiezy sie sama, bo liczy sie ze zdarzen. */
+  /**
+   * Cofa ostatnia ocene. W trybie `events` pula odswieza sie sama (liczy sie ze
+   * zdarzen), w trybie `local` trzeba jeszcze oddac uczniowi jego sektor.
+   */
   function undoLast() {
-    if (!lastEventId) return;
-    removeRecapEvent(lastEventId);
-    setLastEventId(null);
+    if (!lastGrade) return;
+    removeRecapEvent(lastGrade.eventId);
+    const studentId = lastGrade.studentId;
+    if (poolMemory === 'local') {
+      setLocalUsed((cur) => {
+        const left = (cur[studentId] ?? 0) - 1;
+        const next = { ...cur };
+        if (left > 0) next[studentId] = left;
+        else delete next[studentId];
+        return next;
+      });
+    }
+    setLastGrade(null);
     setCurrentEntry(null);
     setGraded(false);
+  }
+
+  /**
+   * Reset rundy: wszyscy wracaja na kolo. Kasuje TYLKO skreslenia - obecnosc i
+   * zapisane plusy/kropki zostaja (te ostatnie sa juz w bilansie miesiaca).
+   * Dziala wylacznie w trybie `local`; w `events` skreslenia wynikaja z
+   * zapisanych zdarzen i nie ma czego zerowac bez kasowania ocen.
+   */
+  function resetPool() {
+    setLocalUsed({});
+    setAllowRepeats(false);
+    setCurrentEntry(null);
+    setGraded(false);
+    setLastGrade(null);
   }
 
   /** Przy zmianie slajdu: uczen z ocena znika z ramki, uczen bez oceny zostaje. */
@@ -156,7 +210,10 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
     handleSpinEnd,
     grade,
     undoLast,
-    canUndo: !!lastEventId,
+    resetPool,
+    /** Czy jest co resetowac - do wyszarzenia przycisku. */
+    canReset: poolMemory === 'local' && (Object.keys(localUsed).length > 0 || allowRepeats),
+    canUndo: !!lastGrade,
     clearGradedStudent,
   };
 }
