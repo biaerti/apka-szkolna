@@ -14,6 +14,7 @@ import { GripIcon, MoreIcon, WheelIcon } from '../ui/icons';
 import { TD } from '../ui/Table';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { copyToClipboard } from '../../lib/clipboard';
+import { resolveRecapMode } from '../../lib/recap';
 
 export interface LessonRowProps {
   lesson: Lesson;
@@ -41,6 +42,9 @@ export function LessonRow(p: LessonRowProps) {
   const dragFromHandle = useRef(false);
   const registerTopic = lesson.registerTopic || lesson.title;
   const curriculum = lesson.curriculum ?? [];
+  // Lekcja zapoznawcza: jej kolo to tryb 'demo' (patrz resolveRecapMode) - nie
+  // ma z czego robic powtorki na ocene.
+  const isIntroLesson = lesson.slides.some((s) => s.kind === 'recap' && resolveRecapMode(s) === 'demo');
 
   async function copyRegister() {
     const text = curriculum.length > 0 ? `${registerTopic}\nKody: ${curriculum.join(', ')}` : registerTopic;
@@ -136,28 +140,14 @@ export function LessonRow(p: LessonRowProps) {
               >
                 <span className="tabular-nums">{plural(questionCount, 'pytanie', 'pytania', 'pytań')}</span> w kole
               </button>
-              {questionCount > 0 && (
+              {questionCount > 0 && !isIntroLesson && (
                 <>
-                  {/* Kolo PO LEKCJI - mozna tylko zyskac (patrz src/lib/recap.ts). */}
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/powtorka/${classId}/${lesson.questionSetId}?tryb=po-lekcji`)}
-                    title="Uruchom koło po lekcji (można tylko zyskać)"
-                    aria-label="Uruchom koło po lekcji"
-                    className="inline-flex shrink-0 items-center gap-0.5 rounded border border-accent-200 bg-accent-50 px-1.5 py-0.5 text-accent-700 hover:bg-accent-100"
-                  >
-                    <WheelIcon className="shrink-0" />
-                    Koło
-                  </button>
-                  {/* Kolo POWTORZENIOWE - te same pytania, pelne ocenianie (te same
-                      pytania sluza wiec i po lekcji, i na powtorce). Ukryte dla lekcji
-                      oceniajacego kola (np. lekcja zapoznawcza - tam kolo sluzy tylko
-                      przedstawianiu sie, powtorka na ocene nie ma sensu). Wystarczy
-                      dowolny slajd recap z trybem - wlasny zestaw lekcji jest wtedy
-                      materialem "na ocene" dla powtorki na nastepnej lekcji. */}
-                  {lesson.slides.some(
-                    (s) => s.kind === 'recap' && (s.mode === 'powtorzeniowe' || s.mode === 'po-lekcji'),
-                  ) && (
+                  {/* Kolo POWTORZENIOWE - pytania z tej lekcji, pelne ocenianie, na
+                      poczatku nastepnej lekcji (patrz src/lib/recap.ts). Dawny przycisk
+                      "Kolo" (tryb po-lekcji) USUNIETY - kolo na lekcji kreci sie ze
+                      slajdu zadania w prezentacji, nie z listy lekcji. Ukryte tylko dla
+                      lekcji zapoznawczej (kolo demo / "Przedstaw się" - powtorka na
+                      ocene z pytan "Poznajmy się" nie ma sensu). */}
                   <button
                     type="button"
                     onClick={() => navigate(`/powtorka/${classId}/${lesson.questionSetId}?tryb=powtorzeniowe`)}
@@ -168,7 +158,6 @@ export function LessonRow(p: LessonRowProps) {
                     <WheelIcon className="shrink-0" />
                     Koło powt.
                   </button>
-                  )}
                 </>
               )}
             </>

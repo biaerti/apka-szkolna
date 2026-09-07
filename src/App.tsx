@@ -12,6 +12,9 @@ import { LessonPresent } from './pages/LessonPresent';
 import { Textbook } from './pages/Textbook';
 import { Meetings } from './pages/Meetings';
 import { MeetingDetail } from './pages/MeetingDetail';
+import { Quizzes } from './pages/Quizzes';
+import { QuizDetail } from './pages/QuizDetail';
+import { QuizPresent } from './pages/QuizPresent';
 import { SettingsPage } from './pages/Settings';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
 import { RulesPrint } from './pages/RulesPrint';
@@ -24,6 +27,7 @@ export default function App() {
       <Route path="/powtorka/:classId/:setId" element={<RecapScreen />} />
       <Route path="/lekcje/:id/pokaz/:classId" element={<LessonPresent />} />
       <Route path="/lekcje/:id/pokaz" element={<LessonPresent />} />
+      <Route path="/kartkowki/:id/pokaz" element={<QuizPresent />} />
       {/* Wydruk zasad - bez paska bocznego, wlasny uklad A4 */}
       <Route path="/zasady/druk" element={<RulesPrint />} />
 
@@ -35,6 +39,8 @@ export default function App() {
         <Route path="/pytania/:id" element={<QuestionSetDetail />} />
         <Route path="/lekcje" element={<Lessons />} />
         <Route path="/lekcje/:id/edytuj" element={<LessonEditor />} />
+        <Route path="/kartkowki" element={<Quizzes />} />
+        <Route path="/kartkowki/:id" element={<QuizDetail />} />
         <Route path="/podrecznik" element={<Textbook />} />
         <Route path="/zebrania" element={<Meetings />} />
         <Route path="/zebrania/:id" element={<MeetingDetail />} />

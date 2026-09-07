@@ -142,8 +142,10 @@ export function LessonEditor() {
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Zestaw pytań do koła</label>
-            {/* Ten sam zestaw sluzy i kolu po lekcji, i kolu powtorzeniowemu na
-                poczatku nastepnej lekcji - patrz src/lib/recap.ts (RecapMode). */}
+            {/* Zestaw pytan do kola powtorzeniowego na poczatku nastepnej lekcji
+                (pytania inne niz zadania z lekcji). Kolo na lekcji nie korzysta
+                z zestawu - losuje osobe do zadania ze slajdu task. Stary tryb
+                po-lekcji - patrz src/lib/recap.ts (RecapMode). */}
             <div className="flex items-center gap-2">
               <Select
                 value={lesson.questionSetId ?? ''}

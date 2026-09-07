@@ -17,6 +17,7 @@ import type {
   Meeting,
   Question,
   QuestionSet,
+  Quiz,
   RecapEvent,
   SchoolClass,
   Settings,
@@ -47,6 +48,7 @@ interface AppState {
   lessons: Lesson[];
   recapEvents: RecapEvent[];
   meetings: Meeting[];
+  quizzes: Quiz[];
   settings: Settings;
   manuallyEditedLessonIds: ManuallyEditedLessonIds;
 
@@ -107,11 +109,16 @@ interface AppState {
   updateMeeting: (id: string, patch: Partial<Omit<Meeting, 'id'>>) => void;
   removeMeeting: (id: string) => void;
 
+  // Kartkowki i klasowki (per klasa; pytania to kopie tresci - patrz types.ts)
+  addQuiz: (quiz: Omit<Quiz, 'id' | 'createdAt'>) => Quiz;
+  updateQuiz: (id: string, patch: Partial<Omit<Quiz, 'id'>>) => void;
+  removeQuiz: (id: string) => void;
+
   // Ustawienia
   updateSettings: (patch: Partial<Settings>) => void;
 
   // Reset / import calego stanu
-  replaceAll: (data: Pick<AppState, 'classes' | 'students' | 'questionSets' | 'questions' | 'lessons' | 'recapEvents' | 'meetings' | 'settings'>) => void;
+  replaceAll: (data: Pick<AppState, 'classes' | 'students' | 'questionSets' | 'questions' | 'lessons' | 'recapEvents' | 'meetings' | 'quizzes' | 'settings'>) => void;
   resetToSeed: () => void;
 }
 
@@ -246,6 +253,7 @@ export const useStore = create<AppState>()(
       lessons: [],
       recapEvents: [],
       meetings: [],
+      quizzes: [],
       settings: {
         passesPerMonth: 2,
         hintGivesMinus: true,
@@ -277,6 +285,7 @@ export const useStore = create<AppState>()(
           // lekcje dopiero wtedy, gdy w roczniku nie zostala zadna klasa.
           lessons: removeClassFromLessons(s.lessons, s.classes, id),
           recapEvents: s.recapEvents.filter((e) => e.classId !== id),
+          quizzes: s.quizzes.filter((q) => q.classId !== id),
           questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
         }));
       },
@@ -423,6 +432,18 @@ export const useStore = create<AppState>()(
         set((s) => ({ meetings: s.meetings.filter((m) => m.id !== id) }));
       },
 
+      addQuiz: (quiz) => {
+        const created: Quiz = { ...quiz, id: newId(), createdAt: new Date().toISOString() };
+        set((s) => ({ quizzes: [...s.quizzes, created] }));
+        return created;
+      },
+      updateQuiz: (id, patch) => {
+        set((s) => ({ quizzes: s.quizzes.map((q) => (q.id === id ? { ...q, ...patch } : q)) }));
+      },
+      removeQuiz: (id) => {
+        set((s) => ({ quizzes: s.quizzes.filter((q) => q.id !== id) }));
+      },
+
       updateSettings: (patch) => {
         set((s) => ({ settings: { ...s.settings, ...patch } }));
       },
@@ -440,6 +461,7 @@ export const useStore = create<AppState>()(
           lessons: [],
           recapEvents: [],
           meetings: buildSeedMeetings(),
+          quizzes: [],
           settings: seed.settings,
           manuallyEditedLessonIds: {},
         }));
@@ -447,7 +469,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 11,
+      version: 12,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -480,6 +502,8 @@ export const useStore = create<AppState>()(
       // upraszcza kolo powtorzeniowe). Stara domyslna wartosc (7, nieruszana
       // recznie) dostaje nowa domyslna (5); inna wartosc (zmieniona recznie)
       // zostaje bez zmian.
+      // v11 -> v12: dochodzi kolekcja quizzes (zakladka "Kartkowki"). Stare
+      // dane dostaja pusta liste - kartkowki nie maja zadnego seeda.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -488,6 +512,7 @@ export const useStore = create<AppState>()(
           settings?: (Partial<Settings> & { passesPerWeek?: number }) | undefined;
           manuallyEditedLessonIds?: ManuallyEditedLessonIds;
           meetings?: Array<Record<string, unknown>>;
+          quizzes?: Array<Record<string, unknown>>;
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -547,6 +572,9 @@ export const useStore = create<AppState>()(
           // Stoper odpowiedzi doszedl pozniej - istniejace instalacje dostaja
           // domyslne 30 s (0 = nauczyciel go wylaczyl, tego nie ruszamy).
           state.settings = { ...state.settings, answerTimerSec: state.settings.answerTimerSec ?? 30 };
+        }
+        if (version < 12 && !Array.isArray(state.quizzes)) {
+          state.quizzes = [];
         }
         return state as unknown as AppState;
       },

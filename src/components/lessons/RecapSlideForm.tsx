@@ -35,13 +35,17 @@ export function RecapSlideForm({
       {mode !== 'demo' && (
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">Tryb rundy</label>
+          {/* Jedyny aktualny tryb slajdu recap to kolo powtorzeniowe. 'po-lekcji'
+              (stary tryb, wycofany - patrz src/lib/recap.ts) pokazujemy tylko wtedy,
+              gdy slajd juz go ma (stare dane), zeby Select nie stal na wartosci
+              bez opcji; wybor powtorzeniowego nadpisuje go na stale. */}
           <Select
             value={mode}
             onChange={(e) =>
-              onChange({ ...slide, mode: e.target.value === 'powtorzeniowe' ? 'powtorzeniowe' : 'po-lekcji' })
+              onChange({ ...slide, mode: e.target.value === 'po-lekcji' ? 'po-lekcji' : 'powtorzeniowe' })
             }
           >
-            <option value="po-lekcji">koło po lekcji (można tylko zyskać)</option>
+            {mode === 'po-lekcji' && <option value="po-lekcji">koło po lekcji (stary tryb)</option>}
             <option value="powtorzeniowe">koło powtórzeniowe (pełne ocenianie)</option>
           </Select>
         </div>

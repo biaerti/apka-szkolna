@@ -43,7 +43,7 @@ type RecapResult =
   | 'pass'         // uczen bierze pas (limit miesieczny)
   | 'hint_plomba'  // plomba dla podpowiadajacego
   | 'uwaga'        // niegrzeczne zachowanie (eskalacja w kole)
-  | 'rozliczenie'  // uczen oddal zadania naprawcze - zeruje licznik plomb
+  | 'rozliczenie'  // HISTORYCZNE (dawne zadania naprawcze) - zeruje licznik plomb, UI juz go nie tworzy
   | 'jedynka'      // plomby zamienione na ocene niedostateczna
   | 'piatka';      // plusy zamienione na ocene bardzo dobra
 interface RecapEvent {
@@ -176,32 +176,52 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
 Jedno zrodlo prawdy dla tresci: `src/data/zasady.ts` - zasila i wydruk `/zasady/druk`, i slajdy
 lekcji zapoznawczej. Logika: `src/lib/recap.ts`.
 
+- **Dwa kola** (nomenklatura kluczowa dla calego systemu, `RecapMode` w `src/lib/recap.ts`):
+  - **Kolo na lekcji** - po KAZDYM zadaniu (slajd `task`: Z1, Z2... ze stoperem) nauczyciel kreci
+    kolem i wylosowana osoba pokazuje swoje rozwiazanie. Mozna tylko zyskac: **plus** za dobrze
+    zrobione zadanie, **kropka** za zrobione slabo albo wcale; plomby ani pasa tu nie ma
+    (`LessonWheelResult`). To NIE jest slajd `recap` i nie ma pytan z zestawu - "pytaniem" jest
+    samo zadanie; zdarzenie dostaje `note` z kodem lekcji i zadania, np. `"4.3 Z2"`
+    (`lessonWheelNote`). Pula kola liczona jest ze zdarzen z DZISIEJSZEGO dnia (kto juz dzis
+    odpowiadal - takze na kole powtorzeniowym z poczatku tej lekcji - wypada z losowania, dopoki
+    reszta klasy nie byla); przeladowanie strony nie psuje puli, cofniecie oceny zwalnia sektor.
+    UI: szuflada kola na slajdzie zadania w prezentacji (`TaskWheelDrawer`, skrot `K`).
+  - **Kolo powtorzeniowe** - poczatek nastepnej lekcji, slajd `recap` z pytaniami z poprzedniego
+    tematu (INNE niz zadania z lekcji; tyle pytan, ile bylo zadan - zwykle 3-5). Gra sie o
+    wszystko: plus / kropka / plomba / pas.
+  - Dawne **kolo po lekcji** (`mode: 'po-lekcji'` - recap na koncu lekcji z tymi samymi pytaniami,
+    co potem na powtorce, mozna bylo tylko zyskac) jest WYCOFANE: dzieci odpowiadaly dwa razy na
+    to samo. Wartosc zostaje w typie wylacznie dla starych, nieodswiezonych lekcji w bazie
+    (edytor i pasek powtorki pokazuja ja jako "stary tryb"); nowy slajd `recap` dostaje
+    `mode: 'powtorzeniowe'`.
 - Odpowiedz oceniamy jako **plus** (bardzo dobra), **kropka** (czesciowa - zaliczone, bez plusa)
   albo **plomba** (zla albo brak). Slowo "minus" nie wystepuje w UI - ma nie budzic negatywnych
   skojarzen u dzieci.
 - **3 plusy = piatka, 3 plomby = jedynka** (progi w `Settings.plusesForFive` / `plombyForOne`).
-- 3 plomby nie sa jednak od razu jedynka: uczen dostaje **3 zadania naprawcze** z tych pytan, na
-  ktore nie umial odpowiedziec (stad `RecapEvent.questionId`). Przyniesie -> `rozliczenie`
-  (licznik plomb wraca do zera). Nie przyniesie -> `jedynka`.
+- Rozliczenie na koniec miesiaca (zakladka "Do rozliczenia" w widoku klasy): komplet plomb ->
+  `jedynka`, komplet plusow -> `piatka`. Zadnych zadan naprawczych (wycofane; stare zdarzenia
+  `rozliczenie` w bazie nadal zeruja licznik plomb).
 - Nie zglaszamy sie do odpowiedzi - losuje kolo. To gra.
 - Za podpowiadanie plomba dla podpowiadajacego (`hint_plomba`).
-- Kazdy ma **3 pasy w miesiacu** (`passesPerMonth`).
+- Kazdy ma **2 pasy w miesiacu** (`passesPerMonth`).
 - **Eskalacja za przeszkadzanie** (licznik uwag liczony z `RecapEvent` typu `uwaga` w biezacym
   miesiacu, zeruje sie 1. dnia miesiaca razem z pasami):
   1. pierwsza uwaga - ostrzezenie, bez skutkow mechanicznych,
-  2. druga (`WARN_NO_PLUS_AT`) - uczen traci mozliwosc zdobywania plusow,
-  3. trzecia (`WARN_DOUBLE_AT`) - uczen trafia do kola **podwojnie**; kazde dodatkowe wejscie to
-     jedno losowanie i jedno pytanie wiecej dla calej klasy.
+  2. druga i kazda kolejna (`WARN_NO_PLUS_AT`) - uczen traci mozliwosc zdobywania plusow do konca
+     miesiaca, w OBU kolach (na lekcji i powtorzeniowym). Tylko dwa stopnie - dawny trzeci
+     (podwojne wejscie do kola) wycofany.
 - Zasada lawek: nie siadamy w ostatnich lawkach, wszyscy w najblizszych - zeby nie krzyczec
   (mniej halasu i bodzcow).
 
 ## Schemat lekcji (uklad tresci)
-Kolo fortuny **zamyka i otwiera** lekcje. Domyslny uklad slajdow modulu tematycznego:
-1. powtorka z poprzedniego tematu -> slajd `recap`,
+Kolo powtorzeniowe **otwiera** lekcje, kolo na lekcji kreci sie **po kazdym zadaniu**, lekcja
+konczy sie notatka. Domyslny uklad slajdow modulu tematycznego:
+1. powtorka z poprzedniego tematu -> slajd `recap` (kolo powtorzeniowe, `mode: 'powtorzeniowe'`),
 2. `topic` - temat z kodem lekcji do zapisania w zeszycie,
-3. nowy temat: `title` / `text` / `read` / `task`,
-4. slajd `recap` z nowego tematu (kolo kreci sie 2-3 razy w ciagu tematu),
-5. slajd `note` - notatka do zeszytu ("zapisujecie notatke i jestescie wolni").
+3. nowy temat: `title` / `text` / `read` / `task` - po kazdym `task` kolo na lekcji (szuflada na
+   slajdzie zadania, bez osobnego slajdu),
+4. slajd `note` - notatka do zeszytu ("zapisujecie notatke i jestescie wolni") - ostatni slajd,
+   bez kola na koncu lekcji.
 
 Zestaw pytan do jednego bloku tematycznego: **5-6 krotkich pytan**. Bloki nie moga byc dlugie -
 to klasa czwarta.

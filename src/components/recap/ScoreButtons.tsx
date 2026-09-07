@@ -3,10 +3,13 @@
 // RecapMode):
 // - 'powtorzeniowe' - pelne ocenianie plus/kropka/plomba/pas. "Dobrze" jest
 //   wylaczone, gdy uczen ma juz 2 lub wiecej uwag w tym miesiacu (canEarnPlus).
-// - 'po-lekcji' (domyslny) - mozna tylko zyskac: tylko dwa przyciski, "Dobrze"
-//   i "Dalej" (neutralne, nic sie nie zapisuje). Nie ma tu "Źle" wcale - kolo
-//   po lekcji nigdy nie daje plomby. "Dobrze" jest wylaczone na tych samych
-//   zasadach co w kole powtorzeniowym (canEarnPlus - blokada dziala w OBU trybach).
+// - 'po-lekcji' - STARY tryb (wycofany, zostaje dla starych danych - patrz
+//   src/lib/recap.ts): mozna tylko zyskac: tylko dwa przyciski, "Dobrze" i
+//   "Dalej" (neutralne, nic sie nie zapisuje). Nie ma tu "Źle" wcale - ten tryb
+//   nigdy nie dawal plomby. "Dobrze" jest wylaczone na tych samych zasadach co
+//   w kole powtorzeniowym (canEarnPlus - blokada dziala w OBU trybach).
+//   Aktualne kolo NA LEKCJI (po kazdym zadaniu) nie korzysta z tego komponentu -
+//   ma wlasna szuflade na slajdzie zadania (TaskWheelDrawer).
 
 import type { RecapResult } from '../../data/types';
 import type { RecapMode } from '../../lib/recap';
@@ -17,7 +20,7 @@ export interface ScoreButtonsProps {
   graded: boolean;
   recapMode: RecapMode;
   onGrade: (result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>) => void;
-  /** "Dalej" w kole po lekcji - jak "gotowe, następny", nic nie zapisuje. */
+  /** "Dalej" w starym trybie po-lekcji - jak "gotowe, następny", nic nie zapisuje. */
   onSkip: () => void;
   canPass: boolean;
   canEarnPlus: boolean;

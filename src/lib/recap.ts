@@ -3,11 +3,15 @@
 // obliczanie docelowego kata obrotu kola.
 //
 // Zasady gry (patrz `src/data/zasady.ts` i wydruk /zasady/druk):
+// - dwa kola: KOLO NA LEKCJI (po kazdym zadaniu losuje, kto pokazuje
+//   rozwiazanie - mozna tylko zyskac: plus albo kropka, patrz sekcja "kolo na
+//   lekcji" nizej) i KOLO POWTORZENIOWE (na poczatku nastepnej lekcji, z
+//   wlasnymi pytaniami - gra sie o wszystko: plus / kropka / plomba / pas),
 // - odpowiedz oceniamy jako plus / kropka / plomba, mozna tez wziac pas,
 // - podpowiadanie = plomba dla podpowiadajacego,
 // - niegrzeczne zachowanie eskaluje TYLKO dwa stopnie: 1. ostrzezenie, 2. (i
 //   kazdy kolejny raz) brak mozliwosci zdobycia plusa do konca miesiaca - w
-//   ZADNYM kole (ani po lekcji, ani powtorzeniowym),
+//   ZADNYM kole (ani na lekcji, ani powtorzeniowym),
 // - wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
 //   zeruja sie 1. dnia miesiaca,
 // - na koniec miesiaca rozliczamy tez plusy, kropki i plomby: uzbierany komplet
@@ -17,9 +21,21 @@
 
 import type { RecapEvent, RecapResult, Settings, Slide, Student } from '../data/types';
 import { monthKey as toMonthKey } from './week';
+import { toDateKey } from './dates';
 
 // --- tryb rundy (slajd 'recap') ----------------------------------------------
 
+/**
+ * Tryb rundy slajdu `recap`:
+ * - 'powtorzeniowe' - kolo na poczatku lekcji z pytaniami z poprzedniego tematu,
+ *   pelne ocenianie; to JEDYNY tryb, jaki tworza dzis gotowe materialy,
+ * - 'demo' - lekcja zapoznawcza,
+ * - 'po-lekcji' - HISTORYCZNY: kolo na koncu lekcji z tymi samymi pytaniami
+ *   (mozna bylo tylko zyskac). Wycofane, bo dzieci odpowiadaly dwa razy na to
+ *   samo - zastapione kolem NA LEKCJI, ktore losuje osobe do kazdego zadania
+ *   (patrz sekcja "kolo na lekcji" nizej, bez slajdu recap). Wartosc zostaje w
+ *   typie tylko dla starych, nieodswiezonych lekcji w bazie.
+ */
 export type RecapMode = 'po-lekcji' | 'powtorzeniowe' | 'demo';
 
 /**
@@ -56,7 +72,7 @@ export function wheelEntriesFor(_warnings: number): number {
   return 1;
 }
 
-/** Czy uczen z taka liczba uwag moze jeszcze zdobyc plusa - dotyczy OBU kol (po lekcji i powtorzeniowego). */
+/** Czy uczen z taka liczba uwag moze jeszcze zdobyc plusa - dotyczy OBU kol (na lekcji i powtorzeniowego). */
 export function canEarnPlus(warnings: number): boolean {
   return warnings < WARN_NO_PLUS_AT;
 }
@@ -222,7 +238,8 @@ export interface QuestionAnswer {
   at: string;
 }
 
-const GRADED_RESULTS: RecapResult[] = ['plus', 'kropka', 'plomba', 'pass'];
+/** Wyniki, ktore znacza "uczen odpowiadal" (w odroznieniu od uwagi, podpowiedzi i adnotacji o ocenie). */
+export const GRADED_RESULTS: RecapResult[] = ['plus', 'kropka', 'plomba', 'pass'];
 
 /**
  * Historia odpowiedzi klasy per pytanie: kto juz to pytanie dostal i jak mu
@@ -307,6 +324,48 @@ export function earnedOne(events: RecapEvent[], studentId: string, settings: Set
 /** Czy uczen uzbieral komplet plusow na piatke (domyslnie 3). */
 export function earnedFive(events: RecapEvent[], studentId: string, settings: Settings): boolean {
   return outstandingPlusy(events, studentId).count >= settings.plusesForFive;
+}
+
+// --- kolo na lekcji (zadania) ------------------------------------------------
+//
+// Po kazdym zadaniu ze slajdu `task` nauczyciel kreci kolem i wylosowana osoba
+// pokazuje swoje rozwiazanie. To NIE jest slajd recap i nie ma pytan z zestawu
+// - "pytaniem" jest samo zadanie (Z1, Z2...). Mozna tylko zyskac.
+
+/**
+ * Ocena z kola NA LEKCJI: plus za dobrze zrobione zadanie, kropka za zadanie
+ * zrobione slabo albo wcale. Plomby ani pasa tu nie ma - na lekcji nie da sie
+ * nic stracic (tak jak kiedys na kole po lekcji).
+ */
+export type LessonWheelResult = Extract<RecapResult, 'plus' | 'kropka'>;
+
+/**
+ * Adnotacja zdarzenia z kola na lekcji - zamiast questionId (zadanie nie jest
+ * pytaniem z zestawu): kod lekcji i kod zadania, np. "4.3 Z2". Jedno miejsce,
+ * zeby bilans i ewentualny przyszly wglad "za co plus" czytaly to samo.
+ */
+export function lessonWheelNote(lessonCode: string | undefined, taskCode: string): string {
+  return lessonCode ? `${lessonCode} ${taskCode}` : taskCode;
+}
+
+/**
+ * Ile razy kazdy uczen klasy juz DZIS odpowiadal (dowolny wynik z
+ * GRADED_RESULTS: plus, kropka, plomba, pas) - podstawa puli kola na lekcji.
+ * Liczone z zapisanych zdarzen, nie ze stanu sesji: przeladowanie strony w
+ * srodku lekcji nie wraca tej samej osoby na kolo, a cofniecie oceny
+ * (usuniecie zdarzenia) samo zwalnia jej sektor. Wlicza tez kolo powtorzeniowe
+ * z poczatku tej samej lekcji - kto juz dzis odpowiadal, nie jest losowany do
+ * zadan, dopoki reszta klasy nie byla. `dayKey` = "RRRR-MM-DD" lokalnie
+ * (toDateKey), zdarzenia porownywane po lokalnej dacie `at`.
+ */
+export function answeredOnDay(events: RecapEvent[], classId: string, dayKey: string): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const e of events) {
+    if (e.classId !== classId || !GRADED_RESULTS.includes(e.result)) continue;
+    if (toDateKey(new Date(e.at)) !== dayKey) continue;
+    out.set(e.studentId, (out.get(e.studentId) ?? 0) + 1);
+  }
+  return out;
 }
 
 // --- kolejnosc i losowanie --------------------------------------------------

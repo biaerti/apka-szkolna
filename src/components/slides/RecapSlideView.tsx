@@ -20,6 +20,7 @@ export function RecapSlideView({
         onExit={onExit}
         embedded
         demoVariant={mode === 'demo'}
+        // 'po-lekcji' = stary tryb dla nieodswiezonych slajdow (patrz src/lib/recap.ts).
         recapMode={mode === 'powtorzeniowe' ? 'powtorzeniowe' : 'po-lekcji'}
       />
     </div>

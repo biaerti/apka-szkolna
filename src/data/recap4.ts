@@ -4,7 +4,12 @@
 // ortografia z wielka litera i skrotami, swiat przedstawiony z gatunkami i tekstami
 // kultury - kazda z wlasnym zestawem pytan do kola fortuny.
 // Rytm slajdow taki sam jak w powtorce klas 1-3 (recap13.ts): krotka regula (text)
-// -> zadanie do zeszytu ze stoperem (task) -> kolejna regula...
+// -> zadanie do zeszytu ze stoperem (task; po nim UI losuje kolem osobe, ktora
+// pokazuje rozwiazanie) -> kolejna regula... -> slajd "Zapamiętaj" -> notatka.
+// Zestaw pytan lekcji NIE jest odpytywany na jej koncu - sluzy wylacznie kolu
+// powtorzeniowemu na poczatku NASTEPNEJ lekcji (slajd recap, mode 'powtorzeniowe').
+// Dlatego zestaw ma tyle pytan, ile lekcja ma zadan (3-5): pytanie i. sprawdza te
+// sama umiejetnosc co zadanie Zi, ale na innym materiale i do odpowiedzi ustnej.
 // Wstawiane z ekranu Lekcje przyciskiem.
 
 import { newId } from './id';
@@ -48,29 +53,24 @@ function buildQuestionSet(
 /** Nazwa dzialu do naglowka na liscie lekcji - wszystkie lekcje tej powtorki naleza razem. */
 const DZIAL = 'Powtórka klasy 4';
 
-/** Tworzy 6 lekcji + 6 zestawow pytan wstepnych + 6 zestawow powtorkowych powtorki materialu klasy 4 dla wskazanego rocznika. */
+/**
+ * Tworzy 6 lekcji + 6 zestawow pytan powtorki materialu klasy 4 dla wskazanego rocznika.
+ * Kazda lekcja: tytul -> temat -> (od lekcji 2) kolo powtorzeniowe na zestawie poprzedniej
+ * lekcji -> regula -> zadanie (+ kolo na lekcji w UI) -> ... -> Zapamiętaj -> notatka.
+ * Zestaw lekcji ma dokladnie tyle pytan, ile lekcja ma slajdow task.
+ */
 export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   const set1 = buildQuestionSet(
     'Powtórka klasy 4: odmienne części mowy',
     'Odmienne części mowy',
     classIds,
+    // 4 pytania = 4 zadania lekcji 1 (Z1 odmiana przez przypadki, Z2 forma czasownika, Z3 stopniowanie, Z4 liczebniki).
     [
-      { text: 'Wymień cztery odmienne części mowy.', answer: 'rzeczownik, czasownik, przymiotnik, liczebnik (odmienia się też zaimek)' },
-      { text: 'Ile przypadków ma język polski? Wymień pierwsze trzy.', answer: '7 przypadków; mianownik, dopełniacz, celownik' },
-      { text: 'Na jakie pytania odpowiada dopełniacz?', answer: 'kogo? czego?' },
-      { text: 'Na jakie pytania odpowiada narzędnik?', answer: '(z) kim? (z) czym?' },
       { text: 'Odmień przez trzy pierwsze przypadki rzeczownik "pies".', answer: 'M. pies, D. psa, C. psu' },
-      { text: 'Jakie trzy rodzaje ma rzeczownik w liczbie pojedynczej?', answer: 'męski, żeński, nijaki' },
-      { text: 'Co określamy przy czasowniku poza osobą i liczbą?', answer: 'czas (przeszły, teraźniejszy, przyszły), a także rodzaj i tryb' },
-      { text: 'Podaj formę bezokolicznika czasownika "napisałem".', answer: 'napisać' },
-      { text: 'W jakiej osobie i liczbie jest forma "piszecie"?', answer: '2. osoba liczby mnogiej' },
-      { text: 'Wymień trzy stopnie przymiotnika na przykładzie wyrazu "miły".', answer: 'miły - milszy - najmilszy (równy, wyższy, najwyższy)' },
-      { text: 'Stopniuj przymiotnik "dobry".', answer: 'dobry - lepszy - najlepszy (stopniowanie nieregularne)' },
-      { text: 'Jak stopniujemy przymiotnik "kolorowy"?', answer: 'bardziej kolorowy - najbardziej kolorowy (stopniowanie opisowe)' },
-      { text: 'Czym różni się liczebnik główny od porządkowego? Podaj przykłady.', answer: 'główny odpowiada na pytanie ile? (pięć), porządkowy - który z kolei? (piąty)' },
-      { text: 'Jaką częścią mowy jest wyraz "trzeci"?', answer: 'liczebnikiem porządkowym' },
-      { text: 'Na jakie pytania odpowiada przymiotnik?', answer: 'jaki? jaka? jakie? który? czyj?' },
+      { text: 'W jakiej osobie, liczbie i czasie jest forma "piszecie"?', answer: '2. osoba liczby mnogiej, czas teraźniejszy' },
+      { text: 'Stopniuj przymiotnik "dobry". Jakie to stopniowanie?', answer: 'dobry - lepszy - najlepszy; stopniowanie nieregularne' },
+      { text: 'Jaki to liczebnik: "dziesiąty", a jaki "dziesięć"? Na jakie pytania odpowiadają?', answer: 'dziesiąty - porządkowy (który z kolei?), dziesięć - główny (ile?)' },
     ],
   );
 
@@ -78,22 +78,12 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     'Powtórka klasy 4: zdanie i wyrazy nieodmienne',
     'Składnia i wyrazy nieodmienne',
     classIds,
+    // 4 pytania = 4 zadania lekcji 2 (Z1 podmiot i orzeczenie, Z2 rodzaj wypowiedzenia, Z3 wyrazy nieodmienne, Z4 pisownia "nie").
     [
-      { text: 'Co to jest orzeczenie i jaką częścią mowy najczęściej jest wyrażone?', answer: 'mówi, co robi podmiot; najczęściej czasownikiem w formie osobowej' },
-      { text: 'Na jakie pytania odpowiada podmiot?', answer: 'kto? co?' },
-      { text: 'Wskaż podmiot i orzeczenie w zdaniu: "Mała Zosia czyta ciekawą książkę."', answer: 'podmiot: Zosia, orzeczenie: czyta' },
-      { text: 'Czym różni się zdanie pojedyncze rozwinięte od nierozwiniętego?', answer: 'nierozwinięte ma tylko podmiot i orzeczenie, rozwinięte ma dodatkowe określenia' },
-      { text: 'Ile orzeczeń ma zdanie złożone?', answer: 'co najmniej dwa - tyle zdań składowych, ile orzeczeń' },
-      { text: 'Co to jest równoważnik zdania? Podaj przykład.', answer: 'wypowiedzenie bez orzeczenia, np. "Cisza!", "Zakaz wstępu"' },
-      { text: 'Zamień na równoważnik zdania: "Proszę zamknąć drzwi."', answer: 'np. "Zamykać drzwi!" albo "Drzwi zamknięte"' },
-      { text: 'Wymień trzy części mowy, które się nie odmieniają.', answer: 'przysłówek, przyimek, spójnik (a także wykrzyknik i partykuła)' },
-      { text: 'Na jakie pytania odpowiada przysłówek?', answer: 'jak? gdzie? kiedy?' },
-      { text: 'Od jakiej części mowy tworzymy przysłówek "wesoło"?', answer: 'od przymiotnika "wesoły"' },
-      { text: 'Podaj trzy przyimki.', answer: 'np. w, na, pod, nad, za, przy, do, od' },
-      { text: 'Jak piszemy "nie" z czasownikiem? Podaj przykład.', answer: 'osobno: nie wiem, nie pójdę' },
-      { text: 'Jak piszemy "nie" z rzeczownikiem i przymiotnikiem? Podaj przykłady.', answer: 'razem: nieprawda, niegrzeczny' },
-      { text: 'Popraw zapis: "Nieznam tego chłopca."', answer: '"Nie znam tego chłopca" - nie z czasownikiem piszemy osobno' },
-      { text: 'Jaki znak stawiamy przed spójnikami: że, ale, bo, więc?', answer: 'przecinek' },
+      { text: 'Wskaż podmiot i orzeczenie w zdaniu: "Mały kotek pije mleko z miski."', answer: 'podmiot: kotek, orzeczenie: pije' },
+      { text: 'Jakie to wypowiedzenie: "Uwaga, stopień!", a jakie: "Dzieci biegają, a pies szczeka"?', answer: 'pierwsze - równoważnik zdania (bez orzeczenia), drugie - zdanie złożone (dwa orzeczenia: biegają, szczeka)' },
+      { text: 'Znajdź przysłówek, przyimek i spójnik w zdaniu: "Dzisiaj siedziałem pod drzewem i czytałem."', answer: 'przysłówek: dzisiaj, przyimek: pod, spójnik: i' },
+      { text: 'Jak zapiszesz "nie" z wyrazami: lubię, porządek, miły? Dlaczego?', answer: 'nie lubię (osobno - czasownik), nieporządek (razem - rzeczownik), niemiły (razem - przymiotnik)' },
     ],
   );
 
@@ -101,22 +91,12 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     'Powtórka klasy 4: środki poetyckie i formy wypowiedzi',
     'Środki poetyckie i formy wypowiedzi',
     classIds,
+    // 4 pytania = 4 zadania lekcji 3 (Z1 srodki poetyckie, Z2 budowa wiersza, Z3 list, Z4 ogloszenie).
     [
-      { text: 'Co to jest epitet? Podaj przykład.', answer: 'określenie rzeczownika, najczęściej przymiotnik, np. "zielona łąka"' },
-      { text: 'Po jakich wyrazach poznajemy porównanie?', answer: 'po wyrazach: jak, jakby, niby, niczym' },
-      { text: 'Ułóż porównanie ze słowem "szybki".', answer: 'np. "szybki jak błyskawica"' },
-      { text: 'Co to jest wyraz dźwiękonaśladowczy? Podaj dwa przykłady.', answer: 'wyraz naśladujący dźwięk, np. bzyk, szur, plum, tik-tak' },
-      { text: 'Co to jest uosobienie?', answer: 'nadanie rzeczy, zwierzęciu lub zjawisku cech człowieka, np. "wiatr śpiewał"' },
-      { text: 'Czym jest ożywienie? Podaj przykład.', answer: 'nadanie przedmiotowi cech istoty żywej, np. "słońce się budzi"' },
-      { text: 'Jak nazywa się jedna linijka wiersza?', answer: 'wers' },
-      { text: 'Jak inaczej nazywamy zwrotkę wiersza?', answer: 'strofa' },
-      { text: 'Co to jest refren?', answer: 'powtarzający się fragment wiersza lub piosenki' },
-      { text: 'Kto wypowiada się w wierszu, a kto w opowiadaniu?', answer: 'w wierszu podmiot liryczny, w opowiadaniu narrator' },
-      { text: 'Czym różni się narracja pierwszoosobowa od trzecioosobowej?', answer: 'pierwszoosobowa: narrator mówi "ja", jest bohaterem; trzecioosobowa: opowiada z zewnątrz' },
+      { text: 'Jaki to środek poetycki: "cichy wieczór", "zimny jak lód", "kap, kap"?', answer: 'epitet, porównanie, wyraz dźwiękonaśladowczy' },
+      { text: 'Jak nazywa się jedna linijka wiersza, a jak zwrotka? Co to jest rym?', answer: 'linijka to wers, zwrotka to strofa; rym to podobne zakończenie wersów, np. kot - płot' },
       { text: 'Wymień cztery elementy listu.', answer: 'miejscowość i data, nagłówek, treść, zwrot pożegnalny i podpis' },
-      { text: 'Co musi zawierać ogłoszenie?', answer: 'czego dotyczy, kiedy i gdzie, kontakt do osoby ogłaszającej' },
-      { text: 'Czym różni się dialog od monologu?', answer: 'dialog to rozmowa co najmniej dwóch osób, monolog to wypowiedź jednej' },
-      { text: 'Jakim znakiem zapisujemy wypowiedzi w dialogu?', answer: 'myślnikiem na początku każdej wypowiedzi (nowa linia)' },
+      { text: 'Na jakie trzy pytania musi odpowiadać ogłoszenie?', answer: 'czego dotyczy, kiedy i gdzie, kto je zamieszcza (kontakt)' },
     ],
   );
 
@@ -124,22 +104,11 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     'Powtórka klasy 4: słownictwo i frazeologia',
     'Słownictwo',
     classIds,
+    // 3 pytania = 3 zadania lekcji 4 (Z1 rdzen, Z2 wyraz wieloznaczny, Z3 frazeologizmy).
     [
-      { text: 'Co to jest rodzina wyrazów?', answer: 'grupa wyrazów ze wspólną cząstką i wspólnym znaczeniem, np. dom, domek, domowy' },
-      { text: 'Jak nazywa się wspólna cząstka wszystkich wyrazów z jednej rodziny?', answer: 'rdzeń (wspólna cząstka)' },
-      { text: 'Podaj rdzeń wyrazów: pisać, pisarz, napis, pisemny.', answer: 'pis' },
-      { text: 'Który wyraz jest podstawowy, a który pochodny: las - leśniczy?', answer: 'podstawowy: las, pochodny: leśniczy (powstał od lasu)' },
-      { text: 'Co to jest wyraz wieloznaczny? Podaj przykład.', answer: 'wyraz o kilku różnych znaczeniach, np. zamek: budowla, w kurtce, w drzwiach' },
-      { text: 'Podaj dwa znaczenia wyrazu "klucz".', answer: 'np. klucz do drzwi, klucz żurawi, klucz wiolinowy, klucz do zadania' },
-      { text: 'Co to jest synonim? Podaj synonim słowa "mądry".', answer: 'wyraz bliskoznaczny; np. rozumny, bystry, inteligentny' },
-      { text: 'Co to jest antonim? Podaj antonim słowa "odważny".', answer: 'wyraz o znaczeniu przeciwnym; tchórzliwy' },
-      { text: 'Po co używamy synonimów w wypracowaniu?', answer: 'żeby nie powtarzać w kółko tego samego wyrazu' },
-      { text: 'Co to jest zdrobnienie? Podaj zdrobnienie od "kot".', answer: 'forma mniejsza i czulsza; kotek, koteczek' },
-      { text: 'Co to jest zgrubienie? Podaj zgrubienie od "pies".', answer: 'forma większa i niemiła; psisko' },
-      { text: 'Co to jest związek frazeologiczny?', answer: 'stałe połączenie wyrazów o znaczeniu przenośnym, np. wziąć nogi za pas' },
-      { text: 'Co znaczy "wziąć nogi za pas"?', answer: 'szybko uciec' },
+      { text: 'Jaki rdzeń mają wyrazy: woda, wodny, podwodny? Dodaj jeden wyraz z tej rodziny.', answer: 'rdzeń wod-; np. wodnik, wodospad, wodować' },
+      { text: 'Podaj dwa różne znaczenia wyrazu "pilot".', answer: 'np. pilot samolotu i pilot do telewizora (także pilot wycieczki)' },
       { text: 'Co znaczy "mieć muchy w nosie"?', answer: 'być obrażonym, w złym humorze' },
-      { text: 'Co znaczy "biały kruk"?', answer: 'rzecz bardzo rzadka i cenna, np. stara książka' },
     ],
   );
 
@@ -147,22 +116,11 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     'Powtórka klasy 4: ortografia, wielka litera i skróty',
     'Ortografia i interpunkcja',
     classIds,
+    // 3 pytania = 3 zadania lekcji 5 (Z1 uzasadnienie pisowni, Z2 wielka litera, Z3 znaki interpunkcyjne).
     [
-      { text: 'Kiedy piszemy ó wymienne? Podaj przykład z wymianą.', answer: 'gdy wymienia się na o, e albo a: stół - stoły, siódmy - siedem, skrócić - skracać' },
-      { text: 'Podaj trzy wyrazy, w których ó trzeba zapamiętać.', answer: 'np. ogórek, wróbel, król, córka, chór, mózg' },
-      { text: 'Kiedy piszemy rz, a kiedy ż? Podaj wymianę dla obu.', answer: 'rz wymienia się na r (morze - morski), ż na g lub z (może - mogę, wożę - wozy)' },
-      { text: 'Po jakich literach piszemy rz? Podaj dwa przykłady.', answer: 'po b, p, d, t, g, k, ch, j, w: brzeg, przerwa, drzewo, krzak' },
-      { text: 'Kiedy piszemy ch? Podaj zasadę i przykład.', answer: 'gdy wymienia się na sz (mucha - muszka) i zawsze na końcu wyrazu (dach)' },
-      { text: 'Popraw zapis: "Mieszkam w krakowie przy ulicy długiej."', answer: 'Mieszkam w Krakowie przy ulicy Długiej.' },
-      { text: 'Czy nazwy świąt piszemy wielką literą? Podaj przykład.', answer: 'tak: Boże Narodzenie, Wielkanoc, Dzień Matki' },
-      { text: 'Jak zapisujemy tytuł książki?', answer: 'wielką literą pierwszy wyraz i w cudzysłowie: "Akademia pana Kleksa"' },
-      { text: 'Czy nazwy dni tygodnia i miesięcy piszemy wielką literą?', answer: 'nie, małą: poniedziałek, marzec' },
-      { text: 'Czym różni się nazwa własna od pospolitej? Podaj parę przykładów.', answer: 'własna nazywa konkretną osobę lub miejsce (Burek, Wisła), pospolita całą grupę (pies, rzeka)' },
-      { text: 'Co oznaczają skróty: np., itd., itp.?', answer: 'na przykład, i tak dalej, i tym podobne' },
-      { text: 'Dlaczego skrót "dr" piszemy bez kropki?', answer: 'bo kończy się ostatnią literą całego wyrazu (doktor)' },
-      { text: 'Jak zapisujemy wypowiedzi w dialogu?', answer: 'każdą od nowej linii, zaczynając od myślnika' },
-      { text: 'Do czego służy dwukropek? Podaj przykład.', answer: 'zapowiada wyliczenie lub czyjeś słowa: "Kupiłem: chleb, masło i ser"' },
-      { text: 'Popraw zapis: "Byłem u lekarza dr. kowalskiego."', answer: 'Byłem u lekarza dr. Kowalskiego - nazwisko wielką literą.' },
+      { text: 'Dlaczego w wyrazie "lód" piszemy ó, a w "morze" rz? Podaj wymiany.', answer: 'lód - lody (ó wymienia się na o), morze - morski (rz wymienia się na r)' },
+      { text: 'Które z tych wyrazów napiszesz wielką literą: wisła, wtorek, wielkanoc, maj, warszawa?', answer: 'Wisła, Wielkanoc, Warszawa (nazwy własne i święto); wtorek i maj małą literą' },
+      { text: 'Jakie znaki wstawisz: "Czy lubisz lody" oraz "Zabrałem trzy rzeczy zeszyt długopis i linijkę"?', answer: 'pytajnik na końcu pytania; dwukropek przed wyliczeniem i przecinek: "Zabrałem trzy rzeczy: zeszyt, długopis i linijkę."' },
     ],
   );
 
@@ -170,22 +128,11 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     'Powtórka klasy 4: świat przedstawiony, gatunki, teatr i film',
     'Odbiór tekstów kultury',
     classIds,
+    // 3 pytania = 3 zadania lekcji 6 (Z1 swiat przedstawiony, Z2 realizm i fantastyka, Z3 komiks).
     [
-      { text: 'Wymień cztery elementy świata przedstawionego.', answer: 'czas, miejsce, bohaterowie, wydarzenia' },
-      { text: 'Na jakie pytanie odpowiada "miejsce" w świecie przedstawionym?', answer: 'gdzie dzieje się akcja?' },
-      { text: 'Co to jest fikcja literacka?', answer: 'świat wymyślony przez autora, choć może przypominać prawdziwy' },
-      { text: 'Czym różnią się elementy realistyczne od fantastycznych?', answer: 'realistyczne mogłyby zdarzyć się naprawdę, fantastyczne nie (magia, smoki, latający dywan)' },
-      { text: 'Po czym poznajesz baśń?', answer: 'po magii, zmyślonym świecie i zwrocie "dawno, dawno temu"' },
-      { text: 'Czym różni się legenda od baśni?', answer: 'legenda tłumaczy pochodzenie prawdziwego miejsca lub wydarzenia' },
-      { text: 'Co wyjaśnia mit? Podaj przykład.', answer: 'pochodzenie świata i zjawisk, opowiada o bogach; np. mit o Prometeuszu' },
-      { text: 'Kto jest bohaterem bajki i co jest na jej końcu?', answer: 'zwierzęta zachowujące się jak ludzie; na końcu morał' },
-      { text: 'Co to jest komiks?', answer: 'opowieść w kadrach, obrazkach, z tekstem w dymkach' },
-      { text: 'Jak nazywa się tekst w komiksie zapisany w chmurce przy postaci?', answer: 'dymek' },
-      { text: 'Wymień trzy elementy spektaklu teatralnego.', answer: 'np. scena, aktorzy, scenografia, kostiumy, reżyser, widownia' },
-      { text: 'Wymień trzy elementy dzieła filmowego.', answer: 'np. kamera i zdjęcia, montaż, muzyka, reżyser, plan filmowy, aktorzy' },
-      { text: 'Czym różni się teatr od filmu?', answer: 'w teatrze aktorzy grają na żywo na scenie, film jest nagrany i oglądamy go na ekranie' },
-      { text: 'Co to jest adaptacja?', answer: 'przerobienie utworu literackiego na film albo spektakl' },
-      { text: 'Kto kieruje pracą aktorów i w teatrze, i w filmie?', answer: 'reżyser' },
+      { text: 'Wymień cztery elementy świata przedstawionego i pytania, na które odpowiadają.', answer: 'czas (kiedy?), miejsce (gdzie?), bohaterowie (kto?), wydarzenia (co się dzieje?)' },
+      { text: 'Co jest realistyczne, a co fantastyczne: "chłopiec gubi klucze", "czarownica leci na miotle"? Po czym poznajesz?', answer: 'pierwsze realistyczne - mogłoby zdarzyć się naprawdę; drugie fantastyczne - magia, nie zdarzy się naprawdę' },
+      { text: 'Jak zbudowany jest komiks? Gdzie zapisuje się słowa postaci?', answer: 'to opowieść w obrazkach ułożonych w kadry; słowa postaci są w dymkach' },
     ],
   );
 
@@ -264,12 +211,10 @@ Liczebnik porządkowy zapisany cyfrą ma kropkę: **5. miejsce** znaczy "piąte 
 5. dwadzieścia jeden
 
 Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- odmienne: **rzeczownik, czasownik, przymiotnik, liczebnik**
+      slideText('Zapamiętaj', `- odmienne: **rzeczownik, czasownik, przymiotnik, liczebnik**
 - rzeczownik odmienia się przez **7 przypadków**, liczby i rodzaje
 - czasownik ma **osobę, liczbę i czas**, a bez nich jest **bezokolicznikiem**
 - przymiotnik stopniujemy: **równy - wyższy - najwyższy**`),
-      slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Odmienne: rzeczownik, czasownik, przymiotnik, liczebnik, zaimek.
@@ -293,8 +238,8 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
     slides: [
       slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/6'),
       slideTopic('Zdanie i wyrazy nieodmienne'),
-      // Kolo na start: wracamy do tematu z lekcji 1 (odmienne czesci mowy) tym samym zestawem, w trybie powtorzeniowym.
-      slideRecap(set1.set.id, 'powtorzeniowe'),
+      // Kolo na start: wracamy do tematu z lekcji 1 (odmienne czesci mowy) zestawem tamtej lekcji.
+      slideRecap(set1.set.id),
       slideText('Co dziś powtarzamy', `- Podmiot i orzeczenie
 - Zdanie pojedyncze, złożone i równoważnik
 - Przysłówek, przyimek, spójnik
@@ -355,12 +300,10 @@ Najczęstszy błąd to "niewiem" - zapamiętaj: przy czasowniku **nie** stoi zaw
 5. (nie)ładny
 
 Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **orzeczenie** - co robi (czasownik), **podmiot** - kto? co?
+      slideText('Zapamiętaj', `- **orzeczenie** - co robi (czasownik), **podmiot** - kto? co?
 - zdanie **złożone** ma co najmniej **dwa orzeczenia**
 - **równoważnik** nie ma orzeczenia
 - **nie** z czasownikiem **osobno**, z rzeczownikiem i przymiotnikiem **razem**`),
-      slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Orzeczenie - co robi. Podmiot - kto? co?
@@ -384,8 +327,8 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
     slides: [
       slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/6'),
       slideTopic('Środki poetyckie'),
-      // Kolo na start: wracamy do tematu z lekcji 2 (zdanie, wyrazy nieodmienne) tym samym zestawem, w trybie powtorzeniowym.
-      slideRecap(set2.set.id, 'powtorzeniowe'),
+      // Kolo na start: wracamy do tematu z lekcji 2 (zdanie, wyrazy nieodmienne) zestawem tamtej lekcji.
+      slideRecap(set2.set.id),
       slideText('Co dziś powtarzamy', `- Epitet, porównanie, przenośnia, ożywienie
 - Wers, strofa, rym, refren
 - Narrator i podmiot liryczny
@@ -454,12 +397,10 @@ Treść: 3-4 zdania. Masz 6 minut.`, undefined, 360),
 Musi być w nim: czego dotyczy, kiedy i gdzie przynosić, kto organizuje.
 
 Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **epitet** określa, **porównanie** ma "jak", **przenośnia** mówi nie wprost
+      slideText('Zapamiętaj', `- **epitet** określa, **porównanie** ma "jak", **przenośnia** mówi nie wprost
 - **wers** to linijka, **strofa** to zwrotka
 - w wierszu mówi **podmiot liryczny**, w opowiadaniu **narrator**
 - list: data, nagłówek, treść, podpis`),
-      slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Epitet określa (zielona łąka), porównanie ma jak/niby.
@@ -483,8 +424,8 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
     slides: [
       slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/6'),
       slideTopic('Słownictwo i frazeologia'),
-      // Kolo na start: wracamy do tematu z lekcji 3 (srodki poetyckie, formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
-      slideRecap(set3.set.id, 'powtorzeniowe'),
+      // Kolo na start: wracamy do tematu z lekcji 3 (srodki poetyckie, formy wypowiedzi) zestawem tamtej lekcji.
+      slideRecap(set3.set.id),
       slideText('Co dziś powtarzamy', `- Rodzina wyrazów i rdzeń
 - Synonimy i antonimy
 - Wyrazy wieloznaczne
@@ -540,12 +481,10 @@ Frazeologizmów szukamy w **słowniku frazeologicznym**.`, 'frazeologizm'),
 4. złapać byka za rogi
 
 Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **rodzina wyrazów** ma wspólny **rdzeń**
+      slideText('Zapamiętaj', `- **rodzina wyrazów** ma wspólny **rdzeń**
 - **synonim** znaczy prawie to samo, **antonim** odwrotnie
 - **wyraz wieloznaczny** ma kilka znaczeń - decyduje zdanie
 - **frazeologizm** rozumiemy **przenośnie**, nie dosłownie`),
-      slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Rodzina wyrazów - wspólny rdzeń: dom, domek, domowy.
@@ -569,8 +508,8 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
     slides: [
       slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/6'),
       slideTopic('Ortografia i wielka litera'),
-      // Kolo na start: wracamy do tematu z lekcji 4 (slownictwo i frazeologia) tym samym zestawem, w trybie powtorzeniowym.
-      slideRecap(set4.set.id, 'powtorzeniowe'),
+      // Kolo na start: wracamy do tematu z lekcji 4 (slownictwo i frazeologia) zestawem tamtej lekcji.
+      slideRecap(set4.set.id),
       slideText('Co dziś powtarzamy', `- Ó i u, rz i ż, ch i h: wymiany oraz reguły
 - Wielka litera w nazwach własnych
 - Skróty i kropka w skrócie
@@ -626,12 +565,10 @@ Zasada: skrót urwany w środku wyrazu - z kropką; skrót sięgający ostatniej
 4. Wiem że dasz radę
 
 Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz
+      slideText('Zapamiętaj', `- **ó** wymienia się na o/e/a, **rz** na r, **ż** na g/z, **ch** na sz
 - **rz** po b, p, d, t, g, k, ch, j, w; **ch** na końcu wyrazu
 - **nazwy własne i święta** wielką literą, **dni i miesiące** małą
 - skrót obciętego wyrazu ma **kropkę**`),
-      slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Ó - wymiana na o/e/a. Rz - na r. Ż - na g/z. Ch - na sz.
@@ -655,8 +592,8 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
     slides: [
       slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/6'),
       slideTopic('Świat przedstawiony'),
-      // Kolo na start: wracamy do tematu z lekcji 5 (ortografia, wielka litera, skroty) tym samym zestawem, w trybie powtorzeniowym.
-      slideRecap(set5.set.id, 'powtorzeniowe'),
+      // Kolo na start: wracamy do tematu z lekcji 5 (ortografia, wielka litera, skroty) zestawem tamtej lekcji.
+      slideRecap(set5.set.id),
       slideText('Co dziś powtarzamy', `- Świat przedstawiony utworu
 - Fikcja, elementy realistyczne i fantastyczne
 - Baśń, legenda, mit, bajka, komiks
@@ -706,12 +643,10 @@ Nie musi być ładnie - ma być czytelnie i po kolei.`, undefined, 420),
 W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
 
 **Adaptacja** to książka przerobiona na film albo spektakl.`, 'teatrFilm'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- świat przedstawiony: **czas, miejsce, bohaterowie, wydarzenia**
+      slideText('Zapamiętaj', `- świat przedstawiony: **czas, miejsce, bohaterowie, wydarzenia**
 - **fantastyczne** nie mogłoby zdarzyć się naprawdę
 - **baśń** - magia, **legenda** - prawdziwe miejsce, **mit** - bogowie, **bajka** - morał
 - **adaptacja** - książka przerobiona na film albo spektakl`),
-      slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.
@@ -780,8 +715,9 @@ function slideTask(
   };
 }
 
-function slideRecap(questionSetId: string, mode?: 'po-lekcji' | 'powtorzeniowe'): Slide {
-  return { id: newId(), kind: 'recap', questionSetId, ...(mode ? { mode } : {}) };
+/** Kolo powtorzeniowe na poczatku lekcji - jedyny rodzaj slajdu recap w tej powtorce (zestaw poprzedniej lekcji). */
+function slideRecap(questionSetId: string): Slide {
+  return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' };
 }
 
 function slideNote(title: string, body: string): Slide {

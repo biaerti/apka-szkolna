@@ -1,12 +1,17 @@
 // Gotowa powtorka materialu klas 1-3 - jezyk polski.
 // Dwanascie lekcji (modul = 1-2 godziny lekcyjne): fonetyka+ortografia, gramatyka+interpunkcja,
 // formy wypowiedzi i czytanie, alfabet+slownictwo, zmiekczenia+interpunkcja,
-// czytanie ze zrozumieniem+krotkie formy - kazda z wlasnym zestawem pytan do kola fortuny.
+// czytanie ze zrozumieniem+krotkie formy, bohater i nastroj, opowiadanie, formy uzytkowe,
+// slownictwo, skladnia, zapis i poprawnosc - kazda z wlasnym zestawem pytan do kola fortuny.
 // Zakres wynika z podstawy programowej I etapu (edukacja polonistyczna: sluchanie,
 // mowienie, czytanie, pisanie, ksztalcenie jezykowe, samoksztalcenie).
-// Rytm slajdow: krotka regula z ilustracja (text) -> zadanie do zeszytu ze
-// stoperem i TA SAMA ilustracja (task) -> kolejna regula... W klasach 1-3 kazdy
-// slajd tresciowy ma obrazek, a notatka do zeszytu ma najwyzej trzy punkty.
+// Rytm slajdow: (od lekcji 2) kolo powtorzeniowe na zestawie POPRZEDNIEJ lekcji (recap) ->
+// krotka regula z ilustracja (text) -> zadanie do zeszytu ze stoperem i TA SAMA ilustracja
+// (task; po zadaniu UI losuje kolem osobe, ktora pokazuje rozwiazanie) -> kolejna regula...
+// -> slajd "Zapamiętaj" -> notatka do zeszytu. Na koncu lekcji NIE MA kola z pytaniami:
+// zestaw pytan lekcji sluzy wylacznie kolu powtorzeniowemu na poczatku nastepnej lekcji,
+// a pytan jest dokladnie tyle, ile zadan (kazde sprawdza umiejetnosc z zadania Zi na innym
+// materiale). W klasach 1-3 kazdy slajd tresciowy ma obrazek, a notatka ma najwyzej trzy punkty.
 // Wstawiane z ekranu Lekcje przyciskiem.
 
 import { newId } from './id';
@@ -50,28 +55,23 @@ function buildQuestionSet(
 /** Nazwa dzialu do naglowka na liscie lekcji - wszystkie lekcje tej powtorki naleza razem. */
 const DZIAL = 'Powtórka 1-3';
 
-/** Tworzy 6 lekcji + 6 zestawow pytan wstepnych + 6 zestawow powtorkowych powtorki klas 1-3 dla wskazanego rocznika. */
+/** Tworzy 12 lekcji + 12 zestawow pytan powtorki klas 1-3 dla wskazanego rocznika (zestaw lekcji N kreci sie na poczatku lekcji N+1). */
 export function buildRecap13(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
+  // Kazdy zestaw ma DOKLADNIE tyle pytan, ile lekcja ma zadan (Z1, Z2...): pytanie i.
+  // sprawdza te sama umiejetnosc co zadanie Zi, ale na innym materiale, tak by dalo
+  // sie odpowiedziec ustnie w 1-2 zdaniach. Zestaw sluzy WYLACZNIE kolu
+  // powtorzeniowemu na poczatku nastepnej lekcji (set12 zostaje na "Koło powt.").
   const set1 = buildQuestionSet(
     'Powtórka 1-3: głoski, sylaby, ortografia',
     'Fonetyka i ortografia',
     classIds,
     [
-      { text: 'Ile liter ma alfabet polski?', answer: '32 litery (w tym ą, ć, ę, ł, ń, ó, ś, ź, ż)' },
-      { text: 'Wymień wszystkie samogłoski w języku polskim.', answer: 'a, e, i, o, u, y, ą, ę (8 samogłosek)' },
-      { text: 'Podziel na sylaby wyraz: biblioteka.', answer: 'bi-blio-te-ka (4 sylaby)' },
-      { text: 'Podziel na sylaby wyraz: kredka.', answer: 'kred-ka (2 sylaby)' },
-      { text: 'Ile głosek i ile liter ma wyraz dzień?', answer: '3 głoski (dź-e-ń), 5 liter' },
-      { text: 'Ile głosek i ile liter ma wyraz ciocia?', answer: '4 głoski (ć-o-ć-a), 6 liter' },
-      { text: 'Co to jest dwuznak? Podaj przykład.', answer: 'dwie litery zapisujące jedną głoskę, np. sz, cz, rz, ch, dz, dż, dź' },
-      { text: 'Jak piszemy: kr_l? ó czy u?', answer: 'król - ó, bo wymienia się na o: król - królowie' },
-      { text: 'Jak piszemy: w_zek? ó czy u?', answer: 'wózek - ó, bo wymienia się na o: wózek - wozy' },
-      { text: 'Jak piszemy: si_dmy? ó czy u?', answer: 'siódmy - ó, bo wymienia się na e: siódmy - siedem' },
-      { text: 'Jak piszemy: sk_ra? ó czy u?', answer: 'skóra - ó, pisownię trzeba zapamiętać (nie ma wymiany)' },
-      { text: 'Jak piszemy: mo_e (zbiornik wodny)? rz czy ż?', answer: 'morze - rz, bo wymienia się na r: morze - morski' },
-      { text: 'Jak piszemy: mo_e (być może)? rz czy ż?', answer: 'może - ż, bo wymienia się na g: może - mogę' },
-      { text: 'Jak piszemy: mu_a (owad)? ch czy h?', answer: 'mucha - ch, bo wymienia się na sz: mucha - muszka' },
+      { text: 'Ile samogłosek ma wyraz: zeszyt?', answer: '2 samogłoski (e, y) - y też jest samogłoską' },
+      { text: 'Podziel na sylaby wyraz: czekolada.', answer: 'cze-ko-la-da (4 sylaby)' },
+      { text: 'Ile głosek i ile liter ma wyraz czapka?', answer: '5 głosek (cz-a-p-k-a), 6 liter - cz to dwuznak' },
+      { text: 'Jak piszemy: l_d (zamarznięta woda)? ó czy u?', answer: 'lód - ó, bo wymienia się na o: lód - lody' },
+      { text: 'Jak piszemy: ma_ec (miesiąc)? rz czy ż?', answer: 'marzec - rz, bo wymienia się na r: marzec - marca' },
     ],
   );
 
@@ -80,20 +80,10 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Gramatyka i interpunkcja',
     classIds,
     [
-      { text: 'Na jakie pytania odpowiada rzeczownik?', answer: 'kto? co?' },
-      { text: 'Na jakie pytania odpowiada czasownik?', answer: 'co robi? co się z nim dzieje?' },
-      { text: 'Na jakie pytania odpowiada przymiotnik?', answer: 'jaki? jaka? jakie?' },
-      { text: 'Jaka to część mowy: biegnie?', answer: 'czasownik' },
-      { text: 'Jaka to część mowy: wesoły?', answer: 'przymiotnik' },
-      { text: 'Jaka to część mowy: szkoła?', answer: 'rzeczownik' },
-      { text: 'Wymień trzy rodzaje zdań ze względu na cel wypowiedzi.', answer: 'oznajmujące, pytające, rozkazujące' },
-      { text: 'Jaki znak stawiamy na końcu zdania pytającego?', answer: 'znak zapytania (?)' },
-      { text: 'Jakim znakiem może kończyć się zdanie rozkazujące?', answer: 'kropką albo wykrzyknikiem' },
-      { text: 'Podaj przykład zdania rozkazującego.', answer: 'np. "Usiądź spokojnie."' },
-      { text: 'Kiedy piszemy wielką literę? Podaj trzy sytuacje.', answer: 'na początku zdania, w imionach i nazwiskach, w nazwach miejscowości, państw i rzek' },
-      { text: 'Popraw zapis: warszawa jest stolicą polski.', answer: 'Warszawa jest stolicą Polski.' },
-      { text: 'Kiedy stawiamy przecinek przed słowem że?', answer: 'zawsze, np. "Wiem, że przyjdziesz."' },
-      { text: 'Kiedy stawiamy przecinek przed słowem ale?', answer: 'zawsze, np. "Chciałem iść, ale padał deszcz."' },
+      { text: 'Jakie to części mowy: pływa, czerwony, książka?', answer: 'pływa - czasownik, czerwony - przymiotnik, książka - rzeczownik' },
+      { text: 'Jaki to rodzaj zdania i jaki znak stawiamy na końcu: "Gdzie leży mój plecak"?', answer: 'pytające - znak zapytania (?)' },
+      { text: 'Popraw zapis: mój brat tomek pojechał nad bałtyk.', answer: 'Mój brat Tomek pojechał nad Bałtyk.' },
+      { text: 'Gdzie brakuje przecinka: "Poszliśmy do domu bo zaczęło padać"?', answer: 'przed bo: "Poszliśmy do domu, bo zaczęło padać."' },
     ],
   );
 
@@ -102,20 +92,11 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Formy wypowiedzi',
     classIds,
     [
-      { text: 'Czym różni się wiersz od opowiadania?', answer: 'wiersz ma wersy i często rymy; opowiadanie to tekst ciągły pisany prozą' },
-      { text: 'Co to jest rym?', answer: 'podobne zakończenie wyrazów na końcu wersów, np. kot - płot' },
-      { text: 'Wymień trzy części, z których składa się opowiadanie.', answer: 'wstęp, rozwinięcie, zakończenie' },
-      { text: 'Kim jest bohater główny?', answer: 'postacią, o której opowiada cała historia' },
-      { text: 'Czym różni się baśń od legendy?', answer: 'baśń jest zmyślona i pełna magii; legenda tłumaczy pochodzenie prawdziwego miejsca lub wydarzenia' },
-      { text: 'Jak zwykle zaczyna się baśń?', answer: 'np. "Dawno, dawno temu..." albo "Za górami, za lasami..."' },
-      { text: 'Kim są bohaterowie bajki jako gatunku?', answer: 'zwierzętami, które mówią i zachowują się jak ludzie' },
-      { text: 'Co znajduje się zwykle na końcu bajki?', answer: 'morał, czyli nauka płynąca z historii' },
-      { text: 'Wymień trzy elementy, jakie powinno zawierać zaproszenie.', answer: 'np. kogo zapraszamy, na co, kiedy, dokąd, kto zaprasza (dowolne trzy)' },
-      { text: 'Wymień trzy elementy listu.', answer: 'np. data i miejscowość, nagłówek, treść, pożegnanie, podpis (dowolne trzy)' },
-      { text: 'Co to jest opis?', answer: 'wypowiedź mówiąca, jak coś wygląda - osoba, przedmiot lub krajobraz' },
-      { text: 'Jakiej części mowy używamy najwięcej w opisie?', answer: 'przymiotników' },
-      { text: 'Co to jest plan wydarzeń?', answer: 'kolejno spisane punkty pokazujące, co działo się w tekście' },
-      { text: 'Do kogo piszemy życzenia?', answer: 'do konkretnej osoby, z okazji święta, urodzin lub sukcesu' },
+      { text: 'Podaj wyraz, który rymuje się ze słowem: kotek.', answer: 'np. płotek, młotek, motek' },
+      { text: 'Kim jest główny bohater baśni "Pinokio"?', answer: 'drewniany pajacyk, który chce zostać prawdziwym chłopcem' },
+      { text: 'Ułóż w kolejności wydarzenia z "Czerwonego Kapturka": myśliwy ratuje babcię, Kapturek idzie przez las, wilk zjada babcię.', answer: 'Kapturek idzie przez las, wilk zjada babcię, myśliwy ratuje babcię' },
+      { text: 'Opisz jednym zdaniem swoje buty, używając dwóch przymiotników.', answer: 'np. "Moje buty są czarne i wygodne."' },
+      { text: 'Zaproś ustnie kolegę na przedstawienie klasowe - powiedz kogo, na co, kiedy i dokąd.', answer: 'np. "Kasiu, zapraszam cię na przedstawienie klasy 4a w piątek o 12:00 do sali gimnastycznej."' },
     ],
   );
 
@@ -124,20 +105,10 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Alfabet i słownictwo',
     classIds,
     [
-      { text: 'Ile liter ma alfabet polski i ile z nich to litery tylko polskie?', answer: '32 litery, w tym 9 tylko polskich: ą, ć, ę, ł, ń, ó, ś, ź, ż' },
-      { text: 'Jaka litera stoi w alfabecie zaraz po literze m?', answer: 'n (a zaraz po niej ń)' },
       { text: 'Ustaw w kolejności alfabetycznej: rower, ryba, rak.', answer: 'rak, rower, ryba' },
-      { text: 'Ustaw w kolejności alfabetycznej: kot, koc, koń.', answer: 'koc, koń, kot' },
-      { text: 'Po czym poznajesz, który wyraz w słowniku jest wcześniej, jeśli oba zaczynają się tak samo?', answer: 'po kolejnej literze: porównujemy drugą, potem trzecią i tak dalej' },
-      { text: 'Do czego służy słownik ortograficzny?', answer: 'do sprawdzania, jak poprawnie zapisać wyraz' },
-      { text: 'Co to są wyrazy bliskoznaczne? Podaj przykład.', answer: 'wyrazy o bardzo podobnym znaczeniu, np. ładny - piękny' },
-      { text: 'Podaj wyraz bliskoznaczny do słowa "iść".', answer: 'np. kroczyć, maszerować, wędrować' },
-      { text: 'Co to są wyrazy o znaczeniu przeciwnym? Podaj parę.', answer: 'znaczą odwrotnie, np. ciepły - zimny, dzień - noc' },
-      { text: 'Podaj wyraz o znaczeniu przeciwnym do słowa "wesoły".', answer: 'smutny' },
-      { text: 'Co to jest rodzina wyrazów?', answer: 'grupa wyrazów ze wspólną cząstką i wspólnym znaczeniem, np. dom, domek, domowy' },
-      { text: 'Podaj trzy wyrazy z rodziny wyrazu "las".', answer: 'np. lasek, leśny, leśniczy, leśnik' },
-      { text: 'Jaka cząstka jest wspólna dla wyrazów: kwiat, kwiatek, kwiaciarnia?', answer: 'kwiat' },
-      { text: 'Który wyraz nie należy do rodziny wyrazu "dom": domek, domowy, domino?', answer: 'domino - to zupełnie inne znaczenie, tylko podobnie brzmi' },
+      { text: 'Co to są żywe paginy i w czym pomagają w słowniku?', answer: 'pierwszy i ostatni wyraz na górze strony; mówią, czy szukać dalej, czy cofnąć' },
+      { text: 'Podaj wyraz bliskoznaczny do słowa "mówić" i wyraz o znaczeniu przeciwnym do słowa "szybki".', answer: 'np. gadać, opowiadać; wolny (powolny)' },
+      { text: 'Podaj trzy wyrazy z rodziny wyrazu "ryba".', answer: 'np. rybka, rybak, rybny, rybołówstwo' },
     ],
   );
 
@@ -146,20 +117,9 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Ortografia i interpunkcja',
     classIds,
     [
-      { text: 'Kiedy piszemy ć, a kiedy ci?', answer: 'ć na końcu wyrazu i przed spółgłoską (nić), ci przed samogłoską (ciocia)' },
-      { text: 'Jak zapiszemy zmiękczone s przed samogłoską? Podaj przykład.', answer: 'si, np. siostra, siano' },
       { text: 'Dlaczego piszemy "koń", ale "konia"?', answer: 'ń na końcu wyrazu, a przed samogłoską zmiękczenie zapisujemy przez ni: ko-ni-a' },
-      { text: 'Jak zapiszemy: "zima" czy "źima"?', answer: 'zima - przed samogłoską piszemy zi, nie ź' },
-      { text: 'Podaj dwa wyrazy z dź i dzi.', answer: 'np. gwóźdź, niedźwiedź (dź); dziadek, dziura (dzi)' },
-      { text: 'Kiedy piszemy ą i ę, a kiedy om, on, em, en?', answer: 'ą i ę, gdy słychać jedną głoskę; om/on/em/en, gdy słychać osobne m albo n' },
-      { text: 'Jak zapiszemy: k_t (róg pokoju)?', answer: 'kąt' },
-      { text: 'Jak zapiszemy: k_duktor?', answer: 'konduktor - słychać wyraźne n' },
-      { text: 'Jaki znak stawiamy na końcu zdania oznajmującego?', answer: 'kropkę' },
-      { text: 'Do czego służy wykrzyknik?', answer: 'kończy zdanie rozkazujące albo takie, które mówimy z emocją' },
-      { text: 'Kiedy stawiamy przecinek w wyliczeniu? Podaj przykład.', answer: 'między wyliczanymi wyrazami: "Kupiłem chleb, masło i ser"' },
-      { text: 'Czy przed "i" w wyliczeniu stawiamy przecinek?', answer: 'nie, np. "jabłka, gruszki i śliwki"' },
-      { text: 'Do czego służy dwukropek?', answer: 'zapowiada wyliczenie albo czyjeś słowa, np. "Wziąłem: zeszyt, długopis i linijkę"' },
-      { text: 'Jaki znak stawiamy na początku każdej wypowiedzi w dialogu?', answer: 'myślnik' },
+      { text: 'Jak zapiszemy: z_b (w buzi) i k_pot (do picia)?', answer: 'ząb - słychać jedną głoskę; kompot - słychać osobne m' },
+      { text: 'Jakie znaki wstawisz: "Na obiad była zupa kotlet i kompot"?', answer: 'przecinek po "zupa" i kropka na końcu: "Na obiad była zupa, kotlet i kompot."' },
     ],
   );
 
@@ -168,20 +128,9 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Czytanie i formy użytkowe',
     classIds,
     [
-      { text: 'Co to jest temat tekstu?', answer: 'to, o czym tekst opowiada - da się powiedzieć jednym zdaniem' },
-      { text: 'Jakich słów używamy, żeby uporządkować wydarzenia?', answer: 'najpierw, potem, następnie, nagle, na koniec' },
-      { text: 'Czym różni się bohater główny od drugoplanowego?', answer: 'główny występuje przez cały czas, drugoplanowy pojawia się tylko w części zdarzeń' },
-      { text: 'Co robisz, gdy masz znaleźć w tekście konkretną informację?', answer: 'szukam w tekście słów z pytania i czytam zdanie wokół nich' },
-      { text: 'Czym różni się dialog od monologu?', answer: 'dialog to rozmowa co najmniej dwóch osób, monolog to wypowiedź jednej' },
+      { text: 'Opowiedz w trzech punktach, co robisz rano przed szkołą - użyj słów najpierw, potem, na koniec.', answer: 'np. "Najpierw wstaję, potem jem śniadanie, na koniec pakuję plecak."' },
       { text: 'Jak zapisujemy dialog?', answer: 'każdą wypowiedź od nowej linii, zaczynając od myślnika' },
-      { text: 'Co musi zawierać zaproszenie?', answer: 'kogo zapraszamy, na co, kiedy, dokąd i kto zaprasza' },
-      { text: 'Co musi zawierać życzenie?', answer: 'do kogo, z jakiej okazji, czego życzymy i podpis' },
-      { text: 'Za co dziękujemy w podziękowaniu i co jeszcze musi w nim być?', answer: 'za konkretną rzecz; musi być też komu dziękujemy i podpis' },
-      { text: 'Co musi zawierać ogłoszenie?', answer: 'czego dotyczy, kiedy i gdzie, kto je zamieszcza' },
-      { text: 'Po co piszemy notatkę?', answer: 'żeby zapamiętać najważniejsze informacje w skróconej formie' },
-      { text: 'Czym różni się notatka od opowiadania?', answer: 'notatka jest krótka i ma same najważniejsze punkty, opowiadanie to pełny tekst ze zdaniami' },
-      { text: 'Co to jest zagadka?', answer: 'krótki tekst z opisem, do którego trzeba odgadnąć rozwiązanie' },
-      { text: 'Który znak kończy zdanie: "Ale piękny dzień"?', answer: 'wykrzyknik - to zdanie z emocją' },
+      { text: 'Złóż ustnie życzenia koledze z okazji urodzin: powiedz komu, z jakiej okazji i czego życzysz.', answer: 'np. "Kuba, z okazji urodzin życzę ci dużo zdrowia i samych piątek."' },
     ],
   );
 
@@ -190,20 +139,9 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Bohater i odbiór tekstu',
     classIds,
     [
-      { text: 'Co składa się na świat przedstawiony utworu?', answer: 'czas, miejsce, bohaterowie i wydarzenia' },
-      { text: 'Na jakie pytanie odpowiada czas w świecie przedstawionym?', answer: 'kiedy?' },
-      { text: 'Podaj trzy cechy Kopciuszka.', answer: 'np. pracowita, dobra, cierpliwa' },
-      { text: 'Skąd wiesz, że bohater jest odważny?', answer: 'z tego, co robi w tekście - trzeba wskazać konkretne zdarzenie' },
-      { text: 'Jak zacząć zdanie, w którym oceniasz bohatera?', answer: 'np. "Uważam, że... , bo w tekście..."' },
-      { text: 'Czym różni się cecha bohatera od jego wyglądu?', answer: 'cecha mówi, jaki jest w środku; wygląd - jak wygląda z zewnątrz' },
-      { text: 'Co to jest nastrój utworu?', answer: 'uczucie, jakie budzi tekst: wesoły, smutny albo straszny' },
-      { text: 'Po czym poznajesz nastrój tekstu?', answer: 'po słowach, których użył autor, np. ciemno, cisza, śmiech' },
-      { text: 'Jaki nastrój ma tekst ze słowami: śmiech, słońce, zabawa?', answer: 'wesoły' },
-      { text: 'Jaki nastrój ma tekst ze słowami: ciemno, cicho, sam?', answer: 'straszny albo smutny' },
-      { text: 'Po co tekstowi tytuł?', answer: 'mówi w kilku słowach, o czym tekst jest' },
-      { text: 'Wymyśl tytuł do historii o psie, który zgubił się w mieście.', answer: 'np. "Zagubiony Burek"' },
-      { text: 'Czym różni się bohater główny od drugoplanowego?', answer: 'główny jest przez cały czas, drugoplanowy tylko w części zdarzeń' },
-      { text: 'Czy w jednym tekście może być dwóch bohaterów głównych?', answer: 'tak, jeśli obaj są w całej historii' },
+      { text: 'Podaj jedną cechę Czerwonego Kapturka i zdarzenie z baśni, które ją pokazuje.', answer: 'np. ufny - bo powiedział wilkowi, dokąd idzie' },
+      { text: 'Jaki nastrój ma tekst ze słowami: deszcz, łzy, pusty pokój?', answer: 'smutny' },
+      { text: 'Wymyśl tytuł (najwyżej cztery słowa) do historii o dziewczynce, która znalazła w parku portfel i oddała go właścicielowi.', answer: 'np. "Znaleziony portfel", "Uczciwa Zosia"' },
     ],
   );
 
@@ -212,20 +150,10 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Tworzenie opowiadania',
     classIds,
     [
-      { text: 'Z jakich trzech części składa się opowiadanie?', answer: 'wstęp, rozwinięcie, zakończenie' },
-      { text: 'Co piszemy we wstępie opowiadania?', answer: 'kto, kiedy i gdzie - wprowadzamy bohatera i miejsce' },
-      { text: 'Co się dzieje w rozwinięciu?', answer: 'najważniejsze wydarzenia, opowiedziane po kolei' },
-      { text: 'Do czego służy zakończenie?', answer: 'mówi, jak się to wszystko skończyło' },
-      { text: 'Ile zdań ma mieć opowiadanie w klasie 3?', answer: 'od 6 do 10' },
-      { text: 'Wymień cztery słowa, które porządkują wydarzenia.', answer: 'najpierw, potem, nagle, na koniec' },
+      { text: 'Co piszemy we wstępie opowiadania, a co w zakończeniu?', answer: 'wstęp: kto, kiedy i gdzie; zakończenie: jak się to wszystko skończyło' },
       { text: 'Po co w opowiadaniu słowo "nagle"?', answer: 'zapowiada zwrot akcji - coś, czego nikt się nie spodziewał' },
-      { text: 'Czym różni się plan wydarzeń od opowiadania?', answer: 'plan to krótkie punkty, opowiadanie to pełne zdania' },
-      { text: 'Co to są dalsze losy bohatera?', answer: 'wymyślony ciąg dalszy historii, zgodny z tym, co już o nim wiemy' },
+      { text: 'Ile zdań ma mieć opowiadanie w klasie 3 i co zrobić, gdy powtarza się w nim to samo słowo?', answer: 'od 6 do 10 zdań; powtórzenie zamienić na wyraz bliskoznaczny' },
       { text: 'Czy w dalszych losach bohater może nagle zmienić charakter?', answer: 'nie - ma zostać taki, jaki był w tekście' },
-      { text: 'Jakiej części mowy używamy najwięcej, opowiadając wydarzenia?', answer: 'czasowników' },
-      { text: 'Od czego zaczynasz każdą nową część opowiadania?', answer: 'od nowego akapitu, czyli od wcięcia' },
-      { text: 'Co zrobić, gdy w opowiadaniu ciągle powtarza się to samo słowo?', answer: 'zamienić je na wyraz bliskoznaczny' },
-      { text: 'Podaj przykład pierwszego zdania wstępu.', answer: 'np. "Pewnego letniego poranka Marek wyszedł z domu."' },
     ],
   );
 
@@ -234,20 +162,10 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Formy użytkowe',
     classIds,
     [
-      { text: 'Wymień cztery stałe elementy listu.', answer: 'miejscowość i data, nagłówek, treść, pożegnanie z podpisem' },
-      { text: 'Gdzie na kartce piszemy miejscowość i datę?', answer: 'w prawym górnym rogu' },
-      { text: 'Podaj przykład nagłówka listu.', answer: 'np. "Kochana Babciu," albo "Cześć Zosiu,"' },
-      { text: 'Jakim znakiem kończymy nagłówek listu?', answer: 'przecinkiem' },
-      { text: 'Czym kończymy list?', answer: 'pożegnaniem i podpisem, np. "Pozdrawiam, Antek"' },
-      { text: 'Gdzie na kopercie piszemy adres nadawcy?', answer: 'w lewym górnym rogu' },
-      { text: 'Gdzie na kopercie piszemy adres odbiorcy?', answer: 'na środku koperty, większymi literami' },
-      { text: 'Co jeszcze musi znaleźć się na kopercie?', answer: 'znaczek, w prawym górnym rogu' },
-      { text: 'Na jakie trzy pytania odpowiada ogłoszenie?', answer: 'czego dotyczy, kiedy i gdzie, kto ogłasza' },
-      { text: 'Czym różni się ogłoszenie od zaproszenia?', answer: 'ogłoszenie jest do wszystkich, zaproszenie do konkretnej osoby' },
-      { text: 'Z jakich trzech części składa się przeproszenie?', answer: 'za co konkretnie, że jest mi przykro, co zrobię inaczej' },
-      { text: 'Dlaczego samo "przepraszam" to za mało?', answer: 'nie wiadomo, za co przepraszam ani czy coś się zmieni' },
-      { text: 'Podaj przykład pierwszego zdania przeprosin.', answer: 'np. "Przepraszam, że zniszczyłem Twój rysunek."' },
-      { text: 'Do kogo piszemy list, a do kogo ogłoszenie?', answer: 'list do jednej osoby, ogłoszenie do wielu naraz' },
+      { text: 'Podaj przykład nagłówka listu do kolegi i powiedz, jaki znak stoi na jego końcu.', answer: 'np. "Cześć Kubo," - przecinek' },
+      { text: 'Gdzie na kopercie piszemy adres nadawcy, a gdzie odbiorcy?', answer: 'nadawca w lewym górnym rogu, odbiorca na środku, większymi literami' },
+      { text: 'Ogłoś ustnie zbiórkę makulatury: powiedz czego dotyczy, kiedy i gdzie, kto ogłasza.', answer: 'np. "Zbiórka makulatury w piątek o 8:00 przy portierni. Ogłasza samorząd klasy 4a."' },
+      { text: 'Przeproś ustnie kolegę za to, że zapomniałeś oddać mu książkę - użyj trzech części przeprosin.', answer: 'np. "Przepraszam, że nie oddałem ci książki. Jest mi przykro. Jutro na pewno ją przyniosę."' },
     ],
   );
 
@@ -256,20 +174,9 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Słownictwo',
     classIds,
     [
-      { text: 'Co to jest wyraz wieloznaczny?', answer: 'wyraz, który ma kilka różnych znaczeń' },
-      { text: 'Podaj trzy znaczenia wyrazu "zamek".', answer: 'budowla, zamek w kurtce, zamek w drzwiach' },
-      { text: 'Skąd wiesz, o które znaczenie chodzi?', answer: 'z całego zdania, w którym ten wyraz stoi' },
-      { text: 'Podaj dwa znaczenia wyrazu "język".', answer: 'część ciała oraz mowa, np. język polski' },
-      { text: 'Co to jest związek frazeologiczny?', answer: 'stałe połączenie wyrazów, które rozumiemy przenośnie' },
-      { text: 'Co znaczy "wziąć nogi za pas"?', answer: 'szybko uciec' },
-      { text: 'Co znaczy "mieć muchy w nosie"?', answer: 'być obrażonym' },
-      { text: 'Co znaczy "biały kruk"?', answer: 'rzadka, cenna rzecz' },
-      { text: 'Czy frazeologizmy rozumiemy dosłownie?', answer: 'nie, przenośnie - dosłownie wychodzi bzdura' },
-      { text: 'Co to jest zdrobnienie? Podaj przykład.', answer: 'wyraz mówiący, że coś jest małe albo miłe: domek, piesek' },
-      { text: 'Co to jest zgrubienie? Podaj przykład.', answer: 'wyraz mówiący, że coś jest duże albo brzydkie: domisko, psisko' },
+      { text: 'Podaj dwa znaczenia wyrazu "klucz".', answer: 'klucz do drzwi i klucz ptaków (albo klucz wiolinowy)' },
+      { text: 'Co znaczy "mieć muchy w nosie"?', answer: 'być obrażonym, w złym humorze' },
       { text: 'Utwórz zdrobnienie i zgrubienie od wyrazu "nos".', answer: 'nosek i nochal' },
-      { text: 'Po co używamy zdrobnień?', answer: 'żeby powiedzieć o czymś ciepło, czule' },
-      { text: 'Czym różni się wyraz wieloznaczny od bliskoznacznego?', answer: 'wieloznaczny to jeden wyraz z wieloma znaczeniami, bliskoznaczne to dwa wyrazy o podobnym znaczeniu' },
     ],
   );
 
@@ -278,20 +185,9 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Składnia',
     classIds,
     [
-      { text: 'Zamień na pytanie: "Ala wraca do domu."', answer: '"Czy Ala wraca do domu?"' },
-      { text: 'Zamień na zdanie oznajmujące: "Czy pada deszcz?"', answer: '"Pada deszcz."' },
-      { text: 'Jaki znak stawiasz na końcu wykrzyknienia?', answer: 'wykrzyknik' },
-      { text: 'Co to jest równoważnik zdania?', answer: 'wypowiedzenie bez orzeczenia, np. "Cisza."' },
-      { text: 'Czy "Powrót Ali do domu." to zdanie?', answer: 'nie, to równoważnik - nie ma orzeczenia' },
-      { text: 'Po czym poznasz zdanie?', answer: 'ma orzeczenie, czyli czasownik mówiący, co się dzieje' },
-      { text: 'Co to jest zdanie pojedyncze?', answer: 'zdanie z jednym orzeczeniem' },
-      { text: 'Co to jest zdanie złożone?', answer: 'zdanie z co najmniej dwoma orzeczeniami' },
-      { text: 'Ile orzeczeń ma zdanie "Ala wróciła i zjadła obiad"?', answer: 'dwa: wróciła, zjadła' },
-      { text: 'Połącz w jedno zdanie: "Padał deszcz." "Zostaliśmy w domu."', answer: 'np. "Padał deszcz, więc zostaliśmy w domu."' },
-      { text: 'Jakie wyrazy łączą zdania w złożone?', answer: 'i, a, ale, bo, że, więc' },
-      { text: 'Gdzie stawiamy przecinek w zdaniu złożonym?', answer: 'przed ale, bo, że, więc' },
-      { text: 'Zamień na wykrzyknienie: "Ala wraca do domu."', answer: '"Ala wraca do domu!"' },
-      { text: 'Podaj równoważnik zdania, jakim można zatytułować przerwę.', answer: 'np. "Przerwa." albo "Koniec lekcji."' },
+      { text: 'Zamień zdanie "Kasia lubi lody." na pytanie i na wykrzyknienie.', answer: '"Czy Kasia lubi lody?" i "Kasia lubi lody!"' },
+      { text: 'Które z tych wypowiedzeń to zdanie, a które równoważnik: "Wesołych świąt." i "Babcia piecze ciasto."?', answer: '"Wesołych świąt." - równoważnik (brak orzeczenia); "Babcia piecze ciasto." - zdanie (orzeczenie: piecze)' },
+      { text: 'Połącz w jedno zdanie złożone: "Zosia była chora." "Nie poszła do szkoły."', answer: 'np. "Zosia była chora, więc nie poszła do szkoły." - z przecinkiem przed więc' },
     ],
   );
 
@@ -300,20 +196,10 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     'Zapis i poprawność',
     classIds,
     [
-      { text: 'Co znaczy skrót "np."?', answer: 'na przykład' },
-      { text: 'Co znaczy skrót "itd."?', answer: 'i tak dalej' },
-      { text: 'Co znaczy skrót "ul."?', answer: 'ulica' },
-      { text: 'Co znaczy skrót "godz."?', answer: 'godzina' },
-      { text: 'Dlaczego po "np." stawiamy kropkę, a po "dr" nie?', answer: 'kropka jest wtedy, gdy skrót urywa wyraz; "dr" kończy się ostatnią literą wyrazu doktor' },
-      { text: 'Zapisz słowami: 600.', answer: 'sześćset' },
-      { text: 'Zapisz słowami: 400.', answer: 'czterysta' },
-      { text: 'Zapisz słowami: 90.', answer: 'dziewięćdziesiąt' },
-      { text: 'Jak zapiszemy tytuł książki?', answer: 'wielką literą i w cudzysłowie: "Akademia pana Kleksa"' },
-      { text: 'Czy nazwy dni tygodnia piszemy wielką literą?', answer: 'nie, małą: poniedziałek, wtorek' },
-      { text: 'Czy nazwy świąt piszemy wielką literą?', answer: 'tak: Boże Narodzenie, Wielkanoc' },
+      { text: 'Co znaczą skróty "ul." i "godz." i dlaczego mają kropkę?', answer: 'ulica, godzina; kropka, bo skrót urywa wyraz' },
+      { text: 'Jak zapiszemy słowami liczby 300 i 80?', answer: 'trzysta, osiemdziesiąt' },
+      { text: 'Popraw zapis: w czwartek mój pies azor pływał w odrze.', answer: 'W czwartek mój pies Azor pływał w Odrze. (czwartek zostaje małą literą)' },
       { text: 'Wymień trzy rzeczy, które sprawdzasz po napisaniu tekstu.', answer: 'np. kropki na końcach zdań, wielkie litery, powtórzenia, trudne ortograficznie wyrazy' },
-      { text: 'Co robisz, gdy nie jesteś pewien pisowni wyrazu?', answer: 'sprawdzam w słowniku ortograficznym' },
-      { text: 'Jak sprawdzisz, czy w tekście nie brakuje kropki?', answer: 'czytam na głos - tam gdzie robię pauzę, powinien być znak' },
     ],
   );
 
@@ -400,11 +286,9 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaOu'),
 4. Byliśmy w nowym _otelu. (ch/h)
 
 Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaRzCh'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **8 samogłosek**: a, e, i, o, u, y, ą, ę
+      slideText('Zapamiętaj', `- **8 samogłosek**: a, e, i, o, u, y, ą, ę
 - **dwuznak** to jedna głoska, dwie litery
 - **ó** wymienia się na o, e, a`, 'wymianaOu'),
-      slideRecap(set1.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Samogłoski (8): a, e, i, o, u, y, ą, ę.
@@ -427,7 +311,7 @@ Uzasadnij ustnie każdy wybór.`, undefined, 150, 'wymianaRzCh'),
     slides: [
       slideTitle('Powtórka klas 1-3', 'Części mowy, zdania i interpunkcja - część 2/12'),
       slideTopic('Części mowy i zdania'),
-      // Kolo na start: wracamy do ostatniego tematu (glaski, litery, sylaby) tym samym zestawem, w trybie powtorzeniowym.
+      // Kolo na start: zestaw lekcji 1 (gloski, litery, sylaby) w trybie powtorzeniowym - jedyne kolo z pytaniami w lekcji.
       slideRecap(set1.set.id, 'powtorzeniowe'),
       slideText('Rzeczownik', `**Rzeczownik** nazywa osoby, zwierzęta, rzeczy i uczucia.
 
@@ -489,11 +373,9 @@ Przykłady:
 2. Chciałem grać ale musiałem się uczyć.
 3. Nie poszedłem do szkoły bo bolała mnie głowa.
 4. Cieszę się że przyjechałeś.`, undefined, 150, 'przecinek'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **kto? co?** rzeczownik, **co robi?** czasownik, **jaki?** przymiotnik
+      slideText('Zapamiętaj', `- **kto? co?** rzeczownik, **co robi?** czasownik, **jaki?** przymiotnik
 - zdanie: **oznajmujące, pytające, rozkazujące**
 - przecinek przed **że, ale, bo**`, 'rodzajeZdan'),
-      slideRecap(set2.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Rzeczownik (kto? co?), czasownik (co robi?), przymiotnik (jaki?).
@@ -517,7 +399,7 @@ Przykłady:
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie i formy wypowiedzi - część 3/12'),
       slideTopic('Formy wypowiedzi'),
-      // Kolo na start: wracamy do tematu z lekcji 2 (czesci mowy, zdania) tym samym zestawem, w trybie powtorzeniowym.
+      // Kolo na start: zestaw lekcji 2 (czesci mowy, zdania) w trybie powtorzeniowym.
       slideRecap(set2.set.id, 'powtorzeniowe'),
       slideText('Wiersz i proza', `**Wiersz** jest zapisany w **wersach** (liniach) i często się **rymuje**.
 
@@ -576,11 +458,9 @@ Przeczytamy kilka opisów na głos.`, undefined, 180, 'opis'),
 Pamiętaj o wszystkich elementach: kogo, na co, kiedy, dokąd, kto zaprasza.
 
 Masz 5 minut.`, undefined, 300, 'zaproszenie'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **wiersz** ma wersy i rymy
+      slideText('Zapamiętaj', `- **wiersz** ma wersy i rymy
 - **baśń** jest zmyślona, **legenda** tłumaczy prawdziwe miejsce
 - opowiadanie: **wstęp - rozwinięcie - zakończenie**`, 'opowiadanie'),
-      slideRecap(set3.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Wiersz: wersy i rymy. Proza: zwykły tekst, zdania.
@@ -603,7 +483,7 @@ Masz 5 minut.`, undefined, 300, 'zaproszenie'),
     slides: [
       slideTitle('Powtórka klas 1-3', 'Alfabet, słownik i rodziny wyrazów - część 4/12'),
       slideTopic('Alfabet i słownik'),
-      // Kolo na start: wracamy do tematu z lekcji 3 (formy wypowiedzi) tym samym zestawem, w trybie powtorzeniowym.
+      // Kolo na start: zestaw lekcji 3 (formy wypowiedzi) w trybie powtorzeniowym.
       slideRecap(set3.set.id, 'powtorzeniowe'),
       slideText('Alfabet', `Alfabet polski ma **32 litery**. Dziewięć z nich to litery **tylko polskie**: ą, ć, ę, ł, ń, ó, ś, ź, ż.
 
@@ -653,11 +533,9 @@ Uwaga na pułapkę: **domino** brzmi podobnie, ale znaczy coś zupełnie innego 
 4. woda
 
 Podkreśl w każdym wspólną cząstkę.`, undefined, 240, 'rodzinaWyrazow'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- alfabet: **32 litery**, 9 tylko polskich
+      slideText('Zapamiętaj', `- alfabet: **32 litery**, 9 tylko polskich
 - **bliskoznaczne** znaczą to samo, **przeciwstawne** odwrotnie
 - **rodzina wyrazów** ma wspólną cząstkę`, 'rodzinaWyrazow'),
-      slideRecap(set4.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Alfabet: 32 litery, 9 tylko polskich (ą, ć, ę, ł, ń, ó, ś, ź, ż).
@@ -680,7 +558,7 @@ Podkreśl w każdym wspólną cząstkę.`, undefined, 240, 'rodzinaWyrazow'),
     slides: [
       slideTitle('Powtórka klas 1-3', 'Zmiękczenia, ą i ę, interpunkcja - część 5/12'),
       slideTopic('Zmiękczenia i interpunkcja'),
-      // Kolo na start: wracamy do tematu z lekcji 4 (alfabet i slownik) tym samym zestawem, w trybie powtorzeniowym.
+      // Kolo na start: zestaw lekcji 4 (alfabet i slownik) w trybie powtorzeniowym.
       slideRecap(set4.set.id, 'powtorzeniowe'),
       slideText('Zmiękczenia: kreska czy i', `To jedna z najczęstszych pomyłek w zeszytach.
 
@@ -728,11 +606,9 @@ Każdy wyraz powiedz najpierw na głos, powoli.`, undefined, 240, 'nosowki'),
 5. Kupiłam trzy owoce jabłko gruszkę i śliwkę
 
 Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270, 'znakiInterpunkcyjne'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **kreska** przed spółgłoską, **litera i** przed samogłoską
+      slideText('Zapamiętaj', `- **kreska** przed spółgłoską, **litera i** przed samogłoską
 - **ą, ę** gdy słychać jedną głoskę
 - przecinek: wyliczenie oraz przed **że, ale, bo**`, 'znakiInterpunkcyjne'),
-      slideRecap(set5.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Kreska: koniec wyrazu, przed spółgłoską (koń). Litera i: przed samogłoską (ciocia).
@@ -755,7 +631,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 270, 'znakiInterpunk
     slides: [
       slideTitle('Powtórka klas 1-3', 'Czytanie ze zrozumieniem i krótkie formy - część 6/12'),
       slideTopic('Czytanie ze zrozumieniem'),
-      // Kolo na start: wracamy do tematu z lekcji 5 (zmiekczenia, interpunkcja) tym samym zestawem, w trybie powtorzeniowym.
+      // Kolo na start: zestaw lekcji 5 (zmiekczenia, interpunkcja) w trybie powtorzeniowym.
       slideRecap(set5.set.id, 'powtorzeniowe'),
       slideText('Temat tekstu', `**Temat tekstu** to jedno zdanie: o czym ten tekst jest.
 
@@ -799,11 +675,9 @@ W obu podpisz się i napisz, z jakiej okazji albo za co dziękujesz.`, undefined
 Dobra notatka odpowiada na pytania: **kto, co, kiedy, gdzie**.
 
 Zapisujesz ją dla siebie - ma się dać przeczytać za tydzień i wszystko zrozumieć.`, 'zeszyt'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **temat tekstu** to jedno zdanie
+      slideText('Zapamiętaj', `- **temat tekstu** to jedno zdanie
 - kolejność: **najpierw - potem - nagle - na koniec**
 - dialog: **nowa linia i myślnik**`, 'dialog'),
-      slideRecap(set6.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Temat tekstu - jedno zdanie, o czym jest.
@@ -867,11 +741,9 @@ Tytuł nie zdradza zakończenia.`, 'tematTekstu'),
 3. chłopiec bał się ciemności, aż przestał
 
 Tytuł ma mieć **najwyżej cztery słowa**.`, undefined, 240, 'tematTekstu'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- świat przedstawiony: **czas, miejsce, bohaterowie, wydarzenia**
+      slideText('Zapamiętaj', `- świat przedstawiony: **czas, miejsce, bohaterowie, wydarzenia**
 - każdą cechę bohatera pokazujesz zdarzeniem: **bo w tekście...**
 - **nastrój** poznajesz po słowach, tytuł mówi, co najważniejsze`, 'cechyBohatera'),
-      slideRecap(set7.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.
@@ -938,11 +810,9 @@ Tak samo działa wymyślanie **początku** albo **zakończenia** do obrazka.`, '
 Dopisz w zeszycie **trzy zdania zakończenia**.
 
 Bohater ma zostać taki, jaki był - sprawdzimy to przy czytaniu na głos.`, undefined, 300, 'kolejnoscZdarzen'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- opowiadanie: **wstęp - rozwinięcie - zakończenie**, każda część od akapitu
+      slideText('Zapamiętaj', `- opowiadanie: **wstęp - rozwinięcie - zakończenie**, każda część od akapitu
 - porządkują je słowa **najpierw, potem, nagle, na koniec**
 - w klasie 3 opowiadanie ma **6-10 zdań**`, 'opowiadanie'),
-      slideRecap(set8.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Wstęp (kto, kiedy, gdzie), rozwinięcie, zakończenie.
@@ -1011,11 +881,9 @@ Trzecia część jest najważniejsza.`, 'przeproszenie'),
 3. powiedziałeś coś przykrego
 
 Trzy zdania - po jednym na każdą część.`, undefined, 300, 'przeproszenie'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- list: **data, nagłówek z przecinkiem, treść, podpis**
+      slideText('Zapamiętaj', `- list: **data, nagłówek z przecinkiem, treść, podpis**
 - koperta: **nadawca** w lewym górnym rogu, **odbiorca** na środku
 - ogłoszenie: **co, kiedy i gdzie, kto**; przeprosiny: **za co, przykro mi, co zrobię**`, 'list'),
-      slideRecap(set9.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- List: data, nagłówek + przecinek, treść, podpis.
@@ -1079,11 +947,9 @@ Ten sam dom, a zupełnie inne wrażenie.`, 'zdrobnienieZgrubienie'),
 4. ptak
 
 Potem powiedz, którego z nich użyłbyś w bajce dla malucha.`, undefined, 240, 'zdrobnienieZgrubienie'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- **wieloznaczny** to jeden wyraz i kilka znaczeń - rozstrzyga zdanie
+      slideText('Zapamiętaj', `- **wieloznaczny** to jeden wyraz i kilka znaczeń - rozstrzyga zdanie
 - **frazeologizm** rozumiemy przenośnie, nie dosłownie
 - **zdrobnienie** zmniejsza i ociepla, **zgrubienie** powiększa`, 'frazeologizm'),
-      slideRecap(set10.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Wyraz wieloznaczny - kilka znaczeń (zamek); rozstrzyga zdanie.
@@ -1144,11 +1010,9 @@ Dlatego świetnie nadaje się na **tytuł** i na napis na tablicy.`, 'przeksztal
 3. Wiem to. Mama mi powiedziała.
 
 Nie zapomnij o przecinku.`, undefined, 270, 'zdanieZlozone'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- to samo zdanie może być **oznajmujące, pytające** albo **wykrzyknieniem**
+      slideText('Zapamiętaj', `- to samo zdanie może być **oznajmujące, pytające** albo **wykrzyknieniem**
 - **równoważnik** nie ma orzeczenia - nic w nim nie "robi"
 - **pojedyncze** ma jedno orzeczenie, **złożone** co najmniej dwa`, 'przeksztalcanieZdan'),
-      slideRecap(set11.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Zdanie: oznajmujące, pytające, wykrzyknienie - zmienia się znak.
@@ -1226,11 +1090,9 @@ Potem sprawdzasz cztery rzeczy: **kropki, wielkie litery, powtórzenia, trudne w
 4. dwa trudne wyrazy sprawdź w słowniku
 
 Poprawki zaznacz kolorem.`, undefined, 420, 'zeszyt'),
-      slideText('Zanim zakręcimy kołem', `Zapamiętaj:
-- kropka w skrócie jest wtedy, gdy skrót **urywa** wyraz (np., itd., ale dr)
+      slideText('Zapamiętaj', `- kropka w skrócie jest wtedy, gdy skrót **urywa** wyraz (np., itd., ale dr)
 - **sześćset, czterysta, dziewięćdziesiąt** - pisownię trzeba zapamiętać
 - po napisaniu czytasz **na głos** i sprawdzasz kropki, wielkie litery, powtórzenia`, 'skroty'),
-      slideRecap(set12.set.id, 'po-lekcji'),
       slideNote(
         'Notatka do zeszytu',
         `- Kropka w skrócie urwanym: np., itd. Skrót dr - bez kropki.
@@ -1326,8 +1188,9 @@ function slideTask(
   };
 }
 
-function slideRecap(questionSetId: string, mode?: 'po-lekcji' | 'powtorzeniowe'): Slide {
-  return { id: newId(), kind: 'recap', questionSetId, ...(mode ? { mode } : {}) };
+/** Kolo powtorzeniowe na poczatku lekcji - jedyny rodzaj slajdu recap w tej powtorce. */
+function slideRecap(questionSetId: string, mode: 'powtorzeniowe'): Slide {
+  return { id: newId(), kind: 'recap', questionSetId, mode };
 }
 
 function slideNote(title: string, body: string): Slide {

@@ -3,7 +3,20 @@
 // Kolumny "updated_at" sa zarzadzane przez baze (trigger) i nie sa czescia
 // encji aplikacji, wiec nie sa tu mapowane.
 
-import type { Lesson, LessonProgress, Meeting, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Slide, Student } from '../types';
+import type {
+  Lesson,
+  LessonProgress,
+  Meeting,
+  Question,
+  QuestionSet,
+  Quiz,
+  QuizQuestion,
+  RecapEvent,
+  SchoolClass,
+  Settings,
+  Slide,
+  Student,
+} from '../types';
 
 // --- classes ---------------------------------------------------------------
 
@@ -246,6 +259,47 @@ export function rowToMeeting(row: MeetingRow): Meeting {
     place: row.place ?? undefined,
     script: row.script,
     order: row.order,
+  };
+}
+
+// --- quizzes (kartkowki i klasowki) -----------------------------------------
+// Pytania siedza w jednej kolumnie jsonb (kopie tresci - patrz types.ts),
+// wiec nie maja osobnej tabeli ani osobnego mapowania.
+
+export interface QuizRow {
+  id: string;
+  class_id: string;
+  kind: Quiz['kind'];
+  title: string;
+  date: string | null;
+  questions: QuizQuestion[];
+  note: string | null;
+  created_at: string;
+}
+
+export function quizToRow(q: Quiz): QuizRow {
+  return {
+    id: q.id,
+    class_id: q.classId,
+    kind: q.kind,
+    title: q.title,
+    date: q.date ?? null,
+    questions: q.questions,
+    note: q.note ?? null,
+    created_at: q.createdAt,
+  };
+}
+
+export function rowToQuiz(row: QuizRow): Quiz {
+  return {
+    id: row.id,
+    classId: row.class_id,
+    kind: row.kind,
+    title: row.title,
+    date: row.date ?? undefined,
+    questions: row.questions ?? [],
+    note: row.note ?? undefined,
+    createdAt: row.created_at,
   };
 }
 

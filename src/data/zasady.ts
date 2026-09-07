@@ -5,7 +5,8 @@
 // UWAGA na indeksy: src/data/intro.ts szuka sekcji PO TYTULE (ruleSection),
 // nie po pozycji w tej tablicy - kolejnosc sekcji mozna wiec zmieniac. W
 // obrebie pojedynczej sekcji intro.ts czasem siega do konkretnego elementu
-// `items` po numerze indeksu (np. sekcja "Gramy w kolo fortuny" - items[1]).
+// `items` po numerze indeksu (np. sekcja "Gramy w kolo fortuny" - items[1],
+// items[2] i items[3]; sekcja "Pasy" - items[0]).
 // Nowe punkty w takiej sekcji dopisywac na koncu listy, zeby nie przesunac
 // indeksu, po ktory siega intro.ts. Reszta sekcji jest dzielona funkcja
 // `partitionItems` (dopasowanie po tresci/regex, nie po indeksie) - tam
@@ -27,15 +28,19 @@ export const RULE_SECTIONS: RuleSection[] = [
   {
     title: 'Gramy w koło fortuny',
     items: [
-      'Po każdym zagadnieniu kręcimy kołem. Na kole są wasze imiona.',
+      'Po każdym zadaniu kręcimy kołem. Na kole są wasze imiona.',
       // indeks 1 - wykorzystywany wprost w intro.ts, nie przesuwac
       'Kto się wylosuje, ten odpowiada. Nie zgłaszamy się - losuje koło. To jest gra.',
-      // Dwa kola - nomenklatura kluczowa dla calego systemu, patrz tez sekcja
-      // "Specjalne utrudnienia za zachowanie" i slajd "Przyklad rundy" w intro.ts.
-      'Koło po lekcji kręcimy zaraz po omówieniu tematu, na tej samej lekcji - tu można tylko zyskać: dobra odpowiedź to plus, słabsza albo brak odpowiedzi - nic się nie dzieje.',
-      'Koło powtórzeniowe kręcimy na początku następnej lekcji, z pytaniami z poprzedniego tematu - tu gra się o wszystko: plus, kropkę i plombę.',
+      // Dwa kola - nomenklatura kluczowa dla calego systemu (kolo NA LEKCJI po
+      // kazdym zadaniu i kolo POWTORZENIOWE na poczatku nastepnej lekcji), patrz
+      // tez sekcja "Specjalne utrudnienia za zachowanie", slajd "Przyklad rundy"
+      // w intro.ts i logika w src/lib/recap.ts. Dawne "kolo po lekcji" (te same
+      // pytania drugi raz na koncu tematu) USUNIETE - nie przywracac.
+      // indeksy 2 i 3 - wykorzystywane wprost w intro.ts (slajd "Dwa kola"), nie przesuwac
+      'Koło na lekcji kręcimy po każdym zadaniu - kto się wylosuje, pokazuje swoje rozwiązanie. Tu można tylko zyskać: zadanie zrobione dobrze to plus, zrobione słabo albo wcale - kropka. Plomby na kole na lekcji nie ma.',
+      'Koło powtórzeniowe kręcimy na początku następnej lekcji, z pytaniami z poprzedniego tematu - innymi niż zadania z lekcji. Tu gra się o wszystko: plus, kropkę i plombę.',
       'Uwagi za zachowanie można dostać zawsze, niezależnie od tego, które koło akurat kręcimy.',
-      'Na każdym kole - po lekcji i powtórzeniowym - losujemy od 3 do 5 osób.',
+      'Na kole na lekcji losujemy jedną osobę do każdego zadania. Na kole powtórzeniowym jest tyle pytań, ile było zadań - zwykle od 3 do 5.',
       'Na początku może być stresująco. To normalne. Po kilku lekcjach się przyzwyczaicie i będzie dobrze.',
     ],
   },
@@ -63,7 +68,7 @@ export const RULE_SECTIONS: RuleSection[] = [
     title: 'Specjalne utrudnienia za zachowanie',
     items: [
       'Pierwszy raz: ostrzeżenie.',
-      'Drugi raz: do końca miesiąca nie możesz już dostać plusa - ani na kole po lekcji, ani na kole powtórzeniowym.',
+      'Drugi raz: do końca miesiąca nie możesz już dostać plusa - ani na kole na lekcji, ani na kole powtórzeniowym.',
       'Kolejne uwagi wpisuję już do dziennika.',
       'Uwagi zerują się z początkiem każdego miesiąca - nowy miesiąc, czysta kartka.',
     ],
@@ -93,10 +98,11 @@ export const RULE_SECTIONS: RuleSection[] = [
     items: [
       // Trzy kroki lekcji - intro.ts renderuje je jako liste numerowana
       // (RULE_SECTIONS trzyma sama tresc, bez cyfr - numeracja to sprawa
-      // widoku/wydruku, nie danych).
+      // widoku/wydruku, nie danych). Kolo na lekcji siedzi w kroku 2 (po
+      // kazdym zadaniu), lekcja konczy sie notatka - bez osobnego kola na koncu.
       'Koło powtórzeniowe - z poprzedniego tematu.',
-      'Nowy temat - prezentacja i zadania na czas, ze stoperem. W zeszycie zapisujemy nazwę zadania i rozwiązanie.',
-      'Koło po lekcji z nowego tematu i notatka do zeszytu ze slajdu.',
+      'Nowy temat - prezentacja i zadania na czas, ze stoperem. Po każdym zadaniu koło na lekcji losuje, kto pokazuje rozwiązanie. W zeszycie zapisujemy nazwę zadania i rozwiązanie.',
+      'Notatka do zeszytu ze slajdu - i koniec lekcji.',
       'Każda lekcja ma swój kod - zapisujecie go w zeszycie przy temacie.',
     ],
   },

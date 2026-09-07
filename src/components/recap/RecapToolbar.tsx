@@ -8,7 +8,8 @@ import type { PickMode } from './useRecapDraw';
 
 /** Etykieta trybu rundy do paska - zeby nauczyciel od razu widzial, w czym jest. */
 const RECAP_MODE_LABELS: Record<RecapMode, string> = {
-  'po-lekcji': 'koło po lekcji',
+  // Stary tryb po-lekcji - tylko dla nieodswiezonych lekcji (patrz src/lib/recap.ts).
+  'po-lekcji': 'koło po lekcji (stary tryb)',
   powtorzeniowe: 'koło powtórzeniowe',
   demo: 'koło (demo)',
 };

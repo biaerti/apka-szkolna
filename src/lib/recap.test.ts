@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import type { RecapEvent, Settings, Slide, Student } from '../data/types';
 import {
+  answeredOnDay,
   answersByQuestion,
+  lessonWheelNote,
   buildRoundEntries,
   drawableEntries,
   canEarnPlus,
@@ -520,5 +522,40 @@ describe('answersByQuestion', () => {
       ev({ result: 'plus' }),
     ];
     expect(answersByQuestion(events, 'c1').size).toBe(0);
+  });
+});
+
+describe('kolo na lekcji: answeredOnDay / lessonWheelNote', () => {
+  const day = '2026-09-07';
+  const atDay = (h: number) => new Date(2026, 8, 7, h, 0, 0).toISOString();
+
+  it('liczy tylko oceny (plus/kropka/plomba/pas) z tej klasy i z tego dnia', () => {
+    const events = [
+      ev({ studentId: 's1', classId: 'c1', result: 'plus', at: atDay(8) }),
+      ev({ studentId: 's1', classId: 'c1', result: 'kropka', at: atDay(9) }),
+      ev({ studentId: 's2', classId: 'c1', result: 'pass', at: atDay(9) }),
+      // uwaga i podpowiedz to nie "odpowiadal"
+      ev({ studentId: 's3', classId: 'c1', result: 'uwaga', at: atDay(9) }),
+      ev({ studentId: 's3', classId: 'c1', result: 'hint_plomba', at: atDay(9) }),
+      // inna klasa
+      ev({ studentId: 's4', classId: 'c2', result: 'plus', at: atDay(9) }),
+      // inny dzien
+      ev({ studentId: 's5', classId: 'c1', result: 'plus', at: new Date(2026, 8, 6, 23, 30).toISOString() }),
+    ];
+    const map = answeredOnDay(events, 'c1', day);
+    expect(map.get('s1')).toBe(2);
+    expect(map.get('s2')).toBe(1);
+    expect(map.has('s3')).toBe(false);
+    expect(map.has('s4')).toBe(false);
+    expect(map.has('s5')).toBe(false);
+  });
+
+  it('pusta lista zdarzen = nikt jeszcze nie odpowiadal', () => {
+    expect(answeredOnDay([], 'c1', day).size).toBe(0);
+  });
+
+  it('adnotacja zdarzenia: kod lekcji + kod zadania, bez kodu lekcji sam kod zadania', () => {
+    expect(lessonWheelNote('4.3', 'Z2')).toBe('4.3 Z2');
+    expect(lessonWheelNote(undefined, 'Z1')).toBe('Z1');
   });
 });

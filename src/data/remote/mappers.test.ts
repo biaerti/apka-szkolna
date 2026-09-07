@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { Lesson, Meeting, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Student } from '../types';
+import type { Lesson, Meeting, Question, QuestionSet, Quiz, RecapEvent, SchoolClass, Settings, Student } from '../types';
 import {
   meetingToRow,
+  quizToRow,
   rowToMeeting,
+  rowToQuiz,
   classToRow,
   lessonToRow,
   questionSetToRow,
@@ -226,5 +228,39 @@ describe('meetings', () => {
     const row = meetingToRow({ ...meeting, place: undefined });
     expect(row.place).toBeNull();
     expect(rowToMeeting(row).place).toBeUndefined();
+  });
+});
+
+describe('quizzes', () => {
+  const quiz: Quiz = {
+    id: 'q1',
+    classId: 'c1',
+    kind: 'kartkowka',
+    title: 'Kartkówka 07.09.2026',
+    date: '2026-09-07',
+    questions: [
+      { id: 'qq1', text: 'Ile jest samogłosek?', answer: '8', sourceQuestionId: 'src1', order: 0 },
+      { id: 'qq2', text: 'Podaj przykład dwuznaku.', order: 1 },
+    ],
+    note: 'za hałas',
+    createdAt: '2026-09-07T08:00:00.000Z',
+  };
+
+  it('mapuje kartkowke tam i z powrotem', () => {
+    expect(rowToQuiz(quizToRow(quiz))).toEqual(quiz);
+  });
+
+  it('brak daty i notatki zapisuje jako NULL i wraca jako undefined', () => {
+    const row = quizToRow({ ...quiz, date: undefined, note: undefined });
+    expect(row.date).toBeNull();
+    expect(row.note).toBeNull();
+    const back = rowToQuiz(row);
+    expect(back.date).toBeUndefined();
+    expect(back.note).toBeUndefined();
+  });
+
+  it('wiersz bez pytan (NULL z bazy) wraca z pusta lista', () => {
+    const row = { ...quizToRow(quiz), questions: null as unknown as Quiz['questions'] };
+    expect(rowToQuiz(row).questions).toEqual([]);
   });
 });

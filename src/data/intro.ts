@@ -102,12 +102,14 @@ function asBulletList(items: string[]): string {
 }
 
 /**
- * Pogrubia nazwy obu kol w tresci zasad. Rozroznienie "koło po lekcji" vs
- * "koło powtórzeniowe" to najwazniejsza nomenklatura calego systemu - na
- * slajdzie musi rzucac sie w oczy, a sama tresc zostaje w zasady.ts.
+ * Pogrubia nazwy obu kol w tresci zasad. Rozroznienie "koło na lekcji" (po
+ * kazdym zadaniu, tylko zysk) vs "koło powtórzeniowe" (poczatek nastepnej
+ * lekcji, gra o wszystko) to najwazniejsza nomenklatura calego systemu - na
+ * slajdzie musi rzucac sie w oczy, a sama tresc zostaje w zasady.ts. Lapie
+ * tez formy "kole na lekcji" / "kole powtórzeniowym" w srodku zdania.
  */
 function boldNazwyKol(text: string): string {
-  return text.replace(/(Koł[oa]) (po lekcji|powtórzeniow\w+)/gi, '**$1 $2**');
+  return text.replace(/(Koł[oa]|Kole) (na lekcji|powtórzeniow\w+)/gi, '**$1 $2**');
 }
 
 /** Zamienia liste punktow na markdown-lite: uporzadkowana lista "1. ...". */
@@ -179,7 +181,8 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
   );
   const secLekcja = ruleSection('Jak wygląda nasza lekcja');
   // Punkt o kodzie lekcji zostaje wspomniany na koniec slajdu jako osobne
-  // zdanie, trzy kroki (powtorka - temat - kolo) ida jako lista numerowana.
+  // zdanie, trzy kroki (kolo powtorzeniowe - temat z zadaniami i kolem na
+  // lekcji - notatka) ida jako lista numerowana.
   const { matched: przebiegKod, rest: przebiegKroki } = partitionItems(secLekcja.items, /kod/i);
   // Slajd "Jak wyglada nasza lekcja" pojawia sie DWA RAZY: raz po przykladzie
   // rundy (zeby dzieci od razu wiedzialy, kiedy ktore kolo sie kreci) i drugi
@@ -311,7 +314,8 @@ Zasady są po to, żeby dało się grać uczciwie. Są jawne i takie same dla ws
       slideText('Pasy', asBulletList(secPasy.items), 'pas'),
 
       // 17. Przyklad rundy na pytaniu, na ktorym widac roznice miedzy odpowiedziami.
-      // To przyklad kola powtorzeniowego - na kole po lekcji mozna tylko zyskac.
+      // Glowny przyklad to kolo powtorzeniowe (gra o wszystko); na koncu krotki
+      // przyklad kola na lekcji (po zadaniu Z1 - tylko plus albo kropka).
       slideText(
         'Przykład rundy',
         `Pytanie: **"Wymień trzy znaki interpunkcyjne."** (koło powtórzeniowe)
@@ -321,7 +325,7 @@ Zasady są po to, żeby dało się grać uczciwie. Są jawne i takie same dla ws
 - Odpowiadasz źle albo wcale → plomba
 - Mówisz "pas" → nic się nie dzieje, ale zużywasz 1 z 2 pasów na ten miesiąc
 
-Na kole po lekcji, zaraz po nowym temacie, można tylko zyskać - nie ma tu kropki ani plomby.`,
+Na kole na lekcji, po każdym zadaniu, można tylko zyskać: plus albo kropka, plomby nie ma. Zadanie Z1 zrobione dobrze → plus. Zrobione w połowie albo wcale → kropka.`,
       ),
 
       // 18. Przebieg lekcji (z zasady.ts) - zaraz po przykladzie rundy, bo dopiero
@@ -329,13 +333,13 @@ Na kole po lekcji, zaraz po nowym temacie, można tylko zyskać - nie ma tu krop
       slideJakWygladaLekcja(),
 
       // 19. Dwa koła - najwazniejsze rozroznienie calego systemu. Tresc obu
-      // punktow z zasady.ts (sekcja "Gramy w koło fortuny"), plus zdanie, ze
-      // kola po lekcji nie trzeba sie bac.
+      // punktow z zasady.ts (sekcja "Gramy w koło fortuny", items[2] i [3]),
+      // plus zdanie, ze kola na lekcji nie trzeba sie bac.
       slideText(
-        'Dwa koła: po lekcji i powtórzeniowe',
+        'Dwa koła: na lekcji i powtórzeniowe',
         `${asBulletList([secGraKolo.items[2], secGraKolo.items[3]].map(boldNazwyKol))}
 
-Na **kole po lekcji** nie ma się czego bać - można tylko zyskać, nic nie szkodzi.
+Na **kole na lekcji** nie ma się czego bać - można tylko zyskać.
 
 Na **kole powtórzeniowym** gra się o wszystko: plus, kropka albo plomba.`,
         'kolo',
@@ -390,7 +394,7 @@ Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
       slideNote(
         'Notatka do zeszytu',
         `- Koło losuje, kto odpowiada.
-- Koło po lekcji - tylko zysk. Koło powtórzeniowe - gra się o wszystko.
+- Koło na lekcji - tylko zysk. Koło powtórzeniowe - gra się o wszystko.
 - Plus, kropka, plomba. 3 plusy = 5, 3 plomby = 1 (koniec miesiąca).
 - 2 pasy w miesiącu.`,
       ),

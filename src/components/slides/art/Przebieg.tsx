@@ -1,5 +1,7 @@
 // Ilustracja "przebieg": poziomy schemat przebiegu lekcji.
-// powtorka -> kolo -> nowy temat -> kolo -> notatka.
+// kolo powtorzeniowe -> nowy temat -> zadanie -> kolo (na lekcji) -> notatka.
+// Para "zadanie -> kolo" powtarza sie po kazdym zadaniu (zwykle 3-5 razy) -
+// pokazuje to strzalka zwrotna nad tymi dwoma krokami z podpisem "3-5 razy".
 //
 // Kroki z kolem fortuny nie sa prostokatem z napisem, tylko malym podgladem
 // samego kola (sektory, wskaznik, jeden wylosowany sektor). Dziecko widzi na
@@ -9,12 +11,16 @@
 import { ART_COLORS as C, ART_FONT } from './colors';
 
 const STEPS: { label: string; color: string; wheel?: boolean }[] = [
-  { label: 'powtórka', color: C.kropka },
-  { label: 'koło', color: C.pas, wheel: true },
+  { label: 'koło powt.', color: C.pas, wheel: true },
   { label: 'nowy temat', color: C.plus },
+  { label: 'zadanie', color: C.kropka },
   { label: 'koło', color: C.pas, wheel: true },
   { label: 'notatka', color: C.kropka },
 ];
+
+// Indeksy krokow, ktore sie powtarzaja (zadanie -> kolo na lekcji).
+const REPEAT_FROM = 3;
+const REPEAT_TO = 2;
 
 const BOX_W = 140;
 const BOX_H = 90;
@@ -69,9 +75,31 @@ export function Przebieg({ className }: { className?: string }) {
       viewBox="0 0 900 210"
       className={className ?? 'h-auto w-full'}
       role="img"
-      aria-label="Ilustracja: przebieg lekcji - powtorka, kolo fortuny, nowy temat, kolo fortuny, notatka"
+      aria-label="Ilustracja: przebieg lekcji - kolo powtorzeniowe, nowy temat, zadanie, kolo na lekcji (po kazdym zadaniu), notatka"
       style={{ fontFamily: ART_FONT }}
     >
+      {/* Strzalka zwrotna nad krokami "zadanie" i "kolo": po kazdym zadaniu
+          kreci sie kolo, potem kolejne zadanie - i tak 3-5 razy. */}
+      {(() => {
+        const fromX = START_X + REPEAT_FROM * (BOX_W + GAP) + BOX_W / 2;
+        const toX = START_X + REPEAT_TO * (BOX_W + GAP) + BOX_W / 2;
+        const midX = (fromX + toX) / 2;
+        return (
+          <g>
+            <path
+              d={`M ${fromX - 22} 40 Q ${midX} -14 ${toX + 8} 48`}
+              fill="none"
+              stroke={C.white}
+              strokeWidth={4}
+              strokeDasharray="10 8"
+            />
+            <polygon points={`${toX},40 ${toX + 16},40 ${toX + 8},54`} fill={C.white} />
+            <text x={midX} y={44} textAnchor="middle" fontSize={16} fontWeight={700} fill={C.white}>
+              3-5 razy
+            </text>
+          </g>
+        );
+      })()}
       {STEPS.map((step, i) => {
         const x = START_X + i * (BOX_W + GAP);
         return (

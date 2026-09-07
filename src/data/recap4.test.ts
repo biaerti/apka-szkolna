@@ -22,27 +22,62 @@ describe('buildRecap4', () => {
     }
   });
 
-  it('kazda lekcja ma zamykajacy slajd recap (mode po-lekcji) na wlasnym zestawie i, od drugiej lekcji, otwierajacy slajd (mode powtorzeniowe) na zestawie poprzedniej lekcji', () => {
+  it('lekcja 1 nie ma slajdu recap, kazda kolejna ma dokladnie jeden - otwierajacy (mode powtorzeniowe) na zestawie poprzedniej lekcji; brak slajdow po-lekcji', () => {
     const bundle = buildRecap4('V', [CLASS_ID]);
     bundle.lessons.forEach((lesson, idx) => {
       const recapSlides = lesson.slides.filter((s) => s.kind === 'recap');
-      const closing = recapSlides[recapSlides.length - 1];
-      if (closing.kind !== 'recap') throw new Error('spodziewany slajd recap');
-      expect(closing.questionSetId).toBe(lesson.questionSetId);
-      expect(closing.mode).toBe('po-lekcji');
-      expect(bundle.questionSets.some((qs) => qs.id === closing.questionSetId)).toBe(true);
+      for (const slide of recapSlides) {
+        if (slide.kind !== 'recap') throw new Error('spodziewany slajd recap');
+        expect(slide.mode).not.toBe('po-lekcji');
+      }
 
       if (idx === 0) {
-        expect(recapSlides).toHaveLength(1);
-      } else {
-        expect(recapSlides).toHaveLength(2);
-        const opening = recapSlides[0];
-        if (opening.kind !== 'recap') throw new Error('spodziewany slajd recap');
-        const previousLesson = bundle.lessons[idx - 1];
-        expect(opening.questionSetId).toBe(previousLesson.questionSetId);
-        expect(opening.mode).toBe('powtorzeniowe');
+        expect(recapSlides).toHaveLength(0);
+        return;
       }
+
+      expect(recapSlides).toHaveLength(1);
+      const opening = recapSlides[0];
+      if (opening.kind !== 'recap') throw new Error('spodziewany slajd recap');
+      const previousLesson = bundle.lessons[idx - 1];
+      expect(opening.questionSetId).toBe(previousLesson.questionSetId);
+      expect(opening.mode).toBe('powtorzeniowe');
+      expect(bundle.questionSets.some((qs) => qs.id === opening.questionSetId)).toBe(true);
+
+      // Kolo powtorzeniowe jest na poczatku lekcji - przed pierwszym zadaniem.
+      const recapIdx = lesson.slides.indexOf(opening);
+      const firstTaskIdx = lesson.slides.findIndex((s) => s.kind === 'task');
+      expect(firstTaskIdx).toBeGreaterThan(-1);
+      expect(recapIdx).toBeLessThan(firstTaskIdx);
     });
+  });
+
+  // Zestaw lekcji sluzy kolu powtorzeniowemu na nastepnej lekcji: jedno pytanie na zadanie.
+  it('zestaw lekcji ma tyle pytan, ile lekcja ma slajdow task (3-5)', () => {
+    const bundle = buildRecap4('V', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const taskCount = lesson.slides.filter((s) => s.kind === 'task').length;
+      const questionCount = bundle.questions.filter((q) => q.setId === lesson.questionSetId).length;
+      expect(taskCount).toBeGreaterThanOrEqual(3);
+      expect(taskCount).toBeLessThanOrEqual(5);
+      expect(questionCount).toBe(taskCount);
+    }
+  });
+
+  // Pytanie na kolo sprawdza te sama umiejetnosc co zadanie, ale nie jest tym samym cwiczeniem.
+  it('zadne pytanie nie powtarza tytulu ani tresci zadania z lekcji', () => {
+    const bundle = buildRecap4('V', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const tasks = lesson.slides.filter((s) => s.kind === 'task');
+      const questions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
+      for (const question of questions) {
+        for (const task of tasks) {
+          if (task.kind !== 'task') throw new Error('spodziewany slajd task');
+          expect(question.text).not.toBe(task.title);
+          expect(task.body.includes(question.text)).toBe(false);
+        }
+      }
+    }
   });
 
   it('kazde pytanie ma odpowiedz i nalezy do istniejacego zestawu', () => {
@@ -109,27 +144,62 @@ describe('buildRecap13', () => {
     }
   });
 
-  it('kazda lekcja ma zamykajacy slajd recap (mode po-lekcji) na wlasnym zestawie i, od drugiej lekcji, otwierajacy slajd (mode powtorzeniowe) na zestawie poprzedniej lekcji', () => {
+  it('lekcja 1 nie ma slajdu recap, kazda kolejna ma dokladnie jeden - otwierajacy (mode powtorzeniowe) na zestawie poprzedniej lekcji; brak slajdow po-lekcji', () => {
     const bundle = buildRecap13('IV', [CLASS_ID]);
     bundle.lessons.forEach((lesson, idx) => {
       const recapSlides = lesson.slides.filter((s) => s.kind === 'recap');
-      const closing = recapSlides[recapSlides.length - 1];
-      if (closing.kind !== 'recap') throw new Error('spodziewany slajd recap');
-      expect(closing.questionSetId).toBe(lesson.questionSetId);
-      expect(closing.mode).toBe('po-lekcji');
-      expect(bundle.questionSets.some((qs) => qs.id === closing.questionSetId)).toBe(true);
+      for (const slide of recapSlides) {
+        if (slide.kind !== 'recap') throw new Error('spodziewany slajd recap');
+        expect(slide.mode).not.toBe('po-lekcji');
+      }
 
       if (idx === 0) {
-        expect(recapSlides).toHaveLength(1);
-      } else {
-        expect(recapSlides).toHaveLength(2);
-        const opening = recapSlides[0];
-        if (opening.kind !== 'recap') throw new Error('spodziewany slajd recap');
-        const previousLesson = bundle.lessons[idx - 1];
-        expect(opening.questionSetId).toBe(previousLesson.questionSetId);
-        expect(opening.mode).toBe('powtorzeniowe');
+        expect(recapSlides).toHaveLength(0);
+        return;
       }
+
+      expect(recapSlides).toHaveLength(1);
+      const opening = recapSlides[0];
+      if (opening.kind !== 'recap') throw new Error('spodziewany slajd recap');
+      const previousLesson = bundle.lessons[idx - 1];
+      expect(opening.questionSetId).toBe(previousLesson.questionSetId);
+      expect(opening.mode).toBe('powtorzeniowe');
+      expect(bundle.questionSets.some((qs) => qs.id === opening.questionSetId)).toBe(true);
+
+      // Kolo powtorzeniowe jest na poczatku lekcji - przed pierwszym zadaniem.
+      const recapIdx = lesson.slides.indexOf(opening);
+      const firstTaskIdx = lesson.slides.findIndex((s) => s.kind === 'task');
+      expect(firstTaskIdx).toBeGreaterThan(-1);
+      expect(recapIdx).toBeLessThan(firstTaskIdx);
     });
+  });
+
+  // Zestaw lekcji sluzy kolu powtorzeniowemu na nastepnej lekcji: jedno pytanie na zadanie.
+  it('zestaw lekcji ma tyle pytan, ile lekcja ma slajdow task (3-5)', () => {
+    const bundle = buildRecap13('IV', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const taskCount = lesson.slides.filter((s) => s.kind === 'task').length;
+      const questionCount = bundle.questions.filter((q) => q.setId === lesson.questionSetId).length;
+      expect(taskCount).toBeGreaterThanOrEqual(3);
+      expect(taskCount).toBeLessThanOrEqual(5);
+      expect(questionCount).toBe(taskCount);
+    }
+  });
+
+  // Pytanie na kolo sprawdza te sama umiejetnosc co zadanie, ale nie jest tym samym cwiczeniem.
+  it('zadne pytanie nie powtarza tytulu ani tresci zadania z lekcji', () => {
+    const bundle = buildRecap13('IV', [CLASS_ID]);
+    for (const lesson of bundle.lessons) {
+      const tasks = lesson.slides.filter((s) => s.kind === 'task');
+      const questions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
+      for (const question of questions) {
+        for (const task of tasks) {
+          if (task.kind !== 'task') throw new Error('spodziewany slajd task');
+          expect(question.text).not.toBe(task.title);
+          expect(task.body.includes(question.text)).toBe(false);
+        }
+      }
+    }
   });
 
   it('kazde pytanie ma odpowiedz i nalezy do istniejacego zestawu', () => {

@@ -6,15 +6,12 @@ import { useStore } from '../data/store';
 import { SlideView } from '../components/slides/SlideView';
 import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
+import { TaskWheelDrawer } from '../components/lessons/TaskWheelDrawer';
+import { useTaskWheel } from '../components/lessons/useTaskWheel';
+import { usePresentKeys } from '../components/lessons/usePresentKeys';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
 import { classesOfGrade, lessonProgress, todayKey } from '../lib/grade';
-
-function isTypingTarget(el: EventTarget | null): boolean {
-  if (!(el instanceof HTMLElement)) return false;
-  const tag = el.tagName;
-  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
-}
 
 export function LessonPresent() {
   const { id, classId: classIdParam } = useParams<{ id: string; classId?: string }>();
@@ -30,6 +27,8 @@ export function LessonPresent() {
   const [classPanelOpen, setClassPanelOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+  // Kolo na lekcji - stan na poziomie prezentacji, zeby przezyl zmiany slajdow.
+  const wheel = useTaskWheel({ classId: classId ?? '', lessonCode: lesson?.code });
 
   useEffect(() => {
     if (!lesson || !classId || startedRef.current) return;
@@ -43,50 +42,31 @@ export function LessonPresent() {
   const total = lesson?.slides.length ?? 0;
 
   function goTo(next: number) {
-    setIndex(Math.max(0, Math.min(total - 1, next)));
+    const clamped = Math.max(0, Math.min(total - 1, next));
+    // Zmiana slajdu: oceniony uczen znika z ramki kola, nieoceniony zostaje.
+    if (clamped !== index) wheel.clearGradedStudent();
+    setIndex(clamped);
   }
 
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (isTypingTarget(e.target)) return;
+  const currentSlide = lesson?.slides[index];
+  const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : '';
 
-      // Esc z otwartym panelem "Klasa" najpierw zamyka panel - dopiero kolejny
-      // Esc (panel juz zamkniety) wychodzi z prezentacji. Nawigacja strzalkami
-      // dziala niezaleznie od panelu (prosciej niz jej wstrzymywanie).
-      if (e.key === 'Escape' && classPanelOpen) {
-        e.preventDefault();
-        setClassPanelOpen(false);
-        return;
-      }
-
-      const onRecap = lesson?.slides[index]?.kind === 'recap';
-      if (onRecap && (e.key === ' ' || e.key === 'Escape')) return;
-
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        e.preventDefault();
-        goTo(index + 1);
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        e.preventDefault();
-        goTo(index - 1);
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        goTo(0);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        goTo(total - 1);
-      } else if (e.key === 'f' || e.key === 'F') {
-        e.preventDefault();
-        toggleFullscreen();
-      } else if (e.key === 'Escape') {
-        if (!document.fullscreenElement) {
-          navigate(classId ? `/lekcje?klasa=${classId}` : '/lekcje');
-        }
-      }
-    }
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, total, lesson, classId, classPanelOpen]);
+  usePresentKeys({
+    index,
+    total,
+    onRecap: currentSlide?.kind === 'recap',
+    onTask: currentSlide?.kind === 'task',
+    classPanelOpen,
+    setClassPanelOpen,
+    wheelOpen: wheel.open,
+    setWheelOpen: wheel.setOpen,
+    onSpin: wheel.spin,
+    onGrade: (result) => wheel.grade(result, taskCode),
+    onUndo: wheel.undoLast,
+    goTo,
+    toggleFullscreen,
+    exit: () => navigate(classId ? `/lekcje?klasa=${classId}` : '/lekcje'),
+  });
 
   function toggleFullscreen() {
     if (document.fullscreenElement) {
@@ -145,12 +125,14 @@ export function LessonPresent() {
 
   const slide = lesson.slides[index];
   const isRecap = slide.kind === 'recap';
+  const isTask = slide.kind === 'task';
   const isLast = index === total - 1;
+  const drawerOpen = isTask && wheel.open;
 
   return (
-    <div ref={rootRef} className="relative bg-gray-950" style={{ height: '100vh' }}>
+    <div ref={rootRef} className="relative flex flex-row bg-gray-950" style={{ height: '100vh' }}>
       <div
-        className="h-full w-full"
+        className="h-full min-w-0 flex-1"
         onClick={(e) => {
           if (isRecap) return;
           const rect = e.currentTarget.getBoundingClientRect();
@@ -170,6 +152,21 @@ export function LessonPresent() {
           onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
         />
       </div>
+
+      {drawerOpen && <TaskWheelDrawer wheel={wheel} taskCode={taskCode} onClose={() => wheel.setOpen(false)} />}
+
+      {isTask && (
+        <button
+          type="button"
+          onClick={() => wheel.setOpen(!wheel.open)}
+          aria-label={wheel.open ? 'Zamknij koło na lekcji' : 'Otwórz koło na lekcji'}
+          aria-expanded={wheel.open}
+          className="fixed right-0 top-1/3 z-40 -translate-y-1/2 rounded-l-md bg-gray-800/60 px-1.5 py-4 text-[11px] tracking-wide text-gray-300 hover:bg-gray-800/90"
+          style={{ writingMode: 'vertical-rl' }}
+        >
+          Koło
+        </button>
+      )}
 
       {!isRecap && (
         <PresentClassPanel classId={classId} open={classPanelOpen} onOpenChange={setClassPanelOpen} />

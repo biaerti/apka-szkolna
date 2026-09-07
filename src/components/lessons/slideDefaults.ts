@@ -69,7 +69,9 @@ export function createSlide(kind: SlideKind, existingSlides: Slide[]): Slide {
     case 'note':
       return { id, kind: 'note', title: '', body: '' };
     case 'recap':
-      return { id, kind: 'recap', questionSetId: '' };
+      // Nowy slajd recap = kolo powtorzeniowe (jedyny aktualny tryb; brak `mode`
+      // oznaczalby stary tryb po-lekcji - patrz resolveRecapMode w src/lib/recap.ts).
+      return { id, kind: 'recap', questionSetId: '', mode: 'powtorzeniowe' };
     case 'image':
       return { id, kind: 'image', url: '', caption: '' };
     default:

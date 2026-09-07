@@ -119,18 +119,42 @@ describe('buildIntroLesson', () => {
     expect(titles).toContain('Przykład rundy');
   });
 
-  it('rozroznia kolo po lekcji od kola powtorzeniowego', () => {
+  it('rozroznia kolo na lekcji od kola powtorzeniowego', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const text = allText(lesson).toLowerCase();
-    expect(text).toContain('koło po lekcji');
+    expect(text).toContain('koło na lekcji');
     expect(text).toContain('koło powtórzeniowe');
   });
 
-  it('przyklad rundy dotyczy kola powtorzeniowego i zaznacza, ze na kole po lekcji mozna tylko zyskac', () => {
+  it('nie wspomina juz wycofanego "kola po lekcji" (dzieci odpowiadaly dwa razy na to samo)', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const text = allText(lesson).toLowerCase();
+    expect(text).not.toContain('koło po lekcji');
+    expect(text).not.toContain('kole po lekcji');
+    expect(text).not.toContain('koła po lekcji');
+  });
+
+  it('przyklad rundy dotyczy kola powtorzeniowego i zaznacza, ze na kole na lekcji mozna tylko zyskac', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Przykład rundy');
-    expect(slide && 'body' in slide ? slide.body : '').toContain('powtórzeniowe');
-    expect(slide && 'body' in slide ? slide.body : '').toContain('tylko zyskać');
+    const body = slide && 'body' in slide ? slide.body : '';
+    expect(body).toContain('powtórzeniowe');
+    expect(body).toContain('kole na lekcji');
+    expect(body).toContain('tylko zyskać');
+    // Krotki przyklad kola na lekcji: zadanie zrobione dobrze -> plus, slabo/wcale -> kropka.
+    expect(body).toContain('Z1');
+    expect(body).not.toContain('kole po lekcji');
+  });
+
+  it('slajd "Dwa koła" nazywa kolo na lekcji i kolo powtorzeniowe, oba pogrubione', () => {
+    const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
+    const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Dwa koła: na lekcji i powtórzeniowe');
+    expect(slide).toBeDefined();
+    const body = slide && 'body' in slide ? slide.body : '';
+    expect(body).toContain('**Koło na lekcji**');
+    expect(body).toContain('**Koło powtórzeniowe**');
+    expect(body).toContain('**kole na lekcji**');
+    expect(body).toContain('**kole powtórzeniowym**');
   });
 
   it('po przykladzie rundy tlumaczy przebieg lekcji, a potem rozroznia dwa kola', () => {
@@ -151,7 +175,9 @@ describe('buildIntroLesson', () => {
     for (const slide of przebieg) {
       const body = 'body' in slide ? slide.body : '';
       expect(body).toContain('**Koło powtórzeniowe**');
-      expect(body).toContain('**Koło po lekcji**');
+      // W kroku 2 kolo na lekcji stoi w srodku zdania, wiec malymi literami.
+      expect(body).toContain('**koło na lekcji**');
+      expect(body).not.toContain('po lekcji');
     }
   });
 
@@ -238,10 +264,25 @@ describe('RULE_SECTIONS', () => {
     }
   });
 
-  it('wspomina, ze na kazdym kole losuje sie od 3 do 5 osob, a nie stary limit "10 pytan"', () => {
+  it('kolo powtorzeniowe ma tyle pytan, ile bylo zadan (zwykle 3-5), a nie stary limit "10 pytan"', () => {
     const all = RULE_SECTIONS.map((s) => s.items.join(' ')).join(' ');
-    expect(all).toContain('od 3 do 5 osób');
+    expect(all).toContain('tyle pytań, ile było zadań');
+    expect(all).toContain('od 3 do 5');
     expect(all.toLowerCase()).not.toContain('10 pytań');
+  });
+
+  it('dwa kola: na lekcji (po kazdym zadaniu, tylko plus/kropka) i powtorzeniowe; bez wycofanego "kola po lekcji"', () => {
+    const section = RULE_SECTIONS.find((s) => s.title === 'Gramy w koło fortuny');
+    expect(section).toBeDefined();
+    const items = section?.items ?? [];
+    // intro.ts siega po indeksach 1, 2 i 3 - pilnujemy, ze nic sie nie przesunelo.
+    expect(items[1]).toContain('losuje koło');
+    expect(items[2]).toMatch(/^Koło na lekcji/);
+    expect(items[2]).toContain('Plomby na kole na lekcji nie ma');
+    expect(items[3]).toMatch(/^Koło powtórzeniowe/);
+    expect(items[3]).toContain('innymi niż zadania z lekcji');
+    const all = RULE_SECTIONS.map((s) => s.items.join(' ')).join(' ').toLowerCase();
+    expect(all).not.toContain('po lekcji');
   });
 
   it('eskalacja za zachowanie ma tylko dwa stopnie, bez dawnych "dodatkowych miejsc w kole"', () => {

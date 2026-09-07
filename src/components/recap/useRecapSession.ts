@@ -27,7 +27,10 @@ export interface UseRecapSessionArgs {
   initialGrading?: boolean;
   /** Czy pytania sa losowane (zmieniaja sie automatycznie przy kazdym uczniu). */
   initialRandomOrder?: boolean;
-  /** Tryb rundy - decyduje o zasadach oceniania (patrz src/lib/recap.ts). Domyslnie 'po-lekcji'. */
+  /**
+   * Tryb rundy - decyduje o zasadach oceniania (patrz src/lib/recap.ts).
+   * Domyslnie 'po-lekcji' - stary tryb, zostaje jako fallback dla starych danych.
+   */
   recapMode?: RecapMode;
   /**
    * Czy wylosowanie ucznia zmienia od razu pytanie (przy losowych pytaniach).

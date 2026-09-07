@@ -8,11 +8,13 @@ import { useSyncStatus } from '../../data/remote/sync';
 // bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w inne ekrany
 // (lekcje / klasa ucznia) i nie sa juz osobnymi modulami. "Zebrania" to osobna
 // pozycja, bo skrypt zebrania z rodzicami nie ma sie gdzie podpiac - nie nalezy
-// ani do lekcji, ani do klasy.
+// ani do lekcji, ani do klasy. "Kartkowki" podobnie: kartkowka karna za halas
+// i klasowka po dziale to wydarzenia konkretnej klasy, z pytaniami z wielu lekcji.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
   { to: '/lekcje', label: 'Lekcje' },
+  { to: '/kartkowki', label: 'Kartkówki' },
   { to: '/podrecznik', label: 'Podręcznik' },
   { to: '/zebrania', label: 'Zebrania' },
   { to: '/zasady/druk', label: 'Zasady' },

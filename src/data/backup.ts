@@ -1,6 +1,6 @@
 // Eksport / import calego stanu aplikacji do/z pliku JSON.
 
-import type { Lesson, Meeting, Question, QuestionSet, RecapEvent, SchoolClass, Settings, Student } from './types';
+import type { Lesson, Meeting, Question, QuestionSet, Quiz, RecapEvent, SchoolClass, Settings, Student } from './types';
 import { useStore } from './store';
 
 export interface BackupData {
@@ -14,13 +14,15 @@ export interface BackupData {
   recapEvents: RecapEvent[];
   /** Doszlo w wersji 2 backupu - starsze pliki tego pola nie maja. */
   meetings?: Meeting[];
+  /** Doszlo w wersji 3 backupu (kartkowki) - starsze pliki tego pola nie maja. */
+  quizzes?: Quiz[];
   settings: Settings;
 }
 
 export function buildBackup(): BackupData {
   const s = useStore.getState();
   return {
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
     classes: s.classes,
     students: s.students,
@@ -29,6 +31,7 @@ export function buildBackup(): BackupData {
     lessons: s.lessons,
     recapEvents: s.recapEvents,
     meetings: s.meetings,
+    quizzes: s.quizzes,
     settings: s.settings,
   };
 }
@@ -74,6 +77,8 @@ export function applyBackup(data: BackupData): void {
     // Backup sprzed zakladki "Zebrania" nie ma tego pola - wtedy zostawiamy
     // biezace zebrania zamiast kasowac je przy odtwarzaniu starego pliku.
     meetings: data.meetings ?? useStore.getState().meetings,
+    // Tak samo backup sprzed zakladki "Kartkowki" - stare pliki nie maja pola.
+    quizzes: data.quizzes ?? useStore.getState().quizzes,
     settings: data.settings,
   });
 }

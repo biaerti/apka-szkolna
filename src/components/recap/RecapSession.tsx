@@ -38,8 +38,9 @@ export interface RecapSessionProps {
    */
   demoVariant?: boolean;
   /**
-   * Tryb rundy - "koło po lekcji" (domyslnie, mozna tylko zyskac) albo "koło
-   * powtórzeniowe" (pelne ocenianie, patrz src/lib/recap.ts). Nadpisywany
+   * Tryb rundy - "koło powtórzeniowe" (pelne ocenianie) albo stary tryb
+   * po-lekcji (mozna bylo tylko zyskac; zostaje domyslnym fallbackiem dla
+   * starych danych - patrz src/lib/recap.ts). Nadpisywany
    * query stringiem `?tryb=` na trasie /powtorka/:classId/:setId (patrz
    * RecapScreen) - dzieki temu ten sam link dziala tez spoza slajdu recap.
    */
@@ -81,7 +82,8 @@ export function RecapSession({
   const queryTryb = searchParams.get('tryb');
   const explicitRecapMode: RecapMode | undefined =
     queryTryb === 'powtorzeniowe' || queryTryb === 'po-lekcji' ? queryTryb : undefined;
-  // Kolejnosc jak przy pickMode/grading: query string > prop > domyslne 'po-lekcji'.
+  // Kolejnosc jak przy pickMode/grading: query string > prop > domyslne 'po-lekcji'
+  // (stary tryb - fallback dla starych danych, patrz src/lib/recap.ts).
   const resolvedRecapMode: RecapMode = explicitRecapMode ?? recapMode ?? 'po-lekcji';
 
   const hasExplicitSettings =

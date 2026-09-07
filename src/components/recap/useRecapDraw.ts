@@ -71,9 +71,10 @@ export interface UseRecapDrawArgs {
   initialGrading: boolean;
   /**
    * Tryb rundy - decyduje o zasadach oceniania (patrz src/lib/recap.ts):
-   * 'po-lekcji' (domyslnie) mozna tylko zyskac, 'powtorzeniowe' ocenia w
-   * pelni. 'demo' (lekcja zapoznawcza / "Przedstaw się") nie korzysta z tego
-   * rozroznienia - tam `grading` jest i tak wylaczone wyzej w drzewie.
+   * 'powtorzeniowe' ocenia w pelni, 'po-lekcji' (stary tryb, tylko dla
+   * nieodswiezonych lekcji) pozwalal tylko zyskac. 'demo' (lekcja zapoznawcza /
+   * "Przedstaw się") nie korzysta z tego rozroznienia - tam `grading` jest i
+   * tak wylaczone wyzej w drzewie.
    */
   recapMode: RecapMode;
 }
@@ -199,10 +200,10 @@ export function useRecapDraw({
   function grade(result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>) {
     if (!currentEntry || graded) return;
     // Blokada plusa dziala w OBU trybach - uczen z >=2 uwagami w miesiacu nie
-    // moze dostac plusa ani na kole po lekcji, ani na powtorzeniowym.
+    // moze dostac plusa w zadnym kole (canEarnPlus).
     if (result === 'plus' && !canEarnPlus(warningsFor(currentEntry.student.id))) return;
-    // Kolo po lekcji: jedyna ocena to plus - nie ma kropki, plomby ani pasa
-    // (przycisk "Dalej" zamiast nich - patrz markDoneNoGrade).
+    // Stary tryb po-lekcji (patrz src/lib/recap.ts): jedyna ocena to plus - nie
+    // ma kropki, plomby ani pasa (przycisk "Dalej" zamiast nich - patrz markDoneNoGrade).
     if (recapMode !== 'powtorzeniowe' && result !== 'plus') return;
     const studentId = currentEntry.student.id;
     const event = recordEvent(studentId, result);

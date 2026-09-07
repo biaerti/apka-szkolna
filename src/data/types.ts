@@ -56,7 +56,14 @@ export interface RecapEvent {
   questionSetId?: ID;
   questionId?: ID;
   result: RecapResult;
-  note?: string; // adnotacja (np. przy jedynce/piatce/rozliczeniu)
+  /**
+   * Adnotacja: przy jedynce/piatce/rozliczeniu - komentarz nauczyciela; przy
+   * plusie/kropce z KOLA NA LEKCJI - kod lekcji i zadania, np. "4.3 Z2"
+   * (patrz src/lib/recap.ts: lessonWheelNote). Zdarzenia z kola na lekcji nie
+   * maja questionSetId ani questionId, bo "pytaniem" jest samo zadanie ze
+   * slajdu, nie pytanie z zestawu.
+   */
+  note?: string;
   at: string; // ISO
 }
 
@@ -119,8 +126,9 @@ export interface Lesson {
   dzial?: string;
   /**
    * Zestaw pytan powtorkowy TEJ lekcji - wskazuje na JEJ WLASNY `questionSetId`
-   * (te same pytania sluza i kolu po lekcji, i kolu powtorzeniowemu na
-   * poczatku nastepnej lekcji, patrz src/lib/recap.ts: RecapMode). Dawniej byl
+   * (pytania zestawu sluza WYLACZNIE kolu powtorzeniowemu na poczatku
+   * nastepnej lekcji; na samej lekcji kolo losuje osobe do zadan ze slajdow
+   * `task`, bez pytan - patrz src/lib/recap.ts: "kolo na lekcji"). Dawniej byl
    * to osobny, lustrzany zestaw pytan - wycofany, zeby nauczyciel nie musial
    * przygotowywac dwoch kompletow pytan na ten sam material. Zostaje jako
    * osobne pole (kolumna w Supabase juz istnieje) - starsze, jeszcze
@@ -260,14 +268,20 @@ export type Slide =
   // zapoznawczej (src/data/intro.ts) - nowe rozroznienie zasad oceniania
   // zaladowanych z `mode` (patrz nizej).
   //
-  // `mode` rozroznia DWA WLASCIWE tryby rundy (nazewnictwo nauczyciela):
-  // - 'po-lekcji'    - kolo NA KONCU lekcji: mozna tylko zyskac (plus/Dalej,
-  //                    plomba tylko dla ucznia z >=3 uwagami w miesiacu),
+  // `mode` (nazewnictwo nauczyciela):
   // - 'powtorzeniowe' - kolo NA POCZATKU lekcji (albo wejscie "Koło powt."):
   //                    pelne ocenianie plus/kropka/plomba/pas, uczen z >=2
-  //                    uwagami w miesiacu nie moze dostac plusa.
+  //                    uwagami w miesiacu nie moze dostac plusa. Jedyny tryb,
+  //                    jaki tworza dzis gotowe materialy.
+  // - 'po-lekcji'    - HISTORYCZNY: kolo NA KONCU lekcji z tymi samymi
+  //                    pytaniami (mozna bylo tylko zyskac). Wycofane - dzieci
+  //                    odpowiadaly dwa razy na to samo. Zastapione KOLEM NA
+  //                    LEKCJI, ktore nie jest slajdem: losuje osobe do kazdego
+  //                    zadania wprost na slajdzie `task` (patrz
+  //                    src/components/lessons/useTaskWheel.ts). Wartosc zostaje
+  //                    dla starych, nieodswiezonych lekcji w bazie.
   // Brak pola (stare dane sprzed tego rozroznienia) = 'po-lekcji', bo do tej
-  // pory KAZDY recap na koncu lekcji dzialal tak jak dzisiejsze 'po-lekcji'
+  // pory KAZDY recap na koncu lekcji dzialal tak jak dawne 'po-lekcji'
   // (patrz src/lib/recap.ts: resolveRecapMode). Odczyt starych danych nie moze
   // sie wywalic - stad pole opcjonalne, a nie wymagane.
   | { id: ID; kind: 'recap'; questionSetId: ID; variant?: 'demo'; mode?: 'po-lekcji' | 'powtorzeniowe' | 'demo' }
@@ -314,4 +328,45 @@ export interface Meeting {
   place?: string; // np. "sala 24"
   script: string;
   order: number;
+}
+
+// --- Kartkowki i klasowki ----------------------------------------------------
+
+export type QuizKind = 'kartkowka' | 'klasowka';
+
+/**
+ * Pytanie kartkowki - KOPIA tresci z chwili dodania, a nie odwolanie do
+ * `Question`. Zestaw pytan lekcji moze sie potem zmienic (nauczyciel poprawi
+ * tresc, usunie pytanie, przestawi kolejnosc), a kartkowka ma zostac taka,
+ * jaka byla pisana - dzieci maja ja na kartkach, a nauczyciel sprawdza po
+ * tym, co bylo na projektorze. `sourceQuestionId` to tylko slad, skad
+ * pytanie pochodzi (blokuje ponowne dodanie tego samego pytania w pickerze);
+ * pytania wlasne go nie maja.
+ */
+export interface QuizQuestion {
+  id: ID;
+  text: string;
+  answer?: string;
+  sourceQuestionId?: ID;
+  order: number;
+}
+
+/**
+ * Kartkowka albo klasowka. Nalezy do KLASY (`classId`), a nie do rocznika jak
+ * lekcje: to konkretne wydarzenie w konkretnej klasie - kartkowka "karna" za
+ * halas pisana przez IV A w ten wtorek, klasowka po dziale w terminie
+ * ustalonym z IV B. Klasy rownolegle pisza w rozne dni i z roznym zestawem
+ * pytan, wiec wspolna encja dla rocznika nie mialaby sensu. Pytania sie
+ * bierze z zestawow lekcji rocznika tej klasy (patrz src/lib/quiz.ts:
+ * lessonsWithQuestionSets) albo dopisuje wlasne.
+ */
+export interface Quiz {
+  id: ID;
+  classId: ID;
+  kind: QuizKind;
+  title: string;
+  date?: string; // YYYY-MM-DD
+  questions: QuizQuestion[];
+  note?: string;
+  createdAt: string; // ISO
 }

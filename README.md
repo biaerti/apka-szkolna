@@ -48,13 +48,15 @@ paska bocznego. Offline zmiany czekają i idą po powrocie sieci.
 | Trasa | Co robi |
 |---|---|
 | `/` | Pulpit: dzisiejsze lekcje, kolejka per klasa, szybki start |
-| `/klasy` | Klasy i uczniowie (import listy z tekstu, dezaktywacja zamiast kasowania) |
-| `/pytania` | Zestawy pytań do powtórek (import: jedno pytanie na linię, opcjonalnie `pytanie \| odpowiedź`) |
-| `/powtorka` | Wybór klasy, zestawu i obecnych, potem ekran projektora z kołem fortuny |
-| `/lekcje` | Lista lekcji per klasa, edytor slajdów, prezentacja |
-| `/kalendarz` | Widok tygodnia, kolejka lekcji, zaległe, pomijanie |
-| `/statystyki` | Bilans uczniów per miesiąc, eksport CSV, usuwanie pojedynczych zdarzeń |
-| `/ustawienia` | Limit pasów na tydzień, minus za podpowiadanie, czas kręcenia, eksport/import JSON |
+| `/klasy`, `/klasy/:id` | Klasy i uczniowie (import listy z tekstu, dezaktywacja zamiast kasowania); w widoku klasy zakładki Uczniowie / Bilans miesiąca / Do rozliczenia |
+| `/lekcje` | Lista lekcji per rocznik (postęp per klasa), edytor slajdów, prezentacja, gotowe materiały |
+| `/lekcje/:id/pokaz/:classId` | Ekran projektora: slajdy, koło na lekcji przy zadaniach, koło powtórzeniowe ze slajdu `recap` |
+| `/pytania/:id` | Zestaw pytań lekcji (import: jedno pytanie na linię, opcjonalnie `pytanie \| odpowiedź`) |
+| `/kartkowki` | Kartkówki i klasówki per klasa: pytania z zestawów lekcji + własne, pokaz na projektorze (`/kartkowki/:id/pokaz`) |
+| `/podrecznik` | Podręcznik (PDF w IndexedDB) |
+| `/zebrania` | Zebrania z rodzicami - kafelki i skrypt zebrania |
+| `/zasady/druk` | Wydruk zasad na A4 |
+| `/ustawienia` | Limit pasów na miesiąc, plomba za podpowiadanie, czas kręcenia, stoper odpowiedzi, eksport/import JSON |
 
 ## Skróty na ekranie projektora
 
@@ -62,12 +64,19 @@ Powtórka: `Spacja` kręć, `1` dobrze, `2` źle, `3` pas, `N` następne pytanie
 `F` pełny ekran, `Esc` zakończ.
 
 Prezentacja: strzałki / `Spacja` / `PageUp` / `PageDown` nawigacja, `Home` / `End`, `F` pełny ekran,
-`Esc` wyjście. Klik w lewą / prawą połowę ekranu też przewija slajdy.
+`Esc` wyjście. Klik w lewą / prawą połowę ekranu też przewija slajdy. Na slajdzie zadania `K` otwiera
+koło na lekcji - wtedy `Spacja` kręć, `1` plus, `2` kropka, `Backspace` cofnij, `Esc` zamyka koło.
 
 ## Zasady powtórki (konfigurowalne w Ustawieniach)
 
-- Każdy uczeń ma domyślnie 2 pasy na tydzień (poniedziałek - niedziela).
-- Podpowiadanie daje minus podpowiadającemu.
+- Dwa koła. **Koło na lekcji**: po każdym zadaniu (Z1, Z2...) koło losuje, kto pokazuje rozwiązanie -
+  można tylko zyskać (plus za dobrze zrobione zadanie, kropka za zrobione słabo albo wcale; plomby
+  i pasa nie ma). Kręci się ze slajdu zadania w prezentacji. **Koło powtórzeniowe**: początek
+  następnej lekcji, pytania z poprzedniego tematu (inne niż zadania), gra się o wszystko:
+  plus / kropka / plomba / pas. Uruchamia się ze slajdu `recap` albo przyciskiem "Koło powt." na
+  liście lekcji.
+- Każdy uczeń ma domyślnie 2 pasy na miesiąc (zerują się 1. dnia miesiąca).
+- Podpowiadanie daje plombę podpowiadającemu.
 - Wylosowany uczeń wypada z puli do końca rundy (można włączyć powtórki).
 - Statystyki liczone per miesiąc z zapisanych zdarzeń; każde zdarzenie można usunąć.
 

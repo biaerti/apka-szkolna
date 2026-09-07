@@ -4,8 +4,9 @@
 // Spacja = losuj/nastepny, Enter = gotowe-nastepny (tryb bez ocen). W trybie
 // ocen klawisze 1-4 zaleza od trybu rundy (recapMode, patrz src/lib/recap.ts):
 // - powtorzeniowe: 1/2/3/4 = dobrze/czesciowo/zle/pas (bez zmian),
-// - po-lekcji: 1 = dobrze, 2 = dalej (jak Enter w trybie bez ocen) - to
-//   jedyne dwa przyciski, kolo po lekcji nigdy nie daje plomby.
+// - po-lekcji (stary tryb, tylko dla starych danych - patrz src/lib/recap.ts):
+//   1 = dobrze, 2 = dalej (jak Enter w trybie bez ocen) - to jedyne dwa
+//   przyciski, ten tryb nigdy nie dawal plomby.
 // N = nastepne pytanie, O = pokaz odpowiedz, F = pelny ekran, Esc = zakoncz.
 
 import { useEffect, useRef } from 'react';
