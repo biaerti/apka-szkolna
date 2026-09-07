@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import type { SchoolClass } from '../../data/types';
 import { resultSymbol } from '../../lib/resultSymbol';
+import { NoPlusNote } from '../recap/NoPlusNote';
 import { Wheel } from '../recap/Wheel';
 import { TaskWheelAttendance } from '../lessons/TaskWheelAttendance';
 import { PanelUwagi } from './PanelUwagi';
@@ -152,6 +153,7 @@ export function PanelWheel({
               <p className="text-2xl font-bold leading-tight text-white">
                 {student.firstName} {student.lastName}
               </p>
+              {!wheel.currentCanEarnPlus && <NoPlusNote warnings={wheel.currentWarnings} compact />}
             </div>
           ) : (
             <p className="py-2 text-center text-2xl font-bold leading-tight text-gray-600">Kręć kołem</p>

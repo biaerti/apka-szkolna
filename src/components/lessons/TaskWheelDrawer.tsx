@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { resultSymbol } from '../../lib/resultSymbol';
+import { NoPlusNote } from '../recap/NoPlusNote';
 import { Wheel } from '../recap/Wheel';
 import { TaskWheelAttendance } from './TaskWheelAttendance';
 import type { TaskWheelState } from './useTaskWheel';
@@ -109,6 +110,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
             <p className="font-bold leading-tight text-white" style={{ fontSize: 'clamp(28px, 2.6vw, 48px)' }}>
               {student.firstName} {student.lastName}
             </p>
+            {!wheel.currentCanEarnPlus && <NoPlusNote warnings={wheel.currentWarnings} compact />}
           </div>
         ) : (
           <p className="py-2 text-center font-bold leading-tight text-gray-500" style={{ fontSize: 'clamp(28px, 2.6vw, 48px)' }}>

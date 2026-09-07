@@ -94,7 +94,8 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
   const pool = useMemo(() => drawableEntries(entries), [entries]);
 
   const currentStudent = currentEntry?.student ?? null;
-  const currentCanEarnPlus = currentStudent ? canEarnPlus(warningsFor(currentStudent.id)) : false;
+  const currentWarnings = currentStudent ? warningsFor(currentStudent.id) : 0;
+  const currentCanEarnPlus = currentStudent ? canEarnPlus(currentWarnings) : false;
   const canSpin = !spinning && (!currentEntry || graded) && pool.length > 0;
 
   // Wpis wylosowany, ale jeszcze nie ujawniony - kolo dopiero sie kreci.
@@ -201,6 +202,7 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
     currentEntry,
     currentStudent,
     currentCanEarnPlus,
+    currentWarnings,
     graded,
     spinning,
     wheelTarget,

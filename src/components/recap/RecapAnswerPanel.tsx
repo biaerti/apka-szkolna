@@ -3,6 +3,7 @@
 // RecapSession.tsx, zeby komponent zmiescil sie w limicie 250 linii.
 
 import { AnswerTimer } from './AnswerTimer';
+import { NoPlusNote } from './NoPlusNote';
 import { QuestionPanel } from './QuestionPanel';
 import { ScoreButtons } from './ScoreButtons';
 import type { RecapSessionState } from './useRecapSession';
@@ -50,6 +51,7 @@ export function RecapAnswerPanel({
             <p className="font-bold leading-tight text-white" style={{ fontSize: 'clamp(40px, 6.4vw, 112px)' }}>
               {session.currentStudent.firstName} {session.currentStudent.lastName}
             </p>
+            {!session.currentCanEarnPlus && <NoPlusNote warnings={session.currentWarnings} />}
           </div>
         ) : (
           <p

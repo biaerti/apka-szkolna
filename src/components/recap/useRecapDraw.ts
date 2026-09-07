@@ -122,7 +122,8 @@ export function useRecapDraw({
   // Blokada plusa dziala w OBU trybach: uczen z >=2 uwagami w miesiacu traci
   // mozliwosc plusa (canEarnPlus, patrz src/lib/recap.ts) - w kole po lekcji
   // dostaje wtedy tylko "Dalej" (nic), w kole powtorzeniowym - kropke/plombe/pas.
-  const currentCanEarnPlus = currentStudent ? canEarnPlus(warningsFor(currentStudent.id)) : false;
+  const currentWarnings = currentStudent ? warningsFor(currentStudent.id) : 0;
+  const currentCanEarnPlus = currentStudent ? canEarnPlus(currentWarnings) : false;
 
   const canSpin = !spinning && (!currentEntry || graded) && pool.length > 0;
 
@@ -285,6 +286,7 @@ export function useRecapDraw({
     currentPassesUsed,
     currentCanPass,
     currentCanEarnPlus,
+    currentWarnings,
     recapMode,
   };
 }
