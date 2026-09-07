@@ -54,7 +54,6 @@ paska bocznego. Offline zmiany czekają i idą po powrocie sieci.
 | `/pytania/:id` | Zestaw pytań lekcji (import: jedno pytanie na linię, opcjonalnie `pytanie \| odpowiedź`) |
 | `/kartkowki` | Kartkówki i klasówki per klasa: pytania z zestawów lekcji + własne, pokaz na projektorze (`/kartkowki/:id/pokaz`) |
 | `/plan` | Plan lekcji: siatka pon-pt z klasą i salą, godziny dzwonków; z niego bierze się zegar z odliczaniem do końca lekcji na ekranach projektora i pasek "Dziś" na pulpicie |
-| `/podrecznik` | Podręcznik (PDF w IndexedDB) |
 | `/panel` | Pływające koło fortuny dla aplikacji desktopowej (`desktop/`) - okno nad multipodręcznikiem |
 | `/zebrania` | Zebrania z rodzicami - kafelki i skrypt zebrania |
 | `/zasady/druk` | Wydruk zasad na A4 |

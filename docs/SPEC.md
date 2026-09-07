@@ -166,8 +166,9 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   - pasek boczny z lista uczniow i czytelnym bilansem miesiaca (plusy / kropki / plomby / pasy)
   - skroty: Spacja = kręć, 1/2/3/4 = plus/kropka/plomba/pas, N = nastepne pytanie,
     O = pokaz/ukryj odpowiedz, F = fullscreen, Esc = zakoncz
-- `/podrecznik` - wgrane PDF-y podrecznika (IndexedDB, podglad w przegladarce). Docelowo zrodlo
-  numerow stron i fragmentow do slajdow `read`.
+- `/panel` - **poza AppShell**: plywajace kolo fortuny dla aplikacji desktopowej (`desktop/`).
+  Okno zawsze na wierzchu nad multipodrecznikiem GWO: wybor klasy, kolo, plus/kropka, uwagi,
+  obecnosc i Reset skreslen. Wlasna pamiec puli (`useTaskWheel`, `poolMemory: 'local'`).
 - `/zasady/druk` - **poza AppShell**: strona A4 z dwiema kopiami zasad do przeciecia nozyczkami
   plus strona z rysunkiem kola fortuny. Zrodlo tresci: `src/data/zasady.ts`.
 - `/ustawienia` - Settings + eksport/import calej bazy do JSON.

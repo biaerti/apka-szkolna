@@ -17,7 +17,6 @@ const NAV_ITEMS = [
   { to: '/lekcje', label: 'Lekcje' },
   { to: '/kartkowki', label: 'Kartkówki' },
   { to: '/plan', label: 'Plan' },
-  { to: '/podrecznik', label: 'Podręcznik' },
   { to: '/zebrania', label: 'Zebrania' },
   { to: '/zasady/druk', label: 'Zasady' },
   { to: '/ustawienia', label: 'Ustawienia' },

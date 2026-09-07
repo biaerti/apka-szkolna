@@ -9,7 +9,6 @@ import { RecapScreen } from './pages/RecapScreen';
 import { Lessons } from './pages/Lessons';
 import { LessonEditor } from './pages/LessonEditor';
 import { LessonPresent } from './pages/LessonPresent';
-import { Textbook } from './pages/Textbook';
 import { Meetings } from './pages/Meetings';
 import { MeetingDetail } from './pages/MeetingDetail';
 import { Quizzes } from './pages/Quizzes';
@@ -46,7 +45,6 @@ export default function App() {
         <Route path="/kartkowki" element={<Quizzes />} />
         <Route path="/kartkowki/:id" element={<QuizDetail />} />
         <Route path="/plan" element={<Timetable />} />
-        <Route path="/podrecznik" element={<Textbook />} />
         <Route path="/zebrania" element={<Meetings />} />
         <Route path="/zebrania/:id" element={<MeetingDetail />} />
         <Route path="/ustawienia" element={<SettingsPage />} />

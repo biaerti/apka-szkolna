@@ -9,9 +9,6 @@ export function QuickStart() {
         <Link to="/lekcje">
           <Button variant="secondary">Nowa lekcja</Button>
         </Link>
-        <Link to="/podrecznik">
-          <Button variant="secondary">Podręcznik</Button>
-        </Link>
       </div>
     </section>
   );
