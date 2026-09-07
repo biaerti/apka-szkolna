@@ -22,6 +22,8 @@ const RESULT_LABEL: Record<string, string> = {
   pass: 'Pas',
   hint_plomba: 'Podpowiedź (plomba)',
   uwaga: 'Uwaga',
+  // 'rozliczenie' juz nie jest tworzone przez UI (stary system zadan naprawczych),
+  // ale historyczne zdarzenia tego typu wciaz siedza w Supabase i musza sie wyswietlic.
   rozliczenie: 'Rozliczenie zadań',
   jedynka: 'Jedynka',
   piatka: 'Piątka',

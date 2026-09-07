@@ -10,8 +10,10 @@
 //   ZADNYM kole (ani po lekcji, ani powtorzeniowym),
 // - wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
 //   zeruja sie 1. dnia miesiaca,
-// - uzbierane plomby zamieniaja sie na zadania naprawcze -> rozliczenie albo jedynke,
-//   uzbierane plusy na piatke.
+// - na koniec miesiaca rozliczamy tez plusy, kropki i plomby: uzbierany komplet
+//   plomb zamienia sie na jedynke, uzbierany komplet plusow na piatke (patrz
+//   src/data/zasady.ts - zadnych zadan naprawczych, to prosta zamiana licznika
+//   na ocene).
 
 import type { RecapEvent, RecapResult, Settings, Slide, Student } from '../data/types';
 import { monthKey as toMonthKey } from './week';
@@ -249,7 +251,8 @@ function studentEventsAsc(events: RecapEvent[], studentId: string): RecapEvent[]
 
 /**
  * Zwraca zdarzenia ucznia od ostatniego zdarzenia zerujacego licznik. Uzywane do
- * "nierozliczonych" plomb (zeruje `rozliczenie` albo `jedynka`) i plusow (zeruje `piatka`).
+ * "nierozliczonych" plomb (zeruje `jedynka`, a historycznie tez `rozliczenie` -
+ * patrz komentarz przy RecapResult w src/data/types.ts) i plusow (zeruje `piatka`).
  */
 function eventsSinceReset(
   events: RecapEvent[],
@@ -266,13 +269,14 @@ function eventsSinceReset(
 
 export interface Outstanding {
   count: number;
-  /** Id pytan, na ktore uczen nie odpowiedzial - podstawa zadan naprawczych. */
+  /** Id pytan, na ktore uczen nie odpowiedzial - historia do ewentualnego wgladu nauczyciela. */
   questionIds: string[];
 }
 
 /**
  * Nierozliczone plomby ucznia: wszystkie plomby (w tym za podpowiadanie) zapisane
- * po ostatnim rozliczeniu albo jedynce.
+ * po ostatniej jedynce (albo po historycznym zdarzeniu `rozliczenie` - patrz
+ * eventsSinceReset powyzej).
  */
 export function outstandingPlomby(events: RecapEvent[], studentId: string): Outstanding {
   const since = eventsSinceReset(events, studentId, ['rozliczenie', 'jedynka']);
@@ -296,7 +300,7 @@ export function outstandingPlusy(events: RecapEvent[], studentId: string): Outst
 }
 
 /** Czy uczen uzbieral komplet plomb na jedynke (domyslnie 3). */
-export function owesTasks(events: RecapEvent[], studentId: string, settings: Settings): boolean {
+export function earnedOne(events: RecapEvent[], studentId: string, settings: Settings): boolean {
   return outstandingPlomby(events, studentId).count >= settings.plombyForOne;
 }
 

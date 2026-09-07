@@ -30,7 +30,11 @@ export interface Student {
  * - `pass`         - uczen korzysta z pasa (limit tygodniowy w ustawieniach),
  * - `hint_plomba`  - plomba dla ucznia, ktory podpowiadal,
  * - `uwaga`        - niegrzeczne zachowanie; kolejne uwagi eskaluja konsekwencje w kole,
- * - `rozliczenie`  - uczen oddal zadania naprawcze; zeruje licznik plomb od tej chwili,
+ * - `rozliczenie`  - HISTORYCZNE zdarzenie ze starszej wersji zasad (byly zadania
+ *                    naprawcze) - zerowalo licznik plomb od tej chwili. UI go juz
+ *                    nie tworzy, ale stare zdarzenia tego typu moga wciaz byc w
+ *                    Supabase, wiec typ i logika zerowania licznika (patrz
+ *                    src/lib/recap.ts: eventsSinceReset) musza je nadal obslugiwac,
  * - `jedynka`      - adnotacja: plomby zamienione na ocene niedostateczna,
  * - `piatka`       - adnotacja: plusy zamienione na ocene bardzo dobra.
  */
@@ -143,10 +147,9 @@ export type SlideArt =
   | 'kolo' // schemat kola fortuny z imionami
   | 'oceny' // plus / kropka / plomba
   | 'stopnie' // 3 plusy = piatka, 3 plomby = jedynka
-  | 'eskalacja' // 1. ostrzezenie, 2. bez plusow, 3. podwojnie w kole
+  | 'eskalacja' // 1. ostrzezenie, 2. bez plusow do konca miesiaca
   | 'zleZachowania' // co liczy sie jako przeszkadzanie, a za co nigdy nie ma uwagi
   | 'pas' // pas: dzis nie odpowiadam
-  | 'zadania' // zadania naprawcze z pytan, ktorych uczen nie umial
   | 'lawki' // plan klasy: siadamy w najblizszych lawkach
   | 'przebieg' // przebieg lekcji: powtorka - temat - kolo - notatka
   | 'zeszyt' // notatka do zeszytu

@@ -1,6 +1,6 @@
-// Widok "Do rozliczenia": uczniowie z kompletem plomb (zadania naprawcze albo
-// jedynka) lub kompletem plusow (piatka). Zasada: 3 plomby to NIE od razu jedynka -
-// uczen dostaje zadania naprawcze z pytan, na ktore nie umial odpowiedziec.
+// Widok "Do rozliczenia": uczniowie z kompletem plomb (jedynka) albo kompletem
+// plusow (piatka). Plusy, kropki i plomby rozliczamy na koniec miesiaca (patrz
+// src/data/zasady.ts) - to miejsce nauczyciel odwiedza wtedy i wystawia ocene.
 
 import { useMemo, useState } from 'react';
 import { useStore } from '../../data/store';
@@ -8,24 +8,18 @@ import type { RecapResult } from '../../data/types';
 import { Button } from '../ui/Button';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { EmptyState } from '../ui/EmptyState';
-import { copyToClipboard } from '../../lib/clipboard';
 import { settlementRows, type SettlementRow } from '../../lib/stats';
 
-type PendingType = Extract<RecapResult, 'rozliczenie' | 'jedynka' | 'piatka'>;
+type PendingType = Extract<RecapResult, 'jedynka' | 'piatka'>;
 interface Pending {
   type: PendingType;
   row: SettlementRow;
 }
 
 const CONFIRM_COPY: Record<PendingType, { title: string; message: (name: string) => string; confirmLabel: string }> = {
-  rozliczenie: {
-    title: 'Zaznaczyć jako rozliczone?',
-    message: (name) => `${name} przyniósł/-a rozwiązania zadań naprawczych. Licznik plomb zostanie wyzerowany.`,
-    confirmLabel: 'Rozliczone',
-  },
   jedynka: {
     title: 'Wystawić jedynkę?',
-    message: (name) => `${name} nie oddał/-a zadań naprawczych. Plomby zostaną zamienione na ocenę niedostateczną.`,
+    message: (name) => `${name} zebrał/-a komplet plomb w tym miesiącu. Plomby zostaną zamienione na ocenę niedostateczną.`,
     confirmLabel: 'Jedynka',
   },
   piatka: {
@@ -39,7 +33,6 @@ export function Settlements({ classId }: { classId: string }) {
   const students = useStore((s) => s.students);
   const recapEvents = useStore((s) => s.recapEvents);
   const settings = useStore((s) => s.settings);
-  const questions = useStore((s) => s.questions);
   const addRecapEvent = useStore((s) => s.addRecapEvent);
 
   const classStudents = useMemo(
@@ -53,27 +46,6 @@ export function Settlements({ classId }: { classId: string }) {
   );
 
   const [pending, setPending] = useState<Pending | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  function questionTexts(ids: string[]): string[] {
-    return ids
-      .map((id) => questions.find((q) => q.id === id)?.text)
-      .filter((text): text is string => Boolean(text));
-  }
-
-  async function handleCopy(row: SettlementRow) {
-    const texts = questionTexts(row.plombyQuestionIds);
-    const date = new Date().toLocaleDateString('pl-PL');
-    const header = `Zadania naprawcze - ${row.student.firstName} ${row.student.lastName} (${date})`;
-    const body = texts
-      .map((text, i) => `${i + 1}. ${text}\nOdpowiedź: ______________________________`)
-      .join('\n\n');
-    const ok = await copyToClipboard(`${header}\n\n${body}`);
-    if (ok) {
-      setCopiedId(row.student.id);
-      window.setTimeout(() => setCopiedId((id) => (id === row.student.id ? null : id)), 2000);
-    }
-  }
 
   function confirmPending() {
     if (!pending) return;
@@ -93,7 +65,6 @@ export function Settlements({ classId }: { classId: string }) {
   return (
     <div className="space-y-3">
       {rows.map((row) => {
-        const texts = questionTexts(row.plombyQuestionIds);
         const fullName = `${row.student.firstName} ${row.student.lastName}`;
         return (
           <div key={row.student.id} className="rounded-lg border border-gray-200 bg-white p-4">
@@ -101,27 +72,12 @@ export function Settlements({ classId }: { classId: string }) {
               {row.student.number}. {row.student.lastName} {row.student.firstName}
             </p>
 
-            {row.owesTasks && (
+            {row.earnedOne && (
               <div className="mt-2">
                 <p className="text-sm text-gray-600">
-                  Zebrał/-a komplet plomb ({row.plomby}). 3 plomby to nie od razu jedynka - najpierw zadania
-                  naprawcze: przyniesie rozwiązania na następną lekcję - kliknij „Rozliczone”; nie przyniesie -
-                  kliknij „Jedynka”.
+                  Zebrał/-a komplet plomb ({row.plomby}) - można wystawić jedynkę.
                 </p>
-                {texts.length > 0 && (
-                  <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-gray-700">
-                    {texts.map((text, i) => (
-                      <li key={i}>{text}</li>
-                    ))}
-                  </ol>
-                )}
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Button variant="secondary" size="sm" onClick={() => handleCopy(row)} disabled={texts.length === 0}>
-                    {copiedId === row.student.id ? 'Skopiowano' : 'Kopiuj zadania'}
-                  </Button>
-                  <Button variant="secondary" size="sm" onClick={() => setPending({ type: 'rozliczenie', row })}>
-                    Rozliczone
-                  </Button>
+                <div className="mt-3">
                   <Button variant="danger" size="sm" onClick={() => setPending({ type: 'jedynka', row })}>
                     Jedynka
                   </Button>

@@ -7,12 +7,12 @@ import {
   canEarnPlus,
   canPass,
   earnedFive,
+  earnedOne,
   monthBalance,
   nextRandomIndex,
   nextSequential,
   outstandingPlomby,
   outstandingPlusy,
-  owesTasks,
   passesUsedThisMonth,
   pickRandom,
   plannedDraws,
@@ -385,13 +385,13 @@ describe('outstandingPlusy', () => {
   });
 });
 
-describe('owesTasks', () => {
+describe('earnedOne', () => {
   it('false ponizej progu plombyForOne', () => {
     const events: RecapEvent[] = [
       ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 1).toISOString() }),
       ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 2).toISOString() }),
     ];
-    expect(owesTasks(events, 's1', settings)).toBe(false);
+    expect(earnedOne(events, 's1', settings)).toBe(false);
   });
 
   it('true od progu plombyForOne', () => {
@@ -400,7 +400,7 @@ describe('owesTasks', () => {
       ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 2).toISOString() }),
       ev({ studentId: 's1', result: 'hint_plomba', at: new Date(2026, 8, 3).toISOString() }),
     ];
-    expect(owesTasks(events, 's1', settings)).toBe(true);
+    expect(earnedOne(events, 's1', settings)).toBe(true);
   });
 });
 

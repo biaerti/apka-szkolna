@@ -14,8 +14,10 @@ import type { Student } from '../data/types';
 
 /**
  * Widok klasy laczy trzy rzeczy, ktore wczesniej byly rozrzucone po aplikacji:
- * liste uczniow, ich bilans miesiaca (dawna zakladka "Statystyki") i rozliczenia
- * plomb. Nauczyciel chcial jedno miejsce - klasa - zamiast dublujacych sie ekranow.
+ * liste uczniow, ich bilans miesiaca (dawna zakladka "Statystyki") i zakladke
+ * "Do rozliczenia" - uczniow z kompletem plomb (jedynka) albo plusow (piatka),
+ * czekajacych na ocene na koniec miesiaca (patrz src/data/zasady.ts). Nauczyciel
+ * chcial jedno miejsce - klasa - zamiast dublujacych sie ekranow.
  */
 type ClassTab = 'uczniowie' | 'bilans' | 'rozliczenia';
 

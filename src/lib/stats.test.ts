@@ -118,7 +118,7 @@ describe('settlementRows', () => {
       student({ id: 's3', number: 3 }),
     ];
     const events: RecapEvent[] = [
-      // s1: 3 plomby -> owesTasks
+      // s1: 3 plomby -> earnedOne
       ev({ studentId: 's1', result: 'plomba', questionId: 'q1' }),
       ev({ studentId: 's1', result: 'plomba', questionId: 'q2' }),
       ev({ studentId: 's1', result: 'plomba', questionId: 'q3' }),
@@ -133,13 +133,12 @@ describe('settlementRows', () => {
     const rows = settlementRows(events, students, settings());
     expect(rows.map((r) => r.student.id)).toEqual(['s1', 's3']);
     const s1Row = rows.find((r) => r.student.id === 's1')!;
-    expect(s1Row.owesTasks).toBe(true);
+    expect(s1Row.earnedOne).toBe(true);
     expect(s1Row.earnedFive).toBe(false);
     expect(s1Row.plomby).toBe(3);
-    expect(s1Row.plombyQuestionIds).toEqual(['q1', 'q2', 'q3']);
     const s3Row = rows.find((r) => r.student.id === 's3')!;
     expect(s3Row.earnedFive).toBe(true);
-    expect(s3Row.owesTasks).toBe(false);
+    expect(s3Row.earnedOne).toBe(false);
     expect(s3Row.plusy).toBe(3);
   });
 
@@ -152,10 +151,10 @@ describe('settlementRows', () => {
     const rows = settlementRows(events, [student({})], settings());
     expect(rows).toHaveLength(1);
     expect(rows[0].plomby).toBe(3);
-    expect(rows[0].owesTasks).toBe(true);
+    expect(rows[0].earnedOne).toBe(true);
   });
 
-  it('zdarzenie rozliczenie zeruje licznik plomb', () => {
+  it('historyczne zdarzenie rozliczenie tez zeruje licznik plomb (stare dane z Supabase)', () => {
     const events: RecapEvent[] = [
       ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 1).toISOString() }),
       ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 2).toISOString() }),
@@ -195,7 +194,7 @@ describe('settlementRows', () => {
     ];
     const rows = settlementRows(events, [student({})], settings({ plombyForOne: 2 }));
     expect(rows).toHaveLength(1);
-    expect(rows[0].owesTasks).toBe(true);
+    expect(rows[0].earnedOne).toBe(true);
   });
 });
 

@@ -34,6 +34,8 @@ export const RESULT_SYMBOLS: Record<RecapResult, ResultSymbol> = {
   },
   pass: { symbol: 'P', label: 'pas', color: 'text-amber-300', bg: 'bg-amber-900/60' },
   uwaga: { symbol: '!', label: 'uwaga', color: 'text-orange-300', bg: 'bg-orange-900/60' },
+  // 'rozliczenie' - historyczne zdarzenie (stary system zadan naprawczych), UI go
+  // juz nie tworzy, ale stare wpisy z Supabase wciaz musza dostac swoj symbol.
   rozliczenie: { symbol: '✓', label: 'rozliczenie', color: 'text-gray-300', bg: 'bg-gray-800' },
   jedynka: { symbol: '1', label: 'jedynka', color: 'text-red-300', bg: 'bg-red-900/60' },
   piatka: { symbol: '5', label: 'piątka', color: 'text-emerald-300', bg: 'bg-emerald-900/60' },

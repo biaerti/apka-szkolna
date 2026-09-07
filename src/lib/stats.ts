@@ -1,5 +1,6 @@
 // Agregacja statystyk miesiecznych per uczen, eksport do CSV oraz zestawienie
-// "do rozliczenia" (nierozliczone plomby -> zadania naprawcze/jedynka, plusy -> piatka).
+// "do rozliczenia" (nierozliczone plomby -> jedynka, plusy -> piatka; rozliczamy
+// pelnymi miesiacami kalendarzowymi, patrz src/data/zasady.ts).
 
 import type { ID, RecapEvent, Settings, Student } from '../data/types';
 import { monthBalance, outstandingPlomby, outstandingPlusy } from './recap';
@@ -93,38 +94,36 @@ export function toCsv(rows: StudentStatsRow[]): string {
 
 export interface SettlementRow {
   student: Student;
-  /** Nierozliczone plomby (outstandingPlomby().count) - zebrane po ostatnim rozliczeniu/jedynce. */
+  /** Nierozliczone plomby (outstandingPlomby().count) - zebrane po ostatniej jedynce. */
   plomby: number;
-  /** Id pytan, na ktore uczen nie odpowiedzial - podstawa zadan naprawczych. */
-  plombyQuestionIds: string[];
   /** Nierozliczone plusy (outstandingPlusy().count) - zebrane po ostatniej piatce. */
   plusy: number;
-  /** Uczen ma komplet plomb (>= settings.plombyForOne) - czeka na zadania naprawcze albo jedynke. */
-  owesTasks: boolean;
-  /** Uczen ma komplet plusow (>= settings.plusesForFive) - czeka na piatke. */
+  /** Uczen ma komplet plomb (>= settings.plombyForOne) - mozna wystawic jedynke. */
+  earnedOne: boolean;
+  /** Uczen ma komplet plusow (>= settings.plusesForFive) - mozna wystawic piatke. */
   earnedFive: boolean;
 }
 
 /**
- * Uczniowie klasy wymagajacy reakcji nauczyciela: komplet plomb (zadania naprawcze
- * albo jedynka) lub komplet plusow (piatka). Posortowani po numerze z dziennika.
+ * Uczniowie klasy wymagajacy reakcji nauczyciela: komplet plomb (jedynka) lub
+ * komplet plusow (piatka) do rozliczenia na koniec miesiaca. Posortowani po
+ * numerze z dziennika.
  */
 export function settlementRows(events: RecapEvent[], students: Student[], settings: Settings): SettlementRow[] {
   return students
     .map((student) => {
       const plomby = outstandingPlomby(events, student.id);
       const plusy = outstandingPlusy(events, student.id);
-      const owesTasks = plomby.count >= settings.plombyForOne;
+      const earnedOne = plomby.count >= settings.plombyForOne;
       const earnedFive = plusy.count >= settings.plusesForFive;
       return {
         student,
         plomby: plomby.count,
-        plombyQuestionIds: plomby.questionIds,
         plusy: plusy.count,
-        owesTasks,
+        earnedOne,
         earnedFive,
       };
     })
-    .filter((row) => row.owesTasks || row.earnedFive)
+    .filter((row) => row.earnedOne || row.earnedFive)
     .sort((a, b) => a.student.number - b.student.number);
 }
