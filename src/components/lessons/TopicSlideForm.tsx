@@ -1,24 +1,16 @@
 // Slajd "Temat lekcji": puste pole = temat brany z lekcji (pole "Temat do
 // wpisania w dzienniku"), zeby zeszyt ucznia i dziennik mowily to samo.
 // Kod lekcji (np. 4.3) dokladamy automatycznie - nie da sie go tu wpisac.
+//
+// Stopera nie ustawia sie tutaj: na zapisanie tematu domyslnie nie ma
+// odliczania, a w razie potrzeby nauczyciel wlacza je kolkiem wprost na
+// slajdzie (patrz src/components/slides/TopicSlideView.tsx).
 
-import { useState } from 'react';
 import type { Slide } from '../../data/types';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
-import { Select } from '../ui/Select';
 
 type TopicSlide = Extract<Slide, { kind: 'topic' }>;
-
-const TIMER_PRESETS = [
-  { label: 'Brak', value: '' },
-  { label: '1 minuta', value: '60' },
-  { label: '2 minuty', value: '120' },
-  { label: '3 minuty', value: '180' },
-  { label: '5 minut', value: '300' },
-  { label: '10 minut', value: '600' },
-  { label: 'Własny...', value: 'custom' },
-];
 
 export function TopicSlideForm({
   slide,
@@ -31,10 +23,6 @@ export function TopicSlideForm({
   lessonTopic?: string;
   lessonCode?: string;
 }) {
-  const knownValues = TIMER_PRESETS.map((p) => p.value).filter((v) => v && v !== 'custom');
-  const currentTimerStr = slide.timerSec ? String(slide.timerSec) : '';
-  const [customMode, setCustomMode] = useState(currentTimerStr !== '' && !knownValues.includes(currentTimerStr));
-
   return (
     <div className="space-y-3">
       <p className="text-sm text-gray-500">
@@ -60,39 +48,6 @@ export function TopicSlideForm({
           onChange={(e) => onChange({ ...slide, note: e.target.value || undefined })}
           placeholder="Zapiszcie temat z kodem i dzisiejszą datą w zeszycie"
         />
-      </div>
-      <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Stoper (czas na zapisanie tematu)</label>
-        <Select
-          value={customMode ? 'custom' : currentTimerStr}
-          onChange={(e) => {
-            const v = e.target.value;
-            if (v === 'custom') {
-              setCustomMode(true);
-              return;
-            }
-            setCustomMode(false);
-            onChange({ ...slide, timerSec: v ? Number(v) : undefined });
-          }}
-        >
-          {TIMER_PRESETS.map((p) => (
-            <option key={p.value || 'none'} value={p.value}>
-              {p.label}
-            </option>
-          ))}
-        </Select>
-        {customMode && (
-          <div className="mt-2 flex items-center gap-2">
-            <Input
-              type="number"
-              min={1}
-              className="w-32"
-              value={slide.timerSec ?? ''}
-              onChange={(e) => onChange({ ...slide, timerSec: e.target.value ? Number(e.target.value) : undefined })}
-            />
-            <span className="text-sm text-gray-500">sekund</span>
-          </div>
-        )}
       </div>
     </div>
   );

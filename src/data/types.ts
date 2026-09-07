@@ -220,8 +220,11 @@ export type Slide =
   // dzieci pisza wolno, wiec zeszytowy temat ma byc jak najkrotszy). Pusty
   // `topic` znaczy "wez temat z lekcji" (registerTopic), zeby wpis do dziennika
   // i wpis w zeszycie nie rozjechaly sie ze soba, gdy nikt nie ustawil krotszej
-  // wersji. `timerSec` - stoper na zapisanie tematu (jak na slajdach task/read).
-  | { id: ID; kind: 'topic'; topic?: string; note?: string; timerSec?: number }
+  // wersji. Bez `timerSec`: na zapisanie tematu domyslnie nie ma stopera, a
+  // gdy trzeba, nauczyciel wlacza go kolkiem wprost na slajdzie (patrz
+  // src/components/slides/TopicSlideView.tsx). Stare dane moga jeszcze miec to
+  // pole w JSON-ie - jest po prostu ignorowane.
+  | { id: ID; kind: 'topic'; topic?: string; note?: string }
   | {
       id: ID;
       kind: 'task';

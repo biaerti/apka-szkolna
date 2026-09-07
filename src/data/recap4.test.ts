@@ -84,7 +84,8 @@ describe('buildRecap4', () => {
       expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
       if (topicSlide && topicSlide.kind === 'topic') {
         expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
-        expect(topicSlide.timerSec).toBeUndefined();
+        // Slajd tematu nie ma juz pola stopera - odliczanie wlacza sie kolkiem na slajdzie.
+        expect('timerSec' in topicSlide).toBe(false);
       }
 
       const noteSlide = lesson.slides.find((s) => s.kind === 'note');
@@ -154,7 +155,8 @@ describe('buildRecap13', () => {
       expect(topicSlide && topicSlide.kind === 'topic' ? topicSlide.topic : undefined).toBeTruthy();
       if (topicSlide && topicSlide.kind === 'topic') {
         expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
-        expect(topicSlide.timerSec).toBeUndefined();
+        // Slajd tematu nie ma juz pola stopera - odliczanie wlacza sie kolkiem na slajdzie.
+        expect('timerSec' in topicSlide).toBe(false);
       }
 
       const noteSlide = lesson.slides.find((s) => s.kind === 'note');

@@ -68,7 +68,8 @@ describe('buildIntroLesson', () => {
     if (topicSlide && topicSlide.kind === 'topic') {
       expect(topicSlide.topic!.length).toBeLessThanOrEqual(40);
       expect(topicSlide.topic!.length).toBeLessThan((lesson.registerTopic ?? '').length);
-      expect(topicSlide.timerSec).toBeUndefined();
+      // Slajd tematu nie ma juz pola stopera - odliczanie wlacza sie kolkiem na slajdzie.
+      expect('timerSec' in topicSlide).toBe(false);
     }
   });
 
