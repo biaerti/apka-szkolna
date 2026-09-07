@@ -8,9 +8,16 @@ Dwa stany:
 
 - **pigułka** - wąski pasek (`🎡 IV A`), zajmuje róg ekranu. Przeciągasz, żeby
   przesunąć; klikasz, żeby rozwinąć.
-- **koło** - okno 360x600 z kołem, przyciskiem *Kręć*, nazwiskiem i dwoma
-  ocenami: **✚ Dobrze** i **• Kropka** (klawisze `1` i `2`, `Spacja` kręci,
-  `Backspace` cofa, `Esc` zwija do pigułki).
+- **panel** - okno 360x600 z dwoma trybami przełączanymi w nagłówku:
+  - **Koło** - *Kręć*, nazwisko i dwie oceny: **✚ Dobrze** i **• Kropka**
+    (klawisze `1` i `2`, `Spacja` kręci, `Backspace` cofa). Przycisk **Reset**
+    kasuje skreślenia, **Obecność** wypisuje nieobecnych z koła.
+  - **Stoper** - odliczanie z własnym poleceniem („Czytamy tekst ze s. 12")
+    i edytowalną długością. `Spacja` = start / pauza. Leci dalej po zwinięciu
+    do pigułki - pigułka pokazuje wtedy pozostały czas.
+
+  W nagłówku jest też wybór klasy i **Uwagi** (lista klasy z licznikiem uwag
+  w tym miesiącu). `Esc` zwija panel do pigułki.
 
 Zdarzenia lądują w tym samym miejscu, co te z prezentacji - w bilansie miesiąca
 mają adnotację `podręcznik`. Pula "kto już dziś odpowiadał" jest wspólna

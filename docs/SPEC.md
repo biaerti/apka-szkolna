@@ -167,8 +167,10 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   - skroty: Spacja = kręć, 1/2/3/4 = plus/kropka/plomba/pas, N = nastepne pytanie,
     O = pokaz/ukryj odpowiedz, F = fullscreen, Esc = zakoncz
 - `/panel` - **poza AppShell**: plywajace kolo fortuny dla aplikacji desktopowej (`desktop/`).
-  Okno zawsze na wierzchu nad multipodrecznikiem GWO: wybor klasy, kolo, plus/kropka, uwagi,
-  obecnosc i Reset skreslen. Wlasna pamiec puli (`useTaskWheel`, `poolMemory: 'local'`).
+  Okno zawsze na wierzchu nad multipodrecznikiem GWO. Naglowek: wybor klasy, przelacznik trybu,
+  uwagi. Tryb KOLO: losowanie, plus/kropka, obecnosc, Reset skreslen - wlasna pamiec puli
+  (`useTaskWheel`, `poolMemory: 'local'`). Tryb STOPER: odliczanie (`useCountdown`) z wlasnym
+  poleceniem i edytowalna dlugoscia; leci dalej po zwinieciu do pigulki, ktora pokazuje czas.
 - `/zasady/druk` - **poza AppShell**: strona A4 z dwiema kopiami zasad do przeciecia nozyczkami
   plus strona z rysunkiem kola fortuny. Zrodlo tresci: `src/data/zasady.ts`.
 - `/ustawienia` - Settings + eksport/import calej bazy do JSON.

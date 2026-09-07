@@ -54,7 +54,7 @@ paska bocznego. Offline zmiany czekają i idą po powrocie sieci.
 | `/pytania/:id` | Zestaw pytań lekcji (import: jedno pytanie na linię, opcjonalnie `pytanie \| odpowiedź`) |
 | `/kartkowki` | Kartkówki i klasówki per klasa: pytania z zestawów lekcji + własne, pokaz na projektorze (`/kartkowki/:id/pokaz`) |
 | `/plan` | Plan lekcji: siatka pon-pt z klasą i salą, godziny dzwonków; z niego bierze się zegar z odliczaniem do końca lekcji na ekranach projektora i pasek "Dziś" na pulpicie |
-| `/panel` | Pływające koło fortuny dla aplikacji desktopowej (`desktop/`) - okno nad multipodręcznikiem |
+| `/panel` | Pływający panel lekcji dla aplikacji desktopowej (`desktop/`) - koło i stoper w oknie nad multipodręcznikiem |
 | `/zebrania` | Zebrania z rodzicami - kafelki i skrypt zebrania |
 | `/zasady/druk` | Wydruk zasad na A4 |
 | `/ustawienia` | Limit pasów na miesiąc, plomba za podpowiadanie, czas kręcenia, stoper odpowiedzi, eksport/import JSON |
@@ -63,7 +63,8 @@ paska bocznego. Offline zmiany czekają i idą po powrocie sieci.
 
 Kiedy lekcja idzie w multipodręczniku GWO, a nie w prezentacji apki, koło musi być NAD tamtym oknem.
 Robi to mały shell Tauri z katalogu `desktop/`: okno zawsze na wierzchu, zwijane do pigułki, ładujące
-trasę `/panel` z produkcji. Szczegóły i uruchomienie: [`desktop/README.md`](desktop/README.md).
+trasę `/panel` z produkcji. Dwa tryby: **koło** (losowanie + plus/kropka, własna pamięć puli z Resetem)
+i **stoper** (odliczanie z własnym poleceniem, np. „Czytamy tekst ze s. 12"). Szczegóły i uruchomienie: [`desktop/README.md`](desktop/README.md).
 
 ## Skróty na ekranie projektora
 
