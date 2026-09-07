@@ -178,8 +178,8 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
     /piątka|jedynka/i,
   );
   const secLekcja = ruleSection('Jak wygląda nasza lekcja');
-  // Punkt o kodach zadan/lekcji zostaje wspomniany na koniec slajdu jako
-  // osobne zdanie, trzy kroki (powtorka - temat - kolo) ida jako lista numerowana.
+  // Punkt o kodzie lekcji zostaje wspomniany na koniec slajdu jako osobne
+  // zdanie, trzy kroki (powtorka - temat - kolo) ida jako lista numerowana.
   const { matched: przebiegKod, rest: przebiegKroki } = partitionItems(secLekcja.items, /kod/i);
   // Slajd "Jak wyglada nasza lekcja" pojawia sie DWA RAZY: raz po przykladzie
   // rundy (zeby dzieci od razu wiedzialy, kiedy ktore kolo sie kreci) i drugi
@@ -194,13 +194,14 @@ ${przebiegKod[0]}`,
       'przebieg',
     );
   const secZeszyt = ruleSection('Zeszyt i sprawdziany');
-  // Punkty o kodach lekcji (wszystkie zawieraja slowo "kod") dostaja wlasny
-  // slajd "Kody lekcji" - dzieciom nalezy sie osobne, spokojne wytlumaczenie
-  // systemu spisu tematow, a nie jedna linijka wsrod wyposazenia.
+  // Punkt o kodzie lekcji (zawiera slowo "kod") dostaje wlasny slajd "Kody
+  // lekcji" - jedno spokojne zdanie na pelnym ekranie, zeby dzieci zapamietaly
+  // sam schemat 4.1. Dawna legenda tematow na pierwszej stronie zeszytu i kod
+  // w rogu strony zostaly usuniete z zasad - nie przywracac.
   const { matched: zeszytKody, rest: zeszytPoKodach } = partitionItems(secZeszyt.items, /kod/i);
   // Punkt o procentach zasila slajd z progami ocen (ilustracja "procenty"),
-  // reszta (numer i temat lekcji, notatki, powtorzenie przed sprawdzianem)
-  // trafia na slajd "Co bedzie potrzebne". Szukamy po tresci, nie po indeksie.
+  // reszta (co zapisujemy w zeszycie, powtorzenie przed sprawdzianem) trafia
+  // na slajd "Co bedzie potrzebne". Szukamy po tresci, nie po indeksie.
   const { rest: zeszytBiezace } = partitionItems(zeszytPoKodach, /procent/i);
 
   const jestOsmoklasista = grade === 'VIII';

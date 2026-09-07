@@ -63,7 +63,8 @@ export const RULE_SECTIONS: RuleSection[] = [
     title: 'Specjalne utrudnienia za zachowanie',
     items: [
       'Pierwszy raz: ostrzeżenie.',
-      'Drugi raz i każdy kolejny: do końca miesiąca nie możesz już dostać plusa - ani na kole po lekcji, ani na kole powtórzeniowym.',
+      'Drugi raz: do końca miesiąca nie możesz już dostać plusa - ani na kole po lekcji, ani na kole powtórzeniowym.',
+      'Kolejne uwagi wpisuję już do dziennika.',
       'Uwagi zerują się z początkiem każdego miesiąca - nowy miesiąc, czysta kartka.',
     ],
   },
@@ -94,9 +95,9 @@ export const RULE_SECTIONS: RuleSection[] = [
       // (RULE_SECTIONS trzyma sama tresc, bez cyfr - numeracja to sprawa
       // widoku/wydruku, nie danych).
       'Koło powtórzeniowe - z poprzedniego tematu.',
-      'Nowy temat - prezentacja i zadania na czas, ze stoperem. Rozwiązania zapisujemy do zeszytu.',
-      'Koło po lekcji z nowego tematu i notatka do zeszytu.',
-      'Każda lekcja i każde zadanie ma swój kod - zapisujecie go przy notatce.',
+      'Nowy temat - prezentacja i zadania na czas, ze stoperem. W zeszycie zapisujemy nazwę zadania i rozwiązanie.',
+      'Koło po lekcji z nowego tematu i notatka do zeszytu ze slajdu.',
+      'Każda lekcja ma swój kod - zapisujecie go w zeszycie przy temacie.',
     ],
   },
   // Nowa sekcja dopisana NA KONCU tablicy - zgodnie z uwaga na gorze pliku,
@@ -104,14 +105,14 @@ export const RULE_SECTIONS: RuleSection[] = [
   {
     title: 'Zeszyt i sprawdziany',
     items: [
-      'Każda lekcja ma numer i temat. Zapisujemy je w zeszycie w linie.',
-      // Trzy ponizsze punkty tlumacza system kodow lekcji - wszystkie zawieraja
-      // slowo "kod", zeby intro.ts moglo je wydzielic na osobny slajd przez
-      // partitionItems(items, /kod/i) bez lamania sie na indeksach.
-      'Kod lekcji, np. 4.1, znaczy: 4 - klasa czwarta, 1 - pierwsza lekcja.',
-      'Na pierwszej stronie zeszytu robimy spis tematów - legenda z kodami, np. 4.5 - temat, 4.6 - temat.',
-      'Zaczynając nową stronę, piszemy w rogu kod tematu, który się na niej zaczyna. Łatwo wrócić: patrzysz w legendę i kartkujesz do kodu.',
-      'W zeszycie robimy notatki i zapisujemy podpowiedzi. Pracujemy na nich na bieżąco.',
+      // W zeszycie laduja tylko trzy rzeczy - swiadomie krotka lista, zeby dzieci
+      // nie przepisywaly polowy prezentacji.
+      'W zeszycie zapisujemy trzy rzeczy: 1) temat lekcji, 2) nazwę zadania i rozwiązanie, 3) na koniec notatkę ze slajdu.',
+      // Punkt o kodzie lekcji zawiera slowo "kod" - po nim intro.ts wydziela go
+      // przez partitionItems(items, /kod/i) na osobny slajd, bez lamania sie na
+      // indeksach. Dawna legenda tematow na pierwszej stronie i kod w rogu
+      // strony USUNIETE - zostaje samo znaczenie kodu.
+      'Kod lekcji, np. 4.1, znaczy: 4 - klasa czwarta, 1 - pierwsza lekcja. Zapisujemy go przy temacie.',
       'Przed sprawdzianem dostajecie całe powtórzenie na kartkach.',
       // Progi procentowe zgodne z WZO szkoly.
       'Sprawdziany oceniamy w procentach: 0-30% niedostateczny, 31-50% dopuszczający, 51-72% dostateczny, 73-85% dobry, 86-96% bardzo dobry, 97-100% celujący.',

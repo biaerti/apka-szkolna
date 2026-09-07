@@ -194,8 +194,12 @@ describe('buildIntroLesson', () => {
     const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Specjalne utrudnienia za zachowanie');
     const body = (slide && 'body' in slide ? slide.body : '') ?? '';
     expect(body).toContain('Pierwszy raz');
-    expect(body).toContain('Drugi raz i każdy kolejny');
+    expect(body).toContain('Drugi raz:');
     expect(body).toContain('nie możesz już dostać plusa');
+    // Dawne "drugi raz i kazdy kolejny" rozbite na dwa punkty - kolejne uwagi
+    // ida juz do dziennika, a nie mnoza kar w grze.
+    expect(body.toLowerCase()).not.toContain('każdy kolejny');
+    expect(body).toContain('dziennika');
     expect(body.toLowerCase()).not.toContain('trzeci raz');
     expect(body.toLowerCase()).not.toContain('dodatkowe miejsce');
     expect(body.toLowerCase()).not.toContain('podwójne wejście');
@@ -247,5 +251,19 @@ describe('RULE_SECTIONS', () => {
     expect(text).not.toContain('dodatkowe miejsce');
     expect(text).not.toContain('podwójne wejście');
     expect(text).toContain('do końca miesiąca nie możesz już dostać plusa');
+    expect(text).not.toContain('każdy kolejny');
+  });
+
+  it('zeszyt: trzy rzeczy do zapisania, kod lekcji bez legendy i kodu w rogu strony', () => {
+    const section = RULE_SECTIONS.find((s) => s.title === 'Zeszyt i sprawdziany');
+    expect(section).toBeDefined();
+    const text = (section?.items ?? []).join(' ');
+    expect(text).toContain('temat lekcji');
+    expect(text).toContain('nazwę zadania i rozwiązanie');
+    expect(text).toContain('notatkę ze slajdu');
+    expect(text).toContain('4 - klasa czwarta, 1 - pierwsza lekcja');
+    expect(text.toLowerCase()).not.toContain('legenda');
+    expect(text.toLowerCase()).not.toContain('spis tematów');
+    expect(text.toLowerCase()).not.toContain('w rogu');
   });
 });
