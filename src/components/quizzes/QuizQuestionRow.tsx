@@ -7,6 +7,9 @@ import { useState } from 'react';
 import type { QuizQuestion } from '../../data/types';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
+import { Textarea } from '../ui/Textarea';
+import { POINTS_RULE, pointsLabel, questionPoints } from '../../lib/quiz';
 
 export function QuizQuestionRow({
   question,
@@ -20,7 +23,7 @@ export function QuizQuestionRow({
   question: QuizQuestion;
   index: number;
   total: number;
-  onSave: (patch: { text: string; answer?: string }) => void;
+  onSave: (patch: { text: string; answer?: string; points?: number }) => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
   onRemove: () => void;
@@ -28,10 +31,12 @@ export function QuizQuestionRow({
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(question.text);
   const [answer, setAnswer] = useState(question.answer ?? '');
+  const [points, setPoints] = useState(questionPoints(question));
 
   function startEdit() {
     setText(question.text);
     setAnswer(question.answer ?? '');
+    setPoints(questionPoints(question));
     setEditing(true);
   }
 
@@ -39,13 +44,21 @@ export function QuizQuestionRow({
     const t = text.trim();
     if (!t) return;
     const a = answer.trim();
-    onSave({ text: t, answer: a || undefined });
+    onSave({ text: t, answer: a || undefined, points });
     setEditing(false);
   }
 
   return (
     <div className="flex items-start gap-3 border-b border-gray-100 px-4 py-3 last:border-b-0">
       <span className="mt-0.5 w-7 shrink-0 text-right text-sm font-medium text-gray-400">{index + 1}.</span>
+      {!editing && (
+        <span
+          className="mt-0.5 shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium tabular-nums text-gray-500"
+          title={POINTS_RULE}
+        >
+          {pointsLabel(questionPoints(question))}
+        </span>
+      )}
       <div className="min-w-0 flex-1">
         {editing ? (
           <form
@@ -55,8 +68,28 @@ export function QuizQuestionRow({
               save();
             }}
           >
-            <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="Treść pytania" autoFocus />
+            {/* Textarea, nie Input: wygenerowane zadania za 2 pkt maja przyklady
+                a) b) c) w osobnych liniach i musza sie dac poprawic w calosci. */}
+            <Textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Treść pytania"
+              rows={2}
+              autoFocus
+            />
             <Input value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Odpowiedź (opcjonalnie)" />
+            <label className="flex items-center gap-2 text-sm text-gray-600">
+              Punkty
+              <Select
+                value={String(points)}
+                onChange={(e) => setPoints(Number(e.target.value))}
+                className="w-auto"
+                title={POINTS_RULE}
+              >
+                <option value="1">1 pkt - jedno polecenie</option>
+                <option value="2">2 pkt - kilka przykładów</option>
+              </Select>
+            </label>
             <div className="flex gap-2">
               <Button size="sm" type="submit" disabled={!text.trim()}>
                 Zapisz
@@ -69,7 +102,7 @@ export function QuizQuestionRow({
         ) : (
           <>
             <p className="whitespace-pre-line text-base text-gray-900">{question.text}</p>
-            {question.answer && <p className="mt-0.5 text-sm text-gray-500">Odp.: {question.answer}</p>}
+            {question.answer && <p className="mt-0.5 whitespace-pre-line text-sm text-gray-500">Odp.: {question.answer}</p>}
             {/* Skad pytanie przyszlo: "4.2 Z1" = zadanie robione na lekcji,
                 "4.2 PZ3" = pytanie powtorzeniowe z zestawu tej lekcji. */}
             {question.sourceLabel ? (

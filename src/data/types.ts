@@ -356,6 +356,14 @@ export interface QuizQuestion {
    * rozroznienie powstalo.
    */
   sourceLabel?: string;
+  /**
+   * Ile punktow jest warte zadanie. Brak pola = 1 punkt (tak wygladaly
+   * wszystkie kartkowki, zanim punktacja powstala).
+   * - 1 pkt - jedno polecenie: zrobione albo nie,
+   * - 2 pkt - zadanie z kilkoma przykladami: wiecej niz polowa dobrze = 1 pkt,
+   *   wszystko dobrze = 2 pkt (patrz src/lib/quiz.ts: POINTS_RULE).
+   */
+  points?: number;
   order: number;
 }
 

@@ -19,6 +19,11 @@ export function quizKindTitle(kind: QuizKind): string {
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
+/** Biernik, do polecen: "Uloz kartkowke / klasowke". */
+export function quizKindAccusative(kind: QuizKind): string {
+  return quizKindLabel(kind).replace(/a$/, 'ę');
+}
+
 /** "2026-09-07" -> "07.09.2026" (format, jakim nauczyciel podpisuje kartki). */
 export function formatQuizDate(date?: string): string {
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return date ?? '';
@@ -45,12 +50,39 @@ export function quizQuestionFromLessonItem(lesson: Lesson, item: LessonQuestionI
   return out;
 }
 
-/** Pytanie wpisane recznie - bez sladu do zestawu. */
-export function ownQuizQuestion(text: string, answer: string | undefined, order: number): QuizQuestion {
+/** Pytanie wpisane recznie albo wygenerowane - bez sladu do zestawu lekcji. */
+export function ownQuizQuestion(
+  text: string,
+  answer: string | undefined,
+  order: number,
+  points = 1,
+): QuizQuestion {
   const out: QuizQuestion = { id: newId(), text: text.trim(), order };
   const trimmed = answer?.trim();
   if (trimmed) out.answer = trimmed;
+  if (points !== 1) out.points = points;
   return out;
+}
+
+/**
+ * Zasada punktacji, ta sama w poleceniu dla generatora i na projektorze -
+ * kartkowki sa karne, wiec za dwa punkty trzeba zrobic CALE zadanie.
+ */
+export const POINTS_RULE = 'Zadania za 2 pkt: więcej niż połowa przykładów dobrze - 1 pkt, wszystko dobrze - 2 pkt.';
+
+/** Ile punktow warte jest pytanie; brak pola = 1 punkt. */
+export function questionPoints(q: QuizQuestion): number {
+  return q.points ?? 1;
+}
+
+/** Suma punktow calej kartkowki - do naglowka i do progow procentowych. */
+export function totalPoints(questions: QuizQuestion[]): number {
+  return questions.reduce((sum, q) => sum + questionPoints(q), 0);
+}
+
+/** "1 pkt" / "2 pkt" - polska forma jest tu nieodmienna, wiec bez pluralizacji. */
+export function pointsLabel(points: number): string {
+  return `${points} pkt`;
 }
 
 /** Sortuje po `order` i nadaje kolejnosc od zera, bez dziur. */

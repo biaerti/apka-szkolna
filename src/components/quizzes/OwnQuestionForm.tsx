@@ -5,16 +5,25 @@
 import { useRef, useState } from 'react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
+import { POINTS_RULE } from '../../lib/quiz';
 
-export function OwnQuestionForm({ onAdd, onClose }: { onAdd: (text: string, answer?: string) => void; onClose: () => void }) {
+export function OwnQuestionForm({
+  onAdd,
+  onClose,
+}: {
+  onAdd: (text: string, answer: string | undefined, points: number) => void;
+  onClose: () => void;
+}) {
   const [text, setText] = useState('');
   const [answer, setAnswer] = useState('');
+  const [points, setPoints] = useState(1);
   const textRef = useRef<HTMLInputElement>(null);
 
   function submit() {
     const t = text.trim();
     if (!t) return;
-    onAdd(t, answer.trim() || undefined);
+    onAdd(t, answer.trim() || undefined, points);
     setText('');
     setAnswer('');
     textRef.current?.focus();
@@ -45,7 +54,19 @@ export function OwnQuestionForm({ onAdd, onClose }: { onAdd: (text: string, answ
           className="flex-1"
         />
       </div>
-      <div className="mt-2 flex gap-2">
+      <div className="mt-2 flex items-center gap-2">
+        <label className="mr-1 flex items-center gap-2 text-sm text-gray-600">
+          Punkty
+          <Select
+            value={String(points)}
+            onChange={(e) => setPoints(Number(e.target.value))}
+            className="w-auto"
+            title={POINTS_RULE}
+          >
+            <option value="1">1 pkt</option>
+            <option value="2">2 pkt</option>
+          </Select>
+        </label>
         <Button size="sm" type="submit" disabled={!text.trim()}>
           Dodaj
         </Button>

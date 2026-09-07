@@ -1,6 +1,8 @@
 // Jedna kartkowka / klasowka: naglowek (tytul edytowalny, klasa, rodzaj,
-// data), lista pytan z numeracja i dwa sposoby dodawania - z zestawow lekcji
-// rocznika tej klasy (PickQuestionsModal) albo wlasne (OwnQuestionForm).
+// data), lista pytan z numeracja i punktami oraz trzy sposoby dodawania -
+// z materialu lekcji rocznika tej klasy (PickQuestionsModal), wlasne
+// (OwnQuestionForm) albo wygenerowane przez Claude (GenerateQuizModal:
+// polecenie do schowka, odpowiedz wklejona z powrotem - bez API w apce).
 // Pytania z lekcji sa KOPIAMI (patrz types.ts: QuizQuestion).
 
 import { useState } from 'react';
@@ -15,7 +17,8 @@ import { QuizKindBadge } from '../components/quizzes/QuizKindBadge';
 import { QuizQuestionRow } from '../components/quizzes/QuizQuestionRow';
 import { OwnQuestionForm } from '../components/quizzes/OwnQuestionForm';
 import { PickQuestionsModal } from '../components/quizzes/PickQuestionsModal';
-import { moveQuizQuestion, ownQuizQuestion, quizQuestionFromLessonItem, renumber } from '../lib/quiz';
+import { GenerateQuizModal } from '../components/quizzes/GenerateQuizModal';
+import { moveQuizQuestion, ownQuizQuestion, pointsLabel, quizQuestionFromLessonItem, renumber, totalPoints } from '../lib/quiz';
 
 export function QuizDetail() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +29,7 @@ export function QuizDetail() {
   const removeQuiz = useStore((s) => s.removeQuiz);
 
   const [pickOpen, setPickOpen] = useState(false);
+  const [generateOpen, setGenerateOpen] = useState(false);
   const [ownOpen, setOwnOpen] = useState(false);
   const [confirmRemove, setConfirmRemove] = useState(false);
 
@@ -103,15 +107,20 @@ export function QuizDetail() {
         <Button variant="secondary" onClick={() => setOwnOpen(true)}>
           Dodaj własne pytanie
         </Button>
+        <Button variant="secondary" onClick={() => setGenerateOpen(true)}>
+          Wygeneruj zadania
+        </Button>
         <span className="ml-auto text-sm text-gray-500">
-          {questions.length === 0 ? 'Brak pytań' : `Pytań: ${questions.length}`}
+          {questions.length === 0 ? 'Brak pytań' : `Pytań: ${questions.length} · ${pointsLabel(totalPoints(questions))}`}
         </span>
       </div>
 
       {ownOpen && (
         <div className="mb-3">
           <OwnQuestionForm
-            onAdd={(text, answer) => setQuestions([...questions, ownQuizQuestion(text, answer, questions.length)])}
+            onAdd={(text, answer, points) =>
+              setQuestions([...questions, ownQuizQuestion(text, answer, questions.length, points)])
+            }
             onClose={() => setOwnOpen(false)}
           />
         </div>
@@ -162,6 +171,20 @@ export function QuizDetail() {
           const start = questions.length;
           setQuestions([...questions, ...picked.map((item, i) => quizQuestionFromLessonItem(lesson, item, start + i))]);
           setPickOpen(false);
+        }}
+      />
+
+      <GenerateQuizModal
+        open={generateOpen}
+        quiz={quiz}
+        onClose={() => setGenerateOpen(false)}
+        onAdd={(generated) => {
+          const start = questions.length;
+          setQuestions([
+            ...questions,
+            ...generated.map((g, i) => ownQuizQuestion(g.text, g.answer, start + i, g.points)),
+          ]);
+          setGenerateOpen(false);
         }}
       />
 
