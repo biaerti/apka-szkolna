@@ -5,6 +5,11 @@
 // prezentacji apki - a przy podreczniku prezentacji nie ma. Panel lezy nad
 // podrecznikiem, wiec i polecenie, i czas widzi cala klasa.
 //
+// Dwa rozmiary (srodkowy przycisk w naglowku, jak w pasku okna Windows):
+// - pelny - polecenie, czas, ustawianie dlugosci, Start i Od nowa;
+// - KOMPAKT - tylko polecenie i czas, bez pustych przestrzeni. Sterowanie idzie
+//   wtedy klikiem w sam czas (jak w AnswerTimer na ekranie kola) albo spacja.
+//
 // Odliczanie nie siedzi tutaj, tylko w Panel (useCountdown) - dzieki temu
 // stoper leci dalej po przelaczeniu na kolo i po zwinieciu panelu do pigulki
 // (pigulka pokazuje wtedy pozostaly czas).
@@ -23,6 +28,8 @@ export interface PanelStoperProps {
   onStart: () => void;
   onPauza: () => void;
   onReset: () => void;
+  /** Wersja bez ustawien i przyciskow - samo polecenie i czas. */
+  kompakt: boolean;
 }
 
 const MIN_MINUT = 1;
@@ -39,6 +46,7 @@ export function PanelStoper({
   onStart,
   onPauza,
   onReset,
+  kompakt,
 }: PanelStoperProps) {
   const koncowka = !finished && remainingSec <= 10 && remainingSec > 0;
   // Zmiana dlugosci w trakcie odliczania zeruje stoper (useCountdown ->
@@ -47,6 +55,49 @@ export function PanelStoper({
 
   function przestaw(delta: number) {
     onMinuty(Math.min(MAX_MINUT, Math.max(MIN_MINUT, minuty + delta)));
+  }
+
+  /** Klik w czas: start, pauza, a po uplywie - licz od nowa. */
+  function klikWCzas() {
+    if (finished) onReset();
+    else if (running) onPauza();
+    else onStart();
+  }
+
+  const czas = (
+    <button
+      type="button"
+      onClick={klikWCzas}
+      title="Kliknij: start, pauza, a po czasie - licz od nowa"
+      className={clsx(
+        'font-bold tabular-nums leading-none',
+        finished
+          ? 'animate-pulse text-red-400'
+          : koncowka
+            ? 'animate-pulse text-red-300'
+            : running
+              ? 'text-white'
+              : 'text-gray-400',
+      )}
+      style={{ fontSize: kompakt ? 'clamp(44px, 17vw, 72px)' : 'clamp(56px, 22vw, 96px)' }}
+    >
+      {formatMmSs(remainingSec)}
+    </button>
+  );
+
+  if (kompakt) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 px-3 pb-2">
+        <input
+          value={polecenie}
+          onChange={(e) => onPolecenie(e.target.value)}
+          placeholder="Polecenie, np. Czytamy tekst ze s. 12"
+          aria-label="Polecenie"
+          className="w-full shrink-0 rounded-md bg-transparent px-2 py-0.5 text-center text-base text-gray-100 placeholder:text-gray-600 focus:bg-gray-950"
+        />
+        {czas}
+      </div>
+    );
   }
 
   return (
@@ -59,23 +110,9 @@ export function PanelStoper({
         className="w-full shrink-0 rounded-lg border border-gray-700 bg-gray-950 px-3 py-2 text-center text-base text-gray-100 placeholder:text-gray-600"
       />
 
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
-        <p
-          className={clsx(
-            'font-bold tabular-nums leading-none',
-            finished
-              ? 'animate-pulse text-red-400'
-              : koncowka
-                ? 'animate-pulse text-red-300'
-                : running
-                  ? 'text-white'
-                  : 'text-gray-400',
-          )}
-          style={{ fontSize: 'clamp(56px, 22vw, 96px)' }}
-        >
-          {formatMmSs(remainingSec)}
-        </p>
-        {finished && <p className="mt-2 text-2xl font-bold text-red-400">Koniec czasu</p>}
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-2">
+        {czas}
+        {finished && <p className="mt-2 text-xl font-bold text-red-400">Koniec czasu</p>}
       </div>
 
       {mozeZmieniacCzas && (

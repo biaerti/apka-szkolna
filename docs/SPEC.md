@@ -171,6 +171,8 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   uwagi. Tryb KOLO: losowanie, plus/kropka, obecnosc, Reset skreslen - wlasna pamiec puli
   (`useTaskWheel`, `poolMemory: 'local'`). Tryb STOPER: odliczanie (`useCountdown`) z wlasnym
   poleceniem i edytowalna dlugoscia; leci dalej po zwinieciu do pigulki, ktora pokazuje czas.
+  Okno ma rozmiar dopasowany do tego, co pokazuje (ROZMIARY w Panel.tsx): wysokie pod kolo,
+  niskie pod stoper, a srodkowy przycisk naglowka sciaga stoper do paska z poleceniem i czasem.
 - `/zasady/druk` - **poza AppShell**: strona A4 z dwiema kopiami zasad do przeciecia nozyczkami
   plus strona z rysunkiem kola fortuny. Zrodlo tresci: `src/data/zasady.ts`.
 - `/ustawienia` - Settings + eksport/import calej bazy do JSON.

@@ -22,6 +22,13 @@ export interface PanelNaglowekProps {
   onTryb: (tryb: PanelTryb) => void;
   uwagiOtwarte: boolean;
   onUwagi: (open: boolean) => void;
+  /**
+   * Srodkowy przycisk paska - jak "przywroc w dol" w oknie Windows. Podajemy go
+   * tylko tam, gdzie jest co zmniejszac (stoper); w trybie kola panel nie ma
+   * pustych przestrzeni i przycisk sie nie pojawia.
+   */
+  kompakt?: boolean;
+  onKompakt?: (kompakt: boolean) => void;
   onZwin: () => void;
   /** Brak w przegladarce - zamykac mozna tylko okno Tauri. */
   onZamknij?: () => void;
@@ -35,6 +42,8 @@ export function PanelNaglowek({
   onTryb,
   uwagiOtwarte,
   onUwagi,
+  kompakt = false,
+  onKompakt,
   onZwin,
   onZamknij,
 }: PanelNaglowekProps) {
@@ -87,6 +96,18 @@ export function PanelNaglowek({
       >
         Uwagi
       </button>
+      {onKompakt && (
+        <button
+          type="button"
+          onClick={() => onKompakt(!kompakt)}
+          title={kompakt ? 'Powiększ panel' : 'Zmniejsz do samego czasu'}
+          aria-label={kompakt ? 'Powiększ panel' : 'Zmniejsz panel'}
+          aria-pressed={kompakt}
+          className="shrink-0 rounded-md px-1.5 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+        >
+          ▭
+        </button>
+      )}
       <button
         type="button"
         onClick={onZwin}

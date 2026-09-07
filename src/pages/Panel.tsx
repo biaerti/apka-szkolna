@@ -15,8 +15,10 @@
 // przelaczenie trybu ani zwiniecie panelu do pigulki nie moze gubic losowania
 // ani przerywac stopera.
 //
-// Dwa stany okna: PIGULKA (waski pasek, ~208x44) i PANEL (~360x600). Rozmiar
-// okna zmienia sie razem z UI - w przegladarce (dev) zmienia sie tylko UI.
+// Rozmiar okna idzie za tym, co jest na ekranie (patrz ROZMIARY): pigulka po
+// zwinieciu, wysokie okno pod kolo, niskie pod stoper, a srodkowy przycisk w
+// naglowku scisga stoper do samego polecenia i czasu. W przegladarce (dev)
+// zmienia sie tylko UI - okna nie ma czym ruszac.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from '../data/store';
@@ -33,8 +35,15 @@ import { useUchwytPrzeciagania } from '../components/panel/useUchwytPrzeciagania
 /** Adnotacja zdarzen z panelu - patrz lessonWheelNote (lessonCode jest pusty). */
 const ADNOTACJA = 'podręcznik';
 
+// Rozmiary okna. Stoper dostaje wlasna wysokosc, bo w oknie kola zostawal pod
+// czasem wielki pusty prostokat; KOMPAKT to jeszcze mniej - samo polecenie
+// i czas (srodkowy przycisk w naglowku).
 const PIGULKA = { width: 208, height: 44 };
-const PANEL = { width: 360, height: 600 };
+const ROZMIARY = {
+  kolo: { width: 360, height: 600 },
+  stoper: { width: 360, height: 300 },
+  stoperKompakt: { width: 360, height: 150 },
+};
 
 const KLUCZ_KLASY = 'apka-szkolna:panel:classId';
 const KLUCZ_MINUT = 'apka-szkolna:panel:minuty';
@@ -58,6 +67,7 @@ export function Panel() {
 
   const [rozwiniety, setRozwiniety] = useState(true);
   const [tryb, setTryb] = useState<PanelTryb>('kolo');
+  const [kompakt, setKompakt] = useState(false);
   // Stan listy uwag siedzi TU, a nie w komponencie trybu, bo Esc ma najpierw
   // zamykac liste, a klawisze (spacja/1/2) nie moga dzialac na to, co pod nia.
   const [uwagiOtwarte, setUwagiOtwarte] = useState(false);
@@ -81,9 +91,15 @@ export function Panel() {
   // Rozmiar okna idzie za stanem UI. Pierwsze wywolanie tez jest potrzebne:
   // okno startuje w rozmiarze panelu, ale po restarcie chcemy zgodnosc.
   useEffect(() => {
-    const rozmiar = rozwiniety ? PANEL : PIGULKA;
+    const rozmiar = !rozwiniety
+      ? PIGULKA
+      : tryb === 'stoper'
+        ? kompakt
+          ? ROZMIARY.stoperKompakt
+          : ROZMIARY.stoper
+        : ROZMIARY.kolo;
     void ustawRozmiarOkna(rozmiar.width, rozmiar.height);
-  }, [rozwiniety]);
+  }, [rozwiniety, tryb, kompakt]);
 
   // Tlo strony musi byc przezroczyste - okno Tauri jest transparent, wiec
   // szare tlo body rysowaloby prostokat wokol zaokraglonych rogow panelu.
@@ -193,6 +209,8 @@ export function Panel() {
         onTryb={setTryb}
         uwagiOtwarte={uwagiOtwarte}
         onUwagi={setUwagiOtwarte}
+        kompakt={kompakt}
+        onKompakt={tryb === 'stoper' ? setKompakt : undefined}
         onZwin={() => {
           setUwagiOtwarte(false);
           setRozwiniety(false);
@@ -215,6 +233,7 @@ export function Panel() {
             onStart={stoper.start}
             onPauza={stoper.pause}
             onReset={stoper.reset}
+            kompakt={kompakt}
           />
         )}
 
