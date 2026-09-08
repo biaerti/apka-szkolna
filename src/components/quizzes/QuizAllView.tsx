@@ -17,7 +17,7 @@ export function QuizAllView({ questions, showAnswers }: { questions: QuizQuestio
       .map((q) => `${q.text} (${pointsLabel(questionPoints(q))})${showAnswers && q.answer ? ` (${q.answer})` : ''}`)
       .join('\n');
     // Szerokosc kolumny bez numeracji i marginesow; wysokosc bez naglowka i stopki.
-    return fitFontSize(text, { width: 1120, height: 560, min: 26, max: 72, scale, lineHeight: 1.45 });
+    return fitFontSize(text, { width: 1120, height: 560, min: 22, max: 72, scale, lineHeight: 1.45 });
   }, [questions, showAnswers, scale]);
 
   // Zasada punktacji na dole - tylko gdy jakiekolwiek zadanie jest za 2 pkt.

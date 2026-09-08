@@ -27,11 +27,10 @@ export interface FitOptions {
   charRatio?: number;
   /**
    * Mnoznik wielkosci liter z Ustawien (Settings.slideFontPercent / 100).
-   * Podbija `min` i `max`, ale NIE wysokosc `height`: krotki slajd (a takich
-   * jest wiekszosc) robi sie o tyle wiekszy, o ile nauczyciel poprosil, a dlugi
-   * nadal dobiera rozmiar do miejsca i nie wylewa sie poza kartke. Podniesiony
-   * `min` jest jedynym miejscem, gdzie naprawde dlugi tekst moze przekroczyc
-   * ramke - to swiadome: lepiej duze litery i ciasny slajd niz nieczytelny.
+   * Podbija `max` w calosci, `min` o polowe, a wysokosci `height` wcale: krotki
+   * slajd (a takich jest wiekszosc) robi sie o tyle wiekszy, o ile nauczyciel
+   * poprosil, a slajd gesty od tekstu nadal dobiera rozmiar do miejsca i nie
+   * wylewa sie poza kartke.
    */
   scale?: number;
 }
@@ -44,35 +43,51 @@ export function plainLength(text: string): number {
     .trim().length;
 }
 
-/** Bloki tekstu (akapity i listy rozbite na pozycje) - kazdy zaczyna nowy wiersz. */
-function blockLines(text: string): string[] {
+/** Odstep miedzy akapitami (RichText: `space-y-[0.6em]`), w em. */
+const BLOCK_GAP_EM = 0.6;
+/** Odstep miedzy pozycjami tej samej listy (RichText: `[&_ul]:space-y-[0.3em]`), w em. */
+const ITEM_GAP_EM = 0.3;
+
+interface SourceLine {
+  text: string;
+  /** Pozycja listy ("- ", "1. ") - sasiednie pozycje maja mniejszy odstep niz akapity. */
+  list: boolean;
+}
+
+/** Linie zrodlowe tekstu: akapity i pozycje list, bez skladni markdown-lite. */
+function sourceLines(text: string): SourceLine[] {
   return text
     .replace(/\r\n/g, '\n')
     .split('\n')
-    .map((line) => line.replace(/\*\*/g, '').replace(/^[\t ]*(?:[-*]|\d+\.)\s+/, '').trim())
-    .filter((line) => line.length > 0);
-}
-
-/** Ile pustych linii (czyli odstepow miedzy akapitami) jest w tekscie. */
-function blankLineCount(text: string): number {
-  return (text.replace(/\r\n/g, '\n').match(/\n[\t ]*\n/g) ?? []).length;
+    .map((line) => {
+      const clean = line.replace(/\*\*/g, '').trim();
+      const list = /^(?:[-*]|\d+\.)\s+/.test(clean);
+      return { text: clean.replace(/^(?:[-*]|\d+\.)\s+/, ''), list };
+    })
+    .filter((line) => line.text.length > 0);
 }
 
 /**
  * Szacunkowa wysokosc tekstu zlozonego danym rozmiarem czcionki w kolumnie o
  * zadanej szerokosci. Kazda linia zrodlowa (akapit, pozycja listy) zaczyna sie
- * od nowa i zawija sie co `width / (fontSize * charRatio)` znakow.
+ * od nowa i zawija sie co `width / (fontSize * charRatio)` znakow. Do wysokosci
+ * wierszy doliczamy odstepy, ktore RichText naprawde rysuje miedzy blokami -
+ * bez nich dluga lista wychodzila w oszacowaniu o jakies 20% nizsza, niz jest
+ * naprawde, i tresc wypychala ze slajdu to, co pod nia (np. stoper zadania).
  */
 export function estimateTextHeight(text: string, fontSize: number, opts: FitOptions): number {
   const lineHeight = opts.lineHeight ?? 1.35;
   const charRatio = opts.charRatio ?? 0.52;
   const charsPerLine = Math.max(1, Math.floor(opts.width / (fontSize * charRatio)));
-  let lines = 0;
-  for (const line of blockLines(text)) {
-    lines += Math.max(1, Math.ceil(line.length / charsPerLine));
-  }
-  const gaps = blankLineCount(text);
-  return lines * fontSize * lineHeight + gaps * fontSize * 0.7;
+  const lines = sourceLines(text);
+  let wrapped = 0;
+  let gapEm = 0;
+  lines.forEach((line, i) => {
+    wrapped += Math.max(1, Math.ceil(line.text.length / charsPerLine));
+    const prev = lines[i - 1];
+    if (prev) gapEm += line.list && prev.list ? ITEM_GAP_EM : BLOCK_GAP_EM;
+  });
+  return wrapped * fontSize * lineHeight + gapEm * fontSize;
 }
 
 /**
@@ -83,7 +98,10 @@ export function estimateTextHeight(text: string, fontSize: number, opts: FitOpti
 export function fitFontSize(text: string, opts: FitOptions): number {
   const scale = opts.scale ?? 1;
   const max = Math.round(opts.max * scale);
-  const min = Math.round(opts.min * scale);
+  // Podloge podnosimy o POLOWE tego, co sufit: przy 130% krotki slajd ma byc o
+  // 30% wiekszy, ale slajd gesty od tekstu (dlugie polecenie + lista) nie moze
+  // przez to zjechac poza kartke - nieczytelny jest tak samo jak za maly.
+  const min = Math.round(opts.min * (1 + (scale - 1) / 2));
   if (!text.trim()) return max;
   for (let size = max; size > min; size -= 2) {
     if (estimateTextHeight(text, size, opts) <= opts.height) return size;

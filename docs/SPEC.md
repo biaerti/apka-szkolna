@@ -159,9 +159,15 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
     bazy (to zamazania przy klasie, jak na tablicy; nastepna klasa ma czysty slajd). Przy wlaczonym
     pisaku klik w slajd rysuje, a nie przewija. Slajd `recap` (kolo) nie ma warstwy rysowania.
   - **Wielkosc liter** (Ustawienia -> "Wielkosc liter na slajdach", `Settings.slideFontPercent`,
-    80-180%, domyslnie 100): mnoznik podawany do fitFontSize jako `scale`. Rusza `min`/`max`, ale nie
-    wysokosc ramki - krotki slajd rosnie o zadany procent, dlugi nadal dopasowuje sie do miejsca.
-    Dziala takze na ekranach kartkowek (QuizAllView / QuizOneView).
+    80-180%, domyslnie 100): mnoznik podawany do fitFontSize jako `scale`. Rusza `max` w calosci,
+    `min` o polowe, a wysokosci ramki wcale - krotki slajd rosnie o zadany procent, a slajd gesty od
+    tekstu nadal dopasowuje sie do miejsca i nie wychodzi poza kartke. Dziala takze na ekranach
+    kartkowek (QuizAllView / QuizOneView). `estimateTextHeight` dolicza odstepy, ktore RichText
+    naprawde rysuje miedzy akapitami (0,6 em) i pozycjami listy (0,3 em) - bez tego dluga lista
+    wychodzila w oszacowaniu o jakies 20% nizsza, niz jest naprawde.
+  - **Stoper zadania** siedzi w prawym dolnym rogu slajdu `task`, poza ukladem kolumnowym
+    (`absolute`, na lewo od kodu lekcji) i w wersji `compact` StopwatchBar. Wczesniej stal pod
+    trescia i dluzsze polecenie spychalo go poza slajd.
 - `/powtorka/:classId/:setId` - **ekran projektora** z kolem fortuny. Nie ma osobnej zakladki
   "Powtorka": kolo uruchamia sie ze slajdu `recap` wpietego w konkretna lekcje, a po zamknieciu
   wraca sie do prezentacji.

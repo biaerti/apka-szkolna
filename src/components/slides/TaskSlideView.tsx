@@ -1,7 +1,13 @@
 // Slajd zadania (Z1, Z2...). Kod zadania jest celowo ogromny - to on wisi na
 // tablicy, gdy klasa pisze w zeszytach. Tresc dobiera rozmiar do dlugosci
 // (fitText.ts) w pikselach kartki 1280x720 ze SlideView.
+//
+// Stoper siedzi w PRAWYM DOLNYM ROGU, poza ukladem kolumnowym (absolute) i obok
+// kodu lekcji: gdy stal pod trescia, dluzsze polecenie spychalo go poza slajd.
+// Dol slajdu jest pod niego zarezerwowany paddingiem, zeby tresc nie wchodzila
+// mu pod spod.
 
+import clsx from 'clsx';
 import { useState } from 'react';
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
@@ -26,16 +32,18 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
 
   // Z ilustracja tekst dostaje wezsza kolumne - reszta kartki nalezy do obrazka.
   const width = slide.art ? 620 : 1000;
-  const available = hasTimer ? 380 : 470;
+  // Wysokosc do dyspozycji pod naglowkiem z kodem zadania: stoper zabiera pasek
+  // przy dolnej krawedzi (patrz padding kontenera nizej).
+  const available = hasTimer ? 430 : 480;
   const title = slide.title ?? '';
   const tSize = title ? fitFontSize(title, { width, height: 130, min: 40, max: 84, scale, ...TITLE_FIT }) : 0;
   const used = title
     ? estimateTextHeight(title, tSize, { width, height: 0, min: 0, max: 0, ...TITLE_FIT }) + 20
     : 0;
-  const bSize = fitFontSize(slide.body, { width, height: available - used, min: 30, max: 66, scale });
+  const bSize = fitFontSize(slide.body, { width, height: available - used, min: 26, max: 66, scale });
 
   return (
-    <div className="relative flex h-full flex-col px-16 py-8">
+    <div className={clsx('relative flex h-full flex-col px-16 pt-8', hasTimer ? 'pb-28' : 'pb-16')}>
       <div className="flex items-start justify-between">
         <div className="rounded-2xl border-4 border-accent-400 px-8 py-3">
           <span className="text-[96px] font-bold leading-none text-accent-300">{slide.code}</span>
@@ -71,17 +79,17 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
         )}
       </div>
 
-      {hasTimer ? (
-        <div className="flex justify-center">
-          {/* key = dlugosc: zmiana -1/+1 min przestawia stoper od nowa */}
+      {/* Prawy dolny rog, na lewo od kodu lekcji (LessonCodeBadge w SlideView). */}
+      <div className="absolute bottom-5 right-28">
+        {hasTimer ? (
+          /* key = dlugosc: zmiana -1/+1 min przestawia stoper od nowa */
           <StopwatchBar
             key={timerSec}
+            compact
             timerSec={timerSec}
             onAdjust={(delta) => setTimerSec((t) => Math.max(60, t + delta))}
           />
-        </div>
-      ) : (
-        <div className="flex justify-center">
+        ) : (
           <button
             type="button"
             onClick={(e) => {
@@ -93,8 +101,8 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
           >
             + stoper
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

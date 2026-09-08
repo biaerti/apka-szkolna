@@ -27,7 +27,7 @@ export function ImageSlideView({ slide }: { slide: ImageSlide }) {
   // Zdjecie + tekst obok - np. "Kim jestem". Naglowek nad calym slajdem,
   // zdjecie po lewej, tekst po prawej - czytelne na 1280x720.
   if (slide.body) {
-    const bodySize = fitFontSize(slide.body, { width: 660, height: 460, min: 26, max: 52, scale });
+    const bodySize = fitFontSize(slide.body, { width: 660, height: 460, min: 24, max: 52, scale });
     return (
       <div className="flex h-full flex-col gap-6 px-16 py-12">
         {slide.title && (

@@ -21,7 +21,7 @@ export function ReadSlideView({ slide }: { slide: Extract<Slide, { kind: 'read' 
     : 0;
   const bodyHeight = 200 - (pageLabel ? 0 : 60);
   const bodySize = slide.body
-    ? fitFontSize(slide.body, { width: 1000, height: bodyHeight, min: 28, max: 58, scale })
+    ? fitFontSize(slide.body, { width: 1000, height: bodyHeight, min: 24, max: 58, scale })
     : 0;
 
   return (

@@ -18,7 +18,7 @@ export function NoteSlideView({ slide }: { slide: Extract<Slide, { kind: 'note' 
   const scale = useSlideFontScale();
   // Notatka jest przepisywana z tablicy, wiec ma byc tak duza, jak sie da -
   // rozmiar dobieramy do dlugosci tresci (fitText.ts), w pikselach kartki 1280x720.
-  const bodySize = fitFontSize(slide.body, { width: 1120, height: 480, min: 30, max: 72, scale, lineHeight: 1.6 });
+  const bodySize = fitFontSize(slide.body, { width: 1120, height: 480, min: 28, max: 72, scale, lineHeight: 1.6 });
 
   return (
     <div className="flex h-full flex-col bg-amber-50 px-20 py-12 text-gray-900" style={RULED_LINES_STYLE}>

@@ -25,7 +25,7 @@ export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' 
   function block(width: number, height: number) {
     const tSize = slide.title ? titleSize(slide.title, width, scale) : 0;
     const used = slide.title ? titleHeight(slide.title, tSize, width) + 28 : 0;
-    const bSize = fitFontSize(slide.body, { width, height: height - used, min: 30, max: 72, scale });
+    const bSize = fitFontSize(slide.body, { width, height: height - used, min: 28, max: 72, scale });
     return (
       <>
         {slide.title && (

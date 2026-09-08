@@ -27,6 +27,39 @@ describe('fitFontSize', () => {
   });
 });
 
+describe('estimateTextHeight liczy odstepy miedzy blokami', () => {
+  const opts = { width: 1000, height: 400, min: 20, max: 60 };
+
+  it('lista jest wyzsza niz same wiersze tekstu (odstepy 0,3 em miedzy pozycjami)', () => {
+    const items = ['- raz', '- dwa', '- trzy', '- cztery'].join('\n');
+    const bareLines = 40 * 4 * 1.35;
+    expect(estimateTextHeight(items, 40, opts)).toBeCloseTo(bareLines + 3 * 0.3 * 40, 5);
+  });
+
+  it('akapity dostaja wiekszy odstep niz pozycje listy', () => {
+    const paragraphs = ['raz', '', 'dwa', '', 'trzy'].join('\n');
+    const list = ['- raz', '- dwa', '- trzy'].join('\n');
+    expect(estimateTextHeight(paragraphs, 40, opts)).toBeGreaterThan(estimateTextHeight(list, 40, opts));
+  });
+
+  it('dluga lista nie miesci sie tam, gdzie dawniej pozornie wchodzila', () => {
+    // Tresc slajdu 4.2 Z2 ("Podziel na sylaby") w kolumnie obok ilustracji:
+    // stare oszacowanie mowilo, ze zmiesci sie w 380 px, i stoper wypadal ze slajdu.
+    const body = [
+      'Podziel wyrazy na sylaby, klaszczac przy kazdej z nich:',
+      '',
+      '1. dom',
+      '2. lampa',
+      '3. jablko',
+      '4. samolot',
+      '5. kolezanka',
+      '',
+      'Zapisz podzial w zeszycie, np. lam-pa.',
+    ].join('\n');
+    expect(estimateTextHeight(body, 30, { width: 620, height: 0, min: 0, max: 0 })).toBeGreaterThan(380);
+  });
+});
+
 describe('fitFontSize ze skala z Ustawien', () => {
   const opts = { width: 1000, height: 400, min: 30, max: 72 };
 
@@ -34,9 +67,10 @@ describe('fitFontSize ze skala z Ustawien', () => {
     expect(fitFontSize('Krotko', { ...opts, scale: 1.25 })).toBe(90);
   });
 
-  it('skala podnosi takze podloge dla bardzo dlugiego tekstu', () => {
+  it('podloga rosnie o polowe skali - gesty slajd ma nie wyjsc poza kartke', () => {
     const long = 'Bardzo dluga tresc slajdu. '.repeat(200);
-    expect(fitFontSize(long, { ...opts, scale: 1.25 })).toBe(38);
+    // min 30 przy skali 1,25 -> 30 * 1,125
+    expect(fitFontSize(long, { ...opts, scale: 1.25 })).toBe(34);
   });
 
   it('skala 1 nic nie zmienia', () => {
