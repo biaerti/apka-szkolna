@@ -3,7 +3,10 @@ import { formatMmSs } from '../../lib/timer';
 import { useCountdown } from './useCountdown';
 import { Button } from '../ui/Button';
 
-export function StopwatchBar({ timerSec }: { timerSec: number }) {
+// Stoper zadania. `onAdjust` (opcjonalne) pokazuje przy stojacym stoperze
+// przyciski -1 / +1 min: nauczyciel dobiera czas do klasy juz na lekcji,
+// bez wchodzenia w edytor (tak jak kolko czasu na slajdzie tematu).
+export function StopwatchBar({ timerSec, onAdjust }: { timerSec: number; onAdjust?: (deltaSec: number) => void }) {
   const { remainingSec, running, finished, start, pause, reset } = useCountdown(timerSec);
   const isLow = remainingSec < 10 && remainingSec > 0;
 
@@ -39,6 +42,29 @@ export function StopwatchBar({ timerSec }: { timerSec: number }) {
           <Button size="lg" variant="ghost" className="text-white hover:bg-white/10" onClick={reset}>
             Reset
           </Button>
+          {onAdjust && !running && (
+            <>
+              <Button
+                size="lg"
+                variant="ghost"
+                className="text-gray-300 hover:bg-white/10"
+                onClick={() => onAdjust(-60)}
+                disabled={timerSec <= 60}
+                title="Minuta mniej"
+              >
+                -1 min
+              </Button>
+              <Button
+                size="lg"
+                variant="ghost"
+                className="text-gray-300 hover:bg-white/10"
+                onClick={() => onAdjust(60)}
+                title="Minuta więcej"
+              >
+                +1 min
+              </Button>
+            </>
+          )}
         </div>
       )}
     </div>

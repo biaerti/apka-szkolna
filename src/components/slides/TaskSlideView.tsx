@@ -2,6 +2,7 @@
 // tablicy, gdy klasa pisze w zeszytach. Tresc dobiera rozmiar do dlugosci
 // (fitText.ts) w pikselach kartki 1280x720 ze SlideView.
 
+import { useState } from 'react';
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView } from './art';
@@ -10,9 +11,16 @@ import { estimateTextHeight, fitFontSize } from './fitText';
 
 const TITLE_FIT = { lineHeight: 1.15, charRatio: 0.55 };
 
+/** Czas stopera, gdy slajd go nie ma, a nauczyciel wlaczy go na lekcji. */
+const DEFAULT_TIMER_SEC = 180;
+
 export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' }> }) {
   const hasSource = slide.page || slide.exerciseNo;
-  const hasTimer = typeof slide.timerSec === 'number' && slide.timerSec > 0;
+  // Czas stopera zyje tylko w tym pokazie (SlideView keyuje slajd po id, wiec
+  // kolejne zadanie startuje od wartosci z lekcji) - zmiana na lekcji nie
+  // zapisuje sie do slajdu, zeby jeden wolniejszy dzien nie przestawial lekcji na stale.
+  const [timerSec, setTimerSec] = useState(typeof slide.timerSec === 'number' ? slide.timerSec : 0);
+  const hasTimer = timerSec > 0;
 
   // Z ilustracja tekst dostaje wezsza kolumne - reszta kartki nalezy do obrazka.
   const width = slide.art ? 620 : 1000;
@@ -61,9 +69,28 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
         )}
       </div>
 
-      {hasTimer && (
+      {hasTimer ? (
         <div className="flex justify-center">
-          <StopwatchBar key={slide.id} timerSec={slide.timerSec as number} />
+          {/* key = dlugosc: zmiana -1/+1 min przestawia stoper od nowa */}
+          <StopwatchBar
+            key={timerSec}
+            timerSec={timerSec}
+            onAdjust={(delta) => setTimerSec((t) => Math.max(60, t + delta))}
+          />
+        </div>
+      ) : (
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setTimerSec(DEFAULT_TIMER_SEC);
+            }}
+            className="rounded-lg px-4 py-1 text-xl text-gray-500 hover:bg-white/10 hover:text-gray-300"
+            title="Włącz stoper na to zadanie (3 min, potem -1/+1 min)"
+          >
+            + stoper
+          </button>
         </div>
       )}
     </div>
