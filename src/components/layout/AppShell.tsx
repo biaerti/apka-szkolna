@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { isSupabaseConfigured } from '../../data/supabase';
 import { useAuth } from '../../data/auth';
 import { useSyncStatus } from '../../data/remote/sync';
+import { CzytankiFab } from '../czytanki/CzytankiFab';
 
 // Krotkie menu - nauczyciel ma nie byc "milionerem na zakladkach, ktorych nie
 // bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w inne ekrany
@@ -53,6 +54,7 @@ export function AppShell() {
       <main className="flex-1 overflow-y-auto px-8 py-6">
         <Outlet />
       </main>
+      <CzytankiFab />
     </div>
   );
 }

@@ -2,3 +2,7 @@ node_modules
 dist
 .DS_Store
 *.local
+
+# Materialy z podrecznika (prawa autorskie) - nie publikujemy w publicznym repo
+audio-czytanki/teksty/
+public/audio/czytanki/
