@@ -73,7 +73,11 @@ export function NoiseMeterBars({ meter }: { meter: NoiseMeter }) {
       </div>
 
       <div className="mt-1.5 flex flex-col items-start gap-0.5 text-[11px] leading-tight text-gray-400">
-        <span>{Math.round(meter.level)} dB</span>
+        <span>
+          {Math.round(meter.level)} dB
+          {meter.meterStatus === 'ok' && <span className="ml-1 text-sky-400">USB</span>}
+          {meter.meterStatus === 'no-data' && <span className="ml-1 text-amber-400">USB?</span>}
+        </span>
         {meter.full ? (
           <span className="animate-pulse font-bold text-red-400">KARTKÓWKA!</span>
         ) : (
@@ -94,18 +98,40 @@ export function NoiseMeterBars({ meter }: { meter: NoiseMeter }) {
               className="mt-1 w-full"
             />
           </label>
-          <label className="mt-2 block text-xs text-gray-400">
-            Kalibracja (dopasuj do miernika): {meter.calibration - 100 >= 0 ? '+' : ''}
-            {meter.calibration - 100} dB
-            <input
-              type="range"
-              min={70}
-              max={130}
-              value={meter.calibration}
-              onChange={(e) => meter.setCalibration(Number(e.target.value))}
-              className="mt-1 w-full"
-            />
-          </label>
+          {meter.meterStatus !== 'ok' && (
+            <label className="mt-2 block text-xs text-gray-400">
+              Kalibracja (dopasuj do miernika): {meter.calibration - 100 >= 0 ? '+' : ''}
+              {meter.calibration - 100} dB
+              <input
+                type="range"
+                min={70}
+                max={130}
+                value={meter.calibration}
+                onChange={(e) => meter.setCalibration(Number(e.target.value))}
+                className="mt-1 w-full"
+              />
+            </label>
+          )}
+          {meter.error && meter.meterStatus !== 'ok' && (
+            <p className="mt-2 text-xs text-red-400">{meter.error} - pomiar tylko z miernika USB.</p>
+          )}
+          {meter.meterSupported && meter.meterStatus === 'off' && (
+            <button
+              type="button"
+              onClick={() => meter.connectMeter()}
+              className="mt-2 w-full rounded-md bg-gray-800 px-2 py-1 text-xs hover:bg-gray-700"
+            >
+              Podłącz miernik USB (HT622B)
+            </button>
+          )}
+          {meter.meterStatus === 'ok' && (
+            <p className="mt-2 text-xs text-sky-400">Miernik USB podłączony - pomiar z HT622B.</p>
+          )}
+          {meter.meterStatus === 'no-data' && (
+            <p className="mt-2 text-xs text-amber-400">
+              Miernik milczy - włącz go, przytrzymaj ⏸ 2 s (ikona USB) i ustaw UNIT na dB.
+            </p>
+          )}
           <div className="mt-3 flex gap-2">
             <button
               type="button"
