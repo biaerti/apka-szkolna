@@ -129,7 +129,8 @@ export function NoiseMeterBars({ meter }: { meter: NoiseMeter }) {
           )}
           {meter.meterStatus === 'no-data' && (
             <p className="mt-2 text-xs text-amber-400">
-              Miernik milczy - włącz go, przytrzymaj ⏸ 2 s (ikona USB) i ustaw UNIT na dB.
+              Miernik milczy - włącz go i przytrzymaj ⏸ 2 s, aż na LCD pojawi się ikona USB.
+              Na wyświetlaczu ma być jednostka dB (A lub C), nie SONE.
             </p>
           )}
           <div className="mt-3 flex gap-2">
