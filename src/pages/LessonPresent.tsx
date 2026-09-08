@@ -11,6 +11,8 @@ import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
 import { PresentClock } from '../components/lessons/PresentClock';
 import { TaskWheelDrawer } from '../components/lessons/TaskWheelDrawer';
+import { NoiseMeterBars } from '../components/lessons/NoiseMeterBars';
+import { useNoiseMeter } from '../components/lessons/useNoiseMeter';
 import { useTaskWheel } from '../components/lessons/useTaskWheel';
 import { usePresentKeys } from '../components/lessons/usePresentKeys';
 import { Button } from '../components/ui/Button';
@@ -33,6 +35,8 @@ export function LessonPresent() {
   const startedRef = useRef(false);
   // Kolo na lekcji - stan na poziomie prezentacji, zeby przezyl zmiany slajdow.
   const wheel = useTaskWheel({ classId: classId ?? '', lessonCode: lesson?.code });
+  // Decybelomierz - stan na poziomie prezentacji, zeby ladowanie kartkowki przezylo zmiany slajdow.
+  const noise = useNoiseMeter();
 
   useEffect(() => {
     if (!lesson || !classId || startedRef.current) return;
@@ -196,6 +200,8 @@ export function LessonPresent() {
       )}
 
       {!isRecap && <AnnotationToolbar ann={ann} />}
+
+      {!isRecap && <NoiseMeterBars meter={noise} />}
 
       <PresentProgressBar index={index} total={total} />
       {/* Na slajdzie kola prawy bok zajmuja pasek RecapToolbar i panel uczniow - zegar idzie w lewy gorny rog. */}
