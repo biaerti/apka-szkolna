@@ -89,6 +89,7 @@ const DEFAULT_SETTINGS: Settings = {
   plombyForOne: 3,
   reviewQuestionCount: 5,
   answerTimerSec: 30,
+  slideFontPercent: 100,
 };
 
 async function fetchAllRows<T>(table: string): Promise<T[]> {

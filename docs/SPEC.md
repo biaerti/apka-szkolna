@@ -151,6 +151,17 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   rysowane na kartce 1280x720 i skalowane do ekranu, a rozmiary czcionek dobiera dlugosc tekstu
   (src/components/slides/fitText.ts) - krotki slajd ma byc OGROMNY, dlugi tylko sie miesci. Start prezentacji przestawia
   postep tej klasy w tej lekcji na `in_progress`, zakonczenie - na `done` z data.
+  - **Rysowanie po slajdzie** (src/components/slides/AnnotationLayer.tsx): pasek w lewym dolnym rogu,
+    domyslnie zwiniety do przycisku "Rysuj". Pioro / zakreslacz / tekst / gumka, piec kolorow, trzy
+    grubosci, Cofnij i Wyczysc. Skroty: R = pioro, T = dopisek, Ctrl+Z = cofnij, Esc = schowaj pasek.
+    Kreski i dopiski maja wspolrzedne w pikselach kartki 1280x720, wiec trzymaja sie tresci slajdu
+    niezaleznie od rozdzielczosci. **Zyja tylko w tym pokazie** - nie zapisuja sie do lekcji ani do
+    bazy (to zamazania przy klasie, jak na tablicy; nastepna klasa ma czysty slajd). Przy wlaczonym
+    pisaku klik w slajd rysuje, a nie przewija. Slajd `recap` (kolo) nie ma warstwy rysowania.
+  - **Wielkosc liter** (Ustawienia -> "Wielkosc liter na slajdach", `Settings.slideFontPercent`,
+    80-180%, domyslnie 100): mnoznik podawany do fitFontSize jako `scale`. Rusza `min`/`max`, ale nie
+    wysokosc ramki - krotki slajd rosnie o zadany procent, dlugi nadal dopasowuje sie do miejsca.
+    Dziala takze na ekranach kartkowek (QuizAllView / QuizOneView).
 - `/powtorka/:classId/:setId` - **ekran projektora** z kolem fortuny. Nie ma osobnej zakladki
   "Powtorka": kolo uruchamia sie ze slajdu `recap` wpietego w konkretna lekcje, a po zamknieciu
   wraca sie do prezentacji.

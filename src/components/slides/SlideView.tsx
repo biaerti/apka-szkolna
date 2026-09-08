@@ -27,6 +27,11 @@ export interface SlideViewProps {
   lessonCode?: string;
   /** Temat lekcji do zeszytu - uzywany przez slajd `topic`, gdy nie ma wlasnego. */
   lessonTopic?: string;
+  /**
+   * Warstwa rysowania (AnnotationLayer) - renderowana NA kartce 1280x720, wiec
+   * kreski skaluja sie razem z trescia slajdu. Podglad w edytorze jej nie podaje.
+   */
+  overlay?: ReactNode;
 }
 
 /** Kartka 1280x720 wyskalowana do kontenera, wysrodkowana. */
@@ -78,7 +83,7 @@ function LessonCodeBadge({ code, onLightBackground }: { code: string; onLightBac
   );
 }
 
-export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic }: SlideViewProps) {
+export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, overlay }: SlideViewProps) {
   // Kolo fortuny: wlasny uklad na caly ekran, bez kartki i bez znacznika w rogu
   // (ma wlasny gorny pasek z nazwa klasy i zestawu).
   if (slide.kind === 'recap') {
@@ -101,6 +106,7 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
       {slide.kind === 'read' && <ReadSlideView slide={slide} />}
       {slide.kind === 'note' && <NoteSlideView slide={slide} />}
       {slide.kind === 'image' && <ImageSlideView slide={slide} />}
+      {overlay}
     </SlideStage>
   );
 }

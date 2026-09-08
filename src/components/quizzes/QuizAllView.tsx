@@ -7,16 +7,18 @@
 import { useMemo } from 'react';
 import type { QuizQuestion } from '../../data/types';
 import { SLIDE_W, fitFontSize } from '../slides/fitText';
+import { useSlideFontScale } from '../slides/useSlideFontScale';
 import { POINTS_RULE, pointsLabel, questionPoints } from '../../lib/quiz';
 
 export function QuizAllView({ questions, showAnswers }: { questions: QuizQuestion[]; showAnswers: boolean }) {
+  const scale = useSlideFontScale();
   const fontSize = useMemo(() => {
     const text = questions
       .map((q) => `${q.text} (${pointsLabel(questionPoints(q))})${showAnswers && q.answer ? ` (${q.answer})` : ''}`)
       .join('\n');
     // Szerokosc kolumny bez numeracji i marginesow; wysokosc bez naglowka i stopki.
-    return fitFontSize(text, { width: 1120, height: 560, min: 20, max: 64, lineHeight: 1.45 });
-  }, [questions, showAnswers]);
+    return fitFontSize(text, { width: 1120, height: 560, min: 26, max: 72, scale, lineHeight: 1.45 });
+  }, [questions, showAnswers, scale]);
 
   // Zasada punktacji na dole - tylko gdy jakiekolwiek zadanie jest za 2 pkt.
   const showRule = questions.some((q) => questionPoints(q) > 1);

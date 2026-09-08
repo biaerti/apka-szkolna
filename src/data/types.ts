@@ -312,6 +312,14 @@ export interface Settings {
    * ucznia. 0 = bez stopera. Domyslnie 30.
    */
   answerTimerSec: number;
+  /**
+   * Wielkosc liter na ekranach projektora (slajdy lekcji, kartkowki) w
+   * procentach: 100 = tak, jak wyliczy fitText.ts, 125 = o cwierc wiekszej.
+   * Sala jest dluga, a ostatnia lawka daleko - nauczyciel podbija to sobie sam,
+   * bez ruszania kodu. Patrz src/components/slides/useSlideFontScale.ts.
+   * Domyslnie 100.
+   */
+  slideFontPercent: number;
 }
 
 /**

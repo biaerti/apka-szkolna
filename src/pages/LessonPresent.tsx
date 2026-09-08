@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { SlideView } from '../components/slides/SlideView';
+import { AnnotationLayer } from '../components/slides/AnnotationLayer';
+import { AnnotationToolbar } from '../components/slides/AnnotationToolbar';
+import { useSlideAnnotations } from '../components/slides/useSlideAnnotations';
 import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
 import { PresentClock } from '../components/lessons/PresentClock';
@@ -51,6 +54,9 @@ export function LessonPresent() {
 
   const currentSlide = lesson?.slides[index];
   const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : '';
+  // Rysowanie po slajdzie - stan trzyma prezentacja, wiec kreski przezywaja
+  // przejscie na kolejny slajd i powrot (patrz useSlideAnnotations).
+  const ann = useSlideAnnotations(currentSlide?.id);
 
   usePresentKeys({
     index,
@@ -67,6 +73,11 @@ export function LessonPresent() {
     goTo,
     toggleFullscreen,
     exit: () => navigate(classId ? `/lekcje?klasa=${classId}` : '/lekcje'),
+    drawing: ann.tool !== 'off',
+    onToggleDraw: ann.toggleDrawing,
+    onTextTool: () => ann.setTool('text'),
+    onDrawOff: () => ann.setTool('off'),
+    onDrawUndo: ann.undo,
   });
 
   function toggleFullscreen() {
@@ -136,6 +147,8 @@ export function LessonPresent() {
         className="h-full min-w-0 flex-1"
         onClick={(e) => {
           if (isRecap) return;
+          // Przy wlaczonym rysowaniu klik nalezy do pisaka, nie do nawigacji.
+          if (ann.tool !== 'off') return;
           const rect = e.currentTarget.getBoundingClientRect();
           const clickX = e.clientX - rect.left;
           if (clickX < rect.width / 2) {
@@ -151,6 +164,7 @@ export function LessonPresent() {
           lessonCode={lesson.code}
           lessonTopic={lesson.registerTopic || lesson.title}
           onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
+          overlay={<AnnotationLayer ann={ann} />}
         />
       </div>
 
@@ -180,6 +194,8 @@ export function LessonPresent() {
           </Button>
         </div>
       )}
+
+      {!isRecap && <AnnotationToolbar ann={ann} />}
 
       <PresentProgressBar index={index} total={total} />
       {/* Na slajdzie kola prawy bok zajmuja pasek RecapToolbar i panel uczniow - zegar idzie w lewy gorny rog. */}

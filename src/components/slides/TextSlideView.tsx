@@ -7,11 +7,12 @@ import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView, WIDE_ART } from './art';
 import { estimateTextHeight, fitFontSize } from './fitText';
+import { useSlideFontScale } from './useSlideFontScale';
 
 const TITLE_FIT = { lineHeight: 1.15, charRatio: 0.55 };
 
-function titleSize(title: string, width: number): number {
-  return fitFontSize(title, { width, height: 150, min: 36, max: 88, ...TITLE_FIT });
+function titleSize(title: string, width: number, scale: number): number {
+  return fitFontSize(title, { width, height: 150, min: 42, max: 96, scale, ...TITLE_FIT });
 }
 
 function titleHeight(title: string, size: number, width: number): number {
@@ -19,10 +20,12 @@ function titleHeight(title: string, size: number, width: number): number {
 }
 
 export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' }> }) {
+  const scale = useSlideFontScale();
+
   function block(width: number, height: number) {
-    const tSize = slide.title ? titleSize(slide.title, width) : 0;
+    const tSize = slide.title ? titleSize(slide.title, width, scale) : 0;
     const used = slide.title ? titleHeight(slide.title, tSize, width) + 28 : 0;
-    const bSize = fitFontSize(slide.body, { width, height: height - used, min: 22, max: 60 });
+    const bSize = fitFontSize(slide.body, { width, height: height - used, min: 30, max: 72, scale });
     return (
       <>
         {slide.title && (

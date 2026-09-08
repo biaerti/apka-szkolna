@@ -4,6 +4,7 @@
 import { useMemo } from 'react';
 import type { QuizQuestion } from '../../data/types';
 import { SLIDE_W, fitFontSize } from '../slides/fitText';
+import { useSlideFontScale } from '../slides/useSlideFontScale';
 import { pointsLabel, questionPoints } from '../../lib/quiz';
 
 export function QuizOneView({
@@ -17,9 +18,10 @@ export function QuizOneView({
   total: number;
   showAnswers: boolean;
 }) {
+  const scale = useSlideFontScale();
   const fontSize = useMemo(
-    () => fitFontSize(question.text, { width: 1100, height: 420, min: 36, max: 96, lineHeight: 1.3 }),
-    [question.text],
+    () => fitFontSize(question.text, { width: 1100, height: 420, min: 44, max: 104, scale, lineHeight: 1.3 }),
+    [question.text, scale],
   );
 
   return (

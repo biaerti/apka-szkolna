@@ -292,6 +292,7 @@ export const useStore = create<AppState>()(
         plombyForOne: 3,
         reviewQuestionCount: 5,
         answerTimerSec: 30,
+        slideFontPercent: 100,
       },
       manuallyEditedLessonIds: {},
 
@@ -523,7 +524,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 13,
+      version: 14,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -561,6 +562,9 @@ export const useStore = create<AppState>()(
       // v12 -> v13: dochodza periods (dzwonki) i timetable (plan tygodniowy,
       // zakladka "Plan"). Stare dane dostaja domyslne dzwonki SP97 i plan
       // nauczyciela dopasowany po nazwach klas (patrz timetableSeed.ts).
+      // v13 -> v14: dochodzi slideFontPercent (wielkosc liter na projektorze,
+      // Ustawienia). Stare dane dostaja 100 - same domyslne rozmiary w
+      // slajdach urosly, wiec bez ruszania ustawien i tak jest wieksze.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -638,6 +642,9 @@ export const useStore = create<AppState>()(
         if (version < 13) {
           if (!Array.isArray(state.periods)) state.periods = DEFAULT_PERIODS;
           if (!Array.isArray(state.timetable)) state.timetable = buildSeedTimetable(state.classes ?? []);
+        }
+        if (version < 14 && state.settings) {
+          state.settings = { ...state.settings, slideFontPercent: state.settings.slideFontPercent ?? 100 };
         }
         return state as unknown as AppState;
       },

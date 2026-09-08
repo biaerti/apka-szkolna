@@ -33,6 +33,7 @@ function settings(partial: Partial<Settings> = {}): Settings {
     plusesForFive: 3,
     plombyForOne: 3,
     reviewQuestionCount: 7,
+    slideFontPercent: 100,
     ...partial,
   };
 }

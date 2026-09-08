@@ -58,6 +58,7 @@ const settings: Settings = {
   plusesForFive: 3,
   plombyForOne: 3,
   reviewQuestionCount: 5,
+  slideFontPercent: 100,
 };
 
 describe('passesUsedThisMonth', () => {

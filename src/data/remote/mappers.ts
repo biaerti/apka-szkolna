@@ -316,6 +316,7 @@ export interface SettingsRow {
   plomby_for_one: number;
   review_question_count: number | null;
   answer_timer_sec: number | null;
+  slide_font_percent: number | null;
 }
 
 export function settingsToRow(s: Settings): SettingsRow {
@@ -328,6 +329,7 @@ export function settingsToRow(s: Settings): SettingsRow {
     plomby_for_one: s.plombyForOne,
     review_question_count: s.reviewQuestionCount,
     answer_timer_sec: s.answerTimerSec,
+    slide_font_percent: s.slideFontPercent,
   };
 }
 
@@ -344,5 +346,7 @@ export function rowToSettings(row: SettingsRow): Settings {
     // Kolumna doszla razem ze stoperem odpowiedzi (0010_answer_timer.sql) -
     // starsze wiersze maja NULL, dopoki nauczyciel nie zapisze ustawien.
     answerTimerSec: row.answer_timer_sec ?? 30,
+    // Kolumna doszla z wielkoscia liter na projektorze (0014_wielkosc_liter.sql).
+    slideFontPercent: row.slide_font_percent ?? 100,
   };
 }

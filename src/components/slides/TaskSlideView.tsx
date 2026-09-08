@@ -8,6 +8,7 @@ import { RichText } from './RichText';
 import { SlideArtView } from './art';
 import { StopwatchBar } from './StopwatchBar';
 import { estimateTextHeight, fitFontSize } from './fitText';
+import { useSlideFontScale } from './useSlideFontScale';
 
 const TITLE_FIT = { lineHeight: 1.15, charRatio: 0.55 };
 
@@ -15,6 +16,7 @@ const TITLE_FIT = { lineHeight: 1.15, charRatio: 0.55 };
 const DEFAULT_TIMER_SEC = 180;
 
 export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' }> }) {
+  const scale = useSlideFontScale();
   const hasSource = slide.page || slide.exerciseNo;
   // Czas stopera zyje tylko w tym pokazie (SlideView keyuje slajd po id, wiec
   // kolejne zadanie startuje od wartosci z lekcji) - zmiana na lekcji nie
@@ -26,11 +28,11 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
   const width = slide.art ? 620 : 1000;
   const available = hasTimer ? 380 : 470;
   const title = slide.title ?? '';
-  const tSize = title ? fitFontSize(title, { width, height: 130, min: 34, max: 76, ...TITLE_FIT }) : 0;
+  const tSize = title ? fitFontSize(title, { width, height: 130, min: 40, max: 84, scale, ...TITLE_FIT }) : 0;
   const used = title
     ? estimateTextHeight(title, tSize, { width, height: 0, min: 0, max: 0, ...TITLE_FIT }) + 20
     : 0;
-  const bSize = fitFontSize(slide.body, { width, height: available - used, min: 22, max: 54 });
+  const bSize = fitFontSize(slide.body, { width, height: available - used, min: 30, max: 66, scale });
 
   return (
     <div className="relative flex h-full flex-col px-16 py-8">

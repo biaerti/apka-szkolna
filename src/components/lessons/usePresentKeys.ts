@@ -6,7 +6,10 @@
 // 3. na slajdzie `task` klawisz K przelacza szuflade kola na lekcji; przy
 //    otwartej szufladzie Spacja KRECI (nie zmienia slajdu), 1 = plus,
 //    2 = kropka, Backspace = cofnij ostatnia ocene,
-// 4. strzalki / PageUp / PageDown / Home / End nawiguja zawsze, F = pelny ekran.
+// 4. strzalki / PageUp / PageDown / Home / End nawiguja zawsze, F = pelny ekran,
+// 5. R wlacza/wylacza rysowanie po slajdzie, T dopisek tekstowy, Ctrl+Z cofa
+//    ostatnia kreske; przy wlaczonym rysowaniu Esc najpierw chowa pasek
+//    (klikanie w slajd wraca do przewijania).
 
 import { useEffect } from 'react';
 
@@ -31,6 +34,12 @@ export interface PresentKeysArgs {
   goTo: (index: number) => void;
   toggleFullscreen: () => void;
   exit: () => void;
+  /** Rysowanie po slajdzie (AnnotationToolbar) jest wlaczone. */
+  drawing: boolean;
+  onToggleDraw: () => void;
+  onTextTool: () => void;
+  onDrawOff: () => void;
+  onDrawUndo: () => void;
 }
 
 export function usePresentKeys(args: PresentKeysArgs) {
@@ -47,6 +56,27 @@ export function usePresentKeys(args: PresentKeysArgs) {
       if (e.key === 'Escape' && args.classPanelOpen) {
         e.preventDefault();
         args.setClassPanelOpen(false);
+        return;
+      }
+      if (e.key === 'Escape' && args.drawing) {
+        e.preventDefault();
+        args.onDrawOff();
+        return;
+      }
+      if (args.drawing && (e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        args.onDrawUndo();
+        return;
+      }
+      // Slajd kola ma wlasny uklad (bez kartki 1280x720), wiec nie ma po czym rysowac.
+      if (!args.onRecap && (e.key === 'r' || e.key === 'R')) {
+        e.preventDefault();
+        args.onToggleDraw();
+        return;
+      }
+      if (!args.onRecap && (e.key === 't' || e.key === 'T')) {
+        e.preventDefault();
+        args.onTextTool();
         return;
       }
       if (args.onRecap && (e.key === ' ' || e.key === 'Escape')) return;

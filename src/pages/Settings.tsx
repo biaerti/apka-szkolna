@@ -4,6 +4,11 @@ import { downloadBackup, importBackupFromFile } from '../data/backup';
 import { isSupabaseConfigured } from '../data/supabase';
 import { useAuth } from '../data/auth';
 import { pullAllFromRemote, pushAllToRemote, useSyncStatus } from '../data/remote/sync';
+import {
+  SLIDE_FONT_PERCENT_MAX,
+  SLIDE_FONT_PERCENT_MIN,
+  clampSlideFontPercent,
+} from '../components/slides/useSlideFontScale';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -230,6 +235,30 @@ export function SettingsPage() {
             {savedMsg ? 'Zapisano' : 'Zapisz'}
           </Button>
         </div>
+      </section>
+
+      <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
+        <h2 className="mb-1 text-base font-semibold text-gray-900">Prezentacja</h2>
+        <p className="mb-4 text-sm text-gray-500">
+          Dotyczy ekranów na projektorze: slajdów lekcji i kartkówek.
+        </p>
+        <label className="mb-1.5 block text-sm font-medium text-gray-700">Wielkość liter na slajdach (%)</label>
+        <p className="mb-1.5 text-xs text-gray-500">
+          100% = domyślne rozmiary. Podnieś, jeśli z ostatniej ławki tekst jest za mały - slajd z krótkim
+          tekstem urośnie o tyle procent, a długi wciąż będzie się dopasowywał do miejsca.
+          Zakres {SLIDE_FONT_PERCENT_MIN}-{SLIDE_FONT_PERCENT_MAX}%.
+        </p>
+        <Input
+          type="number"
+          min={SLIDE_FONT_PERCENT_MIN}
+          max={SLIDE_FONT_PERCENT_MAX}
+          step={5}
+          value={settings.slideFontPercent}
+          onChange={(e) =>
+            updateSettings({ slideFontPercent: clampSlideFontPercent(parseInt(e.target.value, 10)) })
+          }
+          className="max-w-[10rem]"
+        />
       </section>
 
       {isSupabaseConfigured() && <CloudSection />}

@@ -18,6 +18,7 @@ import clsx from 'clsx';
 import type { Slide } from '../../data/types';
 import { StopwatchBar } from './StopwatchBar';
 import { fitFontSize } from './fitText';
+import { useSlideFontScale } from './useSlideFontScale';
 
 /** Kolejne pozycje kolka stopera (w minutach); 0 = bez stopera. */
 const TIMER_MINUTES = [0, 1, 2, 3, 5];
@@ -62,7 +63,8 @@ export function TopicSlideView({
   lessonTopic?: string;
 }) {
   const topic = (slide.topic || lessonTopic || '').trim();
-  const topicSize = fitFontSize(topic, { width: 1080, height: 300, min: 32, max: 84, lineHeight: 1.25 });
+  const scale = useSlideFontScale();
+  const topicSize = fitFontSize(topic, { width: 1080, height: 300, min: 40, max: 92, scale, lineHeight: 1.25 });
   // Stoper startuje wylaczony przy kazdym wejsciu na slajd - patrz uwaga na gorze.
   const [timerMin, setTimerMin] = useState(0);
 

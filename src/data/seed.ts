@@ -61,6 +61,7 @@ export function buildSeedData(): SeedData {
     plombyForOne: 3,
     reviewQuestionCount: 5,
     answerTimerSec: 30,
+    slideFontPercent: 100,
   };
 
   return {

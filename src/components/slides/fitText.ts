@@ -25,6 +25,15 @@ export interface FitOptions {
   lineHeight?: number;
   /** Srednia szerokosc znaku jako czesc rozmiaru czcionki. */
   charRatio?: number;
+  /**
+   * Mnoznik wielkosci liter z Ustawien (Settings.slideFontPercent / 100).
+   * Podbija `min` i `max`, ale NIE wysokosc `height`: krotki slajd (a takich
+   * jest wiekszosc) robi sie o tyle wiekszy, o ile nauczyciel poprosil, a dlugi
+   * nadal dobiera rozmiar do miejsca i nie wylewa sie poza kartke. Podniesiony
+   * `min` jest jedynym miejscem, gdzie naprawde dlugi tekst moze przekroczyc
+   * ramke - to swiadome: lepiej duze litery i ciasny slajd niz nieczytelny.
+   */
+  scale?: number;
 }
 
 /** Tekst bez skladni markdown-lite - do liczenia znakow, ktore naprawde widac. */
@@ -72,9 +81,12 @@ export function estimateTextHeight(text: string, fontSize: number, opts: FitOpti
  * nie jest widoczna z ostatniej lawki.
  */
 export function fitFontSize(text: string, opts: FitOptions): number {
-  if (!text.trim()) return opts.max;
-  for (let size = opts.max; size > opts.min; size -= 2) {
+  const scale = opts.scale ?? 1;
+  const max = Math.round(opts.max * scale);
+  const min = Math.round(opts.min * scale);
+  if (!text.trim()) return max;
+  for (let size = max; size > min; size -= 2) {
     if (estimateTextHeight(text, size, opts) <= opts.height) return size;
   }
-  return opts.min;
+  return min;
 }

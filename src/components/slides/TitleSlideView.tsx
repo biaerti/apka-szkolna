@@ -1,20 +1,23 @@
 import type { Slide } from '../../data/types';
 import { SlideArtView } from './art';
 import { fitFontSize } from './fitText';
+import { useSlideFontScale } from './useSlideFontScale';
 
 export function TitleSlideView({ slide }: { slide: Extract<Slide, { kind: 'title' }> }) {
+  const scale = useSlideFontScale();
   // Rozmiary w pikselach kartki 1280x720 ze SlideView - krotki tytul dostaje
   // maksimum, dluzszy schodzi tylko tyle, zeby sie zmiescil.
   const titleSize = fitFontSize(slide.title, {
     width: 1080,
     height: slide.art ? 220 : 340,
-    min: 44,
-    max: 116,
+    min: 52,
+    max: 124,
+    scale,
     lineHeight: 1.1,
     charRatio: 0.55,
   });
   const subtitleSize = slide.subtitle
-    ? fitFontSize(slide.subtitle, { width: 1000, height: 120, min: 24, max: 48, charRatio: 0.5 })
+    ? fitFontSize(slide.subtitle, { width: 1000, height: 120, min: 30, max: 56, scale, charRatio: 0.5 })
     : 0;
 
   return (

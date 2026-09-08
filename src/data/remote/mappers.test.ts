@@ -199,6 +199,7 @@ describe('settings round-trip', () => {
       plusesForFive: 3,
       plombyForOne: 3,
       reviewQuestionCount: 7,
+      slideFontPercent: 110,
     };
     const row = settingsToRow(settings);
     expect(row.id).toBe('default');
@@ -217,8 +218,10 @@ describe('settings round-trip', () => {
       plusesForFive: 3,
       plombyForOne: 3,
       reviewQuestionCount: 5,
+      slideFontPercent: 100,
     });
     expect(rowToSettings({ ...row, review_question_count: null }).reviewQuestionCount).toBe(5);
+    expect(rowToSettings({ ...row, slide_font_percent: null }).slideFontPercent).toBe(100);
   });
 });
 
