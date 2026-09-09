@@ -8,6 +8,7 @@ import { useStore } from '../../data/store';
 import { INTRO_PROMPT, INTRO_PROMPT_HINT, INTRO_SET_TOPIC } from '../../data/intro';
 import { answersByQuestion, type RecapMode } from '../../lib/recap';
 import { StudentPicker } from './StudentPicker';
+import { UwagaPicker } from '../uwagi/UwagaPicker';
 import { QuestionPicker } from './QuestionPicker';
 import { StudentSidebar } from './StudentSidebar';
 import { RecapToolbar } from './RecapToolbar';
@@ -215,7 +216,6 @@ export function RecapSession({
           onToggleOpen={() => setSidebarOpen((v) => !v)}
           students={session.classStudents}
           usedCount={session.usedCount}
-          warningsFor={session.warningsFor}
           absentSet={session.absentSet}
           currentStudentId={session.currentStudent?.id ?? null}
           balanceFor={session.balanceFor}
@@ -260,9 +260,8 @@ export function RecapSession({
         onPick={session.addHint}
         onClose={() => setHintOpen(false)}
       />
-      <StudentPicker
+      <UwagaPicker
         open={uwagaOpen}
-        title="Komu wpisać uwagę?"
         students={session.presentStudents}
         onPick={session.addUwaga}
         onClose={() => setUwagaOpen(false)}

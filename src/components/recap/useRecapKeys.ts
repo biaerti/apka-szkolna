@@ -7,7 +7,8 @@
 // - po-lekcji (stary tryb, tylko dla starych danych - patrz src/lib/recap.ts):
 //   1 = dobrze, 2 = dalej (jak Enter w trybie bez ocen) - to jedyne dwa
 //   przyciski, ten tryb nigdy nie dawal plomby.
-// N = nastepne pytanie, O = pokaz odpowiedz, F = pelny ekran, Esc = zakoncz.
+// N = nastepne pytanie, O = pokaz odpowiedz, Ctrl+Z = cofnij ostatnia akcje,
+// F = pelny ekran, Esc = zakoncz.
 
 import { useEffect, useRef } from 'react';
 import type { RecapSessionState } from './useRecapSession';
@@ -22,6 +23,12 @@ export function useRecapKeys(session: RecapSessionState, embedded: boolean | und
       if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
 
       const s = sessionRef.current;
+      // Ctrl+Z = cofnij ostatnia akcje - to samo, co przycisk w pasku.
+      if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        if (s.canUndo) s.undoLast();
+        return;
+      }
       if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
         if (s.canSpin) s.pickNext();

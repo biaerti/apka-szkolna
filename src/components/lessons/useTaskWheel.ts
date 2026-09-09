@@ -3,27 +3,27 @@
 // pokazuje rozwiazanie i dostaje plus (dobrze) albo kropke (slabo albo wcale).
 // Hook zyje na poziomie CALEJ prezentacji (LessonPresent), a nie szuflady -
 // zmiana slajdu nie moze gubic obecnosci, otwarcia szuflady ani osoby, ktora
-// wlasnie odpowiada.
+// wlasnie odpowiada. Ten sam hook napedza plywajacy panel (src/pages/Panel.tsx).
 //
-// "Kto juz dzis odpowiadal" w prezentacji NIE jest stanem sesji, tylko wynika z
-// zapisanych RecapEvent (answeredOnDay): przeladowanie strony nie wraca nikogo
-// na kolo, a cofniecie oceny (usuniecie zdarzenia) samo zwalnia sektor. Wlicza
-// sie tez kolo powtorzeniowe z poczatku tej samej lekcji. Plywajacy panel ma to
-// inaczej - patrz `poolMemory` nizej.
+// "Kto juz dzis odpowiadal" NIE jest stanem sesji, tylko wynika z zapisanych
+// RecapEvent (answeredOnDay): przeladowanie strony nie wraca nikogo na kolo,
+// cofniecie oceny samo zwalnia sektor, a pamiec jest WSPOLNA dla calego dnia i
+// calej klasy - kolo powtorzeniowe z apki webowej, kolo na slajdzie zadania i
+// kolo w plywajacym panelu widza te sama liste "juz byl". Zdarzenia z innego
+// okna dociagamy z chmury (useTodayEventsPull).
 //
 // Przebieg losowania (spin -> handleSpinEnd -> applyPick) skopiowany z
 // useRecapDraw: nazwisko ujawniamy dopiero, gdy kolo stanie.
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useStore } from '../../data/store';
+import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 import { todayKey } from '../../lib/grade';
 import {
   answeredOnDay,
   buildRoundEntries,
-  canEarnPlus,
   drawableEntries,
   lessonWheelNote,
-  warningsThisMonth,
   wheelTargetAngle,
   type LessonWheelResult,
   type PoolEntry,
@@ -33,27 +33,18 @@ import { useAttendance } from '../recap/useAttendance';
 export interface UseTaskWheelArgs {
   classId: string;
   lessonCode?: string;
-  /**
-   * Skad bierze sie "kto juz byl" (sektory na czerwono, wypadniete z losowania):
-   * - `events` (domyslne, prezentacja) - z zapisanych zdarzen z dzisiaj, wiec
-   *   pula jest wspolna z kolem powtorzeniowym i przezywa przeladowanie strony;
-   * - `local` (plywajacy panel) - licznik zyje tylko w pamieci panelu i kasuje
-   *   go przycisk Reset. Panel chodzi obok apki, czesto przez cala lekcje przy
-   *   podreczniku, a nauczyciel sam decyduje, kiedy runda sie konczy - wiazanie
-   *   go ze zdarzeniami dnia znaczyloby, ze pol klasy startuje juz skreslone.
-   *
-   * Same OCENY ida w obu trybach tak samo, do wspolnego store - rozne jest
-   * tylko to, kogo kolo jeszcze losuje.
-   */
-  poolMemory?: 'events' | 'local';
 }
 
-export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: UseTaskWheelArgs) {
+export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
   const students = useStore((s) => s.students);
   const recapEvents = useStore((s) => s.recapEvents);
   const settings = useStore((s) => s.settings);
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
+
+  // Zdarzenia z dzisiaj zapisane w drugim oknie (apka webowa <-> plywajacy
+  // panel) - bez tego panel nie wiedzialby, kogo wylosowalo kolo powtorzeniowe.
+  useTodayEventsPull();
 
   const classStudents = useMemo(
     () => students.filter((st) => st.classId === classId && st.active).sort((a, b) => a.number - b.number),
@@ -73,29 +64,24 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
   // oddac sektor temu, kto te ocene dostal.
   const [lastGrade, setLastGrade] = useState<{ eventId: string; studentId: string } | null>(null);
 
-  // Tryb `local`: ile razy uczen byl losowany OD OSTATNIEGO RESETU (patrz poolMemory).
-  const [localUsed, setLocalUsed] = useState<Record<string, number>>({});
+  // "Reset skreslen": od tej chwili liczymy, kto juz byl. Wczesniejsze
+  // odpowiedzi zostaja w bilansie miesiaca, tylko przestaja skreslac ludzi z
+  // kola (patrz answeredOnDay: sinceIso).
+  const [resetAt, setResetAt] = useState<string | null>(null);
 
-  const answered = useMemo(() => answeredOnDay(recapEvents, classId, todayKey()), [recapEvents, classId]);
-  const usedFor = useCallback(
-    (studentId: string) =>
-      poolMemory === 'local' ? localUsed[studentId] ?? 0 : answered.get(studentId) ?? 0,
-    [poolMemory, localUsed, answered],
+  const answered = useMemo(
+    () => answeredOnDay(recapEvents, classId, todayKey(), resetAt ?? undefined),
+    [recapEvents, classId, resetAt],
   );
-  const warningsFor = useCallback(
-    (studentId: string) => warningsThisMonth(recapEvents, studentId, new Date()),
-    [recapEvents],
-  );
+  const usedFor = useCallback((studentId: string) => answered.get(studentId) ?? 0, [answered]);
 
   const entries = useMemo(
-    () => buildRoundEntries({ students: presentStudents, warningsFor, usedFor, allowRepeats }),
-    [presentStudents, warningsFor, usedFor, allowRepeats],
+    () => buildRoundEntries({ students: presentStudents, usedFor, allowRepeats }),
+    [presentStudents, usedFor, allowRepeats],
   );
   const pool = useMemo(() => drawableEntries(entries), [entries]);
 
   const currentStudent = currentEntry?.student ?? null;
-  const currentWarnings = currentStudent ? warningsFor(currentStudent.id) : 0;
-  const currentCanEarnPlus = currentStudent ? canEarnPlus(currentWarnings) : false;
   const canSpin = !spinning && (!currentEntry || graded) && pool.length > 0;
 
   // Wpis wylosowany, ale jeszcze nie ujawniony - kolo dopiero sie kreci.
@@ -135,32 +121,15 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
   function grade(result: LessonWheelResult, taskCode: string) {
     if (!currentEntry || graded) return;
     const studentId = currentEntry.student.id;
-    if (result === 'plus' && !canEarnPlus(warningsFor(studentId))) return;
     const event = addRecapEvent({ studentId, classId, result, note: lessonWheelNote(lessonCode, taskCode) });
     setLastGrade({ eventId: event.id, studentId });
     setGraded(true);
-    if (poolMemory === 'local') {
-      setLocalUsed((cur) => ({ ...cur, [studentId]: (cur[studentId] ?? 0) + 1 }));
-    }
   }
 
-  /**
-   * Cofa ostatnia ocene. W trybie `events` pula odswieza sie sama (liczy sie ze
-   * zdarzen), w trybie `local` trzeba jeszcze oddac uczniowi jego sektor.
-   */
+  /** Cofa ostatnia ocene - pula odswieza sie sama, bo liczy sie ze zdarzen. */
   function undoLast() {
     if (!lastGrade) return;
     removeRecapEvent(lastGrade.eventId);
-    const studentId = lastGrade.studentId;
-    if (poolMemory === 'local') {
-      setLocalUsed((cur) => {
-        const left = (cur[studentId] ?? 0) - 1;
-        const next = { ...cur };
-        if (left > 0) next[studentId] = left;
-        else delete next[studentId];
-        return next;
-      });
-    }
     setLastGrade(null);
     setCurrentEntry(null);
     setGraded(false);
@@ -169,11 +138,9 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
   /**
    * Reset rundy: wszyscy wracaja na kolo. Kasuje TYLKO skreslenia - obecnosc i
    * zapisane plusy/kropki zostaja (te ostatnie sa juz w bilansie miesiaca).
-   * Dziala wylacznie w trybie `local`; w `events` skreslenia wynikaja z
-   * zapisanych zdarzen i nie ma czego zerowac bez kasowania ocen.
    */
   function resetPool() {
-    setLocalUsed({});
+    setResetAt(new Date().toISOString());
     setAllowRepeats(false);
     setCurrentEntry(null);
     setGraded(false);
@@ -201,8 +168,6 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
     pool,
     currentEntry,
     currentStudent,
-    currentCanEarnPlus,
-    currentWarnings,
     graded,
     spinning,
     wheelTarget,
@@ -214,7 +179,7 @@ export function useTaskWheel({ classId, lessonCode, poolMemory = 'events' }: Use
     undoLast,
     resetPool,
     /** Czy jest co resetowac - do wyszarzenia przycisku. */
-    canReset: poolMemory === 'local' && (Object.keys(localUsed).length > 0 || allowRepeats),
+    canReset: entries.some((e) => e.done) || allowRepeats,
     canUndo: !!lastGrade,
     clearGradedStudent,
   };

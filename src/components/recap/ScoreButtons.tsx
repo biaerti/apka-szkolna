@@ -1,15 +1,16 @@
 // Przyciski oceny odpowiedzi ucznia + licznik pasow + wejscia do "kto
 // podpowiadal" i "uwaga". Uklad zalezy od trybu rundy (src/lib/recap.ts:
 // RecapMode):
-// - 'powtorzeniowe' - pelne ocenianie plus/kropka/plomba/pas. "Dobrze" jest
-//   wylaczone, gdy uczen ma juz 2 lub wiecej uwag w tym miesiacu (canEarnPlus).
+// - 'powtorzeniowe' - pelne ocenianie plus/kropka/plomba/pas.
 // - 'po-lekcji' - STARY tryb (wycofany, zostaje dla starych danych - patrz
 //   src/lib/recap.ts): mozna tylko zyskac: tylko dwa przyciski, "Dobrze" i
 //   "Dalej" (neutralne, nic sie nie zapisuje). Nie ma tu "Źle" wcale - ten tryb
-//   nigdy nie dawal plomby. "Dobrze" jest wylaczone na tych samych zasadach co
-//   w kole powtorzeniowym (canEarnPlus - blokada dziala w OBU trybach).
+//   nigdy nie dawal plomby.
 //   Aktualne kolo NA LEKCJI (po kazdym zadaniu) nie korzysta z tego komponentu -
 //   ma wlasna szuflade na slajdzie zadania (TaskWheelDrawer).
+//
+// Uwaga za zachowanie nie odbiera juz plusa - to tylko przypominajka do
+// dziennika (patrz src/lib/recap.ts i zakladka "Uwagi").
 
 import type { RecapResult } from '../../data/types';
 import type { RecapMode } from '../../lib/recap';
@@ -23,7 +24,6 @@ export interface ScoreButtonsProps {
   /** "Dalej" w starym trybie po-lekcji - jak "gotowe, następny", nic nie zapisuje. */
   onSkip: () => void;
   canPass: boolean;
-  canEarnPlus: boolean;
   passesUsed: number;
   passesPerMonth: number;
   hintGivesMinus: boolean;
@@ -38,7 +38,6 @@ export function ScoreButtons({
   onGrade,
   onSkip,
   canPass,
-  canEarnPlus,
   passesUsed,
   passesPerMonth,
   hintGivesMinus,
@@ -54,8 +53,7 @@ export function ScoreButtons({
         <button
           type="button"
           onClick={() => onGrade('plus')}
-          disabled={gradeDisabled || !canEarnPlus}
-          title={!canEarnPlus ? '2. uwaga - bez plusa do końca miesiąca' : undefined}
+          disabled={gradeDisabled}
           className="whitespace-nowrap rounded-lg bg-emerald-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-emerald-500 disabled:opacity-40 sm:text-3xl"
         >
           <span className="mr-2 font-black">{resultSymbol('plus').symbol}</span>
@@ -130,7 +128,7 @@ export function ScoreButtons({
           onClick={onOpenUwaga}
           className="whitespace-nowrap rounded-lg bg-orange-700 px-2 py-2.5 text-xl font-semibold text-white hover:bg-orange-600"
         >
-          Uwaga<span className="block text-sm font-normal opacity-75">niegrzeczne zachowanie</span>
+          Uwaga<span className="block text-sm font-normal opacity-75">wpis do dziennika</span>
         </button>
       </div>
 

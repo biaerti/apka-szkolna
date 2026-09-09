@@ -15,6 +15,7 @@ import { Quizzes } from './pages/Quizzes';
 import { QuizDetail } from './pages/QuizDetail';
 import { QuizPresent } from './pages/QuizPresent';
 import { Timetable } from './pages/Timetable';
+import { Uwagi } from './pages/Uwagi';
 import { SettingsPage } from './pages/Settings';
 import { Podstawa } from './pages/Podstawa';
 import { Lektury } from './pages/Lektury';
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/pytania/:id" element={<QuestionSetDetail />} />
         <Route path="/lekcje" element={<Lessons />} />
         <Route path="/lekcje/:id/edytuj" element={<LessonEditor />} />
+        <Route path="/uwagi" element={<Uwagi />} />
         <Route path="/kartkowki" element={<Quizzes />} />
         <Route path="/kartkowki/:id" element={<QuizDetail />} />
         <Route path="/plan" element={<Timetable />} />

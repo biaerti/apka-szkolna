@@ -10,7 +10,9 @@
 
 import { useState } from 'react';
 import { useStore } from '../../data/store';
+import type { Student } from '../../data/types';
 import { warningsThisMonth } from '../../lib/recap';
+import { UwagaNoteChoices } from '../uwagi/UwagaNoteChoices';
 
 /** Polska liczba mnoga "uwaga/uwagi/uwag" do badge'a przy uczniu. */
 function warningsWord(n: number): string {
@@ -34,16 +36,20 @@ export function PresentClassPanel({
   const recapEvents = useStore((s) => s.recapEvents);
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const [flashId, setFlashId] = useState<string | null>(null);
+  const [wybrany, setWybrany] = useState<Student | null>(null);
 
   const classStudents = students
     .filter((st) => st.classId === classId && st.active)
     .sort((a, b) => a.number - b.number);
 
-  function handleWarn(studentId: string) {
-    addRecapEvent({ studentId, classId, result: 'uwaga' });
+  // Uwaga idzie z trescia: nie ma juz zadnych skutkow w kole, jest za to
+  // przypominajka do wpisania w dzienniku (zakladka "Uwagi").
+  function handleWarn(student: Student, note: string) {
+    addRecapEvent({ studentId: student.id, classId, result: 'uwaga', note });
+    setWybrany(null);
     // Krotki flash zamiast modala - nauczyciel widzi, ze klikniecie "wzielo".
-    setFlashId(studentId);
-    window.setTimeout(() => setFlashId((id) => (id === studentId ? null : id)), 500);
+    setFlashId(student.id);
+    window.setTimeout(() => setFlashId((id) => (id === student.id ? null : id)), 500);
   }
 
   return (
@@ -72,42 +78,53 @@ export function PresentClassPanel({
               ✕
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto">
-            {classStudents.length === 0 ? (
-              <p className="p-3 text-xs text-gray-500">Ta klasa nie ma jeszcze uczniów.</p>
-            ) : (
-              classStudents.map((st) => {
-                const count = warningsThisMonth(recapEvents, st.id, new Date());
-                const flashing = flashId === st.id;
-                return (
-                  <div
-                    key={st.id}
-                    className="flex items-center justify-between gap-2 border-b border-gray-800 px-3 py-2"
-                  >
-                    <div className="min-w-0">
-                      <div className="truncate text-sm">
-                        {st.number}. {st.lastName} {st.firstName}
-                      </div>
-                      {count > 0 && (
-                        <div className={`text-xs ${flashing ? 'text-amber-300' : 'text-gray-400'}`}>
-                          {count} {warningsWord(count)}
-                        </div>
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleWarn(st.id)}
-                      className={`shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-                        flashing ? 'bg-amber-500 text-gray-900' : 'bg-gray-700 text-gray-100 hover:bg-gray-600'
-                      }`}
+          {wybrany ? (
+            <div className="flex-1 overflow-y-auto p-3">
+              <UwagaNoteChoices
+                tone="dark"
+                title={`${wybrany.lastName} ${wybrany.firstName}`}
+                onPick={(note) => handleWarn(wybrany, note)}
+                onCancel={() => setWybrany(null)}
+              />
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto">
+              {classStudents.length === 0 ? (
+                <p className="p-3 text-xs text-gray-500">Ta klasa nie ma jeszcze uczniów.</p>
+              ) : (
+                classStudents.map((st) => {
+                  const count = warningsThisMonth(recapEvents, st.id, new Date());
+                  const flashing = flashId === st.id;
+                  return (
+                    <div
+                      key={st.id}
+                      className="flex items-center justify-between gap-2 border-b border-gray-800 px-3 py-2"
                     >
-                      Uwaga
-                    </button>
-                  </div>
-                );
-              })
-            )}
-          </div>
+                      <div className="min-w-0">
+                        <div className="truncate text-sm">
+                          {st.number}. {st.lastName} {st.firstName}
+                        </div>
+                        {count > 0 && (
+                          <div className={`text-xs ${flashing ? 'text-amber-300' : 'text-gray-400'}`}>
+                            {count} {warningsWord(count)}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setWybrany(st)}
+                        className={`shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                          flashing ? 'bg-amber-500 text-gray-900' : 'bg-gray-700 text-gray-100 hover:bg-gray-600'
+                        }`}
+                      >
+                        Uwaga
+                      </button>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
         </div>
       )}
     </>

@@ -181,14 +181,12 @@ describe('buildIntroLesson', () => {
     }
   });
 
-  it('rozdzial o zachowaniu: najpierw utrudnienia, potem definicja przeszkadzania, bez pytania o grzecznosc', () => {
+  it('rozdzial o zachowaniu: najpierw uwagi, potem definicja przeszkadzania, bez pytania o grzecznosc', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const titles = lesson.slides.map((s) => ('title' in s ? s.title : undefined));
     expect(titles).not.toContain('Czy zachowujecie się grzecznie na lekcjach?');
     expect(titles).not.toContain('Za to nigdy nie ma uwagi');
-    expect(titles.indexOf('Co to znaczy przeszkadzać')).toBe(
-      titles.indexOf('Specjalne utrudnienia za zachowanie') + 1,
-    );
+    expect(titles.indexOf('Co to znaczy przeszkadzać')).toBe(titles.indexOf('Uwagi za zachowanie') + 1);
   });
 
   it('zdanie "to NIE jest przeszkadzanie" zostaje w lekcji mimo usunietego slajdu', () => {
@@ -216,20 +214,17 @@ describe('buildIntroLesson', () => {
     expect(text).not.toContain('dla całej klasy');
   });
 
-  it('eskalacja ma tylko dwa stopnie: ostrzezenie, a od drugiego razu brak plusow do konca miesiaca', () => {
+  it('uwaga idzie wprost do dziennika, bez ostrzezen i bez odbierania plusow', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
-    const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Specjalne utrudnienia za zachowanie');
+    const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Uwagi za zachowanie');
     const body = (slide && 'body' in slide ? slide.body : '') ?? '';
-    expect(body).toContain('Pierwszy raz');
-    expect(body).toContain('Drugi raz:');
-    expect(body).toContain('nie możesz już dostać plusa');
-    // Dawne "drugi raz i kazdy kolejny" rozbite na dwa punkty - kolejne uwagi
-    // ida juz do dziennika, a nie mnoza kar w grze.
-    expect(body.toLowerCase()).not.toContain('każdy kolejny');
-    expect(body).toContain('dziennika');
+    expect(body).toContain('uwagę do dziennika');
+    expect(body).toContain('Bez ostrzeżeń');
+    // Dawna eskalacja (ostrzezenie, potem blokada plusa) jest wycofana.
+    expect(body.toLowerCase()).not.toContain('ostrzeżenie.');
+    expect(body.toLowerCase()).not.toContain('nie możesz już dostać plusa');
     expect(body.toLowerCase()).not.toContain('trzeci raz');
     expect(body.toLowerCase()).not.toContain('dodatkowe miejsce');
-    expect(body.toLowerCase()).not.toContain('podwójne wejście');
   });
 
 });
@@ -285,15 +280,18 @@ describe('RULE_SECTIONS', () => {
     expect(all).not.toContain('po lekcji');
   });
 
-  it('eskalacja za zachowanie ma tylko dwa stopnie, bez dawnych "dodatkowych miejsc w kole"', () => {
-    const section = RULE_SECTIONS.find((s) => s.title === 'Specjalne utrudnienia za zachowanie');
+  it('uwaga za zachowanie: od razu do dziennika, bez ostrzezen i bez skutkow w grze', () => {
+    const section = RULE_SECTIONS.find((s) => s.title === 'Uwagi za zachowanie');
     expect(section).toBeDefined();
     const text = (section?.items ?? []).join(' ').toLowerCase();
-    expect(text).not.toContain('trzeci raz');
+    expect(text).toContain('uwagę do dziennika');
+    expect(text).toContain('bez ostrzeżeń');
+    // Dawna eskalacja - nie przywracac (patrz src/data/zasady.ts).
+    expect(text).not.toContain('pierwszy raz');
+    expect(text).not.toContain('drugi raz');
+    expect(text).not.toContain('nie możesz już dostać plusa');
     expect(text).not.toContain('dodatkowe miejsce');
     expect(text).not.toContain('podwójne wejście');
-    expect(text).toContain('do końca miesiąca nie możesz już dostać plusa');
-    expect(text).not.toContain('każdy kolejny');
   });
 
   it('zeszyt: trzy rzeczy do zapisania, kod lekcji bez legendy i kodu w rogu strony', () => {

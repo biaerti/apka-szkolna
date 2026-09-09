@@ -1,14 +1,14 @@
-// Stan i logika ekranu powtorki: pula uczniow (z duplikatami za uwagi),
-// losowanie, pytania, oceny, eskalacja uwag liczona z historii biezacego
-// miesiaca. Czyste obliczenia (limity pasow, losowanie, eskalacja, pula, kat
-// kola) sa w src/lib/recap.ts. Sam hook jest tylko kompozycja mniejszych
+// Stan i logika ekranu powtorki: pula uczniow, losowanie, pytania i oceny.
+// Czyste obliczenia (limity pasow, losowanie, pula, kat kola) sa w
+// src/lib/recap.ts. Sam hook jest tylko kompozycja mniejszych
 // hookow (useAttendance/usePool/useQuestionOrder/useRecapDraw), zeby
 // zmiescic sie w limicie dlugosci pliku. Bez ekranu gotowosci - pula liczy
 // sie wprost z obecnych uczniow (usuniety po testach na zywo).
 
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useStore } from '../../data/store';
-import { monthBalance, warningsThisMonth, type RecapMode } from '../../lib/recap';
+import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
+import { monthBalance, type RecapMode } from '../../lib/recap';
 import { monthKey } from '../../lib/week';
 import { useAttendance } from './useAttendance';
 import { usePool } from './usePool';
@@ -62,18 +62,16 @@ export function useRecapSession({
     [students, classId],
   );
 
+  // Zdarzenia zapisane w drugim oknie (plywajacy panel) - zeby kolo nie
+  // losowalo kogos, kto przed chwila odpowiadal przy podreczniku.
+  useTodayEventsPull();
+
   const attendance = useAttendance(classStudents, classId, absentIds);
 
-  // Uwagi rozliczamy pelnymi miesiacami z zapisanych zdarzen (nie ze stanu
-  // sesji) - przeladowanie strony w srodku lekcji nie kasuje eskalacji, a
-  // cofniecie ostatniej uwagi (usuniecie RecapEvent w undoLast) automatycznie
-  // obniza poziom, bo liczba znow wynika wprost z historii.
-  const warningsFor = useCallback(
-    (studentId: string) => warningsThisMonth(recapEvents, studentId, new Date()),
-    [recapEvents],
-  );
-
-  const poolState = usePool(attendance.presentStudents, warningsFor);
+  // Pamiec "kto juz dzis odpowiadal" jest wspolna dla calej klasy i calego dnia
+  // (patrz usePool) - kolo powtorzeniowe, kolo na lekcji i plywajacy panel nie
+  // losuja tej samej osoby drugi raz, dopoki reszta klasy nie byla.
+  const poolState = usePool(attendance.presentStudents, classId);
 
   const setQuestions = useMemo(
     () => questions.filter((q) => q.setId === setId).sort((a, b) => a.order - b.order),
@@ -86,7 +84,6 @@ export function useRecapSession({
     setId,
     entries: poolState.entries,
     pool: poolState.pool,
-    warningsFor,
     bumpUsedCount: poolState.bumpUsedCount,
     undoUsedCount: poolState.undoUsedCount,
     resetRound: poolState.resetRound,
@@ -134,7 +131,6 @@ export function useRecapSession({
     plannedTotal: poolState.plannedTotal,
     drawsCompleted: poolState.drawsCompleted,
     usedCount: poolState.usedCount,
-    warningsFor,
     allowRepeats: poolState.allowRepeats,
     setAllowRepeats: poolState.setAllowRepeats,
     settings,

@@ -170,8 +170,9 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
     secZleZachowania.items,
     /NIE jest przeszkadzanie/i,
   );
-  // Dawna nazwa sekcji: "Kiedy ktos przeszkadza".
-  const secEskalacja = ruleSection('Specjalne utrudnienia za zachowanie');
+  // Dawne nazwy sekcji: "Kiedy ktos przeszkadza", "Specjalne utrudnienia za
+  // zachowanie" (eskalacja - wycofana, patrz zasady.ts).
+  const secUwagi = ruleSection('Uwagi za zachowanie');
   const secLawki = ruleSection('Gdzie siedzimy');
   // Punkt o przelicznikach na oceny dostaje wlasny slajd z ilustracja "stopnie",
   // reszta zostaje przy definicjach plusa, kropki i plomby.
@@ -345,8 +346,8 @@ Na **kole powtórzeniowym** gra się o wszystko: plus, kropka albo plomba.`,
         'kolo',
       ),
 
-      // 20. Eskalacja 1-2-3 (z zasady.ts) - NAJPIERW konsekwencje, powaga tematu
-      slideText('Specjalne utrudnienia za zachowanie', asBulletList(secEskalacja.items), 'eskalacja'),
+      // 20. Uwagi za zachowanie (z zasady.ts) - NAJPIERW konsekwencja, powaga tematu
+      slideText('Uwagi za zachowanie', asBulletList(secUwagi.items), 'eskalacja'),
 
       // 21. Nazwanie zachowan (z zasady.ts) - DOPIERO TERAZ jasna definicja, co
       // dokladnie jest karane. Bez tego "uwaga" jest workiem na wszystko i dzieci

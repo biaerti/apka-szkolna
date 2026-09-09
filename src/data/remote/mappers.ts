@@ -197,6 +197,7 @@ export interface RecapEventRow {
   question_id: string | null;
   result: RecapEvent['result'];
   note: string | null;
+  wpisane: boolean;
   at: string;
 }
 
@@ -209,6 +210,7 @@ export function recapEventToRow(e: RecapEvent): RecapEventRow {
     question_id: e.questionId ?? null,
     result: e.result,
     note: e.note ?? null,
+    wpisane: e.wpisane ?? false,
     at: e.at,
   };
 }
@@ -222,6 +224,10 @@ export function rowToRecapEvent(row: RecapEventRow): RecapEvent {
     questionId: row.question_id ?? undefined,
     result: row.result,
     note: row.note ?? undefined,
+    // false nie jedzie do store - `wpisane` jest opcjonalne, a brak pola i
+    // false znacza to samo (niewpisane). Dzieki temu wiersze sprzed migracji
+    // nie roznia sie w snapshocie od tych po niej.
+    wpisane: row.wpisane ? true : undefined,
     at: row.at,
   };
 }

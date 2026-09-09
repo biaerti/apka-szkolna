@@ -103,6 +103,12 @@ interface AppState {
   addRecapEvent: (event: Omit<RecapEvent, 'id' | 'at'>) => RecapEvent;
   removeRecapEvent: (id: string) => void;
   /**
+   * Poprawka do zapisanego zdarzenia - w praktyce uwagi: tresc do dziennika
+   * (`note`) i odhaczenie "wpisane" w zakladce "Uwagi". Daty ani ucznia sie nie
+   * zmienia, wiec `at`, `id` i `studentId` sa poza zasiegiem.
+   */
+  updateRecapEvent: (id: string, patch: Partial<Pick<RecapEvent, 'note' | 'wpisane'>>) => void;
+  /**
    * "Wyzeruj bilans": kasuje zdarzenia recapu (plusy, kropki, plomby, pasy, uwagi)
    * calej klasy - albo jednego ucznia, gdy podano `studentId` - zapisane w danym
    * miesiacu ("RRRR-MM"). Tylko biezacy miesiac, bo bilans i tak liczy sie
@@ -442,6 +448,11 @@ export const useStore = create<AppState>()(
       },
       removeRecapEvent: (id) => {
         set((s) => ({ recapEvents: s.recapEvents.filter((e) => e.id !== id) }));
+      },
+      updateRecapEvent: (id, patch) => {
+        set((s) => ({
+          recapEvents: s.recapEvents.map((e) => (e.id === id ? { ...e, ...patch } : e)),
+        }));
       },
       resetBalance: (classId, month, studentId) => {
         set((s) => {

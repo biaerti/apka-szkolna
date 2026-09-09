@@ -72,9 +72,11 @@ export function Panel() {
   // zamykac liste, a klawisze (spacja/1/2) nie moga dzialac na to, co pod nia.
   const [uwagiOtwarte, setUwagiOtwarte] = useState(false);
 
-  // poolMemory 'local': panel ma wlasna pamiec "kto juz byl", kasowana przyciskiem
-  // Reset - nie dziedziczy skreslen po kole powtorzeniowym z rana (patrz useTaskWheel).
-  const wheel = useTaskWheel({ classId, poolMemory: 'local' });
+  // Pamiec "kto juz dzis byl losowany" jest wspolna z apka webowa: panel czyta
+  // te same zdarzenia z dzisiaj dla tej klasy, wiec kto odpowiadal na kole
+  // powtorzeniowym z rana, nie wraca na kolo przy podreczniku (patrz
+  // useTaskWheel i useTodayEventsPull). Przycisk Reset zaczyna liczenie od nowa.
+  const wheel = useTaskWheel({ classId });
 
   // Stoper. Dlugosc pamietana miedzy uruchomieniami panelu, polecenie nie -
   // dotyczy konkretnego zadania i puste pole jest lepszym startem niz cudze.
@@ -123,7 +125,6 @@ export function Panel() {
   }, []);
 
   const { spin, grade, undoLast, canSpin, graded, currentStudent, canUndo } = wheel;
-  const currentCanEarnPlus = wheel.currentCanEarnPlus;
   const stoperRunning = stoper.running;
   const stoperFinished = stoper.finished;
   const { start: stoperStart, pause: stoperPause } = stoper;
@@ -139,6 +140,13 @@ export function Panel() {
       }
       if (!rozwiniety || uwagiOtwarte) return;
 
+      // Ctrl+Z = cofnij, w obu trybach i tak samo jak wszedzie indziej w apce.
+      if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        if (canUndo) undoLast();
+        return;
+      }
+
       if (tryb === 'stoper') {
         if (e.code === 'Space' || e.key === 'Enter') {
           e.preventDefault();
@@ -153,7 +161,7 @@ export function Panel() {
         e.preventDefault();
         if (canSpin) spin();
       } else if (e.key === '1') {
-        if (currentStudent && !graded && currentCanEarnPlus) grade('plus', ADNOTACJA);
+        if (currentStudent && !graded) grade('plus', ADNOTACJA);
       } else if (e.key === '2') {
         if (currentStudent && !graded) grade('kropka', ADNOTACJA);
       } else if (e.key === 'Backspace') {
@@ -173,7 +181,6 @@ export function Panel() {
       spin,
       currentStudent,
       graded,
-      currentCanEarnPlus,
       grade,
       canUndo,
       undoLast,

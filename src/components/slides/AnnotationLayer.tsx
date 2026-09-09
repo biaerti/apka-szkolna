@@ -5,19 +5,33 @@
 // Kreski rysujemy w SVG (jeden <path> na pociagniecie), a dopiski jako zwykle
 // diwy - HTML sam zawija tekst, czego <text> w SVG nie robi.
 
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { SLIDE_H, SLIDE_W } from './fitText';
 import {
   appendPoint,
   strokePath,
+  TEXT_BOX_WIDTH,
   type AnnotationPoint,
   type StrokeShape,
   type TextShape,
 } from './annotations';
+import { AnnotationTextBox } from './AnnotationTextBox';
+import { AnnotationTexts, TEXT_MARGIN, textWidth } from './AnnotationTexts';
 import type { SlideAnnotations } from './useSlideAnnotations';
 
-/** Margines na dopisek, zeby tekst pisany przy krawedzi mial gdzie sie zawinac. */
-const TEXT_MARGIN = 48;
+/**
+ * Otwarte pole tekstowe. `id` jest, gdy poprawiamy dopisek juz stojacy na
+ * slajdzie (klikniety narzedziem "Tekst") - wtedy zatwierdzenie go zmienia,
+ * a nie dodaje drugiego.
+ */
+interface TextDraft {
+  id?: string;
+  x: number;
+  y: number;
+  text: string;
+  size: number;
+  width: number;
+}
 
 function cursorFor(tool: string): string {
   if (tool === 'text') return 'text';
@@ -27,18 +41,9 @@ function cursorFor(tool: string): string {
 
 export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const textRef = useRef<HTMLTextAreaElement>(null);
   const [draft, setDraft] = useState<AnnotationPoint[] | null>(null);
-  const [textAt, setTextAt] = useState<AnnotationPoint | null>(null);
-  const [textValue, setTextValue] = useState('');
+  const [text, setText] = useState<TextDraft | null>(null);
   const erasingRef = useRef(false);
-
-  // Fokus dopiero po zamontowaniu pola, a nie przez `autoFocus`: przegladarka w
-  // ramach obslugi mousedown przenosi fokus na klikniety element (czyli z
-  // powrotem na slajd), co natychmiast zamykalo swiezo otwarte pole.
-  useEffect(() => {
-    if (textAt) textRef.current?.focus();
-  }, [textAt]);
 
   const drawing = ann.tool === 'pen' || ann.tool === 'marker';
   const active = ann.tool !== 'off';
@@ -53,10 +58,19 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
     };
   }
 
+  /** Ile pikseli ekranu przypada na jeden piksel kartki - kartka jest przeskalowana transformem. */
+  function slideScale(): number {
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0) return 1;
+    return rect.width / SLIDE_W;
+  }
+
   function commitText() {
-    if (textAt) ann.addText(textAt.x, textAt.y, textValue);
-    setTextAt(null);
-    setTextValue('');
+    if (text) {
+      if (text.id) ann.updateText(text.id, { text: text.text.trim(), size: text.size, width: text.width });
+      else ann.addText({ x: text.x, y: text.y, text: text.text, size: text.size, width: text.width });
+    }
+    setText(null);
   }
 
   function onPointerDown(e: ReactPointerEvent) {
@@ -82,9 +96,21 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
     const p = pointAt(e);
     if (!p) return;
     // Klik obok otwartego pola najpierw zatwierdza poprzedni dopisek.
-    if (textAt) commitText();
-    setTextAt({ x: Math.min(p.x, SLIDE_W - TEXT_MARGIN * 2), y: p.y });
-    setTextValue('');
+    if (text) commitText();
+    const x = Math.min(p.x, SLIDE_W - TEXT_MARGIN * 2);
+    setText({
+      x,
+      y: p.y,
+      text: '',
+      size: ann.textSize,
+      width: Math.min(TEXT_BOX_WIDTH, SLIDE_W - x - TEXT_MARGIN),
+    });
+  }
+
+  /** Klik w gotowy dopisek narzedziem "Tekst" - poprawiamy tresc albo wielkosc. */
+  function editText(shape: TextShape) {
+    if (text) commitText();
+    setText({ id: shape.id, x: shape.x, y: shape.y, text: shape.text, size: shape.size, width: textWidth(shape) });
   }
 
   function onPointerMove(e: ReactPointerEvent) {
@@ -175,60 +201,32 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
         )}
       </svg>
 
-      {texts.map((t) => (
-        <div
-          key={t.id}
-          className="absolute font-semibold leading-tight"
-          style={{
-            left: t.x,
-            top: t.y,
-            maxWidth: SLIDE_W - t.x - TEXT_MARGIN,
-            color: t.color,
-            fontSize: t.size,
-            whiteSpace: 'pre-wrap',
-            pointerEvents: ann.tool === 'eraser' ? 'auto' : 'none',
-            cursor: ann.tool === 'eraser' ? 'pointer' : undefined,
-          }}
-          onPointerDown={() => ann.tool === 'eraser' && ann.removeShape(t.id)}
-          onPointerEnter={() => eraseOnHover(t.id)}
-        >
-          {t.text}
-        </div>
-      ))}
+      <AnnotationTexts
+        texts={texts}
+        tool={ann.tool}
+        hiddenId={text?.id}
+        onErase={ann.removeShape}
+        onEraseHover={eraseOnHover}
+        onEdit={editText}
+      />
 
-      {textAt && (
-        <textarea
-          ref={textRef}
-          value={textValue}
-          onChange={(e) => setTextValue(e.target.value)}
-          onPointerDown={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            e.stopPropagation();
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              commitText();
-            } else if (e.key === 'Escape') {
-              e.preventDefault();
-              setTextAt(null);
-              setTextValue('');
-            }
-          }}
-          onBlur={commitText}
-          placeholder="Wpisz tekst, Enter zatwierdza"
-          className="absolute resize-none rounded-md border-2 border-dashed px-2 py-1 font-semibold leading-tight outline-none"
-          style={{
-            left: textAt.x,
-            top: textAt.y,
-            width: Math.min(700, SLIDE_W - textAt.x - TEXT_MARGIN),
-            height: ann.textSize * 3,
-            color: ann.color,
-            borderColor: ann.color,
-            // Neutralna przymglona podkladka - czytelna i na ciemnym slajdzie, i na jasnej notatce.
-            background: 'rgba(128,128,128,0.25)',
-            fontSize: ann.textSize,
-          }}
+      {text && (
+        <AnnotationTextBox
+          x={text.x}
+          y={text.y}
+          value={text.text}
+          color={ann.color}
+          size={text.size}
+          width={text.width}
+          maxWidth={SLIDE_W - text.x - TEXT_MARGIN}
+          scale={slideScale()}
+          onValue={(value) => setText((cur) => (cur ? { ...cur, text: value } : cur))}
+          onSize={(next) => setText((cur) => (cur ? { ...cur, ...next } : cur))}
+          onCommit={commitText}
+          onCancel={() => setText(null)}
         />
       )}
+
     </div>
   );
 }

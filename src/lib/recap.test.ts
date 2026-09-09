@@ -6,7 +6,6 @@ import {
   lessonWheelNote,
   buildRoundEntries,
   drawableEntries,
-  canEarnPlus,
   canPass,
   earnedFive,
   earnedOne,
@@ -20,10 +19,7 @@ import {
   plannedDraws,
   resolveRecapMode,
   shuffle,
-  warnBadgeLabel,
-  warnLevel,
   warningsThisMonth,
-  wheelEntriesFor,
   wheelTargetAngle,
 } from './recap';
 
@@ -99,17 +95,15 @@ describe('warningsThisMonth', () => {
     expect(warningsThisMonth(events, 's1', now)).toBe(2);
   });
 
-  it('eskalacja zeruje sie z poczatkiem miesiaca', () => {
+  it('licznik uwag zeruje sie z poczatkiem miesiaca', () => {
     const events: RecapEvent[] = [
       ev({ studentId: 's1', result: 'uwaga', at: new Date(2026, 7, 10).toISOString() }),
       ev({ studentId: 's1', result: 'uwaga', at: new Date(2026, 7, 20).toISOString() }),
       ev({ studentId: 's1', result: 'uwaga', at: new Date(2026, 7, 25).toISOString() }),
     ];
-    // W sierpniu uczen mial trzy uwagi (blokada plusa - canEarnPlus false)...
-    expect(canEarnPlus(warningsThisMonth(events, 's1', new Date(2026, 7, 26)))).toBe(false);
-    // ...ale 1. wrzesnia licznik startuje od zera.
+    expect(warningsThisMonth(events, 's1', new Date(2026, 7, 26))).toBe(3);
+    // 1. wrzesnia licznik startuje od zera.
     expect(warningsThisMonth(events, 's1', new Date(2026, 8, 1))).toBe(0);
-    expect(canEarnPlus(warningsThisMonth(events, 's1', new Date(2026, 8, 1)))).toBe(true);
   });
 });
 
@@ -152,57 +146,6 @@ describe('pickRandom', () => {
   });
 });
 
-describe('warnLevel', () => {
-  it('none dla 0 uwag', () => {
-    expect(warnLevel(0)).toBe('none');
-  });
-  it('warned dla 1 uwagi', () => {
-    expect(warnLevel(1)).toBe('warned');
-  });
-  it('no_plus dla 2 i wiecej uwag', () => {
-    expect(warnLevel(2)).toBe('no_plus');
-    expect(warnLevel(3)).toBe('no_plus');
-    expect(warnLevel(5)).toBe('no_plus');
-  });
-});
-
-describe('wheelEntriesFor', () => {
-  it('zawsze 1 wejscie, niezaleznie od liczby uwag - eskalacja juz nie mnozy miejsc w kole', () => {
-    expect(wheelEntriesFor(0)).toBe(1);
-    expect(wheelEntriesFor(1)).toBe(1);
-    expect(wheelEntriesFor(2)).toBe(1);
-    expect(wheelEntriesFor(3)).toBe(1);
-    expect(wheelEntriesFor(6)).toBe(1);
-  });
-});
-
-describe('canEarnPlus', () => {
-  it('true ponizej progu blokady plusow', () => {
-    expect(canEarnPlus(0)).toBe(true);
-    expect(canEarnPlus(1)).toBe(true);
-  });
-  it('false od progu blokady plusow (dotyczy obu kol)', () => {
-    expect(canEarnPlus(2)).toBe(false);
-    expect(canEarnPlus(3)).toBe(false);
-  });
-});
-
-describe('warnBadgeLabel', () => {
-  it('pusty string bez uwag', () => {
-    expect(warnBadgeLabel(0)).toBe('');
-  });
-  it('1 uwaga - dyskretne ostrzezenie', () => {
-    expect(warnBadgeLabel(1)).toBe('1. ostrzeżenie');
-  });
-  it('2 uwagi - bez plusow do konca miesiaca', () => {
-    expect(warnBadgeLabel(2)).toBe('bez plusów do końca miesiąca');
-  });
-  it('wiecej niz 2 uwagi - ten sam komunikat co przy 2', () => {
-    expect(warnBadgeLabel(3)).toBe('bez plusów do końca miesiąca');
-    expect(warnBadgeLabel(6)).toBe('bez plusów do końca miesiąca');
-  });
-});
-
 describe('resolveRecapMode', () => {
   function recapSlide(partial: Partial<Extract<Slide, { kind: 'recap' }>> = {}): Extract<Slide, { kind: 'recap' }> {
     return { id: 's1', kind: 'recap', questionSetId: 'qs1', ...partial };
@@ -226,27 +169,14 @@ describe('buildRoundEntries', () => {
   const s2 = stu({ id: 's2', number: 2 });
   const s3 = stu({ id: 's3', number: 3 });
 
-  it('jedno wejscie na ucznia bez uwag i bez wczesniejszych odpowiedzi', () => {
+  it('jedno wejscie na ucznia, gdy nikt jeszcze nie odpowiadal', () => {
     const entries = buildRoundEntries({
       students: [s1, s2, s3],
-      warningsFor: () => 0,
       usedFor: () => 0,
     });
     expect(entries).toHaveLength(3);
     expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's3#0']);
     expect(entries.every((e) => !e.done)).toBe(true);
-  });
-
-  it('uczen z uwagami dostaje wciaz tylko jedno wejscie - eskalacja juz nie mnozy miejsc', () => {
-    const warnings = new Map([['s2', 3]]);
-    const entries = buildRoundEntries({
-      students: [s1, s2, s3],
-      warningsFor: (id) => warnings.get(id) ?? 0,
-      usedFor: () => 0,
-    });
-    expect(entries.filter((e) => e.student.id === 's2')).toHaveLength(1);
-    expect(entries.filter((e) => e.student.id === 's1')).toHaveLength(1);
-    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's3#0']);
   });
 
   it('wykorzystane wejscia zostaja na kole, ale sa oznaczone jako done', () => {
@@ -255,7 +185,6 @@ describe('buildRoundEntries', () => {
     ]);
     const entries = buildRoundEntries({
       students: [s1, s2, s3],
-      warningsFor: () => 0,
       usedFor: (id) => used.get(id) ?? 0,
     });
     expect(entries.map((e) => [e.key, e.done])).toEqual([
@@ -269,7 +198,6 @@ describe('buildRoundEntries', () => {
     const used = new Map([['s1', 1]]);
     const entries = buildRoundEntries({
       students: [s1, s2],
-      warningsFor: () => 0,
       usedFor: (id) => used.get(id) ?? 0,
       allowRepeats: true,
     });
@@ -286,7 +214,6 @@ describe('drawableEntries', () => {
     const used = new Map([['s1', 1]]);
     const entries = buildRoundEntries({
       students: [s1, s2],
-      warningsFor: () => 0,
       usedFor: (id) => used.get(id) ?? 0,
     });
     expect(drawableEntries(entries).map((e) => e.key)).toEqual(['s2#0']);
@@ -294,16 +221,15 @@ describe('drawableEntries', () => {
 });
 
 describe('plannedDraws', () => {
-  it('sumuje wejscia do kola dla wszystkich uczniow - kazdy ma jedno wejscie, niezaleznie od uwag', () => {
+  it('kazdy uczen to jedno losowanie', () => {
     const s1 = stu({ id: 's1' });
     const s2 = stu({ id: 's2' });
     const s3 = stu({ id: 's3' });
-    const warnings = new Map([['s2', 3]]);
-    expect(plannedDraws([s1, s2, s3], (id) => warnings.get(id) ?? 0)).toBe(3); // 1 + 1 + 1
+    expect(plannedDraws([s1, s2, s3])).toBe(3);
   });
 
   it('0 dla pustej listy uczniow', () => {
-    expect(plannedDraws([], () => 0)).toBe(0);
+    expect(plannedDraws([])).toBe(0);
   });
 });
 

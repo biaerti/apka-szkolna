@@ -12,10 +12,14 @@ import { CzytankiFab } from '../czytanki/CzytankiFab';
 // ani do lekcji, ani do klasy. "Kartkowki" podobnie: kartkowka karna za halas
 // i klasowka po dziale to wydarzenia konkretnej klasy, z pytaniami z wielu lekcji.
 // "Plan" to tygodniowy plan dzwonkowy nauczyciela - karmi pulpit i zegar na projektorze.
+// "Uwagi" to kalendarz tygodnia z uwagami do przepisania do dziennika: uwaga wpisana
+// w trakcie lekcji jest przypominajka, a po lekcjach trzeba ja zobaczyc ulozona po
+// dniach, a nie rozsypana po uczniach (patrz src/pages/Uwagi.tsx).
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
   { to: '/lekcje', label: 'Lekcje' },
+  { to: '/uwagi', label: 'Uwagi' },
   { to: '/kartkowki', label: 'Kartkówki' },
   { to: '/plan', label: 'Plan' },
   { to: '/zebrania', label: 'Zebrania' },

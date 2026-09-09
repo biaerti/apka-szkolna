@@ -50,7 +50,6 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
           <SequentialPicker
             students={session.presentStudents}
             usedCount={session.usedCount}
-            warningsFor={session.warningsFor}
             nextStudentId={session.pool[0]?.student.id ?? null}
             currentStudentId={session.currentStudent?.id ?? null}
           />

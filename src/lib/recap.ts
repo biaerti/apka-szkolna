@@ -1,6 +1,6 @@
-// Czyste funkcje modulu powtorki (kolo fortuny): limity pasow, eskalacja uwag,
-// budowa puli losowania, bilans miesieczny ucznia, rozliczanie plomb oraz
-// obliczanie docelowego kata obrotu kola.
+// Czyste funkcje modulu powtorki (kolo fortuny): limity pasow, budowa puli
+// losowania, bilans miesieczny ucznia, rozliczanie plomb oraz obliczanie
+// docelowego kata obrotu kola.
 //
 // Zasady gry (patrz `src/data/zasady.ts` i wydruk /zasady/druk):
 // - dwa kola: KOLO NA LEKCJI (po kazdym zadaniu losuje, kto pokazuje
@@ -9,9 +9,11 @@
 //   wlasnymi pytaniami - gra sie o wszystko: plus / kropka / plomba / pas),
 // - odpowiedz oceniamy jako plus / kropka / plomba, mozna tez wziac pas,
 // - podpowiadanie = plomba dla podpowiadajacego,
-// - niegrzeczne zachowanie eskaluje TYLKO dwa stopnie: 1. ostrzezenie, 2. (i
-//   kazdy kolejny raz) brak mozliwosci zdobycia plusa do konca miesiaca - w
-//   ZADNYM kole (ani na lekcji, ani powtorzeniowym),
+// - niegrzeczne zachowanie = UWAGA DO DZIENNIKA, od razu i bez ostrzezen.
+//   Uwaga nie ma juz zadnych skutkow w grze (nie blokuje plusa, nie mnozy
+//   sektorow) - jest przypominajka dla nauczyciela, zeby po lekcjach wpisac ja
+//   do dziennika (zakladka "Uwagi", src/pages/Uwagi.tsx). Dawna eskalacja
+//   (1. ostrzezenie, 2. brak plusow do konca miesiaca) jest WYCOFANA,
 // - wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
 //   zeruja sie 1. dnia miesiaca,
 // - na koniec miesiaca rozliczamy tez plusy, kropki i plomby: uzbierany komplet
@@ -49,63 +51,13 @@ export function resolveRecapMode(slide: Extract<Slide, { kind: 'recap' }>): Reca
   return 'po-lekcji';
 }
 
-// --- eskalacja uwag ---------------------------------------------------------
-
-/** Od tylu uwag w miesiacu uczen traci mozliwosc zdobywania plusow (w OBU kolach). */
-export const WARN_NO_PLUS_AT = 2;
-
-export type WarnLevel = 'none' | 'warned' | 'no_plus';
-
-/** Poziom eskalacji dla podanej liczby uwag w biezacym miesiacu. Tylko dwa stopnie - patrz zasady.ts. */
-export function warnLevel(warnings: number): WarnLevel {
-  if (warnings >= WARN_NO_PLUS_AT) return 'no_plus';
-  if (warnings >= 1) return 'warned';
-  return 'none';
-}
-
-/**
- * Ile razy uczen trafia do kola. Eskalacja uwag juz nie mnozy miejsc w kole -
- * kazdy uczen ma zawsze jedno wejscie, niezaleznie od liczby uwag (patrz
- * canEarnPlus - konsekwencja to wylacznie blokada plusa).
- */
-export function wheelEntriesFor(_warnings: number): number {
-  return 1;
-}
-
-/** Czy uczen z taka liczba uwag moze jeszcze zdobyc plusa - dotyczy OBU kol (na lekcji i powtorzeniowego). */
-export function canEarnPlus(warnings: number): boolean {
-  return warnings < WARN_NO_PLUS_AT;
-}
-
-/** Krotki opis konsekwencji dla poziomu eskalacji - do pokazania nauczycielowi. */
-export function warnLevelLabel(level: WarnLevel): string {
-  switch (level) {
-    case 'warned':
-      return 'ostrzeżenie';
-    case 'no_plus':
-      return 'bez plusów do końca miesiąca';
-    default:
-      return '';
-  }
-}
-
-/**
- * Zwiezly opis eskalacji uwag do listy uczniow (StudentSidebar): 1 uwaga -
- * dyskretne ostrzezenie, od 2 uwag - brak mozliwosci zdobycia plusa do konca
- * miesiaca, w zadnym kole (patrz canEarnPlus). Pusty string = brak uwag w tym miesiacu.
- */
-export function warnBadgeLabel(warnings: number): string {
-  if (warnings <= 0) return '';
-  if (warnings === 1) return '1. ostrzeżenie';
-  return 'bez plusów do końca miesiąca';
-}
-
 // --- pula losowania ---------------------------------------------------------
 
 /**
  * Jedno wejscie do kola. Kazdy uczen ma dokladnie jedno wejscie (`copy` zawsze
- * 0) - eskalacja uwag juz nie mnozy sektorow, tylko blokuje plusa (patrz
- * canEarnPlus). Pole `copy` zostaje w typie dla stabilnosci klucza `key`.
+ * 0) - uwagi za zachowanie nie ruszaja kola w zaden sposob (patrz naglowek
+ * pliku: uwaga idzie do dziennika, nie do gry). Pole `copy` zostaje w typie dla
+ * stabilnosci klucza `key`.
  */
 export interface PoolEntry {
   /** Stabilny klucz wejscia (uczen + numer kopii) - React key i indeks sektora. */
@@ -122,8 +74,6 @@ export interface PoolEntry {
 
 export interface BuildPoolArgs {
   students: Student[];
-  /** Liczba uwag ucznia w biezacym miesiacu. */
-  warningsFor: (studentId: string) => number;
   /** Ile razy uczen juz odpowiadal w biezacej rundzie. */
   usedFor: (studentId: string) => number;
   /** true = ignoruj "juz odpowiadal", nikt nie jest `done` i wszyscy wracaja do losowania. */
@@ -132,22 +82,14 @@ export interface BuildPoolArgs {
 
 /**
  * Wszystkie wejscia do kola w tej rundzie - razem z tymi, ktore juz odpowiadaly
- * (`done: true`). Lista jest stala przez cala runde (zmienia ja tylko obecnosc i
- * nowe uwagi), wiec sektory na kole nie przeskakuja po kazdej ocenie.
+ * (`done: true`). Lista jest stala przez cala runde (zmienia ja tylko obecnosc),
+ * wiec sektory na kole nie przeskakuja po kazdej ocenie.
  */
-export function buildRoundEntries({
-  students,
-  warningsFor,
-  usedFor,
-  allowRepeats = false,
-}: BuildPoolArgs): PoolEntry[] {
+export function buildRoundEntries({ students, usedFor, allowRepeats = false }: BuildPoolArgs): PoolEntry[] {
   const entries: PoolEntry[] = [];
   for (const student of students) {
-    const total = wheelEntriesFor(warningsFor(student.id));
     const used = allowRepeats ? 0 : usedFor(student.id);
-    for (let copy = 0; copy < total; copy++) {
-      entries.push({ key: `${student.id}#${copy}`, student, copy, done: copy < used });
-    }
+    entries.push({ key: `${student.id}#0`, student, copy: 0, done: used > 0 });
   }
   return entries;
 }
@@ -157,9 +99,9 @@ export function drawableEntries(entries: PoolEntry[]): PoolEntry[] {
   return entries.filter((entry) => !entry.done);
 }
 
-/** Ile losowan (a wiec i pytan) przewiduje pelna runda dla podanych uczniow. */
-export function plannedDraws(students: Student[], warningsFor: (studentId: string) => number): number {
-  return students.reduce((sum, st) => sum + wheelEntriesFor(warningsFor(st.id)), 0);
+/** Ile losowan (a wiec i pytan) przewiduje pelna runda - kazdy uczen raz. */
+export function plannedDraws(students: Student[]): number {
+  return students.length;
 }
 
 // --- pasy i uwagi w miesiacu -------------------------------------------------
@@ -183,10 +125,10 @@ export function canPass(events: RecapEvent[], studentId: string, settings: Setti
 }
 
 /**
- * Liczba uwag ucznia w miesiacu zawierajacym date `now` - podstawa eskalacji.
- * Uwagi zeruja sie 1. dnia miesiaca razem z pasami i statystykami; liczymy je
- * z zapisanych RecapEvent, a nie ze stanu sesji, zeby przeladowanie strony w
- * srodku lekcji nie kasowalo konsekwencji.
+ * Liczba uwag ucznia w miesiacu zawierajacym date `now`. Sluzy JUZ TYLKO do
+ * pokazania licznika przy nazwisku - uwaga nie ma zadnych skutkow w grze
+ * (patrz naglowek pliku). Liczymy ja z zapisanych RecapEvent, a nie ze stanu
+ * sesji, zeby przeladowanie strony w srodku lekcji nic nie gubilo.
  */
 export function warningsThisMonth(events: RecapEvent[], studentId: string, now: Date): number {
   return countInMonth(events, studentId, 'uwaga', now);
@@ -357,12 +299,26 @@ export function lessonWheelNote(lessonCode: string | undefined, taskCode: string
  * z poczatku tej samej lekcji - kto juz dzis odpowiadal, nie jest losowany do
  * zadan, dopoki reszta klasy nie byla. `dayKey` = "RRRR-MM-DD" lokalnie
  * (toDateKey), zdarzenia porownywane po lokalnej dacie `at`.
+ *
+ * `sinceIso` (opcjonalne) obcina liczenie do zdarzen NIE STARSZYCH niz podana
+ * chwila - tak dziala "Reset skreslen" w plywajacym panelu: nauczyciel zaczyna
+ * nowa runde w srodku dnia, a wczesniejsze odpowiedzi zostaja w bilansie
+ * miesiaca, tylko przestaja skreslac ludzi z kola.
  */
-export function answeredOnDay(events: RecapEvent[], classId: string, dayKey: string): Map<string, number> {
+export function answeredOnDay(
+  events: RecapEvent[],
+  classId: string,
+  dayKey: string,
+  sinceIso?: string,
+): Map<string, number> {
+  // Daty ze store i z chmury maja rozny zapis strefy ("...Z" kontra "...+00:00"),
+  // wiec porownujemy chwile, a nie napisy.
+  const sinceMs = sinceIso ? new Date(sinceIso).getTime() : null;
   const out = new Map<string, number>();
   for (const e of events) {
     if (e.classId !== classId || !GRADED_RESULTS.includes(e.result)) continue;
     if (toDateKey(new Date(e.at)) !== dayKey) continue;
+    if (sinceMs !== null && new Date(e.at).getTime() < sinceMs) continue;
     out.set(e.studentId, (out.get(e.studentId) ?? 0) + 1);
   }
   return out;

@@ -4,12 +4,10 @@
 // Wheel.tsx), nieobecni/niegotowi sa pominieci (filtrowani wczesniej).
 
 import type { Student } from '../../data/types';
-import { warnBadgeLabel } from '../../lib/recap';
 
 export interface SequentialPickerProps {
   students: Student[];
   usedCount: Map<string, number>;
-  warningsFor: (studentId: string) => number;
   nextStudentId: string | null;
   currentStudentId: string | null;
 }
@@ -17,7 +15,6 @@ export interface SequentialPickerProps {
 export function SequentialPicker({
   students,
   usedCount,
-  warningsFor,
   nextStudentId,
   currentStudentId,
 }: SequentialPickerProps) {
@@ -28,9 +25,7 @@ export function SequentialPicker({
   return (
     <div className="flex h-full w-full max-w-md flex-col overflow-y-auto rounded-xl border border-gray-700 bg-gray-900/70 p-2">
       {students.map((st) => {
-        const warnings = warningsFor(st.id);
         const used = (usedCount.get(st.id) ?? 0) >= 1;
-        const badge = warnBadgeLabel(warnings);
         const isNext = st.id === nextStudentId;
         const isCurrent = st.id === currentStudentId;
         return (
@@ -43,16 +38,13 @@ export function SequentialPicker({
                   ? 'bg-accent-900/50 text-white'
                   : used
                     ? 'text-red-400'
-                    : badge
-                      ? 'text-amber-300'
-                      : 'text-gray-200'
+                    : 'text-gray-200'
             }`}
           >
             <span className="w-8 shrink-0 text-right tabular-nums opacity-70">{st.number}.</span>
             <span className={used && !isCurrent ? 'line-through' : ''}>
               {st.lastName} {st.firstName}
             </span>
-            {badge && <span className="text-xs text-amber-300">({badge})</span>}
             {used && !isCurrent && <span className="ml-auto text-xs text-red-400">już był/a</span>}
             {isNext && !isCurrent && <span className="ml-auto text-xs text-accent-200">następny/a</span>}
           </div>

@@ -497,6 +497,79 @@ export function startSync(): void {
   scheduleFlush(0);
 }
 
+/**
+ * Dociaga z chmury DZISIEJSZE zdarzenia kola i wtapia je w store, bez
+ * wysylania czegokolwiek z powrotem.
+ *
+ * Po co: apka webowa (kolo powtorzeniowe, prezentacja) i plywajacy panel to
+ * dwa osobne okna z osobnym store. Bez tego panel nie wiedzialby, kogo kolo
+ * powtorzeniowe wylosowalo pol godziny wczesniej - a wlasnie o to chodzi w
+ * pamieci "kto juz dzis odpowiadal" (src/lib/recap.ts: answeredOnDay).
+ *
+ * Bierzemy TYLKO dzisiaj: to jedyny zakres, ktory jest potrzebny do puli kola,
+ * a caly dzien to najwyzej kilkadziesiat wierszy.
+ *
+ * Zasady wtapiania:
+ * - zdarzenie, ktorego nie mamy lokalnie, dokladamy;
+ * - zdarzenie, ktore mamy lokalnie i ktore BYLO juz wyslane (jest w snapshocie),
+ *   a w chmurze go nie ma, kasujemy - ktos cofnal ocene w drugim oknie;
+ * - zdarzenia jeszcze niewyslane (poza snapshotem) zostawiamy w spokoju, zeby
+ *   odswiezenie nie zjadlo tego, co dopiero czeka na wysylke.
+ * Snapshot aktualizujemy punktowo, wiec to wtopienie nie generuje wysylki.
+ */
+export async function pullTodayRecapEvents(): Promise<void> {
+  if (!started || sending || !isOnline()) return;
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const sinceMs = startOfDay.getTime();
+
+  let rows: RecapEventRow[];
+  try {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from('recap_events')
+      .select('*')
+      .gte('at', startOfDay.toISOString());
+    if (error) throw error;
+    rows = (data ?? []) as RecapEventRow[];
+  } catch {
+    // Odswiezenie w tle - blad sieci nie ma czym straszyc nauczyciela na lekcji.
+    return;
+  }
+
+  const remote = rows.map(rowToRecapEvent);
+  const remoteIds = new Set(remote.map((e) => e.id));
+  const local = useStore.getState().recapEvents;
+  const localIds = new Set(local.map((e) => e.id));
+
+  const added = remote.filter((e) => !localIds.has(e.id));
+  const removedIds = new Set(
+    local
+      .filter(
+        (e) =>
+          new Date(e.at).getTime() >= sinceMs &&
+          !remoteIds.has(e.id) &&
+          snapshots.recapEvents.has(e.id),
+      )
+      .map((e) => e.id),
+  );
+  if (added.length === 0 && removedIds.size === 0) return;
+
+  const next = local.filter((e) => !removedIds.has(e.id)).concat(added);
+  applyingRemote = true;
+  try {
+    useStore.setState({ recapEvents: next });
+  } finally {
+    applyingRemote = false;
+  }
+  for (const e of added) {
+    snapshots.recapEvents.set(e.id, JSON.stringify(recapEventToRow(e)));
+  }
+  for (const id of removedIds) {
+    snapshots.recapEvents.delete(id);
+  }
+}
+
 /** Zatrzymuje synchronizacje (np. przy wylogowaniu). */
 export function stopSync(): void {
   started = false;

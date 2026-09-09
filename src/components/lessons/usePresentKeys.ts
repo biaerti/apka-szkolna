@@ -5,11 +5,12 @@
 // 2. na slajdzie recap Spacja/Esc naleza do sesji kola powtorzeniowego,
 // 3. na slajdzie `task` klawisz K przelacza szuflade kola na lekcji; przy
 //    otwartej szufladzie Spacja KRECI (nie zmienia slajdu), 1 = plus,
-//    2 = kropka, Backspace = cofnij ostatnia ocene,
+//    2 = kropka, Backspace albo Ctrl+Z = cofnij ostatnia ocene,
 // 4. strzalki / PageUp / PageDown / Home / End nawiguja zawsze, F = pelny ekran,
 // 5. R wlacza/wylacza rysowanie po slajdzie, T dopisek tekstowy, Ctrl+Z cofa
-//    ostatnia kreske; przy wlaczonym rysowaniu Esc najpierw chowa pasek
-//    (klikanie w slajd wraca do przewijania),
+//    ostatnia kreske (przy wylaczonym rysowaniu - ostatnia ocene z kola);
+//    przy wlaczonym rysowaniu Esc najpierw chowa pasek (klikanie w slajd
+//    wraca do przewijania),
 // 6. M pauzuje ladowanie kartkowki decybelomierza (gdy mowi nauczyciel).
 
 import { useEffect } from 'react';
@@ -66,9 +67,12 @@ export function usePresentKeys(args: PresentKeysArgs) {
         args.onDrawOff();
         return;
       }
-      if (args.drawing && (e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
+      // Ctrl+Z = cofnij. Przy wlaczonym rysowaniu cofa ostatni ksztalt, poza
+      // rysowaniem - ostatnia ocene z kola na lekcji (tak samo jak Backspace).
+      if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        args.onDrawUndo();
+        if (args.drawing) args.onDrawUndo();
+        else if (wheelActive) args.onUndo();
         return;
       }
       // Slajd kola ma wlasny uklad (bez kartki 1280x720), wiec nie ma po czym rysowac.

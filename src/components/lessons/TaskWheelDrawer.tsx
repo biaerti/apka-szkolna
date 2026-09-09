@@ -11,7 +11,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { resultSymbol } from '../../lib/resultSymbol';
-import { NoPlusNote } from '../recap/NoPlusNote';
 import { Wheel } from '../recap/Wheel';
 import { TaskWheelAttendance } from './TaskWheelAttendance';
 import type { TaskWheelState } from './useTaskWheel';
@@ -110,7 +109,6 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
             <p className="font-bold leading-tight text-white" style={{ fontSize: 'clamp(28px, 2.6vw, 48px)' }}>
               {student.firstName} {student.lastName}
             </p>
-            {!wheel.currentCanEarnPlus && <NoPlusNote warnings={wheel.currentWarnings} compact />}
           </div>
         ) : (
           <p className="py-2 text-center font-bold leading-tight text-gray-500" style={{ fontSize: 'clamp(28px, 2.6vw, 48px)' }}>
@@ -123,8 +121,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
         <button
           type="button"
           onClick={() => wheel.grade('plus', taskCode)}
-          disabled={gradeDisabled || !wheel.currentCanEarnPlus}
-          title={student && !wheel.currentCanEarnPlus ? '2. uwaga - bez plusa do końca miesiąca' : undefined}
+          disabled={gradeDisabled}
           className="whitespace-nowrap rounded-lg bg-emerald-600 px-2 py-2.5 text-xl font-semibold text-white hover:bg-emerald-500 disabled:opacity-40"
         >
           <span className="mr-2 font-black">{resultSymbol('plus').symbol}</span>
@@ -149,7 +146,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
         <div>
           {wheel.canUndo && (
             <button type="button" onClick={wheel.undoLast} className="rounded-md bg-gray-800 px-2 py-1 hover:bg-gray-700">
-              Cofnij (Backspace)
+              Cofnij (Ctrl+Z)
             </button>
           )}
         </div>

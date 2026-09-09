@@ -1,6 +1,5 @@
 // Zwijany pasek boczny: lista uczniow klasy z bilansem miesiaca oraz
-// oznaczeniem "juz byl" / "nieobecny" / eskalacji uwag. Umozliwia tez
-// odhaczenie obecnosci.
+// oznaczeniem "juz byl" / "nieobecny". Umozliwia tez odhaczenie obecnosci.
 //
 // "Juz byl/a" jest CZERWONE i przekreslone - dokladnie tak samo jak sektor na
 // kole (Wheel.tsx). Jeden kolor znaczy w calej aplikacji to samo: ta osoba
@@ -8,7 +7,6 @@
 
 import type { RecapResult, Student } from '../../data/types';
 import type { MonthBalance } from '../../lib/recap';
-import { warnBadgeLabel } from '../../lib/recap';
 import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface StudentSidebarProps {
@@ -16,7 +14,6 @@ export interface StudentSidebarProps {
   onToggleOpen: () => void;
   students: Student[];
   usedCount: Map<string, number>;
-  warningsFor: (studentId: string) => number;
   absentSet: Set<string>;
   currentStudentId: string | null;
   balanceFor: (studentId: string) => MonthBalance;
@@ -48,7 +45,6 @@ export function StudentSidebar({
   onToggleOpen,
   students,
   usedCount,
-  warningsFor,
   absentSet,
   currentStudentId,
   balanceFor,
@@ -82,9 +78,7 @@ export function StudentSidebar({
         {students.map((st) => {
           const balance = balanceFor(st.id);
           const absent = absentSet.has(st.id);
-          const warnings = warningsFor(st.id);
           const used = (usedCount.get(st.id) ?? 0) >= 1;
-          const badge = warnBadgeLabel(warnings);
           const active = st.id === currentStudentId;
           return (
             <div
@@ -117,7 +111,6 @@ export function StudentSidebar({
                     <Tally label="pasy" value={balance.pass} result="pass" />
                   </span>
                 )}
-                {badge && <span className="text-amber-400">{badge}</span>}
                 {absent ? <span>nieobecny/a</span> : used ? <span className="text-red-400">już był/a</span> : null}
               </div>
             </div>

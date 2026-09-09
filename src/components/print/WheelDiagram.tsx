@@ -12,8 +12,9 @@ interface SectorSpec {
   shade: 'jasny' | 'ciemny' | 'wylosowany';
 }
 
-// 14 sektorow - przykladowe imiona, nie prawdziwi uczniowie. "Bartek"
-// wystepuje dwa razy - to przyklad ucznia z trzema uwagami (podwojne wejscie).
+// 14 sektorow - przykladowe imiona, nie prawdziwi uczniowie. Kazdy uczen ma
+// dokladnie JEDEN sektor: uwagi nie mnoza juz wejsc do kola (patrz zasady.ts -
+// uwaga idzie do dziennika i nie rusza gry).
 const SECTORS: SectorSpec[] = [
   { label: 'Zosia', shade: 'jasny' },
   { label: 'Tomek', shade: 'ciemny' },
@@ -23,7 +24,7 @@ const SECTORS: SectorSpec[] = [
   { label: 'Uczeń', shade: 'jasny' },
   { label: 'Ola', shade: 'ciemny' },
   { label: 'Uczeń', shade: 'jasny' },
-  { label: 'Bartek', shade: 'ciemny' },
+  { label: 'Nadia', shade: 'ciemny' },
   { label: 'Uczeń', shade: 'jasny' },
   { label: 'Julia', shade: 'ciemny' },
   { label: 'Uczeń', shade: 'jasny' },
@@ -71,7 +72,6 @@ function Badge({ angle, radius, n }: { angle: number; radius: number; n: number 
 export function WheelDiagram() {
   const n = SECTORS.length;
   const step = 360 / n;
-  const bartekIndexes = SECTORS.map((s, i) => (s.label === 'Bartek' ? i : -1)).filter((i) => i >= 0);
 
   return (
     <div className="print-color mx-auto w-full max-w-[175mm]">
@@ -119,9 +119,6 @@ export function WheelDiagram() {
         {/* znaczniki do legendy - "1" przesuniety w bok, zeby nie zaslaniac wskaznika */}
         <Badge angle={-20} radius={R + 40} n={1} />
         <Badge angle={(SECTORS.findIndex((s) => s.shade === 'wylosowany') + 0.5) * step} radius={R + 24} n={2} />
-        {bartekIndexes.map((i) => (
-          <Badge key={i} angle={(i + 0.5) * step} radius={R + 24} n={3} />
-        ))}
       </svg>
 
       <ol className="mt-3 space-y-1.5 text-[13px] leading-snug text-gray-800">
@@ -135,7 +132,7 @@ export function WheelDiagram() {
         </li>
         <li className="flex gap-2">
           <span className="font-bold">3.</span>
-          <span>Uczeń z trzema uwagami ma na kole dwa sektory ze swoim imieniem (tu: Bartek) - większa szansa na wylosowanie.</span>
+          <span>Każdy ma na kole jedno pole - uwagi za zachowanie niczego tu nie zmieniają.</span>
         </li>
       </ol>
     </div>

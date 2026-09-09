@@ -14,10 +14,14 @@
 //
 // Kolejnosc sekcji w tej tablicy = kolejnosc omawiania zasad na lekcji
 // zapoznawczej i w wydruku. Rozdzial o zachowaniu jest celowo w kolejnosci:
-// najpierw "Specjalne utrudnienia za zachowanie" (eskalacja - co sie stanie),
-// dopiero potem "Co liczy sie jako przeszkadzanie" (jasna definicja, co
-// dokladnie jest karane) - dzieci maja najpierw poczuc powage tematu, a potem
-// dostac precyzyjne granice.
+// najpierw "Uwagi za zachowanie" (co sie stanie), dopiero potem "Co liczy sie
+// jako przeszkadzanie" (jasna definicja, co dokladnie jest karane) - dzieci
+// maja najpierw poczuc powage tematu, a potem dostac precyzyjne granice.
+//
+// Uwaga idzie WPROST do dziennika, bez ostrzezen i bez skutkow w grze. Dawna
+// eskalacja ("1. ostrzezenie, 2. bez plusow do konca miesiaca") jest WYCOFANA -
+// mieszala kare za zachowanie z gra o oceny i odbierala dziecku szanse na plusa
+// za rzeczy, ktore umialo. Nie przywracac.
 
 export interface RuleSection {
   title: string;
@@ -33,7 +37,7 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Kto się wylosuje, ten odpowiada. Nie zgłaszamy się - losuje koło. To jest gra.',
       // Dwa kola - nomenklatura kluczowa dla calego systemu (kolo NA LEKCJI po
       // kazdym zadaniu i kolo POWTORZENIOWE na poczatku nastepnej lekcji), patrz
-      // tez sekcja "Specjalne utrudnienia za zachowanie", slajd "Przyklad rundy"
+      // tez sekcja "Uwagi za zachowanie", slajd "Przyklad rundy"
       // w intro.ts i logika w src/lib/recap.ts. Dawne "kolo po lekcji" (te same
       // pytania drugi raz na koncu tematu) USUNIETE - nie przywracac.
       // indeksy 2 i 3 - wykorzystywane wprost w intro.ts (slajd "Dwa kola"), nie przesuwac
@@ -62,15 +66,15 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Limit pasów odnawia się na początku każdego miesiąca.',
     ],
   },
-  // Sekcja eskalacji PRZED "Co liczy sie jako przeszkadzanie" - patrz uwaga na
-  // gorze pliku. Dawny tytul: "Kiedy ktos przeszkadza".
+  // Sekcja o uwagach PRZED "Co liczy sie jako przeszkadzanie" - patrz uwaga na
+  // gorze pliku. Dawne tytuly: "Kiedy ktos przeszkadza", "Specjalne utrudnienia
+  // za zachowanie" (eskalacja - wycofana).
   {
-    title: 'Specjalne utrudnienia za zachowanie',
+    title: 'Uwagi za zachowanie',
     items: [
-      'Pierwszy raz: ostrzeżenie.',
-      'Drugi raz: do końca miesiąca nie możesz już dostać plusa - ani na kole na lekcji, ani na kole powtórzeniowym.',
-      'Kolejne uwagi wpisuję już do dziennika.',
-      'Uwagi zerują się z początkiem każdego miesiąca - nowy miesiąc, czysta kartka.',
+      'Kto przeszkadza, dostaje uwagę do dziennika. Bez ostrzeżeń.',
+      'Uwaga nie zabiera plusów ani nie wyklucza z koła - w grze o oceny grasz dalej normalnie.',
+      'Zawsze mówię, za co jest uwaga, i zapisuję to sobie od razu na lekcji.',
     ],
   },
   {

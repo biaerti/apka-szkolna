@@ -42,13 +42,14 @@ type RecapResult =
   | 'plomba'       // zla odpowiedz albo jej brak
   | 'pass'         // uczen bierze pas (limit miesieczny)
   | 'hint_plomba'  // plomba dla podpowiadajacego
-  | 'uwaga'        // niegrzeczne zachowanie (eskalacja w kole)
+  | 'uwaga'        // przeszkadzanie - przypominajka do wpisania w dzienniku, bez skutkow w kole
   | 'rozliczenie'  // HISTORYCZNE (dawne zadania naprawcze) - zeruje licznik plomb, UI juz go nie tworzy
   | 'jedynka'      // plomby zamienione na ocene niedostateczna
   | 'piatka';      // plusy zamienione na ocene bardzo dobra
 interface RecapEvent {
   id: ID; studentId: ID; classId: ID; questionSetId?: ID; questionId?: ID;
   result: RecapResult; note?: string; at: string; /* ISO */
+  wpisane?: boolean;      // tylko dla 'uwaga': juz przepisana do dziennika (zakladka Uwagi)
 }
 
 interface QuestionSet { id: ID; name: string; topic?: string; classIds: ID[]; createdAt: string; }
@@ -115,13 +116,13 @@ interface Settings {
 }
 ```
 
-**Wszystko rozliczamy pelnymi miesiacami kalendarzowymi.** Pasy, uwagi (eskalacja) i statystyki
-zeruja sie 1. dnia miesiaca, wg daty lokalnej. Jeden rytm - nauczyciel nie ma pamietac dwoch.
-Licznik uwag wynika z zapisanych `RecapEvent`, nie ze stanu sesji: przeladowanie strony w srodku
-lekcji nie moze kasowac konsekwencji.
+**Wszystko rozliczamy pelnymi miesiacami kalendarzowymi.** Pasy i statystyki zeruja sie 1. dnia
+miesiaca, wg daty lokalnej. Jeden rytm - nauczyciel nie ma pamietac dwoch. Uwagi za zachowanie
+nie wchodza juz do tego rozliczenia: nie maja skutkow w grze, tylko czekaja na przepisanie do
+dziennika (zakladka Uwagi).
 
 ## Moduly / trasy
-Menu ma **szesc** pozycji: Pulpit, Klasy, Lekcje, Podrecznik, Zasady, Ustawienia. Nauczyciel
+Menu: Pulpit, Klasy, Lekcje, Uwagi, Kartkowki, Plan, Zebrania, Zasady, Ustawienia. Nauczyciel
 wprost prosil o mniej zakladek ("chce byc milionerem na zakladkach, ktorych nie bede uzywal"),
 wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
 
@@ -130,6 +131,11 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   (CRUD, import z tekstu, aktywacja/dezaktywacja) razem z ich bilansem miesiaca, wyborem
   miesiaca, eksportem CSV i sekcja "Do rozliczenia". Nie ma osobnej zakladki Statystyki -
   statystyki sa tam, gdzie uczniowie.
+- `/uwagi` - **kalendarz tygodnia z uwagami do przepisania do dziennika**. Uwaga wpisana w
+  trakcie lekcji (kolo powtorzeniowe, panel "Klasa" w prezentacji, plywajacy panel) ma tresc
+  (`note`, gotowce w `src/lib/uwagi.ts`) i czeka tu na odhaczenie (`wpisane`). Kolumna = dzien,
+  zolta karta = do wpisania, szara = juz wpisana; sobota i niedziela pokazuja sie tylko wtedy,
+  gdy cos w nich jest. Tresc uwagi edytuje sie w miejscu, klikiem w tekst.
 - `/pytania` - lista zestawow pytan, bez menu wlasnego i bez przypisywania do klas (zestaw
   siedzi w wierszu lekcji, ktora go uzywa); `/pytania/:id` - edytor pytan, nazwa zestawu
   edytowalna wprost w naglowku. Wejscie tylko z poziomu lekcji ("dodaj pytania do kola" albo
@@ -154,6 +160,10 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
   - **Rysowanie po slajdzie** (src/components/slides/AnnotationLayer.tsx): pasek w lewym dolnym rogu,
     domyslnie zwiniety do przycisku "Rysuj". Pioro / zakreslacz / tekst / gumka, piec kolorow, trzy
     grubosci, Cofnij i Wyczysc. Skroty: R = pioro, T = dopisek, Ctrl+Z = cofnij, Esc = schowaj pasek.
+    **Pole dopisku ma uchwyt skalowania** w prawym dolnym rogu (AnnotationTextBox): przeciagniecie
+    zmienia szerokosc ramki I wielkosc liter w tej samej proporcji (`scaleTextBox`), a klik w gotowy
+    dopisek narzedziem "Tekst" otwiera go z powrotem do poprawki. Grubosc z paska daje dopiskowi
+    tylko wielkosc STARTOWA.
     Kreski i dopiski maja wspolrzedne w pikselach kartki 1280x720, wiec trzymaja sie tresci slajdu
     niezaleznie od rozdzielczosci. **Zyja tylko w tym pokazie** - nie zapisuja sie do lekcji ani do
     bazy (to zamazania przy klasie, jak na tablicy; nastepna klasa ma czysty slajd). Przy wlaczonym
@@ -182,11 +192,20 @@ wiec kazda nowa pozycja w menu wymaga uzasadnienia, a nie tylko "bo pasuje".
     i z jakim wynikiem
   - pasek boczny z lista uczniow i czytelnym bilansem miesiaca (plusy / kropki / plomby / pasy)
   - skroty: Spacja = kręć, 1/2/3/4 = plus/kropka/plomba/pas, N = nastepne pytanie,
-    O = pokaz/ukryj odpowiedz, F = fullscreen, Esc = zakoncz
+    O = pokaz/ukryj odpowiedz, Ctrl+Z = cofnij ostatnia akcje, F = fullscreen, Esc = zakoncz
+  - **"kto juz dzis odpowiadal" jest wspolne dla calej klasy i calego dnia** (`answeredOnDay`
+    + licznik sesji dla trybu bez ocen, patrz `usePool`): kolo powtorzeniowe, kolo na lekcji i
+    plywajacy panel nie losuja tej samej osoby drugi raz, dopoki reszta klasy nie byla.
+    "Zacznij nowa runde" / "Reset" przesuwa tylko moment, od ktorego liczymy skreslenia - oceny
+    zostaja w bilansie miesiaca. Miedzy oknami (apka webowa a panel desktopowy) synchronizuje to
+    `pullTodayRecapEvents` z `useTodayEventsPull` - dzisiejsze zdarzenia dociagane z chmury co 15 s
+    i przy powrocie do okna.
 - `/panel` - **poza AppShell**: plywajace kolo fortuny dla aplikacji desktopowej (`desktop/`).
   Okno zawsze na wierzchu nad multipodrecznikiem GWO. Naglowek: wybor klasy, przelacznik trybu,
-  uwagi. Tryb KOLO: losowanie, plus/kropka, obecnosc, Reset skreslen - wlasna pamiec puli
-  (`useTaskWheel`, `poolMemory: 'local'`). Tryb STOPER: odliczanie (`useCountdown`) z wlasnym
+  uwagi (z trescia do dziennika). Tryb KOLO: losowanie, plus/kropka, obecnosc, Reset skreslen -
+  pamiec puli WSPOLNA z apka webowa (`useTaskWheel` liczy ja ze zdarzen dnia, a
+  `useTodayEventsPull` dociaga te zapisane w drugim oknie), wiec kto odpowiadal rano na kole
+  powtorzeniowym, nie wraca na kolo przy podreczniku. Tryb STOPER: odliczanie (`useCountdown`) z wlasnym
   poleceniem i edytowalna dlugoscia; leci dalej po zwinieciu do pigulki, ktora pokazuje czas.
   Okno ma rozmiar dopasowany do tego, co pokazuje (ROZMIARY w Panel.tsx): wysokie pod kolo,
   niskie pod stoper, a srodkowy przycisk naglowka sciaga stoper do paska z poleceniem i czasem.
@@ -226,12 +245,11 @@ lekcji zapoznawczej. Logika: `src/lib/recap.ts`.
 - Nie zglaszamy sie do odpowiedzi - losuje kolo. To gra.
 - Za podpowiadanie plomba dla podpowiadajacego (`hint_plomba`).
 - Kazdy ma **2 pasy w miesiacu** (`passesPerMonth`).
-- **Eskalacja za przeszkadzanie** (licznik uwag liczony z `RecapEvent` typu `uwaga` w biezacym
-  miesiacu, zeruje sie 1. dnia miesiaca razem z pasami):
-  1. pierwsza uwaga - ostrzezenie, bez skutkow mechanicznych,
-  2. druga i kazda kolejna (`WARN_NO_PLUS_AT`) - uczen traci mozliwosc zdobywania plusow do konca
-     miesiaca, w OBU kolach (na lekcji i powtorzeniowym). Tylko dwa stopnie - dawny trzeci
-     (podwojne wejscie do kola) wycofany.
+- **Za przeszkadzanie - uwaga do dziennika, od razu i bez ostrzezen.** Uwaga nie ma ZADNYCH
+  skutkow w grze: nie blokuje plusa, nie mnozy sektorow, nie wyklucza z kola. To przypominajka
+  dla nauczyciela - laduje w zakladce `/uwagi` z trescia i data, a tam sie ja odhacza po
+  przepisaniu do dziennika. Dawna eskalacja (1. ostrzezenie, 2. brak plusow do konca miesiaca,
+  `WARN_NO_PLUS_AT`) jest WYCOFANA - mieszala kare za zachowanie z gra o oceny. Nie przywracac.
 - Zasada lawek: nie siadamy w ostatnich lawkach, wszyscy w najblizszych - zeby nie krzyczec
   (mniej halasu i bodzcow).
 
@@ -281,6 +299,8 @@ ktory wstawil starsza wersje - menu pokazuje wtedy "Uzupelnij" i liste brakujacy
   klasa). Lekcje o tej samej tresci, ktore nauczyciel wstawil osobno do klas rownoleglych, sa
   sklejane w jedna - dopasowanie po znormalizowanym tytule (`titleMatchKey`), a ich postep laczony
   do jednego obiektu `progress`.
+- Supabase: `supabase/migrations/0015_uwagi_do_dziennika.sql` - kolumna `wpisane` w
+  `recap_events` (uwaga przepisana do dziennika) plus indeks pod kalendarz zakladki "Uwagi".
 - Supabase: `supabase/migrations/0005_lekcje_rocznika.sql` - odpowiadajaca zmiana schematu po
   stronie bazy: kolumna `grade` zamiast `class_id`, a `status`/`done_date` zastapione kolumna
   `progress jsonb` (mapa `class_id -> { status, doneDate }`).

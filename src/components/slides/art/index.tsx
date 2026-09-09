@@ -8,7 +8,7 @@ import { Gra } from './Gra';
 import { Kolo } from './Kolo';
 import { Oceny } from './Oceny';
 import { Stopnie } from './Stopnie';
-import { Eskalacja } from './Eskalacja';
+import { UwagaDoDziennika } from './UwagaDoDziennika';
 import { ZleZachowania } from './ZleZachowania';
 import { Pas } from './Pas';
 import { Lawki } from './Lawki';
@@ -78,7 +78,9 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   kolo: Kolo,
   oceny: Oceny,
   stopnie: Stopnie,
-  eskalacja: Eskalacja,
+  // Klucz 'eskalacja' zostaje dla lekcji juz zapisanych w bazie - sama
+  // ilustracja mowi juz co innego: uwaga idzie wprost do dziennika.
+  eskalacja: UwagaDoDziennika,
   zleZachowania: ZleZachowania,
   pas: Pas,
   lawki: Lawki,

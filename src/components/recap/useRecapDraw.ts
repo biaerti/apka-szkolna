@@ -5,9 +5,9 @@
 // od useAttendance/usePool, a sam zajmuje sie tylko przebiegiem pojedynczego
 // losowania.
 //
-// Uwagi (eskalacja) licza sie z historii RecapEvent w biezacym miesiacu
-// (warningsFor przekazane z gory), wiec cofniecie uwagi w undoLast wystarczy
-// zalatwic usunieciem zdarzenia - poziom eskalacji obniza sie automatycznie.
+// Uwaga za zachowanie jest tylko zapisem do pozniejszego wpisu w dzienniku
+// (zakladka "Uwagi") - nie zmienia niczego w kole, wiec cofniecie jej w
+// undoLast to samo usuniecie zdarzenia.
 //
 // Wybor ucznia (kolo i "po kolei") jest ZAWSZE efektem akcji nauczyciela
 // (Krec/Spacja albo "nastepny uczen") - zaden tryb nie wybiera nikogo sam z
@@ -23,7 +23,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '../../data/store';
 import type { RecapEvent, RecapResult, Settings, Student } from '../../data/types';
 import {
-  canEarnPlus,
   canPass,
   nextSequential,
   passesUsedThisMonth,
@@ -50,7 +49,6 @@ export interface UseRecapDrawArgs {
   entries: PoolEntry[];
   /** Wpisy, ktore jeszcze moga byc wylosowane (entries bez `done`). */
   pool: PoolEntry[];
-  warningsFor: (studentId: string) => number;
   bumpUsedCount: (studentId: string) => void;
   undoUsedCount: (studentId: string) => void;
   resetRound: () => void;
@@ -84,7 +82,6 @@ export function useRecapDraw({
   setId,
   entries,
   pool,
-  warningsFor,
   bumpUsedCount,
   undoUsedCount,
   resetRound,
@@ -119,11 +116,6 @@ export function useRecapDraw({
   const currentStudent: Student | null = currentEntry?.student ?? null;
   const currentPassesUsed = currentStudent ? passesUsedThisMonth(recapEvents, currentStudent.id, now) : 0;
   const currentCanPass = currentStudent ? canPass(recapEvents, currentStudent.id, settings, now) : false;
-  // Blokada plusa dziala w OBU trybach: uczen z >=2 uwagami w miesiacu traci
-  // mozliwosc plusa (canEarnPlus, patrz src/lib/recap.ts) - w kole po lekcji
-  // dostaje wtedy tylko "Dalej" (nic), w kole powtorzeniowym - kropke/plombe/pas.
-  const currentWarnings = currentStudent ? warningsFor(currentStudent.id) : 0;
-  const currentCanEarnPlus = currentStudent ? canEarnPlus(currentWarnings) : false;
 
   const canSpin = !spinning && (!currentEntry || graded) && pool.length > 0;
 
@@ -200,9 +192,6 @@ export function useRecapDraw({
 
   function grade(result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>) {
     if (!currentEntry || graded) return;
-    // Blokada plusa dziala w OBU trybach - uczen z >=2 uwagami w miesiacu nie
-    // moze dostac plusa w zadnym kole (canEarnPlus).
-    if (result === 'plus' && !canEarnPlus(warningsFor(currentEntry.student.id))) return;
     // Stary tryb po-lekcji (patrz src/lib/recap.ts): jedyna ocena to plus - nie
     // ma kropki, plomby ani pasa (przycisk "Dalej" zamiast nich - patrz markDoneNoGrade).
     if (recapMode !== 'powtorzeniowe' && result !== 'plus') return;
@@ -219,9 +208,19 @@ export function useRecapDraw({
     setLastAction({ eventId: event.id, studentId: otherStudentId, kind: 'hint' });
   }
 
-  /** Uwaga dla wskazanego ucznia: zapis do statystyk - eskalacja liczy sie z historii. */
-  function addUwaga(studentId: string) {
-    const event = recordEvent(studentId, 'uwaga');
+  /**
+   * Uwaga dla wskazanego ucznia - przypominajka do wpisania w dzienniku, z
+   * trescia od nauczyciela ("przeszkadza na lekcji"). Bez skutkow w kole.
+   */
+  function addUwaga(studentId: string, note?: string) {
+    const event = addRecapEvent({
+      studentId,
+      classId,
+      questionSetId: setId,
+      questionId: currentQuestionId,
+      result: 'uwaga',
+      note: note?.trim() || undefined,
+    });
     setLastAction({ eventId: event.id, studentId, kind: 'uwaga' });
   }
 
@@ -246,14 +245,12 @@ export function useRecapDraw({
       setCurrentEntry(null);
       setGraded(false);
     }
-    // 'uwaga' i 'hint' nie potrzebuja nic wiecej - usuniecie zdarzenia
-    // wystarczy (poziom eskalacji uwag wynika wprost z historii zdarzen).
+    // 'uwaga' i 'hint' nie potrzebuja nic wiecej - wystarczy usuniecie zdarzenia.
     setLastAction(null);
   }
 
   function startNewRound() {
-    // Uwagi (eskalacja) zostaja - licza sie z historii zdarzen w biezacym
-    // miesiacu, nie z rundy.
+    // Uwagi zostaja - to zapis do dziennika, a nie stan rundy.
     resetRound();
     setCurrentEntry(null);
     setGraded(false);
@@ -285,8 +282,6 @@ export function useRecapDraw({
     startNewRound,
     currentPassesUsed,
     currentCanPass,
-    currentCanEarnPlus,
-    currentWarnings,
     recapMode,
   };
 }

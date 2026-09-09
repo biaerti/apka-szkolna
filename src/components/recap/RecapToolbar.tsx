@@ -133,7 +133,7 @@ export function RecapToolbar({
           disabled={!canUndo}
           className="rounded-md border border-gray-600 px-2.5 py-1 hover:bg-gray-800 disabled:opacity-40"
         >
-          cofnij ostatnią akcję
+          cofnij ostatnią akcję (Ctrl+Z)
         </button>
         {!embedded && (
           <button

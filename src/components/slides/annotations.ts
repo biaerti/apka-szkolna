@@ -28,15 +28,48 @@ export interface StrokeShape {
   points: AnnotationPoint[];
 }
 
-/** Dopisek wstawiony klikiem w slajd. */
+/**
+ * Dopisek wstawiony klikiem w slajd. `width` to szerokosc ramki w pikselach
+ * kartki - nauczyciel ustawia ja uchwytem w rogu pola, a litery skaluja sie
+ * RAZEM z ramka (patrz scaleTextBox): wieksze pole to wieksze litery, mniejsze
+ * pole to mniejsze. Jedno pociagniecie zamiast osobnego suwaka wielkosci.
+ * Brak `width` (dopiski sprzed tej zmiany) = szerokosc domyslna.
+ */
 export interface TextShape {
   id: ID;
   kind: 'text';
   color: string;
   size: number;
+  width?: number;
   x: number;
   y: number;
   text: string;
+}
+
+/** Szerokosc swiezo otwartego pola tekstowego, w pikselach kartki 1280x720. */
+export const TEXT_BOX_WIDTH = 520;
+
+/** Granice skalowania pola - ponizej tekst jest nieczytelny z ostatniej lawki, powyzej nie miesci sie na kartce. */
+export const TEXT_SIZE_MIN = 14;
+export const TEXT_SIZE_MAX = 160;
+
+export interface TextBoxSize {
+  width: number;
+  size: number;
+}
+
+/**
+ * Nowa szerokosc ramki i wynikajaca z niej wielkosc liter po przeciagnieciu
+ * uchwytu o `dx` pikseli kartki. Litery ida w tej samej proporcji co ramka,
+ * wiec liczba wierszy w polu zostaje mniej wiecej ta sama - zmienia sie skala
+ * calego dopisku, a nie zawijanie tekstu.
+ */
+export function scaleTextBox(start: TextBoxSize, dx: number, maxWidth: number): TextBoxSize {
+  const minWidth = Math.max(60, (start.width * TEXT_SIZE_MIN) / start.size);
+  const limit = Math.max(minWidth, Math.min(maxWidth, (start.width * TEXT_SIZE_MAX) / start.size));
+  const width = Math.round(Math.min(limit, Math.max(minWidth, start.width + dx)));
+  const size = Math.round((start.size * width) / start.width);
+  return { width, size };
 }
 
 export type AnnotationShape = StrokeShape | TextShape;
@@ -50,7 +83,11 @@ export const ANNOTATION_COLORS = [
   { value: '#111827', label: 'czarny' },
 ];
 
-/** Grubosc pisaka i wielkosc dopisku - jedno ustawienie, trzy pozycje. */
+/**
+ * Grubosc pisaka i wielkosc dopisku - jedno ustawienie, trzy pozycje. Dla
+ * dopisku to tylko wielkosc STARTOWA: dalej skaluje sie ja uchwytem w rogu pola
+ * (scaleTextBox).
+ */
 export const ANNOTATION_SIZES = [
   { label: 'cienki', stroke: 4, text: 32 },
   { label: 'średni', stroke: 8, text: 46 },

@@ -14,6 +14,7 @@ import {
   type AnnotationPoint,
   type AnnotationShape,
   type AnnotationTool,
+  type TextShape,
 } from './annotations';
 
 export interface SlideAnnotations {
@@ -28,12 +29,14 @@ export interface SlideAnnotations {
   cycleSize: () => void;
   /** Grubosc kreski dla biezacego narzedzia, w pikselach kartki 1280x720. */
   strokeWidth: number;
-  /** Wielkosc dopisku, w pikselach kartki. */
+  /** STARTOWA wielkosc dopisku, w pikselach kartki - dalej skaluje ja uchwyt pola. */
   textSize: number;
   /** Ksztalty narysowane na biezacym slajdzie. */
   shapes: AnnotationShape[];
   addStroke: (points: AnnotationPoint[]) => void;
-  addText: (x: number, y: number, text: string) => void;
+  addText: (shape: Omit<TextShape, 'id' | 'kind' | 'color'>) => void;
+  /** Poprawka istniejacego dopisku - tresc albo rozmiar ramki (skalowanie). */
+  updateText: (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width'>>) => void;
   removeShape: (id: string) => void;
   undo: () => void;
   clearSlide: () => void;
@@ -72,12 +75,23 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
   );
 
   const addText = useCallback(
-    (x: number, y: number, text: string) => {
-      const trimmed = text.trim();
+    (shape: Omit<TextShape, 'id' | 'kind' | 'color'>) => {
+      const trimmed = shape.text.trim();
       if (!trimmed) return;
-      push({ id: newId(), kind: 'text', color, size: size.text, x, y, text: trimmed });
+      push({ ...shape, id: newId(), kind: 'text', color, text: trimmed });
     },
-    [color, push, size.text],
+    [color, push],
+  );
+
+  const updateText = useCallback(
+    (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width'>>) => {
+      if (!slideId) return;
+      setBySlide((prev) => ({
+        ...prev,
+        [slideId]: (prev[slideId] ?? []).map((s) => (s.id === id && s.kind === 'text' ? { ...s, ...patch } : s)),
+      }));
+    },
+    [slideId],
   );
 
   const removeShape = useCallback(
@@ -119,6 +133,7 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
     shapes,
     addStroke,
     addText,
+    updateText,
     removeShape,
     undo,
     clearSlide,

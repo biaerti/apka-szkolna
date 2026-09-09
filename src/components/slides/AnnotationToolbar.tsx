@@ -1,6 +1,9 @@
 // Pasek rysowania w rogu prezentacji. Domyslnie zwiniety do jednego przycisku
 // "Rysuj" - na lekcji przez wiekszosc czasu nikt nie rysuje, a slajd ma byc
-// czysty. Skroty: R wlacza/wylacza pioro, T dopisek, Esc chowa pasek.
+// czysty. Skroty: R wlacza/wylacza pioro, T dopisek, Ctrl+Z cofa, Esc chowa pasek.
+//
+// Grubosc dotyczy pisaka i zakreslacza; dopisek dostaje z niej tylko wielkosc
+// STARTOWA, bo dalej skaluje sie go uchwytem w rogu pola (AnnotationTextBox).
 
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
@@ -10,7 +13,11 @@ import type { SlideAnnotations } from './useSlideAnnotations';
 const TOOLS: Array<{ value: AnnotationTool; label: string; title: string }> = [
   { value: 'pen', label: 'Pióro', title: 'Rysowanie odręczne (R)' },
   { value: 'marker', label: 'Zakreślacz', title: 'Grube, przezroczyste zakreślenie' },
-  { value: 'text', label: 'Tekst', title: 'Kliknij w slajd i wpisz tekst (T)' },
+  {
+    value: 'text',
+    label: 'Tekst',
+    title: 'Kliknij w slajd i wpisz tekst (T). Kółkiem w rogu pola zmieniasz jego wielkość razem z literami',
+  },
   { value: 'eraser', label: 'Gumka', title: 'Kliknij kreskę lub dopisek, żeby go usunąć' },
 ];
 

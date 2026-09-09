@@ -7,7 +7,6 @@
 
 import { useState } from 'react';
 import { resultSymbol } from '../../lib/resultSymbol';
-import { NoPlusNote } from '../recap/NoPlusNote';
 import { Wheel } from '../recap/Wheel';
 import { TaskWheelAttendance } from '../lessons/TaskWheelAttendance';
 import type { TaskWheelState } from '../lessons/useTaskWheel';
@@ -81,7 +80,6 @@ export function PanelWheel({ wheel, adnotacja }: PanelWheelProps) {
             <p className="text-2xl font-bold leading-tight text-white">
               {student.firstName} {student.lastName}
             </p>
-            {!wheel.currentCanEarnPlus && <NoPlusNote warnings={wheel.currentWarnings} compact />}
           </div>
         ) : (
           <p className="py-2 text-center text-2xl font-bold leading-tight text-gray-600">Kręć kołem</p>
@@ -92,7 +90,7 @@ export function PanelWheel({ wheel, adnotacja }: PanelWheelProps) {
         <button
           type="button"
           onClick={() => wheel.grade('plus', adnotacja)}
-          disabled={ocenaZablokowana || !wheel.currentCanEarnPlus}
+          disabled={ocenaZablokowana}
           className="rounded-lg bg-emerald-600 py-2 text-base font-semibold text-white hover:bg-emerald-500 disabled:opacity-40"
         >
           <span className="mr-1.5 font-black">{resultSymbol('plus').symbol}</span>
@@ -123,7 +121,12 @@ export function PanelWheel({ wheel, adnotacja }: PanelWheelProps) {
             Reset
           </button>
           {wheel.canUndo && (
-            <button type="button" onClick={wheel.undoLast} className="rounded-md bg-gray-800 px-2 py-1 hover:bg-gray-700">
+            <button
+              type="button"
+              onClick={wheel.undoLast}
+              title="Cofnij ostatnią ocenę (Ctrl+Z)"
+              className="rounded-md bg-gray-800 px-2 py-1 hover:bg-gray-700"
+            >
               Cofnij
             </button>
           )}
