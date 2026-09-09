@@ -25,6 +25,36 @@ export function chargeRatePerSecond(overDb: number): number {
 }
 // W ciszy pasek opada z pelna po ~10 minutach.
 const DECAY_PER_SECOND = 1 / 600;
+// Ladowanie rusza dopiero po ciaglym halasie nad progiem - pojedyncze zdanie
+// nauczyciela nie nabija paska. Krotki dip pod prog nie zeruje licznika.
+const SUSTAIN_SECONDS = 3;
+const SUSTAIN_RESET_AFTER_SECONDS = 1;
+
+export interface ChargeState {
+  charge: number; // 0..1
+  overTime: number; // ile sekund ciagiem nad progiem
+  belowTime: number; // ile sekund ciagiem pod progiem
+}
+
+// Czysty krok symulacji ladowania - wydzielony do testow.
+export function advanceCharge(s: ChargeState, overDb: number, dt: number, paused: boolean): ChargeState {
+  let { charge, overTime, belowTime } = s;
+  if (overDb > 0) {
+    overTime += dt;
+    belowTime = 0;
+  } else {
+    belowTime += dt;
+    if (belowTime >= SUSTAIN_RESET_AFTER_SECONDS) overTime = 0;
+  }
+  if (!paused) {
+    if (overDb > 0 && overTime >= SUSTAIN_SECONDS) {
+      charge = Math.min(1, charge + dt * chargeRatePerSecond(overDb));
+    } else if (overDb <= 0) {
+      charge = Math.max(0, charge - dt * DECAY_PER_SECOND);
+    }
+  }
+  return { charge, overTime, belowTime };
+}
 
 // Odczyt z miernika starszy niz tyle ms = utrata sygnalu (USB wylaczone/SONE).
 const METER_STALE_MS = 3000;
@@ -64,9 +94,11 @@ export interface NoiseMeter {
   threshold: number;
   calibration: number;
   meterStatus: MeterStatus; // fizyczny miernik USB
+  paused: boolean; // pauza ladowania (klawisz M), gdy mowi nauczyciel
   start: () => void;
   stop: () => void;
   connectMeter: () => void;
+  togglePause: () => void;
   setThreshold: (db: number) => void;
   setCalibration: (offset: number) => void;
   resetCharge: () => void;
@@ -80,6 +112,7 @@ export function useNoiseMeter(): NoiseMeter {
   const [level, setLevel] = useState(DB_MIN);
   const [charge, setCharge] = useState(0);
   const [meterStatus, setMeterStatus] = useState<MeterStatus>('off');
+  const [paused, setPaused] = useState(false);
   const [threshold, setThresholdState] = useState(() => readNumber(THRESHOLD_KEY, DEFAULT_THRESHOLD));
   const [calibration, setCalibrationState] = useState(() => readNumber(CALIBRATION_KEY, DEFAULT_CALIBRATION));
 
@@ -92,7 +125,8 @@ export function useNoiseMeter(): NoiseMeter {
   // Wartosci czytane w petli - refy, zeby petla nie restartowala przy kazdej zmianie.
   const thresholdRef = useRef(threshold);
   const calibrationRef = useRef(calibration);
-  const chargeRef = useRef(0);
+  const chargeRef = useRef<ChargeState>({ charge: 0, overTime: 0, belowTime: 0 });
+  const pausedRef = useRef(false);
   const levelRef = useRef(DB_MIN);
   const meterDbRef = useRef(0);
   const meterAtRef = useRef(0);
@@ -113,8 +147,13 @@ export function useNoiseMeter(): NoiseMeter {
   }
 
   function resetCharge() {
-    chargeRef.current = 0;
+    chargeRef.current = { charge: 0, overTime: 0, belowTime: 0 };
     setCharge(0);
+  }
+
+  function togglePause() {
+    pausedRef.current = !pausedRef.current;
+    setPaused(pausedRef.current);
   }
 
   function stop() {
@@ -172,15 +211,11 @@ export function useNoiseMeter(): NoiseMeter {
         levelRef.current += (db - levelRef.current) * alpha;
 
         const over = levelRef.current - thresholdRef.current;
-        if (over > 0) {
-          chargeRef.current = Math.min(1, chargeRef.current + dtCharge * chargeRatePerSecond(over));
-        } else {
-          chargeRef.current = Math.max(0, chargeRef.current - dtCharge * DECAY_PER_SECOND);
-        }
+        chargeRef.current = advanceCharge(chargeRef.current, over, dtCharge, pausedRef.current);
       }
 
       setLevel(levelRef.current);
-      setCharge(chargeRef.current);
+      setCharge(chargeRef.current.charge);
     };
     timerRef.current = window.setInterval(tick, 100);
     setRunning(true);
@@ -287,9 +322,11 @@ export function useNoiseMeter(): NoiseMeter {
     threshold,
     calibration,
     meterStatus,
+    paused,
     start,
     stop,
     connectMeter,
+    togglePause,
     setThreshold,
     setCalibration,
     resetCharge,

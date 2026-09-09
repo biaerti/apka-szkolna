@@ -63,12 +63,15 @@ export function NoiseMeterBars({ meter }: { meter: NoiseMeter }) {
           type="button"
           onClick={() => setSettingsOpen(!settingsOpen)}
           aria-label="Ustawienia decybelomierza"
-          className={`relative h-full w-5 overflow-hidden rounded-full bg-gray-800/70 ${meter.full ? 'animate-pulse ring-2 ring-red-500' : ''}`}
+          className={`relative h-full w-5 overflow-hidden rounded-full bg-gray-800/70 ${meter.full ? 'animate-pulse ring-2 ring-red-500' : ''} ${meter.paused ? 'opacity-40' : ''}`}
         >
           <div
             className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-amber-500 to-red-600"
             style={{ height: `${meter.charge * 100}%`, transition: 'height 150ms linear' }}
           />
+          {meter.paused && (
+            <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[13px] text-white">⏸</span>
+          )}
         </button>
       </div>
 
@@ -78,7 +81,9 @@ export function NoiseMeterBars({ meter }: { meter: NoiseMeter }) {
           {meter.meterStatus === 'ok' && <span className="ml-1 text-sky-400">USB</span>}
           {meter.meterStatus === 'no-data' && <span className="ml-1 text-amber-400">USB?</span>}
         </span>
-        {meter.full ? (
+        {meter.paused ? (
+          <span className="font-semibold text-sky-300">PAUZA (M)</span>
+        ) : meter.full ? (
           <span className="animate-pulse font-bold text-red-400">KARTKÓWKA!</span>
         ) : (
           <span>kartkówka {Math.round(meter.charge * 100)}%</span>
@@ -133,7 +138,14 @@ export function NoiseMeterBars({ meter }: { meter: NoiseMeter }) {
               Na wyświetlaczu ma być jednostka dB (A lub C), nie SONE.
             </p>
           )}
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => meter.togglePause()}
+              className={`rounded-md px-2 py-1 text-xs ${meter.paused ? 'bg-sky-700 hover:bg-sky-600' : 'bg-gray-800 hover:bg-gray-700'}`}
+            >
+              {meter.paused ? 'Wznów (M)' : 'Pauza (M)'}
+            </button>
             <button
               type="button"
               onClick={() => meter.resetCharge()}

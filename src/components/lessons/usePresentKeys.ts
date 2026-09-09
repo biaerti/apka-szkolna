@@ -9,7 +9,8 @@
 // 4. strzalki / PageUp / PageDown / Home / End nawiguja zawsze, F = pelny ekran,
 // 5. R wlacza/wylacza rysowanie po slajdzie, T dopisek tekstowy, Ctrl+Z cofa
 //    ostatnia kreske; przy wlaczonym rysowaniu Esc najpierw chowa pasek
-//    (klikanie w slajd wraca do przewijania).
+//    (klikanie w slajd wraca do przewijania),
+// 6. M pauzuje ladowanie kartkowki decybelomierza (gdy mowi nauczyciel).
 
 import { useEffect } from 'react';
 
@@ -40,6 +41,8 @@ export interface PresentKeysArgs {
   onTextTool: () => void;
   onDrawOff: () => void;
   onDrawUndo: () => void;
+  /** M = mute: pauza ladowania kartkowki na czas, gdy mowi nauczyciel. */
+  onToggleNoisePause: () => void;
 }
 
 export function usePresentKeys(args: PresentKeysArgs) {
@@ -77,6 +80,11 @@ export function usePresentKeys(args: PresentKeysArgs) {
       if (!args.onRecap && (e.key === 't' || e.key === 'T')) {
         e.preventDefault();
         args.onTextTool();
+        return;
+      }
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        args.onToggleNoisePause();
         return;
       }
       if (args.onRecap && (e.key === ' ' || e.key === 'Escape')) return;

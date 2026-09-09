@@ -82,6 +82,7 @@ export function LessonPresent() {
     onTextTool: () => ann.setTool('text'),
     onDrawOff: () => ann.setTool('off'),
     onDrawUndo: ann.undo,
+    onToggleNoisePause: noise.togglePause,
   });
 
   function toggleFullscreen() {
