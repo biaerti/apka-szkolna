@@ -6,3 +6,5 @@ dist
 # Materialy z podrecznika (prawa autorskie) - nie publikujemy w publicznym repo
 audio-czytanki/teksty/
 public/audio/czytanki/
+
+.vercel

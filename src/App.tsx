@@ -16,6 +16,8 @@ import { QuizDetail } from './pages/QuizDetail';
 import { QuizPresent } from './pages/QuizPresent';
 import { Timetable } from './pages/Timetable';
 import { SettingsPage } from './pages/Settings';
+import { Podstawa } from './pages/Podstawa';
+import { Lektury } from './pages/Lektury';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
 import { RulesPrint } from './pages/RulesPrint';
 import { Panel } from './pages/Panel';
@@ -47,6 +49,8 @@ export default function App() {
         <Route path="/plan" element={<Timetable />} />
         <Route path="/zebrania" element={<Meetings />} />
         <Route path="/zebrania/:id" element={<MeetingDetail />} />
+        <Route path="/podstawa" element={<Podstawa />} />
+        <Route path="/lektury" element={<Lektury />} />
         <Route path="/ustawienia" element={<SettingsPage />} />
         <Route path="*" element={<ModulePlaceholder title="Nie znaleziono strony" />} />
       </Route>

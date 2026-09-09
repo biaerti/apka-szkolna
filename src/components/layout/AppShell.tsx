@@ -20,6 +20,8 @@ const NAV_ITEMS = [
   { to: '/plan', label: 'Plan' },
   { to: '/zebrania', label: 'Zebrania' },
   { to: '/zasady/druk', label: 'Zasady' },
+  { to: '/podstawa', label: 'Podstawa programowa' },
+  { to: '/lektury', label: 'Lektury' },
   { to: '/ustawienia', label: 'Ustawienia' },
 ];
 
