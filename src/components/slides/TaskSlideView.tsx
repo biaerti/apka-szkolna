@@ -13,6 +13,7 @@ import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView } from './art';
 import { StopwatchBar } from './StopwatchBar';
+import { ZeszytBadge } from './ZeszytBadge';
 import { estimateTextHeight, fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
 
@@ -48,13 +49,17 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
         <div className="rounded-2xl border-4 border-accent-400 px-8 py-3">
           <span className="text-[96px] font-bold leading-none text-accent-300">{slide.code}</span>
         </div>
-        {hasSource && (
-          <div className="rounded-lg bg-black/30 px-5 py-2 text-3xl text-gray-200">
-            {slide.page && <span>Podręcznik s. {slide.page}</span>}
-            {slide.page && slide.exerciseNo && <span>, </span>}
-            {slide.exerciseNo && <span>ćw. {slide.exerciseNo}</span>}
-          </div>
-        )}
+        {/* mt-5: zegar prezentacji (PresentClock, fixed w rogu ekranu) nachodzi na sam gorny skraj kartki. */}
+        <div className="mt-5 flex items-center gap-4">
+          {hasSource && (
+            <div className="rounded-lg bg-black/30 px-5 py-2 text-3xl text-gray-200">
+              {slide.page && <span>Podręcznik s. {slide.page}</span>}
+              {slide.page && slide.exerciseNo && <span>, </span>}
+              {slide.exerciseNo && <span>ćw. {slide.exerciseNo}</span>}
+            </div>
+          )}
+          {slide.zeszyt && <ZeszytBadge />}
+        </div>
       </div>
 
       <div className={`flex flex-1 items-center justify-center gap-10 ${slide.art ? 'px-2' : 'px-8'}`}>

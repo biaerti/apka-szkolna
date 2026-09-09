@@ -29,7 +29,11 @@ export interface Student {
  *                    zeby nie budzic negatywnych skojarzen),
  * - `pass`         - uczen korzysta z pasa (limit tygodniowy w ustawieniach),
  * - `hint_plomba`  - plomba dla ucznia, ktory podpowiadal,
- * - `uwaga`        - niegrzeczne zachowanie; kolejne uwagi eskaluja konsekwencje w kole,
+ * - `uwaga`        - niegrzeczne zachowanie. NIE ma zadnych skutkow w kole (dawna
+ *                    eskalacja "1. ostrzezenie, 2. bez plusow" jest wycofana) - to
+ *                    przypominajka dla nauczyciela, zeby po lekcjach wpisac uwage
+ *                    do dziennika. Tresc siedzi w `note`, a `wpisane` mowi, czy
+ *                    juz trafila do dziennika (zakladka "Uwagi"),
  * - `rozliczenie`  - HISTORYCZNE zdarzenie ze starszej wersji zasad (byly zadania
  *                    naprawcze) - zerowalo licznik plomb od tej chwili. UI go juz
  *                    nie tworzy, ale stare zdarzenia tego typu moga wciaz byc w
@@ -61,9 +65,16 @@ export interface RecapEvent {
    * plusie/kropce z KOLA NA LEKCJI - kod lekcji i zadania, np. "4.3 Z2"
    * (patrz src/lib/recap.ts: lessonWheelNote). Zdarzenia z kola na lekcji nie
    * maja questionSetId ani questionId, bo "pytaniem" jest samo zadanie ze
-   * slajdu, nie pytanie z zestawu.
+   * slajdu, nie pytanie z zestawu. Przy UWADZE - jej tresc, np. "przeszkadza
+   * na lekcji": to ona ma potem trafic do dziennika.
    */
   note?: string;
+  /**
+   * Tylko dla `result: 'uwaga'`: uwaga zostala juz przepisana do dziennika
+   * (papierowego albo Vulcana). Odhaczane w zakladce "Uwagi" - kalendarz ma
+   * pokazywac, co jeszcze zostalo do wpisania po lekcjach. Brak pola = nie.
+   */
+  wpisane?: boolean;
   at: string; // ISO
 }
 
@@ -155,7 +166,9 @@ export type SlideArt =
   | 'kolo' // schemat kola fortuny z imionami
   | 'oceny' // plus / kropka / plomba
   | 'stopnie' // 3 plusy = piatka, 3 plomby = jedynka
-  | 'eskalacja' // 1. ostrzezenie, 2. bez plusow do konca miesiaca
+  // Klucz historyczny (dawna eskalacja) - dzis rysuje uwage wpisywana wprost do
+  // dziennika. Zostaje pod stara nazwa, bo siedzi w lekcjach zapisanych w bazie.
+  | 'eskalacja' // przeszkadzanie -> uwaga do dziennika, bez ostrzezen
   | 'zleZachowania' // co liczy sie jako przeszkadzanie, a za co nigdy nie ma uwagi
   | 'pas' // pas: dzis nie odpowiadam
   | 'lawki' // plan klasy: siadamy w najblizszych lawkach
@@ -222,7 +235,12 @@ export type SlideArt =
 
 export type Slide =
   | { id: ID; kind: 'title'; title: string; subtitle?: string; art?: SlideArt }
-  | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt } // markdown-lite: akapity, listy
+  // `zeszyt` (text i task): ikonka zeszytu na slajdzie - umowa z klasa "widzisz
+  // ikonke = zapisujesz do zeszytu; nie ma ikonki = sluchasz". Dzieci ciagle
+  // pytaly, czy trzeba przepisywac - ikonka odpowiada za nauczyciela. Slajdy
+  // `topic` i `note` maja ikonke zawsze (jasna kartka w liniaturze i tak znaczy
+  // "to sie przepisuje" - ikonka tylko domyka te sama umowe).
+  | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt; zeszyt?: boolean } // markdown-lite: akapity, listy
   // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + krotka wersja
   // tematu do zeszytu (celowo krotsza niz `registerTopic` w dzienniku Vulcan -
   // dzieci pisza wolno, wiec zeszytowy temat ma byc jak najkrotszy). Pusty
@@ -246,6 +264,8 @@ export type Slide =
       // pisze w zeszycie i ma wzor przed oczami, zamiast patrzec na sama liste
       // polecen. Szczegolnie wazne w klasach 1-3.
       art?: SlideArt;
+      // Ikonka "do zeszytu" - patrz komentarz przy slajdzie 'text'.
+      zeszyt?: boolean;
     }
   // Praca z tekstem: strona i czas na przeczytanie musza byc widoczne od razu,
   // duzymi cyframi - uczen ma wiedziec CO czyta i ILE MA CZASU bez pytania.

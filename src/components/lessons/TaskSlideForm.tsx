@@ -42,6 +42,16 @@ export function TaskSlideForm({ slide, onChange }: { slide: TaskSlide; onChange:
         <Textarea rows={6} value={slide.body} onChange={(e) => onChange({ ...slide, body: e.target.value })} />
       </div>
 
+      <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+        <input
+          type="checkbox"
+          className="rounded border-gray-300 text-accent-600 focus:ring-accent-500"
+          checked={slide.zeszyt === true}
+          onChange={(e) => onChange({ ...slide, zeszyt: e.target.checked || undefined })}
+        />
+        Ikonka "do zeszytu" (uczniowie zapisują rozwiązanie w zeszycie)
+      </label>
+
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">Strona podręcznika</label>

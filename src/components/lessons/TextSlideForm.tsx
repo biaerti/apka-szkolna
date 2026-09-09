@@ -26,6 +26,15 @@ export function TextSlideForm({ slide, onChange }: { slide: TextSlide; onChange:
           Puste linie rozdzielają akapity. Listy: linie zaczynające się od "- " lub "1. ". Pogrubienie: **tekst**.
         </p>
       </div>
+      <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+        <input
+          type="checkbox"
+          className="rounded border-gray-300 text-accent-600 focus:ring-accent-500"
+          checked={slide.zeszyt === true}
+          onChange={(e) => onChange({ ...slide, zeszyt: e.target.checked || undefined })}
+        />
+        Ikonka "do zeszytu" (uczniowie przepisują ten slajd)
+      </label>
     </div>
   );
 }

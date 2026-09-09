@@ -24,19 +24,26 @@ Kody `P.*` służą tylko do sprawdzenia, czy nic z klas 1-3 nie wypadło.
 | P.4 | pisanie | a-f |
 | P.5 | świadomość językowa | a-f |
 
-## Co pokrywa obecnych sześć lekcji
+## Co pokrywa obecnych pięć lekcji
+
+Powtórka została we wrześniu 2026 skrócona z 12 do 5 lekcji: lekcje 4-12 były
+chaotyczne (za dużo tematów naraz) i zostały zastąpione dwiema nowymi,
+węższymi. Stara treść jest w historii gita (commit ac36793).
 
 | Lekcja | Kody I etapu |
 |---|---|
 | 1. Głoski, litery, sylaby, ortografia | P.5.a, P.4.b (częściowo) |
 | 2. Części mowy, zdania, wielka litera | P.5.b, P.5.d, P.4.c, P.4.e (częściowo) |
 | 3. Formy wypowiedzi i czytanie | P.3.g, P.3.h, P.4.a (opis, zaproszenie) |
-| 4. Alfabet, słownik i rodziny wyrazów | P.4.c (porządek alfabetyczny), P.5.e (częściowo) |
-| 5. Zmiękczenia, ą i ę, interpunkcja | P.4.b, P.4.c |
-| 6. Czytanie ze zrozumieniem, krótkie formy | P.3.d, P.3.h, P.4.a (notatka, życzenia, podziękowanie) |
+| 4. Zmiękczenia oraz ą i ę | P.4.b, P.4.c |
+| 5. Alfabet, słownik i rodzina wyrazów | P.4.c (porządek alfabetyczny), P.5.e (częściowo) |
 
-Wniosek: sześć lekcji dobrze domyka **kształcenie językowe i ortografię**
-(P.5 i P.4.b-c). Cała reszta podstawy jest pokryta wyrywkowo albo wcale.
+Wniosek: pięć lekcji CELOWO domyka tylko **kształcenie językowe, ortografię
+i słownictwo** (P.5 i P.4.b-c) - to fundament, bez którego nie da się ruszyć
+z materiałem klasy 4. Reszta podstawy I etapu (praca z tekstem, tworzenie
+dłuższych form) nie dostaje osobnych powtórek - wraca naturalnie przy
+normalnych lekcjach klasy 4, przy pierwszych tekstach i pierwszych
+wypracowaniach.
 
 ## Czego brakuje
 
@@ -64,49 +71,16 @@ Wniosek: sześć lekcji dobrze domyka **kształcenie językowe i ortografię**
 | P.1.c | **słucha tekstów czytanych i wypowiada się na ich temat** | jest tylko w Z1 lekcji 6 - warto powtórzyć w kilku |
 | P.3.i | **czyta samodzielnie wybraną książkę** | osobny wątek, nie mieści się w powtórce |
 
-## Lekcje 7-12 (zrobione)
-
-Sześć lekcji domykających powyższe braki jest już w `recap13.ts`. Kolejność
-wynika z trudności, a nie z kolejności w podstawie: najpierw praca z tekstem,
-potem tworzenie tekstu, na końcu drobiazgi zapisu.
-
-**7. Bohater i nastrój utworu** - `P.3.d`, `P.2.d`
-Świat przedstawiony, cechy bohatera i ocena z uzasadnieniem ("uważam, że...,
-bo w tekście..."), nastrój utworu, nadawanie tytułu.
-Ilustracje: `swiatPrzedstawiony`, `cechyBohatera`, `nastroj`, `tematTekstu`.
-
-**8. Opowiadanie od początku do końca** - `P.4.a`, `P.3.f`
-Trzy części, słowa porządkujące, opowiadanie na 6-10 zdań, dalsze losy
-bohatera, dopisywanie zakończenia.
-Ilustracje: `opowiadanie`, `kolejnoscZdarzen`, `swiatPrzedstawiony`.
-
-**9. List, ogłoszenie i przeproszenie** - `P.4.a`
-Cztery elementy listu, adres nadawcy i odbiorcy na kopercie, ogłoszenie na
-trzy pytania, przeprosiny na trzy części.
-Ilustracje: `list`, `koperta`, `ogloszenie`, `przeproszenie`.
-
-**10. Wyrazy, które znaczą więcej** - `P.5.e`
-Wyrazy wieloznaczne, związki frazeologiczne, zdrobnienia i zgrubienia.
-Ilustracje: `wieloznaczne`, `frazeologizm`, `zdrobnienieZgrubienie`.
-
-**11. Przerabiamy zdania** - `P.5.c`, `P.5.f`
-Oznajmujące, pytające i wykrzyknienie; równoważnik zdania; zdanie pojedyncze
-i złożone.
-Ilustracje: `przeksztalcanieZdan`, `zdanieZlozone`.
-
-**12. Skróty, liczebniki i sprawdzanie po sobie** - `P.4.b`-`P.4.e`
-Kropka w skrócie, liczebniki zapisane słowami, wielka litera w tytułach,
-poprawianie własnego tekstu.
-Ilustracje: `skroty`, `liczebnikSlownie`, `nazwyWlasne`, `zeszyt`.
-
 ## Co zostało
 
-Braki mniejsze z tabeli powyżej - recytacja i wygłaszanie z pamięci, intonacja
-i siła głosu, ustne sprawozdanie, samodzielna lektura. Nie mieszczą się
-w rytmie "reguła - zadanie do zeszytu - koło" i nie da się ich sprawdzić kołem
-fortuny, więc są raczej na osobny typ lekcji niż na kolejną powtórkę.
+Obie tabele braków powyżej opisują to, czego powtórka celowo NIE domyka -
+te umiejętności wracają w normalnych lekcjach klasy 4 (świat przedstawiony,
+opowiadanie, list, frazeologizmy, składnia itd. są i tak w podstawie II etapu).
+Braki mniejsze (recytacja, intonacja, ustne sprawozdanie, samodzielna lektura)
+nie mieszczą się w rytmie "reguła - zadanie do zeszytu - koło" i nie da się ich
+sprawdzić kołem fortuny, więc są na osobny typ lekcji, nie na powtórkę.
 
-## Zasada, która wyszła przy pisaniu lekcji 7-12
+## Zasada, która wyszła przy pisaniu lekcji
 
 Każde zadanie ma tę samą ilustrację, co reguła tuż przed nim - dziecko pisze
 w zeszycie i ma wzór przed oczami. **Ale wyrazy w zadaniu muszą być inne niż

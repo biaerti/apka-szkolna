@@ -5,6 +5,7 @@
 
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
+import { ZeszytIcon } from './ZeszytBadge';
 import { fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
 
@@ -30,7 +31,11 @@ export function NoteSlideView({ slide }: { slide: Extract<Slide, { kind: 'note' 
         style={{ fontSize: bodySize }}
       />
 
-      <p className="mt-4 text-center text-3xl font-semibold text-gray-500">Przepisz do zeszytu</p>
+      {/* Ta sama ikonka co plakietka "do zeszytu" na ciemnych slajdach - jedna umowa. */}
+      <p className="mt-4 flex items-center justify-center gap-3 text-center text-3xl font-semibold text-gray-500">
+        <ZeszytIcon className="h-10 w-10 text-amber-600" />
+        Przepisz do zeszytu
+      </p>
     </div>
   );
 }

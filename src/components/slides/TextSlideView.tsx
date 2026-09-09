@@ -6,6 +6,7 @@
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView, WIDE_ART } from './art';
+import { ZeszytBadge } from './ZeszytBadge';
 import { estimateTextHeight, fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
 
@@ -42,15 +43,30 @@ export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' 
     );
   }
 
+  // Ikonka "do zeszytu" wisi w prawym gornym rogu, nad ukladem kolumn -
+  // wspolne miejsce dla wszystkich trzech wariantow slajdu.
+  const badge = slide.zeszyt ? (
+    // top-14: nizej niz zegar prezentacji (PresentClock, fixed w rogu ekranu).
+    <div className="absolute right-8 top-14 z-10">
+      <ZeszytBadge />
+    </div>
+  ) : null;
+
   if (!slide.art) {
-    return <div className="flex h-full flex-col justify-center gap-7 px-20 py-14">{block(1120, 600)}</div>;
+    return (
+      <div className="relative flex h-full flex-col justify-center gap-7 px-20 py-14">
+        {badge}
+        {block(1120, 600)}
+      </div>
+    );
   }
 
   // Szerokie, poziome schematy (np. przebieg lekcji) czytelniejsze sa pod
   // tekstem na cala szerokosc niz w waskiej kolumnie obok.
   if (WIDE_ART.has(slide.art)) {
     return (
-      <div className="flex h-full flex-col justify-center gap-8 px-16 py-12">
+      <div className="relative flex h-full flex-col justify-center gap-8 px-16 py-12">
+        {badge}
         <div className="flex flex-col justify-center gap-6">{block(1152, 350)}</div>
         <SlideArtView art={slide.art} className="mx-auto h-auto w-full max-w-3xl" />
       </div>
@@ -58,7 +74,8 @@ export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' 
   }
 
   return (
-    <div className="flex h-full flex-row items-center gap-12 px-14 py-12">
+    <div className="relative flex h-full flex-row items-center gap-12 px-14 py-12">
+      {badge}
       <div className="flex flex-1 flex-col justify-center gap-6">{block(600, 600)}</div>
       <div className="flex items-center justify-center" style={{ width: 480 }}>
         <SlideArtView art={slide.art} className="h-auto w-full" />
