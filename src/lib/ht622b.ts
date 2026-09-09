@@ -4,7 +4,8 @@
 //
 // Ramka (~5/s, koniec 0D 0A): 06 2A 11 01 [b4] [b5] B0 B1 B2 B3 ... 02 0D 0A
 //   b5 bit 0x04 - ikona H (hold)
-//   B3 bit 0x80 - ikona dB (bez niej miernik jest w trybie SONE)
+//   B3 bity 0x30 - ikona dB (w trybie SONE zawsze zgaszone; bit 0x80 to inna
+//   ikona, ktora w SONE zapala sie przy wartosciach >= 10 - nie mylic z dB)
 //   B0..B3 - zrzut segmentow LCD, cyfry setki/dziesiatki/jednosci/dziesiate:
 //     C1 ("1" setek) = B0 & 0x03
 //     C2: f=B0&80 g=B0&40 e=B0&20 | a=B1&08 b=B1&04 c=B1&02 d=B1&01
@@ -59,7 +60,7 @@ export function decodeHt622bFrame(frame: Uint8Array): Ht622bReading | null {
   const b2 = frame[8];
   const b3 = frame[9];
 
-  if ((b3 & 0x80) === 0) return null; // tryb SONE - prosimy o UNIT na dB
+  if ((b3 & 0x30) === 0) return null; // tryb SONE - prosimy o przelaczenie na dB
 
   const hundreds = b0 & 0x03;
   if (hundreds !== 0 && hundreds !== 0x03) return null;
