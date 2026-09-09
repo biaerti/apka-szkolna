@@ -2,7 +2,9 @@
 // tlo. Dzieci przepisuja pytania z ekranu na kartki, wiec domyslnie widac
 // WSZYSTKIE pytania naraz (widok "wszystkie"); klawisz W przelacza na "po
 // jednym" (do dyktowania). Odpowiedzi domyslnie ukryte - klawisz O pokazuje
-// je tylko wtedy, gdy nauczyciel sam tego chce (np. przy omawianiu).
+// je tylko wtedy, gdy nauczyciel sam tego chce (np. przy omawianiu). Klawisz K
+// rozklada widok "wszystkie" na dwie kolumny - krotkie pytania sa wtedy pisane
+// wiekszymi literami zamiast zostawiac pusta prawa polowe ekranu.
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -29,6 +31,9 @@ export function QuizPresent() {
   const [view, setView] = useState<View>('all');
   const [index, setIndex] = useState(0);
   const [showAnswers, setShowAnswers] = useState(false);
+  // Dwie kolumny w widoku "wszystkie" - przy krotkich pytaniach prawa polowa
+  // ekranu i tak stoi pusta, a w dwoch kolumnach litery sa wyrazniej wieksze.
+  const [columns, setColumns] = useState<1 | 2>(1);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const questions = quiz ? renumber(quiz.questions) : [];
@@ -46,6 +51,9 @@ export function QuizPresent() {
       if (key === 'w' || key === 'W') {
         e.preventDefault();
         setView((v) => (v === 'all' ? 'one' : 'all'));
+      } else if (key === 'k' || key === 'K') {
+        e.preventDefault();
+        setColumns((c) => (c === 1 ? 2 : 1));
       } else if (key === 'o' || key === 'O') {
         e.preventDefault();
         setShowAnswers((v) => !v);
@@ -111,7 +119,7 @@ export function QuizPresent() {
           </Button>
         </div>
       ) : view === 'all' ? (
-        <QuizAllView questions={questions} showAnswers={showAnswers} />
+        <QuizAllView questions={questions} showAnswers={showAnswers} columns={columns} />
       ) : (
         <div
           className="flex flex-1 flex-col"
@@ -128,6 +136,7 @@ export function QuizPresent() {
       <p className="shrink-0 text-center text-[1.1vw] text-gray-500">
         W: {view === 'all' ? 'po jednym pytaniu' : 'wszystkie pytania'}
         {view === 'one' && ' - strzałki / Spacja: następne, poprzednie'}
+        {view === 'all' && total > 1 && ` - K: ${columns === 1 ? 'dwie kolumny' : 'jedna kolumna'}`}
         {' - O: '}
         {showAnswers ? 'ukryj odpowiedzi' : 'pokaż odpowiedzi'} - F: pełny ekran - Esc: wyjście
       </p>
