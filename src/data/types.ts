@@ -210,6 +210,9 @@ export type SlideArt =
   | 'przeproszenie' // za co, ze przykro, co zrobie inaczej
   | 'przeksztalcanieZdan' // to samo zdanie: oznajmujace, pytajace, wykrzyknienie, rownowaznik
   | 'liczebnikSlownie' // 600 = szescset, 400 = czterysta
+  | 'czat' // ta sama rozmowa: dymki w komunikatorze i dialog na kartce
+  | 'wiadomosc' // wiadomosc do doroslego: powitanie, prosba, podziekowanie, podpis
+  | 'email' // pola e-maila: do kogo, temat, tresc, podpis, zalacznik
   // Ilustracje przedmiotowe do powtorki klasy 4 (src/data/recap4.ts).
   | 'przypadki' // 7 przypadkow z pytaniami
   | 'czasownikOdmiana' // osoba, liczba, czas

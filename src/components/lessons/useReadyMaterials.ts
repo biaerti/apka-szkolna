@@ -57,14 +57,14 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
     key: 'recap13',
     label: 'Powtórka klas 1-3',
     description:
-      'Doda 5 lekcji-prezentacji (głoski i ortografia, części mowy i zdania, formy wypowiedzi, zmiękczenia oraz ą i ę, alfabet i słownik) i 5 zestawów pytań do koła fortuny.',
+      'Doda 6 lekcji-prezentacji (głoski i ortografia, części mowy i zdania, formy wypowiedzi, zmiękczenia oraz ą i ę, alfabet i słownik, zapis rozmowy: dialog i czat) i 6 zestawów pytań do koła fortuny.',
     build: buildRecap13,
   },
   {
     key: 'recap4',
     label: 'Powtórka klasy 4',
     description:
-      'Doda 6 lekcji-prezentacji (odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi, słownictwo i frazeologia, ortografia i skróty, świat przedstawiony i teksty kultury) i 6 zestawów pytań do koła fortuny.',
+      'Doda 7 lekcji-prezentacji (odmienne części mowy, zdanie i wyrazy nieodmienne, środki poetyckie i formy wypowiedzi, słownictwo i frazeologia, ortografia i skróty, świat przedstawiony i teksty kultury, dialog, wiadomość i e-mail) i 7 zestawów pytań do koła fortuny.',
     build: buildRecap4,
   },
 ];

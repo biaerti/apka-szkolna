@@ -49,6 +49,9 @@ import { Koperta } from './Koperta';
 import { Przeproszenie } from './Przeproszenie';
 import { PrzeksztalcanieZdan } from './PrzeksztalcanieZdan';
 import { LiczebnikSlownie } from './LiczebnikSlownie';
+import { Czat } from './Czat';
+import { Wiadomosc } from './Wiadomosc';
+import { Email } from './Email';
 import { Przypadki } from './Przypadki';
 import { CzasownikOdmiana } from './CzasownikOdmiana';
 import { Stopniowanie } from './Stopniowanie';
@@ -122,6 +125,9 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   przeproszenie: Przeproszenie,
   przeksztalcanieZdan: PrzeksztalcanieZdan,
   liczebnikSlownie: LiczebnikSlownie,
+  czat: Czat,
+  wiadomosc: Wiadomosc,
+  email: Email,
   // Ilustracje przedmiotowe do powtorki klasy 4.
   przypadki: Przypadki,
   czasownikOdmiana: CzasownikOdmiana,

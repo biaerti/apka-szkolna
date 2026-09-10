@@ -1,8 +1,9 @@
 // Gotowa powtorka materialu klasy 4 - jezyk polski, na start klasy 5.
-// Szesc lekcji (modul = 1-2 godziny lekcyjne): odmienne czesci mowy, zdanie i wyrazy
+// Siedem lekcji (modul = 1-2 godziny lekcyjne): odmienne czesci mowy, zdanie i wyrazy
 // nieodmienne, srodki poetyckie i formy wypowiedzi, slownictwo i frazeologia,
 // ortografia z wielka litera i skrotami, swiat przedstawiony z gatunkami i tekstami
-// kultury - kazda z wlasnym zestawem pytan do kola fortuny.
+// kultury, zapis rozmowy z wiadomoscia i e-mailem - kazda z wlasnym zestawem pytan
+// do kola fortuny.
 // Rytm slajdow taki sam jak w powtorce klas 1-3 (recap13.ts): krotka regula (text)
 // -> zadanie do zeszytu ze stoperem (task; po nim UI losuje kolem osobe, ktora
 // pokazuje rozwiazanie) -> kolejna regula... -> slajd "Zapamiętaj" -> notatka.
@@ -54,7 +55,7 @@ function buildQuestionSet(
 const DZIAL = 'Powtórka klasy 4';
 
 /**
- * Tworzy 6 lekcji + 6 zestawow pytan powtorki materialu klasy 4 dla wskazanego rocznika.
+ * Tworzy 7 lekcji + 7 zestawow pytan powtorki materialu klasy 4 dla wskazanego rocznika.
  * Kazda lekcja: tytul -> temat -> (od lekcji 2) kolo powtorzeniowe na zestawie poprzedniej
  * lekcji -> regula -> zadanie (+ kolo na lekcji w UI) -> ... -> Zapamiętaj -> notatka.
  * Zestaw lekcji ma dokladnie tyle pytan, ile lekcja ma slajdow task.
@@ -136,6 +137,33 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     ],
   );
 
+
+  // Zestaw lekcji 7 - ostatniej, wiec jej kolo krecimy recznie ("Koło powt.").
+  const set7 = buildQuestionSet(
+    'Powtórka klasy 4: dialog, wiadomość i e-mail',
+    'Zapis rozmowy i pisanie na ekranie',
+    classIds,
+    [
+      {
+        text: 'Jak zapisujemy słowa narratora po wypowiedzi bohatera: "- Idę - ... powiedział Kuba"?',
+        answer: 'po myślniku, małą literą: - Idę - powiedział Kuba.',
+      },
+      {
+        text: 'Piszesz wiadomość do trenera. Jak zapiszesz wyraz "pana" w zwrocie "prośba do pana"?',
+        answer: 'wielką literą - Pana; zwroty do adresata piszemy wielką literą z szacunku',
+      },
+      {
+        text: 'Do czego służy pole "Temat" w e-mailu i co się dzieje, gdy zostanie puste?',
+        answer:
+          'mówi jednym zdaniem, o co chodzi; pusty temat wygląda na spam i wiadomość łatwo ginie',
+      },
+      {
+        text: 'Wymień dwie rzeczy, które pasują do wiadomości do kolegi, a nie pasują do wiadomości do nauczyciela.',
+        answer: 'np. skróty (nara, cze, thx), emotki, brak powitania i podpisu, zdania bez znaków',
+      },
+    ],
+  );
+
   // ---------- Lekcje ----------
   const lesson1: Omit<Lesson, 'id' | 'order'> = {
     grade,
@@ -148,7 +176,7 @@ export function buildRecap4(grade: string, classIds: string[]): SeedBundleResult
     registerTopic: 'Powtórzenie wiadomości z klasy 4: odmienne części mowy i ich formy',
     curriculum: ['II.1.1', 'II.1.2', 'II.1.4', 'II.1.6', 'II.1.7'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Odmienne części mowy - część 1/6'),
+      slideTitle('Powtórka klasy 4', 'Odmienne części mowy - część 1/7'),
       slideTopic('Odmienne części mowy'),
       slideText('Co dziś powtarzamy', `- Rzeczownik i odmiana przez przypadki
 - Czasownik: osoba, liczba, czas
@@ -236,7 +264,7 @@ Ułóż też jedno zdanie z liczebnikiem porządkowym.`, undefined, 180),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: budowa zdania, wyrazy nieodmienne, pisownia "nie"',
     curriculum: ['II.1.8', 'II.1.12', 'II.1.2', 'II.4.1', 'II.4.2'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/6'),
+      slideTitle('Powtórka klasy 4', 'Zdanie i wyrazy nieodmienne - część 2/7'),
       slideTopic('Zdanie i wyrazy nieodmienne'),
       // Kolo na start: wracamy do tematu z lekcji 1 (odmienne czesci mowy) zestawem tamtej lekcji.
       slideRecap(set1.set.id),
@@ -325,7 +353,7 @@ Przy każdym dopisz, jaka to część mowy.`, undefined, 210),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: środki poetyckie, budowa wiersza, formy wypowiedzi',
     curriculum: ['I.1.4', 'I.1.6', 'I.1.9', 'I.1.10', 'III.2.1'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/6'),
+      slideTitle('Powtórka klasy 4', 'Środki poetyckie i formy wypowiedzi - część 3/7'),
       slideTopic('Środki poetyckie'),
       // Kolo na start: wracamy do tematu z lekcji 2 (zdanie, wyrazy nieodmienne) zestawem tamtej lekcji.
       slideRecap(set2.set.id),
@@ -422,7 +450,7 @@ Krótko - ogłoszenie ma być czytelne z daleka.`, undefined, 300),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: rodzina wyrazów, synonimy i antonimy, wyrazy wieloznaczne, związki frazeologiczne',
     curriculum: ['II.2.4', 'II.2.5', 'II.2.8', 'I.1.4', 'IV.5'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/6'),
+      slideTitle('Powtórka klasy 4', 'Słownictwo i frazeologia - część 4/7'),
       slideTopic('Słownictwo i frazeologia'),
       // Kolo na start: wracamy do tematu z lekcji 3 (srodki poetyckie, formy wypowiedzi) zestawem tamtej lekcji.
       slideRecap(set3.set.id),
@@ -506,7 +534,7 @@ Pracujcie w parach - potem sprawdzimy na głos.`, undefined, 300),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: pisownia ó-u, rz-ż, ch-h, wielka litera w nazwach własnych, skróty',
     curriculum: ['II.4.1', 'II.4.2', 'IV.5'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/6'),
+      slideTitle('Powtórka klasy 4', 'Ortografia, wielka litera i skróty - część 5/7'),
       slideTopic('Ortografia i wielka litera'),
       // Kolo na start: wracamy do tematu z lekcji 4 (slownictwo i frazeologia) zestawem tamtej lekcji.
       slideRecap(set4.set.id),
@@ -590,7 +618,7 @@ Przy każdym powiedz, jaki to znak i dlaczego.`, undefined, 240),
     registerTopic: 'Powtórzenie wiadomości z klasy 4: świat przedstawiony, baśń, legenda, mit, bajka, komiks, teatr i film',
     curriculum: ['I.1.1', 'I.1.2', 'I.1.3', '2.7', '2.8', '2.9', '2.10'],
     slides: [
-      slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/6'),
+      slideTitle('Powtórka klasy 4', 'Świat przedstawiony, gatunki, teatr i film - część 6/7'),
       slideTopic('Świat przedstawiony'),
       // Kolo na start: wracamy do tematu z lekcji 5 (ortografia, wielka litera, skroty) zestawem tamtej lekcji.
       slideRecap(set5.set.id),
@@ -657,8 +685,88 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
     ],
   };
 
+  const lesson7: Omit<Lesson, 'id' | 'order'> = {
+    grade,
+    title: 'Powtórka klasy 4: Dialog, wiadomość i e-mail',
+    topic: 'Dialog, wiadomość i e-mail',
+    progress: {},
+    dzial: DZIAL,
+    questionSetId: set7.set.id,
+    reviewQuestionSetId: set7.set.id,
+    registerTopic:
+      'Powtórzenie wiadomości z klasy 4: zapis dialogu ze słowami narratora, wiadomość oficjalna i nieoficjalna, e-mail',
+    curriculum: ['III.2.1', 'III.2.5', 'IV.2', 'II.4.1'],
+    slides: [
+      slideTitle('Powtórka klasy 4', 'Dialog, wiadomość i e-mail - część 7/7'),
+      slideTopic('Dialog, wiadomość i e-mail'),
+      // Kolo na start: zestaw lekcji 6 (swiat przedstawiony, gatunki, teatr i film).
+      slideRecap(set6.set.id),
+      slideText('Co dziś powtarzamy', `- Dialog w opowiadaniu i słowa narratora
+- Wiadomość oficjalna i nieoficjalna
+- E-mail: temat, zwrot do adresata, podpis
+- Znak na końcu zdania kontra emotka`),
+      slideText('Rozmowa na ekranie i w opowiadaniu', `Na czacie widać, kto mówi, bo każdy ma swoją stronę ekranu i swój dymek.
+
+W opowiadaniu dymków nie ma - pracę dymka wykonuje **układ tekstu**: każda wypowiedź od nowej linii, na początku **myślnik**.
+
+Dlatego rozmowy z komunikatora nie da się wkleić do wypracowania - trzeba ją **przepisać** jak dialog.`, 'czat'),
+      slideText('Słowa narratora przy wypowiedzi', `Po wypowiedzi bohatera narrator często dopowiada, kto i jak mówił. Wtedy stawiamy **drugi myślnik**, a słowa narratora piszemy **małą literą**:
+
+- Zaraz przyjdę - powiedział Kuba.
+
+Czasownik mówienia można wybrać dokładniej niż „powiedział": szepnął, krzyknął, mruknął, zapytał.`, 'dialog'),
+      slideTask('Z1', 'Zamień czat na dialog', `Przepisz tę rozmowę do zeszytu jako dialog w opowiadaniu: nowa linia, myślnik, znak na końcu. Do każdej wypowiedzi dopisz słowa narratora po drugim myślniku, za każdym razem z **innym** czasownikiem mówienia.
+
+Ola: masz zadanie z polskiego
+Kuba: mam ale zostawiłem zeszyt w szkole
+Ola: to co teraz zrobisz
+Kuba: poproszę wychowawczynię o kartkę`, undefined, 300, 'dialog'),
+      slideText('Oficjalnie czy nieoficjalnie', `Do kolegi piszesz **nieoficjalnie**: krótko, ze skrótami i emotkami.
+
+Do nauczyciela, trenera czy urzędu piszesz **oficjalnie**: pełnymi zdaniami, z powitaniem, prośbą, podziękowaniem i podpisem.
+
+W wiadomości oficjalnej zwroty do adresata piszemy **wielką literą**: Pan, Pani, Ciebie, Wam. Wielkie litery w całym wyrazie znaczą w internecie **krzyk**.`, 'wiadomosc'),
+      slideTask('Z2', 'Przepisz na wiadomość oficjalną', `Uczeń wysłał do nauczycielki: „ZAPOMNIALEM ZESZYTU CO TERAZ??? nara"
+
+Napisz tę wiadomość w zeszycie jeszcze raz, oficjalnie. Muszą się w niej znaleźć: powitanie, prośba pełnym zdaniem, podziękowanie i podpis. Zwroty do adresatki zapisz wielką literą i podkreśl je.`, undefined, 300, 'wiadomosc'),
+      slideText('E-mail to list na ekranie', `E-mail ma te same części co list, tylko w polach formularza:
+
+- **Do** - adres odbiorcy, sprawdzany przed wysłaniem
+- **Temat** - jedno zdanie, o co chodzi; nigdy nie zostaje pusty
+- treść ze zwrotem grzecznościowym i podpisem imieniem oraz klasą
+- **załącznik**, gdy coś przesyłasz
+
+Adres nadawcy nic nie mówi odbiorcy, dlatego podpis jest obowiązkowy.`, 'email'),
+      slideTask('Z3', 'Napisz e-mail', `Napisz w zeszycie e-mail do nauczycielki z prośbą o zgodę na oddanie opowiadania dzień później.
+
+Zapisz go tak jak na ekranie: najpierw linijka **Temat:**, potem treść. W treści: zwrot do adresatki, prośba z uzasadnieniem, podziękowanie i podpis imieniem oraz klasą.`, undefined, 360, 'email'),
+      slideText('Znak na końcu zdania', `Emotka dokłada nastrój, ale **nie zastępuje** kropki, pytajnika ani wykrzyknika.
+
+To znak na końcu mówi odbiorcy, po co piszesz: pytam, informuję czy proszę stanowczo.
+
+Wiadomość bez znaków i wielkich liter czyta się wolniej, a w sprawie oficjalnej wygląda na niedbalą.`, 'znakiInterpunkcyjne'),
+      slideTask('Z4', 'Wstaw znaki i nazwij zdania', `Przepisz wiadomości do zeszytu: wielka litera na początku, właściwy znak na końcu. Obok każdej dopisz, czy to zdanie **oznajmujące**, **pytające** czy **rozkazujące**.
+
+1. kiedy oddajemy opowiadanie
+2. wysłałam Pani zadanie mailem
+3. proszę o odpowiedź do piątku
+4. nie zapomnij o załączniku`, undefined, 240, 'przeksztalcanieZdan'),
+      slideText('Zapamiętaj', `- dialog: **nowa linia + myślnik**, słowa narratora po drugim myślniku małą literą
+- oficjalnie: powitanie, prośba, podziękowanie, podpis; **Pan, Pani, Ciebie** wielką literą
+- e-mail: **temat** nigdy pusty, podpis imieniem i klasą`, 'email'),
+      slideNote(
+        'Notatka do zeszytu',
+        `- Dialog: nowa linia i myślnik; słowa narratora po drugim myślniku małą literą.
+- Wiadomość oficjalna: powitanie, prośba, podziękowanie, podpis.
+- Zwroty do adresata wielką literą: Pan, Pani, Ciebie, Wam.
+- E-mail: pole Temat nigdy nie zostaje puste, podpisuję się imieniem i klasą.`,
+      ),
+    ],
+  };
+
+
   return {
-    lessons: [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6],
+    lessons: [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6, lesson7],
     questionSets: [
       set1.set,
       set2.set,
@@ -666,6 +774,7 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
       set4.set,
       set5.set,
       set6.set,
+      set7.set,
     ],
     questions: [
       ...set1.questions,
@@ -674,6 +783,7 @@ W **filmie** wszystko jest nagrane: kamera, plan filmowy, montaż, muzyka.
       ...set4.questions,
       ...set5.questions,
       ...set6.questions,
+      ...set7.questions,
     ],
   };
 }
@@ -703,6 +813,7 @@ function slideTask(
   body: string,
   exerciseNo?: number,
   timerSec?: number,
+  art?: SlideArt,
 ): Slide {
   return {
     id: newId(),
@@ -712,6 +823,7 @@ function slideTask(
     body,
     exerciseNo: exerciseNo ? String(exerciseNo) : undefined,
     timerSec,
+    art,
   };
 }
 

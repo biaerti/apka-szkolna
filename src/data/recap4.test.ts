@@ -6,10 +6,10 @@ import { titleMatchKey } from '../components/lessons/refreshMaterials';
 const CLASS_ID = 'klasa-testowa';
 
 describe('buildRecap4', () => {
-  it('tworzy szesc lekcji i szesc zestawow pytan (jeden zestaw na lekcje - bez osobnych zestawow powtorkowych)', () => {
+  it('tworzy siedem lekcji i siedem zestawow pytan (jeden zestaw na lekcje - bez osobnych zestawow powtorkowych)', () => {
     const bundle = buildRecap4('V', [CLASS_ID]);
-    expect(bundle.lessons).toHaveLength(6);
-    expect(bundle.questionSets).toHaveLength(6);
+    expect(bundle.lessons).toHaveLength(7);
+    expect(bundle.questionSets).toHaveLength(7);
     for (const lesson of bundle.lessons) {
       expect(lesson.grade).toBe('V');
       expect(lesson.progress).toEqual({});
@@ -134,10 +134,10 @@ describe('buildRecap4', () => {
 });
 
 describe('buildRecap13', () => {
-  it('tworzy piec lekcji i piec zestawow pytan (jeden zestaw na lekcje - bez osobnych zestawow powtorkowych)', () => {
+  it('tworzy szesc lekcji i szesc zestawow pytan (jeden zestaw na lekcje - bez osobnych zestawow powtorkowych)', () => {
     const bundle = buildRecap13('IV', [CLASS_ID]);
-    expect(bundle.lessons).toHaveLength(5);
-    expect(bundle.questionSets).toHaveLength(5);
+    expect(bundle.lessons).toHaveLength(6);
+    expect(bundle.questionSets).toHaveLength(6);
     for (const lesson of bundle.lessons) {
       expect(lesson.dzial).toBe('Powtórka 1-3');
       expect(lesson.reviewQuestionSetId).toBe(lesson.questionSetId);

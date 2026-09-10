@@ -1,7 +1,7 @@
 // Gotowa powtorka materialu klas 1-3 - jezyk polski.
-// Piec lekcji (modul = 1-2 godziny lekcyjne): fonetyka+ortografia, gramatyka+interpunkcja,
+// Szesc lekcji (modul = 1-2 godziny lekcyjne): fonetyka+ortografia, gramatyka+interpunkcja,
 // formy wypowiedzi i czytanie, zmiekczenia i samogloski nosowe, alfabet+slownik+rodzina
-// wyrazow - kazda z wlasnym zestawem pytan do kola fortuny.
+// wyrazow, zapis rozmowy (dialog i czat) - kazda z wlasnym zestawem pytan do kola fortuny.
 // (Wczesniejsza wersja miala 12 lekcji - lekcje 4-12 byly chaotyczne i zostaly zastapione
 // dwiema nowymi, spokojniejszymi; stara tresc zostala w historii gita, commit ac36793.)
 // Rytm slajdow: (od lekcji 2) kolo powtorzeniowe na zestawie POPRZEDNIEJ lekcji (recap) ->
@@ -11,7 +11,7 @@
 // zestaw pytan lekcji sluzy wylacznie kolu powtorzeniowemu na poczatku nastepnej lekcji,
 // a pytan jest dokladnie tyle, ile zadan (kazde sprawdza umiejetnosc z zadania Zi na innym
 // materiale). W klasach 1-3 kazdy slajd tresciowy ma obrazek, a notatka ma najwyzej trzy punkty.
-// Lekcje 4-5 (dopisane pozniej) stosuja dwie nowsze zasady, ktorych lekcje 1-3 celowo
+// Lekcje 4-6 (dopisane pozniej) stosuja dwie nowsze zasady, ktorych lekcje 1-3 celowo
 // NIE dostaly wstecz (nauczyciel prowadzi je juz w klasach - nie ruszamy):
 // - polecenie zadania w CALOSCI w `body`, bez tytulu-naglowka (dzieci nie czytaly podtytulu,
 //   wiec polecenie ma byc jednym, samowystarczalnym tekstem),
@@ -59,13 +59,13 @@ function buildQuestionSet(
 /** Nazwa dzialu do naglowka na liscie lekcji - wszystkie lekcje tej powtorki naleza razem. */
 const DZIAL = 'Powtórka 1-3';
 
-/** Tworzy 5 lekcji + 5 zestawow pytan powtorki klas 1-3 dla wskazanego rocznika (zestaw lekcji N kreci sie na poczatku lekcji N+1). */
+/** Tworzy 6 lekcji + 6 zestawow pytan powtorki klas 1-3 dla wskazanego rocznika (zestaw lekcji N kreci sie na poczatku lekcji N+1). */
 export function buildRecap13(grade: string, classIds: string[]): SeedBundleResult {
   // ---------- Zestawy pytan ----------
   // Kazdy zestaw ma DOKLADNIE tyle pytan, ile lekcja ma zadan (Z1, Z2...): pytanie i.
   // sprawdza te sama umiejetnosc co zadanie Zi, ale na innym materiale, tak by dalo
   // sie odpowiedziec ustnie w 1-2 zdaniach. Zestaw sluzy WYLACZNIE kolu
-  // powtorzeniowemu na poczatku nastepnej lekcji (set5 zostaje na "Koło powt.").
+  // powtorzeniowemu na poczatku nastepnej lekcji (set6 zostaje na "Koło powt.").
   const set1 = buildQuestionSet(
     'Powtórka 1-3: głoski, sylaby, ortografia',
     'Fonetyka i ortografia',
@@ -148,6 +148,30 @@ export function buildRecap13(grade: string, classIds: string[]): SeedBundleResul
     ],
   );
 
+
+
+  // Zestaw lekcji 6 - lekcja konczy powtorke, wiec jej kolo krecimy dopiero
+  // recznie ("Koło powt." na liscie lekcji), tak samo jak set5.
+  const set6 = buildQuestionSet(
+    'Powtórka 1-3: zapis rozmowy - dialog i czat',
+    'Zapis rozmowy',
+    classIds,
+    [
+      {
+        text: 'Od czego zaczyna się każda wypowiedź w dialogu zapisanym w zeszycie?',
+        answer: 'od nowej linii i myślnika',
+      },
+      {
+        text: 'Kolega napisał na czacie „idziesz jutro na basen". Jakiego znaku brakuje na końcu i dlaczego?',
+        answer: 'pytajnika - to pytanie; emotka nie zastępuje znaku na końcu zdania',
+      },
+      {
+        text: 'Czym różni się wiadomość do kolegi od wiadomości do nauczyciela?',
+        answer:
+          'do nauczyciela: powitanie, prośba pełnym zdaniem, podziękowanie i podpis; bez skrótów i emotek',
+      },
+    ],
+  );
 
   // ---------- Lekcje ----------
   const lesson1: Omit<Lesson, 'id' | 'order'> = {
@@ -559,15 +583,78 @@ Dopisz dwa własne wyrazy z tej rodziny i podkreśl w każdym wspólną cząstk�
   };
 
 
+  const lesson6: Omit<Lesson, 'id' | 'order'> = {
+    grade,
+    title: 'Powtórka 1-3: Zapis rozmowy - dialog i czat',
+    topic: 'Zapis rozmowy',
+    progress: {},
+    dzial: DZIAL,
+    questionSetId: set6.set.id,
+    reviewQuestionSetId: set6.set.id,
+    registerTopic:
+      'Powtórzenie wiadomości z klas 1-3: zapis dialogu, znaki na końcu zdania i kultura pisania wiadomości',
+    curriculum: ['II.3.5', 'III.2.1', 'IV.2'],
+    slides: [
+      slideTitle('Powtórka klas 1-3', 'Zapis rozmowy - w zeszycie i na ekranie'),
+      slideTopic('Zapis rozmowy: dialog i czat'),
+      // Kolo na start: zestaw lekcji 5 (alfabet i slownictwo) w trybie powtorzeniowym.
+      slideRecap(set5.set.id, 'powtorzeniowe'),
+      slideText('Ta sama rozmowa, dwa zapisy', `Na czacie rozmowa sama układa się w **dymki** - widać, kto mówi, bo każdy ma swoją stronę ekranu.
+
+W zeszycie dymków nie ma, więc kto mówi, pokazuje **układ tekstu**:
+
+- każda wypowiedź od **nowej linii**
+- na początku **myślnik**`, 'czat'),
+      slideTask('Z1', undefined, `Przepisz tę rozmowę do zeszytu tak, jak zapisuje się dialog: każda wypowiedź od nowej linii, z myślnikiem i znakiem na końcu.
+
+„Ola pisze: masz zadanie z polskiego. Kuba odpowiada: mam, ale zostawiłem zeszyt w szkole. Ola pyta: to co teraz zrobisz. Kuba pisze: poproszę o kartkę."
+
+Wzór pierwszej linijki: **- Masz zadanie z polskiego?**`, undefined, 300, 'dialog', true),
+      slideText('Emotka to nie znak zdania', `Na końcu zdania zawsze stoi **kropka, pytajnik albo wykrzyknik** - to one mówią, po co piszesz.
+
+- pytam - **?**
+- zwykła wiadomość - **.**
+- krzyczę, cieszę się, ostrzegam - **!**
+
+Emotka może dołożyć nastrój, ale **nie zastępuje** znaku ani wielkiej litery na początku.`, 'znakiInterpunkcyjne'),
+      slideTask('Z2', undefined, `Przepisz wiadomości do zeszytu poprawnie: wielka litera na początku i właściwy znak na końcu. Obok każdej dopisz, co to za zdanie: **pytanie**, **oznajmienie** czy **rozkaz**.
+
+1. kiedy jest sprawdzian
+2. już jestem pod szkołą
+3. zadzwoń do mnie po obiedzie
+4. ale super mecz
+5. nie zapomnij stroju`, undefined, 300, 'przeksztalcanieZdan', true),
+      slideText('Wiadomość do dorosłego', `Do kolegi piszesz krótko i luźno. Do **nauczyciela, trenera, bibliotekarki** wiadomość ma cztery części:
+
+**powitanie - prośba - podziękowanie - podpis**
+
+Wielkie litery w całym wyrazie znaczą w internecie **krzyk**, więc ich nie używamy. Podpisujemy się imieniem i klasą, bo adres nic nie mówi.`, 'wiadomosc'),
+      slideTask('Z3', undefined, `Uczeń wysłał do nauczycielki wiadomość: „ZAPOMNIALEM ZESZYTU CO TERAZ???"
+
+Napisz ją w zeszycie jeszcze raz, tak jak pisze się do dorosłego. Muszą się w niej znaleźć wszystkie cztery części: powitanie, prośba pełnym zdaniem, podziękowanie i podpis.`, undefined, 300, 'wiadomosc', true),
+      slideText('Zapamiętaj', `- dialog w zeszycie: **nowa linia + myślnik** przy każdej wypowiedzi
+- na końcu zdania **. ? !** - emotka nigdy tego nie zastąpi
+- do dorosłego: **powitanie, prośba, podziękowanie, podpis**`, 'czat'),
+      slideNote(
+        'Notatka do zeszytu',
+        `- Dialog: każda wypowiedź od nowej linii, z myślnikiem.
+- Na końcu zdania kropka, pytajnik albo wykrzyknik. Emotka nie jest znakiem zdania.
+- Wiadomość do dorosłego: powitanie, prośba, podziękowanie, podpis.`,
+      ),
+    ],
+  };
+
+
   return {
-    lessons: [lesson1, lesson2, lesson3, lesson4, lesson5],
-    questionSets: [set1.set, set2.set, set3.set, set4.set, set5.set],
+    lessons: [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6],
+    questionSets: [set1.set, set2.set, set3.set, set4.set, set5.set, set6.set],
     questions: [
       ...set1.questions,
       ...set2.questions,
       ...set3.questions,
       ...set4.questions,
       ...set5.questions,
+      ...set6.questions,
     ],
   };
 }

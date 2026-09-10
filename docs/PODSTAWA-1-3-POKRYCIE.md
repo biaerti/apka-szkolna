@@ -24,11 +24,13 @@ Kody `P.*` służą tylko do sprawdzenia, czy nic z klas 1-3 nie wypadło.
 | P.4 | pisanie | a-f |
 | P.5 | świadomość językowa | a-f |
 
-## Co pokrywa obecnych pięć lekcji
+## Co pokrywa obecnych sześć lekcji
 
 Powtórka została we wrześniu 2026 skrócona z 12 do 5 lekcji: lekcje 4-12 były
 chaotyczne (za dużo tematów naraz) i zostały zastąpione dwiema nowymi,
-węższymi. Stara treść jest w historii gita (commit ac36793).
+węższymi. Stara treść jest w historii gita (commit ac36793). Później doszła
+lekcja 6 o zapisie rozmowy - dialog zestawiony z czatem i wiadomością na
+ekranie, bo dzieci piszą dziś najwięcej właśnie tam.
 
 | Lekcja | Kody I etapu |
 |---|---|
@@ -37,9 +39,10 @@ węższymi. Stara treść jest w historii gita (commit ac36793).
 | 3. Formy wypowiedzi i czytanie | P.3.g, P.3.h, P.4.a (opis, zaproszenie) |
 | 4. Zmiękczenia oraz ą i ę | P.4.b, P.4.c |
 | 5. Alfabet, słownik i rodzina wyrazów | P.4.c (porządek alfabetyczny), P.5.e (częściowo) |
+| 6. Zapis rozmowy: dialog i czat | P.4.a (dialog), P.5.c (rodzaje zdań i znaki), P.2.g, P.4.f |
 
-Wniosek: pięć lekcji CELOWO domyka tylko **kształcenie językowe, ortografię
-i słownictwo** (P.5 i P.4.b-c) - to fundament, bez którego nie da się ruszyć
+Wniosek: sześć lekcji CELOWO domyka tylko **kształcenie językowe, ortografię,
+słownictwo i zapis rozmowy** (P.5 i P.4.a-c) - to fundament, bez którego nie da się ruszyć
 z materiałem klasy 4. Reszta podstawy I etapu (praca z tekstem, tworzenie
 dłuższych form) nie dostaje osobnych powtórek - wraca naturalnie przy
 normalnych lekcjach klasy 4, przy pierwszych tekstach i pierwszych
@@ -63,12 +66,12 @@ wypracowaniach.
 
 | Kod | Treść | Gdzie dopiąć |
 |---|---|---|
-| P.4.b | **sprawdza i poprawia napisany tekst** | zadanie domykające w lekcji 6 |
+| P.4.b | **sprawdza i poprawia napisany tekst** | Z2 i Z3 lekcji 6 (poprawianie cudzej wiadomości) - można dołożyć w kolejnych |
 | P.2.e | **recytuje wiersze, wygłasza z pamięci krótkie teksty prozatorskie** | lekcja 3 (wiersz i proza) |
-| P.2.c | wypowiada się płynnie i wyraziście: **pauzy, intonacja, tempo, siła głosu** | lekcja 3 albo dialog w lekcji 6 |
-| P.2.d | **nadaje tytuł obrazkom i fragmentom tekstu** | lekcja 6, przy temacie tekstu |
-| P.2.f | **ustne sprawozdanie** z wykonanej pracy | lekcja 6 |
-| P.1.c | **słucha tekstów czytanych i wypowiada się na ich temat** | jest tylko w Z1 lekcji 6 - warto powtórzyć w kilku |
+| P.2.c | wypowiada się płynnie i wyraziście: **pauzy, intonacja, tempo, siła głosu** | lekcja 3 albo czytanie dialogu z lekcji 6 na głos |
+| P.2.d | **nadaje tytuł obrazkom i fragmentom tekstu** | brak - szło razem z tematem tekstu, którego powtórka nie ma |
+| P.2.f | **ustne sprawozdanie** z wykonanej pracy | brak - na osobny typ lekcji |
+| P.1.c | **słucha tekstów czytanych i wypowiada się na ich temat** | brak w powtórce - wraca przy czytankach z lektorem |
 | P.3.i | **czyta samodzielnie wybraną książkę** | osobny wątek, nie mieści się w powtórce |
 
 ## Co zostało
