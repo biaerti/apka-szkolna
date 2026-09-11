@@ -443,6 +443,7 @@ export interface TimetableEntry {
   id: ID;
   weekday: number; // 1 = poniedzialek ... 5 = piatek
   period: number; // LessonPeriod.no
-  classId: ID;
+  classId?: ID; // brak = komorka tylko z dopiskiem (np. "Jagoda ma lekcje")
   room?: string; // np. "31"
+  note?: string; // dopisek w komorce, np. "zamiana z Jagoda"
 }

@@ -1,9 +1,11 @@
-// Edycja jednej komorki planu "w miejscu": wybor klasy (albo "brak") i sala.
+// Edycja jednej komorki planu "w miejscu": wybor klasy (albo "brak"), sala
+// i dopisek. Dopisek dziala tez bez klasy - wtedy komorka to tylko notatka
+// ("Jagoda ma lekcje"), a nie lekcja nauczyciela.
 // Kazda zmiana (select, kazda litera w sali) zapisuje od razu - klik poza
 // edytor odmontowuje go, zanim input dostanie blur, wiec zapis "przy wyjsciu"
 // gubilby sale. Bez osobnego modala - nauczyciel klika komorke i wybiera.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { SchoolClass, TimetableEntry } from '../../data/types';
 import { Select } from '../ui/Select';
 import { Input } from '../ui/Input';
@@ -13,13 +15,14 @@ export interface TimetableCellEditorProps {
   classes: SchoolClass[];
   /** Sala podpowiadana dla nowej komorki (najczestsza w planie), moze byc pusta. */
   defaultRoom: string;
-  onSave: (classId: string, room: string) => void;
+  onSave: (classId: string, room: string, note: string) => void;
   onClose: () => void;
 }
 
 export function TimetableCellEditor({ entry, classes, defaultRoom, onSave, onClose }: TimetableCellEditorProps) {
   const [classId, setClassId] = useState(entry?.classId ?? '');
   const [room, setRoom] = useState(entry?.room ?? defaultRoom);
+  const [note, setNote] = useState(entry?.note ?? '');
   const rootRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
 
@@ -38,14 +41,25 @@ export function TimetableCellEditor({ entry, classes, defaultRoom, onSave, onClo
 
   function changeClass(next: string) {
     setClassId(next);
-    onSave(next, room);
-    if (!next) onClose();
+    onSave(next, room, note);
   }
 
   function changeRoom(next: string) {
     setRoom(next);
-    if (classId) onSave(classId, next);
+    if (classId) onSave(classId, next, note);
   }
+
+  function changeNote(next: string) {
+    setNote(next);
+    onSave(classId, room, next);
+  }
+
+  const closeOnEnter = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onClose();
+    }
+  };
 
   return (
     <div
@@ -70,15 +84,18 @@ export function TimetableCellEditor({ entry, classes, defaultRoom, onSave, onClo
       <Input
         value={room}
         onChange={(e) => changeRoom(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            onClose();
-          }
-        }}
+        onKeyDown={closeOnEnter}
         placeholder="sala"
         aria-label="Sala"
         disabled={!classId}
+        className="px-2 py-1 text-xs"
+      />
+      <Input
+        value={note}
+        onChange={(e) => changeNote(e.target.value)}
+        onKeyDown={closeOnEnter}
+        placeholder="dopisek"
+        aria-label="Dopisek"
         className="px-2 py-1 text-xs"
       />
     </div>

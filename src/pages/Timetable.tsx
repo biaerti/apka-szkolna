@@ -53,7 +53,7 @@ export function Timetable() {
         editing={editing}
         defaultRoom={defaultRoom}
         onEdit={setEditing}
-        onSave={(cell, classId, room) => setTimetableEntry({ ...cell, classId, room })}
+        onSave={(cell, classId, room, note) => setTimetableEntry({ ...cell, classId, room, note })}
       />
       <PeriodsEditor periods={periods} onChange={setPeriods} />
     </div>

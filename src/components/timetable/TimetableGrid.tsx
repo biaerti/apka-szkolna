@@ -1,6 +1,7 @@
 // Siatka planu: wiersze = godziny lekcyjne, kolumny = pon-pt. Komorka to chip
-// z nazwa klasy (kolor jak w kalendarzu) i sala; klik otwiera edytor w miejscu.
-// Dzisiejsza kolumna jest podswietlona, trwajaca lekcja - mocniej.
+// z nazwa klasy (kolor jak w kalendarzu), sala i opcjonalny dopisek; komorka
+// moze tez miec sam dopisek bez klasy ("Jagoda ma lekcje"). Klik otwiera
+// edytor w miejscu. Dzisiejsza kolumna jest podswietlona, trwajaca lekcja - mocniej.
 
 import clsx from 'clsx';
 import type { LessonPeriod, SchoolClass, TimetableEntry } from '../../data/types';
@@ -23,7 +24,7 @@ export interface TimetableGridProps {
   editing: EditingCell | null;
   defaultRoom: string;
   onEdit: (cell: EditingCell | null) => void;
-  onSave: (cell: EditingCell, classId: string, room: string) => void;
+  onSave: (cell: EditingCell, classId: string, room: string, note: string) => void;
 }
 
 export function TimetableGrid({ periods, timetable, classes, now, editing, defaultRoom, onEdit, onSave }: TimetableGridProps) {
@@ -72,7 +73,7 @@ export function TimetableGrid({ periods, timetable, classes, now, editing, defau
               </td>
               {WEEKDAYS.map((d) => {
                 const entry = entryAt(d, p.no);
-                const cls = entry ? classById.get(entry.classId) : undefined;
+                const cls = entry?.classId ? classById.get(entry.classId) : undefined;
                 const isEditing = editing?.weekday === d && editing.period === p.no;
                 const isCurrent = d === today && p.no === currentPeriodNo;
                 return (
@@ -89,29 +90,30 @@ export function TimetableGrid({ periods, timetable, classes, now, editing, defau
                         entry={entry}
                         classes={classes}
                         defaultRoom={defaultRoom}
-                        onSave={(classId, room) => onSave({ weekday: d, period: p.no }, classId, room)}
+                        onSave={(classId, room, note) => onSave({ weekday: d, period: p.no }, classId, room, note)}
                         onClose={() => onEdit(null)}
                       />
                     ) : (
                       <button
                         type="button"
                         onClick={() => onEdit({ weekday: d, period: p.no })}
-                        aria-label={`${WEEKDAY_SHORT[d]}, lekcja ${p.no}: ${cls ? cls.name : 'brak'}`}
+                        aria-label={`${WEEKDAY_SHORT[d]}, lekcja ${p.no}: ${cls ? cls.name : entry?.note ?? 'brak'}`}
                         className={clsx(
-                          'flex h-10 w-full items-center gap-1.5 rounded-md px-1.5 text-left transition-colors hover:bg-gray-100',
+                          'flex min-h-[2.5rem] w-full flex-col justify-center gap-0.5 rounded-md px-1.5 py-1 text-left transition-colors hover:bg-gray-100',
                           isCurrent && 'ring-2 ring-accent-500',
                         )}
                       >
                         {cls ? (
-                          <>
+                          <span className="flex items-center gap-1.5">
                             <span className={`rounded border px-1.5 py-0.5 text-xs font-medium ${classBadgeClasses(cls.order)}`}>
                               {cls.name}
                             </span>
                             {entry?.room && <span className="text-xs text-gray-500">s. {entry.room}</span>}
-                          </>
+                          </span>
                         ) : (
-                          <span className="text-xs text-gray-300">-</span>
+                          !entry?.note && <span className="text-xs text-gray-300">-</span>
                         )}
+                        {entry?.note && <span className="truncate text-xs text-gray-500">{entry.note}</span>}
                       </button>
                     )}
                   </td>

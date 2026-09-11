@@ -97,9 +97,13 @@ export function formatRemaining(sec: number): string {
   return `${s} s`;
 }
 
-/** Wpisy planu z danego dnia, posortowane po numerze godziny. */
+/**
+ * Lekcje z danego dnia (wpisy z klasa), posortowane po numerze godziny.
+ * Komorki z samym dopiskiem (np. "Jagoda ma lekcje") pomijamy - to nie sa
+ * lekcje nauczyciela, pulpit i zegar maja ich nie liczyc.
+ */
 export function entriesForDay(timetable: TimetableEntry[], weekday: number): TimetableEntry[] {
-  return timetable.filter((e) => e.weekday === weekday).sort((a, b) => a.period - b.period);
+  return timetable.filter((e) => e.weekday === weekday && e.classId).sort((a, b) => a.period - b.period);
 }
 
 /** Wpis planu trwajacej wlasnie lekcji (wg dzwonkow), albo undefined. */
@@ -108,7 +112,7 @@ export function currentEntry(timetable: TimetableEntry[], periods: LessonPeriod[
   if (status.kind !== 'lesson') return undefined;
   const weekday = weekdayOf(now);
   if (weekday === 0) return undefined;
-  return timetable.find((e) => e.weekday === weekday && e.period === status.period.no);
+  return timetable.find((e) => e.weekday === weekday && e.period === status.period.no && e.classId);
 }
 
 /**

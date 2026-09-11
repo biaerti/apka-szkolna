@@ -96,12 +96,19 @@ const TT: TimetableEntry[] = [
   { id: 'a', weekday: 1, period: 2, classId: 'c2' },
   { id: 'b', weekday: 1, period: 1, classId: 'c1', room: '31' },
   { id: 'c', weekday: 2, period: 1, classId: 'c3' },
+  // Sam dopisek, bez klasy - to nie lekcja nauczyciela.
+  { id: 'd', weekday: 1, period: 3, note: 'Jagoda ma lekcję' },
 ];
 
 describe('entriesForDay / currentEntry / currentOrNextEntry', () => {
   it('wpisy dnia posortowane po godzinie', () => {
     expect(entriesForDay(TT, 1).map((e) => e.id)).toEqual(['b', 'a']);
     expect(entriesForDay(TT, 3)).toEqual([]);
+  });
+  it('komorka z samym dopiskiem nie jest lekcja', () => {
+    expect(entriesForDay(TT, 1).map((e) => e.id)).not.toContain('d');
+    expect(currentEntry(TT, PERIODS, at(9, 50))).toBeUndefined();
+    expect(currentOrNextEntry(TT, PERIODS, at(8, 47))?.id).toBe('a');
   });
   it('biezacy wpis wg dzwonkow', () => {
     expect(currentEntry(TT, PERIODS, at(8, 10))?.id).toBe('b');

@@ -29,14 +29,29 @@ export interface TimetableEntryRow {
   id: string;
   weekday: number;
   period: number;
-  class_id: string;
+  class_id: string | null;
   room: string | null;
+  note: string | null;
 }
 
 export function timetableEntryToRow(e: TimetableEntry): TimetableEntryRow {
-  return { id: e.id, weekday: e.weekday, period: e.period, class_id: e.classId, room: e.room ?? null };
+  return {
+    id: e.id,
+    weekday: e.weekday,
+    period: e.period,
+    class_id: e.classId ?? null,
+    room: e.room ?? null,
+    note: e.note ?? null,
+  };
 }
 
 export function rowToTimetableEntry(row: TimetableEntryRow): TimetableEntry {
-  return { id: row.id, weekday: row.weekday, period: row.period, classId: row.class_id, room: row.room ?? undefined };
+  return {
+    id: row.id,
+    weekday: row.weekday,
+    period: row.period,
+    classId: row.class_id ?? undefined,
+    room: row.room ?? undefined,
+    note: row.note ?? undefined,
+  };
 }

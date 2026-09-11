@@ -52,7 +52,7 @@ export function TodayTimetableBar() {
     <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">
       <span className="font-medium text-gray-500">Dziś:</span>
       {entries.map((e, i) => {
-        const cls = classById.get(e.classId);
+        const cls = e.classId ? classById.get(e.classId) : undefined;
         const isHighlighted = highlighted?.id === e.id;
         return (
           <span key={e.id} className="flex items-center gap-2">

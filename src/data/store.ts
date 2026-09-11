@@ -490,16 +490,19 @@ export const useStore = create<AppState>()(
       setPeriods: (list) => {
         set(() => ({ periods: [...list].sort((a, b) => a.no - b.no) }));
       },
-      setTimetableEntry: ({ weekday, period, classId, room }) => {
+      setTimetableEntry: ({ weekday, period, classId, room, note }) => {
         set((s) => {
           const rest = s.timetable.filter((e) => !(e.weekday === weekday && e.period === period));
-          if (!classId) return { timetable: rest };
+          const trimmedNote = note?.trim() || undefined;
+          // Komorka bez klasy i bez dopisku to pusta komorka - nie trzymamy wpisu.
+          if (!classId && !trimmedNote) return { timetable: rest };
           const entry: TimetableEntry = {
             id: timetableCellId(weekday, period),
             weekday,
             period,
-            classId,
-            room: room && room.trim() !== '' ? room.trim() : undefined,
+            classId: classId || undefined,
+            room: classId && room && room.trim() !== '' ? room.trim() : undefined,
+            note: trimmedNote,
           };
           return { timetable: [...rest, entry] };
         });

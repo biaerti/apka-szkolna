@@ -301,4 +301,11 @@ describe('timetable entries round-trip', () => {
     expect(row.room).toBeNull();
     expect(rowToTimetableEntry(row)).toEqual(e);
   });
+  it('sam dopisek bez klasy (class_id null)', () => {
+    const e: TimetableEntry = { id: 't3', weekday: 3, period: 4, note: 'Jagoda ma lekcję' };
+    const row = timetableEntryToRow(e);
+    expect(row.class_id).toBeNull();
+    expect(row.note).toBe('Jagoda ma lekcję');
+    expect(rowToTimetableEntry(row)).toEqual(e);
+  });
 });
