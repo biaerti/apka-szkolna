@@ -203,12 +203,18 @@ describe('settings round-trip', () => {
       plombyForOne: 3,
       reviewQuestionCount: 7,
       slideFontPercent: 110,
+      readingPlans: {
+        IV: [{ id: 'nowa-narracyjna-17', autor: 'Michael Ende', tytul: 'Momo' }],
+        V: [{ id: 'wlasna-1', tytul: 'Własny tytuł', wlasna: true, przeczytana: true }],
+      },
     };
     const row = settingsToRow(settings);
     expect(row.id).toBe('default');
     expect(row.pluses_for_five).toBe(3);
     expect(row.plomby_for_one).toBe(3);
     expect(row.review_question_count).toBe(7);
+    expect(row.reading_plans?.IV).toHaveLength(1);
+    expect(row.reading_plans?.V?.[0].przeczytana).toBe(true);
     expect(rowToSettings(row)).toEqual(settings);
   });
 

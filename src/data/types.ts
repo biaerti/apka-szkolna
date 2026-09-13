@@ -368,6 +368,11 @@ export interface ReadingPlanItem {
   tytul: string;
   /** Wlasne = tytul dopisany przez nauczyciela, spoza katalogu w podstawie. */
   wlasna?: boolean;
+  /**
+   * Czy klasa juz przeczytala ten tytul. Przy klasie V pozwala zachowac
+   * historie calego cyklu IV-VI, bez mylenia samego wyboru z realizacja.
+   */
+  przeczytana?: boolean;
 }
 
 /**
