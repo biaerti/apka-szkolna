@@ -9,6 +9,8 @@
 // pozycja na liscie.
 
 import type { Lesson } from '../data/types';
+import { lessonProgress } from './grade';
+import { lessonMaterialType } from './lessonMaterial';
 
 const ROMAN: Record<string, number> = {
   I: 1,
@@ -70,4 +72,26 @@ export function backfillLessonCodes(lessons: Lesson[]): Array<{ id: string; code
     }
   }
   return out;
+}
+
+/**
+ * Kod widoczny dla konkretnej klasy. Lekcje podrecznikowe zaczynaja sie po
+ * tylu powtorkach, ile ta klasa faktycznie ukonczyla, dlatego IV A i IV C moga
+ * w tym samym temacie zobaczyc inny numer. Pozycja tematu w podreczniku dodaje
+ * kolejne numery, a zmiana statusu powtorki od razu przelicza wynik.
+ */
+export function classLessonCode(lessons: Lesson[], lesson: Lesson, classId: string): string | undefined {
+  if (lessonMaterialType(lesson) !== 'textbook') return lesson.code;
+
+  const gradeLessons = lessons.filter((item) => item.grade === lesson.grade);
+  const completedReviews = gradeLessons.filter(
+    (item) => lessonMaterialType(item) === 'review' && lessonProgress(item, classId).status === 'done',
+  ).length;
+  const textbookLessons = gradeLessons
+    .filter((item) => lessonMaterialType(item) === 'textbook')
+    .sort((a, b) => a.order - b.order);
+  const textbookIndex = textbookLessons.findIndex((item) => item.id === lesson.id);
+
+  if (textbookIndex < 0) return lesson.code;
+  return `${gradeNumber(lesson.grade)}.${completedReviews + textbookIndex + 1}`;
 }

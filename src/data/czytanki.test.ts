@@ -19,4 +19,10 @@ describe('czytanki', () => {
     ]);
     expect(grupy.flatMap((g) => g.czytanki)).toEqual(CZYTANKI);
   });
+
+  it('trzyma cala czytanke z lekcji 1-2 w jednym nagraniu', () => {
+    const pierwsza = CZYTANKI.filter((c) => c.lekcja === '1-2');
+    expect(pierwsza).toHaveLength(1);
+    expect(pierwsza[0]).toMatchObject({ id: 'moje-lato-z-szablozebnym', pages: '12-14' });
+  });
 });

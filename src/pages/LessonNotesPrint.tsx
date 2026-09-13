@@ -1,18 +1,19 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { Button } from '../components/ui/Button';
+import { classLessonCode } from '../lib/lessonCode';
 
-function NoteSheet({ title, code, textbookPage, exercisePage, note }: { title: string; code?: string; textbookPage?: number; exercisePage?: number; note?: string }) {
+function NoteSheet({ title, code, textbookPage, note }: { title: string; code?: string; textbookPage?: number; note?: string }) {
   return (
     <article className="box-border flex h-[148.5mm] flex-col overflow-hidden border-b border-dashed border-gray-400 p-[10mm] last:border-b-0">
       <header className="mb-5 border-b-2 border-gray-900 pb-3">
         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-500">Język polski {code ? `- lekcja ${code}` : ''}</p>
         <h1 className="mt-1 text-xl font-bold leading-tight">{title}</h1>
         <p className="mt-1 text-xs text-gray-600">
-          {textbookPage ? `Podręcznik s. ${textbookPage}` : ''}{exercisePage ? ` - ćwiczenia s. ${exercisePage}` : ''}
+          {textbookPage ? `Podręcznik s. ${textbookPage}` : ''}
         </p>
       </header>
-      <div className="whitespace-pre-wrap text-[13px] leading-7 text-gray-900">{note || 'Miejsce na notatkę z lekcji.'}</div>
+      <div className="whitespace-pre-wrap text-[12px] leading-[1.55] text-gray-900">{note || 'Miejsce na notatkę z lekcji.'}</div>
     </article>
   );
 }
@@ -21,6 +22,7 @@ export function LessonNotesPrint() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const wanted = (params.get('ids') ?? '').split(',').filter(Boolean).slice(0, 2);
+  const classId = params.get('klasa') ?? '';
   const lessons = useStore((state) => state.lessons);
   const selected = wanted.map((id) => lessons.find((lesson) => lesson.id === id)).filter(Boolean);
 
@@ -38,7 +40,7 @@ export function LessonNotesPrint() {
       </div>
       {selected.length === 2 ? (
         <div className="lesson-notes-page mx-auto h-[297mm] w-[210mm] bg-white shadow-lg print:shadow-none">
-          {selected.map((lesson) => lesson && <NoteSheet key={lesson.id} title={lesson.title} code={lesson.code} textbookPage={lesson.textbookPage} exercisePage={lesson.exercisePage} note={lesson.notebookNote} />)}
+          {selected.map((lesson) => lesson && <NoteSheet key={lesson.id} title={lesson.title} code={classId ? classLessonCode(lessons, lesson, classId) : lesson.code} textbookPage={lesson.textbookPage} note={lesson.notebookNote} />)}
         </div>
       ) : (
         <p className="mx-auto max-w-xl rounded-lg bg-white p-6 text-center text-sm text-gray-600">Wróć do listy lekcji i zaznacz dokładnie dwa tematy.</p>

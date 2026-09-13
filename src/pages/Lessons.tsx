@@ -26,7 +26,7 @@ import { useReadyMaterials } from '../components/lessons/useReadyMaterials';
 import { duplicateSlide } from '../components/lessons/slideDefaults';
 import { newId } from '../data/id';
 import { useLessonDrag } from '../components/lessons/useLessonDrag';
-import { backfillLessonCodes } from '../lib/lessonCode';
+import { backfillLessonCodes, classLessonCode } from '../lib/lessonCode';
 import { lessonMaterialType } from '../lib/lessonMaterial';
 import { MaterialTabs } from '../components/lessons/MaterialTabs';
 
@@ -221,7 +221,7 @@ export function Lessons() {
         {visibleLessons.length > 0 && materialType === 'textbook' ? (
           <div className="mb-4 flex items-center gap-2">
             <span className="text-xs text-gray-500">Zaznacz 2 notatki A5</span>
-            <Button size="sm" variant="secondary" disabled={printLessonIds.length !== 2} onClick={() => navigate(`/lekcje/notatki/druk?ids=${printLessonIds.join(',')}`)}>
+            <Button size="sm" variant="secondary" disabled={printLessonIds.length !== 2} onClick={() => navigate(`/lekcje/notatki/druk?ids=${printLessonIds.join(',')}&klasa=${classId}`)}>
               Drukuj notatki ({printLessonIds.length}/2)
             </Button>
           </div>
@@ -292,6 +292,7 @@ export function Lessons() {
                   index={idx}
                   total={visibleLessons.length}
                   questionCount={questionCountFor(lesson)}
+                  displayCode={classLessonCode(lessons, lesson, classId)}
                   dropIndicator={drag.indicatorFor(idx, lesson.id)}
                   onDragStart={() => drag.start(lesson.id)}
                   onDragOver={(position) => drag.over(idx, position)}

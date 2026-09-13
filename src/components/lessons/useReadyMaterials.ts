@@ -14,7 +14,8 @@ import type { Lesson, Question, QuestionSet } from '../../data/types';
 import { buildRecap13 } from '../../data/recap13';
 import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson } from '../../data/intro';
-import { buildTextbook4, TEXTBOOK4_TOPIC_COUNT } from '../../data/textbook4';
+import { buildTextbook4, RETIRED_TEXTBOOK4_TITLES, TEXTBOOK4_TOPIC_COUNT } from '../../data/textbook4';
+import { lessonMaterialType } from '../../lib/lessonMaterial';
 import {
   classifyMatch,
   isMatchStale,
@@ -51,7 +52,7 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
   {
     key: 'textbook4',
     label: 'Podręcznik klasy 4 - tematy z rozdziału I',
-    description: `Doda ${TEXTBOOK4_TOPIC_COUNT} tematów z podręcznika (lekcje 1-16 bez 12-14), ze stronami, notatką A5 i pytaniami do koła o zagadnienia i teksty lekcji.`,
+    description: `Doda ${TEXTBOOK4_TOPIC_COUNT} pierwszych tematów jako pełne prezentacje: praca z podręcznikiem, zadania do zeszytu, notatka A5 i pytania do koła.`,
     build: buildTextbook4,
   },
   {
@@ -96,6 +97,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
   const questions = useStore((s) => s.questions);
   const manuallyEditedLessonIds = useStore((s) => s.manuallyEditedLessonIds);
   const addLesson = useStore((s) => s.addLesson);
+  const removeLesson = useStore((s) => s.removeLesson);
   const updateLesson = useStore((s) => s.updateLesson);
   const clearManualEdit = useStore((s) => s.clearManualEdit);
   const addQuestionSet = useStore((s) => s.addQuestionSet);
@@ -327,7 +329,17 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
       clearManualEdit(match.oldLesson.id);
     }
 
-    if (toRefresh.length > 0) cleanupOrphanQuestionSets(beforeQuestionSetIds);
+    if (toRefresh.length > 0) {
+      // Pierwszy pakiet podrecznikowy zawieral dalsze, jeszcze nieopracowane
+      // tematy. Przy przejsciu na piec dopracowanych prezentacji usuwamy tylko
+      // te dokladnie znane pozycje - wlasne lekcje nauczyciela zostaja.
+      for (const lesson of gradeLessons) {
+        if (lessonMaterialType(lesson) === 'textbook' && RETIRED_TEXTBOOK4_TITLES.has(lesson.title)) {
+          removeLesson(lesson.id);
+        }
+      }
+      cleanupOrphanQuestionSets(beforeQuestionSetIds);
+    }
   }
 
   /**

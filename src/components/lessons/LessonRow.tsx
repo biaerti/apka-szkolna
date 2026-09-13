@@ -15,7 +15,6 @@ import { TD } from '../ui/Table';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { resolveRecapMode } from '../../lib/recap';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
-import { gwoExercisesUrl, gwoTextbookUrl } from '../../lib/gwo';
 
 export interface LessonRowProps {
   lesson: Lesson;
@@ -24,6 +23,7 @@ export interface LessonRowProps {
   index: number;
   total: number;
   questionCount: number | null; // null = lekcja nie ma zestawu pytan
+  displayCode?: string;
   dropIndicator: 'above' | 'below' | null;
   onDragStart: () => void;
   onDragOver: (position: 'above' | 'below') => void;
@@ -140,7 +140,7 @@ export function LessonRow(p: LessonRowProps) {
         </button>}
       </TD>
       {/* Kod lekcji ("4.3") - ten sam, ktory dzieci maja w zeszytach. */}
-      <TD className="!px-1 whitespace-nowrap tabular-nums text-gray-500">{lesson.code ?? index + 1}</TD>
+      <TD className="!px-1 whitespace-nowrap tabular-nums text-gray-500">{p.displayCode ?? lesson.code ?? index + 1}</TD>
       <TD>
         <p className={clsx('truncate font-medium', isSkipped ? 'text-gray-500 line-through' : 'text-gray-900')}>
           {lesson.title}
@@ -148,8 +148,7 @@ export function LessonRow(p: LessonRowProps) {
         <p className="mt-0.5 flex items-center gap-x-1.5 text-xs text-gray-500">
           {lesson.textbookPage && (
             <>
-              <a target="_blank" rel="noreferrer" href={gwoTextbookUrl()} title="Otwiera spis treści podręcznika" className="shrink-0 font-medium text-accent-700 hover:underline">Podręcznik s. {lesson.textbookPage}</a>
-              {lesson.exercisePage && <a target="_blank" rel="noreferrer" href={gwoExercisesUrl()} title="Otwiera spis treści ćwiczeń" className="shrink-0 text-accent-700 hover:underline">Ćwiczenia s. {lesson.exercisePage}</a>}
+              <span className="shrink-0 font-medium text-gray-600">Podręcznik s. {lesson.textbookPage}</span>
               <span aria-hidden="true">·</span>
             </>
           )}
@@ -233,11 +232,7 @@ export function LessonRow(p: LessonRowProps) {
       </TD>
       <TD className="whitespace-nowrap">
         <div className="flex items-center justify-end gap-1">
-          {isTextbook ? (
-            <a target="_blank" rel="noreferrer" href={gwoTextbookUrl()} title="Otwiera spis treści podręcznika" className="inline-flex h-8 items-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 hover:bg-gray-50">Otwórz</a>
-          ) : (
-            <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?${listQuery}`)}>Pokaż</Button>
-          )}
+          <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?${listQuery}`)}>Pokaż</Button>
           <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${lesson.id}/edytuj?${listQuery}`)}>
             Edytuj
           </Button>

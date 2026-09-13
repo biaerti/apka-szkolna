@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Lesson } from '../data/types';
-import { backfillLessonCodes, gradeNumber, nextLessonCode } from './lessonCode';
+import { backfillLessonCodes, classLessonCode, gradeNumber, nextLessonCode } from './lessonCode';
 
 function lesson(patch: Partial<Lesson>): Lesson {
   return { id: 'l1', grade: 'IV', title: 'Lekcja', order: 0, progress: {}, slides: [], ...patch };
@@ -52,5 +52,23 @@ describe('backfillLessonCodes', () => {
 
   it('nic nie zwraca, gdy wszystkie lekcje maja kody', () => {
     expect(backfillLessonCodes([lesson({ code: '4.1' })])).toEqual([]);
+  });
+});
+
+describe('classLessonCode', () => {
+  it('numeruje temat podrecznikowy po liczbie ukonczonych powtorek danej klasy', () => {
+    const lessons = [
+      lesson({ id: 'r1', order: 0, materialType: 'review', progress: { a: { status: 'done' }, c: { status: 'done' } } }),
+      lesson({ id: 'r2', order: 1, materialType: 'review', progress: { a: { status: 'done' }, c: { status: 'done' } } }),
+      lesson({ id: 'r3', order: 2, materialType: 'review', progress: { a: { status: 'done' }, c: { status: 'done' } } }),
+      lesson({ id: 'r4', order: 3, materialType: 'review', progress: { a: { status: 'done' }, c: { status: 'done' } } }),
+      lesson({ id: 'r5', order: 4, materialType: 'review', progress: { a: { status: 'planned' }, c: { status: 'done' } } }),
+      lesson({ id: 't1', order: 5, materialType: 'textbook', code: '4.8' }),
+      lesson({ id: 't2', order: 6, materialType: 'textbook', code: '4.9' }),
+    ];
+
+    expect(classLessonCode(lessons, lessons[5], 'a')).toBe('4.5');
+    expect(classLessonCode(lessons, lessons[5], 'c')).toBe('4.6');
+    expect(classLessonCode(lessons, lessons[6], 'a')).toBe('4.6');
   });
 });

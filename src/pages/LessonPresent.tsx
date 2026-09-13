@@ -19,6 +19,7 @@ import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
 import { classesOfGrade, lessonProgress, todayKey } from '../lib/grade';
 import { lessonMaterialType } from '../lib/lessonMaterial';
+import { classLessonCode } from '../lib/lessonCode';
 
 export function LessonPresent() {
   const { id, classId: classIdParam } = useParams<{ id: string; classId?: string }>();
@@ -37,8 +38,9 @@ export function LessonPresent() {
   const [classPanelOpen, setClassPanelOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+  const lessonCode = lesson && classId ? classLessonCode(lessons, lesson, classId) : lesson?.code;
   // Kolo na lekcji - stan na poziomie prezentacji, zeby przezyl zmiany slajdow.
-  const wheel = useTaskWheel({ classId: classId ?? '', lessonCode: lesson?.code });
+  const wheel = useTaskWheel({ classId: classId ?? '', lessonCode });
   // Decybelomierz - stan na poziomie prezentacji, zeby ladowanie kartkowki przezylo zmiany slajdow.
   const noise = useNoiseMeter();
 
@@ -170,7 +172,7 @@ export function LessonPresent() {
         <SlideView
           slide={slide}
           classId={classId}
-          lessonCode={lesson.code}
+          lessonCode={lessonCode}
           lessonTopic={lesson.registerTopic || lesson.title}
           onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
           overlay={<AnnotationLayer ann={ann} />}

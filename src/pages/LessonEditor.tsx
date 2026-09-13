@@ -13,6 +13,8 @@ import { CurriculumPicker } from '../components/lessons/CurriculumPicker';
 import { createSlide, duplicateSlide, type SlideKind } from '../components/lessons/slideDefaults';
 import type { Slide } from '../data/types';
 import { classesOfGrade } from '../lib/grade';
+import { classLessonCode } from '../lib/lessonCode';
+import { lessonMaterialType } from '../lib/lessonMaterial';
 
 export function LessonEditor() {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +31,7 @@ export function LessonEditor() {
   const lesson = lessons.find((l) => l.id === id);
   const classId = searchParams.get('klasa') ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
   const materialType = searchParams.get('typ') ?? lesson?.materialType ?? 'textbook';
+  const displayCode = lesson && classId ? classLessonCode(lessons, lesson, classId) : lesson?.code;
   const [selectedSlideId, setSelectedSlideId] = useState<string | null>(lesson?.slides[0]?.id ?? null);
 
   const selectedIndex = useMemo(
@@ -113,7 +116,7 @@ export function LessonEditor() {
               Lekcje
             </button>
             <span className="mx-1.5 text-gray-400">/</span>
-            {lesson.code && <span className="mr-2 font-semibold tabular-nums text-gray-500">{lesson.code}</span>}
+            {displayCode && <span className="mr-2 font-semibold tabular-nums text-gray-500">{displayCode}</span>}
             <span className="text-gray-700">{lesson.title || 'Nowa lekcja'}</span>
           </p>
           <Button onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?typ=${materialType}`)}>Pokaż</Button>
@@ -121,12 +124,14 @@ export function LessonEditor() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[7rem_1fr] lg:grid-cols-[7rem_1fr_1fr]">
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Kod</label>
-            {/* Kod trafia do zeszytow uczniow - zmieniaj tylko swiadomie. */}
+            {/* W materiale z podrecznika kod zalezy od postepu aktywnej klasy. */}
             <Input
-              value={lesson.code ?? ''}
+              value={displayCode ?? ''}
+              disabled={lessonMaterialType(lesson) === 'textbook'}
               onChange={(e) => updateLesson(lesson.id, { code: e.target.value.trim() || undefined })}
               placeholder="4.1"
             />
+            {lessonMaterialType(lesson) === 'textbook' && <p className="mt-1 text-xs text-gray-500">Numer wynika z ukończonych lekcji tej klasy.</p>}
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Tytuł</label>
@@ -253,7 +258,7 @@ export function LessonEditor() {
               <SlidePreview
                 slide={selectedSlide}
                 classId={classId ?? ''}
-                lessonCode={lesson.code}
+                lessonCode={displayCode}
                 lessonTopic={lesson.registerTopic || lesson.title}
               />
               <div className="rounded-lg border border-gray-200 bg-white p-4">
@@ -262,7 +267,7 @@ export function LessonEditor() {
                   onChange={updateSlide}
                   questionSets={questionSets}
                   lessonTopic={lesson.registerTopic || lesson.title}
-                  lessonCode={lesson.code}
+                  lessonCode={displayCode}
                 />
               </div>
             </div>

@@ -20,8 +20,7 @@ export type Czytanka = {
 };
 
 export const CZYTANKI: Czytanka[] = [
-  { id: 'moje-lato-z-szablozebnym', lekcja: '1-2', temat: 'Krok po kroku tworzymy pierwszą wspólną opowieść', title: 'Moje lato z szablozębnym', author: 'Weronika Kurosz', pages: '12-13' },
-  { id: 'moje-lato-zakonczenie', lekcja: '1-2', temat: 'Krok po kroku tworzymy pierwszą wspólną opowieść', title: 'Moje lato z szablozębnym - list i 9 września', author: 'Weronika Kurosz', pages: '14' },
+  { id: 'moje-lato-z-szablozebnym', lekcja: '1-2', temat: 'Krok po kroku tworzymy pierwszą wspólną opowieść', title: 'Moje lato z szablozębnym - całość', author: 'Weronika Kurosz', pages: '12-14' },
   { id: 'ja-rusinek', lekcja: '3', temat: 'Być sobą, czyli kim?', title: 'Ja', author: 'Michał Rusinek', pages: '16' },
   { id: 'notatka-kluczem-do-sukcesu', lekcja: '4', temat: 'Notatka kluczem do sukcesu', title: 'Każdy z nas ma niezwykłe narzędzie - to mózg', pages: '18' },
   { id: 'alfabet', lekcja: '5-6', temat: 'Sekrety wyrazów - głoski, litery i sylaby', title: 'Alfabet to zbiór liter', pages: '22' },
