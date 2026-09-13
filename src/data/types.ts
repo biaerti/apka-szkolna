@@ -262,7 +262,20 @@ export type Slide =
   // gdy trzeba, nauczyciel wlacza go kolkiem wprost na slajdzie (patrz
   // src/components/slides/TopicSlideView.tsx). Stare dane moga jeszcze miec to
   // pole w JSON-ie - jest po prostu ignorowane.
-  | { id: ID; kind: 'topic'; topic?: string; note?: string }
+  | {
+      id: ID;
+      kind: 'topic';
+      topic?: string;
+      note?: string;
+      /**
+       * `handout` otwiera lekcje rozdaniem gotowej karty A5 zamiast
+       * przepisywania tematu. Brak pola zachowuje dotychczasowy slajd do
+       * zapisania, wiec starsze lekcje dzialaja bez migracji.
+       */
+      variant?: 'write' | 'handout';
+      /** Krotkie cele lekcji bez zdradzania fabuly czytanki. */
+      goals?: string[];
+    }
   | {
       id: ID;
       kind: 'task';
@@ -281,8 +294,9 @@ export type Slide =
       // Ikonka "do zeszytu" - patrz komentarz przy slajdzie 'text'.
       zeszyt?: boolean;
     }
-  // Praca z tekstem: strona i czas na przeczytanie musza byc widoczne od razu,
-  // duzymi cyframi - uczen ma wiedziec CO czyta i ILE MA CZASU bez pytania.
+  // Praca z tekstem: strona i czas calego bloku podrecznikowego musza byc
+  // widoczne od razu, duzymi cyframi. To nie jest czas samego czytania - obejmuje
+  // tez rozmowe i wskazane zadania.
   | {
       id: ID;
       kind: 'read';
@@ -291,7 +305,7 @@ export type Slide =
       page?: number;
       pageTo?: number; // zakres stron: s. 124-126
       body?: string; // na co zwrocic uwage podczas czytania
-      timerSec?: number; // czas na przeczytanie
+      timerSec?: number; // czas na caly blok pracy z tekstem
     }
   // Notatka do zeszytu - zamyka lekcje ("zapisujecie notatkę i jesteście wolni").
   | { id: ID; kind: 'note'; title?: string; body: string }

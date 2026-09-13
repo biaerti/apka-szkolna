@@ -12,19 +12,23 @@ describe('buildTextbook4', () => {
     expect([...pages].sort((a, b) => a - b)).toEqual(pages);
   });
 
-  it('pierwsze piec tematow jest pelnymi prezentacjami bez odnosnikow do cwiczen', () => {
+  it('pierwsze piec tematow zaczyna karta A5 i nie ma slajdu do przepisywania notatki', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     expect(bundle.lessons).toHaveLength(5);
     for (const lesson of bundle.lessons) {
       expect(lesson.exercisePage).toBeUndefined();
-      expect(lesson.slides.some((slide) => slide.kind === 'topic')).toBe(true);
+      const opening = lesson.slides[0];
+      expect(opening).toMatchObject({ kind: 'topic', variant: 'handout' });
+      expect(opening.kind === 'topic' ? opening.goals : undefined).toHaveLength(3);
       expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
       expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(3);
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
-      expect(lesson.slides.some((slide) => slide.kind === 'note')).toBe(true);
+      expect(lesson.slides.some((slide) => slide.kind === 'note')).toBe(false);
+      expect(lesson.slides[lesson.slides.length - 1]).toMatchObject({ kind: 'text', title: 'Wracamy do karty A5', zeszyt: true });
+      expect(lesson.notebookNote?.match(/\{\{[^{}]+\}\}/g)).toHaveLength(3);
     }
     const firstRead = bundle.lessons[0].slides.find((slide) => slide.kind === 'read');
-    expect(firstRead).toMatchObject({ page: 12, pageTo: 15 });
+    expect(firstRead).toMatchObject({ page: 12, pageTo: 15, timerSec: 20 * 60 });
   });
 
   it('zadania mieszcza sie na slajdzie projektora', () => {

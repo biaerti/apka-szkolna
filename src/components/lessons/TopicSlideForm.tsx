@@ -8,6 +8,7 @@
 
 import type { Slide } from '../../data/types';
 import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { Textarea } from '../ui/Textarea';
 
 type TopicSlide = Extract<Slide, { kind: 'topic' }>;
@@ -25,12 +26,24 @@ export function TopicSlideForm({
 }) {
   return (
     <div className="space-y-3">
+      <div>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Początek lekcji</label>
+        <Select
+          value={slide.variant ?? 'write'}
+          onChange={(e) => onChange({ ...slide, variant: e.target.value as 'write' | 'handout' })}
+        >
+          <option value="write">Zapisujemy temat</option>
+          <option value="handout">Rozdajemy i wklejamy kartę A5</option>
+        </Select>
+      </div>
       <p className="text-sm text-gray-500">
         Kod lekcji na slajdzie: <span className="font-semibold text-gray-700">{lessonCode ?? '(brak)'}</span> - nadaje
         się sam i już się nie zmienia.
       </p>
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Temat do zapisania w zeszycie</label>
+        <label className="mb-1 block text-sm font-medium text-gray-700">
+          {slide.variant === 'handout' ? 'Temat widoczny na karcie i slajdzie' : 'Temat do zapisania w zeszycie'}
+        </label>
         <Textarea
           rows={3}
           value={slide.topic ?? ''}
@@ -41,6 +54,17 @@ export function TopicSlideForm({
           Puste pole = temat z lekcji: {lessonTopic || '(uzupełnij temat lekcji wyżej)'}
         </p>
       </div>
+      {slide.variant === 'handout' && (
+        <div>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Czego uczniowie się nauczą - jeden punkt w wierszu</label>
+          <Textarea
+            rows={4}
+            value={(slide.goals ?? []).join('\n')}
+            onChange={(e) => onChange({ ...slide, goals: e.target.value.split('\n').map((line) => line.trim()).filter(Boolean) })}
+            placeholder={'rozpoznawać...\nodróżniać...\nstosować...'}
+          />
+        </div>
+      )}
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-700">Polecenie na dole (opcjonalnie)</label>
         <Input

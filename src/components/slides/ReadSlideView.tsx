@@ -1,12 +1,22 @@
-// Slajd "Praca z tekstem" - strona i czas na przeczytanie sa glowna trescia,
-// widoczne od razu z ostatniej lawki, bez pytania. Rozmiary w pikselach kartki
-// 1280x720 ze SlideView (na rzutniku skaluja sie razem z nia).
+// Slajd "Praca z tekstem" - strona i czas calego bloku podrecznikowego sa
+// glowna trescia, widoczna od razu z ostatniej lawki. Blok obejmuje czytanie,
+// rozmowe i zadania, a nie tylko samo przeczytanie tekstu.
 
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { StopwatchBar } from './StopwatchBar';
 import { fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
+
+function TextbookIcon() {
+  return (
+    <svg viewBox="0 0 96 72" className="h-20 w-28 text-accent-300" aria-hidden="true">
+      <path d="M8 14c15-6 29-4 40 5v43c-11-8-25-10-40-4z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M88 14c-15-6-29-4-40 5v43c11-8 25-10 40-4z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M48 19v43M17 28h21M17 38h21M58 28h21M58 38h21" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export function ReadSlideView({ slide }: { slide: Extract<Slide, { kind: 'read' }> }) {
   const scale = useSlideFontScale();
@@ -34,7 +44,12 @@ export function ReadSlideView({ slide }: { slide: Extract<Slide, { kind: 'read' 
 
       {(slide.source || pageLabel) && (
         <div className="flex flex-col items-center gap-2">
-          {slide.source && <span className="text-4xl text-gray-300">{slide.source}</span>}
+          {slide.source && (
+            <span className="flex items-center gap-4 text-4xl font-semibold text-gray-200">
+              <TextbookIcon />
+              {slide.source}
+            </span>
+          )}
           {pageLabel && (
             <span className="text-[170px] font-bold leading-none text-accent-300">{pageLabel}</span>
           )}
@@ -51,7 +66,7 @@ export function ReadSlideView({ slide }: { slide: Extract<Slide, { kind: 'read' 
 
       {timerSec !== null && (
         <div className="mt-1 flex flex-col items-center gap-2">
-          <span className="text-3xl font-semibold text-gray-200">Czas na przeczytanie</span>
+          <span className="text-3xl font-semibold text-gray-200">Czas na pracę z podręcznikiem</span>
           <StopwatchBar key={slide.id} timerSec={timerSec} />
         </div>
       )}

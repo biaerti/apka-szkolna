@@ -1,4 +1,6 @@
-// Slajd "Temat lekcji" - to, co klasa zapisuje w zeszycie na poczatku lekcji.
+// Slajd otwierajacy lekcje. W zwyklym wariancie klasa zapisuje temat. Wariant
+// `handout` prowadzi rozdanie gotowej karty A5: temat jest juz na wydruku, a
+// dzieci tylko wklejaja material i widza trzy cele bez spoilerow z czytanki.
 // Jasne tlo w liniature (jak notatka) mowi bez slow: "to sie przepisuje".
 //
 // Stoper: DOMYSLNIE GO NIE MA. Zapisywanie tematu jednym klasom idzie szybko,
@@ -69,6 +71,51 @@ export function TopicSlideView({
   // Stoper startuje wylaczony przy kazdym wejsciu na slajd - patrz uwaga na gorze.
   const [timerMin, setTimerMin] = useState(0);
 
+  if (slide.variant === 'handout') {
+    return (
+      <div className="relative flex h-full flex-col overflow-hidden bg-amber-50 px-16 py-10 text-amber-950">
+        <div className="flex items-start justify-between gap-10">
+          <div className="min-w-0 flex-1">
+            <div className="mb-5 flex items-center gap-4 text-accent-700">
+              <ZeszytIcon className="h-14 w-14" />
+              <span className="text-3xl font-bold">Karta do wklejenia</span>
+            </div>
+            <h1 className="text-[68px] font-bold leading-[1.08] tracking-[-0.03em] text-amber-950">
+              {topic || 'Temat lekcji'}
+            </h1>
+          </div>
+          {code && (
+            <span className="shrink-0 rounded-2xl bg-accent-700 px-7 py-3 text-[64px] font-bold leading-none tabular-nums text-white">
+              {code}
+            </span>
+          )}
+        </div>
+
+        {slide.goals && slide.goals.length > 0 && (
+          <div className="mt-8 flex-1 rounded-2xl bg-white px-9 py-7 shadow-[0_12px_32px_rgba(120,53,15,0.10)]">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">Dzisiaj nauczysz się:</h2>
+            <ul className="space-y-3 text-[32px] leading-tight text-gray-800">
+              {slide.goals.map((goal) => (
+                <li key={goal} className="flex items-start gap-4">
+                  <svg viewBox="0 0 32 32" className="mt-1 h-8 w-8 shrink-0 text-accent-600" aria-hidden="true">
+                    <circle cx="16" cy="16" r="13" fill="currentColor" opacity="0.14" />
+                    <path d="m10 16 4 4 8-9" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>{goal}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-7 flex items-center justify-center gap-5 rounded-2xl bg-amber-200 px-8 py-5 text-center text-[30px] font-bold leading-tight text-amber-950">
+          <ZeszytIcon className="h-12 w-12 shrink-0 text-amber-700" />
+          <span>{slide.note?.trim() || 'Wklejamy karty A5 do zeszytu. Puste pola uzupełnimy pod koniec.'}</span>
+        </div>
+      </div>
+    );
+  }
+
   function cycleTimer() {
     const next = TIMER_MINUTES[(TIMER_MINUTES.indexOf(timerMin) + 1) % TIMER_MINUTES.length];
     setTimerMin(next);
@@ -76,11 +123,11 @@ export function TopicSlideView({
 
   return (
     <div
-      className="relative flex h-full flex-col bg-amber-50 px-16 py-10 text-gray-900"
+      className="relative flex h-full flex-col bg-amber-50 px-16 py-10 text-amber-950"
       style={RULED_LINES_STYLE}
     >
       <div className="flex items-center gap-6">
-        <span className="text-3xl font-semibold uppercase tracking-widest text-gray-500">Temat</span>
+        <span className="text-3xl font-semibold uppercase tracking-widest text-amber-800">Temat</span>
         {code && (
           <span className="rounded-2xl border-4 border-accent-500 px-7 py-2 text-[80px] font-bold leading-none tabular-nums text-accent-700">
             {code}
@@ -89,13 +136,13 @@ export function TopicSlideView({
       </div>
 
       <div className="flex flex-1 items-center">
-        <p className="font-bold leading-snug text-gray-900" style={{ fontSize: topicSize }}>
+        <p className="font-bold leading-snug text-amber-950" style={{ fontSize: topicSize }}>
           {topic || 'Temat lekcji'}
         </p>
       </div>
 
       {/* Ta sama ikonka co plakietka "do zeszytu" na ciemnych slajdach - jedna umowa. */}
-      <p className="flex items-center justify-center gap-3 text-center text-3xl font-semibold text-gray-500">
+      <p className="flex items-center justify-center gap-3 text-center text-3xl font-semibold text-amber-800">
         <ZeszytIcon className="h-10 w-10 text-amber-600" />
         {slide.note?.trim() || 'Zapiszcie temat z kodem i dzisiejszą datą w zeszycie'}
       </p>

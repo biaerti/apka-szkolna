@@ -21,6 +21,7 @@ export function slideSummary(slide: Slide): string {
     case 'title':
       return slide.title || '(bez tytułu)';
     case 'topic':
+      if (slide.variant === 'handout') return slide.topic ? `Karta A5: ${slide.topic}` : 'Karta A5 na początek';
       return slide.topic ? `Temat: ${slide.topic}` : 'Temat lekcji (z lekcji)';
     case 'text':
       return slide.title || slide.body.slice(0, 60) || '(pusty tekst)';

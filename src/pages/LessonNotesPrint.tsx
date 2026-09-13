@@ -42,8 +42,27 @@ function sectionsFromNote(note?: string): HandoutSection[] {
   return sections.length > 0 ? sections : [{ title: 'Notatka', blocks: [{ type: 'paragraph', inline: [{ type: 'text', text: 'Miejsce na notatkę z lekcji.' }] }] }];
 }
 
+function FillableText({ text }: { text: string }) {
+  return <>{text.split(/(\{\{[^{}]+\}\})/g).filter(Boolean).map((part, index) => {
+    const match = /^\{\{(.+)\}\}$/.exec(part);
+    if (!match) return <span key={index}>{part}</span>;
+    const answer = match[1];
+    const width = Math.min(18, Math.max(5, answer.length * 0.62));
+    return (
+      <span
+        key={index}
+        aria-label="puste miejsce do uzupełnienia"
+        className="mx-0.5 inline-block h-[1.05em] border-b-2 border-dotted align-baseline"
+        style={{ borderColor: '#64748b', width: `${width}em` }}
+      />
+    );
+  })}</>;
+}
+
 function InlineText({ nodes }: { nodes: MdInline[] }) {
-  return <>{nodes.map((node, index) => node.type === 'bold' ? <strong key={index}>{node.text}</strong> : <span key={index}>{node.text}</span>)}</>;
+  return <>{nodes.map((node, index) => node.type === 'bold'
+    ? <strong key={index}><FillableText text={node.text} /></strong>
+    : <FillableText key={index} text={node.text} />)}</>;
 }
 
 function NoteBlock({ block, color }: { block: MdBlock; color: string }) {
@@ -82,6 +101,7 @@ function NotebookMark({ accent }: { accent: string }) {
 function Handout({ title, code, textbookPage, note }: { title: string; code?: string; textbookPage?: number; note?: string }) {
   const sections = sectionsFromNote(note);
   const theme = (textbookPage && THEMES[textbookPage]) || { accent: '#4f46e5', pale: '#eef2ff' };
+  const blankCount = note?.match(/\{\{[^{}]+\}\}/g)?.length ?? 0;
 
   return (
     <article className="print-color box-border flex h-[210mm] w-[148.5mm] shrink-0 flex-col overflow-hidden border-r border-dashed border-slate-400 bg-[#fffdf8] px-[8mm] py-[7mm] last:border-r-0">
@@ -112,7 +132,7 @@ function Handout({ title, code, textbookPage, note }: { title: string; code?: st
       </div>
 
       <footer className="mt-[3mm] flex items-center justify-between border-t-2 pt-[1.8mm] text-[8px] font-bold uppercase" style={{ borderColor: theme.accent, color: theme.accent }}>
-        <span>Przeczytaj - zasłoń - powiedz z pamięci</span>
+        <span>{blankCount > 0 ? `Uzupełnij ${blankCount} pola - sprawdź - powiedz z pamięci` : 'Przeczytaj - zasłoń - powiedz z pamięci'}</span>
         <span>{code ?? ''}</span>
       </footer>
     </article>
