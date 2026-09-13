@@ -256,7 +256,7 @@ export function Lessons() {
               <TH>Lekcja</TH>
               <TH className="w-40">Data lekcji</TH>
               <TH className="w-32">Status</TH>
-              <TH className="w-52 text-right">
+              <TH className="w-64 text-right">
                 <span className="sr-only">Akcje</span>
               </TH>
             </TR>
