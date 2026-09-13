@@ -223,7 +223,7 @@ export function LessonRow(p: LessonRowProps) {
         <div className="flex items-center justify-end gap-1">
           {isTextbook && (
             <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/notatki/druk?id=${lesson.id}&klasa=${classId}&copies=50`)}>
-              Materiały A5
+              Notatka A5
             </Button>
           )}
           <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?${listQuery}`)}>Pokaż</Button>
