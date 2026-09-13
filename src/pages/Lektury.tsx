@@ -18,6 +18,12 @@ import {
 } from '../data/lektury';
 import { newId } from '../data/id';
 import { useStore } from '../data/store';
+import {
+  TEXTBOOK4_METADATA,
+  TEXTBOOK4_REQUIRED_TEXT_COVERAGE,
+  TEXTBOOK4_TOC,
+  type Textbook4RequiredTextCoverage,
+} from '../data/textbook4Toc';
 import type { ReadingPlanItem } from '../data/types';
 
 type Rocznik = 'IV' | 'V';
@@ -41,16 +47,70 @@ function OpisLektury({ lektura }: { lektura: Pick<Lektura, 'autor' | 'tytul'> })
   );
 }
 
-function ListaTekstowStalych({ lektury }: { lektury: Lektura[] }) {
+const COVERAGE_IV = new Map<string, Textbook4RequiredTextCoverage>(
+  TEXTBOOK4_REQUIRED_TEXT_COVERAGE.map((item) => [item.requirementId, item]),
+);
+
+function ListaTekstowStalych({ lektury, pokazPokrycie = false }: { lektury: Lektura[]; pokazPokrycie?: boolean }) {
   return (
-    <ul className="mt-3 space-y-2">
-      {lektury.map((lektura) => (
-        <li key={lektura.id} className="text-sm leading-6 text-gray-700">
-          {lektura.autor && <span className="text-gray-500">{lektura.autor}, </span>}
-          <span className="font-medium">{lektura.tytul}</span>
-        </li>
-      ))}
+    <ul className="mt-3 divide-y divide-gray-100">
+      {lektury.map((lektura) => {
+        const coverage = pokazPokrycie ? COVERAGE_IV.get(lektura.id) : undefined;
+        return (
+          <li key={lektura.id} className="py-3 text-sm leading-6 text-gray-700">
+            <div>
+              {lektura.autor && <span className="text-gray-500">{lektura.autor}, </span>}
+              <span className="font-medium">{lektura.tytul}</span>
+            </div>
+            {coverage && (
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className={clsx(
+                  'rounded-full px-2 py-0.5 text-xs font-semibold',
+                  coverage.status === 'jest'
+                    ? 'bg-emerald-100 text-emerald-800'
+                    : 'bg-amber-100 text-amber-900',
+                )}>
+                  {coverage.status === 'jest' ? 'Jest w podręczniku IV' : 'Nie ma w spisie tomu IV'}
+                </span>
+                <span className="text-xs leading-5 text-gray-500">{coverage.evidence}</span>
+              </div>
+            )}
+          </li>
+        );
+      })}
     </ul>
+  );
+}
+
+function SpisTresciPodrecznikaIV() {
+  return (
+    <details className="rounded-xl border border-gray-200 bg-white px-5 py-4">
+      <summary className="cursor-pointer font-semibold text-gray-900">Pełny spis treści podręcznika GWO - klasa IV</summary>
+      <p className="mt-3 text-sm leading-6 text-gray-600">
+        Program {TEXTBOOK4_METADATA.curriculum}, wydanie {TEXTBOOK4_METADATA.year}, ISBN {TEXTBOOK4_METADATA.isbn}.
+        Spis zapisany ze stron 3-8 podręcznika.
+      </p>
+      <div className="mt-4 divide-y divide-gray-200">
+        {TEXTBOOK4_TOC.map((chapter) => (
+          <section key={chapter.number} className="py-5 first:pt-0 last:pb-0">
+            <h3 className="font-semibold text-gray-900">Rozdział {chapter.number}. {chapter.title}</h3>
+            <p className="mt-0.5 text-sm text-gray-500">{chapter.subtitle}</p>
+            <ol className="mt-3 space-y-2">
+              {chapter.items.map((item) => (
+                <li key={`${chapter.number}-${item.lessons}`} className="grid grid-cols-[2.75rem_minmax(0,1fr)_2.5rem] gap-2 text-sm leading-5">
+                  <span className="font-medium tabular-nums text-accent-700">{item.lessons}</span>
+                  <span className="min-w-0 text-gray-700">
+                    <span className="font-medium">{item.title}</span>
+                    {item.texts?.map((tekst) => <span key={tekst} className="mt-0.5 block text-xs text-gray-500">{tekst}</span>)}
+                  </span>
+                  <span className="text-right tabular-nums text-gray-400">{item.page}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+    </details>
   );
 }
 
@@ -328,11 +388,16 @@ export function Lektury() {
           </summary>
           <p className="mt-3 text-sm leading-6 text-gray-600">
             {rocznik === 'IV'
-              ? 'Te teksty również trzeba uwzględnić w pracy z klasą. Nie wliczają się do minimum 4 dłuższych lektur.'
+              ? 'To wymagania całego etapu IV-VIII, a nie lista do wykonania w całości w klasie IV. Podręcznik GWO IV obejmuje legendy, baśnie i Mazurek Dąbrowskiego. Biblii, mitów greckich i Roty nie ma jako osobnych tematów w jego spisie treści.'
               : 'To wspólna pula do realizacji w klasach IV-VI. Nie wlicza się do minimum 2 lektur uzupełniających w roku.'}
           </p>
-          <ListaTekstowStalych lektury={rocznik === 'IV' ? LEKTURY_IV_2026_STALE_TEKSTY : LEKTURY_KROTKIE} />
+          <ListaTekstowStalych
+            lektury={rocznik === 'IV' ? LEKTURY_IV_2026_STALE_TEKSTY : LEKTURY_KROTKIE}
+            pokazPokrycie={rocznik === 'IV'}
+          />
         </details>
+
+        {rocznik === 'IV' && <SpisTresciPodrecznikaIV />}
 
         <details className="rounded-xl border border-gray-200 bg-white px-5 py-4">
           <summary className="cursor-pointer font-semibold text-gray-900">Co dokładnie mówi podstawa i źródło</summary>
