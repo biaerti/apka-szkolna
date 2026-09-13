@@ -11,7 +11,7 @@ Dwa stany:
   ostatnia minuta czerwona; na przerwie „przerwa 4 min"). Gdy leci stoper albo
   czytanka, pigułka pokazuje ich czas. Przeciągasz, żeby przesunąć; klikasz,
   żeby rozwinąć.
-- **panel** - okno 360x600 z trzema trybami przełączanymi w nagłówku:
+- **panel** - okno 390x600 z trzema trybami przełączanymi w nagłówku:
   - **Koło** - *Kręć*, nazwisko i dwie oceny: **✚ Dobrze** i **• Kropka**
     (klawisze `1` i `2`, `Spacja` kręci, `Backspace` cofa). Przycisk **Reset**
     kasuje skreślenia.

@@ -19,9 +19,10 @@
 // OBECNOSC (przycisk w naglowku) - lista klasy: klik = nieobecny, 💬 = uwaga do
 // dziennika. Nieobecni dzis nie trafiaja na zadne kolo.
 //
-// Klasa idzie SAMA z planu lekcji (zakladka "Plan"): trwajaca lekcja, a na
-// przerwie i przed lekcjami - najblizsza. Wybor recznie zostaje na zastepstwa;
-// wygrywa do nastepnej lekcji z planu. Pigulka pokazuje zegar i czas do dzwonka.
+// LEKCJA idzie SAMA z planu (zakladka "Plan"): trwajaca, a na przerwie i przed
+// lekcjami - najblizsza. W naglowku wybiera sie lekcje z dzisiejszego planu
+// ("2. IV B"), a klase bez lekcji tylko na zastepstwa; reczny wybor wygrywa do
+// nastepnej lekcji z planu. Pigulka pokazuje zegar i czas do dzwonka.
 //
 // Rozmiar okna idzie za tym, co jest na ekranie (patrz ROZMIARY): pigulka po
 // zwinieciu, wysokie okno pod kolo, niskie pod stoper, a srodkowy przycisk w
@@ -33,7 +34,7 @@ import { useStore } from '../data/store';
 import { isTauri, nasluchujZwiniecia, ustawRozmiarOkna, zamknijOkno } from '../lib/desktop';
 import { formatMmSs } from '../lib/timer';
 import { toDateKey } from '../lib/dates';
-import { currentOrNextEntry, formatRemaining, periodStatus } from '../lib/timetable';
+import { currentOrNextEntry, entriesForDay, formatRemaining, periodStatus, weekdayOf } from '../lib/timetable';
 import { useNow } from '../components/timetable/useNow';
 import { useCountdown } from '../components/slides/useCountdown';
 import { useTaskWheel } from '../components/lessons/useTaskWheel';
@@ -53,8 +54,10 @@ const ADNOTACJA = 'podręcznik';
 // i czas (srodkowy przycisk w naglowku).
 const PIGULKA = { width: 250, height: 44 };
 const ROZMIARY = {
-  kolo: { width: 360, height: 600 },
-  stoper: { width: 360, height: 300 },
+  // 390 px, bo w naglowku jest wybor lekcji ("2. IV B"), trzy tryby, Obecność i
+  // trzy przyciski okna - przy 360 px ✕ wypadal za prawa krawedz.
+  kolo: { width: 390, height: 600 },
+  stoper: { width: 390, height: 300 },
   stoperKompakt: { width: 300, height: 138 },
   czytanki: { width: 390, height: 560 },
 };
@@ -79,19 +82,41 @@ export function Panel() {
     if (classId) localStorage.setItem(KLUCZ_KLASY, classId);
   }, [classId]);
 
-  // Klasa z planu lekcji. Efekt odpala sie tylko przy ZMIANIE lekcji z planu
-  // (klucz: dzien + komorka), wiec reczny wybor w naglowku nie jest co sekunde
+  // Lekcja z planu. Efekt odpala sie tylko przy ZMIANIE lekcji z planu (klucz:
+  // dzien + komorka), wiec reczny wybor w naglowku nie jest co sekunde
   // nadpisywany - trzyma sie do nastepnego dzwonka.
   const timetable = useStore((s) => s.timetable);
   const periods = useStore((s) => s.periods);
   const now = useNow(1000);
   const lekcjaZPlanu = currentOrNextEntry(timetable, periods, now);
-  const kluczLekcji = lekcjaZPlanu ? `${toDateKey(now)}:${lekcjaZPlanu.id}` : '';
+  const dzisiaj = toDateKey(now);
+  const kluczLekcji = lekcjaZPlanu ? `${dzisiaj}:${lekcjaZPlanu.id}` : '';
+  // Wybrana komorka planu (dzien + id), albo null = sama klasa, bez lekcji.
+  const [wybranaLekcja, setWybranaLekcja] = useState<string | null>(null);
   useEffect(() => {
     const id = lekcjaZPlanu?.classId;
-    if (id && classes.some((c) => c.id === id)) setClassId(id);
+    if (id && classes.some((c) => c.id === id)) {
+      setClassId(id);
+      setWybranaLekcja(kluczLekcji);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kluczLekcji, classes.length]);
+
+  const lekcjeDzis = entriesForDay(timetable, weekdayOf(now));
+  const lekcja = lekcjeDzis.find((e) => `${dzisiaj}:${e.id}` === wybranaLekcja && e.classId === classId);
+
+  function wybierz(wartosc: string) {
+    const [rodzaj, id] = [wartosc.slice(0, 2), wartosc.slice(2)];
+    if (rodzaj === 'l:') {
+      const e = lekcjeDzis.find((x) => x.id === id);
+      if (!e?.classId) return;
+      setClassId(e.classId);
+      setWybranaLekcja(`${dzisiaj}:${e.id}`);
+    } else {
+      setClassId(id);
+      setWybranaLekcja(null);
+    }
+  }
 
   const [rozwiniety, setRozwiniety] = useState(true);
   const [tryb, setTryb] = useState<PanelTryb>('kolo');
@@ -242,8 +267,8 @@ export function Panel() {
   const nazwaKlasy = sortedClasses.find((c) => c.id === classId)?.name ?? '-';
   const status = periodStatus(periods, now);
   // "3. lekcja" tylko wtedy, gdy wybrana klasa to faktycznie ta z planu.
-  const podpisLekcji =
-    status.kind === 'lesson' && lekcjaZPlanu?.classId === classId ? `${lekcjaZPlanu.period}. lekcja` : null;
+  const podpisLekcji = lekcja ? `${lekcja.period}. lekcja` : null;
+  const nazwaPo = new Map(sortedClasses.map((c) => [c.id, c.name]));
 
   if (!rozwiniety) {
     return (
@@ -270,12 +295,14 @@ export function Panel() {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-gray-900 text-gray-200 shadow-2xl ring-1 ring-gray-700">
       <PanelNaglowek
-        classes={sortedClasses}
-        classId={classId}
-        onClassId={setClassId}
+        wybor={lekcja ? `l:${lekcja.id}` : `k:${classId}`}
+        lekcje={lekcjeDzis
+          .filter((e) => e.classId && nazwaPo.has(e.classId))
+          .map((e) => ({ value: `l:${e.id}`, label: `${e.period}. ${nazwaPo.get(e.classId as string)}` }))}
+        klasy={sortedClasses.map((c) => ({ value: `k:${c.id}`, label: c.name }))}
+        onWybor={wybierz}
         tryb={tryb}
         onTryb={setTryb}
-        podpisLekcji={podpisLekcji}
         obecnoscOtwarta={obecnoscOtwarta}
         onObecnosc={setObecnoscOtwarta}
         kompakt={kompakt}

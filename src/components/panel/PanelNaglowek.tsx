@@ -5,28 +5,35 @@
 // po ruchu myszy, klik zostaje klikiem).
 //
 // Klasa jest w <select>, a nie w zakladkach: przy czterech klasach zakladki
-// zjadaly polowe paska szerokiego na 360 px, a doszedl jeszcze przelacznik
-// trybu. Klase ustawia sam plan lekcji (Panel.tsx) - select jest na zastepstwa
-// i sytuacje spoza planu. Przycisk "Obecność" dotyczy wybranej klasy.
+// zjadaly polowe paska szerokiego na 390 px, a doszedl jeszcze przelacznik
+// trybu. Lekcje ustawia sam plan (Panel.tsx); w selekcie sa dzisiejsze lekcje
+// ("2. IV B"), a pod nimi klasy - na zastepstwa i sytuacje spoza planu.
+// Przycisk "Obecność" dotyczy wybranej klasy.
 //
 // W trybie KOMPAKT (stoper sciagniety do paska) zostaja WYLACZNIE trzy
 // przyciski okna. Klasa, tryb i obecnosc sa wtedy zbedne - kto chce ich uzyc,
 // najpierw powieksza panel, a kazdy dodatkowy element zjada miejsce, ktore ma
 // isc na czas widoczny z konca sali.
 
-import type { SchoolClass } from '../../data/types';
 import { useUchwytPrzeciagania } from './useUchwytPrzeciagania';
 
 export type PanelTryb = 'kolo' | 'stoper' | 'czytanki';
 
+export interface OpcjaWyboru {
+  value: string;
+  label: string;
+}
+
 export interface PanelNaglowekProps {
-  classes: SchoolClass[];
-  classId: string;
-  onClassId: (id: string) => void;
+  /** Wartosc selectu: "l:<id komorki planu>" albo "k:<id klasy>". */
+  wybor: string;
+  /** Dzisiejsze lekcje z planu, np. "2. IV B". */
+  lekcje: OpcjaWyboru[];
+  /** Wszystkie klasy - wybor bez lekcji (zastepstwo, poza planem). */
+  klasy: OpcjaWyboru[];
+  onWybor: (value: string) => void;
   tryb: PanelTryb;
   onTryb: (tryb: PanelTryb) => void;
-  /** "3. lekcja", gdy wybrana klasa ma teraz lekcje wg planu. */
-  podpisLekcji: string | null;
   obecnoscOtwarta: boolean;
   onObecnosc: (open: boolean) => void;
   /**
@@ -42,12 +49,12 @@ export interface PanelNaglowekProps {
 }
 
 export function PanelNaglowek({
-  classes,
-  classId,
-  onClassId,
+  wybor,
+  lekcje,
+  klasy,
+  onWybor,
   tryb,
   onTryb,
-  podpisLekcji,
   obecnoscOtwarta,
   onObecnosc,
   kompakt = false,
@@ -65,17 +72,28 @@ export function PanelNaglowek({
       {!kompakt && (
         <>
       <select
-        value={classId}
-        onChange={(e) => onClassId(e.target.value)}
-        aria-label="Klasa"
-        title={podpisLekcji ? `Z planu lekcji: ${podpisLekcji}` : 'Klasa (poza lekcją z planu)'}
-        className="shrink-0 rounded-md border border-gray-700 bg-gray-900 px-1.5 py-1 text-xs font-semibold text-gray-100"
+        value={wybor}
+        onChange={(e) => onWybor(e.target.value)}
+        aria-label="Lekcja"
+        title="Lekcja z dzisiejszego planu (albo klasa na zastępstwo)"
+        className="shrink-0 rounded-md border border-gray-700 bg-gray-900 px-1 py-1 text-xs font-semibold text-gray-100"
       >
-        {classes.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.name}
-          </option>
-        ))}
+        {lekcje.length > 0 && (
+          <optgroup label="Dziś">
+            {lekcje.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </optgroup>
+        )}
+        <optgroup label="Inna klasa">
+          {klasy.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </optgroup>
       </select>
 
       <div className="flex shrink-0 overflow-hidden rounded-md border border-gray-700">
@@ -118,7 +136,7 @@ export function PanelNaglowek({
           title={kompakt ? 'Powiększ panel' : 'Zmniejsz do samego czasu'}
           aria-label={kompakt ? 'Powiększ panel' : 'Zmniejsz panel'}
           aria-pressed={kompakt}
-          className="shrink-0 rounded-md px-1.5 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+          className="shrink-0 rounded-md px-1 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
         >
           ▭
         </button>
@@ -128,7 +146,7 @@ export function PanelNaglowek({
         onClick={onZwin}
         title="Zwiń do pigułki (Esc)"
         aria-label="Zwiń do pigułki"
-        className="shrink-0 rounded-md px-1.5 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+        className="shrink-0 rounded-md px-1 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
       >
         −
       </button>
@@ -138,7 +156,7 @@ export function PanelNaglowek({
           onClick={onZamknij}
           title="Zamknij panel"
           aria-label="Zamknij panel"
-          className="shrink-0 rounded-md px-1.5 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+          className="shrink-0 rounded-md px-1 py-1 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
         >
           ✕
         </button>
