@@ -48,6 +48,10 @@ export function LessonRow(p: LessonRowProps) {
   const dragFromHandle = useRef(false);
   const registerTopic = lesson.registerTopic || lesson.title;
   const curriculum = lesson.curriculum ?? [];
+  // Temat do dziennika rowny tytulowi (bez numeru z podrecznika) nic nie wnosi
+  // w wierszu - zostaje w oknie z menu "wiecej".
+  const bezNumeru = (t: string) => t.replace(/^[\d-]+\.\s*/, '');
+  const pokazDziennik = curriculum.length > 0 || bezNumeru(registerTopic) !== bezNumeru(lesson.title);
   // Lekcja zapoznawcza: jej kolo to tryb 'demo' (patrz resolveRecapMode) - nie
   // ma z czego robic powtorki na ocene.
   const isIntroLesson = lesson.slides.some((s) => s.kind === 'recap' && resolveRecapMode(s) === 'demo');
@@ -185,18 +189,22 @@ export function LessonRow(p: LessonRowProps) {
               )}
             </>
           )}
-          <span aria-hidden="true">·</span>
           {/* Skrot do dziennika: podglad w wierszu, a pelny temat i kody (do
               zaznaczenia i skopiowania) w oknie z menu "wiecej". */}
-          <button
-            type="button"
-            onClick={p.onShowRegister}
-            title="Pokaż temat do dziennika i kody podstawy programowej"
-            className="min-w-0 flex-1 truncate text-left hover:text-accent-700 hover:underline"
-          >
-            Dziennik: {registerTopic}
-            {curriculum.length > 0 ? ` (${curriculum.join(', ')})` : ''}
-          </button>
+          {pokazDziennik && (
+            <>
+              <span aria-hidden="true">·</span>
+              <button
+                type="button"
+                onClick={p.onShowRegister}
+                title="Pokaż temat do dziennika i kody podstawy programowej"
+                className="min-w-0 flex-1 truncate text-left hover:text-accent-700 hover:underline"
+              >
+                Dziennik: {registerTopic}
+                {curriculum.length > 0 ? ` (${curriculum.join(', ')})` : ''}
+              </button>
+            </>
+          )}
         </p>
       </TD>
       <TD className="whitespace-nowrap">

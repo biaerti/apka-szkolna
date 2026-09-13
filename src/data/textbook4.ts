@@ -261,7 +261,8 @@ export function buildTextbook4(grade: string, classIds: string[]): FreshMaterial
     return {
       grade,
       title: topic.title,
-      registerTopic: topic.title,
+      // W dzienniku sam temat, bez numeru lekcji z podrecznika.
+      registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''),
       materialType: 'textbook',
       textbookPage: topic.textbookPage,
       exercisePage: topic.exercisePage,
