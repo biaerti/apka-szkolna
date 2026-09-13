@@ -6,6 +6,7 @@
 // Widoczne na ekranie przelaczniki pozwalaja wydrukowac tylko jedna z tych stron.
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { RULE_SECTIONS } from '../data/zasady';
 import { Button } from '../components/ui/Button';
 import { WheelDiagram } from '../components/print/WheelDiagram';
@@ -63,7 +64,12 @@ export function RulesPrint() {
     <div className="min-h-screen bg-gray-100 py-8 print:min-h-0 print:bg-white print:py-0">
       <div className="no-print mx-auto mb-6 flex max-w-[210mm] flex-col gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-gray-700">Co się wydrukuje</p>
+          <div>
+            <Link to="/dokumenty" className="text-sm text-accent-700 hover:underline">
+              Dokumenty
+            </Link>
+            <p className="text-sm font-medium text-gray-700">Co się wydrukuje</p>
+          </div>
           <Button onClick={() => window.print()} disabled={nothingSelected}>
             Drukuj
           </Button>

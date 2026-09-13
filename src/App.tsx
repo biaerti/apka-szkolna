@@ -21,7 +21,10 @@ import { Podstawa } from './pages/Podstawa';
 import { Lektury } from './pages/Lektury';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
 import { RulesPrint } from './pages/RulesPrint';
+import { Dokumenty } from './pages/Dokumenty';
+import { DocPrint } from './pages/DocPrint';
 import { Panel } from './pages/Panel';
+import { LessonNotesPrint } from './pages/LessonNotesPrint';
 
 export default function App() {
   return (
@@ -36,6 +39,9 @@ export default function App() {
       <Route path="/panel" element={<Panel />} />
       {/* Wydruk zasad - bez paska bocznego, wlasny uklad A4 */}
       <Route path="/zasady/druk" element={<RulesPrint />} />
+      {/* PSO, plan rozwoju itp. - tresc w src/data/dokumenty.ts */}
+      <Route path="/dokumenty/:slug" element={<DocPrint />} />
+      <Route path="/lekcje/notatki/druk" element={<LessonNotesPrint />} />
 
       <Route element={<AppShell />}>
         <Route path="/" element={<Dashboard />} />
@@ -51,6 +57,7 @@ export default function App() {
         <Route path="/plan" element={<Timetable />} />
         <Route path="/zebrania" element={<Meetings />} />
         <Route path="/zebrania/:id" element={<MeetingDetail />} />
+        <Route path="/dokumenty" element={<Dokumenty />} />
         <Route path="/podstawa" element={<Podstawa />} />
         <Route path="/lektury" element={<Lektury />} />
         <Route path="/ustawienia" element={<SettingsPage />} />

@@ -15,6 +15,8 @@ import { CzytankiFab } from '../czytanki/CzytankiFab';
 // "Uwagi" to kalendarz tygodnia z uwagami do przepisania do dziennika: uwaga wpisana
 // w trakcie lekcji jest przypominajka, a po lekcjach trzeba ja zobaczyc ulozona po
 // dniach, a nie rozsypana po uczniach (patrz src/pages/Uwagi.tsx).
+// "Dokumenty" to lista wydrukow: zasady lekcji dla dzieci, PSO dla rodzicow,
+// plan rozwoju dla dyrektora - jedna zakladka zamiast osobnej na kazdy papier.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/klasy', label: 'Klasy' },
@@ -23,7 +25,7 @@ const NAV_ITEMS = [
   { to: '/kartkowki', label: 'Kartkówki' },
   { to: '/plan', label: 'Plan' },
   { to: '/zebrania', label: 'Zebrania' },
-  { to: '/zasady/druk', label: 'Zasady' },
+  { to: '/dokumenty', label: 'Dokumenty' },
   { to: '/podstawa', label: 'Podstawa programowa' },
   { to: '/lektury', label: 'Lektury' },
   { to: '/ustawienia', label: 'Ustawienia' },
