@@ -24,8 +24,6 @@ export interface RecapSessionProps {
   onExit?: () => void;
   /** true gdy osadzone w prezentacji - bez wlasnego przycisku fullscreen. */
   embedded?: boolean;
-  /** Lista id nieobecnych uczniow (przekazana ze strony wyboru). Domyslnie: wszyscy obecni. */
-  absentIds?: string[];
   /** Domyslny sposob wyboru ucznia, gdy brak parametrow w query string. */
   initialPickMode?: PickMode;
   /** Domyslnie: czy sesja ocenia odpowiedzi, gdy brak parametrow w query string. */
@@ -53,7 +51,6 @@ export function RecapSession({
   setId,
   onExit,
   embedded,
-  absentIds,
   initialPickMode,
   initialGrading,
   initialRandomQuestions,
@@ -112,7 +109,6 @@ export function RecapSession({
   const session = useRecapSession({
     classId,
     setId,
-    absentIds,
     initialPickMode: resolvedPickMode,
     initialGrading: resolvedGrading,
     initialRandomOrder: resolvedRandomOrder,

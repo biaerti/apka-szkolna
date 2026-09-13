@@ -6,8 +6,9 @@
 // otwieranie modala po to, zeby dopisac pol zdania, byloby droga przez meke.
 
 import { useEffect, useRef, useState } from 'react';
+import { useStore } from '../../data/store';
 import type { RecapEvent, SchoolClass, Student } from '../../data/types';
-import { uwagaLabel, uwagaTime } from '../../lib/uwagi';
+import { uwagaLabel, uwagaLekcja, uwagaTime } from '../../lib/uwagi';
 
 export interface UwagaCardProps {
   event: RecapEvent;
@@ -22,6 +23,8 @@ export function UwagaCard({ event, student, schoolClass, onNote, onWpisane, onRe
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(event.note ?? '');
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const periods = useStore((s) => s.periods);
+  const lekcja = uwagaLekcja(event, periods);
 
   useEffect(() => {
     if (editing) inputRef.current?.focus();
@@ -57,7 +60,9 @@ export function UwagaCard({ event, student, schoolClass, onNote, onWpisane, onRe
             {student ? `${student.lastName} ${student.firstName}` : 'Uczeń usunięty'}
           </div>
           <div className="text-xs text-gray-500">
-            {schoolClass?.name ?? ''} <span className="tabular-nums text-gray-400">{uwagaTime(event)}</span>
+            {schoolClass?.name ?? ''}
+            {lekcja !== undefined && <span className="text-gray-600"> · {lekcja}. lekcja</span>}{' '}
+            <span className="tabular-nums text-gray-400">{uwagaTime(event)}</span>
           </div>
 
           {editing ? (

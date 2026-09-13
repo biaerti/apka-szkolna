@@ -1,24 +1,24 @@
 // Tryb KOLO plywajacego panelu: kolo, przycisk Krec, ramka z nazwiskiem i dwie
-// oceny (plus / kropka). Naglowek (klasa, tryb, uwagi, zwin) jest wspolny dla
+// oceny (plus / kropka). Naglowek (klasa, tryb, obecnosc, zwin) jest wspolny dla
 // obu trybow i siedzi w PanelNaglowek - tu jest samo cialo panelu.
 //
 // Uklad jest siostra TaskWheelDrawer (szuflada w prezentacji) - te same zasady
 // kola na lekcji i ta sama kolejnosc elementow - ale scisniety do okna ~360 px.
 
-import { useState } from 'react';
 import { resultSymbol } from '../../lib/resultSymbol';
 import { Wheel } from '../recap/Wheel';
-import { TaskWheelAttendance } from '../lessons/TaskWheelAttendance';
 import type { TaskWheelState } from '../lessons/useTaskWheel';
 
 export interface PanelWheelProps {
   wheel: TaskWheelState;
   /** Adnotacja zapisywana przy plusie/kropce (np. "podrecznik"). */
   adnotacja: string;
+  /** Otwiera liste obecnosci (ta sama, co przycisk w naglowku). */
+  onObecnosc: () => void;
 }
 
-export function PanelWheel({ wheel, adnotacja }: PanelWheelProps) {
-  const [obecnoscOtwarta, setObecnoscOtwarta] = useState(false);
+export function PanelWheel({ wheel, adnotacja, onObecnosc }: PanelWheelProps) {
+  const nieobecni = wheel.classStudents.filter((st) => wheel.absentSet.has(st.id)).length;
 
   const student = wheel.currentStudent;
   const ocenaZablokowana = !student || wheel.graded;
@@ -131,26 +131,13 @@ export function PanelWheel({ wheel, adnotacja }: PanelWheelProps) {
             </button>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => setObecnoscOtwarta((v) => !v)}
-          aria-expanded={obecnoscOtwarta}
-          className="rounded-md bg-gray-800 px-2 py-1 hover:bg-gray-700"
-        >
-          Obecność {obecnoscOtwarta ? '▴' : '▾'}
-        </button>
+        {/* Sama obecnosc jest w naglowku - tu tylko informacja, ze kogos nie ma na kole. */}
+        {nieobecni > 0 && (
+          <button type="button" onClick={onObecnosc} className="rounded-md px-2 py-1 hover:bg-gray-800 hover:text-gray-200">
+            nieobecni: {nieobecni}
+          </button>
+        )}
       </div>
-
-      {obecnoscOtwarta && (
-        <div className="max-h-[45%] shrink-0 overflow-y-auto border-t border-gray-800 px-3 py-2">
-          <TaskWheelAttendance
-            students={wheel.classStudents}
-            absentSet={wheel.absentSet}
-            usedFor={wheel.usedFor}
-            onTogglePresent={wheel.togglePresent}
-          />
-        </div>
-      )}
     </>
   );
 }

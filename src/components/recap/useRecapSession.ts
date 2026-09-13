@@ -20,7 +20,6 @@ export type { PickMode };
 export interface UseRecapSessionArgs {
   classId: string;
   setId: string;
-  absentIds?: string[];
   /** Sposob wyboru ucznia: kolo fortuny albo po kolei wg numeru z dziennika. */
   initialPickMode?: PickMode;
   /** Czy sesja ocenia odpowiedzi. Domyslnie true. */
@@ -42,7 +41,6 @@ export interface UseRecapSessionArgs {
 export function useRecapSession({
   classId,
   setId,
-  absentIds = [],
   initialPickMode = 'wheel',
   initialGrading = true,
   initialRandomOrder = false,
@@ -66,7 +64,7 @@ export function useRecapSession({
   // losowalo kogos, kto przed chwila odpowiadal przy podreczniku.
   useTodayEventsPull();
 
-  const attendance = useAttendance(classStudents, classId, absentIds);
+  const attendance = useAttendance(classStudents, classId);
 
   // Pamiec "kto juz dzis odpowiadal" jest wspolna dla calej klasy i calego dnia
   // (patrz usePool) - kolo powtorzeniowe, kolo na lekcji i plywajacy panel nie

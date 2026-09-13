@@ -16,6 +16,13 @@
 // przelaczenie trybu ani zwiniecie panelu do pigulki nie moze gubic losowania
 // ani przerywac stopera.
 //
+// OBECNOSC (przycisk w naglowku) - lista klasy: klik = nieobecny, 💬 = uwaga do
+// dziennika. Nieobecni dzis nie trafiaja na zadne kolo.
+//
+// Klasa idzie SAMA z planu lekcji (zakladka "Plan"): trwajaca lekcja, a na
+// przerwie i przed lekcjami - najblizsza. Wybor recznie zostaje na zastepstwa;
+// wygrywa do nastepnej lekcji z planu. Pigulka pokazuje zegar i czas do dzwonka.
+//
 // Rozmiar okna idzie za tym, co jest na ekranie (patrz ROZMIARY): pigulka po
 // zwinieciu, wysokie okno pod kolo, niskie pod stoper, a srodkowy przycisk w
 // naglowku scisga stoper do samego polecenia i czasu. W przegladarce (dev)
@@ -25,11 +32,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from '../data/store';
 import { isTauri, nasluchujZwiniecia, ustawRozmiarOkna, zamknijOkno } from '../lib/desktop';
 import { formatMmSs } from '../lib/timer';
+import { toDateKey } from '../lib/dates';
+import { currentOrNextEntry, formatRemaining, periodStatus } from '../lib/timetable';
+import { useNow } from '../components/timetable/useNow';
 import { useCountdown } from '../components/slides/useCountdown';
 import { useTaskWheel } from '../components/lessons/useTaskWheel';
 import { PanelNaglowek, type PanelTryb } from '../components/panel/PanelNaglowek';
 import { PanelStoper } from '../components/panel/PanelStoper';
-import { PanelUwagi } from '../components/panel/PanelUwagi';
+import { PanelObecnosc } from '../components/panel/PanelObecnosc';
 import { PanelWheel } from '../components/panel/PanelWheel';
 import { useUchwytPrzeciagania } from '../components/panel/useUchwytPrzeciagania';
 import { PanelCzytanki } from '../components/panel/PanelCzytanki';
@@ -41,7 +51,7 @@ const ADNOTACJA = 'podręcznik';
 // Rozmiary okna. Stoper dostaje wlasna wysokosc, bo w oknie kola zostawal pod
 // czasem wielki pusty prostokat; KOMPAKT to jeszcze mniej - samo polecenie
 // i czas (srodkowy przycisk w naglowku).
-const PIGULKA = { width: 208, height: 44 };
+const PIGULKA = { width: 250, height: 44 };
 const ROZMIARY = {
   kolo: { width: 360, height: 600 },
   stoper: { width: 360, height: 300 },
@@ -69,12 +79,26 @@ export function Panel() {
     if (classId) localStorage.setItem(KLUCZ_KLASY, classId);
   }, [classId]);
 
+  // Klasa z planu lekcji. Efekt odpala sie tylko przy ZMIANIE lekcji z planu
+  // (klucz: dzien + komorka), wiec reczny wybor w naglowku nie jest co sekunde
+  // nadpisywany - trzyma sie do nastepnego dzwonka.
+  const timetable = useStore((s) => s.timetable);
+  const periods = useStore((s) => s.periods);
+  const now = useNow(1000);
+  const lekcjaZPlanu = currentOrNextEntry(timetable, periods, now);
+  const kluczLekcji = lekcjaZPlanu ? `${toDateKey(now)}:${lekcjaZPlanu.id}` : '';
+  useEffect(() => {
+    const id = lekcjaZPlanu?.classId;
+    if (id && classes.some((c) => c.id === id)) setClassId(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kluczLekcji, classes.length]);
+
   const [rozwiniety, setRozwiniety] = useState(true);
   const [tryb, setTryb] = useState<PanelTryb>('kolo');
   const [kompakt, setKompakt] = useState(false);
-  // Stan listy uwag siedzi TU, a nie w komponencie trybu, bo Esc ma najpierw
+  // Stan listy obecnosci siedzi TU, a nie w komponencie trybu, bo Esc ma najpierw
   // zamykac liste, a klawisze (spacja/1/2) nie moga dzialac na to, co pod nia.
-  const [uwagiOtwarte, setUwagiOtwarte] = useState(false);
+  const [obecnoscOtwarta, setObecnoscOtwarta] = useState(false);
 
   // Pamiec "kto juz dzis byl losowany" jest wspolna z apka webowa: panel czyta
   // te same zdarzenia z dzisiaj dla tej klasy, wiec kto odpowiadal na kole
@@ -144,11 +168,11 @@ export function Panel() {
       // Pole polecenia w stoperze - spacja ma tam pisac, a nie startowac.
       if (e.target instanceof HTMLInputElement) return;
       if (e.key === 'Escape') {
-        if (uwagiOtwarte) setUwagiOtwarte(false);
+        if (obecnoscOtwarta) setObecnoscOtwarta(false);
         else setRozwiniety(false);
         return;
       }
-      if (!rozwiniety || uwagiOtwarte) return;
+      if (!rozwiniety || obecnoscOtwarta) return;
 
       // Ctrl+Z = cofnij, w obu trybach i tak samo jak wszedzie indziej w apce.
       if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
@@ -193,7 +217,7 @@ export function Panel() {
     },
     [
       rozwiniety,
-      uwagiOtwarte,
+      obecnoscOtwarta,
       tryb,
       czytankaToggle,
       czytankaSeekBy,
@@ -216,6 +240,10 @@ export function Panel() {
   }, [onKey]);
 
   const nazwaKlasy = sortedClasses.find((c) => c.id === classId)?.name ?? '-';
+  const status = periodStatus(periods, now);
+  // "3. lekcja" tylko wtedy, gdy wybrana klasa to faktycznie ta z planu.
+  const podpisLekcji =
+    status.kind === 'lesson' && lekcjaZPlanu?.classId === classId ? `${lekcjaZPlanu.period}. lekcja` : null;
 
   if (!rozwiniety) {
     return (
@@ -226,6 +254,14 @@ export function Panel() {
         stoper={stoper.running || stoper.finished ? formatMmSs(stoper.remainingSec) : null}
         koniecCzasu={stoper.finished}
         czytanka={czytanka.playing ? formatCzasu(czytanka.duration - czytanka.currentTime) : null}
+        zegar={`${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`}
+        dzwonek={
+          status.kind === 'lesson'
+            ? { tekst: formatRemaining(status.remainingSec), sec: status.remainingSec }
+            : status.kind === 'break'
+              ? { tekst: `przerwa ${formatRemaining(status.remainingSec)}`, sec: null }
+              : null
+        }
         onRozwin={() => setRozwiniety(true)}
       />
     );
@@ -239,12 +275,13 @@ export function Panel() {
         onClassId={setClassId}
         tryb={tryb}
         onTryb={setTryb}
-        uwagiOtwarte={uwagiOtwarte}
-        onUwagi={setUwagiOtwarte}
+        podpisLekcji={podpisLekcji}
+        obecnoscOtwarta={obecnoscOtwarta}
+        onObecnosc={setObecnoscOtwarta}
         kompakt={kompakt}
         onKompakt={tryb === 'stoper' ? setKompakt : undefined}
         onZwin={() => {
-          setUwagiOtwarte(false);
+          setObecnoscOtwarta(false);
           setRozwiniety(false);
         }}
         onZamknij={isTauri() ? () => void zamknijOkno() : undefined}
@@ -252,7 +289,7 @@ export function Panel() {
 
       <div className="relative flex min-h-0 flex-1 flex-col">
         {tryb === 'kolo' ? (
-          <PanelWheel wheel={wheel} adnotacja={ADNOTACJA} />
+          <PanelWheel wheel={wheel} adnotacja={ADNOTACJA} onObecnosc={() => setObecnoscOtwarta(true)} />
         ) : tryb === 'stoper' ? (
           <PanelStoper
             polecenie={polecenie}
@@ -271,8 +308,15 @@ export function Panel() {
           <PanelCzytanki player={czytanka} />
         )}
 
-        {uwagiOtwarte && (
-          <PanelUwagi classId={classId} students={wheel.classStudents} onZamknij={() => setUwagiOtwarte(false)} />
+        {obecnoscOtwarta && (
+          <PanelObecnosc
+            classId={classId}
+            podpis={podpisLekcji ? `${nazwaKlasy} · ${podpisLekcji}` : nazwaKlasy}
+            students={wheel.classStudents}
+            absentSet={wheel.absentSet}
+            onTogglePresent={wheel.togglePresent}
+            onZamknij={() => setObecnoscOtwarta(false)}
+          />
         )}
       </div>
     </div>
@@ -284,6 +328,8 @@ function Pigulka({
   stoper,
   koniecCzasu,
   czytanka,
+  zegar,
+  dzwonek,
   onRozwin,
 }: {
   nazwaKlasy: string;
@@ -291,6 +337,10 @@ function Pigulka({
   koniecCzasu: boolean;
   /** Pozostaly czas grajacej czytanki - pigulka pokazuje, ze lektor czyta. */
   czytanka: string | null;
+  /** Aktualna godzina "10:42". */
+  zegar: string;
+  /** Do dzwonka wg planu: na lekcji "23 min" (z sekundami do kolorow), na przerwie opis; poza planem null. */
+  dzwonek: { tekst: string; sec: number | null } | null;
   onRozwin: () => void;
 }) {
   const uchwyt = useUchwytPrzeciagania(onRozwin);
@@ -315,7 +365,22 @@ function Pigulka({
         ) : czytanka ? (
           <span className="ml-auto text-sm tabular-nums text-accent-300">🔊 {czytanka}</span>
         ) : (
-          <span className="ml-auto text-xs text-gray-400">koło</span>
+          <span className="ml-auto flex items-baseline gap-2 tabular-nums">
+            <span className="text-xs text-gray-400">{zegar}</span>
+            {dzwonek && (
+              <span
+                className={
+                  dzwonek.sec === null
+                    ? 'text-xs text-gray-400'
+                    : `text-sm font-semibold ${
+                        dzwonek.sec <= 60 ? 'text-red-400' : dzwonek.sec <= 5 * 60 ? 'text-amber-300' : 'text-gray-100'
+                      }`
+                }
+              >
+                {dzwonek.tekst}
+              </span>
+            )}
+          </span>
         )}
       </div>
     </div>

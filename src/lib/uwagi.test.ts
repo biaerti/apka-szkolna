@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { RecapEvent } from '../data/types';
-import { doWpisania, uwagaLabel, uwagaTime, uwagiByDay } from './uwagi';
+import { doWpisania, uwagaLabel, uwagaLekcja, uwagaTime, uwagiByDay } from './uwagi';
 
 function ev(partial: Partial<RecapEvent> & { at: string }): RecapEvent {
   return {
@@ -74,5 +74,24 @@ describe('uwagaLabel', () => {
   it('domyslna tresc, gdy nauczyciel nic nie wpisal', () => {
     expect(uwagaLabel(ev({ at: '2026-09-07T08:00:00.000Z' }))).toBe('Przeszkadza na lekcji');
     expect(uwagaLabel(ev({ at: '2026-09-07T08:00:00.000Z', note: '   ' }))).toBe('Przeszkadza na lekcji');
+  });
+});
+
+describe('uwagaLekcja', () => {
+  const periods = [
+    { no: 1, start: '8:00', end: '8:45' },
+    { no: 2, start: '8:55', end: '9:40' },
+  ];
+  const o = (h: number, m: number) => ev({ at: new Date(2026, 8, 7, h, m).toISOString() });
+
+  it('w trakcie lekcji - jej numer', () => {
+    expect(uwagaLekcja(o(9, 10), periods)).toBe(2);
+  });
+  it('na przerwie - lekcja, ktora sie skonczyla', () => {
+    expect(uwagaLekcja(o(8, 50), periods)).toBe(1);
+  });
+  it('poza planem - brak', () => {
+    expect(uwagaLekcja(o(7, 30), periods)).toBeUndefined();
+    expect(uwagaLekcja(o(15, 0), periods)).toBeUndefined();
   });
 });

@@ -44,8 +44,10 @@ import {
   type LessonPeriodRow,
   type TimetableEntryRow,
 } from './timetableMappers';
+import { absenceToRow, rowToAbsence, type AbsenceRow } from './absenceMappers';
 import { DEFAULT_PERIODS, buildSeedTimetable } from '../timetableSeed';
 import type {
+  Absence,
   Lesson,
   LessonPeriod,
   Meeting,
@@ -78,6 +80,7 @@ export interface RemoteData {
   quizzes: Quiz[];
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
+  absences: Absence[];
   settings: Settings;
 }
 
@@ -132,6 +135,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
     quizRows,
     periodRows,
     timetableRows,
+    absenceRows,
     settingsRows,
   ] =
     await Promise.all([
@@ -145,6 +149,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
       fetchAllRows<QuizRow>('quizzes'),
       fetchAllRows<LessonPeriodRow>('lesson_periods'),
       fetchAllRows<TimetableEntryRow>('timetable_entries'),
+      fetchAllRows<AbsenceRow>('absences'),
       fetchAllRows<SettingsRow>('settings'),
     ]);
 
@@ -170,6 +175,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
       quizzes: quizRows.map(rowToQuiz),
       periods: timetableSeeded ? DEFAULT_PERIODS : periodRows.map(rowToPeriod),
       timetable: timetableSeeded ? buildSeedTimetable(classes) : timetableRows.map(rowToTimetableEntry),
+      absences: absenceRows.map(rowToAbsence),
       settings: settingsRows[0] ? rowToSettings(settingsRows[0]) : DEFAULT_SETTINGS,
     },
   };
@@ -212,6 +218,7 @@ type CollectionName =
   | 'quizzes'
   | 'periods'
   | 'timetable'
+  | 'absences'
   | 'settings';
 
 // Kolejnosc dla upsertow - rodzice przed dziecmi (zgodnie z FK w 0001_init.sql).
@@ -226,6 +233,7 @@ const UPSERT_ORDER: CollectionName[] = [
   'quizzes', // FK do classes - po 'classes'
   'periods',
   'timetable', // FK do classes - po 'classes'
+  'absences', // FK do students i classes
   'settings',
 ];
 const DELETE_ORDER: CollectionName[] = [...UPSERT_ORDER].reverse();
@@ -241,6 +249,7 @@ const TABLE_NAMES: Record<CollectionName, string> = {
   quizzes: 'quizzes',
   periods: 'lesson_periods',
   timetable: 'timetable_entries',
+  absences: 'absences',
   settings: 'settings',
 };
 
@@ -255,6 +264,7 @@ interface StoreSlice {
   quizzes: Quiz[];
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
+  absences: Absence[];
   settings: Settings;
 }
 
@@ -280,6 +290,8 @@ function rowsFor(collection: CollectionName, state: StoreSlice): Array<{ id: str
       return state.periods.map(periodToRow);
     case 'timetable':
       return state.timetable.map(timetableEntryToRow);
+    case 'absences':
+      return state.absences.map(absenceToRow);
     case 'settings':
       return [settingsToRow(state.settings)];
   }
@@ -297,6 +309,7 @@ function emptySnapshots(): Record<CollectionName, Snapshot> {
     quizzes: new Map(),
     periods: new Map(),
     timetable: new Map(),
+    absences: new Map(),
     settings: new Map(),
   };
 }
@@ -522,35 +535,55 @@ export async function pullTodayRecapEvents(): Promise<void> {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
   const sinceMs = startOfDay.getTime();
+  const todayKey = localDateKey(startOfDay);
 
-  let rows: RecapEventRow[];
+  let eventRows: RecapEventRow[];
+  let absenceRows: AbsenceRow[];
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase
-      .from('recap_events')
-      .select('*')
-      .gte('at', startOfDay.toISOString());
-    if (error) throw error;
-    rows = (data ?? []) as RecapEventRow[];
+    // Nieobecni z dzisiaj tez: panel zaznacza obecnosc, a kolo powtorzeniowe
+    // w apce webowej ma ich nie losowac (patrz src/lib/attendance.ts).
+    const [events, absences] = await Promise.all([
+      supabase.from('recap_events').select('*').gte('at', startOfDay.toISOString()),
+      supabase.from('absences').select('*').eq('date', todayKey),
+    ]);
+    if (events.error) throw events.error;
+    if (absences.error) throw absences.error;
+    eventRows = (events.data ?? []) as RecapEventRow[];
+    absenceRows = (absences.data ?? []) as AbsenceRow[];
   } catch {
     // Odswiezenie w tle - blad sieci nie ma czym straszyc nauczyciela na lekcji.
     return;
   }
 
-  const remote = rows.map(rowToRecapEvent);
+  mergeToday('recapEvents', eventRows.map(rowToRecapEvent), (e) => new Date(e.at).getTime() >= sinceMs);
+  mergeToday('absences', absenceRows.map(rowToAbsence), (a) => a.date === todayKey);
+}
+
+/** "RRRR-MM-DD" w czasie lokalnym (jak src/lib/dates.ts: toDateKey). */
+function localDateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+/**
+ * Wtapia dzisiejsze wiersze z chmury w jedna kolekcje store - zasady opisane
+ * przy pullTodayRecapEvents. `isToday` wybiera lokalne wpisy z tego samego
+ * zakresu, zeby nie kasowac starszych dni, ktorych nie pobieralismy.
+ */
+function mergeToday<K extends 'recapEvents' | 'absences'>(
+  collection: K,
+  remote: StoreSlice[K],
+  isToday: (item: StoreSlice[K][number]) => boolean,
+): void {
+  type Item = StoreSlice[K][number];
   const remoteIds = new Set(remote.map((e) => e.id));
-  const local = useStore.getState().recapEvents;
+  const local = useStore.getState()[collection] as Item[];
   const localIds = new Set(local.map((e) => e.id));
 
-  const added = remote.filter((e) => !localIds.has(e.id));
+  const added = (remote as Item[]).filter((e) => !localIds.has(e.id));
   const removedIds = new Set(
     local
-      .filter(
-        (e) =>
-          new Date(e.at).getTime() >= sinceMs &&
-          !remoteIds.has(e.id) &&
-          snapshots.recapEvents.has(e.id),
-      )
+      .filter((e) => isToday(e) && !remoteIds.has(e.id) && snapshots[collection].has(e.id))
       .map((e) => e.id),
   );
   if (added.length === 0 && removedIds.size === 0) return;
@@ -558,15 +591,17 @@ export async function pullTodayRecapEvents(): Promise<void> {
   const next = local.filter((e) => !removedIds.has(e.id)).concat(added);
   applyingRemote = true;
   try {
-    useStore.setState({ recapEvents: next });
+    useStore.setState({ [collection]: next } as Partial<StoreSlice>);
   } finally {
     applyingRemote = false;
   }
+  const toRow = (item: Item) =>
+    collection === 'absences' ? absenceToRow(item as Absence) : recapEventToRow(item as RecapEvent);
   for (const e of added) {
-    snapshots.recapEvents.set(e.id, JSON.stringify(recapEventToRow(e)));
+    snapshots[collection].set(e.id, JSON.stringify(toRow(e)));
   }
   for (const id of removedIds) {
-    snapshots.recapEvents.delete(id);
+    snapshots[collection].delete(id);
   }
 }
 

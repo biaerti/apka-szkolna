@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from '../../data/supabase';
 import { useAuth } from '../../data/auth';
 import { useSyncStatus } from '../../data/remote/sync';
 import { CzytankiFab } from '../czytanki/CzytankiFab';
+import { UwagiPrzypomnienie, useUwagiDoWpisania } from '../uwagi/UwagiPrzypomnienie';
 
 // Krotkie menu - nauczyciel ma nie byc "milionerem na zakladkach, ktorych nie
 // bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w inne ekrany
@@ -32,6 +33,7 @@ const NAV_ITEMS = [
 ];
 
 export function AppShell() {
+  const doWpisania = useUwagiDoWpisania().length;
   return (
     <div className="flex min-h-screen bg-gray-50">
       <aside className="flex w-56 shrink-0 flex-col border-r border-gray-200 bg-white">
@@ -52,6 +54,9 @@ export function AppShell() {
               }
             >
               {item.label}
+              {item.to === '/uwagi' && doWpisania > 0 && (
+                <span className="ml-2 rounded-full bg-amber-100 px-1.5 text-xs font-semibold text-amber-800">{doWpisania}</span>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -63,6 +68,7 @@ export function AppShell() {
         <Outlet />
       </main>
       <CzytankiFab />
+      <UwagiPrzypomnienie />
     </div>
   );
 }

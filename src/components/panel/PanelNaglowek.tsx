@@ -6,11 +6,11 @@
 //
 // Klasa jest w <select>, a nie w zakladkach: przy czterech klasach zakladki
 // zjadaly polowe paska szerokiego na 360 px, a doszedl jeszcze przelacznik
-// trybu. Wybor klasy zostaje takze w trybie stopera, bo przycisk "Uwagi"
-// dotyczy konkretnej klasy.
+// trybu. Klase ustawia sam plan lekcji (Panel.tsx) - select jest na zastepstwa
+// i sytuacje spoza planu. Przycisk "Obecność" dotyczy wybranej klasy.
 //
 // W trybie KOMPAKT (stoper sciagniety do paska) zostaja WYLACZNIE trzy
-// przyciski okna. Klasa, tryb i uwagi sa wtedy zbedne - kto chce ich uzyc,
+// przyciski okna. Klasa, tryb i obecnosc sa wtedy zbedne - kto chce ich uzyc,
 // najpierw powieksza panel, a kazdy dodatkowy element zjada miejsce, ktore ma
 // isc na czas widoczny z konca sali.
 
@@ -25,8 +25,10 @@ export interface PanelNaglowekProps {
   onClassId: (id: string) => void;
   tryb: PanelTryb;
   onTryb: (tryb: PanelTryb) => void;
-  uwagiOtwarte: boolean;
-  onUwagi: (open: boolean) => void;
+  /** "3. lekcja", gdy wybrana klasa ma teraz lekcje wg planu. */
+  podpisLekcji: string | null;
+  obecnoscOtwarta: boolean;
+  onObecnosc: (open: boolean) => void;
   /**
    * Srodkowy przycisk paska - jak "przywroc w dol" w oknie Windows. Podajemy go
    * tylko tam, gdzie jest co zmniejszac (stoper); w trybie kola panel nie ma
@@ -45,8 +47,9 @@ export function PanelNaglowek({
   onClassId,
   tryb,
   onTryb,
-  uwagiOtwarte,
-  onUwagi,
+  podpisLekcji,
+  obecnoscOtwarta,
+  onObecnosc,
   kompakt = false,
   onKompakt,
   onZwin,
@@ -65,6 +68,7 @@ export function PanelNaglowek({
         value={classId}
         onChange={(e) => onClassId(e.target.value)}
         aria-label="Klasa"
+        title={podpisLekcji ? `Z planu lekcji: ${podpisLekcji}` : 'Klasa (poza lekcją z planu)'}
         className="shrink-0 rounded-md border border-gray-700 bg-gray-900 px-1.5 py-1 text-xs font-semibold text-gray-100"
       >
         {classes.map((c) => (
@@ -99,12 +103,12 @@ export function PanelNaglowek({
       {!kompakt && (
       <button
         type="button"
-        onClick={() => onUwagi(!uwagiOtwarte)}
-        aria-expanded={uwagiOtwarte}
-        title="Uwagi - lista klasy"
+        onClick={() => onObecnosc(!obecnoscOtwarta)}
+        aria-expanded={obecnoscOtwarta}
+        title="Obecność i uwagi do dziennika"
         className="shrink-0 rounded-md bg-gray-800 px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-gray-100"
       >
-        Uwagi
+        Obecność
       </button>
       )}
       {onKompakt && (

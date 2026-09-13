@@ -470,3 +470,26 @@ export interface TimetableEntry {
   room?: string; // np. "31"
   note?: string; // dopisek w komorce, np. "zamiana z Jagoda"
 }
+
+// --- Obecnosc ------------------------------------------------------------------
+
+/**
+ * Nieobecnosc ucznia w danym dniu - zaznaczana w plywajacym panelu (albo na
+ * liscie przy kole). Trzymamy TYLKO nieobecnych: brak wpisu = obecny.
+ *
+ * Skutek w apce: nieobecny tego dnia nie trafia na zadne kolo (powtorzeniowe,
+ * na lekcji, w panelu) - wszystkie trzy czytaja te sama liste. `period` to
+ * numer lekcji z planu w chwili zaznaczenia; przyda sie, gdy obecnosc bedzie
+ * przepisywal do dziennika bot.
+ *
+ * Id jest wyliczane z (dzien, uczen) - patrz src/lib/attendance.ts: absenceId -
+ * wiec "nieobecny -> obecny -> nieobecny" w dwoch oknach to zwykly upsert.
+ */
+export interface Absence {
+  id: ID;
+  studentId: ID;
+  classId: ID;
+  date: string; // "RRRR-MM-DD"
+  period?: number; // LessonPeriod.no
+  at: string; // ISO
+}

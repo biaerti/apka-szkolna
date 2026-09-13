@@ -7,8 +7,9 @@
 //
 // Tu siedza same obliczenia: filtrowanie po tygodniu i grupowanie po dniach.
 
-import type { RecapEvent } from '../data/types';
+import type { LessonPeriod, RecapEvent } from '../data/types';
 import { toDateKey } from './dates';
+import { periodStatus, validPeriods } from './timetable';
 
 /** Uwagi z podanego zakresu dni, pogrupowane po dacie ("RRRR-MM-DD"). */
 export function uwagiByDay(events: RecapEvent[], days: Date[]): Map<string, RecapEvent[]> {
@@ -36,6 +37,23 @@ export function doWpisania(events: RecapEvent[]): number {
 export function uwagaTime(event: RecapEvent): string {
   const d = new Date(event.at);
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+/**
+ * Numer lekcji, na ktorej padla uwaga (wg dzwonkow) - do dziennika wpisuje sie
+ * uwage "na 3. lekcji", a nie "o 9:52". Uwaga zapisana na przerwie liczy sie
+ * do lekcji, ktora wlasnie sie skonczyla: nauczyciel dopisuje ja po dzwonku.
+ * Poza planem (przed lekcjami, po ostatniej) - undefined.
+ */
+export function uwagaLekcja(event: RecapEvent, periods: LessonPeriod[]): number | undefined {
+  const status = periodStatus(periods, new Date(event.at));
+  if (status.kind === 'lesson') return status.period.no;
+  if (status.kind === 'break') {
+    const sorted = validPeriods(periods);
+    const idx = sorted.findIndex((p) => p.no === status.nextPeriod.no);
+    return idx > 0 ? sorted[idx - 1].no : undefined;
+  }
+  return undefined;
 }
 
 /**

@@ -6,28 +6,34 @@ nie w prezentacji apki, i po zadaniu trzeba wylosować, kto pokazuje rozwiązani
 
 Dwa stany:
 
-- **pigułka** - wąski pasek (`🎡 IV A`), zajmuje róg ekranu. Przeciągasz, żeby
-  przesunąć; klikasz, żeby rozwinąć.
-- **panel** - okno 360x600 z dwoma trybami przełączanymi w nagłówku:
+- **pigułka** - wąski pasek (`🎡 IV A   9:50  35 min`): klasa, godzina i ile
+  zostało do dzwonka według zakładki „Plan" (ostatnie 5 min bursztynowe,
+  ostatnia minuta czerwona; na przerwie „przerwa 4 min"). Gdy leci stoper albo
+  czytanka, pigułka pokazuje ich czas. Przeciągasz, żeby przesunąć; klikasz,
+  żeby rozwinąć.
+- **panel** - okno 360x600 z trzema trybami przełączanymi w nagłówku:
   - **Koło** - *Kręć*, nazwisko i dwie oceny: **✚ Dobrze** i **• Kropka**
     (klawisze `1` i `2`, `Spacja` kręci, `Backspace` cofa). Przycisk **Reset**
-    kasuje skreślenia, **Obecność** wypisuje nieobecnych z koła.
+    kasuje skreślenia.
   - **Stoper** - odliczanie z własnym poleceniem („Czytamy tekst ze s. 12")
     i edytowalną długością. `Spacja` = start / pauza. Leci dalej po zwinięciu
     do pigułki - pigułka pokazuje wtedy pozostały czas. Środkowy przycisk w
     nagłówku (jak „przywróć w dół" w oknie Windows) ściąga stoper do okienka
     300x138 z samym czasem i - jeśli jest wpisane - poleceniem; zostają w nim
     tylko trzy przyciski okna, a klik w czas = start / pauza.
+  - **Audio** - czytanki z lektorem.
 
-  - **Audio** - czytanki z lektorem (ElevenLabs), pogrupowane po lekcjach
-    podręcznika. `Spacja` = pauza / odtwórz, strzałki = 10 s w tył / w przód.
-    Czytanka gra dalej po zwinięciu do pigułki (pigułka pokazuje 🔊 i ile
-    zostało) i po przełączeniu na koło. Nagrania leżą w prywatnym buckecie
-    Supabase `czytanki` - generowanie i wysyłka: `audio-czytanki/generuj.py`
-    i `audio-czytanki/wyslij.py`, rejestr w `src/data/czytanki.ts`.
+  **Klasa ustawia się sama z planu lekcji**: trwająca lekcja, a na przerwie i
+  przed lekcjami - najbliższa. Select w nagłówku zostaje na zastępstwa; ręczny
+  wybór trzyma się do następnego dzwonka.
 
-  W nagłówku jest też wybór klasy i **Uwagi** (lista klasy z licznikiem uwag
-  w tym miesiącu). `Esc` zwija panel do pigułki.
+  **Obecność** (przycisk w nagłówku) - lista klasy, klik w nazwisko = nieobecny.
+  Nieobecni danego dnia nie trafiają na żadne koło (panel, szuflada w
+  prezentacji, koło powtórzeniowe w apce). Przy każdym nazwisku jest 💬 -
+  uwaga do dziennika własnymi słowami (albo gotowcem). Uwaga nie ma skutków w
+  grze: ląduje w zakładce „Uwagi" z klasą i numerem lekcji, a apka webowa
+  pokazuje okienko „Wpisz do dziennika" z checkboxem „wpisane". `Esc` zwija
+  panel do pigułki.
 
 Zdarzenia lądują w tym samym miejscu, co te z prezentacji - w bilansie miesiąca
 mają adnotację `podręcznik`. Pula "kto już dziś odpowiadał" jest wspólna

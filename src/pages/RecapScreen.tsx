@@ -1,10 +1,9 @@
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { RecapSession } from '../components/recap/RecapSession';
 
 export function RecapScreen() {
   const { classId, setId } = useParams<{ classId: string; setId: string }>();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const schoolClass = useStore((s) => s.classes.find((c) => c.id === classId));
@@ -21,14 +20,10 @@ export function RecapScreen() {
     );
   }
 
-  const state = location.state as { absentIds?: string[] } | null;
-  const absentIds = state?.absentIds ?? [];
-
   return (
     <RecapSession
       classId={classId}
       setId={setId}
-      absentIds={absentIds}
       onExit={() => navigate(`/lekcje?klasa=${classId}`)}
     />
   );

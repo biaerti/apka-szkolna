@@ -1,6 +1,7 @@
 // Eksport / import calego stanu aplikacji do/z pliku JSON.
 
 import type {
+  Absence,
   Lesson,
   LessonPeriod,
   Meeting,
@@ -31,13 +32,15 @@ export interface BackupData {
   /** Doszly w wersji 4 backupu (plan lekcji) - starsze pliki tych pol nie maja. */
   periods?: LessonPeriod[];
   timetable?: TimetableEntry[];
+  /** Doszlo w wersji 5 backupu (obecnosc) - starsze pliki tego pola nie maja. */
+  absences?: Absence[];
   settings: Settings;
 }
 
 export function buildBackup(): BackupData {
   const s = useStore.getState();
   return {
-    version: 4,
+    version: 5,
     exportedAt: new Date().toISOString(),
     classes: s.classes,
     students: s.students,
@@ -49,6 +52,7 @@ export function buildBackup(): BackupData {
     quizzes: s.quizzes,
     periods: s.periods,
     timetable: s.timetable,
+    absences: s.absences,
     settings: s.settings,
   };
 }
@@ -99,6 +103,7 @@ export function applyBackup(data: BackupData): void {
     // I backup sprzed zakladki "Plan" - zostawiamy biezace dzwonki i plan.
     periods: data.periods ?? useStore.getState().periods,
     timetable: data.timetable ?? useStore.getState().timetable,
+    absences: data.absences ?? useStore.getState().absences,
     settings: data.settings,
   });
 }

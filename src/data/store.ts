@@ -12,8 +12,10 @@ import { classGrade } from '../lib/grade';
 import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
 import { timetableCellId } from '../lib/timetable';
+import { absenceId } from '../lib/attendance';
 import { monthKey as recapMonthKey } from '../lib/week';
 import type {
+  Absence,
   Lesson,
   LessonPeriod,
   LessonProgress,
@@ -55,6 +57,7 @@ interface AppState {
   quizzes: Quiz[];
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
+  absences: Absence[];
   settings: Settings;
   manuallyEditedLessonIds: ManuallyEditedLessonIds;
 
@@ -133,6 +136,13 @@ interface AppState {
   setTimetableEntry: (entry: Omit<TimetableEntry, 'id'>) => void;
   removeTimetableEntry: (id: string) => void;
 
+  // Obecnosc (tylko nieobecni; patrz types.ts: Absence)
+  /**
+   * Zaznacza albo zdejmuje nieobecnosc ucznia w dniu `date` ("RRRR-MM-DD").
+   * `period` - numer lekcji z planu w chwili zaznaczenia (dla dziennika).
+   */
+  setAbsent: (args: { studentId: string; classId: string; date: string; absent: boolean; period?: number }) => void;
+
   // Ustawienia
   updateSettings: (patch: Partial<Settings>) => void;
 
@@ -150,6 +160,7 @@ interface AppState {
       | 'quizzes'
       | 'periods'
       | 'timetable'
+      | 'absences'
       | 'settings'
     >,
   ) => void;
@@ -290,6 +301,7 @@ export const useStore = create<AppState>()(
       quizzes: [],
       periods: [],
       timetable: [],
+      absences: [],
       settings: {
         passesPerMonth: 2,
         hintGivesMinus: true,
@@ -324,6 +336,7 @@ export const useStore = create<AppState>()(
           recapEvents: s.recapEvents.filter((e) => e.classId !== id),
           quizzes: s.quizzes.filter((q) => q.classId !== id),
           timetable: s.timetable.filter((e) => e.classId !== id),
+          absences: s.absences.filter((a) => a.classId !== id),
           questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
         }));
       },
@@ -342,6 +355,7 @@ export const useStore = create<AppState>()(
         set((s) => ({
           students: s.students.filter((st) => st.id !== id),
           recapEvents: s.recapEvents.filter((e) => e.studentId !== id),
+          absences: s.absences.filter((a) => a.studentId !== id),
         }));
       },
       setActive: (id, active) => {
@@ -511,6 +525,16 @@ export const useStore = create<AppState>()(
         set((s) => ({ timetable: s.timetable.filter((e) => e.id !== id) }));
       },
 
+      setAbsent: ({ studentId, classId, date, absent, period }) => {
+        set((s) => {
+          const id = absenceId(date, studentId);
+          const rest = s.absences.filter((a) => a.id !== id);
+          if (!absent) return rest.length === s.absences.length ? {} : { absences: rest };
+          const item: Absence = { id, studentId, classId, date, period, at: new Date().toISOString() };
+          return { absences: [...rest, item] };
+        });
+      },
+
       updateSettings: (patch) => {
         set((s) => ({ settings: { ...s.settings, ...patch } }));
       },
@@ -531,6 +555,7 @@ export const useStore = create<AppState>()(
           quizzes: [],
           periods: DEFAULT_PERIODS,
           timetable: buildSeedTimetable(seed.classes),
+          absences: [],
           settings: seed.settings,
           manuallyEditedLessonIds: {},
         }));
@@ -538,7 +563,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 14,
+      version: 15,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -579,6 +604,8 @@ export const useStore = create<AppState>()(
       // v13 -> v14: dochodzi slideFontPercent (wielkosc liter na projektorze,
       // Ustawienia). Stare dane dostaja 100 - same domyslne rozmiary w
       // slajdach urosly, wiec bez ruszania ustawien i tak jest wieksze.
+      // v14 -> v15: dochodzi kolekcja absences (obecnosc z plywajacego panelu).
+      // Stare dane dostaja pusta liste.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -590,6 +617,7 @@ export const useStore = create<AppState>()(
           quizzes?: Array<Record<string, unknown>>;
           periods?: LessonPeriod[];
           timetable?: TimetableEntry[];
+          absences?: Absence[];
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -656,6 +684,9 @@ export const useStore = create<AppState>()(
         if (version < 13) {
           if (!Array.isArray(state.periods)) state.periods = DEFAULT_PERIODS;
           if (!Array.isArray(state.timetable)) state.timetable = buildSeedTimetable(state.classes ?? []);
+        }
+        if (version < 15 && !Array.isArray(state.absences)) {
+          state.absences = [];
         }
         if (version < 14 && state.settings) {
           state.settings = { ...state.settings, slideFontPercent: state.settings.slideFontPercent ?? 100 };
