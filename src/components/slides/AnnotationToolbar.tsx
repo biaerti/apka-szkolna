@@ -1,55 +1,44 @@
-// Pasek rysowania w rogu prezentacji. Domyslnie zwiniety do jednego przycisku
-// "Rysuj" - na lekcji przez wiekszosc czasu nikt nie rysuje, a slajd ma byc
-// czysty. Skroty: R wlacza/wylacza pioro, T dopisek, Ctrl+Z cofa, Esc chowa pasek.
-//
-// Grubosc dotyczy pisaka i zakreslacza; dopisek dostaje z niej tylko wielkosc
-// STARTOWA, bo dalej skaluje sie go uchwytem w rogu pola (AnnotationTextBox).
-
 import clsx from 'clsx';
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { ANNOTATION_COLORS, ANNOTATION_SIZES, type AnnotationTool } from './annotations';
 import type { SlideAnnotations } from './useSlideAnnotations';
 
-const TOOLS: Array<{ value: AnnotationTool; label: string; title: string }> = [
-  { value: 'pen', label: 'Pióro', title: 'Rysowanie odręczne (R)' },
-  { value: 'marker', label: 'Zakreślacz', title: 'Grube, przezroczyste zakreślenie' },
-  {
-    value: 'text',
-    label: 'Tekst',
-    title: 'Kliknij w slajd i wpisz tekst (T). Kółkiem w rogu pola zmieniasz jego wielkość razem z literami',
-  },
-  { value: 'eraser', label: 'Gumka', title: 'Kliknij kreskę lub dopisek, żeby go usunąć' },
+const TOOLS: Array<{ value: AnnotationTool; label: string; hint: string; icon: ReactNode }> = [
+  { value: 'pen', label: 'Pióro', hint: 'Rysowanie odręczne (R)', icon: <PenIcon /> },
+  { value: 'marker', label: 'Zakreślacz', hint: 'Przezroczyste zakreślenie', icon: <MarkerIcon /> },
+  { value: 'text', label: 'Tekst', hint: 'Kliknij w slajd, aby dodać dopisek (T)', icon: <TextIcon /> },
+  { value: 'eraser', label: 'Gumka', hint: 'Kliknij lub przeciągnij po adnotacjach', icon: <EraserIcon /> },
 ];
 
-function BarButton({
-  active,
-  onClick,
-  title,
-  children,
-}: {
-  active?: boolean;
-  onClick: () => void;
-  title?: string;
-  children: ReactNode;
-}) {
+function ToolButton({ active, label, hint, icon, onClick }: { active: boolean; label: string; hint: string; icon: ReactNode; onClick: () => void }) {
   return (
     <button
       type="button"
-      title={title}
+      aria-label={label}
+      aria-pressed={active}
+      title={hint}
       onClick={onClick}
       className={clsx(
-        'rounded-md px-3 py-1.5 text-sm font-medium',
-        active ? 'bg-accent-500 text-white' : 'text-gray-300 hover:bg-white/10',
+        'flex h-11 min-w-12 items-center justify-center gap-2 rounded-lg px-3 text-sm font-semibold transition-colors',
+        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
+        active ? 'bg-white text-gray-950' : 'text-gray-200 hover:bg-white/10 hover:text-white',
       )}
     >
-      {children}
+      {icon}
+      <span className="hidden 2xl:inline">{label}</span>
     </button>
   );
 }
 
 export function AnnotationToolbar({ ann }: { ann: SlideAnnotations }) {
   const open = ann.tool !== 'off';
-  const size = ANNOTATION_SIZES[ann.sizeIndex] ?? ANNOTATION_SIZES[1];
+  const [confirmClear, setConfirmClear] = useState(false);
+
+  useEffect(() => {
+    if (!confirmClear) return;
+    const timer = window.setTimeout(() => setConfirmClear(false), 2500);
+    return () => window.clearTimeout(timer);
+  }, [confirmClear]);
 
   if (!open) {
     return (
@@ -59,67 +48,91 @@ export function AnnotationToolbar({ ann }: { ann: SlideAnnotations }) {
           e.stopPropagation();
           ann.setTool('pen');
         }}
-        title="Rysuj i dopisuj na slajdzie (R)"
-        className="absolute bottom-16 left-4 z-40 rounded-md bg-gray-800/60 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-800/90"
+        title="Otwórz pisak i dopiski (R)"
+        className="absolute bottom-7 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-lg bg-gray-950/90 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(0,0,0,0.35)] transition-colors hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
-        Rysuj
+        <PenIcon />
+        Pisz po slajdzie
+        <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-xs font-medium text-gray-300">R</kbd>
       </button>
     );
   }
 
   return (
     <div
-      className="absolute bottom-16 left-4 z-40 flex items-center gap-1 rounded-lg bg-gray-900/90 p-1.5 shadow-xl"
+      role="toolbar"
+      aria-label="Pisanie po slajdzie"
+      className="absolute bottom-7 left-1/2 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-1.5 rounded-xl bg-gray-950/95 p-2 text-white shadow-[0_14px_36px_rgba(0,0,0,0.45)]"
       onClick={(e) => e.stopPropagation()}
     >
-      {TOOLS.map((t) => (
-        <BarButton key={t.value} active={ann.tool === t.value} title={t.title} onClick={() => ann.setTool(t.value)}>
-          {t.label}
-        </BarButton>
-      ))}
-
-      <span className="mx-1 h-6 w-px bg-white/15" />
-
-      {ANNOTATION_COLORS.map((c) => (
-        <button
-          key={c.value}
-          type="button"
-          title={`Kolor: ${c.label}`}
-          aria-label={`Kolor: ${c.label}`}
-          onClick={() => ann.setColor(c.value)}
-          className={clsx(
-            'h-6 w-6 rounded-full border-2',
-            ann.color === c.value ? 'border-white' : 'border-white/25',
-          )}
-          style={{ backgroundColor: c.value }}
-        />
-      ))}
-
-      <span className="mx-1 h-6 w-px bg-white/15" />
-
+      <div className="flex items-center gap-1" aria-label="Narzędzie">
+        {TOOLS.map((tool) => (
+          <ToolButton key={tool.value} active={ann.tool === tool.value} label={tool.label} hint={tool.hint} icon={tool.icon} onClick={() => ann.setTool(tool.value)} />
+        ))}
+      </div>
+      <Divider />
+      <div className="flex items-center gap-1" aria-label="Kolor">
+        {ANNOTATION_COLORS.map((color) => (
+          <button
+            key={color.value}
+            type="button"
+            title={`Kolor: ${color.label}`}
+            aria-label={`Kolor: ${color.label}`}
+            aria-pressed={ann.color === color.value}
+            onClick={() => ann.setColor(color.value)}
+            className={clsx(
+              'relative h-9 w-9 rounded-full transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
+              ann.color === color.value && 'after:absolute after:inset-[-4px] after:rounded-full after:border-2 after:border-white',
+            )}
+            style={{ backgroundColor: color.value, boxShadow: color.value === '#111827' ? 'inset 0 0 0 1px rgba(255,255,255,.35)' : undefined }}
+          />
+        ))}
+      </div>
+      <Divider />
+      <div className="flex h-11 items-center rounded-lg bg-white/5 p-1" aria-label="Rozmiar">
+        {ANNOTATION_SIZES.map((size, index) => (
+          <button
+            key={size.label}
+            type="button"
+            aria-label={`Rozmiar: ${size.label}`}
+            aria-pressed={ann.sizeIndex === index}
+            title={`Rozmiar: ${size.label}`}
+            onClick={() => ann.setSizeIndex(index)}
+            className={clsx('flex h-9 w-10 items-center justify-center rounded-md text-gray-200 hover:bg-white/10', ann.sizeIndex === index && 'bg-white/15 text-white')}
+          >
+            <span className="rounded-full bg-current" style={{ width: 5 + index * 5, height: 5 + index * 5 }} />
+          </button>
+        ))}
+      </div>
+      <Divider />
+      <button type="button" onClick={ann.undo} disabled={ann.shapes.length === 0} title="Cofnij (Ctrl+Z)" aria-label="Cofnij" className={actionClasses}><UndoIcon /></button>
       <button
         type="button"
-        onClick={ann.cycleSize}
-        title={`Grubość: ${size.label} - kliknij, żeby zmienić`}
-        className="flex h-8 w-8 items-center justify-center rounded-md text-gray-300 hover:bg-white/10"
+        disabled={ann.shapes.length === 0}
+        title={confirmClear ? 'Kliknij ponownie, aby usunąć wszystkie adnotacje' : 'Wyczyść slajd'}
+        onClick={() => {
+          if (confirmClear) {
+            ann.clearSlide();
+            setConfirmClear(false);
+          } else setConfirmClear(true);
+        }}
+        className={clsx(actionClasses, confirmClear && 'w-auto bg-red-500/20 px-3 text-red-200')}
       >
-        <span
-          className="rounded-full bg-current"
-          style={{ width: 4 + ann.sizeIndex * 5, height: 4 + ann.sizeIndex * 5 }}
-        />
+        <TrashIcon />
+        {confirmClear && <span className="ml-2 text-sm font-semibold">Na pewno?</span>}
       </button>
-
-      <span className="mx-1 h-6 w-px bg-white/15" />
-
-      <BarButton onClick={ann.undo} title="Cofnij ostatnią kreskę (Ctrl+Z)">
-        Cofnij
-      </BarButton>
-      <BarButton onClick={ann.clearSlide} title="Usuń wszystko z tego slajdu">
-        Wyczyść
-      </BarButton>
-      <BarButton onClick={() => ann.setTool('off')} title="Schowaj pasek, wróć do klikania slajdów (Esc)">
-        Gotowe
-      </BarButton>
+      <button type="button" onClick={() => ann.setTool('off')} title="Zakończ pisanie (Esc)" className="ml-0.5 h-11 rounded-lg bg-white px-4 text-sm font-bold text-gray-950 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Gotowe</button>
     </div>
   );
 }
+
+const actionClasses = 'flex h-11 w-11 items-center justify-center rounded-lg text-gray-200 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-35';
+
+function Divider() { return <span aria-hidden="true" className="mx-0.5 h-8 w-px bg-white/15" />; }
+function Icon({ children }: { children: ReactNode }) { return <svg viewBox="0 0 24 24" width={21} height={21} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">{children}</svg>; }
+function PenIcon() { return <Icon><path d="m4 20 4.4-1 10.8-10.8a2.1 2.1 0 0 0-3-3L5.4 16 4 20Z"/><path d="m14.8 6.7 3 3"/></Icon>; }
+function MarkerIcon() { return <Icon><path d="m5 15 8.8-8.8 4 4L9 19H5v-4Z"/><path d="m3 21h10"/><path d="m12.3 7.7 4 4"/></Icon>; }
+function TextIcon() { return <Icon><path d="M5 6V4h14v2M12 4v16M8 20h8"/></Icon>; }
+function EraserIcon() { return <Icon><path d="m7 18-3-3 9-10a2.1 2.1 0 0 1 3 0l3 3a2.1 2.1 0 0 1 0 3l-7 7H7Z"/><path d="m10 8 7 7M7 18h13"/></Icon>; }
+function UndoIcon() { return <Icon><path d="M9 8H4V3"/><path d="M4 8c2.1-2.7 4.8-4 8-4a8 8 0 1 1-7.4 11"/></Icon>; }
+function TrashIcon() { return <Icon><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></Icon>; }

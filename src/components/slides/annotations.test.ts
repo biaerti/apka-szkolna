@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scaleTextBox, TEXT_SIZE_MAX, TEXT_SIZE_MIN } from './annotations';
+import { scaleTextBox, strokePath, TEXT_SIZE_MAX, TEXT_SIZE_MIN } from './annotations';
 
 const start = { width: 500, size: 50 };
 
@@ -26,5 +26,13 @@ describe('scaleTextBox', () => {
 
   it('nie rosnie ponad maksymalna wielkosc liter', () => {
     expect(scaleTextBox(start, 5000, 100000).size).toBeLessThanOrEqual(TEXT_SIZE_MAX);
+  });
+});
+
+describe('strokePath', () => {
+  it('wygladza dluzsze pociagniecie krzywymi kwadratowymi', () => {
+    expect(strokePath([{ x: 0, y: 0 }, { x: 10, y: 10 }, { x: 20, y: 0 }])).toBe(
+      'M 0 0 Q 10 10 15 5 Q 10 10 20 0',
+    );
   });
 });

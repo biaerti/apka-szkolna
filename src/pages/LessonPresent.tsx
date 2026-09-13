@@ -1,7 +1,7 @@
 // Ekran projektora - prezentacja lekcji. Poza AppShell, pelny ekran, ciemne tlo.
 
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { SlideView } from '../components/slides/SlideView';
 import { AnnotationLayer } from '../components/slides/AnnotationLayer';
@@ -18,16 +18,20 @@ import { usePresentKeys } from '../components/lessons/usePresentKeys';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
 import { classesOfGrade, lessonProgress, todayKey } from '../lib/grade';
+import { lessonMaterialType } from '../lib/lessonMaterial';
 
 export function LessonPresent() {
   const { id, classId: classIdParam } = useParams<{ id: string; classId?: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const lessons = useStore((s) => s.lessons);
   const classes = useStore((s) => s.classes);
   const setLessonProgress = useStore((s) => s.setLessonProgress);
   const lesson = lessons.find((l) => l.id === id);
 
   const classId = classIdParam ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
+  const materialType = searchParams.get('typ') ?? (lesson ? lessonMaterialType(lesson) : 'textbook');
+  const lessonsUrl = classId ? `/lekcje?klasa=${classId}&typ=${materialType}` : '/lekcje';
 
   const [index, setIndex] = useState(0);
   const [classPanelOpen, setClassPanelOpen] = useState(false);
@@ -76,7 +80,7 @@ export function LessonPresent() {
     onUndo: wheel.undoLast,
     goTo,
     toggleFullscreen,
-    exit: () => navigate(classId ? `/lekcje?klasa=${classId}` : '/lekcje'),
+    exit: () => navigate(lessonsUrl),
     drawing: ann.tool !== 'off',
     onToggleDraw: ann.toggleDrawing,
     onTextTool: () => ann.setTool('text'),
@@ -96,7 +100,7 @@ export function LessonPresent() {
   function finishLesson() {
     if (!lesson || !classId) return;
     setLessonProgress(lesson.id, classId, { status: 'done', doneDate: todayKey() });
-    navigate(`/lekcje?klasa=${classId}`);
+    navigate(lessonsUrl);
   }
 
   if (!lesson) {

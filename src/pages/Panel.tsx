@@ -31,6 +31,7 @@ import { PanelStoper } from '../components/panel/PanelStoper';
 import { PanelUwagi } from '../components/panel/PanelUwagi';
 import { PanelWheel } from '../components/panel/PanelWheel';
 import { useUchwytPrzeciagania } from '../components/panel/useUchwytPrzeciagania';
+import { PanelCzytanki } from '../components/panel/PanelCzytanki';
 
 /** Adnotacja zdarzen z panelu - patrz lessonWheelNote (lessonCode jest pusty). */
 const ADNOTACJA = 'podręcznik';
@@ -43,6 +44,7 @@ const ROZMIARY = {
   kolo: { width: 360, height: 600 },
   stoper: { width: 360, height: 300 },
   stoperKompakt: { width: 300, height: 138 },
+  czytanki: { width: 390, height: 470 },
 };
 
 const KLUCZ_KLASY = 'apka-szkolna:panel:classId';
@@ -99,7 +101,9 @@ export function Panel() {
         ? kompakt
           ? ROZMIARY.stoperKompakt
           : ROZMIARY.stoper
-        : ROZMIARY.kolo;
+        : tryb === 'czytanki'
+          ? ROZMIARY.czytanki
+          : ROZMIARY.kolo;
     void ustawRozmiarOkna(rozmiar.width, rozmiar.height);
   }, [rozwiniety, tryb, kompakt]);
 
@@ -228,7 +232,7 @@ export function Panel() {
       <div className="relative flex min-h-0 flex-1 flex-col">
         {tryb === 'kolo' ? (
           <PanelWheel wheel={wheel} adnotacja={ADNOTACJA} />
-        ) : (
+        ) : tryb === 'stoper' ? (
           <PanelStoper
             polecenie={polecenie}
             onPolecenie={setPolecenie}
@@ -242,7 +246,7 @@ export function Panel() {
             onReset={stoper.reset}
             kompakt={kompakt}
           />
-        )}
+        ) : <PanelCzytanki />}
 
         {uwagiOtwarte && (
           <PanelUwagi classId={classId} students={wheel.classStudents} onZamknij={() => setUwagiOtwarte(false)} />

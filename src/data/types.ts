@@ -95,10 +95,12 @@ export interface Question {
 }
 
 export type LessonStatus = 'planned' | 'in_progress' | 'done' | 'skipped';
+export type LessonMaterialType = 'review' | 'textbook';
 
 /** Postep jednej klasy w jednej lekcji. Brak wpisu w `Lesson.progress` = 'planned'. */
 export interface LessonProgress {
   status: LessonStatus;
+  lessonDate?: string; // YYYY-MM-DD - data faktycznego prowadzenia lekcji
   doneDate?: string; // YYYY-MM-DD
 }
 
@@ -116,6 +118,13 @@ export interface Lesson {
   id: ID;
   grade: string;
   title: string;
+  /** Glowny widok na liscie: gotowa powtorka albo temat prowadzony z podrecznika. */
+  materialType?: LessonMaterialType;
+  /** Numery stron z nowego "Miedzy nami 4" (2026), jezeli temat ma wskazanie w ksiazce. */
+  textbookPage?: number;
+  exercisePage?: number;
+  /** Oryginalna, krótka notatka do wydruku na jednej stronie A5. */
+  notebookNote?: string;
   /**
    * Kod lekcji do zeszytu, np. "4.3" (rocznik.numer). Nadawany raz, przy
    * tworzeniu lekcji, i juz sie nie zmienia - dziecko ma po nim odnalezc temat
@@ -343,6 +352,20 @@ export interface Settings {
    * Domyslnie 100.
    */
   slideFontPercent: number;
+  /**
+   * Roczne spisy lektur ustalone przez nauczyciela. Pole jest opcjonalne,
+   * zeby starsze backupy i wiersze ustawien dzialaly bez migracji danych.
+   * Klasa IV i V maja od 2026/2027 rozne podstawy programowe.
+   */
+  readingPlans?: Partial<Record<'IV' | 'V', ReadingPlanItem[]>>;
+}
+
+export interface ReadingPlanItem {
+  id: ID;
+  autor?: string;
+  tytul: string;
+  /** Wlasne = tytul dopisany przez nauczyciela, spoza katalogu w podstawie. */
+  wlasna?: boolean;
 }
 
 /**

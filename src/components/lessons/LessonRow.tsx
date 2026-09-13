@@ -14,6 +14,8 @@ import { GripIcon, MoreIcon, WheelIcon } from '../ui/icons';
 import { TD } from '../ui/Table';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { resolveRecapMode } from '../../lib/recap';
+import { lessonMaterialType } from '../../lib/lessonMaterial';
+import { gwoExercisesUrl, gwoTextbookUrl } from '../../lib/gwo';
 
 export interface LessonRowProps {
   lesson: Lesson;
@@ -29,6 +31,9 @@ export interface LessonRowProps {
   onDragEnd: () => void;
   onMove: (direction: 'up' | 'down') => void;
   onSetStatus: (status: LessonProgress['status']) => void;
+  onSetDate: (date: string) => void;
+  selectedForPrint: boolean;
+  onTogglePrint: () => void;
   onShowRegister: () => void;
   onShowQuestions: () => void;
   onAddQuestions: () => void;
@@ -46,6 +51,8 @@ export function LessonRow(p: LessonRowProps) {
   // Lekcja zapoznawcza: jej kolo to tryb 'demo' (patrz resolveRecapMode) - nie
   // ma z czego robic powtorki na ocene.
   const isIntroLesson = lesson.slides.some((s) => s.kind === 'recap' && resolveRecapMode(s) === 'demo');
+  const listQuery = `klasa=${classId}&typ=${lessonMaterialType(lesson)}`;
+  const isTextbook = lessonMaterialType(lesson) === 'textbook';
 
   function handleDragStart(e: DragEvent<HTMLTableRowElement>) {
     if (!dragFromHandle.current) {
@@ -107,7 +114,16 @@ export function LessonRow(p: LessonRowProps) {
       )}
     >
       <TD className="!px-1 text-gray-300">
-        <button
+        {isTextbook ? (
+          <input
+            type="checkbox"
+            checked={p.selectedForPrint}
+            onChange={p.onTogglePrint}
+            aria-label={`Wybierz notatkę do druku: ${lesson.title}`}
+            title="Wybierz notatkę A5 do druku"
+            className="ml-2 h-4 w-4 rounded border-gray-300 text-accent-600"
+          />
+        ) : <button
           type="button"
           aria-label="Przeciągnij, aby zmienić kolejność"
           title="Przeciągnij, aby zmienić kolejność"
@@ -117,7 +133,7 @@ export function LessonRow(p: LessonRowProps) {
           className="flex h-7 w-6 cursor-grab items-center justify-center rounded text-gray-300 hover:bg-gray-100 hover:text-gray-500 active:cursor-grabbing"
         >
           <GripIcon />
-        </button>
+        </button>}
       </TD>
       {/* Kod lekcji ("4.3") - ten sam, ktory dzieci maja w zeszytach. */}
       <TD className="!px-1 whitespace-nowrap tabular-nums text-gray-500">{lesson.code ?? index + 1}</TD>
@@ -126,8 +142,14 @@ export function LessonRow(p: LessonRowProps) {
           {lesson.title}
         </p>
         <p className="mt-0.5 flex items-center gap-x-1.5 text-xs text-gray-500">
-          <span className="shrink-0 tabular-nums">{plural(lesson.slides.length, 'slajd', 'slajdy', 'slajdów')}</span>
-          <span aria-hidden="true">·</span>
+          {lesson.textbookPage && (
+            <>
+              <a target="_blank" rel="noreferrer" href={gwoTextbookUrl(lesson.textbookPage)} className="shrink-0 font-medium text-accent-700 hover:underline">Podręcznik s. {lesson.textbookPage}</a>
+              {lesson.exercisePage && <a target="_blank" rel="noreferrer" href={gwoExercisesUrl(lesson.exercisePage)} className="shrink-0 text-accent-700 hover:underline">Ćwiczenia s. {lesson.exercisePage}</a>}
+              <span aria-hidden="true">·</span>
+            </>
+          )}
+          {!isTextbook && <><span className="shrink-0 tabular-nums">{plural(lesson.slides.length, 'slajd', 'slajdy', 'slajdów')}</span><span aria-hidden="true">·</span></>}
           {questionCount === null ? (
             <button type="button" onClick={p.onAddQuestions} className="shrink-0 text-accent-600 hover:underline">
               dodaj pytania do koła
@@ -178,19 +200,37 @@ export function LessonRow(p: LessonRowProps) {
         </p>
       </TD>
       <TD className="whitespace-nowrap">
-        <span
-          className={clsx('inline-flex rounded-full px-2 py-0.5 text-xs font-medium', STATUS_BADGE_CLASSES[progress.status])}
-          title={isDone && progress.doneDate ? `Zrobiona ${progress.doneDate}` : undefined}
+        <input
+          type="date"
+          value={progress.lessonDate ?? ''}
+          onChange={(event) => p.onSetDate(event.target.value)}
+          aria-label={`Data lekcji: ${lesson.title}`}
+          className="w-[8.8rem] rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-700 outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
+        />
+      </TD>
+      <TD className="whitespace-nowrap">
+        <label className="sr-only" htmlFor={`lesson-status-${lesson.id}-${classId}`}>Status lekcji: {lesson.title}</label>
+        <select
+          id={`lesson-status-${lesson.id}-${classId}`}
+          value={progress.status}
+          onChange={(event) => p.onSetStatus(event.target.value as LessonProgress['status'])}
+          title={isDone && progress.doneDate ? `Zrobiona ${progress.doneDate}` : 'Zmień status dla tej klasy'}
+          className={clsx(
+            'w-28 cursor-pointer rounded-full border-0 px-2.5 py-1 text-xs font-semibold outline-none ring-1 ring-inset ring-black/5 focus:ring-2 focus:ring-accent-500',
+            STATUS_BADGE_CLASSES[progress.status],
+          )}
         >
-          {STATUS_LABELS[progress.status]}
-        </span>
+          {Object.entries(STATUS_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select>
       </TD>
       <TD className="whitespace-nowrap">
         <div className="flex items-center justify-end gap-1">
-          <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}`)}>
-            Pokaż
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${lesson.id}/edytuj?klasa=${classId}`)}>
+          {isTextbook ? (
+            <a target="_blank" rel="noreferrer" href={gwoTextbookUrl(lesson.textbookPage)} className="inline-flex h-8 items-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 hover:bg-gray-50">Otwórz</a>
+          ) : (
+            <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?${listQuery}`)}>Pokaż</Button>
+          )}
+          <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${lesson.id}/edytuj?${listQuery}`)}>
             Edytuj
           </Button>
           <Menu

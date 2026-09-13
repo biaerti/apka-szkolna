@@ -1,4 +1,4 @@
-// Czytanki z lektorem - odtwarzanie mp3 czytanek z podrecznika "Jezyk polski 4. Moim zdaniem".
+// Czytanki z lektorem - odtwarzanie legalnie przygotowanych plikow mp3.
 //
 // Mp3 nie leza w repo (repo jest publiczne, a teksty/nagrania sa objete prawami
 // autorskimi) - w produkcji sa serwowane z Supabase Storage (bucket "czytanki"),
@@ -8,7 +8,7 @@ export type Czytanka = {
   id: string
   title: string
   author?: string
-  pages: string // np. "12-13" - strony w podreczniku "Jezyk polski 4. Moim zdaniem"
+  pages: string // np. "12-13" - strony w podreczniku
   audio: string // pelny URL albo sciezka lokalna do mp3
 }
 

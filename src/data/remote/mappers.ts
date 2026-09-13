@@ -136,6 +136,10 @@ export interface LessonRow {
   id: string;
   grade: string;
   title: string;
+  material_type: Lesson['materialType'] | null;
+  textbook_page: number | null;
+  exercise_page: number | null;
+  notebook_note: string | null;
   code: string | null;
   topic: string | null;
   order: number;
@@ -154,6 +158,10 @@ export function lessonToRow(l: Lesson): LessonRow {
     id: l.id,
     grade: l.grade,
     title: l.title,
+    material_type: l.materialType ?? null,
+    textbook_page: l.textbookPage ?? null,
+    exercise_page: l.exercisePage ?? null,
+    notebook_note: l.notebookNote ?? null,
     code: l.code ?? null,
     topic: l.topic ?? null,
     order: l.order,
@@ -173,6 +181,10 @@ export function rowToLesson(row: LessonRow): Lesson {
     id: row.id,
     grade: row.grade,
     title: row.title,
+    materialType: row.material_type ?? undefined,
+    textbookPage: row.textbook_page ?? undefined,
+    exercisePage: row.exercise_page ?? undefined,
+    notebookNote: row.notebook_note ?? undefined,
     code: row.code ?? undefined,
     topic: row.topic ?? undefined,
     order: row.order,
@@ -323,6 +335,7 @@ export interface SettingsRow {
   review_question_count: number | null;
   answer_timer_sec: number | null;
   slide_font_percent: number | null;
+  reading_plans: Settings['readingPlans'] | null;
 }
 
 export function settingsToRow(s: Settings): SettingsRow {
@@ -336,6 +349,7 @@ export function settingsToRow(s: Settings): SettingsRow {
     review_question_count: s.reviewQuestionCount,
     answer_timer_sec: s.answerTimerSec,
     slide_font_percent: s.slideFontPercent,
+    reading_plans: s.readingPlans ?? null,
   };
 }
 
@@ -354,5 +368,6 @@ export function rowToSettings(row: SettingsRow): Settings {
     answerTimerSec: row.answer_timer_sec ?? 30,
     // Kolumna doszla z wielkoscia liter na projektorze (0014_wielkosc_liter.sql).
     slideFontPercent: row.slide_font_percent ?? 100,
+    readingPlans: row.reading_plans ?? undefined,
   };
 }

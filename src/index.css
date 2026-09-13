@@ -41,6 +41,11 @@ html.panel-gotowy .panel-pasek {
     display: none;
   }
 
+  .lesson-notes-page {
+    width: 210mm !important;
+    height: 297mm !important;
+  }
+
   /* Reset kolorow dla calego wydruku - OMIJA elementy z klasa "print-color"
      (rysunek kola fortuny, podpis linii ciecia), zeby zostaly czytelne na
      wydruku zamiast zgasnac do czerni. Sektory kola i tak rozroznia sie

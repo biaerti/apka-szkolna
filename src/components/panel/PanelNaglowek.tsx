@@ -17,7 +17,7 @@
 import type { SchoolClass } from '../../data/types';
 import { useUchwytPrzeciagania } from './useUchwytPrzeciagania';
 
-export type PanelTryb = 'kolo' | 'stoper';
+export type PanelTryb = 'kolo' | 'stoper' | 'czytanki';
 
 export interface PanelNaglowekProps {
   classes: SchoolClass[];
@@ -75,7 +75,7 @@ export function PanelNaglowek({
       </select>
 
       <div className="flex shrink-0 overflow-hidden rounded-md border border-gray-700">
-        {(['kolo', 'stoper'] as const).map((t) => (
+        {(['kolo', 'stoper', 'czytanki'] as const).map((t) => (
           <button
             key={t}
             type="button"
@@ -87,7 +87,7 @@ export function PanelNaglowek({
                 : 'px-2 py-1 text-xs text-gray-400 hover:bg-gray-800'
             }
           >
-            {t === 'kolo' ? 'Koło' : 'Stoper'}
+            {t === 'kolo' ? 'Koło' : t === 'stoper' ? 'Stoper' : 'Audio'}
           </button>
         ))}
       </div>

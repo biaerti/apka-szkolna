@@ -28,6 +28,7 @@ export function LessonEditor() {
 
   const lesson = lessons.find((l) => l.id === id);
   const classId = searchParams.get('klasa') ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
+  const materialType = searchParams.get('typ') ?? lesson?.materialType ?? 'textbook';
   const [selectedSlideId, setSelectedSlideId] = useState<string | null>(lesson?.slides[0]?.id ?? null);
 
   const selectedIndex = useMemo(
@@ -107,7 +108,7 @@ export function LessonEditor() {
           <p className="text-sm">
             <button
               className="text-gray-500 hover:text-accent-700 hover:underline"
-              onClick={() => navigate(`/lekcje?klasa=${classId}`)}
+              onClick={() => navigate(`/lekcje?klasa=${classId}&typ=${materialType}`)}
             >
               Lekcje
             </button>
@@ -115,7 +116,7 @@ export function LessonEditor() {
             {lesson.code && <span className="mr-2 font-semibold tabular-nums text-gray-500">{lesson.code}</span>}
             <span className="text-gray-700">{lesson.title || 'Nowa lekcja'}</span>
           </p>
-          <Button onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}`)}>Pokaż</Button>
+          <Button onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?typ=${materialType}`)}>Pokaż</Button>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[7rem_1fr] lg:grid-cols-[7rem_1fr_1fr]">
           <div>
@@ -138,6 +139,33 @@ export function LessonEditor() {
               value={lesson.dzial ?? ''}
               onChange={(e) => updateLesson(lesson.id, { dzial: e.target.value || undefined })}
               placeholder="np. Powtórka 1-3"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Rodzaj materiału</label>
+            <Select value={lesson.materialType ?? 'textbook'} onChange={(e) => updateLesson(lesson.id, { materialType: e.target.value as 'review' | 'textbook' })}>
+              <option value="textbook">Z podręcznika</option>
+              <option value="review">Powtórzeniowy</option>
+            </Select>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Strona podręcznika</label>
+              <Input type="number" min={1} value={lesson.textbookPage ?? ''} onChange={(e) => updateLesson(lesson.id, { textbookPage: e.target.value ? Number(e.target.value) : undefined })} />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Strona ćwiczeń</label>
+              <Input type="number" min={1} value={lesson.exercisePage ?? ''} onChange={(e) => updateLesson(lesson.id, { exercisePage: e.target.value ? Number(e.target.value) : undefined })} />
+            </div>
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Notatka do zeszytu - A5</label>
+            <textarea
+              value={lesson.notebookNote ?? ''}
+              onChange={(e) => updateLesson(lesson.id, { notebookNote: e.target.value || undefined })}
+              rows={6}
+              placeholder="Krótka notatka lub szablon do uzupełnienia przez ucznia"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
             />
           </div>
           <div>

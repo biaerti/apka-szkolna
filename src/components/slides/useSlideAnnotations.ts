@@ -26,6 +26,7 @@ export interface SlideAnnotations {
   setColor: (color: string) => void;
   /** Indeks w ANNOTATION_SIZES. */
   sizeIndex: number;
+  setSizeIndex: (index: number) => void;
   cycleSize: () => void;
   /** Grubosc kreski dla biezacego narzedzia, w pikselach kartki 1280x720. */
   strokeWidth: number;
@@ -36,7 +37,7 @@ export interface SlideAnnotations {
   addStroke: (points: AnnotationPoint[]) => void;
   addText: (shape: Omit<TextShape, 'id' | 'kind' | 'color'>) => void;
   /** Poprawka istniejacego dopisku - tresc albo rozmiar ramki (skalowanie). */
-  updateText: (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width'>>) => void;
+  updateText: (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width' | 'x' | 'y' | 'color'>>) => void;
   removeShape: (id: string) => void;
   undo: () => void;
   clearSlide: () => void;
@@ -84,7 +85,7 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
   );
 
   const updateText = useCallback(
-    (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width'>>) => {
+    (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width' | 'x' | 'y' | 'color'>>) => {
       if (!slideId) return;
       setBySlide((prev) => ({
         ...prev,
@@ -127,6 +128,7 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
     color,
     setColor,
     sizeIndex,
+    setSizeIndex,
     cycleSize,
     strokeWidth: strokeWidthFor(tool, size.stroke),
     textSize: size.text,

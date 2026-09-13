@@ -5,7 +5,7 @@
 set -e
 cd "$(dirname "$0")"
 
-VOICE_ID="Bz1e1clEKwgN71Vx7cxj" # Asia - Warm and Friendly Native Polish
+VOICE_ID="8EWWaNTDrqObI22Gvo1q" # Glos wybrany przez Bartka dla czytanek
 MODEL="eleven_multilingual_v2"
 
 line=$(grep ELEVEN_LABS_API_KEY ../.env.local | tr -d '\r')

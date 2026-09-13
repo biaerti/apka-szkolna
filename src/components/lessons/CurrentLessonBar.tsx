@@ -4,6 +4,7 @@
 import { Link } from 'react-router-dom';
 import type { Lesson, SchoolClass } from '../../data/types';
 import { nextLessons } from '../../lib/queue';
+import { lessonMaterialType } from '../../lib/lessonMaterial';
 
 export function CurrentLessonBar({
   classId,
@@ -21,7 +22,7 @@ export function CurrentLessonBar({
     <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-accent-100 bg-accent-50 px-4 py-2.5 text-sm">
       <span className="text-accent-700">Teraz</span>
       <Link
-        to={`/lekcje/${current.id}/pokaz/${classId}`}
+        to={`/lekcje/${current.id}/pokaz/${classId}?typ=${lessonMaterialType(current)}`}
         className="font-medium text-gray-900 underline-offset-2 hover:text-accent-700 hover:underline"
       >
         {current.title}

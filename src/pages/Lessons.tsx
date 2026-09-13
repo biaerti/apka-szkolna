@@ -7,7 +7,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
-import type { Lesson, LessonStatus } from '../data/types';
+import type { Lesson, LessonMaterialType, LessonStatus } from '../data/types';
 import { allGrades, classesOfGrade, gradeLabel, gradeOfClass, lessonProgress, lessonsOfGrade, todayKey } from '../lib/grade';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
@@ -27,6 +27,8 @@ import { duplicateSlide } from '../components/lessons/slideDefaults';
 import { newId } from '../data/id';
 import { useLessonDrag } from '../components/lessons/useLessonDrag';
 import { backfillLessonCodes } from '../lib/lessonCode';
+import { lessonMaterialType } from '../lib/lessonMaterial';
+import { MaterialTabs } from '../components/lessons/MaterialTabs';
 
 export function Lessons() {
   const navigate = useNavigate();
@@ -54,10 +56,27 @@ export function Lessons() {
   const classId = sortedClasses.some((c) => c.id === requested) ? (requested as string) : sortedClasses[0]?.id ?? '';
   const grade = gradeOfClass(classes, classId) ?? '';
   const gradeClasses = useMemo(() => classesOfGrade(classes, grade), [classes, grade]);
-  const label = gradeLabel(classes, grade);
   // Konkretne nazwy klas zamiast odmiany "klas IV / klasy IV" - czytelniej i bez bledow gramatycznych.
   const classNames = gradeClasses.map((c) => c.name).join(', ');
   const gradeLessons = useMemo(() => lessonsOfGrade(lessons, grade), [lessons, grade]);
+  const requestedType = params.get('typ');
+  const hasTextbookLessons = gradeLessons.some((lesson) => lessonMaterialType(lesson) === 'textbook');
+  const materialType: LessonMaterialType = requestedType === 'review' || requestedType === 'textbook'
+    ? requestedType
+    : hasTextbookLessons
+      ? 'textbook'
+      : 'review';
+  const visibleLessons = useMemo(
+    () => gradeLessons.filter((lesson) => lessonMaterialType(lesson) === materialType),
+    [gradeLessons, materialType],
+  );
+  const materialCounts = useMemo(
+    () => ({
+      textbook: gradeLessons.filter((lesson) => lessonMaterialType(lesson) === 'textbook').length,
+      review: gradeLessons.filter((lesson) => lessonMaterialType(lesson) === 'review').length,
+    }),
+    [gradeLessons],
+  );
   const otherGrades = allGrades(classes).filter((g) => g !== grade);
 
   const [newOpen, setNewOpen] = useState(false);
@@ -67,11 +86,16 @@ export function Lessons() {
   // odswiezala sie przy kazdej edycji w oknie.
   const [registerLessonId, setRegisterLessonId] = useState<string | null>(null);
   const [questionsLessonId, setQuestionsLessonId] = useState<string | null>(null);
+  const [printLessonIds, setPrintLessonIds] = useState<string[]>([]);
   const registerLesson = gradeLessons.find((l) => l.id === registerLessonId) ?? null;
   const questionsLesson = gradeLessons.find((l) => l.id === questionsLessonId) ?? null;
 
   const ready = useReadyMaterials(grade, gradeClasses.map((c) => c.id), gradeLessons);
-  const drag = useLessonDrag(gradeLessons, moveLesson);
+  const visibleMaterials = ready.materials.filter((material) =>
+    materialType === 'textbook' ? material.key === 'textbook4' : material.key !== 'textbook4',
+  );
+  const firstVisibleIndex = gradeLessons.findIndex((lesson) => visibleLessons[0]?.id === lesson.id);
+  const drag = useLessonDrag(visibleLessons, (lessonId, toIndex) => moveLesson(lessonId, Math.max(0, firstVisibleIndex) + toIndex));
 
   // Lekcje sprzed wprowadzenia kodow do zeszytu dostaja je przy pierwszym
   // wejsciu na liste - wg kolejnosci w roczniku. Nadane kody juz sie nie zmieniaja.
@@ -98,7 +122,11 @@ export function Lessons() {
   }
 
   function selectClass(id: string) {
-    setParams({ klasa: id }, { replace: true });
+    setParams({ klasa: id, typ: materialType }, { replace: true });
+  }
+
+  function selectMaterial(type: LessonMaterialType) {
+    setParams({ klasa: classId, typ: type }, { replace: true });
   }
 
   function questionCountFor(lesson: Lesson): number | null {
@@ -106,8 +134,8 @@ export function Lessons() {
     return questions.filter((q) => q.setId === lesson.questionSetId).length;
   }
 
-  function handleCreate(title: string) {
-    const lesson = addLesson({ grade, title, progress: {}, slides: [] });
+  function handleCreate(title: string, type: LessonMaterialType) {
+    const lesson = addLesson({ grade, title, materialType: type, progress: {}, slides: [] });
     setNewOpen(false);
     navigate(`/lekcje/${lesson.id}/edytuj?klasa=${classId}`);
   }
@@ -134,6 +162,11 @@ export function Lessons() {
       grade: targetGrade,
       title,
       topic: lesson.topic,
+      materialType: lesson.materialType,
+      textbookPage: lesson.textbookPage,
+      exercisePage: lesson.exercisePage,
+      notebookNote: lesson.notebookNote,
+      dzial: lesson.dzial,
       questionSetId: lesson.questionSetId,
       registerTopic: lesson.registerTopic,
       curriculum: lesson.curriculum,
@@ -143,7 +176,18 @@ export function Lessons() {
   }
 
   function setStatus(lesson: Lesson, status: LessonStatus) {
-    setLessonProgress(lesson.id, classId, status === 'done' ? { status, doneDate: todayKey() } : { status });
+    const current = lessonProgress(lesson, classId);
+    const lessonDate = status === 'in_progress' || status === 'done' ? current.lessonDate ?? todayKey() : current.lessonDate;
+    setLessonProgress(lesson.id, classId, { status, lessonDate, doneDate: status === 'done' ? todayKey() : undefined });
+  }
+
+  function setLessonDate(lesson: Lesson, lessonDate: string) {
+    const current = lessonProgress(lesson, classId);
+    setLessonProgress(lesson.id, classId, { ...current, lessonDate: lessonDate || undefined });
+  }
+
+  function togglePrintLesson(id: string) {
+    setPrintLessonIds((current) => current.includes(id) ? current.filter((item) => item !== id) : current.length < 2 ? [...current, id] : [current[1], id]);
   }
 
   return (
@@ -172,18 +216,37 @@ export function Lessons() {
         </p>
       )}
 
-      <CurrentLessonBar classId={classId} classes={classes} lessons={lessons} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <MaterialTabs active={materialType} counts={materialCounts} onSelect={selectMaterial} />
+        {visibleLessons.length > 0 && materialType === 'textbook' ? (
+          <div className="mb-4 flex items-center gap-2">
+            <span className="text-xs text-gray-500">Zaznacz 2 notatki A5</span>
+            <Button size="sm" variant="secondary" disabled={printLessonIds.length !== 2} onClick={() => navigate(`/lekcje/notatki/druk?ids=${printLessonIds.join(',')}`)}>
+              Drukuj notatki ({printLessonIds.length}/2)
+            </Button>
+          </div>
+        ) : visibleLessons.length > 0 && (
+          <p className="mb-4 text-xs text-gray-500">
+            <span className="font-semibold tabular-nums text-gray-700">
+              {visibleLessons.filter((lesson) => lessonProgress(lesson, classId).status === 'done').length}/{visibleLessons.length}
+            </span>{' '}
+            zrobionych w {classes.find((schoolClass) => schoolClass.id === classId)?.name}
+          </p>
+        )}
+      </div>
 
-      {gradeLessons.length === 0 ? (
+      <CurrentLessonBar classId={classId} classes={classes} lessons={visibleLessons} />
+
+      {visibleLessons.length === 0 ? (
         <EmptyState
-          title={gradeClasses.length > 1 ? `${capitalize(label)} nie mają jeszcze lekcji` : `${capitalize(label)} nie ma jeszcze lekcji`}
-          description="Zacznij od gotowych materiałów albo utwórz własną lekcję."
+          title={materialType === 'textbook' ? 'Brak lekcji z podręcznika' : 'Brak lekcji powtórzeniowych'}
+          description={materialType === 'textbook' ? 'Wstaw gotowy spis tematów „Między nami 4” albo utwórz własną lekcję.' : 'Wstaw gotową powtórkę albo utwórz własną.'}
           action={
             <div className="flex flex-col items-center gap-3">
               <ReadyMaterialsMenu
                 variant="buttons"
                 classNames={classNames}
-                materials={ready.materials}
+                materials={visibleMaterials}
                 refreshMatches={ready.refreshMatches}
                 onRefresh={ready.refresh}
               />
@@ -203,6 +266,7 @@ export function Lessons() {
               {/* Kod lekcji - ten sam, ktory dzieci maja w zeszytach. */}
               <TH className="w-14 !px-1">Kod</TH>
               <TH>Lekcja</TH>
+              <TH className="w-40">Data lekcji</TH>
               <TH className="w-32">Status</TH>
               <TH className="w-52 text-right">
                 <span className="sr-only">Akcje</span>
@@ -210,13 +274,13 @@ export function Lessons() {
             </TR>
           </THead>
           <TBody>
-            {gradeLessons.map((lesson, idx) => (
+            {visibleLessons.map((lesson, idx) => (
               <Fragment key={lesson.id}>
                 {/* Naglowek dzialu nad pierwsza lekcja danej grupy (np. "Powtorka 1-3") -
                     lekcje bez dzialu (wlasne, tematyczne) nie dostaja naglowka. */}
-                {lesson.dzial && lesson.dzial !== gradeLessons[idx - 1]?.dzial && (
+                {lesson.dzial && lesson.dzial !== visibleLessons[idx - 1]?.dzial && (
                   <TR className="bg-gray-50/70">
-                    <td colSpan={5} className="border-t border-gray-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <td colSpan={6} className="border-t border-gray-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
                       {lesson.dzial}
                     </td>
                   </TR>
@@ -226,15 +290,18 @@ export function Lessons() {
                   classId={classId}
                   progress={lessonProgress(lesson, classId)}
                   index={idx}
-                  total={gradeLessons.length}
+                  total={visibleLessons.length}
                   questionCount={questionCountFor(lesson)}
                   dropIndicator={drag.indicatorFor(idx, lesson.id)}
                   onDragStart={() => drag.start(lesson.id)}
                   onDragOver={(position) => drag.over(idx, position)}
                   onDrop={drag.finishDrop}
                   onDragEnd={drag.reset}
-                  onMove={(dir) => moveLesson(lesson.id, dir === 'up' ? idx - 1 : idx + 1)}
+                  onMove={(dir) => moveLesson(lesson.id, Math.max(0, firstVisibleIndex) + (dir === 'up' ? idx - 1 : idx + 1))}
                   onSetStatus={(status) => setStatus(lesson, status)}
+                  onSetDate={(date) => setLessonDate(lesson, date)}
+                  selectedForPrint={printLessonIds.includes(lesson.id)}
+                  onTogglePrint={() => togglePrintLesson(lesson.id)}
                   onShowRegister={() => setRegisterLessonId(lesson.id)}
                   onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}
@@ -248,7 +315,7 @@ export function Lessons() {
         </Table>
       )}
 
-      <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} />
+      <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} initialType={materialType} />
 
       {registerLesson && (
         <LessonRegisterModal
@@ -301,8 +368,4 @@ export function Lessons() {
       />
     </div>
   );
-}
-
-function capitalize(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1);
 }

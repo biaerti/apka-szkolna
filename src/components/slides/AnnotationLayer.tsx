@@ -31,6 +31,7 @@ interface TextDraft {
   text: string;
   size: number;
   width: number;
+  color: string;
 }
 
 function cursorFor(tool: string): string {
@@ -67,7 +68,8 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
 
   function commitText() {
     if (text) {
-      if (text.id) ann.updateText(text.id, { text: text.text.trim(), size: text.size, width: text.width });
+      if (text.id && !text.text.trim()) ann.removeShape(text.id);
+      else if (text.id) ann.updateText(text.id, { text: text.text.trim(), size: text.size, width: text.width, x: text.x, y: text.y, color: text.color });
       else ann.addText({ x: text.x, y: text.y, text: text.text, size: text.size, width: text.width });
     }
     setText(null);
@@ -104,13 +106,14 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
       text: '',
       size: ann.textSize,
       width: Math.min(TEXT_BOX_WIDTH, SLIDE_W - x - TEXT_MARGIN),
+      color: ann.color,
     });
   }
 
   /** Klik w gotowy dopisek narzedziem "Tekst" - poprawiamy tresc albo wielkosc. */
   function editText(shape: TextShape) {
     if (text) commitText();
-    setText({ id: shape.id, x: shape.x, y: shape.y, text: shape.text, size: shape.size, width: textWidth(shape) });
+    setText({ id: shape.id, x: shape.x, y: shape.y, text: shape.text, size: shape.size, width: textWidth(shape), color: shape.color });
   }
 
   function onPointerMove(e: ReactPointerEvent) {
@@ -215,13 +218,24 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
           x={text.x}
           y={text.y}
           value={text.text}
-          color={ann.color}
+          color={text.color}
           size={text.size}
           width={text.width}
           maxWidth={SLIDE_W - text.x - TEXT_MARGIN}
           scale={slideScale()}
           onValue={(value) => setText((cur) => (cur ? { ...cur, text: value } : cur))}
           onSize={(next) => setText((cur) => (cur ? { ...cur, ...next } : cur))}
+          onMove={(next) =>
+            setText((cur) =>
+              cur
+                ? {
+                    ...cur,
+                    x: Math.max(TEXT_MARGIN, Math.min(SLIDE_W - cur.width - TEXT_MARGIN, next.x)),
+                    y: Math.max(TEXT_MARGIN, Math.min(SLIDE_H - cur.size * 2 - TEXT_MARGIN, next.y)),
+                  }
+                : cur,
+            )
+          }
           onCommit={commitText}
           onCancel={() => setText(null)}
         />

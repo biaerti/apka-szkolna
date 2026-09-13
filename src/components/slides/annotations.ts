@@ -111,9 +111,25 @@ export function strokePath(points: AnnotationPoint[]): string {
     const p = points[0];
     return `M ${round(p.x)} ${round(p.y)} L ${round(p.x)} ${round(p.y)}`;
   }
-  return points
-    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${round(p.x)} ${round(p.y)}`)
-    .join(' ');
+  if (points.length === 2) {
+    return `M ${round(points[0].x)} ${round(points[0].y)} L ${round(points[1].x)} ${round(points[1].y)}`;
+  }
+
+  // Krzywa przechodzi przez srodki kolejnych odcinkow. Daje naturalna,
+  // gladka kreske takze przy szybkim pisaniu pisakiem po tablicy, bez
+  // kosztownego przeliczania calego pociagniecia przy kazdym ruchu wskaznika.
+  const parts = [`M ${round(points[0].x)} ${round(points[0].y)}`];
+  for (let i = 1; i < points.length - 1; i += 1) {
+    const current = points[i];
+    const next = points[i + 1];
+    const midX = (current.x + next.x) / 2;
+    const midY = (current.y + next.y) / 2;
+    parts.push(`Q ${round(current.x)} ${round(current.y)} ${round(midX)} ${round(midY)}`);
+  }
+  const beforeLast = points[points.length - 2];
+  const last = points[points.length - 1];
+  parts.push(`Q ${round(beforeLast.x)} ${round(beforeLast.y)} ${round(last.x)} ${round(last.y)}`);
+  return parts.join(' ');
 }
 
 function round(n: number): number {

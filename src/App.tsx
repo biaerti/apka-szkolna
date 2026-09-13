@@ -24,6 +24,7 @@ import { RulesPrint } from './pages/RulesPrint';
 import { Dokumenty } from './pages/Dokumenty';
 import { DocPrint } from './pages/DocPrint';
 import { Panel } from './pages/Panel';
+import { LessonNotesPrint } from './pages/LessonNotesPrint';
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/zasady/druk" element={<RulesPrint />} />
       {/* PSO, plan rozwoju itp. - tresc w src/data/dokumenty.ts */}
       <Route path="/dokumenty/:slug" element={<DocPrint />} />
+      <Route path="/lekcje/notatki/druk" element={<LessonNotesPrint />} />
 
       <Route element={<AppShell />}>
         <Route path="/" element={<Dashboard />} />
