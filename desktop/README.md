@@ -19,6 +19,13 @@ Dwa stany:
     300x138 z samym czasem i - jeśli jest wpisane - poleceniem; zostają w nim
     tylko trzy przyciski okna, a klik w czas = start / pauza.
 
+  - **Audio** - czytanki z lektorem (ElevenLabs), pogrupowane po lekcjach
+    podręcznika. `Spacja` = pauza / odtwórz, strzałki = 10 s w tył / w przód.
+    Czytanka gra dalej po zwinięciu do pigułki (pigułka pokazuje 🔊 i ile
+    zostało) i po przełączeniu na koło. Nagrania leżą w prywatnym buckecie
+    Supabase `czytanki` - generowanie i wysyłka: `audio-czytanki/generuj.py`
+    i `audio-czytanki/wyslij.py`, rejestr w `src/data/czytanki.ts`.
+
   W nagłówku jest też wybór klasy i **Uwagi** (lista klasy z licznikiem uwag
   w tym miesiącu). `Esc` zwija panel do pigułki.
 

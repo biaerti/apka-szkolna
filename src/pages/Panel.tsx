@@ -10,8 +10,9 @@
 //   miesiaca widac, skad plus przyszedl.
 // - STOPER - odliczanie z wlasnym poleceniem ("Czytamy tekst ze s. 12"), bo przy
 //   podreczniku nie ma slajdu zadania, na ktorym stoper stalby normalnie.
+// - AUDIO - czytanki z lektorem (ElevenLabs) z kolejnych lekcji podrecznika.
 //
-// Stan obu trybow (kolo i odliczanie) siedzi TU, a nie w komponentach trybow:
+// Stan trybow (kolo, odliczanie, odtwarzacz czytanek) siedzi TU, a nie w komponentach trybow:
 // przelaczenie trybu ani zwiniecie panelu do pigulki nie moze gubic losowania
 // ani przerywac stopera.
 //
@@ -32,6 +33,7 @@ import { PanelUwagi } from '../components/panel/PanelUwagi';
 import { PanelWheel } from '../components/panel/PanelWheel';
 import { useUchwytPrzeciagania } from '../components/panel/useUchwytPrzeciagania';
 import { PanelCzytanki } from '../components/panel/PanelCzytanki';
+import { formatCzasu, useCzytankaPlayer } from '../components/czytanki/useCzytankaPlayer';
 
 /** Adnotacja zdarzen z panelu - patrz lessonWheelNote (lessonCode jest pusty). */
 const ADNOTACJA = 'podręcznik';
@@ -44,7 +46,7 @@ const ROZMIARY = {
   kolo: { width: 360, height: 600 },
   stoper: { width: 360, height: 300 },
   stoperKompakt: { width: 300, height: 138 },
-  czytanki: { width: 390, height: 470 },
+  czytanki: { width: 390, height: 560 },
 };
 
 const KLUCZ_KLASY = 'apka-szkolna:panel:classId';
@@ -91,6 +93,10 @@ export function Panel() {
     localStorage.setItem(KLUCZ_MINUT, String(minuty));
   }, [minuty]);
   const stoper = useCountdown(minuty * 60);
+
+  // Czytanka gra dalej po zwinieciu do pigulki i po przejsciu na kolo.
+  const czytanka = useCzytankaPlayer();
+  const { toggle: czytankaToggle, seekBy: czytankaSeekBy } = czytanka;
 
   // Rozmiar okna idzie za stanem UI. Pierwsze wywolanie tez jest potrzebne:
   // okno startuje w rozmiarze panelu, ale po restarcie chcemy zgodnosc.
@@ -151,6 +157,18 @@ export function Panel() {
         return;
       }
 
+      if (tryb === 'czytanki') {
+        if (e.code === 'Space' || e.key === 'Enter') {
+          e.preventDefault();
+          czytankaToggle();
+        } else if (e.key === 'ArrowLeft') {
+          czytankaSeekBy(-10);
+        } else if (e.key === 'ArrowRight') {
+          czytankaSeekBy(10);
+        }
+        return;
+      }
+
       if (tryb === 'stoper') {
         if (e.code === 'Space' || e.key === 'Enter') {
           e.preventDefault();
@@ -177,6 +195,8 @@ export function Panel() {
       rozwiniety,
       uwagiOtwarte,
       tryb,
+      czytankaToggle,
+      czytankaSeekBy,
       stoperRunning,
       stoperFinished,
       stoperStart,
@@ -205,6 +225,7 @@ export function Panel() {
         // zaslanialo" znaczyloby "strac stoper z oczu".
         stoper={stoper.running || stoper.finished ? formatMmSs(stoper.remainingSec) : null}
         koniecCzasu={stoper.finished}
+        czytanka={czytanka.playing ? formatCzasu(czytanka.duration - czytanka.currentTime) : null}
         onRozwin={() => setRozwiniety(true)}
       />
     );
@@ -246,7 +267,9 @@ export function Panel() {
             onReset={stoper.reset}
             kompakt={kompakt}
           />
-        ) : <PanelCzytanki />}
+        ) : (
+          <PanelCzytanki player={czytanka} />
+        )}
 
         {uwagiOtwarte && (
           <PanelUwagi classId={classId} students={wheel.classStudents} onZamknij={() => setUwagiOtwarte(false)} />
@@ -260,11 +283,14 @@ function Pigulka({
   nazwaKlasy,
   stoper,
   koniecCzasu,
+  czytanka,
   onRozwin,
 }: {
   nazwaKlasy: string;
   stoper: string | null;
   koniecCzasu: boolean;
+  /** Pozostaly czas grajacej czytanki - pigulka pokazuje, ze lektor czyta. */
+  czytanka: string | null;
   onRozwin: () => void;
 }) {
   const uchwyt = useUchwytPrzeciagania(onRozwin);
@@ -286,6 +312,8 @@ function Pigulka({
         <span className="text-sm font-semibold">{nazwaKlasy}</span>
         {stoper ? (
           <span className="ml-auto text-sm font-bold tabular-nums">{stoper}</span>
+        ) : czytanka ? (
+          <span className="ml-auto text-sm tabular-nums text-accent-300">🔊 {czytanka}</span>
         ) : (
           <span className="ml-auto text-xs text-gray-400">koło</span>
         )}

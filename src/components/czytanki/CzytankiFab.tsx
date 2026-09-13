@@ -1,8 +1,9 @@
 // Pływający przycisk "Czytanki" - odtwarzanie mp3 z lektorem czytanek z podręcznika.
 // Widoczny w całej aplikacji (montowany w AppShell), nie na ekranach prezentacji.
 
-import { useEffect, useRef, useState } from 'react';
-import { CZYTANKI, type Czytanka } from '../../data/czytanki';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { CZYTANKI, grupujWgLekcji } from '../../data/czytanki';
+import { formatCzasu, useCzytankaPlayer } from './useCzytankaPlayer';
 
 function SpeakerIcon({ className }: { className?: string }) {
   return (
@@ -80,38 +81,13 @@ function Seek10Icon({ direction, className }: { direction: 'back' | 'forward'; c
   );
 }
 
-function formatTime(sec: number): string {
-  if (!Number.isFinite(sec) || sec < 0) return '0:00';
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
-
 export function CzytankiFab() {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState<Czytanka | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const player = useCzytankaPlayer();
+  const { current, playing, loading, currentTime, duration, error } = player;
+  const grupy = useMemo(() => grupujWgLekcji(CZYTANKI), []);
   const panelRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const onTime = () => setCurrentTime(audio.currentTime);
-    const onLoaded = () => setDuration(audio.duration || 0);
-    const onEnded = () => setPlaying(false);
-    audio.addEventListener('timeupdate', onTime);
-    audio.addEventListener('loadedmetadata', onLoaded);
-    audio.addEventListener('ended', onEnded);
-    return () => {
-      audio.removeEventListener('timeupdate', onTime);
-      audio.removeEventListener('loadedmetadata', onLoaded);
-      audio.removeEventListener('ended', onEnded);
-    };
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -133,59 +109,8 @@ export function CzytankiFab() {
     };
   }, [open]);
 
-  function play(czytanka: Czytanka) {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (current?.id !== czytanka.id) {
-      setCurrent(czytanka);
-      audio.src = czytanka.audio;
-      setCurrentTime(0);
-      setDuration(0);
-    }
-    audio.play();
-    setPlaying(true);
-  }
-
-  function togglePlayPause() {
-    const audio = audioRef.current;
-    if (!audio || !current) return;
-    if (playing) {
-      audio.pause();
-      setPlaying(false);
-    } else {
-      audio.play();
-      setPlaying(true);
-    }
-  }
-
-  function seekBy(delta: number) {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = Math.max(0, Math.min(duration || audio.duration || 0, audio.currentTime + delta));
-  }
-
-  function seekTo(fraction: number) {
-    const audio = audioRef.current;
-    if (!audio || !duration) return;
-    audio.currentTime = Math.max(0, Math.min(duration, fraction * duration));
-  }
-
-  function stop() {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-    setPlaying(false);
-    setCurrent(null);
-    setCurrentTime(0);
-    setDuration(0);
-  }
-
   return (
     <>
-      <audio ref={audioRef} />
-
       <button
         ref={fabRef}
         type="button"
@@ -225,7 +150,7 @@ export function CzytankiFab() {
                 <p className="truncate text-sm font-medium text-gray-900">{current.title}</p>
                 <button
                   type="button"
-                  onClick={stop}
+                  onClick={player.stop}
                   aria-label="Zatrzymaj"
                   className="shrink-0 text-gray-400 hover:text-gray-600"
                 >
@@ -237,7 +162,7 @@ export function CzytankiFab() {
                 className="mt-3 h-1.5 cursor-pointer rounded-full bg-gray-200"
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
-                  seekTo((e.clientX - rect.left) / rect.width);
+                  player.seekTo((e.clientX - rect.left) / rect.width);
                 }}
               >
                 <div
@@ -247,14 +172,14 @@ export function CzytankiFab() {
               </div>
 
               <div className="mt-1 flex items-center justify-between text-xs text-gray-400">
-                <span>{formatTime(currentTime)}</span>
-                <span>{formatTime(duration)}</span>
+                <span>{formatCzasu(currentTime)}</span>
+                <span>{loading ? 'wczytuję...' : formatCzasu(duration)}</span>
               </div>
 
               <div className="mt-2 flex items-center justify-center gap-4">
                 <button
                   type="button"
-                  onClick={() => seekBy(-10)}
+                  onClick={() => player.seekBy(-10)}
                   aria-label="Cofnij 10 sekund"
                   className="text-gray-500 hover:text-gray-800"
                 >
@@ -262,7 +187,7 @@ export function CzytankiFab() {
                 </button>
                 <button
                   type="button"
-                  onClick={togglePlayPause}
+                  onClick={player.toggle}
                   aria-label={playing ? 'Pauza' : 'Odtwórz'}
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white hover:bg-gray-800"
                 >
@@ -270,7 +195,7 @@ export function CzytankiFab() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => seekBy(10)}
+                  onClick={() => player.seekBy(10)}
                   aria-label="Przewiń 10 sekund"
                   className="text-gray-500 hover:text-gray-800"
                 >
@@ -280,27 +205,36 @@ export function CzytankiFab() {
             </div>
           )}
 
-          <ul className="divide-y divide-gray-100">
-            {CZYTANKI.map((czytanka) => (
-              <li key={czytanka.id}>
-                <button
-                  type="button"
-                  onClick={() => play(czytanka)}
-                  className={`flex w-full items-start justify-between gap-3 px-4 py-3 text-left hover:bg-gray-50 ${
-                    current?.id === czytanka.id ? 'bg-accent-50' : ''
-                  }`}
-                >
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-medium text-gray-900">{czytanka.title}</span>
-                    {czytanka.author && (
-                      <span className="block truncate text-xs text-gray-500">{czytanka.author}</span>
-                    )}
-                  </span>
-                  <span className="shrink-0 text-xs text-gray-400">str. {czytanka.pages}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+          {error && <p className="border-b border-gray-200 px-4 py-2 text-xs text-red-600">{error}</p>}
+
+          {grupy.map((g) => (
+            <div key={g.lekcja}>
+              <p className="bg-gray-50 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                {g.lekcja}. {g.temat}
+              </p>
+              <ul className="divide-y divide-gray-100">
+                {g.czytanki.map((czytanka) => (
+                  <li key={czytanka.id}>
+                    <button
+                      type="button"
+                      onClick={() => void player.play(czytanka)}
+                      className={`flex w-full items-start justify-between gap-3 px-4 py-3 text-left hover:bg-gray-50 ${
+                        current?.id === czytanka.id ? 'bg-accent-50' : ''
+                      }`}
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium text-gray-900">{czytanka.title}</span>
+                        {czytanka.author && (
+                          <span className="block truncate text-xs text-gray-500">{czytanka.author}</span>
+                        )}
+                      </span>
+                      <span className="shrink-0 text-xs text-gray-400">str. {czytanka.pages}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       )}
     </>
