@@ -29,6 +29,7 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
   // kolejne zadanie startuje od wartosci z lekcji) - zmiana na lekcji nie
   // zapisuje sie do slajdu, zeby jeden wolniejszy dzien nie przestawial lekcji na stale.
   const [timerSec, setTimerSec] = useState(typeof slide.timerSec === 'number' ? slide.timerSec : 0);
+  const [showExample, setShowExample] = useState(false);
   const hasTimer = timerSec > 0;
 
   // Z ilustracja tekst dostaje wezsza kolumne - reszta kartki nalezy do obrazka.
@@ -93,6 +94,7 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
             compact
             timerSec={timerSec}
             onAdjust={(delta) => setTimerSec((t) => Math.max(60, t + delta))}
+            onRemove={() => setTimerSec(0)}
           />
         ) : (
           <button
@@ -108,6 +110,38 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
           </button>
         )}
       </div>
+
+      {slide.answerExample && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            setShowExample(true);
+          }}
+          className="absolute bottom-6 left-16 rounded-lg bg-white/10 px-4 py-2 text-lg font-semibold text-gray-200 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          Pokaż przykład odpowiedzi
+        </button>
+      )}
+
+      {showExample && slide.answerExample && (
+        <div
+          className="absolute inset-10 z-20 flex items-center justify-center rounded-2xl bg-gray-900/95 p-12 shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div className="max-w-[980px] text-center">
+            <p className="mb-7 text-3xl font-semibold uppercase tracking-wider text-accent-300">Przykład odpowiedzi</p>
+            <RichText text={slide.answerExample} className="space-y-[0.6em] text-5xl leading-snug text-white" />
+            <button
+              type="button"
+              onClick={() => setShowExample(false)}
+              className="mt-10 rounded-lg bg-white px-6 py-3 text-xl font-bold text-gray-950 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Wróć do zadania
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -42,6 +42,16 @@ export function TaskSlideForm({ slide, onChange }: { slide: TaskSlide; onChange:
         <Textarea rows={6} value={slide.body} onChange={(e) => onChange({ ...slide, body: e.target.value })} />
       </div>
 
+      <div>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Przykład odpowiedzi</label>
+        <Textarea
+          rows={3}
+          value={slide.answerExample ?? ''}
+          onChange={(e) => onChange({ ...slide, answerExample: e.target.value || undefined })}
+          placeholder="Pojawi się dopiero po kliknięciu nauczyciela na slajdzie"
+        />
+      </div>
+
       <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
         <input
           type="checkbox"

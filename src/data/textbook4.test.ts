@@ -20,6 +20,7 @@ describe('buildTextbook4', () => {
       expect(lesson.slides.some((slide) => slide.kind === 'topic')).toBe(true);
       expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
       expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(3);
+      expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
       expect(lesson.slides.some((slide) => slide.kind === 'note')).toBe(true);
     }
     const firstRead = bundle.lessons[0].slides.find((slide) => slide.kind === 'read');

@@ -12,10 +12,12 @@ import { Button } from '../ui/Button';
 export function StopwatchBar({
   timerSec,
   onAdjust,
+  onRemove,
   compact = false,
 }: {
   timerSec: number;
   onAdjust?: (deltaSec: number) => void;
+  onRemove?: () => void;
   compact?: boolean;
 }) {
   const { remainingSec, running, finished, start, pause, reset } = useCountdown(timerSec);
@@ -80,6 +82,18 @@ export function StopwatchBar({
             </>
           )}
         </div>
+      )}
+      {onRemove && (
+        <Button
+          size={btnSize}
+          variant="ghost"
+          className="text-gray-300 hover:bg-white/10"
+          onClick={onRemove}
+          title="Usuń stoper"
+          aria-label="Usuń stoper"
+        >
+          ×
+        </Button>
       )}
     </div>
   );

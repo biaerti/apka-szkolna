@@ -44,6 +44,8 @@ export interface PresentKeysArgs {
   onDrawUndo: () => void;
   /** M = mute: pauza ladowania kartkowki na czas, gdy mowi nauczyciel. */
   onToggleNoisePause: () => void;
+  /** S pokazuje lub chowa stoper dostepny na kazdym slajdzie. */
+  onToggleGlobalTimer: () => void;
 }
 
 export function usePresentKeys(args: PresentKeysArgs) {
@@ -89,6 +91,11 @@ export function usePresentKeys(args: PresentKeysArgs) {
       if (e.key === 'm' || e.key === 'M') {
         e.preventDefault();
         args.onToggleNoisePause();
+        return;
+      }
+      if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        args.onToggleGlobalTimer();
         return;
       }
       if (args.onRecap && (e.key === ' ' || e.key === 'Escape')) return;

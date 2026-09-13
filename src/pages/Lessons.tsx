@@ -86,7 +86,6 @@ export function Lessons() {
   // odswiezala sie przy kazdej edycji w oknie.
   const [registerLessonId, setRegisterLessonId] = useState<string | null>(null);
   const [questionsLessonId, setQuestionsLessonId] = useState<string | null>(null);
-  const [printLessonIds, setPrintLessonIds] = useState<string[]>([]);
   const registerLesson = gradeLessons.find((l) => l.id === registerLessonId) ?? null;
   const questionsLesson = gradeLessons.find((l) => l.id === questionsLessonId) ?? null;
 
@@ -186,10 +185,6 @@ export function Lessons() {
     setLessonProgress(lesson.id, classId, { ...current, lessonDate: lessonDate || undefined });
   }
 
-  function togglePrintLesson(id: string) {
-    setPrintLessonIds((current) => current.includes(id) ? current.filter((item) => item !== id) : current.length < 2 ? [...current, id] : [current[1], id]);
-  }
-
   return (
     <div>
       <PageHeader
@@ -218,14 +213,7 @@ export function Lessons() {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <MaterialTabs active={materialType} counts={materialCounts} onSelect={selectMaterial} />
-        {visibleLessons.length > 0 && materialType === 'textbook' ? (
-          <div className="mb-4 flex items-center gap-2">
-            <span className="text-xs text-gray-500">Zaznacz 2 notatki A5</span>
-            <Button size="sm" variant="secondary" disabled={printLessonIds.length !== 2} onClick={() => navigate(`/lekcje/notatki/druk?ids=${printLessonIds.join(',')}&klasa=${classId}`)}>
-              Drukuj notatki ({printLessonIds.length}/2)
-            </Button>
-          </div>
-        ) : visibleLessons.length > 0 && (
+        {visibleLessons.length > 0 && materialType !== 'textbook' && (
           <p className="mb-4 text-xs text-gray-500">
             <span className="font-semibold tabular-nums text-gray-700">
               {visibleLessons.filter((lesson) => lessonProgress(lesson, classId).status === 'done').length}/{visibleLessons.length}
@@ -301,8 +289,6 @@ export function Lessons() {
                   onMove={(dir) => moveLesson(lesson.id, Math.max(0, firstVisibleIndex) + (dir === 'up' ? idx - 1 : idx + 1))}
                   onSetStatus={(status) => setStatus(lesson, status)}
                   onSetDate={(date) => setLessonDate(lesson, date)}
-                  selectedForPrint={printLessonIds.includes(lesson.id)}
-                  onTogglePrint={() => togglePrintLesson(lesson.id)}
                   onShowRegister={() => setRegisterLessonId(lesson.id)}
                   onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}

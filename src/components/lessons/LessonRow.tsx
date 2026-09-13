@@ -32,8 +32,6 @@ export interface LessonRowProps {
   onMove: (direction: 'up' | 'down') => void;
   onSetStatus: (status: LessonProgress['status']) => void;
   onSetDate: (date: string) => void;
-  selectedForPrint: boolean;
-  onTogglePrint: () => void;
   onShowRegister: () => void;
   onShowQuestions: () => void;
   onAddQuestions: () => void;
@@ -118,16 +116,7 @@ export function LessonRow(p: LessonRowProps) {
       )}
     >
       <TD className="!px-1 text-gray-300">
-        {isTextbook ? (
-          <input
-            type="checkbox"
-            checked={p.selectedForPrint}
-            onChange={p.onTogglePrint}
-            aria-label={`Wybierz notatkę do druku: ${lesson.title}`}
-            title="Wybierz notatkę A5 do druku"
-            className="ml-2 h-4 w-4 rounded border-gray-300 text-accent-600"
-          />
-        ) : <button
+        <button
           type="button"
           aria-label="Przeciągnij, aby zmienić kolejność"
           title="Przeciągnij, aby zmienić kolejność"
@@ -137,7 +126,7 @@ export function LessonRow(p: LessonRowProps) {
           className="flex h-7 w-6 cursor-grab items-center justify-center rounded text-gray-300 hover:bg-gray-100 hover:text-gray-500 active:cursor-grabbing"
         >
           <GripIcon />
-        </button>}
+        </button>
       </TD>
       {/* Kod lekcji ("4.3") - ten sam, ktory dzieci maja w zeszytach. */}
       <TD className="!px-1 whitespace-nowrap tabular-nums text-gray-500">{p.displayCode ?? lesson.code ?? index + 1}</TD>
@@ -232,6 +221,11 @@ export function LessonRow(p: LessonRowProps) {
       </TD>
       <TD className="whitespace-nowrap">
         <div className="flex items-center justify-end gap-1">
+          {isTextbook && (
+            <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/notatki/druk?id=${lesson.id}&klasa=${classId}&copies=50`)}>
+              Materiały A5
+            </Button>
+          )}
           <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?${listQuery}`)}>Pokaż</Button>
           <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${lesson.id}/edytuj?${listQuery}`)}>
             Edytuj

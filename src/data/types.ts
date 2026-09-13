@@ -269,6 +269,8 @@ export type Slide =
       code: string;
       title?: string;
       body: string;
+      /** Pokazywany dopiero po kliknieciu przez nauczyciela, po pracy uczniow. */
+      answerExample?: string;
       page?: number;
       exerciseNo?: string;
       timerSec?: number;

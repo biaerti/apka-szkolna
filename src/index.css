@@ -44,6 +44,12 @@ html.panel-gotowy .panel-pasek {
   .lesson-notes-page {
     width: 210mm !important;
     height: 297mm !important;
+    break-after: page;
+    page: lesson-notes;
+  }
+
+  .lesson-notes-page:last-child {
+    break-after: auto;
   }
 
   /* Reset kolorow dla calego wydruku - OMIJA elementy z klasa "print-color"
@@ -57,4 +63,9 @@ html.panel-gotowy .panel-pasek {
     background-image: none !important;
     color: #000 !important;
   }
+}
+
+@page lesson-notes {
+  size: A4 portrait;
+  margin: 0;
 }

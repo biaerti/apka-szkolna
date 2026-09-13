@@ -20,6 +20,7 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { classesOfGrade, lessonProgress, todayKey } from '../lib/grade';
 import { lessonMaterialType } from '../lib/lessonMaterial';
 import { classLessonCode } from '../lib/lessonCode';
+import { PresentationTimer } from '../components/lessons/PresentationTimer';
 
 export function LessonPresent() {
   const { id, classId: classIdParam } = useParams<{ id: string; classId?: string }>();
@@ -37,6 +38,7 @@ export function LessonPresent() {
   const [index, setIndex] = useState(0);
   const [classPanelOpen, setClassPanelOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const [globalTimerVisible, setGlobalTimerVisible] = useState(false);
   const startedRef = useRef(false);
   const lessonCode = lesson && classId ? classLessonCode(lessons, lesson, classId) : lesson?.code;
   // Kolo na lekcji - stan na poziomie prezentacji, zeby przezyl zmiany slajdow.
@@ -89,6 +91,7 @@ export function LessonPresent() {
     onDrawOff: () => ann.setTool('off'),
     onDrawUndo: ann.undo,
     onToggleNoisePause: noise.togglePause,
+    onToggleGlobalTimer: () => setGlobalTimerVisible((visible) => !visible),
   });
 
   function toggleFullscreen() {
@@ -209,6 +212,8 @@ export function LessonPresent() {
       {!isRecap && <AnnotationToolbar ann={ann} />}
 
       {!isRecap && <NoiseMeterBars meter={noise} />}
+
+      <PresentationTimer onRecap={isRecap} visible={globalTimerVisible} onVisibleChange={setGlobalTimerVisible} />
 
       <PresentProgressBar index={index} total={total} />
       {/* Na slajdzie kola prawy bok zajmuja pasek RecapToolbar i panel uczniow - zegar idzie w lewy gorny rog. */}
