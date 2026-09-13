@@ -144,8 +144,8 @@ export function LessonRow(p: LessonRowProps) {
         <p className="mt-0.5 flex items-center gap-x-1.5 text-xs text-gray-500">
           {lesson.textbookPage && (
             <>
-              <a target="_blank" rel="noreferrer" href={gwoTextbookUrl(lesson.textbookPage)} className="shrink-0 font-medium text-accent-700 hover:underline">Podręcznik s. {lesson.textbookPage}</a>
-              {lesson.exercisePage && <a target="_blank" rel="noreferrer" href={gwoExercisesUrl(lesson.exercisePage)} className="shrink-0 text-accent-700 hover:underline">Ćwiczenia s. {lesson.exercisePage}</a>}
+              <a target="_blank" rel="noreferrer" href={gwoTextbookUrl()} title="Otwiera spis treści podręcznika" className="shrink-0 font-medium text-accent-700 hover:underline">Podręcznik s. {lesson.textbookPage}</a>
+              {lesson.exercisePage && <a target="_blank" rel="noreferrer" href={gwoExercisesUrl()} title="Otwiera spis treści ćwiczeń" className="shrink-0 text-accent-700 hover:underline">Ćwiczenia s. {lesson.exercisePage}</a>}
               <span aria-hidden="true">·</span>
             </>
           )}
@@ -226,7 +226,7 @@ export function LessonRow(p: LessonRowProps) {
       <TD className="whitespace-nowrap">
         <div className="flex items-center justify-end gap-1">
           {isTextbook ? (
-            <a target="_blank" rel="noreferrer" href={gwoTextbookUrl(lesson.textbookPage)} className="inline-flex h-8 items-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 hover:bg-gray-50">Otwórz</a>
+            <a target="_blank" rel="noreferrer" href={gwoTextbookUrl()} title="Otwiera spis treści podręcznika" className="inline-flex h-8 items-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 hover:bg-gray-50">Otwórz</a>
           ) : (
             <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${lesson.id}/pokaz/${classId}?${listQuery}`)}>Pokaż</Button>
           )}

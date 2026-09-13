@@ -4,8 +4,9 @@
 // Wszystko ponizej jest spisane z prawdziwych stron podrecznika, nie ze spisu
 // tresci innego wydania: numery i tytuly tematow, strony, pytania do kola
 // i notatki. Pytania sprawdzaja to, czego temat uczy ("Co dzis przed Toba?"
-// i "Podsumujmy..." w podreczniku), a pytania o czytanke - tylko to, co
-// naprawde jest w jej tekscie. Kazde pytanie ma odpowiedz dla nauczyciela.
+// i "Podsumujmy..." w podreczniku), ale wiekszosc pyta prosto o to, co
+// dzieje sie w czytankach - tylko o to, co naprawde jest w ich tekscie.
+// Kazde pytanie ma odpowiedz dla nauczyciela.
 //
 // Dopisujemy temat dopiero wtedy, gdy strony sa przeczytane. Brakuje lekcji
 // 12-14 (s. 38-45) - nie zgadujemy ich z mapy mysli rozdzialu.
@@ -42,11 +43,12 @@ const TOPICS: Topic[] = [
       'W „Moim lecie z szablozębnym” W. Kurosz narratorem jest Antek.',
     ].join('\n'),
     questions: [
+      { text: 'Kto opowiada historię w „Moim lecie z szablozębnym”?', answer: 'Antek, starszy brat Ulki.' },
+      { text: 'Czym zajmują się rodzice Antka i Ulki?', answer: 'Są artystami rzeźbiarzami.' },
+      { text: 'Dlaczego dzieci nie mogły same zostać w domu na wakacje?', answer: 'Prawo nie pozwala, żeby dziewięciolatek i sześciolatka zostali sami na dwa tygodnie.' },
+      { text: 'Kto miał się zaopiekować dziećmi i jaka była ta osoba według Antka?', answer: 'Ciocia Larysa, nauczycielka matematyki - nigdy się nie uśmiechała i ciągle narzekała na uczniów.' },
+      { text: 'Czy wakacje z ciocią Larysą były w końcu złe? Skąd to wiemy?', answer: 'Nie - w liście dzieci pytają, czy za rok ciocia znów się nimi zaopiekuje.' },
       { text: 'Wymień elementy świata przedstawionego.', answer: 'Czas, miejsce, bohaterowie, wydarzenia i narrator.' },
-      { text: 'Kim jest narrator?', answer: 'Osobą wymyśloną przez autora, która opowiada o wydarzeniach.' },
-      { text: 'Czym autor różni się od narratora?', answer: 'Autor (np. Weronika Kurosz) pisze utwór, a narrator jest postacią, która w utworze opowiada historię.' },
-      { text: 'Dlaczego w „Moim lecie z szablozębnym” dzieci nie mogły same zostać w domu?', answer: 'Prawo nie pozwala, żeby dziewięciolatek i sześciolatka zostali sami na dwa tygodnie, a rodzice wyjeżdżali na plener.' },
-      { text: 'Kto miał się zaopiekować Antkiem i Ulką i czym ta osoba się zajmuje?', answer: 'Ciocia Larysa, ciotka taty - uczy matematyki w szkole.' },
     ],
   },
   {
@@ -63,11 +65,11 @@ const TOPICS: Topic[] = [
       'Być sobą - żyć zgodnie ze swoimi zasadami.',
     ].join('\n'),
     questions: [
-      { text: 'Kim jest podmiot liryczny?', answer: 'Osobą mówiącą w wierszu.' },
-      { text: 'Czy podmiot liryczny to poeta? Uzasadnij.', answer: 'Nie. Poeta pisze wiersz, a podmiot liryczny to osoba, która w tym wierszu mówi.' },
-      { text: 'O co jest pytany podmiot liryczny w wierszu „Ja”?', answer: 'O to, kim będzie.' },
-      { text: 'Dlaczego podmiot liryczny uważa to pytanie za błędne?', answer: 'Bo on już jest kimś - jest sobą teraz, a nie dopiero w przyszłości.' },
-      { text: 'Co znaczy wyrażenie „być sobą”?', answer: 'Żyć zgodnie ze swoimi zasadami.' },
+      { text: 'Kim jest podmiot liryczny?', answer: 'Osobą, która mówi w wierszu.' },
+      { text: 'Jakie pytanie ciągle słyszy osoba mówiąca w wierszu „Ja”?', answer: '„Kim będziesz?”' },
+      { text: 'Dlaczego uważa, że to pytanie jest z błędem?', answer: 'Bo ona już jest - jest sobą teraz, a nie dopiero w przyszłości.' },
+      { text: 'Komu radzi zadawać to pytanie?', answer: 'Tym, którzy martwią się przyszłością.' },
+      { text: 'Co postanawia na końcu wiersza?', answer: 'Że będzie sobą: „Ja zamiar mam być - mną”.' },
     ],
   },
   {
@@ -83,11 +85,11 @@ const TOPICS: Topic[] = [
       '• tabela - gdy porównujemy informacje.',
     ].join('\n'),
     questions: [
-      { text: 'Po co robimy notatki?', answer: 'Żeby zapamiętać najważniejsze informacje - pamięć jest ulotna, a do notatki można wrócić.' },
+      { text: 'Z czym autorzy podręcznika porównują mózg?', answer: 'Z komputerem najwyższej klasy.' },
+      { text: 'Co może się stać z usłyszaną informacją, jeśli jej nie zapiszemy?', answer: 'Możemy ją zapomnieć, np. po nocy - pamięć jest ulotna.' },
+      { text: 'Co w nauce działa jak zapisanie dokumentu na twardym dysku?', answer: 'Notowanie.' },
       { text: 'Wymień trzy sposoby notowania.', answer: 'Tradycyjna notatka, punkt po punkcie, tabela.' },
-      { text: 'Kiedy warto notować punkt po punkcie?', answer: 'Gdy trzeba zapamiętać kolejność działań albo coś uporządkować, wyliczyć.' },
-      { text: 'Do czego najlepiej nadaje się tabela?', answer: 'Do porównywania ze sobą informacji.' },
-      { text: 'Z czym podręcznik porównuje mózg i czym jest wtedy notowanie?', answer: 'Z komputerem; notowanie jest jak zapisanie dokumentu na twardym dysku.' },
+      { text: 'Kiedy najlepiej zrobić notatkę w tabeli?', answer: 'Gdy porównujemy ze sobą informacje.' },
     ],
   },
   {
@@ -106,11 +108,12 @@ const TOPICS: Topic[] = [
       'Sylaby tworzą samogłoski ze spółgłoskami (tra-wa) lub same samogłoski (o-pis).',
     ].join('\n'),
     questions: [
-      { text: 'Czym różni się głoska od litery?', answer: 'Głoskę słyszymy i wypowiadamy, a literę widzimy i piszemy.' },
       { text: 'Ile liter ma polski alfabet?', answer: '32.' },
+      { text: 'Od jakiego alfabetu pochodzi nasz alfabet?', answer: 'Od łacińskiego, używanego w starożytnym Rzymie.' },
+      { text: 'Kiedy i razem z czym alfabet łaciński trafił do Polski?', answer: 'W 966 roku, razem z chrześcijaństwem.' },
+      { text: 'Czym różni się głoska od litery?', answer: 'Głoskę słyszymy i wypowiadamy, a literę widzimy i piszemy.' },
       { text: 'Wymień polskie samogłoski.', answer: 'a, ą, e, ę, i, o, u (ó), y.' },
-      { text: 'Czym różni się samogłoska od spółgłoski?', answer: 'Przy samogłosce powietrze nie napotyka przeszkody, przy spółgłosce napotyka (wargi, język, zęby).' },
-      { text: 'Ile głosek, liter i sylab ma wyraz „chmura”?', answer: '5 głosek (ch-m-u-r-a), 6 liter, 2 sylaby (chmu-ra).' },
+      { text: 'Ile głosek, liter i sylab ma wyraz „chmura”?', answer: '5 głosek, 6 liter, 2 sylaby (chmu-ra).' },
     ],
   },
   {
@@ -129,11 +132,11 @@ const TOPICS: Topic[] = [
       'W. Chotomska nie umie malować, więc w wierszu „Autoportret” opisuje siebie słowami.',
     ].join('\n'),
     questions: [
-      { text: 'Czym jest autoportret?', answer: 'Portretem samego siebie - obrazem, zdjęciem albo opisem.' },
-      { text: 'Co to jest epitet?', answer: 'Wyraz określający rzeczownik, np. jego cechę, barwę albo kształt.' },
-      { text: 'Podaj dwa epitety, którymi można opisać twarz Jana Matejki z autoportretu.', answer: 'Np. surowa, groźna twarz; bujne włosy; długa, gęsta broda; duży, krzywy nos.' },
-      { text: 'Jak osoba mówiąca w wierszu „Autoportret” tworzy swój portret, skoro nie umie malować ani fotografować?', answer: 'Opisuje siebie słowami.' },
-      { text: 'Jaki znak szczególny ma osoba mówiąca w „Autoportrecie” wiosną?', answer: 'Rosną jej skrzydła u ramion.' },
+      { text: 'Co to jest autoportret?', answer: 'Portret samego siebie - obraz, zdjęcie albo opis.' },
+      { text: 'Dlaczego Wanda Chotomska opisała siebie, zamiast się namalować?', answer: 'Nie umie malować, a zdjęcia jej nie wychodzą.' },
+      { text: 'Jakie oczy i ile piegów ma osoba z wiersza „Autoportret”?', answer: 'Piwne oczy i siedem piegów na nosie.' },
+      { text: 'Co dzieje się z nią wiosną?', answer: 'Rosną jej skrzydła u ramion.' },
+      { text: 'Co to jest epitet? Podaj przykład z opisu twarzy Jana Matejki.', answer: 'Wyraz, który określa rzeczownik, np. surowa twarz, gęsta broda, duży nos.' },
     ],
   },
   {
@@ -150,11 +153,11 @@ const TOPICS: Topic[] = [
       'dać upust - okazać, wyrazić coś',
     ].join('\n'),
     questions: [
-      { text: 'Dlaczego syn mędrca nie chciał wychodzić z domu?', answer: 'Miał kompleksy na punkcie wyglądu i bał się, że ludzie będą się z niego śmiać.' },
-      { text: 'Jak mędrzec pokazał synowi, że nie warto słuchać innych?', answer: 'Pięć dni chodzili na bazar, za każdym razem inaczej z osłem, a kupcy zawsze coś krytykowali.' },
-      { text: 'Jaką naukę przekazał synowi mędrzec?', answer: 'Cokolwiek zrobisz, ludzie coś zarzucą - rób to, co słuszne, i idź swoją drogą.' },
-      { text: 'Co znaczy „wziąć kogoś na języki”?', answer: 'Obmówić kogoś, plotkować na jego temat.' },
-      { text: 'Co znaczy „dać upust” czemuś?', answer: 'Okazać, wyrazić coś, np. oburzenie.' },
+      { text: 'Dlaczego syn mędrca nie chciał wychodzić z domu?', answer: 'Wstydził się swojego wyglądu i bał się, że ludzie będą się z niego śmiać.' },
+      { text: 'Co mówili kupcy, gdy ojciec jechał na ośle, a syn szedł pieszo?', answer: 'Że ojciec nie ma litości, bo każe synowi iść pieszo.' },
+      { text: 'A co mówili, gdy obaj szli pieszo obok osła?', answer: 'Że są głupi, bo nie wiedzą, że na osłach się jeździ.' },
+      { text: 'Co zrobili ojciec i syn piątego dnia i jak zareagowali kupcy?', answer: 'Nieśli osła na plecach, a kupcy wybuchnęli śmiechem.' },
+      { text: 'Czego mędrzec chciał nauczyć syna?', answer: 'Że ludzie zawsze coś skrytykują, więc trzeba robić to, co słuszne, i iść swoją drogą.' },
     ],
   },
   {
@@ -170,11 +173,12 @@ const TOPICS: Topic[] = [
       'Kreatywność - umiejętność wymyślania czegoś nowego. Warto dawać pomysłom szansę.',
     ].join('\n'),
     questions: [
-      { text: 'Kiedy obchodzimy Międzynarodowy Dzień Kropki i czego dotyczy to święto?', answer: '15 września; to święto kreatywności, odwagi i odkrywania talentów.' },
-      { text: 'Jaki problem miała Vashti na początku lekcji plastyki?', answer: 'Miała pustą kartkę - uważała, że nie umie rysować.' },
-      { text: 'Co sprawiło, że Vashti zaczęła malować kolejne kropki?', answer: 'Zobaczyła swoją kropkę oprawioną w złotą ramkę nad biurkiem nauczycielki i chciała namalować ładniejszą.' },
-      { text: 'Dlaczego Vashti poprosiła chłopca o podpisanie jego kreski?', answer: 'Chciała dodać mu odwagi - tak jak nauczycielka zrobiła to z nią.' },
-      { text: 'Co bohater książki „Co robisz z pomysłem?” zrobił najpierw ze swoim pomysłem?', answer: 'Odszedł od niego i udawał, że pomysł nie należy do niego - ale pomysł zaczął za nim chodzić.' },
+      { text: 'Kiedy obchodzimy Międzynarodowy Dzień Kropki?', answer: '15 września.' },
+      { text: 'Dlaczego Vashti siedziała nad pustą kartką?', answer: 'Myślała, że nie umie rysować.' },
+      { text: 'Co nauczycielka zrobiła z kropką Vashti?', answer: 'Oprawiła ją w złotą ramkę i powiesiła nad biurkiem.' },
+      { text: 'Jak Vashti pomogła chłopcu, który mówił, że nie umie rysować?', answer: 'Dała mu kartkę, poprosiła o kreskę i o podpis - tak jak nauczycielka zrobiła z nią.' },
+      { text: 'Co osoba mówiąca w „Wielkiej historii małej kreski” znalazła na spacerze i co z tym zrobiła?', answer: 'Małą kreskę - włożyła ją do kieszeni i przyniosła do domu.' },
+      { text: 'Co zrobił pomysł, gdy bohater „Co robisz z pomysłem?” od niego odszedł?', answer: 'Zaczął za nim chodzić.' },
     ],
   },
   {
@@ -193,7 +197,8 @@ const TOPICS: Topic[] = [
     questions: [
       { text: 'Co nazywa czasownik?', answer: 'Czynności i stany.' },
       { text: 'Na jakie pytania odpowiada czasownik?', answer: 'Co robi? Co się z nim dzieje?' },
-      { text: 'Czym różni się czynność od stanu? Podaj po jednym przykładzie.', answer: 'Czynność to działanie, np. biegnie; stan to sytuacja, na którą nie mamy wpływu, np. boi się.' },
+      { text: 'Podaj trzy czasowniki, które mówią, co robi stworek z rysunku w podręczniku.', answer: 'Np. trzyma, oddycha, patrzy, tupie.' },
+      { text: 'Czym różni się czynność od stanu? Podaj przykłady.', answer: 'Czynność to działanie, np. biegnie; stan to coś, na co nie mamy wpływu, np. boi się.' },
       { text: 'Jak piszemy „nie” z czasownikami?', answer: 'Osobno, np. nie wiem, nie idę.' },
     ],
   },
@@ -211,11 +216,12 @@ const TOPICS: Topic[] = [
       'zrobić sobie z czegoś kabaret - żartować z czegoś, co powinno być potraktowane serio',
     ].join('\n'),
     questions: [
-      { text: 'Co to jest plan ramowy?', answer: 'Najważniejsze wydarzenia zapisane w punktach, w kolejności, w jakiej się dzieją.' },
-      { text: 'Czym różni się zdanie od równoważnika zdania?', answer: 'Zdanie ma czasownik w formie osobowej, równoważnik zdania go nie ma.' },
-      { text: 'Jak Bartek zrozumiał słowo „akceptować” w „Historii o akceptacji”?', answer: 'Jako wypłacanie pieniędzy z bankomatu.' },
-      { text: 'Dlaczego Miłosz wstawił się za Bartkiem u pani Temperówki?', answer: 'Wiedział, że Bartek nie żartował, tylko się pomylił, więc uwaga była niesprawiedliwa.' },
-      { text: 'Co znaczy „zrobić sobie z czegoś kabaret”?', answer: 'Żartować z czegoś, co powinno być potraktowane serio.' },
+      { text: 'Co według Bartka znaczyło słowo „akceptować”?', answer: 'Wypłacać pieniądze z bankomatu.' },
+      { text: 'Kto w klasie się nie śmiał?', answer: 'Pani Temperówka i Miłosz.' },
+      { text: 'Co zrobił Miłosz po lekcji?', answer: 'Został w klasie i powiedział pani, że Bartek nie żartował, więc uwaga jest niesprawiedliwa.' },
+      { text: 'Co powiedział Miłoszowi tata?', answer: 'Że jest z niego dumny, bo stanął po słusznej stronie.' },
+      { text: 'Co to jest plan ramowy?', answer: 'Najważniejsze wydarzenia zapisane w punktach, po kolei.' },
+      { text: 'Czym różni się zdanie od równoważnika zdania?', answer: 'Zdanie ma czasownik w formie osobowej, równoważnik go nie ma.' },
     ],
   },
   {
@@ -235,11 +241,11 @@ const TOPICS: Topic[] = [
       'samoakceptacja - zaakceptowanie samego siebie',
     ].join('\n'),
     questions: [
-      { text: 'Dlaczego książę wybiegł z pałacu?', answer: 'Nie chciał się żenić - kandydatki widziały w nim przyszłego króla, a nie jego samego.' },
-      { text: 'Gdzie rozgrywają się wydarzenia w opowiadaniu „Książę, który chciał być żabą”?', answer: 'W pałacu i jego okolicy: nad sadzawką, na rynku, w skromnym domku dziewczyny.' },
-      { text: 'Co sprawiło, że czar prysł i książę odzyskał swój wygląd?', answer: 'Dobroć dziewczyny, która zaopiekowała się żabą.' },
-      { text: 'Które słowo lepiej pasuje do wymowy opowiadania: tolerancja czy samoakceptacja? Dlaczego?', answer: 'Samoakceptacja - dziewczyna radzi księciu, żeby nie udawał kogoś innego i był dobry taki, jaki jest.' },
-      { text: 'Czy wypowiedzenie „Tego dnia książę wiele się nauczył” to zdanie czy równoważnik zdania?', answer: 'Zdanie, bo ma czasownik w formie osobowej (nauczył się).' },
+      { text: 'Dlaczego książę nie chciał się żenić?', answer: 'Kandydatki chciały zostać królowymi, a nie poznać jego samego.' },
+      { text: 'Jakie życzenie wypowiedział książę przy czarowniku?', answer: 'Że chciałby być jak żaba i znaczyć tak mało jak ona.' },
+      { text: 'Co przydarzyło się księciu-żabie w drodze do pałacu?', answer: 'Goniły go dzieci z igłą, wiedźma chciała go wrzucić do kotła, a szlachcic go kopnął.' },
+      { text: 'Dzięki czemu czar prysł?', answer: 'Dzięki dobroci dziewczyny, która zaopiekowała się żabą.' },
+      { text: 'Jaką radę dała księciu dziewczyna?', answer: 'Żeby nie udawał kogoś innego, nie uważał się za lepszego i był sobą - jest dobry taki, jaki jest.' },
     ],
   },
 ];
