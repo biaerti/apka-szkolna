@@ -50,8 +50,8 @@ function buildIntroBundle(grade: string, classIds: string[]): FreshMaterialsBund
 const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
   {
     key: 'textbook4',
-    label: 'Między nami 4 - spis tematów 2026/2027',
-    description: `Doda ${TEXTBOOK4_TOPIC_COUNT} tematów w kolejności z podręcznika, z numerami stron podręcznika i odpowiadającymi stronami ćwiczeń.`,
+    label: 'Podręcznik klasy 4 - tematy z rozdziału I',
+    description: `Doda ${TEXTBOOK4_TOPIC_COUNT} tematów z podręcznika (lekcje 1-16 bez 12-14), ze stronami, notatką A5 i pytaniami do koła o zagadnienia i teksty lekcji.`,
     build: buildTextbook4,
   },
   {
