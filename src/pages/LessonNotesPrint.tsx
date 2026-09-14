@@ -180,17 +180,13 @@ function ConceptDiagram({ art, accent }: { art?: SlideArt; accent: string }) {
 function TaskBlock({ task, color, index }: { task: TaskSlide; color: string; index: number }) {
   const blocks = parseMarkdownLite(task.body);
   return (
-    <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-[3mm] border border-[#cad5e2] bg-white">
-      <div className="flex shrink-0 items-center justify-between gap-2 px-[3.2mm] py-[1.5mm] text-white" style={{ backgroundColor: color }}>
-        <h3 className="text-[9px] font-bold uppercase leading-none">{task.code}. Zadanie na karcie</h3>
-        <span className="text-[7px] font-bold uppercase tracking-[0.04em]">{index + 1}/2</span>
+    <section className="flex min-h-0 flex-col overflow-hidden rounded-[3mm] border border-[#cad5e2] bg-white">
+      <div className="flex shrink-0 items-center justify-between gap-2 px-[3mm] py-[1.2mm] text-white" style={{ backgroundColor: color }}>
+        <h3 className="text-[8.3px] font-bold uppercase leading-none">{task.code}. Zadanie</h3>
+        <span className="text-[6.8px] font-bold uppercase tracking-[0.04em]">{index + 1}/3</span>
       </div>
-      <div className="px-[3.2mm] pb-[1.5mm] pt-[2mm] text-[9px] leading-[1.18] text-[#15243a]">
+      <div className="overflow-hidden px-[3mm] py-[1.5mm] text-[8px] leading-[1.14] text-[#15243a]">
         {blocks.map((block, blockIndex) => <NoteBlock key={blockIndex} block={block} color={color} />)}
-      </div>
-      <div className="mt-auto grid shrink-0 gap-[2.2mm] px-[3.2mm] pb-[2.2mm]" aria-label="Miejsce na odpowiedź">
-        <span className="border-b border-dotted border-slate-400" />
-        <span className="border-b border-dotted border-slate-400" />
       </div>
     </section>
   );
@@ -200,7 +196,7 @@ function Handout({ title, code, textbookPage, note, slides }: { title: string; c
   const sections = sectionsFromNote(note);
   const theme = (textbookPage && THEMES[textbookPage]) || { accent: '#4f46e5', pale: '#eef2ff' };
   const blankCount = note?.match(/\{\{[^{}]+\}\}/g)?.length ?? 0;
-  const tasks = slides.filter((slide): slide is TaskSlide => slide.kind === 'task').slice(0, 2);
+  const tasks = slides.filter((slide): slide is TaskSlide => slide.kind === 'task').slice(0, 3);
   const explainer = slides.find((slide): slide is Extract<Slide, { kind: 'text' }> => slide.kind === 'text' && Boolean(slide.art));
   const topicArt = explainer?.art ?? tasks.find((task) => task.art)?.art;
 
@@ -216,7 +212,7 @@ function Handout({ title, code, textbookPage, note, slides }: { title: string; c
         <ConceptDiagram art={topicArt} accent={theme.accent} />
       </header>
 
-      <div className="mb-[2.5mm] grid h-[55mm] shrink-0 grid-cols-2 gap-[2mm]">
+      <div className="mb-[2.5mm] grid h-[52mm] shrink-0 grid-cols-2 gap-[2mm]">
         {sections.map((section, index) => {
           const color = index === 0 ? theme.accent : SECTION_COLORS[(index - 1) % SECTION_COLORS.length];
           return (
@@ -234,17 +230,17 @@ function Handout({ title, code, textbookPage, note, slides }: { title: string; c
 
       <div className="mb-[1.5mm] flex items-center justify-between">
         <h2 className="text-[9px] font-bold uppercase tracking-[0.04em] text-[#15243a]">Zrób tutaj</h2>
-        <span className="text-[7.5px] font-semibold text-[#57657a]">Z3 wykonaj na stronie obok w zeszycie</span>
+        <span className="text-[7.5px] font-semibold text-[#57657a]">Odpowiedzi zapisz na prawej stronie zeszytu</span>
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-rows-2 gap-[2mm]">
+      <div className="grid min-h-0 flex-1 grid-rows-3 gap-[1.5mm]">
         {tasks.map((task, index) => (
           <TaskBlock key={task.id} task={task} color={index === 0 ? theme.accent : SECTION_COLORS[1]} index={index} />
         ))}
       </div>
 
       <footer className="mt-[2mm] flex items-center justify-between border-t-2 pt-[1.3mm] text-[7px] font-bold uppercase" style={{ borderColor: theme.accent, color: theme.accent }}>
-        <span>{blankCount > 0 ? `Uzupełnij ${blankCount} pola - zrób Z1 i Z2 - sprawdź` : 'Przeczytaj - zrób Z1 i Z2 - sprawdź'}</span>
+        <span>{blankCount > 0 ? `Uzupełnij ${blankCount} pola - zrób Z1, Z2 i Z3 - sprawdź` : 'Przeczytaj - zrób Z1, Z2 i Z3 - sprawdź'}</span>
         <span>{code ?? ''}</span>
       </footer>
     </article>
