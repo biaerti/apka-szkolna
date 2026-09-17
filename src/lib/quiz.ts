@@ -77,7 +77,11 @@ export function questionPoints(q: QuizQuestion): number {
 
 /** Suma punktow calej kartkowki - do naglowka i do progow procentowych. */
 export function totalPoints(questions: QuizQuestion[]): number {
-  return questions.reduce((sum, q) => sum + questionPoints(q), 0);
+  return questions.reduce((sum, q) => sum + (q.bonus ? 0 : questionPoints(q)), 0);
+}
+
+export function bonusPoints(questions: QuizQuestion[]): number {
+  return questions.reduce((sum, q) => sum + (q.bonus ? questionPoints(q) : 0), 0);
 }
 
 /** "1 pkt" / "2 pkt" - polska forma jest tu nieodmienna, wiec bez pluralizacji. */

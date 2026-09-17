@@ -52,11 +52,8 @@ export function QuizQuestionRow({
     <div className="flex items-start gap-3 border-b border-gray-100 px-4 py-3 last:border-b-0">
       <span className="mt-0.5 w-7 shrink-0 text-right text-sm font-medium text-gray-400">{index + 1}.</span>
       {!editing && (
-        <span
-          className="mt-0.5 shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium tabular-nums text-gray-500"
-          title={POINTS_RULE}
-        >
-          {pointsLabel(questionPoints(question))}
+        <span className="mt-0.5 shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium tabular-nums text-gray-500" title={POINTS_RULE}>
+          {question.bonus ? 'Bonus · ' : ''}{pointsLabel(questionPoints(question))}
         </span>
       )}
       <div className="min-w-0 flex-1">

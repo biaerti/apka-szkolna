@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Lesson, Question, QuestionSet, QuizQuestion, SchoolClass } from '../data/types';
 import {
+  bonusPoints,
   defaultQuizTitle,
   formatQuizDate,
   lessonQuestionOptions,
@@ -10,6 +11,7 @@ import {
   quizKindTitle,
   quizQuestionFromLessonItem,
   renumber,
+  totalPoints,
 } from './quiz';
 
 const CLASSES: SchoolClass[] = [
@@ -98,6 +100,17 @@ describe('renumber / moveQuizQuestion', () => {
     expect(moveQuizQuestion(list, 'a', 'up').map((q) => q.id)).toEqual(['a', 'b', 'c']);
     expect(moveQuizQuestion(list, 'zzz', 'up').map((q) => q.id)).toEqual(['a', 'b', 'c']);
     expect(moveQuizQuestion(list, 'c', 'up').map((q) => q.order)).toEqual([0, 1, 2]);
+  });
+});
+
+describe('punktacja zadania bonusowego', () => {
+  it('liczy bonus osobno od wyniku podstawowego', () => {
+    const questions: QuizQuestion[] = [
+      { id: 'normal', text: 'Zadanie', order: 0, points: 2 },
+      { id: 'bonus', text: 'Bonus', order: 1, points: 2, bonus: true },
+    ];
+    expect(totalPoints(questions)).toBe(2);
+    expect(bonusPoints(questions)).toBe(2);
   });
 });
 

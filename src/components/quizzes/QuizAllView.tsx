@@ -13,7 +13,7 @@ import type { QuizQuestion } from '../../data/types';
 import { SLIDE_W } from '../slides/fitText';
 import { useSlideFontScale } from '../slides/useSlideFontScale';
 import { quizLayout } from './quizColumns';
-import { POINTS_RULE, pointsLabel, questionPoints } from '../../lib/quiz';
+import { pointsLabel, questionPoints } from '../../lib/quiz';
 
 export function QuizAllView({
   questions,
@@ -33,9 +33,6 @@ export function QuizAllView({
   }, [questions, showAnswers, columns, scale]);
 
   const groups = columns === 2 && split < questions.length ? [questions.slice(0, split), questions.slice(split)] : [questions];
-
-  // Zasada punktacji na dole - tylko gdy jakiekolwiek zadanie jest za 2 pkt.
-  const showRule = questions.some((q) => questionPoints(q) > 1);
 
   return (
     <div className="mx-auto flex w-full max-w-[92vw] flex-1 flex-col justify-center">
@@ -62,7 +59,6 @@ export function QuizAllView({
           </ol>
         ))}
       </div>
-      {showRule && <p className="mt-[2vh] text-center text-[1.2vw] text-gray-500">{POINTS_RULE}</p>}
     </div>
   );
 }

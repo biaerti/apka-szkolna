@@ -422,6 +422,12 @@ export interface QuizQuestion {
   id: ID;
   text: string;
   answer?: string;
+  /** Punkty dodatkowe, niepowiększające wyniku podstawowego. */
+  bonus?: boolean;
+  /** Ilość miejsca na odpowiedź w wydruku; domyślnie trzy linie. */
+  printLines?: number;
+  /** Puste pole do samodzielnego narysowania tabeli. */
+  printLayout?: 'table';
   sourceQuestionId?: ID;
   /**
    * Skad pytanie przyszlo, w jezyku nauczyciela: "4.2 Z1" (zadanie robione na

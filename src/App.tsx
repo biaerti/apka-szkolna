@@ -14,6 +14,7 @@ import { MeetingDetail } from './pages/MeetingDetail';
 import { Quizzes } from './pages/Quizzes';
 import { QuizDetail } from './pages/QuizDetail';
 import { QuizPresent } from './pages/QuizPresent';
+import { QuizPrint } from './pages/QuizPrint';
 import { Timetable } from './pages/Timetable';
 import { Uwagi } from './pages/Uwagi';
 import { SettingsPage } from './pages/Settings';
@@ -35,6 +36,7 @@ export default function App() {
       <Route path="/lekcje/:id/pokaz/:classId" element={<LessonPresent />} />
       <Route path="/lekcje/:id/pokaz" element={<LessonPresent />} />
       <Route path="/kartkowki/:id/pokaz" element={<QuizPresent />} />
+      <Route path="/kartkowki/:id/druk" element={<QuizPrint />} />
       {/* Plywajacy panel desktopowy (folder desktop/) - kolo nad multipodrecznikiem */}
       <Route path="/panel" element={<Panel />} />
       {/* Wydruk zasad - bez paska bocznego, wlasny uklad A4 */}

@@ -18,7 +18,7 @@ import { QuizQuestionRow } from '../components/quizzes/QuizQuestionRow';
 import { OwnQuestionForm } from '../components/quizzes/OwnQuestionForm';
 import { PickQuestionsModal } from '../components/quizzes/PickQuestionsModal';
 import { GenerateQuizModal } from '../components/quizzes/GenerateQuizModal';
-import { moveQuizQuestion, ownQuizQuestion, pointsLabel, quizQuestionFromLessonItem, renumber, totalPoints } from '../lib/quiz';
+import { bonusPoints, moveQuizQuestion, ownQuizQuestion, pointsLabel, quizQuestionFromLessonItem, renumber, totalPoints } from '../lib/quiz';
 
 export function QuizDetail() {
   const { id } = useParams<{ id: string }>();
@@ -94,6 +94,9 @@ export function QuizDetail() {
           <Button variant="secondary" onClick={() => navigate('/kartkowki')}>
             Wróć
           </Button>
+          <Button variant="secondary" onClick={() => navigate(`/kartkowki/${quizId}/druk`)} disabled={questions.length === 0}>
+            Drukuj
+          </Button>
           <Button onClick={() => navigate(`/kartkowki/${quizId}/pokaz`)} disabled={questions.length === 0}>
             Pokaż na projektorze
           </Button>
@@ -111,7 +114,7 @@ export function QuizDetail() {
           Wygeneruj zadania
         </Button>
         <span className="ml-auto text-sm text-gray-500">
-          {questions.length === 0 ? 'Brak pytań' : `Pytań: ${questions.length} · ${pointsLabel(totalPoints(questions))}`}
+          {questions.length === 0 ? 'Brak pytań' : `Pytań: ${questions.length} · ${pointsLabel(totalPoints(questions))}${bonusPoints(questions) ? ` + ${pointsLabel(bonusPoints(questions))} bonus` : ''}`}
         </span>
       </div>
 
