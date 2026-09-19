@@ -109,6 +109,9 @@ export function ClassDetail() {
         actions={
           tab === 'uczniowie' ? (
             <>
+              <Link to={`/sala/${schoolClass.id}`}>
+                <Button variant="secondary">Sala</Button>
+              </Link>
               <Button variant="secondary" onClick={() => setImportOpen(true)}>
                 Importuj z tekstu
               </Button>

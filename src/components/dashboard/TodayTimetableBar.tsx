@@ -73,6 +73,15 @@ export function TodayTimetableBar() {
                 {cls?.name ?? '?'}
               </span>
               {isHighlighted && hint && <span className="text-xs text-accent-700">{hint}</span>}
+              {isHighlighted && e.classId && (
+                <Link
+                  to={`/sala/${e.classId}`}
+                  className="rounded border border-accent-300 bg-white px-1.5 py-0.5 text-xs font-medium text-accent-700 hover:bg-accent-100"
+                  title="Ławki tej klasy: plus, plomba, uwaga jednym kliknięciem"
+                >
+                  Sala
+                </Link>
+              )}
             </span>
           </span>
         );

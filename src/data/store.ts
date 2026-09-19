@@ -13,6 +13,7 @@ import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
 import { timetableCellId } from '../lib/timetable';
 import { absenceId } from '../lib/attendance';
+import { placeStudent, type SeatPosition } from '../lib/seating';
 import { monthKey as recapMonthKey } from '../lib/week';
 import type {
   Absence,
@@ -25,6 +26,7 @@ import type {
   Quiz,
   RecapEvent,
   SchoolClass,
+  Seat,
   Settings,
   Student,
   TimetableEntry,
@@ -58,6 +60,7 @@ interface AppState {
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
   absences: Absence[];
+  seats: Seat[];
   settings: Settings;
   manuallyEditedLessonIds: ManuallyEditedLessonIds;
 
@@ -144,6 +147,18 @@ interface AppState {
   setAbsent: (args: { studentId: string; classId: string; date: string; absent: boolean; period?: number }) => void;
 
   // Ustawienia
+  // Miejsca w lawkach (widok "Sala"; patrz types.ts: Seat i src/lib/seating.ts)
+  /**
+   * Sadza ucznia na wskazanym miejscu. Jesli miejsce jest zajete, tamten
+   * uczen przechodzi na dotychczasowe miejsce sadzanego (zamiana), a gdy
+   * sadzany miejsca nie mial - traci swoje (schodzi do "bez lawki").
+   */
+  setSeat: (args: { classId: string; studentId: string } & SeatPosition) => void;
+  /** Zdejmuje ucznia z lawki. */
+  clearSeat: (studentId: string) => void;
+  /** Czysci cale rozsadzenie klasy. */
+  clearSeating: (classId: string) => void;
+
   updateSettings: (patch: Partial<Settings>) => void;
 
   // Reset / import calego stanu
@@ -161,6 +176,7 @@ interface AppState {
       | 'periods'
       | 'timetable'
       | 'absences'
+      | 'seats'
       | 'settings'
     >,
   ) => void;
@@ -302,6 +318,7 @@ export const useStore = create<AppState>()(
       periods: [],
       timetable: [],
       absences: [],
+      seats: [],
       settings: {
         passesPerMonth: 2,
         hintGivesMinus: true,
@@ -337,6 +354,7 @@ export const useStore = create<AppState>()(
           quizzes: s.quizzes.filter((q) => q.classId !== id),
           timetable: s.timetable.filter((e) => e.classId !== id),
           absences: s.absences.filter((a) => a.classId !== id),
+          seats: s.seats.filter((seat) => seat.classId !== id),
           questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
         }));
       },
@@ -356,6 +374,7 @@ export const useStore = create<AppState>()(
           students: s.students.filter((st) => st.id !== id),
           recapEvents: s.recapEvents.filter((e) => e.studentId !== id),
           absences: s.absences.filter((a) => a.studentId !== id),
+          seats: s.seats.filter((seat) => seat.studentId !== id),
         }));
       },
       setActive: (id, active) => {
@@ -535,6 +554,22 @@ export const useStore = create<AppState>()(
         });
       },
 
+      setSeat: (args) => {
+        set((s) => {
+          const next = placeStudent(s.seats, args);
+          return next === s.seats ? {} : { seats: next };
+        });
+      },
+      clearSeat: (studentId) => {
+        set((s) => {
+          const rest = s.seats.filter((seat) => seat.studentId !== studentId);
+          return rest.length === s.seats.length ? {} : { seats: rest };
+        });
+      },
+      clearSeating: (classId) => {
+        set((s) => ({ seats: s.seats.filter((seat) => seat.classId !== classId) }));
+      },
+
       updateSettings: (patch) => {
         set((s) => ({ settings: { ...s.settings, ...patch } }));
       },
@@ -556,6 +591,7 @@ export const useStore = create<AppState>()(
           periods: DEFAULT_PERIODS,
           timetable: buildSeedTimetable(seed.classes),
           absences: [],
+          seats: [],
           settings: seed.settings,
           manuallyEditedLessonIds: {},
         }));
@@ -563,7 +599,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 15,
+      version: 17,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -606,6 +642,8 @@ export const useStore = create<AppState>()(
       // slajdach urosly, wiec bez ruszania ustawien i tak jest wieksze.
       // v14 -> v15: dochodzi kolekcja absences (obecnosc z plywajacego panelu).
       // Stare dane dostaja pusta liste.
+      // v16 -> v17: dochodzi kolekcja seats (miejsca w lawkach, widok "Sala").
+      // Stare dane dostaja pusta liste - rozsadzenie robi sie recznie.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -618,6 +656,7 @@ export const useStore = create<AppState>()(
           periods?: LessonPeriod[];
           timetable?: TimetableEntry[];
           absences?: Absence[];
+          seats?: Seat[];
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -687,6 +726,9 @@ export const useStore = create<AppState>()(
         }
         if (version < 15 && !Array.isArray(state.absences)) {
           state.absences = [];
+        }
+        if (version < 17 && !Array.isArray(state.seats)) {
+          state.seats = [];
         }
         if (version < 14 && state.settings) {
           state.settings = { ...state.settings, slideFontPercent: state.settings.slideFontPercent ?? 100 };

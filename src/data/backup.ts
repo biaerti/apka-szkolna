@@ -10,6 +10,7 @@ import type {
   Quiz,
   RecapEvent,
   SchoolClass,
+  Seat,
   Settings,
   Student,
   TimetableEntry,
@@ -34,13 +35,15 @@ export interface BackupData {
   timetable?: TimetableEntry[];
   /** Doszlo w wersji 5 backupu (obecnosc) - starsze pliki tego pola nie maja. */
   absences?: Absence[];
+  /** Doszlo w wersji 6 backupu (miejsca w lawkach) - starsze pliki tego pola nie maja. */
+  seats?: Seat[];
   settings: Settings;
 }
 
 export function buildBackup(): BackupData {
   const s = useStore.getState();
   return {
-    version: 5,
+    version: 6,
     exportedAt: new Date().toISOString(),
     classes: s.classes,
     students: s.students,
@@ -53,6 +56,7 @@ export function buildBackup(): BackupData {
     periods: s.periods,
     timetable: s.timetable,
     absences: s.absences,
+    seats: s.seats,
     settings: s.settings,
   };
 }
@@ -104,6 +108,7 @@ export function applyBackup(data: BackupData): void {
     periods: data.periods ?? useStore.getState().periods,
     timetable: data.timetable ?? useStore.getState().timetable,
     absences: data.absences ?? useStore.getState().absences,
+    seats: data.seats ?? useStore.getState().seats,
     settings: data.settings,
   });
 }

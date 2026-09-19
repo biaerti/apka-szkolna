@@ -520,3 +520,28 @@ export interface Absence {
   period?: number; // LessonPeriod.no
   at: string; // ISO
 }
+
+/**
+ * Kolumna lawek z perspektywy patrzacego NA TABLICE: L = lewa, S = srodek,
+ * P = prawa. Tak Bartek nazywa lawki w klasie ("P1", "S3"), wiec kod uzywa
+ * tych samych liter.
+ */
+export type SeatColumn = 'L' | 'S' | 'P';
+
+/**
+ * Miejsce ucznia w lawce (widok "Sala", src/pages/Sala.tsx). Wszystkie klasy
+ * siedza w tej samej sali: 3 kolumny x 5 rzedow lawek, w lawce dwa miejsca.
+ * Jeden uczen ma najwyzej jedno miejsce - id jest wyliczane z ucznia
+ * (src/lib/seating.ts: seatId), wiec przesadzenie to zwykly upsert, a nie
+ * usun + dodaj, i dwa urzadzenia nie zrobia mu dwoch miejsc.
+ */
+export interface Seat {
+  id: ID;
+  classId: ID;
+  studentId: ID;
+  column: SeatColumn;
+  /** 1 = rzad przy tablicy. */
+  row: number;
+  /** 1 = lewe miejsce w lawce (patrzac na tablice), 2 = prawe. */
+  side: 1 | 2;
+}

@@ -45,6 +45,7 @@ import {
   type TimetableEntryRow,
 } from './timetableMappers';
 import { absenceToRow, rowToAbsence, type AbsenceRow } from './absenceMappers';
+import { rowToSeat, seatToRow, type SeatRow } from './seatMappers';
 import { DEFAULT_PERIODS, buildSeedTimetable } from '../timetableSeed';
 import type {
   Absence,
@@ -56,6 +57,7 @@ import type {
   Quiz,
   RecapEvent,
   SchoolClass,
+  Seat,
   Settings,
   Student,
   TimetableEntry,
@@ -81,6 +83,7 @@ export interface RemoteData {
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
   absences: Absence[];
+  seats: Seat[];
   settings: Settings;
 }
 
@@ -136,6 +139,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
     periodRows,
     timetableRows,
     absenceRows,
+    seatRows,
     settingsRows,
   ] =
     await Promise.all([
@@ -150,6 +154,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
       fetchAllRows<LessonPeriodRow>('lesson_periods'),
       fetchAllRows<TimetableEntryRow>('timetable_entries'),
       fetchAllRows<AbsenceRow>('absences'),
+      fetchAllRows<SeatRow>('seats'),
       fetchAllRows<SettingsRow>('settings'),
     ]);
 
@@ -176,6 +181,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
       periods: timetableSeeded ? DEFAULT_PERIODS : periodRows.map(rowToPeriod),
       timetable: timetableSeeded ? buildSeedTimetable(classes) : timetableRows.map(rowToTimetableEntry),
       absences: absenceRows.map(rowToAbsence),
+      seats: seatRows.map(rowToSeat),
       settings: settingsRows[0] ? rowToSettings(settingsRows[0]) : DEFAULT_SETTINGS,
     },
   };
@@ -219,6 +225,7 @@ type CollectionName =
   | 'periods'
   | 'timetable'
   | 'absences'
+  | 'seats'
   | 'settings';
 
 // Kolejnosc dla upsertow - rodzice przed dziecmi (zgodnie z FK w 0001_init.sql).
@@ -234,6 +241,7 @@ const UPSERT_ORDER: CollectionName[] = [
   'periods',
   'timetable', // FK do classes - po 'classes'
   'absences', // FK do students i classes
+  'seats', // FK do students i classes
   'settings',
 ];
 const DELETE_ORDER: CollectionName[] = [...UPSERT_ORDER].reverse();
@@ -250,6 +258,7 @@ const TABLE_NAMES: Record<CollectionName, string> = {
   periods: 'lesson_periods',
   timetable: 'timetable_entries',
   absences: 'absences',
+  seats: 'seats',
   settings: 'settings',
 };
 
@@ -265,6 +274,7 @@ interface StoreSlice {
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
   absences: Absence[];
+  seats: Seat[];
   settings: Settings;
 }
 
@@ -292,6 +302,8 @@ function rowsFor(collection: CollectionName, state: StoreSlice): Array<{ id: str
       return state.timetable.map(timetableEntryToRow);
     case 'absences':
       return state.absences.map(absenceToRow);
+    case 'seats':
+      return state.seats.map(seatToRow);
     case 'settings':
       return [settingsToRow(state.settings)];
   }
@@ -310,6 +322,7 @@ function emptySnapshots(): Record<CollectionName, Snapshot> {
     periods: new Map(),
     timetable: new Map(),
     absences: new Map(),
+    seats: new Map(),
     settings: new Map(),
   };
 }
