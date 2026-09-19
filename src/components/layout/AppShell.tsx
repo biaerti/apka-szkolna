@@ -5,6 +5,8 @@ import { useAuth } from '../../data/auth';
 import { useSyncStatus } from '../../data/remote/sync';
 import { CzytankiFab } from '../czytanki/CzytankiFab';
 import { UwagiPrzypomnienie, useUwagiDoWpisania } from '../uwagi/UwagiPrzypomnienie';
+import { IncomingUwagaToast } from '../uwagi/IncomingUwagaToast';
+import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 
 // Krotkie menu - nauczyciel ma nie byc "milionerem na zakladkach, ktorych nie
 // bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w inne ekrany
@@ -34,6 +36,9 @@ const NAV_ITEMS = [
 
 export function AppShell() {
   const doWpisania = useUwagiDoWpisania().length;
+  // Dzisiejsze zdarzenia z chmury (realtime + polling): uwaga dana z telefonu
+  // ma wyskoczyc na komputerze jako popup (IncomingUwagaToast).
+  useTodayEventsPull();
   return (
     <div className="flex min-h-screen bg-gray-50">
       <aside className="flex w-56 shrink-0 flex-col border-r border-gray-200 bg-white">
@@ -66,6 +71,7 @@ export function AppShell() {
       </aside>
       <main className="flex-1 overflow-y-auto px-8 py-6">
         <Outlet />
+        <IncomingUwagaToast />
       </main>
       <CzytankiFab />
       <UwagiPrzypomnienie />

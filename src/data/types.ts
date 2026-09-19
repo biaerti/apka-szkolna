@@ -75,6 +75,12 @@ export interface RecapEvent {
    * pokazywac, co jeszcze zostalo do wpisania po lekcjach. Brak pola = nie.
    */
   wpisane?: boolean;
+  /**
+   * Urzadzenie (przegladarka), ktore zapisalo zdarzenie - src/lib/device.ts.
+   * Komputer po tym poznaje uwage z telefonu i pokazuje ja jako popup
+   * (src/components/uwagi/useIncomingUwagi.ts). Stare zdarzenia go nie maja.
+   */
+  deviceId?: string;
   at: string; // ISO
 }
 

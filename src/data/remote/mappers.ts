@@ -210,6 +210,7 @@ export interface RecapEventRow {
   result: RecapEvent['result'];
   note: string | null;
   wpisane: boolean;
+  device_id?: string | null;
   at: string;
 }
 
@@ -223,6 +224,7 @@ export function recapEventToRow(e: RecapEvent): RecapEventRow {
     result: e.result,
     note: e.note ?? null,
     wpisane: e.wpisane ?? false,
+    device_id: e.deviceId ?? null,
     at: e.at,
   };
 }
@@ -240,6 +242,7 @@ export function rowToRecapEvent(row: RecapEventRow): RecapEvent {
     // false znacza to samo (niewpisane). Dzieki temu wiersze sprzed migracji
     // nie roznia sie w snapshocie od tych po niej.
     wpisane: row.wpisane ? true : undefined,
+    deviceId: row.device_id ?? undefined,
     at: row.at,
   };
 }

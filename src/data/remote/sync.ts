@@ -4,7 +4,7 @@
 
 import { create } from 'zustand';
 import { useStore } from '../store';
-import { getSupabase } from '../supabase';
+import { getSupabase, isSupabaseConfigured } from '../supabase';
 import { buildSnapshot, diffCollections, type Snapshot } from './diff';
 import { describeSyncError, extractErrorMessage, type SyncOperation } from './errors';
 import {
@@ -571,6 +571,34 @@ export async function pullTodayRecapEvents(): Promise<void> {
 
   mergeToday('recapEvents', eventRows.map(rowToRecapEvent), (e) => new Date(e.at).getTime() >= sinceMs);
   mergeToday('absences', absenceRows.map(rowToAbsence), (a) => a.date === todayKey);
+}
+
+/**
+ * Realtime: nasluch INSERT/UPDATE/DELETE na recap_events i po kazdej zmianie
+ * dociagniecie dzisiejszych zdarzen (ta sama sciezka co polling, wiec te same
+ * zasady wtapiania). Nie czytamy payloadu zmiany wprost - pull jest prostszy i
+ * odporny na kolejnosc zdarzen. Zwraca funkcje odpinajaca kanal. Bez chmury
+ * albo bez startu synchronizacji - nic nie robi.
+ */
+export function subscribeTodayRecapEvents(): () => void {
+  if (!isSupabaseConfigured()) return () => {};
+  let timer: number | null = null;
+  const schedule = () => {
+    // Kilka zmian pod rzad (np. cofniecie + nowy wpis) to jeden pull.
+    if (timer !== null) return;
+    timer = window.setTimeout(() => {
+      timer = null;
+      void pullTodayRecapEvents();
+    }, 300);
+  };
+  const channel = getSupabase()
+    .channel(`recap-events-${Math.random().toString(36).slice(2, 8)}`)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'recap_events' }, schedule)
+    .subscribe();
+  return () => {
+    if (timer !== null) window.clearTimeout(timer);
+    void getSupabase().removeChannel(channel);
+  };
 }
 
 /** "RRRR-MM-DD" w czasie lokalnym (jak src/lib/dates.ts: toDateKey). */

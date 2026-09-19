@@ -44,6 +44,7 @@ import { PanelObecnosc } from '../components/panel/PanelObecnosc';
 import { PanelWheel } from '../components/panel/PanelWheel';
 import { useUchwytPrzeciagania } from '../components/panel/useUchwytPrzeciagania';
 import { PanelCzytanki } from '../components/panel/PanelCzytanki';
+import { IncomingUwagaToast } from '../components/uwagi/IncomingUwagaToast';
 import { formatCzasu, useCzytankaPlayer } from '../components/czytanki/useCzytankaPlayer';
 
 /** Adnotacja zdarzen z panelu - patrz lessonWheelNote (lessonCode jest pusty). */
@@ -294,6 +295,8 @@ export function Panel() {
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-gray-900 text-gray-200 shadow-2xl ring-1 ring-gray-700">
+      {/* Uwaga dana z telefonu (widok "Sala") wyskakuje tez tu, nad multipodrecznikiem. */}
+      <IncomingUwagaToast tone="dark" />
       <PanelNaglowek
         wybor={lekcja ? `l:${lekcja.id}` : `k:${classId}`}
         lekcje={lekcjeDzis

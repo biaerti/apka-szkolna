@@ -14,6 +14,7 @@ import { titleMatchKey } from '../lib/titleMatchKey';
 import { timetableCellId } from '../lib/timetable';
 import { absenceId } from '../lib/attendance';
 import { placeStudent, type SeatPosition } from '../lib/seating';
+import { getDeviceId } from '../lib/device';
 import { monthKey as recapMonthKey } from '../lib/week';
 import type {
   Absence,
@@ -475,7 +476,7 @@ export const useStore = create<AppState>()(
         }));
       },
       addRecapEvent: (event) => {
-        const item: RecapEvent = { ...event, id: newId(), at: new Date().toISOString() };
+        const item: RecapEvent = { ...event, id: newId(), deviceId: getDeviceId(), at: new Date().toISOString() };
         set((s) => ({ recapEvents: [...s.recapEvents, item] }));
         return item;
       },
@@ -745,3 +746,9 @@ export const useStore = create<AppState>()(
     },
   ),
 );
+
+// Tylko w dev: uchwyt do store z konsoli / headless Chrome (podglad bez UI,
+// np. symulacja zdarzenia z telefonu przy testowaniu popupu uwagi).
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as unknown as { __apkaStore?: typeof useStore }).__apkaStore = useStore;
+}

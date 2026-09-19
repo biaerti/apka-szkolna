@@ -1,6 +1,7 @@
 # Sala: ławki na telefonie, plus/plomba jednym tapem, uwaga prosto do VULCANA
 
-Stan: projekt (2026-09-19). Nic z tego nie jest jeszcze zaimplementowane.
+Stan (2026-09-19): etapy 1-5 i 7 zrobione (commity bf2b579 i nastepny).
+Zostal etap 6 (uwaga do VULCANA) - czeka na zrzuty formularza uwag.
 
 ## Problem
 
