@@ -8,7 +8,12 @@ function reply(type, detail) {
 window.addEventListener('message', (event) => {
   if (event.source !== window || !event.data || event.data.source !== PAGE_SOURCE) return;
   if (event.data.type === 'VULCAN_BRIDGE_PING') {
-    reply('VULCAN_BRIDGE_READY');
+    // Z karty VULCANA (przez background.js): uwaga zapisana - apka odhacza ją jako wpisaną.
+chrome.runtime.onMessage.addListener((message) => {
+  if (message?.type === 'VULCAN_UWAGA_SAVED' && message.eventId) reply('VULCAN_UWAGA_SAVED', { eventId: message.eventId });
+});
+
+reply('VULCAN_BRIDGE_READY');
     return;
   }
   if (event.data.type === 'VULCAN_SCHEDULE_REQUEST') {
@@ -28,6 +33,21 @@ window.addEventListener('message', (event) => {
         return;
       }
       reply('VULCAN_ATTENDANCE_RESULT', { rows: response.rows });
+    });
+    return;
+  }
+  if (event.data.type === 'VULCAN_UWAGA') {
+    const uwaga = event.data.payload;
+    if (!uwaga || uwaga.version !== 1 || uwaga.kind !== 'uwaga' || typeof uwaga.content !== 'string' || !uwaga.student) {
+      reply('VULCAN_UWAGA_ERROR', 'Nieprawidłowa paczka uwagi.');
+      return;
+    }
+    chrome.runtime.sendMessage({ type: 'OPEN_VULCAN_UWAGA', payload: uwaga }, (response) => {
+      if (chrome.runtime.lastError || !response?.ok) {
+        reply('VULCAN_UWAGA_ERROR', chrome.runtime.lastError?.message || response?.error || 'Brak odpowiedzi dodatku.');
+        return;
+      }
+      reply('VULCAN_UWAGA_ACCEPTED');
     });
     return;
   }

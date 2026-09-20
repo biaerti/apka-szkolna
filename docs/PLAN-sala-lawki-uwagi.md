@@ -1,7 +1,8 @@
 # Sala: ławki na telefonie, plus/plomba jednym tapem, uwaga prosto do VULCANA
 
-Stan (2026-09-19): etapy 1-5 i 7 zrobione (commity bf2b579 i nastepny).
-Zostal etap 6 (uwaga do VULCANA) - czeka na zrzuty formularza uwag.
+Stan (2026-09-20): wszystkie etapy zrobione. Etap 6 (uwaga do VULCANA) jest
+napisany na podstawie zrzutow formularza, ale do sprawdzenia na zywo w szkole:
+kroki w vulcan-bot.js (fillUwaga) opieraja sie na tekstach z formularza.
 
 ## Problem
 

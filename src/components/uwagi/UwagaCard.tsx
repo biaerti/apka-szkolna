@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../../data/store';
 import type { RecapEvent, SchoolClass, Student } from '../../data/types';
 import { uwagaLabel, uwagaLekcja, uwagaTime } from '../../lib/uwagi';
+import { useVulcanUwaga, VULCAN_STATE_LABEL } from './useVulcanUwaga';
 
 export interface UwagaCardProps {
   event: RecapEvent;
@@ -25,6 +26,9 @@ export function UwagaCard({ event, student, schoolClass, onNote, onWpisane, onRe
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const periods = useStore((s) => s.periods);
   const lekcja = uwagaLekcja(event, periods);
+  // "VULCAN": dodatek Chrome otwiera formularz uwagi z ta trescia i zatrzymuje
+  // sie przed zapisem; po zapisie karta sama sie odhacza (useVulcanUwagaSaved).
+  const vulcan = useVulcanUwaga();
 
   useEffect(() => {
     if (editing) inputRef.current?.focus();
@@ -96,6 +100,24 @@ export function UwagaCard({ event, student, schoolClass, onNote, onWpisane, onRe
             >
               {uwagaLabel(event)}
             </button>
+          )}
+          {!done && (
+            <div className="mt-1.5">
+              <button
+                type="button"
+                onClick={() => void vulcan.send(event)}
+                disabled={vulcan.state === 'sending' || vulcan.state === 'sent'}
+                title="Otwórz formularz tej uwagi w VULCANIE (pomocnik Chrome)"
+                className="rounded border border-accent-300 bg-white px-2 py-0.5 text-xs font-medium text-accent-700 hover:bg-accent-50 disabled:opacity-60"
+              >
+                Do VULCANA
+              </button>
+              {vulcan.state !== 'idle' && (
+                <span className={`ml-2 text-xs ${vulcan.state === 'sent' ? 'text-emerald-700' : vulcan.state === 'sending' ? 'text-gray-500' : 'text-red-600'}`}>
+                  {VULCAN_STATE_LABEL[vulcan.state]}
+                </span>
+              )}
+            </div>
           )}
         </div>
         <button

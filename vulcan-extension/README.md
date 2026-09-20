@@ -28,3 +28,14 @@ klasy są przypisane do właściwego numeru godziny.
 5. Po sprawdzeniu kliknij w pomocniku zapis opisu, a potem osobno zatwierdzenie frekwencji.
 
 VULCAN zmienia czasem strukturę strony. Jeżeli pomocnik nie rozpozna kontrolki, zatrzyma się i poda nazwę kroku, który trzeba dokończyć ręcznie. Nie klika dalej „na ślepo”.
+
+## Uwagi (wersja 0.4)
+
+1. Uwaga wpisana z telefonu (widok Sala) wyskakuje na komputerze jako popup.
+   Kliknij **Wpisz do VULCANA** (to samo jest w zakładce Uwagi: „Do VULCANA”).
+2. Pomocnik w karcie VULCANA otwiera lekcję z drzewa (dzień i numer godziny),
+   zakładkę „Uwagi”, klika „Dodaj”, wyszukuje ucznia, przenosi go strzałką do
+   „Dotyczy”, ustawia kategorię i treść. **Nie klika Zapisz.**
+3. Sprawdź formularz i kliknij Zapisz w VULCANIE. Pomocnik zauważy zniknięcie
+   okna i odhaczy uwagę w apce jako wpisaną. Gdyby nie zauważył, kliknij w panelu
+   „Zapisałem w VULCANIE”.

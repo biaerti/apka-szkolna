@@ -1,6 +1,10 @@
 const BOT_ID = 'apka-szkolna-vulcan-bot';
 let transfer = null;
 let phase = 'start';
+// Uwaga z apki (zakładka „Uwagi” w lekcji -> „Dodaj”). Osobna paczka niż
+// temat + frekwencja; ten sam panel pomocnika, inne fazy: uwaga-start ->
+// uwaga-review (formularz wypełniony, Bartek klika Zapisz sam) -> done.
+let uwaga = null;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const normalized = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('pl');
@@ -163,14 +167,26 @@ function render(message, error = false) {
       if (action === 'fill') void fillDescription();
       if (action === 'attendance') void saveAndFillAttendance();
       if (action === 'confirm') void confirmAttendance();
+      if (action === 'uwaga-fill') void fillUwaga();
+      if (action === 'uwaga-saved') void reportUwagaSaved();
     });
   }
   const content = root.querySelector('[data-slot="content"]');
   const buttons = root.querySelector('[data-slot="buttons"]');
   const absent = transfer?.attendance?.filter((row) => row.status === 'absent').length ?? 0;
   const late = transfer?.attendance?.filter((row) => row.status === 'late').length ?? 0;
-  content.innerHTML = `${transfer ? `<div class="summary"><strong>${transfer.period}. lekcja · ${transfer.vulcanClassName}</strong><br>${transfer.topic}<br>Nieobecni: ${absent}, spóźnieni: ${late}</div>` : ''}<p class="${error ? 'error' : ''}">${message}</p>`;
-  buttons.innerHTML = phase === 'start' ? '<button data-action="fill">Uzupełnij opis lekcji</button>' : phase === 'review-description' ? '<button data-action="attendance">Zapisz opis i ustaw frekwencję</button>' : phase === 'review-attendance' ? '<button data-action="confirm">Zatwierdź frekwencję</button>' : '';
+  const summary = uwaga
+    ? `<div class="summary"><strong>Uwaga · ${escapeHtml(uwaga.student.lastName)} ${escapeHtml(uwaga.student.firstName)} (${escapeHtml(uwaga.vulcanClassName)})</strong><br>${escapeHtml(uwaga.category)}<br>${escapeHtml(uwaga.content)}</div>`
+    : transfer
+      ? `<div class="summary"><strong>${transfer.period}. lekcja · ${transfer.vulcanClassName}</strong><br>${transfer.topic}<br>Nieobecni: ${absent}, spóźnieni: ${late}</div>`
+      : '';
+  content.innerHTML = `${summary}<p class="${error ? 'error' : ''}">${message}</p>`;
+  buttons.innerHTML = phase === 'start' ? '<button data-action="fill">Uzupełnij opis lekcji</button>'
+    : phase === 'review-description' ? '<button data-action="attendance">Zapisz opis i ustaw frekwencję</button>'
+    : phase === 'review-attendance' ? '<button data-action="confirm">Zatwierdź frekwencję</button>'
+    : phase === 'uwaga-start' ? '<button data-action="uwaga-fill">Otwórz formularz uwagi</button>'
+    : phase === 'uwaga-review' ? '<button class="secondary" data-action="uwaga-saved">Zapisałem w VULCANIE</button>'
+    : '';
 }
 
 async function selectScheduledLesson() {
@@ -291,7 +307,122 @@ async function confirmAttendance() {
   }
 }
 
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
+}
+
+// --- uwaga: zakładka „Uwagi” w lekcji -> „Dodaj” -> okno z listą uczniów -----
+
+function modalRoot() {
+  // Okno dodawania uwagi: kontener, w którym są oba nagłówki list.
+  const header = findText('Nazwisko i imię', true);
+  if (!header) return null;
+  let node = header;
+  for (let depth = 0; depth < 12 && node; depth += 1, node = node.parentElement) {
+    if (findTextIn(node, 'Dotyczy', true) && findTextIn(node, 'Kategoria')) return node;
+  }
+  return header.closest('[role="dialog"], .x-window, .ui-dialog') || document.body;
+}
+
+function findTextIn(root, text, exact = false, selector = 'button, a, input, [role="button"], td, span, div, label') {
+  const wanted = normalized(text);
+  return [...root.querySelectorAll(selector)].filter(visible)
+    .filter((element) => exact ? normalized(textOf(element)) === wanted : normalized(textOf(element)).includes(wanted))
+    .sort((a, b) => a.getBoundingClientRect().width * a.getBoundingClientRect().height - b.getBoundingClientRect().width * b.getBoundingClientRect().height)[0];
+}
+
+async function waitFor(check, timeout = 7000) {
+  const end = Date.now() + timeout;
+  while (Date.now() < end) {
+    const found = check();
+    if (found) return found;
+    await sleep(180);
+  }
+  return null;
+}
+
+async function pickStudentInModal(root, student) {
+  const search = [...root.querySelectorAll('input')].filter(visible)
+    .find((input) => normalized(input.placeholder).includes('wyszuk'));
+  if (search) {
+    setField(search, student.lastName);
+    await sleep(500);
+  }
+  const full = `${student.lastName} ${student.firstName}`;
+  const row = await waitFor(() => findTextIn(root, full, false, 'td, div, span') || findTextIn(root, student.lastName, false, 'td, div, span'), 4000);
+  if (!row) throw new Error(`Nie znalazłem ucznia ${full} na liście po lewej.`);
+  clickElement(row);
+  await sleep(250);
+  const arrow = findTextIn(root, '>', true, 'button, a, [role="button"], td, span, div');
+  if (!arrow) throw new Error('Nie znalazłem strzałki „>” przenoszącej ucznia do „Dotyczy”.');
+  clickElement(arrow);
+  await sleep(350);
+}
+
+async function fillUwaga() {
+  try {
+    if (uwaga.period) {
+      render('Otwieram lekcję w drzewie po lewej…');
+      transfer = { date: uwaga.date, period: uwaga.period, vulcanClassName: uwaga.vulcanClassName };
+      try { await selectScheduledLesson(); } catch (error) { render(`${error.message} Zostaję na otwartej lekcji.`); await sleep(900); }
+    }
+    render('Otwieram zakładkę „Uwagi”…');
+    const tab = findText('Uwagi', true);
+    if (!tab) throw new Error('Nie znalazłem zakładki „Uwagi” nad tabelą lekcji.');
+    clickElement(tab);
+    const add = await waitForText('Dodaj', 6000);
+    if (!add) throw new Error('Nie znalazłem przycisku „Dodaj” w zakładce „Uwagi”.');
+    clickElement(add);
+    const root = await waitFor(modalRoot, 7000);
+    if (!root) throw new Error('Nie otworzyło się okno dodawania uwagi.');
+    await pickStudentInModal(root, uwaga.student);
+    await chooseDropdown('Kategoria', uwaga.category);
+    const content = fieldByLabel('Treść');
+    if (!(content instanceof HTMLTextAreaElement) && !(content instanceof HTMLInputElement)) throw new Error('Nie znalazłem pola „Treść”.');
+    setField(content, uwaga.content);
+    phase = 'uwaga-review';
+    render('Formularz jest wypełniony. Sprawdź ucznia w „Dotyczy”, kategorię i treść, potem kliknij <strong>Zapisz</strong> w VULCANIE. Nic nie zostało jeszcze zapisane.');
+    watchUwagaSave(root);
+  } catch (error) {
+    phase = 'uwaga-start';
+    render(`${error.message} Dokończ ten krok ręcznie - treść jest wyżej do skopiowania.`, true);
+  }
+}
+
+// Po kliknięciu „Zapisz” w oknie uwagi (nie „Anuluj”) i zniknięciu okna
+// zgłaszamy zapis do apki. Bez klikania na ślepo: to Bartek klika Zapisz.
+function watchUwagaSave(root) {
+  const onClick = (event) => {
+    const target = event.target instanceof Element ? event.target.closest('button, a, [role="button"], td, span, div') : null;
+    if (!target || !root.contains(target)) return;
+    if (normalized(textOf(target)) !== 'zapisz') return;
+    document.removeEventListener('click', onClick, true);
+    void (async () => {
+      const gone = await waitFor(() => !document.contains(root) || !visible(root), 8000);
+      if (gone) await reportUwagaSaved();
+    })();
+  };
+  document.addEventListener('click', onClick, true);
+}
+
+async function reportUwagaSaved() {
+  if (!uwaga) return;
+  const eventId = uwaga.eventId;
+  try {
+    await chrome.runtime.sendMessage({ type: 'VULCAN_UWAGA_SAVED', eventId });
+  } catch { /* apka może być zamknięta - uwagę odhaczysz ręcznie w zakładce Uwagi */ }
+  phase = 'done';
+  render('Gotowe. Uwaga jest zapisana w VULCANIE i odhaczona w apce.');
+  uwaga = null;
+}
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'VULCAN_UWAGA') {
+    uwaga = message.payload;
+    phase = 'uwaga-start';
+    render('Uwaga z apki jest gotowa. Otworzę zakładkę „Uwagi”, dodam ucznia, kategorię i treść, ale nie zapiszę.');
+    return;
+  }
   if (message?.type === 'READ_VULCAN_SCHEDULE') {
     sendResponse({ entries: readScheduleFromPage() });
     return false;
@@ -310,7 +441,13 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   render('Paczka jest gotowa. Najpierw otworzę wskazaną lekcję i uzupełnię opis bez zapisywania.');
 });
 
-chrome.storage.session.get('pendingVulcanTransfer').then(({ pendingVulcanTransfer }) => {
+chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga']).then(({ pendingVulcanTransfer, pendingVulcanUwaga }) => {
+  if (pendingVulcanUwaga) {
+    uwaga = pendingVulcanUwaga;
+    phase = 'uwaga-start';
+    render('Uwaga z apki czekała na załadowanie VULCANA. Możesz otworzyć formularz.');
+    return;
+  }
   if (!pendingVulcanTransfer) return;
   transfer = pendingVulcanTransfer;
   render('Paczka czekała na załadowanie VULCANA. Możesz rozpocząć uzupełnianie.');

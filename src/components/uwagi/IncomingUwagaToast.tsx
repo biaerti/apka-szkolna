@@ -3,8 +3,9 @@
 // jedna uwaga naraz (kolejne czekaja w kolejce), znika sama po minucie -
 // i tak zostaje w zakladce Uwagi do wpisania po lekcjach.
 //
-// Przyciski: "Później" (zostaw w Uwagach), "Cofnij" (pomylka na telefonie -
-// zdarzenie znika). "Wpisz do VULCANA" dojdzie w etapie 6 planu.
+// Przyciski: "Wpisz do VULCANA" (dodatek Chrome otwiera formularz uwagi i
+// zatrzymuje sie przed zapisem - useVulcanUwaga), "Później" (zostaw w
+// Uwagach), "Cofnij" (pomylka na telefonie - zdarzenie znika).
 //
 // Montowany w AppShell i w rozwinietym panelu desktopowym. CELOWO nie na
 // ekranach projektora (prezentacja, kartkowka, kolo) - klasa nie ma widziec,
@@ -15,6 +16,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../../data/store';
 import { uwagaLabel } from '../../lib/uwagi';
 import { useIncomingUwagi } from './useIncomingUwagi';
+import { useVulcanUwaga, VULCAN_STATE_LABEL } from './useVulcanUwaga';
 
 const AUTO_HIDE_MS = 60_000;
 
@@ -23,6 +25,7 @@ export function IncomingUwagaToast({ tone = 'light' }: { tone?: 'light' | 'dark'
   const students = useStore((s) => s.students);
   const classes = useStore((s) => s.classes);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
+  const vulcan = useVulcanUwaga();
 
   const current = pending[0];
   const studentById = useMemo(() => new Map(students.map((st) => [st.id, st])), [students]);
@@ -30,6 +33,7 @@ export function IncomingUwagaToast({ tone = 'light' }: { tone?: 'light' | 'dark'
 
   useEffect(() => {
     if (!current) return;
+    vulcan.reset();
     const t = window.setTimeout(() => dismiss(current.id), AUTO_HIDE_MS);
     return () => window.clearTimeout(t);
     // dismiss jest stabilne w praktyce (setState), a zalezy nam na id.
@@ -61,8 +65,16 @@ export function IncomingUwagaToast({ tone = 'light' }: { tone?: 'light' | 'dark'
       <div className="mt-3 flex items-center gap-2">
         <button
           type="button"
+          onClick={() => void vulcan.send(current)}
+          disabled={vulcan.state === 'sending' || vulcan.state === 'sent'}
+          className="rounded-md bg-accent-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-accent-700 disabled:opacity-60"
+        >
+          Wpisz do VULCANA
+        </button>
+        <button
+          type="button"
           onClick={() => dismiss(current.id)}
-          className="rounded-md bg-accent-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-accent-700"
+          className={`rounded-md px-3 py-1.5 text-sm font-medium ${dark ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-100'}`}
         >
           Później
         </button>
@@ -80,6 +92,11 @@ export function IncomingUwagaToast({ tone = 'light' }: { tone?: 'light' | 'dark'
           Uwagi
         </Link>
       </div>
+      {vulcan.state !== 'idle' && (
+        <p className={`mt-2 text-xs ${vulcan.state === 'sent' ? 'text-emerald-600' : vulcan.state === 'sending' ? (dark ? 'text-gray-400' : 'text-gray-500') : 'text-red-600'}`}>
+          {VULCAN_STATE_LABEL[vulcan.state]}
+        </p>
+      )}
     </div>
   );
 }
