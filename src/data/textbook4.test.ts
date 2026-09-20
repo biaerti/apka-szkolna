@@ -21,7 +21,7 @@ describe('buildTextbook4', () => {
       expect(opening).toMatchObject({ kind: 'topic', variant: 'handout' });
       expect(opening.kind === 'topic' ? opening.goals : undefined).toHaveLength(3);
       expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
-      expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(3);
+      expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(lesson.title.startsWith('4.') ? 4 : 3);
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
       expect(lesson.slides.some((slide) => slide.kind === 'note')).toBe(false);
       expect(lesson.slides[lesson.slides.length - 1]).toMatchObject({ kind: 'text', title: 'Wracamy do karty A5', zeszyt: true });

@@ -63,6 +63,11 @@ export function TodayTimetableBar() {
                 isHighlighted && 'bg-accent-50 ring-1 ring-accent-300',
               )}
             >
+              <Link
+                to={`/dziennik?data=${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}&lekcja=${e.period}&klasa=${e.classId ?? ''}`}
+                className="flex items-center gap-1 rounded focus:outline-none focus:ring-2 focus:ring-accent-500"
+                title="Otwórz temat i frekwencję tej lekcji"
+              >
               <span className="tabular-nums text-gray-500">{e.period}.</span>
               <span
                 className={clsx(
@@ -72,6 +77,7 @@ export function TodayTimetableBar() {
               >
                 {cls?.name ?? '?'}
               </span>
+              </Link>
               {isHighlighted && hint && <span className="text-xs text-accent-700">{hint}</span>}
               {isHighlighted && e.classId && (
                 <Link

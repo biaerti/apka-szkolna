@@ -103,10 +103,18 @@ export interface Question {
 export type LessonStatus = 'planned' | 'in_progress' | 'done' | 'skipped';
 export type LessonMaterialType = 'review' | 'textbook';
 
+export interface LessonSlot {
+  id: string;
+  date: string; // YYYY-MM-DD
+  period: number;
+}
+
 /** Postep jednej klasy w jednej lekcji. Brak wpisu w `Lesson.progress` = 'planned'. */
 export interface LessonProgress {
   status: LessonStatus;
   lessonDate?: string; // YYYY-MM-DD - data faktycznego prowadzenia lekcji
+  lessonPeriod?: number; // numer konkretnej godziny w dzienniku, np. 3
+  lessonSlots?: LessonSlot[]; // ten sam temat może wracać jako cz. 2, cz. 3 itd.
   doneDate?: string; // YYYY-MM-DD
 }
 
@@ -524,6 +532,8 @@ export interface Absence {
   classId: ID;
   date: string; // "RRRR-MM-DD"
   period?: number; // LessonPeriod.no
+  /** Brak pola w starych danych oznacza nieobecność. Spóźniony pozostaje obecny dla koła. */
+  status?: 'absent' | 'late';
   at: string; // ISO
 }
 

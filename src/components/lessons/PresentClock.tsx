@@ -43,12 +43,12 @@ export function PresentClock({ position = 'top-right' }: PresentClockProps) {
     <div
       aria-live="off"
       className={clsx(
-        'pointer-events-none fixed z-50 rounded-md bg-gray-900/70 px-2.5 py-1 leading-tight',
-        position === 'top-right' ? 'right-2 top-2 text-right' : 'left-2 top-9 text-left',
+        'pointer-events-none fixed z-50 rounded-lg bg-gray-900/80 px-3 py-1.5 leading-tight shadow-[0_6px_20px_rgba(0,0,0,0.2)]',
+        position === 'top-right' ? 'right-5 top-3 text-right' : 'left-5 top-10 text-left',
       )}
     >
-      <div className="text-2xl font-semibold tabular-nums text-gray-100">{time}</div>
-      {detail && <div className={clsx('text-xs tabular-nums', tone)}>{detail}</div>}
+      <div className="text-3xl font-semibold tabular-nums tracking-[-0.02em] text-gray-100">{time}</div>
+      {detail && <div className={clsx('text-sm tabular-nums', tone)}>{detail}</div>}
     </div>
   );
 }

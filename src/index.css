@@ -10,6 +10,15 @@ body {
   @apply bg-gray-50 text-gray-900;
 }
 
+/* Mobilne menu jest przewijane gestem, ale pasek przewijania nie zabiera miejsca. */
+.app-nav {
+  scrollbar-width: none;
+}
+
+.app-nav::-webkit-scrollbar {
+  display: none;
+}
+
 /* Plywajacy panel desktopowy (/panel): okno Tauri jest przezroczyste, wiec tlo
    strony musi zniknac - inaczej wokol zaokraglonych rogow panelu widac szary
    prostokat. Klase wlacza sama trasa panelu. */

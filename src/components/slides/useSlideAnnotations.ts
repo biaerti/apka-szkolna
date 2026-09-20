@@ -35,6 +35,7 @@ export interface SlideAnnotations {
   /** Ksztalty narysowane na biezacym slajdzie. */
   shapes: AnnotationShape[];
   addStroke: (points: AnnotationPoint[]) => void;
+  addLine: (start: AnnotationPoint, end: AnnotationPoint) => void;
   addText: (shape: Omit<TextShape, 'id' | 'kind' | 'color'>) => void;
   /** Poprawka istniejacego dopisku - tresc albo rozmiar ramki (skalowanie). */
   updateText: (id: string, patch: Partial<Pick<TextShape, 'text' | 'size' | 'width' | 'x' | 'y' | 'color'>>) => void;
@@ -46,10 +47,10 @@ export interface SlideAnnotations {
 export function useSlideAnnotations(slideId: string | undefined): SlideAnnotations {
   const [tool, setTool] = useState<AnnotationTool>('off');
   const [color, setColor] = useState(ANNOTATION_COLORS[0].value);
-  const [sizeIndex, setSizeIndex] = useState(1);
+  const [sizeIndex, setSizeIndex] = useState(2);
   const [bySlide, setBySlide] = useState<Record<string, AnnotationShape[]>>({});
 
-  const size = ANNOTATION_SIZES[sizeIndex] ?? ANNOTATION_SIZES[1];
+  const size = ANNOTATION_SIZES[sizeIndex] ?? ANNOTATION_SIZES[2];
   const shapes = useMemo(() => (slideId ? bySlide[slideId] ?? [] : []), [bySlide, slideId]);
 
   const push = useCallback(
@@ -73,6 +74,13 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
       });
     },
     [color, push, size.stroke, tool],
+  );
+
+  const addLine = useCallback(
+    (start: AnnotationPoint, end: AnnotationPoint) => {
+      push({ id: newId(), kind: 'line', color, width: size.stroke, start, end });
+    },
+    [color, push, size.stroke],
   );
 
   const addText = useCallback(
@@ -134,6 +142,7 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
     textSize: size.text,
     shapes,
     addStroke,
+    addLine,
     addText,
     updateText,
     removeShape,

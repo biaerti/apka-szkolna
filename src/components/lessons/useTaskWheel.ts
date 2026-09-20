@@ -50,7 +50,7 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
     () => students.filter((st) => st.classId === classId && st.active).sort((a, b) => a.number - b.number),
     [students, classId],
   );
-  const { absentSet, togglePresent, presentStudents } = useAttendance(classStudents, classId);
+  const { absentSet, togglePresent, presentStudents, pullFromVulcan } = useAttendance(classStudents, classId);
 
   const [open, setOpen] = useState(false);
   const [allowRepeats, setAllowRepeats] = useState(false);
@@ -160,6 +160,7 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
     settings,
     absentSet,
     togglePresent,
+    pullFromVulcan,
     classStudents,
     usedFor,
     allowRepeats,

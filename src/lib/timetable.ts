@@ -73,6 +73,9 @@ export type PeriodStatus =
  * brak godzin). Sekundy liczone z dokladnoscia do sekundy `now`.
  */
 export function periodStatus(periods: LessonPeriod[], now: Date): PeriodStatus {
+  // W weekend dzwonki nie obowiazuja - zegar prezentacji pokazywal w niedziele
+  // "do końca lekcji", bo liczyl tylko godzine, nie dzien tygodnia.
+  if (weekdayOf(now) === 0) return { kind: 'none' };
   const sorted = validPeriods(periods);
   const nowSec = secondsOfDay(now);
   for (let i = 0; i < sorted.length; i += 1) {

@@ -7,7 +7,7 @@
 import { useRef, type DragEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import type { Lesson, LessonProgress } from '../../data/types';
+import type { Lesson, LessonPeriod, LessonProgress, LessonSlot } from '../../data/types';
 import { Button } from '../ui/Button';
 import { Menu, type MenuItem } from '../ui/Menu';
 import { GripIcon, MoreIcon, WheelIcon } from '../ui/icons';
@@ -15,6 +15,8 @@ import { TD } from '../ui/Table';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { resolveRecapMode } from '../../lib/recap';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
+import { isCurrentSlot, slotDisplayLabel, type LessonSlotOption } from '../../lib/lessonSlots';
+import { LessonSlotPicker } from './LessonSlotPicker';
 
 export interface LessonRowProps {
   lesson: Lesson;
@@ -31,7 +33,14 @@ export interface LessonRowProps {
   onDragEnd: () => void;
   onMove: (direction: 'up' | 'down') => void;
   onSetStatus: (status: LessonProgress['status']) => void;
-  onSetDate: (date: string) => void;
+  slots: LessonSlot[];
+  slotOptions: LessonSlotOption[];
+  periods: LessonPeriod[];
+  now: Date;
+  currentSlotId?: string;
+  suggestCurrentSlot: boolean;
+  onAddSlot: (slot: LessonSlot) => void;
+  onRemoveSlot: (slotId: string) => void;
   onShowRegister: () => void;
   onShowQuestions: () => void;
   onAddQuestions: () => void;
@@ -55,6 +64,7 @@ export function LessonRow(p: LessonRowProps) {
   const isIntroLesson = lesson.slides.some((s) => s.kind === 'recap' && resolveRecapMode(s) === 'demo');
   const listQuery = `klasa=${classId}&typ=${lessonMaterialType(lesson)}`;
   const isTextbook = lessonMaterialType(lesson) === 'textbook';
+  const rowIsNow = Boolean(p.currentSlotId && p.slots.some((slot) => slot.id === p.currentSlotId));
 
   function handleDragStart(e: DragEvent<HTMLTableRowElement>) {
     if (!dragFromHandle.current) {
@@ -112,6 +122,7 @@ export function LessonRow(p: LessonRowProps) {
         'group relative transition-colors',
         p.dropIndicator === 'above' && 'shadow-[inset_0_2px_0_0_#4f46e5]',
         p.dropIndicator === 'below' && 'shadow-[inset_0_-2px_0_0_#4f46e5]',
+        rowIsNow && 'bg-accent-50/70',
         isSkipped && 'text-gray-400',
       )}
     >
@@ -195,14 +206,30 @@ export function LessonRow(p: LessonRowProps) {
           )}
         </p>
       </TD>
-      <TD className="whitespace-nowrap">
-        <input
-          type="date"
-          value={progress.lessonDate ?? ''}
-          onChange={(event) => p.onSetDate(event.target.value)}
-          aria-label={`Data lekcji: ${lesson.title}`}
-          className="w-[8.8rem] rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-700 outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
-        />
+      <TD>
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+          {p.slots.map((slot, slotIndex) => {
+            const now = isCurrentSlot(slot, p.periods, p.now);
+            return (
+              <div key={slot.id} className={clsx('inline-flex min-h-8 items-stretch overflow-hidden rounded-md border text-xs font-medium', now ? 'border-accent-300 bg-accent-100 text-accent-900' : 'border-gray-200 bg-gray-50 text-gray-700')}>
+                <button type="button" onClick={() => navigate(`/dziennik?data=${slot.date}&lekcja=${slot.period}&klasa=${classId}&material=${lesson.id}`)} className="px-2 py-1 hover:bg-black/5">
+                  {now ? 'Teraz' : slotDisplayLabel(slot, p.periods, p.now)}{slotIndex > 0 ? ` · cz. ${slotIndex + 1}` : ''}
+                </button>
+                <button type="button" onClick={() => p.onRemoveSlot(slot.id)} aria-label={`Usuń slot ${slotDisplayLabel(slot, p.periods, p.now)}`} className="border-l border-current/15 px-1.5 py-1 text-[10px] opacity-60 hover:bg-black/5 hover:opacity-100">
+                  Usuń
+                </button>
+              </div>
+            );
+          })}
+          <LessonSlotPicker
+            idPrefix={`lesson-slot-${lesson.id}-${classId}`}
+            options={p.slotOptions}
+            assignedSlots={p.slots}
+            now={p.now}
+            suggestCurrentSlot={p.suggestCurrentSlot}
+            onAdd={p.onAddSlot}
+          />
+        </div>
       </TD>
       <TD className="whitespace-nowrap">
         <label className="sr-only" htmlFor={`lesson-status-${lesson.id}-${classId}`}>Status lekcji: {lesson.title}</label>

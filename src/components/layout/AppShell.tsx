@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { isSupabaseConfigured } from '../../data/supabase';
 import { useAuth } from '../../data/auth';
@@ -36,16 +36,17 @@ const NAV_ITEMS = [
 
 export function AppShell() {
   const doWpisania = useUwagiDoWpisania().length;
+  const { pathname } = useLocation();
   // Dzisiejsze zdarzenia z chmury (realtime + polling): uwaga dana z telefonu
   // ma wyskoczyc na komputerze jako popup (IncomingUwagaToast).
   useTodayEventsPull();
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-gray-200 bg-white">
-        <div className="px-4 py-5">
+    <div className="flex min-h-screen w-full max-w-full flex-col bg-gray-50 md:flex-row">
+      <aside className="flex w-full min-w-0 max-w-full shrink-0 flex-col border-b border-gray-200 bg-white md:w-56 md:border-b-0 md:border-r">
+        <div className="px-4 py-3 md:py-5">
           <p className="text-base font-semibold text-gray-900">Apka szkolna</p>
         </div>
-        <nav className="flex flex-1 flex-col gap-0.5 px-2">
+        <nav className="app-nav flex min-w-0 max-w-full flex-1 gap-0.5 overflow-x-auto px-2 pb-2 md:flex-col md:overflow-visible md:pb-0">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -53,7 +54,7 @@ export function AppShell() {
               end={item.end}
               className={({ isActive }) =>
                 clsx(
-                  'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'shrink-0 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   isActive ? 'bg-accent-50 text-accent-700' : 'text-gray-600 hover:bg-gray-100',
                 )
               }
@@ -65,15 +66,15 @@ export function AppShell() {
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-gray-200 py-3">
+        <div className="hidden border-t border-gray-200 py-3 md:block">
           <SyncStatusFooter />
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto px-8 py-6">
+      <main className="box-border w-full min-w-0 max-w-full flex-1 overflow-y-auto px-4 py-5 sm:px-6 md:w-auto md:px-8 md:py-6">
         <Outlet />
         <IncomingUwagaToast />
       </main>
-      <CzytankiFab />
+      {pathname !== '/dziennik' && <CzytankiFab />}
       <UwagiPrzypomnienie />
     </div>
   );

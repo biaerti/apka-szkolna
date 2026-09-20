@@ -6,6 +6,7 @@ import { useStore } from '../data/store';
 import { SlideView } from '../components/slides/SlideView';
 import { AnnotationLayer } from '../components/slides/AnnotationLayer';
 import { AnnotationToolbar } from '../components/slides/AnnotationToolbar';
+import { PresentationBoard } from '../components/slides/PresentationBoard';
 import { useSlideAnnotations } from '../components/slides/useSlideAnnotations';
 import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
@@ -36,6 +37,7 @@ export function LessonPresent() {
   const lessonsUrl = classId ? `/lekcje?klasa=${classId}&typ=${materialType}` : '/lekcje';
 
   const [index, setIndex] = useState(0);
+  const [boardOpen, setBoardOpen] = useState(false);
   const [classPanelOpen, setClassPanelOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [globalTimerVisible, setGlobalTimerVisible] = useState(false);
@@ -68,13 +70,13 @@ export function LessonPresent() {
   const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : '';
   // Rysowanie po slajdzie - stan trzyma prezentacja, wiec kreski przezywaja
   // przejscie na kolejny slajd i powrot (patrz useSlideAnnotations).
-  const ann = useSlideAnnotations(currentSlide?.id);
+  const ann = useSlideAnnotations(boardOpen ? `board:${lesson?.id ?? 'lesson'}` : currentSlide?.id);
 
   usePresentKeys({
     index,
     total,
-    onRecap: currentSlide?.kind === 'recap',
-    onTask: currentSlide?.kind === 'task',
+    onRecap: !boardOpen && currentSlide?.kind === 'recap',
+    onTask: !boardOpen && currentSlide?.kind === 'task',
     classPanelOpen,
     setClassPanelOpen,
     wheelOpen: wheel.open,
@@ -88,6 +90,8 @@ export function LessonPresent() {
     drawing: ann.tool !== 'off',
     onToggleDraw: ann.toggleDrawing,
     onTextTool: () => ann.setTool('text'),
+    onLineTool: () => ann.setTool('line'),
+    onToggleBoard: () => setBoardOpen((open) => !open),
     onDrawOff: () => ann.setTool('off'),
     onDrawUndo: ann.undo,
     onToggleNoisePause: noise.togglePause,
@@ -150,8 +154,8 @@ export function LessonPresent() {
   }
 
   const slide = lesson.slides[index];
-  const isRecap = slide.kind === 'recap';
-  const isTask = slide.kind === 'task';
+  const isRecap = !boardOpen && slide.kind === 'recap';
+  const isTask = !boardOpen && slide.kind === 'task';
   const isLast = index === total - 1;
   const drawerOpen = isTask && wheel.open;
 
@@ -160,6 +164,7 @@ export function LessonPresent() {
       <div
         className="h-full min-w-0 flex-1"
         onClick={(e) => {
+          if (boardOpen) return;
           if (isRecap) return;
           // Przy wlaczonym rysowaniu klik nalezy do pisaka, nie do nawigacji.
           if (ann.tool !== 'off') return;
@@ -172,14 +177,18 @@ export function LessonPresent() {
           }
         }}
       >
-        <SlideView
-          slide={slide}
-          classId={classId}
-          lessonCode={lessonCode}
-          lessonTopic={lesson.registerTopic || lesson.title}
-          onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
-          overlay={<AnnotationLayer ann={ann} />}
-        />
+        {boardOpen ? (
+          <PresentationBoard ann={ann} />
+        ) : (
+          <SlideView
+            slide={slide}
+            classId={classId}
+            lessonCode={lessonCode}
+            lessonTopic={lesson.registerTopic || lesson.title}
+            onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
+            overlay={<AnnotationLayer ann={ann} />}
+          />
+        )}
       </div>
 
       {drawerOpen && <TaskWheelDrawer wheel={wheel} taskCode={taskCode} onClose={() => wheel.setOpen(false)} />}
@@ -197,11 +206,11 @@ export function LessonPresent() {
         </button>
       )}
 
-      {!isRecap && (
+      {!isRecap && !boardOpen && (
         <PresentClassPanel classId={classId} open={classPanelOpen} onOpenChange={setClassPanelOpen} />
       )}
 
-      {isLast && (
+      {isLast && !boardOpen && (
         <div className="absolute bottom-4 left-4" onClick={(e) => e.stopPropagation()}>
           <Button size="sm" onClick={finishLesson}>
             Zakończ lekcję
@@ -211,11 +220,11 @@ export function LessonPresent() {
 
       {!isRecap && <AnnotationToolbar ann={ann} />}
 
-      {!isRecap && <NoiseMeterBars meter={noise} />}
+      {!isRecap && !boardOpen && <NoiseMeterBars meter={noise} />}
 
       <PresentationTimer onRecap={isRecap} visible={globalTimerVisible} onVisibleChange={setGlobalTimerVisible} />
 
-      <PresentProgressBar index={index} total={total} />
+      {!boardOpen && <PresentProgressBar index={index} total={total} />}
       {/* Na slajdzie kola prawy bok zajmuja pasek RecapToolbar i panel uczniow - zegar idzie w lewy gorny rog. */}
       <PresentClock position={isRecap ? 'top-left' : 'top-right'} />
     </div>

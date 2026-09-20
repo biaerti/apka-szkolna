@@ -10,7 +10,7 @@
 
 import type { ID } from '../../data/types';
 
-export type AnnotationTool = 'off' | 'pen' | 'marker' | 'text' | 'eraser';
+export type AnnotationTool = 'off' | 'pen' | 'marker' | 'line' | 'text' | 'eraser';
 
 export interface AnnotationPoint {
   x: number;
@@ -26,6 +26,16 @@ export interface StrokeShape {
   /** Zakreslacz: grube, polprzezroczyste pociagniecie pod tekstem. */
   marker: boolean;
   points: AnnotationPoint[];
+}
+
+/** Prosta linia od punktu rozpoczecia do punktu puszczenia myszy lub piora. */
+export interface LineShape {
+  id: ID;
+  kind: 'line';
+  color: string;
+  width: number;
+  start: AnnotationPoint;
+  end: AnnotationPoint;
 }
 
 /**
@@ -72,7 +82,7 @@ export function scaleTextBox(start: TextBoxSize, dx: number, maxWidth: number): 
   return { width, size };
 }
 
-export type AnnotationShape = StrokeShape | TextShape;
+export type AnnotationShape = StrokeShape | LineShape | TextShape;
 
 /** Kolory pisaka. Pierwsze trzy czytelne na ciemnym slajdzie, czarny - na notatce i temacie. */
 export const ANNOTATION_COLORS = [
@@ -89,9 +99,11 @@ export const ANNOTATION_COLORS = [
  * (scaleTextBox).
  */
 export const ANNOTATION_SIZES = [
-  { label: 'cienki', stroke: 4, text: 32 },
+  { label: 'bardzo cienki', stroke: 2, text: 26 },
+  { label: 'cienki', stroke: 4, text: 34 },
   { label: 'średni', stroke: 8, text: 46 },
-  { label: 'gruby', stroke: 16, text: 64 },
+  { label: 'gruby', stroke: 14, text: 62 },
+  { label: 'bardzo gruby', stroke: 22, text: 82 },
 ];
 
 /** Zakreslacz jest zawsze duzo grubszy od piora tej samej pozycji. */

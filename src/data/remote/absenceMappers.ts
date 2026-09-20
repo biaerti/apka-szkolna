@@ -10,11 +10,12 @@ export interface AbsenceRow {
   class_id: string;
   date: string;
   period: number | null;
+  status?: 'absent' | 'late' | null;
   at: string;
 }
 
 export function absenceToRow(a: Absence): AbsenceRow {
-  return {
+  const row: AbsenceRow = {
     id: a.id,
     student_id: a.studentId,
     class_id: a.classId,
@@ -22,6 +23,11 @@ export function absenceToRow(a: Absence): AbsenceRow {
     period: a.period ?? null,
     at: a.at,
   };
+  // Nieobecność jest domyślnym stanem również w starszym schemacie 0021.
+  // Pominięcie pola pozwala jej synchronizować się przed wdrożeniem 0022;
+  // tylko spóźnienie wymaga nowej kolumny `status`.
+  if (a.status === 'late') row.status = 'late';
+  return row;
 }
 
 export function rowToAbsence(row: AbsenceRow): Absence {
@@ -31,6 +37,7 @@ export function rowToAbsence(row: AbsenceRow): Absence {
     classId: row.class_id,
     date: row.date,
     period: row.period ?? undefined,
+    status: row.status ?? 'absent',
     at: row.at,
   };
 }

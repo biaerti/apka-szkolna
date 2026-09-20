@@ -12,6 +12,7 @@ import {
   strokePath,
   TEXT_BOX_WIDTH,
   type AnnotationPoint,
+  type LineShape,
   type StrokeShape,
   type TextShape,
 } from './annotations';
@@ -46,7 +47,7 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
   const [text, setText] = useState<TextDraft | null>(null);
   const erasingRef = useRef(false);
 
-  const drawing = ann.tool === 'pen' || ann.tool === 'marker';
+  const drawing = ann.tool === 'pen' || ann.tool === 'marker' || ann.tool === 'line';
   const active = ann.tool !== 'off';
 
   /** Punkt zdarzenia w pikselach kartki 1280x720 (SVG jest przeskalowany transformem). */
@@ -120,13 +121,18 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
     if (!draft) return;
     const p = pointAt(e);
     if (!p) return;
-    setDraft((prev) => (prev ? appendPoint(prev, p) : prev));
+    setDraft((prev) => {
+      if (!prev) return prev;
+      if (ann.tool === 'line') return [prev[0], p];
+      return appendPoint(prev, p);
+    });
   }
 
   function endStroke() {
     erasingRef.current = false;
     if (!draft) return;
-    ann.addStroke(draft);
+    if (ann.tool === 'line' && draft.length > 1) ann.addLine(draft[0], draft[draft.length - 1]);
+    else ann.addStroke(draft);
     setDraft(null);
   }
 
@@ -135,6 +141,7 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
   }
 
   const strokes = ann.shapes.filter((s): s is StrokeShape => s.kind === 'stroke');
+  const lines = ann.shapes.filter((s): s is LineShape => s.kind === 'line');
   const texts = ann.shapes.filter((s): s is TextShape => s.kind === 'text');
 
   return (
@@ -185,6 +192,35 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
                 style={{ pointerEvents: 'stroke' }}
                 onPointerDown={() => ann.removeShape(s.id)}
                 onPointerEnter={() => eraseOnHover(s.id)}
+              />
+            )}
+          </g>
+        ))}
+
+        {lines.map((line) => (
+          <g key={line.id}>
+            <line
+              x1={line.start.x}
+              y1={line.start.y}
+              x2={line.end.x}
+              y2={line.end.y}
+              stroke={line.color}
+              strokeWidth={line.width}
+              strokeLinecap="round"
+              style={{ pointerEvents: 'none' }}
+            />
+            {ann.tool === 'eraser' && (
+              <line
+                x1={line.start.x}
+                y1={line.start.y}
+                x2={line.end.x}
+                y2={line.end.y}
+                stroke="transparent"
+                strokeWidth={Math.max(line.width, 32)}
+                strokeLinecap="round"
+                style={{ pointerEvents: 'stroke' }}
+                onPointerDown={() => ann.removeShape(line.id)}
+                onPointerEnter={() => eraseOnHover(line.id)}
               />
             )}
           </g>

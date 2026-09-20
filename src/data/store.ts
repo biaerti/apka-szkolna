@@ -12,7 +12,7 @@ import { classGrade } from '../lib/grade';
 import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
 import { timetableCellId } from '../lib/timetable';
-import { absenceId } from '../lib/attendance';
+import { absenceId, attendanceId, type AttendanceStatus } from '../lib/attendance';
 import { placeStudent, type SeatPosition } from '../lib/seating';
 import { getDeviceId } from '../lib/device';
 import { monthKey as recapMonthKey } from '../lib/week';
@@ -146,6 +146,14 @@ interface AppState {
    * `period` - numer lekcji z planu w chwili zaznaczenia (dla dziennika).
    */
   setAbsent: (args: { studentId: string; classId: string; date: string; absent: boolean; period?: number }) => void;
+  /** Ustawia wyjątek od domyślnej obecności na konkretnej godzinie. */
+  setAttendance: (args: {
+    studentId: string;
+    classId: string;
+    date: string;
+    period: number;
+    status: AttendanceStatus;
+  }) => void;
 
   // Ustawienia
   // Miejsca w lawkach (widok "Sala"; patrz types.ts: Seat i src/lib/seating.ts)
@@ -547,10 +555,30 @@ export const useStore = create<AppState>()(
 
       setAbsent: ({ studentId, classId, date, absent, period }) => {
         set((s) => {
-          const id = absenceId(date, studentId);
-          const rest = s.absences.filter((a) => a.id !== id);
+          const id = period === undefined ? absenceId(date, studentId) : attendanceId(date, period, studentId);
+          const rest = s.absences.filter(
+            (a) => !(a.studentId === studentId && a.date === date && a.period === period),
+          );
           if (!absent) return rest.length === s.absences.length ? {} : { absences: rest };
-          const item: Absence = { id, studentId, classId, date, period, at: new Date().toISOString() };
+          const item: Absence = { id, studentId, classId, date, period, status: 'absent', at: new Date().toISOString() };
+          return { absences: [...rest, item] };
+        });
+      },
+      setAttendance: ({ studentId, classId, date, period, status }) => {
+        set((s) => {
+          const rest = s.absences.filter(
+            (a) => !(a.studentId === studentId && a.date === date && a.period === period),
+          );
+          if (status === 'present') return rest.length === s.absences.length ? {} : { absences: rest };
+          const item: Absence = {
+            id: attendanceId(date, period, studentId),
+            studentId,
+            classId,
+            date,
+            period,
+            status,
+            at: new Date().toISOString(),
+          };
           return { absences: [...rest, item] };
         });
       },

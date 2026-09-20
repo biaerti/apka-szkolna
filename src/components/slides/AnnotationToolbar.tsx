@@ -6,6 +6,7 @@ import type { SlideAnnotations } from './useSlideAnnotations';
 const TOOLS: Array<{ value: AnnotationTool; label: string; hint: string; icon: ReactNode }> = [
   { value: 'pen', label: 'Pióro', hint: 'Rysowanie odręczne (R)', icon: <PenIcon /> },
   { value: 'marker', label: 'Zakreślacz', hint: 'Przezroczyste zakreślenie', icon: <MarkerIcon /> },
+  { value: 'line', label: 'Linia', hint: 'Przeciągnij, aby narysować prostą linię (L)', icon: <LineIcon /> },
   { value: 'text', label: 'Tekst', hint: 'Kliknij w slajd, aby dodać dopisek (T)', icon: <TextIcon /> },
   { value: 'eraser', label: 'Gumka', hint: 'Kliknij lub przeciągnij po adnotacjach', icon: <EraserIcon /> },
 ];
@@ -41,27 +42,13 @@ export function AnnotationToolbar({ ann }: { ann: SlideAnnotations }) {
   }, [confirmClear]);
 
   if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          ann.setTool('pen');
-        }}
-        title="Otwórz pisak i dopiski (R)"
-        className="absolute bottom-7 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-lg bg-gray-950/90 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(0,0,0,0.35)] transition-colors hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-      >
-        <PenIcon />
-        Pisz po slajdzie
-        <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-xs font-medium text-gray-300">R</kbd>
-      </button>
-    );
+    return null;
   }
 
   return (
     <div
       role="toolbar"
-      aria-label="Pisanie po slajdzie"
+      aria-label="Narzędzia tablicy i adnotacji"
       className="absolute bottom-7 left-1/2 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-1.5 rounded-xl bg-gray-950/95 p-2 text-white shadow-[0_14px_36px_rgba(0,0,0,0.45)]"
       onClick={(e) => e.stopPropagation()}
     >
@@ -98,9 +85,9 @@ export function AnnotationToolbar({ ann }: { ann: SlideAnnotations }) {
             aria-pressed={ann.sizeIndex === index}
             title={`Rozmiar: ${size.label}`}
             onClick={() => ann.setSizeIndex(index)}
-            className={clsx('flex h-9 w-10 items-center justify-center rounded-md text-gray-200 hover:bg-white/10', ann.sizeIndex === index && 'bg-white/15 text-white')}
+            className={clsx('flex h-9 w-9 items-center justify-center rounded-md text-gray-200 hover:bg-white/10', ann.sizeIndex === index && 'bg-white/15 text-white')}
           >
-            <span className="rounded-full bg-current" style={{ width: 5 + index * 5, height: 5 + index * 5 }} />
+            <span className="rounded-full bg-current" style={{ width: 3 + index * 4, height: 3 + index * 4 }} />
           </button>
         ))}
       </div>
@@ -132,6 +119,7 @@ function Divider() { return <span aria-hidden="true" className="mx-0.5 h-8 w-px 
 function Icon({ children }: { children: ReactNode }) { return <svg viewBox="0 0 24 24" width={21} height={21} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">{children}</svg>; }
 function PenIcon() { return <Icon><path d="m4 20 4.4-1 10.8-10.8a2.1 2.1 0 0 0-3-3L5.4 16 4 20Z"/><path d="m14.8 6.7 3 3"/></Icon>; }
 function MarkerIcon() { return <Icon><path d="m5 15 8.8-8.8 4 4L9 19H5v-4Z"/><path d="m3 21h10"/><path d="m12.3 7.7 4 4"/></Icon>; }
+function LineIcon() { return <Icon><path d="M5 19 19 5"/><circle cx="5" cy="19" r="1.5"/><circle cx="19" cy="5" r="1.5"/></Icon>; }
 function TextIcon() { return <Icon><path d="M5 6V4h14v2M12 4v16M8 20h8"/></Icon>; }
 function EraserIcon() { return <Icon><path d="m7 18-3-3 9-10a2.1 2.1 0 0 1 3 0l3 3a2.1 2.1 0 0 1 0 3l-7 7H7Z"/><path d="m10 8 7 7M7 18h13"/></Icon>; }
 function UndoIcon() { return <Icon><path d="M9 8H4V3"/><path d="M4 8c2.1-2.7 4.8-4 8-4a8 8 0 1 1-7.4 11"/></Icon>; }

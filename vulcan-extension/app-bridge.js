@@ -1,0 +1,49 @@
+const PAGE_SOURCE = 'apka-szkolna';
+const EXTENSION_SOURCE = 'vulcan-pomocnik';
+
+function reply(type, detail) {
+  window.postMessage({ source: EXTENSION_SOURCE, type, detail }, '*');
+}
+
+window.addEventListener('message', (event) => {
+  if (event.source !== window || !event.data || event.data.source !== PAGE_SOURCE) return;
+  if (event.data.type === 'VULCAN_BRIDGE_PING') {
+    reply('VULCAN_BRIDGE_READY');
+    return;
+  }
+  if (event.data.type === 'VULCAN_SCHEDULE_REQUEST') {
+    chrome.runtime.sendMessage({ type: 'READ_VULCAN_SCHEDULE' }, (response) => {
+      if (chrome.runtime.lastError || !response?.ok) {
+        reply('VULCAN_SCHEDULE_ERROR', chrome.runtime.lastError?.message || response?.error || 'Nie udało się odczytać planu.');
+        return;
+      }
+      reply('VULCAN_SCHEDULE_RESULT', { entries: response.entries });
+    });
+    return;
+  }
+  if (event.data.type === 'VULCAN_ATTENDANCE_REQUEST') {
+    chrome.runtime.sendMessage({ type: 'READ_VULCAN_ATTENDANCE', period: event.data.period }, (response) => {
+      if (chrome.runtime.lastError || !response?.ok) {
+        reply('VULCAN_ATTENDANCE_ERROR', chrome.runtime.lastError?.message || response?.error || 'Nie udało się odczytać frekwencji.');
+        return;
+      }
+      reply('VULCAN_ATTENDANCE_RESULT', { rows: response.rows });
+    });
+    return;
+  }
+  if (event.data.type !== 'VULCAN_TRANSFER') return;
+  const payload = event.data.payload;
+  if (!payload || payload.version !== 1 || typeof payload.topic !== 'string' || !Array.isArray(payload.attendance)) {
+    reply('VULCAN_TRANSFER_ERROR', 'Nieprawidłowa paczka danych.');
+    return;
+  }
+  chrome.runtime.sendMessage({ type: 'OPEN_VULCAN_TRANSFER', payload }, (response) => {
+    if (chrome.runtime.lastError || !response?.ok) {
+      reply('VULCAN_TRANSFER_ERROR', chrome.runtime.lastError?.message || response?.error || 'Brak odpowiedzi dodatku.');
+      return;
+    }
+    reply('VULCAN_TRANSFER_ACCEPTED');
+  });
+});
+
+reply('VULCAN_BRIDGE_READY');

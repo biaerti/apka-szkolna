@@ -111,9 +111,14 @@ export function AnnotationTextBox({
     textRef.current?.focus();
   }
 
+  function changeFontSize(delta: number) {
+    onSize({ width, size: Math.max(14, Math.min(160, size + delta)) });
+    window.setTimeout(() => textRef.current?.focus(), 0);
+  }
+
   return (
     <div className="absolute pt-8" style={{ left: x, top: y, width }} onPointerDown={(e) => e.stopPropagation()}>
-      <div className="absolute left-0 right-0 top-0 flex h-8 items-center justify-between rounded-t-md bg-gray-950/90 px-2 text-white shadow-lg">
+      <div className="absolute left-0 top-0 flex h-8 min-w-max items-center justify-between gap-2 rounded-t-md bg-gray-950/95 px-2 text-white shadow-lg">
         <button
           type="button"
           aria-label="Przenieś dopisek"
@@ -132,6 +137,9 @@ export function AnnotationTextBox({
           Przenieś
         </button>
         <div className="flex items-center gap-1">
+          <button type="button" aria-label="Zmniejsz tekst" title="Zmniejsz tekst" onPointerDown={(e) => e.preventDefault()} onClick={() => changeFontSize(-4)} className="h-7 w-7 rounded text-lg leading-none text-gray-200 hover:bg-white/10">−</button>
+          <span className="min-w-8 text-center text-xs tabular-nums text-gray-300">{size}</span>
+          <button type="button" aria-label="Powiększ tekst" title="Powiększ tekst" onPointerDown={(e) => e.preventDefault()} onClick={() => changeFontSize(4)} className="h-7 w-7 rounded text-lg leading-none text-gray-200 hover:bg-white/10">+</button>
           <button type="button" onPointerDown={(e) => e.preventDefault()} onClick={onCancel} className="h-7 rounded px-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white">
             Anuluj
           </button>
@@ -146,6 +154,9 @@ export function AnnotationTextBox({
         onChange={(e) => onValue(e.target.value)}
         onKeyDown={(e) => {
           e.stopPropagation();
+          // Enter zapisuje - dopiski przy klasie to jedna, dwie linijki, a
+          // siegniecie po mysz do "Zapisz" (albo pamietanie Ctrl+Enter)
+          // wybijalo z rytmu. Nowa linia: Shift+Enter.
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             onCommit();
@@ -159,7 +170,7 @@ export function AnnotationTextBox({
         onBlur={() => {
           if (!resizing && !moving) onCommit();
         }}
-        placeholder="Wpisz dopisek..."
+        placeholder="Wpisz tekst...  Enter zapisuje"
         rows={1}
         className="block w-full resize-none overflow-hidden rounded-b-md border-2 px-3 py-2 font-semibold leading-tight outline-none"
         style={{

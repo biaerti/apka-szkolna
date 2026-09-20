@@ -5,6 +5,12 @@
 // je tylko wtedy, gdy nauczyciel sam tego chce (np. przy omawianiu). Klawisz K
 // rozklada widok "wszystkie" na dwie kolumny - krotkie pytania sa wtedy pisane
 // wiekszymi literami zamiast zostawiac pusta prawa polowe ekranu.
+//
+// Przy omawianiu: P otwiera widok "pytanie | odpowiedz" (QuizSplitView) - z
+// lewej pytanie, z prawej pisze sie odpowiedz narzedziami adnotacji; 0 otwiera
+// pusta tablice do rysowania (PresentationBoard), te sama co w prezentacji
+// lekcji. R/T/L wybieraja narzedzie, Ctrl+Z cofa, Esc najpierw odklada pisak,
+// potem zamyka tablice/widok, dopiero na koncu wychodzi z pokazu.
 
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,9 +20,13 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { PresentClock } from '../components/lessons/PresentClock';
 import { QuizAllView } from '../components/quizzes/QuizAllView';
 import { QuizOneView } from '../components/quizzes/QuizOneView';
+import { QuizSplitView } from '../components/quizzes/QuizSplitView';
+import { PresentationBoard } from '../components/slides/PresentationBoard';
+import { AnnotationToolbar } from '../components/slides/AnnotationToolbar';
+import { useSlideAnnotations } from '../components/slides/useSlideAnnotations';
 import { formatQuizDate, quizKindLabel, quizKindTitle, renumber } from '../lib/quiz';
 
-type View = 'all' | 'one';
+type View = 'all' | 'one' | 'split';
 
 function isTypingTarget(el: EventTarget | null): boolean {
   return el instanceof HTMLElement && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
@@ -29,6 +39,7 @@ export function QuizPresent() {
   const cls = useStore((s) => s.classes.find((c) => c.id === quiz?.classId));
 
   const [view, setView] = useState<View>('all');
+  const [board, setBoard] = useState(false);
   const [index, setIndex] = useState(0);
   const [showAnswers, setShowAnswers] = useState(false);
   // Dwie kolumny w widoku "wszystkie" - przy krotkich pytaniach prawa polowa
@@ -38,18 +49,58 @@ export function QuizPresent() {
 
   const questions = quiz ? renumber(quiz.questions) : [];
   const total = questions.length;
+  const current = questions[Math.min(index, Math.max(0, total - 1))];
+
+  // Rysowac i pisac mozna na tablicy (0) i w widoku "pytanie | odpowiedz" (P).
+  // Notatki trzymaja sie pytania (klucz z id), a tablica jest jedna na kartkowke.
+  const onCanvas = board || view === 'split';
+  const ann = useSlideAnnotations(
+    !quiz ? undefined : board ? `quiz-board:${quiz.id}` : view === 'split' ? `quiz:${quiz.id}:${current?.id ?? ''}` : undefined,
+  );
+  const annRef = useRef(ann);
+  annRef.current = ann;
 
   function toggleFullscreen() {
     if (document.fullscreenElement) document.exitFullscreen();
     else rootRef.current?.requestFullscreen();
   }
 
+  // Wejscie w widok odpowiedzi od razu podaje narzedzie "Tekst" - po to sie go
+  // otwiera; wyjscie z kartki odklada pisak, zeby pasek narzedzi nie wisial
+  // nad widokiem, w ktorym nie ma po czym pisac.
+  useEffect(() => {
+    if (view === 'split' && !board && annRef.current.tool === 'off') annRef.current.setTool('text');
+    if (!board && view !== 'split') annRef.current.setTool('off');
+  }, [view, board]);
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (isTypingTarget(e.target)) return;
       const key = e.key;
-      if (key === 'w' || key === 'W') {
+      const drawing = annRef.current.tool !== 'off';
+      if (key === '0') {
         e.preventDefault();
+        setBoard((b) => !b);
+      } else if (key === 'p' || key === 'P') {
+        e.preventDefault();
+        setBoard(false);
+        setView((v) => (v === 'split' ? 'all' : 'split'));
+      } else if ((key === 'z' || key === 'Z') && (e.ctrlKey || e.metaKey)) {
+        if (!onCanvas) return;
+        e.preventDefault();
+        annRef.current.undo();
+      } else if (onCanvas && (key === 'r' || key === 'R')) {
+        e.preventDefault();
+        annRef.current.toggleDrawing();
+      } else if (onCanvas && (key === 't' || key === 'T')) {
+        e.preventDefault();
+        annRef.current.setTool('text');
+      } else if (onCanvas && (key === 'l' || key === 'L')) {
+        e.preventDefault();
+        annRef.current.setTool('line');
+      } else if (key === 'w' || key === 'W') {
+        e.preventDefault();
+        setBoard(false);
         setView((v) => (v === 'all' ? 'one' : 'all'));
       } else if (key === 'k' || key === 'K') {
         e.preventDefault();
@@ -71,12 +122,16 @@ export function QuizPresent() {
       } else if (key === 'End') {
         setIndex(Math.max(0, total - 1));
       } else if (key === 'Escape') {
-        if (!document.fullscreenElement) navigate('/kartkowki');
+        // Po kolei: odloz pisak, zamknij tablice / widok odpowiedzi, wyjdz.
+        if (drawing && board) annRef.current.setTool('off');
+        else if (board) setBoard(false);
+        else if (view === 'split') setView('all');
+        else if (!document.fullscreenElement) navigate('/kartkowki');
       }
     }
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [total, navigate]);
+  }, [total, navigate, onCanvas, board, view]);
 
   if (!quiz) {
     return (
@@ -111,15 +166,23 @@ export function QuizPresent() {
       {/* pr-28: miejsce na zegar w prawym gornym rogu, zeby nie zaslanial konca naglowka. */}
       <p className="shrink-0 truncate pr-28 text-[1.6vw] text-gray-400">{header}</p>
 
-      {total === 0 ? (
+      {total === 0 && !board ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-4 text-gray-200">
           <p className="text-2xl">Ta kartkówka nie ma jeszcze pytań.</p>
           <Button variant="secondary" onClick={() => navigate(`/kartkowki/${quiz.id}`)}>
             Dodaj pytania
           </Button>
         </div>
+      ) : board ? (
+        <div className="min-h-0 flex-1">
+          <PresentationBoard ann={ann} />
+        </div>
       ) : view === 'all' ? (
         <QuizAllView questions={questions} showAnswers={showAnswers} columns={columns} />
+      ) : view === 'split' ? (
+        <div className="min-h-0 flex-1">
+          <QuizSplitView question={current} index={Math.min(index, total - 1)} total={total} showAnswers={showAnswers} ann={ann} />
+        </div>
       ) : (
         <div
           className="flex flex-1 flex-col"
@@ -129,17 +192,23 @@ export function QuizPresent() {
             setIndex((i) => (left ? Math.max(0, i - 1) : Math.min(total - 1, i + 1)));
           }}
         >
-          <QuizOneView question={questions[Math.min(index, total - 1)]} index={Math.min(index, total - 1)} total={total} showAnswers={showAnswers} />
+          <QuizOneView question={current} index={Math.min(index, total - 1)} total={total} showAnswers={showAnswers} />
         </div>
       )}
 
       <p className="shrink-0 text-center text-[1.1vw] text-gray-500">
-        W: {view === 'all' ? 'po jednym pytaniu' : 'wszystkie pytania'}
-        {view === 'one' && ' - strzałki / Spacja: następne, poprzednie'}
-        {view === 'all' && total > 1 && ` - K: ${columns === 1 ? 'dwie kolumny' : 'jedna kolumna'}`}
-        {' - O: '}
-        {showAnswers ? 'ukryj odpowiedzi' : 'pokaż odpowiedzi'} - F: pełny ekran - Esc: wyjście
+        {board
+          ? '0: wróć do pytań - R: pióro - T: tekst - Ctrl+Z: cofnij - Esc: zamknij tablicę'
+          : view === 'split'
+            ? 'strzałki / Spacja: pytania - kliknij z prawej, aby pisać (Enter zapisuje) - P: wróć do listy - 0: tablica'
+            : `W: ${view === 'all' ? 'po jednym pytaniu' : 'wszystkie pytania'}` +
+              (view === 'one' ? ' - strzałki / Spacja: następne, poprzednie' : '') +
+              (view === 'all' && total > 1 ? ` - K: ${columns === 1 ? 'dwie kolumny' : 'jedna kolumna'}` : '') +
+              ' - P: pytanie i odpowiedź - 0: tablica' +
+              ` - O: ${showAnswers ? 'ukryj odpowiedzi' : 'pokaż odpowiedzi'} - F: pełny ekran - Esc: wyjście`}
       </p>
+
+      {onCanvas && <AnnotationToolbar ann={ann} />}
     </div>
   );
 }

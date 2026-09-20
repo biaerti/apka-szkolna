@@ -84,9 +84,9 @@ export const PSO: Dokument = {
               'ocena na bieżąco, kryteria podaję przed zadaniem',
             ],
             [
-              'Kartkówka z ostatnich tematów',
-              'tylko gdy klasa przekroczy limit hałasu (niżej)',
-              'krótka, na ocenę, z bieżącego materiału',
+              'Kartkówka z hałaśliwej lekcji',
+              'po hałaśliwej lekcji - sprawdzenie wiedzy z tej lekcji',
+              'krótka, na ocenę, z materiału tej lekcji',
             ],
           ],
         },
@@ -123,7 +123,7 @@ export const PSO: Dokument = {
       blocks: [
         {
           type: 'p',
-          text: 'Gdy cała klasa jest za głośno, stawiam kreskę na tablicy. Gdy klasa się wycisza, kreski ścieram. Trzy kreski naraz oznaczają, że klasa pisze krótką kartkówkę z ostatnich tematów. Kartkówka nie jest karą za zachowanie - sprawdza, ile z hałaśliwej lekcji zostało w głowach. Zachowanie oceniam osobno: uwagą w dzienniku, wpisywaną od razu, bez ostrzeżeń. Uwaga nie ma wpływu na oceny z przedmiotu.',
+          text: 'Gdy cała klasa jest za głośno, stawiam kreskę na tablicy. Gdy klasa się wycisza, kreski ścieram. Trzy kreski naraz oznaczają, że klasa pisze krótką kartkówkę sprawdzającą wiedzę z tej hałaśliwej lekcji. Kartkówka nie jest karą za zachowanie - sprawdza, ile z lekcji zostało w głowach. Zachowanie oceniam osobno: uwagą w dzienniku, wpisywaną od razu, bez ostrzeżeń. Uwaga nie ma wpływu na oceny z przedmiotu.',
         },
       ],
     },

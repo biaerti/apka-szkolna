@@ -74,6 +74,11 @@ describe('periodStatus', () => {
   it('bez godzin: none', () => {
     expect(periodStatus([], at(9, 0)).kind).toBe('none');
   });
+  it('w weekend zawsze "none", nawet w godzinach dzwonkow', () => {
+    // Niedziela 20 wrzesnia 2026, 8:22 - w tygodniu bylaby to 1. lekcja.
+    expect(periodStatus(PERIODS, new Date(2026, 8, 20, 8, 22)).kind).toBe('none');
+    expect(periodStatus(PERIODS, new Date(2026, 8, 19, 8, 47)).kind).toBe('none');
+  });
   it('ignoruje godziny z niepoprawnym czasem i nie zaklada posortowania', () => {
     const messy = [PERIODS[2], { no: 9, start: 'x', end: '9:00' }, PERIODS[0], PERIODS[1]];
     const s = periodStatus(messy, at(9, 0));

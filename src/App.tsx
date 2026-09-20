@@ -26,6 +26,7 @@ import { Dokumenty } from './pages/Dokumenty';
 import { DocPrint } from './pages/DocPrint';
 import { Panel } from './pages/Panel';
 import { LessonNotesPrint } from './pages/LessonNotesPrint';
+import { Journal } from './pages/Journal';
 import { Sala } from './pages/Sala';
 
 export default function App() {
@@ -55,12 +56,13 @@ export default function App() {
         <Route path="/lekcje" element={<Lessons />} />
         <Route path="/lekcje/:id/edytuj" element={<LessonEditor />} />
         <Route path="/uwagi" element={<Uwagi />} />
-        {/* Lawki na telefonie: plus / plomba / uwaga jednym tapem (docs/PLAN-sala-lawki-uwagi.md) */}
-        <Route path="/sala" element={<Sala />} />
-        <Route path="/sala/:classId" element={<Sala />} />
         <Route path="/kartkowki" element={<Quizzes />} />
         <Route path="/kartkowki/:id" element={<QuizDetail />} />
         <Route path="/plan" element={<Timetable />} />
+        <Route path="/dziennik" element={<Journal />} />
+        {/* Lawki na telefonie: plus / plomba / uwaga jednym tapem (docs/PLAN-sala-lawki-uwagi.md) */}
+        <Route path="/sala" element={<Sala />} />
+        <Route path="/sala/:classId" element={<Sala />} />
         <Route path="/zebrania" element={<Meetings />} />
         <Route path="/zebrania/:id" element={<MeetingDetail />} />
         <Route path="/dokumenty" element={<Dokumenty />} />

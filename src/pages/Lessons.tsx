@@ -7,8 +7,9 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
-import type { Lesson, LessonMaterialType, LessonStatus } from '../data/types';
+import type { Lesson, LessonMaterialType, LessonSlot, LessonStatus } from '../data/types';
 import { allGrades, classesOfGrade, gradeLabel, gradeOfClass, lessonProgress, lessonsOfGrade, todayKey } from '../lib/grade';
+import { classSlotOptions, progressWithoutSlot, slotsFromProgress } from '../lib/lessonSlots';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -29,12 +30,16 @@ import { useLessonDrag } from '../components/lessons/useLessonDrag';
 import { backfillLessonCodes, classLessonCode } from '../lib/lessonCode';
 import { lessonMaterialType } from '../lib/lessonMaterial';
 import { MaterialTabs } from '../components/lessons/MaterialTabs';
+import { useNow } from '../components/timetable/useNow';
+import { LessonMobileCard } from '../components/lessons/LessonMobileCard';
 
 export function Lessons() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const classes = useStore((s) => s.classes);
   const lessons = useStore((s) => s.lessons);
+  const timetable = useStore((s) => s.timetable);
+  const periods = useStore((s) => s.periods);
   const questions = useStore((s) => s.questions);
   const addLesson = useStore((s) => s.addLesson);
   const updateLesson = useStore((s) => s.updateLesson);
@@ -78,6 +83,28 @@ export function Lessons() {
     [gradeLessons],
   );
   const otherGrades = allGrades(classes).filter((g) => g !== grade);
+  const now = useNow(30_000);
+  const slotOptions = useMemo(
+    () => classSlotOptions({ timetable, periods, classId, now }),
+    [timetable, periods, classId, now],
+  );
+  const slotOwnerById = useMemo(() => {
+    const owners = new Map<string, string>();
+    for (const lesson of gradeLessons) {
+      for (const slot of slotsFromProgress(lessonProgress(lesson, classId))) {
+        // Zachowujemy pierwszego wlasciciela także dla dawnych, zdublowanych danych.
+        // Nowe przypisania nie mogą już utworzyć drugiego właściciela.
+        if (!owners.has(slot.id)) owners.set(slot.id, lesson.id);
+      }
+    }
+    return owners;
+  }, [gradeLessons, classId]);
+  const currentSlotId = slotOptions.find((option) => option.isNow)?.id;
+  const currentLessonId = currentSlotId
+    ? visibleLessons.find((lesson) => slotsFromProgress(lessonProgress(lesson, classId)).some((slot) => slot.id === currentSlotId))?.id
+    : undefined;
+  const suggestedLessonId = visibleLessons.find((lesson) => lessonProgress(lesson, classId).status === 'in_progress')?.id
+    ?? visibleLessons.find((lesson) => lessonProgress(lesson, classId).status === 'planned')?.id;
 
   const [newOpen, setNewOpen] = useState(false);
   const [copyLesson, setCopyLesson] = useState<Lesson | null>(null);
@@ -177,12 +204,37 @@ export function Lessons() {
   function setStatus(lesson: Lesson, status: LessonStatus) {
     const current = lessonProgress(lesson, classId);
     const lessonDate = status === 'in_progress' || status === 'done' ? current.lessonDate ?? todayKey() : current.lessonDate;
-    setLessonProgress(lesson.id, classId, { status, lessonDate, doneDate: status === 'done' ? todayKey() : undefined });
+    setLessonProgress(lesson.id, classId, { ...current, status, lessonDate, doneDate: status === 'done' ? todayKey() : undefined });
   }
 
-  function setLessonDate(lesson: Lesson, lessonDate: string) {
+  function addSlot(lesson: Lesson, slot: LessonSlot) {
+    const ownerId = slotOwnerById.get(slot.id);
+    if (ownerId && ownerId !== lesson.id) {
+      const previousOwner = gradeLessons.find((item) => item.id === ownerId);
+      if (previousOwner) {
+        setLessonProgress(
+          previousOwner.id,
+          classId,
+          progressWithoutSlot(lessonProgress(previousOwner, classId), slot.id),
+        );
+      }
+    }
     const current = lessonProgress(lesson, classId);
-    setLessonProgress(lesson.id, classId, { ...current, lessonDate: lessonDate || undefined });
+    const existing = slotsFromProgress(current);
+    if (existing.some((item) => item.id === slot.id)) return;
+    const lessonSlots = [...existing, slot].sort((a, b) => a.date.localeCompare(b.date) || a.period - b.period);
+    const first = lessonSlots[0];
+    setLessonProgress(lesson.id, classId, {
+      ...current,
+      status: slot.id === currentSlotId ? 'in_progress' : current.status,
+      lessonSlots,
+      lessonDate: first.date,
+      lessonPeriod: first.period,
+    });
+  }
+
+  function removeSlot(lesson: Lesson, slotId: string) {
+    setLessonProgress(lesson.id, classId, progressWithoutSlot(lessonProgress(lesson, classId), slotId));
   }
 
   return (
@@ -223,7 +275,7 @@ export function Lessons() {
         )}
       </div>
 
-      <CurrentLessonBar classId={classId} classes={classes} lessons={visibleLessons} />
+      <CurrentLessonBar classId={classId} classes={classes} lessons={visibleLessons} currentLessonId={currentLessonId} />
 
       {visibleLessons.length === 0 ? (
         <EmptyState
@@ -245,6 +297,28 @@ export function Lessons() {
           }
         />
       ) : (
+        <>
+        <div className="space-y-3 md:hidden">
+          {visibleLessons.map((lesson) => (
+            <LessonMobileCard
+              key={lesson.id}
+              lesson={lesson}
+              classId={classId}
+              progress={lessonProgress(lesson, classId)}
+              displayCode={classLessonCode(lessons, lesson, classId)}
+              slots={slotsFromProgress(lessonProgress(lesson, classId))}
+              slotOptions={slotOptions}
+              periods={periods}
+              now={now}
+              currentSlotId={currentSlotId}
+              suggestCurrentSlot={lesson.id === suggestedLessonId}
+              onAddSlot={(slot) => addSlot(lesson, slot)}
+              onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
+              onSetStatus={(status) => setStatus(lesson, status)}
+            />
+          ))}
+        </div>
+        <div className="hidden md:block">
         <Table fixed>
           <THead>
             <TR>
@@ -254,7 +328,7 @@ export function Lessons() {
               {/* Kod lekcji - ten sam, ktory dzieci maja w zeszytach. */}
               <TH className="w-14 !px-1">Kod</TH>
               <TH>Lekcja</TH>
-              <TH className="w-40">Data lekcji</TH>
+              <TH className="w-72">Sloty</TH>
               <TH className="w-32">Status</TH>
               <TH className="w-64 text-right">
                 <span className="sr-only">Akcje</span>
@@ -288,7 +362,14 @@ export function Lessons() {
                   onDragEnd={drag.reset}
                   onMove={(dir) => moveLesson(lesson.id, Math.max(0, firstVisibleIndex) + (dir === 'up' ? idx - 1 : idx + 1))}
                   onSetStatus={(status) => setStatus(lesson, status)}
-                  onSetDate={(date) => setLessonDate(lesson, date)}
+                  slots={slotsFromProgress(lessonProgress(lesson, classId))}
+                  slotOptions={slotOptions}
+                  periods={periods}
+                  now={now}
+                  currentSlotId={currentSlotId}
+                  suggestCurrentSlot={lesson.id === suggestedLessonId}
+                  onAddSlot={(slot) => addSlot(lesson, slot)}
+                  onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
                   onShowRegister={() => setRegisterLessonId(lesson.id)}
                   onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}
@@ -300,6 +381,8 @@ export function Lessons() {
             ))}
           </TBody>
         </Table>
+        </div>
+        </>
       )}
 
       <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} initialType={materialType} />

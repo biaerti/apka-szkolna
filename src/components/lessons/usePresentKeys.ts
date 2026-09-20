@@ -40,6 +40,9 @@ export interface PresentKeysArgs {
   drawing: boolean;
   onToggleDraw: () => void;
   onTextTool: () => void;
+  onLineTool: () => void;
+  /** 0 przelacza miedzy slajdem a wspolna tablica tej prezentacji. */
+  onToggleBoard: () => void;
   onDrawOff: () => void;
   onDrawUndo: () => void;
   /** M = mute: pauza ladowania kartkowki na czas, gdy mowi nauczyciel. */
@@ -53,6 +56,12 @@ export function usePresentKeys(args: PresentKeysArgs) {
     function onKeyDown(e: KeyboardEvent) {
       if (isTypingTarget(e.target)) return;
       const wheelActive = args.onTask && args.wheelOpen;
+
+      if (e.key === '0') {
+        e.preventDefault();
+        args.onToggleBoard();
+        return;
+      }
 
       if (e.key === 'Escape' && wheelActive) {
         e.preventDefault();
@@ -86,6 +95,11 @@ export function usePresentKeys(args: PresentKeysArgs) {
       if (!args.onRecap && (e.key === 't' || e.key === 'T')) {
         e.preventDefault();
         args.onTextTool();
+        return;
+      }
+      if (!args.onRecap && (e.key === 'l' || e.key === 'L')) {
+        e.preventDefault();
+        args.onLineTool();
         return;
       }
       if (e.key === 'm' || e.key === 'M') {

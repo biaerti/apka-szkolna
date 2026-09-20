@@ -26,6 +26,21 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
   const wheelAreaRef = useRef<HTMLDivElement>(null);
   const [wheelSize, setWheelSize] = useState(300);
   const [attendanceOpen, setAttendanceOpen] = useState(false);
+  // Wynik "Pobierz z VULCANA": krotki komunikat pod lista obecnosci.
+  const [vulcanInfo, setVulcanInfo] = useState('');
+  const [vulcanBusy, setVulcanBusy] = useState(false);
+
+  async function pullVulcan() {
+    setVulcanBusy(true);
+    setVulcanInfo('');
+    try {
+      setVulcanInfo(await wheel.pullFromVulcan());
+    } catch (error) {
+      setVulcanInfo(error instanceof Error ? error.message : 'Nie udało się odczytać frekwencji.');
+    } finally {
+      setVulcanBusy(false);
+    }
+  }
 
   useEffect(() => {
     const el = wheelAreaRef.current;
@@ -162,6 +177,18 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
 
       {attendanceOpen && (
         <div className="-mt-4 max-h-[30%] shrink-0 overflow-y-auto border-t border-gray-800 px-3 pb-6 pt-2">
+          <div className="mb-2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={pullVulcan}
+              disabled={vulcanBusy}
+              title="Odczytaj z otwartej karty VULCANA, kogo nie ma na tej lekcji"
+              className="rounded-md bg-gray-800 px-2 py-1 text-xs hover:bg-gray-700 disabled:opacity-50"
+            >
+              {vulcanBusy ? 'Pobieram…' : 'Pobierz z VULCANA'}
+            </button>
+            {vulcanInfo && <span className="min-w-0 flex-1 truncate text-xs text-gray-400" title={vulcanInfo}>{vulcanInfo}</span>}
+          </div>
           <TaskWheelAttendance
             students={wheel.classStudents}
             absentSet={wheel.absentSet}

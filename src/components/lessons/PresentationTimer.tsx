@@ -30,12 +30,22 @@ export function PresentationTimer({
         <button
           type="button"
           onClick={() => onVisibleChange(true)}
-          title="Dodaj stoper do prezentacji (S)"
-          className="rounded-lg bg-gray-950/90 px-3 py-2 text-sm font-semibold text-gray-200 shadow-[0_8px_24px_rgba(0,0,0,0.35)] hover:bg-gray-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          title="Stoper (S)"
+          aria-label="Otwórz stoper"
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-950/90 text-gray-300 shadow-[0_8px_24px_rgba(0,0,0,0.35)] hover:bg-gray-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
-          + stoper <kbd className="ml-1 rounded bg-white/10 px-1.5 py-0.5 text-xs text-gray-300">S</kbd>
+          <StopwatchIcon />
         </button>
       )}
     </div>
+  );
+}
+
+function StopwatchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width={20} height={20} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="13" r="7" />
+      <path d="M9 2h6M12 6V2M17.5 7.5 19 6M12 13l3-2" />
+    </svg>
   );
 }

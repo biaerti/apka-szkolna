@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Apka szkolna - pomocnik VULCAN",
+  "version": "0.3.0",
+  "description": "Przenosi temat, podstawę programową i frekwencję między Apką szkolną a zalogowaną kartą VULCANA.",
+  "permissions": ["tabs", "storage"],
+  "host_permissions": [
+    "https://szkola.klippi.pl/*",
+    "http://localhost:5173/*",
+    "http://127.0.0.1:5173/*",
+    "https://dziennik-dziennik.vulcan.net.pl/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://szkola.klippi.pl/*", "http://localhost:5173/*", "http://127.0.0.1:5173/*"],
+      "js": ["app-bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://dziennik-dziennik.vulcan.net.pl/*"],
+      "js": ["vulcan-bot.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": { "default_title": "Apka szkolna - pomocnik VULCAN" }
+}
