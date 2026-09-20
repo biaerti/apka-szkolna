@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { Seat, Student } from '../data/types';
 import {
   buildDeskGrid,
+  deskName,
   placeStudent,
   SEAT_ROWS,
   seatId,
@@ -99,5 +100,20 @@ describe('seating', () => {
     it('to samo miejsce zwraca te sama liste', () => {
       expect(placeStudent(seats, { classId: 'c1', studentId: 's1', column: 'P', row: 1, side: 1 })).toBe(seats);
     });
+  });
+});
+
+describe('deskName', () => {
+  it('daje pierwsze imie, a inicjal dokłada dopiero przy powtórce imienia', () => {
+    const cls = [
+      student('a', 'Zosia', 'Kowalska'),
+      student('b', 'Zosia', 'Krupa'),
+      student('c', 'Antek', 'Nowak'),
+      student('d', 'Jeronimo Andres', 'Lopez'),
+    ];
+    expect(deskName(cls[0], cls)).toBe('Zosia Ko.');
+    expect(deskName(cls[1], cls)).toBe('Zosia Kr.');
+    expect(deskName(cls[2], cls)).toBe('Antek');
+    expect(deskName(cls[3], cls)).toBe('Jeronimo');
   });
 });

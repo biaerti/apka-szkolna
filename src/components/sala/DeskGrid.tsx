@@ -1,9 +1,16 @@
 // Siatka lawek w widoku Sala, ulozona z perspektywy nauczyciela: TABLICA na
 // dole (za plecami), rzad 1 tuz nad nia, dalsze rzedy wyzej, a kolumna P po
 // prawej rece. Dane zostaja w kolejnosci od tablicy (rzad 1 pierwszy) - tu
-// odwracamy tylko wyswietlanie. Kazda lawka to kafelek z etykieta ("P1") i
-// dwoma miejscami jedno pod drugim - na telefonie (390 px) trzy lawki obok
-// siebie maja po ok. 110 px, dwa nazwiska obok siebie by sie nie zmiescily.
+// odwracamy tylko wyswietlanie.
+//
+// Kazda lawka to kafelek z etykieta ("P1") i dwoma miejscami OBOK SIEBIE, bo
+// tak siedza uczniowie w lawce. Miejsce ma przez to ok. 55 px, wiec mieszcza
+// sie w nim samo imie (deskName) i dzisiejsze symbole pod spodem - za to
+// wszystkie piec rzedow wchodzi na jeden ekran telefonu.
+//
+// TABLICA jest sticky przy dolnej krawedzi: gdy rzedy jednak sie nie mieszcza,
+// zostaje w polu widzenia jako punkt odniesienia, a przewijanie w gore
+// odslania dalsze lawki.
 //
 // Ten sam komponent obsluguje zwykly widok (tap = akcje dla ucznia) i tryb
 // "Rozsadz" (tap = zaznaczenie miejsca), rozni sie tylko tym, co robi tap
@@ -12,7 +19,7 @@
 import clsx from 'clsx';
 import type { RecapEvent, Student } from '../../data/types';
 import type { Desk, SeatPosition } from '../../lib/seating';
-import { samePosition, shortName } from '../../lib/seating';
+import { deskName, samePosition } from '../../lib/seating';
 import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface DeskGridProps {
@@ -39,15 +46,16 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
         {[...grid].reverse().map((row, rowIdx) => (
           <div key={rowIdx} className="grid grid-cols-3 gap-2">
             {row.map((desk) => (
-              <div key={desk.label} className="rounded-lg border border-gray-200 bg-white p-1">
-                <div className="px-1 text-[10px] font-semibold tabular-nums text-gray-400">{desk.label}</div>
-                <div className="space-y-1">
+              <div key={desk.label} className="rounded-lg border border-gray-200 bg-white p-0.5">
+                <div className="px-1 text-[10px] font-semibold leading-tight tabular-nums text-gray-400">{desk.label}</div>
+                <div className="grid grid-cols-2 gap-1">
                   {desk.places.map((place) => {
                     const pos: SeatPosition = { column: desk.column, row: desk.row, side: place.side };
                     const selected = selectedPos ? samePosition(selectedPos, pos) : false;
                     const student = place.student;
                     const events = student ? todayByStudent.get(student.id) ?? [] : [];
                     const disabled = !editing && !student;
+                    const podpis = student ? deskName(student, classmates) : ' ';
                     return (
                       <button
                         key={place.side}
@@ -57,7 +65,10 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
                         aria-label={student ? `${student.lastName} ${student.firstName}, ${desk.label}` : `Wolne miejsce ${desk.label}`}
                         aria-pressed={editing ? selected : undefined}
                         className={clsx(
-                          'flex min-h-[2.5rem] w-full items-center justify-between gap-1 rounded-md px-1.5 py-1 text-left text-sm leading-tight',
+                          'flex min-h-[2.75rem] w-full flex-col justify-center gap-0.5 rounded-md px-0.5 py-1 text-left leading-tight',
+                          // W 55 px miejscu dluzsze imie musi zejsc o stopien nizej, zeby
+                          // nie skonczyc jako "Aleksandr...".
+                          podpis.length <= 7 ? 'text-xs' : podpis.length === 8 ? 'text-[11px]' : 'text-[10px]',
                           'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
                           student ? 'bg-gray-100 text-gray-900 active:bg-accent-100' : 'border border-dashed border-gray-300 text-gray-300',
                           editing && !student && 'active:bg-accent-50',
@@ -65,7 +76,7 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
                           flashStudentId && student?.id === flashStudentId && 'bg-emerald-100',
                         )}
                       >
-                        <span className="min-w-0 truncate font-medium">{student ? shortName(student, classmates) : ' '}</span>
+                        <span className="w-full truncate font-medium">{podpis}</span>
                         {events.length > 0 && <TodayMarks events={events} />}
                       </button>
                     );
@@ -76,7 +87,7 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
           </div>
         ))}
       </div>
-      <div className="mt-3 rounded bg-gray-800 py-1 text-center text-xs font-semibold uppercase tracking-widest text-gray-200">
+      <div className="sticky bottom-0 mt-3 rounded bg-gray-800 py-1 text-center text-xs font-semibold uppercase tracking-widest text-gray-200 shadow-[0_-6px_10px_-6px_rgba(0,0,0,0.25)]">
         Tablica
       </div>
     </div>

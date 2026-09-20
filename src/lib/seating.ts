@@ -116,10 +116,10 @@ export function unseatedStudents(seats: Seat[], students: Student[], classId: st
 }
 
 /**
- * Krotki podpis na kafelku lawki: imie i inicjal nazwiska ("Zosia K."). Na
- * telefonie w lawce mieszcza sie dwa takie podpisy, pelne nazwisko juz nie.
- * Gdy w klasie sa dwie osoby o tym samym imieniu i inicjale, dokladamy
- * drugi znak nazwiska, zeby dalo sie je odroznic.
+ * Krotki podpis ucznia: imie i inicjal nazwiska ("Zosia K.") - uzywany na
+ * liscie uczniow i jako awaryjna forma w deskName. Gdy w klasie sa dwie osoby
+ * o tym samym imieniu i inicjale, dokladamy drugi znak nazwiska, zeby dalo sie
+ * je odroznic.
  */
 export function shortName(student: Student, classmates: Student[]): string {
   const initial = student.lastName.slice(0, 1);
@@ -131,4 +131,19 @@ export function shortName(student: Student, classmates: Student[]): string {
   );
   const tail = clash ? student.lastName.slice(0, 2) : initial;
   return `${student.firstName} ${tail}.`;
+}
+
+/**
+ * Podpis miejsca w lawce. Dwa miejsca stoja obok siebie (uczniowie siedza obok
+ * siebie, nie za soba), wiec kafelek ma na telefonie ok. 55 px - mieści sie w
+ * nim tylko PIERWSZE imie, bez nazwiska i bez drugiego imienia ("Jeronimo
+ * Andres" to "Jeronimo"). Inicjal nazwiska wraca dopiero wtedy, gdy dwoje
+ * uczniow ma to samo pierwsze imie.
+ */
+export function deskName(student: Student, classmates: Student[]): string {
+  const pierwsze = (st: Student) => ({ ...st, firstName: st.firstName.split(' ')[0] });
+  const imie = pierwsze(student).firstName;
+  const koledzy = classmates.map(pierwsze);
+  const clash = koledzy.some((other) => other.id !== student.id && other.firstName === imie);
+  return clash ? shortName(pierwsze(student), koledzy) : imie;
 }
