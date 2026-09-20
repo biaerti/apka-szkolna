@@ -11,6 +11,8 @@ import {
   ANNOTATION_COLORS,
   ANNOTATION_SIZES,
   strokeWidthFor,
+  TEXT_BOX_WIDTH,
+  type TextBoxSize,
   type AnnotationPoint,
   type AnnotationShape,
   type AnnotationTool,
@@ -30,8 +32,12 @@ export interface SlideAnnotations {
   cycleSize: () => void;
   /** Grubosc kreski dla biezacego narzedzia, w pikselach kartki 1280x720. */
   strokeWidth: number;
-  /** STARTOWA wielkosc dopisku, w pikselach kartki - dalej skaluje ja uchwyt pola. */
+  /** Wielkosc liter, jaka dostanie NOWY dopisek - ostatnio ustawiona przy klasie albo z paska. */
   textSize: number;
+  /** Szerokosc ramki, jaka dostanie NOWY dopisek, w pikselach kartki. */
+  textBoxWidth: number;
+  /** Zapamietuje wielkosc pola po zatwierdzeniu dopisku - nastepny otwiera sie taki sam. */
+  rememberTextBox: (box: TextBoxSize) => void;
   /** Ksztalty narysowane na biezacym slajdzie. */
   shapes: AnnotationShape[];
   addStroke: (points: AnnotationPoint[]) => void;
@@ -47,7 +53,11 @@ export interface SlideAnnotations {
 export function useSlideAnnotations(slideId: string | undefined): SlideAnnotations {
   const [tool, setTool] = useState<AnnotationTool>('off');
   const [color, setColor] = useState(ANNOTATION_COLORS[0].value);
-  const [sizeIndex, setSizeIndex] = useState(2);
+  const [sizeIndex, setSizeIndexState] = useState(2);
+  // Ostatnio ustawiona wielkosc pola tekstowego (uchwytem albo A+/A-). Nauczyciel
+  // raz dobiera litery do tablicy i kolejne dopiski maja byc takie same - bez
+  // tego kazde nowe pole wracalo do wielkosci z paska.
+  const [lastTextBox, setLastTextBox] = useState<TextBoxSize | null>(null);
   const [bySlide, setBySlide] = useState<Record<string, AnnotationShape[]>>({});
 
   const size = ANNOTATION_SIZES[sizeIndex] ?? ANNOTATION_SIZES[2];
@@ -126,7 +136,18 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
   }, []);
 
   const cycleSize = useCallback(() => {
-    setSizeIndex((i) => (i + 1) % ANNOTATION_SIZES.length);
+    setLastTextBox(null);
+    setSizeIndexState((i) => (i + 1) % ANNOTATION_SIZES.length);
+  }, []);
+
+  // Wybor grubosci w pasku jest decyzja swiezsza niz zapamietane pole - wygrywa.
+  const setSizeIndex = useCallback((index: number) => {
+    setLastTextBox(null);
+    setSizeIndexState(index);
+  }, []);
+
+  const rememberTextBox = useCallback((box: TextBoxSize) => {
+    setLastTextBox(box);
   }, []);
 
   return {
@@ -139,7 +160,9 @@ export function useSlideAnnotations(slideId: string | undefined): SlideAnnotatio
     setSizeIndex,
     cycleSize,
     strokeWidth: strokeWidthFor(tool, size.stroke),
-    textSize: size.text,
+    textSize: lastTextBox?.size ?? size.text,
+    textBoxWidth: lastTextBox?.width ?? TEXT_BOX_WIDTH,
+    rememberTextBox,
     shapes,
     addStroke,
     addLine,

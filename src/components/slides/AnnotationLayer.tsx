@@ -10,7 +10,6 @@ import { SLIDE_H, SLIDE_W } from './fitText';
 import {
   appendPoint,
   strokePath,
-  TEXT_BOX_WIDTH,
   type AnnotationPoint,
   type LineShape,
   type StrokeShape,
@@ -69,6 +68,8 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
 
   function commitText() {
     if (text) {
+      // Nastepny dopisek otwiera sie taki sam jak ten - patrz rememberTextBox.
+      if (text.text.trim()) ann.rememberTextBox({ width: text.width, size: text.size });
       if (text.id && !text.text.trim()) ann.removeShape(text.id);
       else if (text.id) ann.updateText(text.id, { text: text.text.trim(), size: text.size, width: text.width, x: text.x, y: text.y, color: text.color });
       else ann.addText({ x: text.x, y: text.y, text: text.text, size: text.size, width: text.width });
@@ -106,7 +107,7 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
       y: p.y,
       text: '',
       size: ann.textSize,
-      width: Math.min(TEXT_BOX_WIDTH, SLIDE_W - x - TEXT_MARGIN),
+      width: Math.min(ann.textBoxWidth, SLIDE_W - x - TEXT_MARGIN),
       color: ann.color,
     });
   }

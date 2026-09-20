@@ -140,17 +140,13 @@ export function AnnotationTextBox({
 
   return (
     <div className="absolute" style={{ left: x, top: y, width }} onPointerDown={(e) => e.stopPropagation()}>
-      {/* Ramka i podkladka leza OBOK tekstu, nie pod nim - inaczej przesuwalyby litery. */}
+      {/* Sama ramka, bez wypelnienia: tekst ma w trakcie pisania lezec na tym
+          samym tle co po zatwierdzeniu - ciemna podkladka klamala o czytelnosci
+          (na jasnej tablicy robila szara plache pod zoltymi literami). */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute rounded"
-        style={{
-          inset: -10,
-          border: `2px dashed ${color}`,
-          opacity: 0.6,
-          // Neutralna przymglona podkladka - czytelna i na ciemnym slajdzie, i na jasnej notatce.
-          background: color === '#111827' ? 'rgba(255,255,255,0.88)' : 'rgba(17,24,39,0.88)',
-        }}
+        style={{ inset: -10, border: `2px dashed ${color}`, opacity: 0.6 }}
       />
 
       <div className="absolute flex items-center gap-0.5 rounded-md bg-gray-950/95 px-1 shadow-lg" style={toolbarStyle}>
