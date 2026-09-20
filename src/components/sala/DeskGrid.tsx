@@ -1,7 +1,9 @@
-// Siatka lawek w widoku Sala: TABLICA na gorze, trzy kolumny L S P, rzedy w
-// dol. Kazda lawka to kafelek z etykieta ("P1") i dwoma miejscami jedno pod
-// drugim - na telefonie (390 px) trzy lawki obok siebie maja po ok. 110 px,
-// dwa nazwiska obok siebie by sie nie zmiescily.
+// Siatka lawek w widoku Sala, ulozona z perspektywy nauczyciela: TABLICA na
+// dole (za plecami), rzad 1 tuz nad nia, dalsze rzedy wyzej, a kolumna P po
+// prawej rece. Dane zostaja w kolejnosci od tablicy (rzad 1 pierwszy) - tu
+// odwracamy tylko wyswietlanie. Kazda lawka to kafelek z etykieta ("P1") i
+// dwoma miejscami jedno pod drugim - na telefonie (390 px) trzy lawki obok
+// siebie maja po ok. 110 px, dwa nazwiska obok siebie by sie nie zmiescily.
 //
 // Ten sam komponent obsluguje zwykly widok (tap = akcje dla ucznia) i tryb
 // "Rozsadz" (tap = zaznaczenie miejsca), rozni sie tylko tym, co robi tap
@@ -28,16 +30,13 @@ export interface DeskGridProps {
 export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPos, flashStudentId, onTapPlace }: DeskGridProps) {
   return (
     <div>
-      <div className="mb-3 rounded bg-gray-800 py-1 text-center text-xs font-semibold uppercase tracking-widest text-gray-200">
-        Tablica
-      </div>
       <div className="mb-1 grid grid-cols-3 gap-2 text-center text-[11px] font-medium uppercase tracking-wide text-gray-400">
         <span>Lewa</span>
         <span>Środek</span>
         <span>Prawa</span>
       </div>
       <div className="space-y-2">
-        {grid.map((row, rowIdx) => (
+        {[...grid].reverse().map((row, rowIdx) => (
           <div key={rowIdx} className="grid grid-cols-3 gap-2">
             {row.map((desk) => (
               <div key={desk.label} className="rounded-lg border border-gray-200 bg-white p-1">
@@ -76,6 +75,9 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
             ))}
           </div>
         ))}
+      </div>
+      <div className="mt-3 rounded bg-gray-800 py-1 text-center text-xs font-semibold uppercase tracking-widest text-gray-200">
+        Tablica
       </div>
     </div>
   );

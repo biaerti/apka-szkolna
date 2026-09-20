@@ -1,9 +1,11 @@
 // Miejsca w lawkach - obliczenia pod widok "Sala" (src/pages/Sala.tsx).
 //
 // Sala jest jedna dla wszystkich klas: trzy kolumny lawek (L / S / P, patrzac
-// na tablice) po piec rzedow, w kazdej lawce dwa miejsca. Rzad 1 stoi przy
-// tablicy. Etykieta lawki to litera kolumny i numer rzedu ("P1"), bo tak
-// Bartek mowi o lawkach na lekcji.
+// od tablicy w strone klasy - P jest po prawej rece nauczyciela) po piec
+// rzedow, w kazdej lawce dwa miejsca. Rzad 1 stoi przy tablicy. Etykieta
+// lawki to litera kolumny i numer rzedu ("P1"), bo tak Bartek mowi o lawkach
+// na lekcji. Na ekranie tablica jest na dole, a rzedy ida w gore - odwraca to
+// samo wyswietlanie w DeskGrid, dane zostaja w kolejnosci od tablicy.
 //
 // Tu sa same czyste funkcje; stan (lista Seat) siedzi w store.
 

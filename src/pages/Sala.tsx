@@ -2,8 +2,9 @@
 //
 // Po co: Bartek nie pamieta wszystkich imion, a na lekcji chce jednym tapem
 // dac plus / kropke / plombe albo zapisac uwage, bez podchodzenia do
-// komputera. Lawki sa ulozone tak, jak je widzi patrzac na tablice (kolumny
-// L S P, rzad 1 przy tablicy - patrz src/lib/seating.ts), wiec "ten w P1" to
+// komputera. Lawki sa ulozone tak, jak widzi sale stojac przy tablicy: tablica
+// na dole ekranu, rzad 1 tuz nad nia, kolumna P po prawej rece
+// (patrz src/lib/seating.ts), wiec "ten w P1" to
 // od razu konkretne nazwisko.
 //
 // Zapis to zwykle RecapEvent (jak z kola na lekcji) - bilans miesiaca,

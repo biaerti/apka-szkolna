@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
 import App from './App';
 import { AuthGate } from './components/layout/AuthGate';
 import { PanelPasek } from './components/panel/PanelPasek';
 import './index.css';
+
+// Telefon (APK z Capacitora) sluzy do widoku Sala, a WebView zawsze startuje
+// na "/". Podmieniamy trase jeszcze przed pierwszym renderem, zeby nie mignal
+// pulpit. W przegladarce isNativePlatform() jest false i nic sie nie dzieje.
+if (Capacitor.isNativePlatform() && window.location.pathname === '/') {
+  window.history.replaceState(null, '', '/sala');
+}
 
 // Plywajacy panel desktopowy (trasa /panel, folder desktop/): okno Tauri jest
 // przezroczyste i bez ramki, wiec tlo strony musi zniknac JUZ przy starcie -
