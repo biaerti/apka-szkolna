@@ -19,10 +19,13 @@ import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 // "Uwagi" to kalendarz tygodnia z uwagami do przepisania do dziennika: uwaga wpisana
 // w trakcie lekcji jest przypominajka, a po lekcjach trzeba ja zobaczyc ulozona po
 // dniach, a nie rozsypana po uczniach (patrz src/pages/Uwagi.tsx).
+// "Sala" to lawki klasy - glowny ekran na telefonie (APK startuje wlasnie tam),
+// wiec musi byc w menu, zeby dalo sie do niej wrocic z innej zakladki.
 // "Dokumenty" to lista wydrukow: zasady lekcji dla dzieci, PSO dla rodzicow,
 // plan rozwoju dla dyrektora - jedna zakladka zamiast osobnej na kazdy papier.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
+  { to: '/sala', label: 'Sala' },
   { to: '/klasy', label: 'Klasy' },
   { to: '/lekcje', label: 'Lekcje' },
   { to: '/uwagi', label: 'Uwagi' },

@@ -27,6 +27,8 @@ export interface DeskGridProps {
   classmates: Student[];
   /** Dzisiejsze zdarzenia po uczniu - male symbole przy nazwisku. */
   todayByStudent: Map<string, RecapEvent[]>;
+  /** Wiszace ostrzezenia - osobno, bo nie sa zdarzeniem jednego dnia. */
+  ostrzezenia: Map<string, RecapEvent>;
   editing: boolean;
   selectedPos?: SeatPosition;
   /** Uczen podswietlony po zapisie (krotki flash "wzielo"). */
@@ -34,7 +36,16 @@ export interface DeskGridProps {
   onTapPlace: (pos: SeatPosition, student?: Student) => void;
 }
 
-export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPos, flashStudentId, onTapPlace }: DeskGridProps) {
+export function DeskGrid({
+  grid,
+  classmates,
+  todayByStudent,
+  ostrzezenia,
+  editing,
+  selectedPos,
+  flashStudentId,
+  onTapPlace,
+}: DeskGridProps) {
   return (
     <div>
       <div className="mb-1 grid grid-cols-3 gap-2 text-center text-[11px] font-medium uppercase tracking-wide text-gray-400">
@@ -56,6 +67,7 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
                     const events = student ? todayByStudent.get(student.id) ?? [] : [];
                     const disabled = !editing && !student;
                     const podpis = student ? deskName(student, classmates) : ' ';
+                    const ostrzezony = student ? ostrzezenia.has(student.id) : false;
                     return (
                       <button
                         key={place.side}
@@ -66,9 +78,9 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
                         aria-pressed={editing ? selected : undefined}
                         className={clsx(
                           'flex min-h-[2.75rem] w-full flex-col justify-center gap-0.5 rounded-md px-0.5 py-1 text-left leading-tight',
-                          // W 55 px miejscu dluzsze imie musi zejsc o stopien nizej, zeby
-                          // nie skonczyc jako "Aleksandr...".
-                          podpis.length <= 7 ? 'text-xs' : podpis.length === 8 ? 'text-[11px]' : 'text-[10px]',
+                          // Miejsce ma ok. 50 px, wiec zamiast przycinac imie schodzimy
+                          // o stopien nizej z pismem - "Maksymilian" ma byc caly.
+                          podpisRozmiar(podpis),
                           'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500',
                           student ? 'bg-gray-100 text-gray-900 active:bg-accent-100' : 'border border-dashed border-gray-300 text-gray-300',
                           editing && !student && 'active:bg-accent-50',
@@ -77,7 +89,16 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
                         )}
                       >
                         <span className="w-full truncate font-medium">{podpis}</span>
-                        {events.length > 0 && <TodayMarks events={events} />}
+                        {(ostrzezony || events.length > 0) && (
+                          <span className="flex w-full items-center gap-0.5">
+                            {ostrzezony && (
+                              <span title="ostrzeżenie" className="text-xs font-black text-amber-600">
+                                {resultSymbol('ostrzezenie').symbol}
+                              </span>
+                            )}
+                            {events.length > 0 && <TodayMarks events={events} />}
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -92,6 +113,18 @@ export function DeskGrid({ grid, classmates, todayByStudent, editing, selectedPo
       </div>
     </div>
   );
+}
+
+/**
+ * Klasa Tailwind z wielkoscia pisma dobrana do dlugosci imienia. Progi wyszly z
+ * pomiaru szerokosci tekstu w miejscu (ok. 50 px): "Mateusz" miesci sie w 12 px,
+ * "Aleksandra" dopiero w 10 px, a "Maksymilian" w 9 px z ciasniejszym odstepem.
+ */
+function podpisRozmiar(podpis: string): string {
+  if (podpis.length <= 7) return 'text-xs';
+  if (podpis.length === 8) return 'text-[11px]';
+  if (podpis.length <= 10) return 'text-[10px]';
+  return 'text-[9px] tracking-tight';
 }
 
 /** Dzisiejsze wyniki ucznia jako ciag symboli ("+ + ▣"), uwaga jako "!". */

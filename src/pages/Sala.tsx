@@ -21,6 +21,7 @@ import { useStore } from '../data/store';
 import type { RecapEvent, Student } from '../data/types';
 import { useTodayEventsPull } from '../data/remote/useTodayEventsPull';
 import { buildDeskGrid, seatLabelByStudent, unseatedStudents, type SeatPosition } from '../lib/seating';
+import { warningsByStudent } from '../lib/ostrzezenia';
 import { toDateKey } from '../lib/dates';
 import { currentOrNextEntry } from '../lib/timetable';
 import { resultSymbol } from '../lib/resultSymbol';
@@ -92,6 +93,13 @@ export function Sala() {
     return out;
   }, [recapEvents, classId]);
 
+  // Ostrzezenia sa POZA todayByStudent: zostaja przy uczniu z lekcji na lekcje,
+  // wiec filtr po dzisiejszej dacie by je gubil (patrz src/lib/ostrzezenia.ts).
+  const ostrzezenia = useMemo(
+    () => (classId ? warningsByStudent(recapEvents, classId) : new Map<string, RecapEvent>()),
+    [recapEvents, classId],
+  );
+
   const onMove = useCallback(
     (move: SalaMove) => {
       if (!classId) return;
@@ -124,8 +132,23 @@ export function Sala() {
   function handleUwaga(student: Student, note: string) {
     if (!classId) return;
     const event = addRecapEvent({ studentId: student.id, classId, result: 'uwaga', note });
+    // Uwaga zastepuje ostrzezenie - po co ma wisiec dalej, skoro jest juz wpis.
+    const wisiace = ostrzezenia.get(student.id);
+    if (wisiace) removeRecapEvent(wisiace.id);
     setUndo({ event, label: `Uwaga: ${student.firstName} ${student.lastName}` });
     flash(student.id);
+  }
+
+  function handleOstrzezenie(student: Student) {
+    if (!classId) return;
+    const event = addRecapEvent({ studentId: student.id, classId, result: 'ostrzezenie' });
+    setUndo({ event, label: `Ostrzeżenie: ${student.firstName} ${student.lastName}` });
+    flash(student.id);
+  }
+
+  function handleZdejmijOstrzezenie(student: Student) {
+    const wisiace = ostrzezenia.get(student.id);
+    if (wisiace) removeRecapEvent(wisiace.id);
   }
 
   function handleTapPlace(pos: SeatPosition, student?: Student) {
@@ -209,13 +232,21 @@ export function Sala() {
           grid={grid}
           classmates={classmates}
           todayByStudent={todayByStudent}
+          ostrzezenia={ostrzezenia}
           editing={editing}
           selectedPos={selectedPos}
           flashStudentId={flashId}
           onTapPlace={handleTapPlace}
         />
       ) : (
-        <StudentList students={classmates} labels={labels} todayByStudent={todayByStudent} flashId={flashId} onTap={handleTapListed} />
+        <StudentList
+          students={classmates}
+          labels={labels}
+          todayByStudent={todayByStudent}
+          ostrzezenia={ostrzezenia}
+          flashId={flashId}
+          onTap={handleTapListed}
+        />
       )}
 
       {(editing || view === 'lawki') && unseated.length > 0 && (
@@ -225,6 +256,7 @@ export function Sala() {
             students={unseated}
             labels={labels}
             todayByStudent={todayByStudent}
+            ostrzezenia={ostrzezenia}
             flashId={flashId}
             selectedId={selectedStudentId}
             onTap={handleTapListed}
@@ -244,7 +276,10 @@ export function Sala() {
         <StudentActionSheet
           student={picked}
           seatLabel={picked ? labels.get(picked.id) : undefined}
+          ostrzezony={picked ? ostrzezenia.has(picked.id) : false}
           onGrade={handleGrade}
+          onOstrzezenie={handleOstrzezenie}
+          onZdejmijOstrzezenie={handleZdejmijOstrzezenie}
           onUwaga={handleUwaga}
           onClose={() => setPicked(null)}
         />
@@ -288,6 +323,7 @@ function StudentList({
   students,
   labels,
   todayByStudent,
+  ostrzezenia,
   flashId,
   selectedId,
   onTap,
@@ -295,6 +331,7 @@ function StudentList({
   students: Student[];
   labels: Map<string, string>;
   todayByStudent: Map<string, RecapEvent[]>;
+  ostrzezenia: Map<string, RecapEvent>;
   flashId: string | null;
   selectedId?: string;
   onTap: (student: Student) => void;
@@ -322,6 +359,11 @@ function StudentList({
               <span className="min-w-0 flex-1 truncate text-gray-900">
                 <span className="font-medium">{st.lastName}</span> {st.firstName}
               </span>
+              {ostrzezenia.has(st.id) && (
+                <span title="ostrzeżenie" className="shrink-0 text-xs font-black text-amber-600">
+                  {resultSymbol('ostrzezenie').symbol}
+                </span>
+              )}
               {events.length > 0 && <TodayMarks events={events} />}
               <span className="w-7 shrink-0 text-right text-xs font-semibold tabular-nums text-gray-400">{labels.get(st.id) ?? ''}</span>
             </button>

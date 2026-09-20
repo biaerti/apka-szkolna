@@ -7,6 +7,11 @@
 //
 // Zwiniete okienko nie wraca przy kazdym odswiezeniu, tylko gdy dojdzie NOWA
 // uwaga (id spoza zapamietanych). Na stronie /uwagi go nie ma - tam jest cala lista.
+//
+// Na telefonie okienka nie ma wcale (hidden md:block): ma 320 px i jest
+// przypiete obok bocznego menu, wiec na pionowym ekranie zaslanialoby Sale.
+// Uwagi i tak przepisuje sie po lekcjach przy komputerze - na telefonie
+// wystarczy licznik przy zakladce "Uwagi".
 
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -70,7 +75,7 @@ export function UwagiPrzypomnienie() {
       <button
         type="button"
         onClick={() => setZwiniete(new Set())}
-        className="fixed bottom-4 left-60 z-40 rounded-full border border-amber-300 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-800 shadow-md hover:bg-amber-100"
+        className="fixed bottom-4 left-60 z-40 hidden rounded-full border border-amber-300 md:block bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-800 shadow-md hover:bg-amber-100"
       >
         💬 do dziennika: {uwagi.length}
       </button>
@@ -78,7 +83,7 @@ export function UwagiPrzypomnienie() {
   }
 
   return (
-    <div className="fixed bottom-4 left-60 z-40 w-80 rounded-lg border border-amber-300 bg-white shadow-xl">
+    <div className="fixed bottom-4 left-60 z-40 hidden w-80 rounded-lg border border-amber-300 bg-white shadow-xl md:block">
       <div className="flex items-center justify-between border-b border-amber-200 bg-amber-50 px-3 py-2">
         <span className="text-sm font-semibold text-amber-900">Wpisz do dziennika ({uwagi.length})</span>
         <button

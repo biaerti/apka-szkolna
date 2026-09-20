@@ -49,6 +49,7 @@ export type RecapResult =
   | 'pass'
   | 'hint_plomba'
   | 'uwaga'
+  | 'ostrzezenie'
   | 'rozliczenie'
   | 'jedynka'
   | 'piatka';

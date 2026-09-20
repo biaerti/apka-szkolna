@@ -3,6 +3,7 @@
 //
 //   +   plus (dobra odpowiedz)      .   kropka (odpowiedz czesciowa)
 //   ▣   plomba (zla odpowiedz)      P   pas ("dzisiaj nie odpowiadam")
+//   !   uwaga (do dziennika)        △   ostrzezenie (krok przed uwaga)
 //
 // Plomba to znak "zaplombowanego" pola - celowo nie minus, bo w dzienniku minus
 // znaczy co innego, a nazwa "plomba" ma nie kojarzyc sie z kara.
@@ -34,6 +35,10 @@ export const RESULT_SYMBOLS: Record<RecapResult, ResultSymbol> = {
   },
   pass: { symbol: 'P', label: 'pas', color: 'text-amber-300', bg: 'bg-amber-900/60' },
   uwaga: { symbol: '!', label: 'uwaga', color: 'text-orange-300', bg: 'bg-orange-900/60' },
+  // Ostrzezenie to krok PRZED uwaga - trojkat, bo ma czytac sie jako
+  // "uwazaj", a nie jako kara. Znak z tego samego bloku Unicode co plomba,
+  // wiec narysuje sie tez na szkolnym Chrome 109.
+  ostrzezenie: { symbol: '△', label: 'ostrzeżenie', color: 'text-amber-300', bg: 'bg-amber-900/60' },
   // 'rozliczenie' - historyczne zdarzenie (stary system zadan naprawczych), UI go
   // juz nie tworzy, ale stare wpisy z Supabase wciaz musza dostac swoj symbol.
   rozliczenie: { symbol: '✓', label: 'rozliczenie', color: 'text-gray-300', bg: 'bg-gray-800' },
