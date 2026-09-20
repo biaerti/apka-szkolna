@@ -1,17 +1,23 @@
-// Pole dopisku na slajdzie: textarea plus uchwyt skalowania w prawym dolnym
-// rogu.
+// Pole dopisku na slajdzie - pasek narzedzi z boku, tak jak w multibooku GWO:
+// kosz, A+/A- i uchwyt do noszenia pola po kartce.
 //
-// Uchwyt zmienia SZEROKOSC RAMKI I WIELKOSC LITER naraz (scaleTextBox w
-// annotations.ts). Nauczyciel prowadzi lekcje przy klasie i nie ma czasu na
-// osobny suwak wielkosci - ciagnie rog tak, jak ciagnie sie pole tekstowe w
-// kazdym innym programie, a litery ida za ramka. Wysokosc dobiera sie sama do
-// tresci, zeby dopisek nie mial pustego pasa pod ostatnim wierszem.
+// Pole jest "co widzisz, to dostaniesz": tekst w trakcie pisania stoi w tym
+// samym punkcie kartki, ma te sama wielkosc liter i to samo zawijanie co gotowy
+// dopisek (AnnotationTexts). Dlatego textarea nie ma ani ramki, ani wyscielenia
+// - ramke rysuje podkladka LEZACA OBOK tekstu (ujemny inset), a pasek narzedzi
+// wisi absolutnie poza polem. Nic z tego nie przesuwa liter, wiec zatwierdzenie
+// dopisku nie jest juz skokiem.
+//
+// Uchwyt w prawym dolnym rogu zmienia SZEROKOSC RAMKI I WIELKOSC LITER naraz
+// (scaleTextBox w annotations.ts) - ciagnie sie rog tak jak w kazdym innym
+// programie, a litery ida za ramka. A+/A- robia to samo klikiem, gdy uchwyt
+// jest za blisko krawedzi kartki.
 //
 // Wszystkie wymiary sa w pikselach kartki 1280x720 (patrz AnnotationLayer) -
 // dlatego przeliczamy ruch myszy przez skale kartki na ekranie.
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { scaleTextBox, type TextBoxSize } from './annotations';
+import { scaleTextBox, TEXT_SIZE_MAX, TEXT_SIZE_MIN, type TextBoxSize } from './annotations';
 
 export interface AnnotationTextBoxProps {
   x: number;
@@ -20,7 +26,7 @@ export interface AnnotationTextBoxProps {
   color: string;
   size: number;
   width: number;
-  /** Ile miejsca zostalo do prawej krawedzi kartki - dalej pole nie roscie. */
+  /** Ile miejsca zostalo do prawej krawedzi kartki - dalej pole nie rosnie. */
   maxWidth: number;
   /** Ile pikseli ekranu przypada na piksel kartki - do przeliczenia ruchu uchwytu. */
   scale: number;
@@ -29,7 +35,12 @@ export interface AnnotationTextBoxProps {
   onMove: (next: { x: number; y: number }) => void;
   onCommit: () => void;
   onCancel: () => void;
+  /** Kosz: wyrzuca dopisek - takze ten, ktory juz stal na slajdzie. */
+  onDelete: () => void;
 }
+
+/** Szerokosc paska narzedzi w pikselach kartki - po to, zeby wiedziec, czy miesci sie z lewej. */
+const TOOLBAR_W = 150;
 
 export function AnnotationTextBox({
   x,
@@ -45,6 +56,7 @@ export function AnnotationTextBox({
   onMove,
   onCommit,
   onCancel,
+  onDelete,
 }: AnnotationTextBoxProps) {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [resizing, setResizing] = useState(false);
@@ -111,14 +123,71 @@ export function AnnotationTextBox({
     textRef.current?.focus();
   }
 
-  function changeFontSize(delta: number) {
-    onSize({ width, size: Math.max(14, Math.min(160, size + delta)) });
+  /** A+ / A-: ta sama proporcja co uchwyt, wiec ramka i litery nie rozjezdzaja sie. */
+  function changeFontSize(step: number) {
+    const next = Math.max(TEXT_SIZE_MIN, Math.min(TEXT_SIZE_MAX, Math.round(size * step)));
+    if (next === size) return;
+    onSize({ width: Math.min(maxWidth, Math.round((width * next) / size)), size: next });
     window.setTimeout(() => textRef.current?.focus(), 0);
   }
 
+  // Pasek stoi z lewej strony pola (jak w GWO). Przy samej krawedzi kartki nie
+  // ma tam miejsca - wtedy siada nad polem.
+  const toolbarStyle =
+    x > TOOLBAR_W + 16 ? { right: '100%', top: 0, marginRight: 10 } : { left: 0, bottom: '100%', marginBottom: 10 };
+
+  const buttonClass = 'flex h-9 w-9 items-center justify-center rounded text-gray-100 hover:bg-white/15';
+
   return (
-    <div className="absolute pt-8" style={{ left: x, top: y, width }} onPointerDown={(e) => e.stopPropagation()}>
-      <div className="absolute left-0 top-0 flex h-8 min-w-max items-center justify-between gap-2 rounded-t-md bg-gray-950/95 px-2 text-white shadow-lg">
+    <div className="absolute" style={{ left: x, top: y, width }} onPointerDown={(e) => e.stopPropagation()}>
+      {/* Ramka i podkladka leza OBOK tekstu, nie pod nim - inaczej przesuwalyby litery. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute rounded"
+        style={{
+          inset: -10,
+          border: `2px dashed ${color}`,
+          opacity: 0.6,
+          // Neutralna przymglona podkladka - czytelna i na ciemnym slajdzie, i na jasnej notatce.
+          background: color === '#111827' ? 'rgba(255,255,255,0.88)' : 'rgba(17,24,39,0.88)',
+        }}
+      />
+
+      <div className="absolute flex items-center gap-0.5 rounded-md bg-gray-950/95 px-1 shadow-lg" style={toolbarStyle}>
+        <button
+          type="button"
+          aria-label="Usuń dopisek"
+          title="Usuń dopisek"
+          onPointerDown={(e) => e.preventDefault()}
+          onClick={onDelete}
+          className={buttonClass}
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 7h16M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          aria-label="Powiększ tekst"
+          title="Powiększ tekst"
+          onPointerDown={(e) => e.preventDefault()}
+          onClick={() => changeFontSize(1.15)}
+          className={buttonClass}
+        >
+          <span className="text-lg leading-none">A</span>
+          <span className="ml-0.5 text-xs leading-none">+</span>
+        </button>
+        <button
+          type="button"
+          aria-label="Zmniejsz tekst"
+          title="Zmniejsz tekst"
+          onPointerDown={(e) => e.preventDefault()}
+          onClick={() => changeFontSize(1 / 1.15)}
+          className={buttonClass}
+        >
+          <span className="text-sm leading-none">A</span>
+          <span className="ml-0.5 text-xs leading-none">−</span>
+        </button>
         <button
           type="button"
           aria-label="Przenieś dopisek"
@@ -127,27 +196,15 @@ export function AnnotationTextBox({
           onPointerMove={move}
           onPointerUp={endMove}
           onPointerCancel={endMove}
-          className="flex h-7 cursor-grab items-center gap-1.5 px-1 text-sm font-medium active:cursor-grabbing"
+          className="flex h-9 w-8 cursor-grab items-center justify-center rounded text-gray-100 hover:bg-white/15 active:cursor-grabbing"
           style={{ touchAction: 'none' }}
         >
-          <span aria-hidden="true" className="grid grid-cols-2 gap-0.5">
-            <i className="h-1 w-1 rounded-full bg-current" /><i className="h-1 w-1 rounded-full bg-current" />
-            <i className="h-1 w-1 rounded-full bg-current" /><i className="h-1 w-1 rounded-full bg-current" />
-          </span>
-          Przenieś
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3" />
+          </svg>
         </button>
-        <div className="flex items-center gap-1">
-          <button type="button" aria-label="Zmniejsz tekst" title="Zmniejsz tekst" onPointerDown={(e) => e.preventDefault()} onClick={() => changeFontSize(-4)} className="h-7 w-7 rounded text-lg leading-none text-gray-200 hover:bg-white/10">−</button>
-          <span className="min-w-8 text-center text-xs tabular-nums text-gray-300">{size}</span>
-          <button type="button" aria-label="Powiększ tekst" title="Powiększ tekst" onPointerDown={(e) => e.preventDefault()} onClick={() => changeFontSize(4)} className="h-7 w-7 rounded text-lg leading-none text-gray-200 hover:bg-white/10">+</button>
-          <button type="button" onPointerDown={(e) => e.preventDefault()} onClick={onCancel} className="h-7 rounded px-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white">
-            Anuluj
-          </button>
-          <button type="button" onPointerDown={(e) => e.preventDefault()} onClick={onCommit} className="h-7 rounded bg-white px-2 text-sm font-semibold text-gray-950 hover:bg-gray-100">
-            Zapisz
-          </button>
-        </div>
       </div>
+
       <textarea
         ref={textRef}
         value={value}
@@ -155,8 +212,7 @@ export function AnnotationTextBox({
         onKeyDown={(e) => {
           e.stopPropagation();
           // Enter zapisuje - dopiski przy klasie to jedna, dwie linijki, a
-          // siegniecie po mysz do "Zapisz" (albo pamietanie Ctrl+Enter)
-          // wybijalo z rytmu. Nowa linia: Shift+Enter.
+          // siegniecie po mysz wybijalo z rytmu. Nowa linia: Shift+Enter.
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             onCommit();
@@ -170,17 +226,14 @@ export function AnnotationTextBox({
         onBlur={() => {
           if (!resizing && !moving) onCommit();
         }}
-        placeholder="Wpisz tekst...  Enter zapisuje"
+        placeholder="Wpisz tekst…"
         rows={1}
-        className="block w-full resize-none overflow-hidden rounded-b-md border-2 px-3 py-2 font-semibold leading-tight outline-none"
-        style={{
-          color,
-          borderColor: color,
-          // Neutralna przymglona podkladka - czytelna i na ciemnym slajdzie, i na jasnej notatce.
-          background: color === '#111827' ? 'rgba(255,255,255,0.94)' : 'rgba(17,24,39,0.94)',
-          fontSize: size,
-        }}
+        // Zero ramki i zero wyscielenia: litery maja stac tam, gdzie stanie
+        // gotowy dopisek (ten sam left/top/fontSize co w AnnotationTexts).
+        className="relative block w-full resize-none overflow-hidden border-0 p-0 font-semibold leading-tight outline-none"
+        style={{ color, caretColor: color, background: 'transparent', fontSize: size }}
       />
+
       <div
         role="slider"
         tabIndex={-1}
@@ -191,7 +244,7 @@ export function AnnotationTextBox({
         onPointerMove={onResizeMove}
         onPointerUp={endResize}
         onPointerCancel={endResize}
-        className="absolute -bottom-3 -right-3 flex h-8 w-8 cursor-nwse-resize items-center justify-center rounded-full border-2 bg-gray-950 shadow-lg"
+        className="absolute -bottom-4 -right-4 flex h-7 w-7 cursor-nwse-resize items-center justify-center rounded-full border-2 bg-gray-950 shadow-lg"
         style={{ borderColor: color, touchAction: 'none' }}
       />
     </div>

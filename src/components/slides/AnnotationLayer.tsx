@@ -274,6 +274,12 @@ export function AnnotationLayer({ ann }: { ann: SlideAnnotations }) {
           }
           onCommit={commitText}
           onCancel={() => setText(null)}
+          onDelete={() => {
+            // Kosz w pasku pola: wyrzuca dopisek razem z tym, co juz na slajdzie
+            // stalo (pole otwiera sie tez klikiem w gotowy dopisek).
+            if (text.id) ann.removeShape(text.id);
+            setText(null);
+          }}
         />
       )}
 
