@@ -262,9 +262,16 @@ async function chooseKategoria(root, text) {
   if (!input) throw new Error('Nie znalazłem pola „Kategoria”.');
   clickElement(input);
   const wanted = normalized(text);
+  // "Uwaga" jest na liscie dwa razy: naglowek grupy u gory i wlasciwa
+  // pozycja (ta z data-qtip) - bierzemy pozycje, w razie remisu OSTATNIA.
   const option = await waitFor(() => {
     const items = [...document.querySelectorAll('.x-boundlist-item')].filter(visible);
-    return items.find((el) => normalized(el.textContent) === wanted) || items.find((el) => normalized(el.textContent).includes(wanted));
+    const exact = items.filter((el) => normalized(el.textContent) === wanted);
+    return (
+      exact.find((el) => normalized(el.getAttribute('data-qtip') || '') === wanted) ||
+      exact[exact.length - 1] ||
+      items.find((el) => normalized(el.textContent).includes(wanted))
+    );
   }, 4000);
   if (!option) throw new Error(`Nie znalazłem opcji „${text}” na liście kategorii.`);
   clickElement(option);
