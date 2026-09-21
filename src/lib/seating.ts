@@ -1,7 +1,7 @@
 // Miejsca w lawkach - obliczenia pod widok "Sala" (src/pages/Sala.tsx).
 //
 // Sala jest jedna dla wszystkich klas: trzy kolumny lawek (L / S / P, patrzac
-// od tablicy w strone klasy - P jest po prawej rece nauczyciela) po piec
+// od tablicy w strone klasy - P jest po prawej rece nauczyciela) po szesc
 // rzedow, w kazdej lawce dwa miejsca. Rzad 1 stoi przy tablicy. Etykieta
 // lawki to litera kolumny i numer rzedu ("P1"), bo tak Bartek mowi o lawkach
 // na lekcji. Na ekranie tablica jest na dole, a rzedy ida w gore - odwraca to
@@ -12,7 +12,7 @@
 import type { Seat, SeatColumn, Student } from '../data/types';
 
 export const SEAT_COLUMNS: SeatColumn[] = ['L', 'S', 'P'];
-export const SEAT_ROWS = 5;
+export const SEAT_ROWS = 6;
 export const SEAT_SIDES: Array<1 | 2> = [1, 2];
 
 /** Polozenie miejsca bez ucznia - to, co klika sie w siatce. */

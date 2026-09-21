@@ -6,7 +6,7 @@
 // Kazda lawka to kafelek z etykieta ("P1") i dwoma miejscami OBOK SIEBIE, bo
 // tak siedza uczniowie w lawce. Miejsce ma przez to ok. 55 px, wiec mieszcza
 // sie w nim samo imie (deskName) i dzisiejsze symbole pod spodem - za to
-// wszystkie piec rzedow wchodzi na jeden ekran telefonu.
+// szesc rzedow wchodzi na jeden ekran telefonu (najwyzej z lekkim przewijaniem).
 //
 // TABLICA jest sticky przy dolnej krawedzi: gdy rzedy jednak sie nie mieszcza,
 // zostaje w polu widzenia jako punkt odniesienia, a przewijanie w gore
@@ -27,8 +27,8 @@ export interface DeskGridProps {
   classmates: Student[];
   /** Dzisiejsze zdarzenia po uczniu - male symbole przy nazwisku. */
   todayByStudent: Map<string, RecapEvent[]>;
-  /** Wiszace ostrzezenia - osobno, bo nie sa zdarzeniem jednego dnia. */
-  ostrzezenia: Map<string, RecapEvent>;
+  /** Wiszace ostrzezenia - osobno, bo nie sa zdarzeniem jednego dnia. Uczen moze miec kilka. */
+  ostrzezenia: Map<string, RecapEvent[]>;
   editing: boolean;
   selectedPos?: SeatPosition;
   /** Uczen podswietlony po zapisie (krotki flash "wzielo"). */
@@ -67,7 +67,7 @@ export function DeskGrid({
                     const events = student ? todayByStudent.get(student.id) ?? [] : [];
                     const disabled = !editing && !student;
                     const podpis = student ? deskName(student, classmates) : ' ';
-                    const ostrzezony = student ? ostrzezenia.has(student.id) : false;
+                    const ileOstrzezen = student ? ostrzezenia.get(student.id)?.length ?? 0 : 0;
                     return (
                       <button
                         key={place.side}
@@ -89,11 +89,12 @@ export function DeskGrid({
                         )}
                       >
                         <span className="w-full truncate font-medium">{podpis}</span>
-                        {(ostrzezony || events.length > 0) && (
+                        {(ileOstrzezen > 0 || events.length > 0) && (
                           <span className="flex w-full items-center gap-0.5">
-                            {ostrzezony && (
+                            {ileOstrzezen > 0 && (
                               <span title="ostrzeżenie" className="text-xs font-black text-amber-600">
                                 {resultSymbol('ostrzezenie').symbol}
+                                {ileOstrzezen > 1 && ileOstrzezen}
                               </span>
                             )}
                             {events.length > 0 && <TodayMarks events={events} />}

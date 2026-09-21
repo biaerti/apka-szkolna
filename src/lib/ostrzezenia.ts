@@ -4,33 +4,26 @@
 // W odroznieniu od plusa czy plomby ostrzezenie NIE jest zdarzeniem jednego
 // dnia: zostaje przy uczniu z lekcji na lekcje, zeby na nastepnej lekcji bylo
 // widac, ze rozmowa juz byla. Znika dopiero, gdy Bartek je zdejmie albo gdy
-// zamieni je w uwage - jedno i drugie kasuje wiersz (store.removeRecapEvent).
+// wpisze uwage - uwaga zdejmuje WSZYSTKIE wiszace ostrzezenia ucznia
+// (store.removeRecapEvent na kazdym).
 //
-// Dzieki temu "aktywne ostrzezenie" to po prostu istniejace zdarzenie
-// result = 'ostrzezenie'; nie trzeba ani flagi w bazie, ani sprzatania po
-// czasie. Uczen ma najwyzej jedno - przycisk "Ostrzezenie" jest wyszarzony,
-// gdy jakies wisi - ale gdyby ze starych danych wyszlo kilka, bierzemy
-// najnowsze.
+// Uczen moze miec kilka ostrzezen naraz (decyzja Bartka z 2026-09-21):
+// pierwsze "uwazaj", drugie "to juz naprawde ostatni raz", a dopiero potem
+// uwaga. Dlatego "aktywne ostrzezenia" to po prostu wszystkie istniejace
+// zdarzenia result = 'ostrzezenie' - bez flagi w bazie i bez sprzatania
+// po czasie.
 
 import type { RecapEvent } from '../data/types';
 
-/** Aktywne ostrzezenie ucznia albo undefined. */
-export function activeWarning(events: RecapEvent[], studentId: string): RecapEvent | undefined {
-  let last: RecapEvent | undefined;
-  for (const e of events) {
-    if (e.result !== 'ostrzezenie' || e.studentId !== studentId) continue;
-    if (!last || e.at > last.at) last = e;
-  }
-  return last;
-}
-
-/** Ostrzezenia calej klasy po uczniu - do znaczkow w lawkach i na liscie. */
-export function warningsByStudent(events: RecapEvent[], classId: string): Map<string, RecapEvent> {
-  const out = new Map<string, RecapEvent>();
+/** Wiszace ostrzezenia calej klasy po uczniu, od najstarszego - do znaczkow w lawkach i arkusza akcji. */
+export function warningsByStudent(events: RecapEvent[], classId: string): Map<string, RecapEvent[]> {
+  const out = new Map<string, RecapEvent[]>();
   for (const e of events) {
     if (e.result !== 'ostrzezenie' || e.classId !== classId) continue;
-    const last = out.get(e.studentId);
-    if (!last || e.at > last.at) out.set(e.studentId, e);
+    const list = out.get(e.studentId) ?? [];
+    list.push(e);
+    out.set(e.studentId, list);
   }
+  for (const list of out.values()) list.sort((a, b) => a.at.localeCompare(b.at));
   return out;
 }

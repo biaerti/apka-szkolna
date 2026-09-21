@@ -96,7 +96,7 @@ export function Sala() {
   // Ostrzezenia sa POZA todayByStudent: zostaja przy uczniu z lekcji na lekcje,
   // wiec filtr po dzisiejszej dacie by je gubil (patrz src/lib/ostrzezenia.ts).
   const ostrzezenia = useMemo(
-    () => (classId ? warningsByStudent(recapEvents, classId) : new Map<string, RecapEvent>()),
+    () => (classId ? warningsByStudent(recapEvents, classId) : new Map<string, RecapEvent[]>()),
     [recapEvents, classId],
   );
 
@@ -132,9 +132,8 @@ export function Sala() {
   function handleUwaga(student: Student, note: string) {
     if (!classId) return;
     const event = addRecapEvent({ studentId: student.id, classId, result: 'uwaga', note });
-    // Uwaga zastepuje ostrzezenie - po co ma wisiec dalej, skoro jest juz wpis.
-    const wisiace = ostrzezenia.get(student.id);
-    if (wisiace) removeRecapEvent(wisiace.id);
+    // Uwaga zastepuje ostrzezenia - po co maja wisiec dalej, skoro jest juz wpis.
+    for (const wisiace of ostrzezenia.get(student.id) ?? []) removeRecapEvent(wisiace.id);
     setUndo({ event, label: `Uwaga: ${student.firstName} ${student.lastName}` });
     flash(student.id);
   }
@@ -147,8 +146,10 @@ export function Sala() {
   }
 
   function handleZdejmijOstrzezenie(student: Student) {
-    const wisiace = ostrzezenia.get(student.id);
-    if (wisiace) removeRecapEvent(wisiace.id);
+    // Zdejmujemy najnowsze; kolejne tapy schodza dalej, az nic nie wisi.
+    const wisiace = ostrzezenia.get(student.id) ?? [];
+    const last = wisiace[wisiace.length - 1];
+    if (last) removeRecapEvent(last.id);
   }
 
   function handleTapPlace(pos: SeatPosition, student?: Student) {
@@ -276,7 +277,8 @@ export function Sala() {
         <StudentActionSheet
           student={picked}
           seatLabel={picked ? labels.get(picked.id) : undefined}
-          ostrzezony={picked ? ostrzezenia.has(picked.id) : false}
+          ostrzezenia={picked ? ostrzezenia.get(picked.id)?.length ?? 0 : 0}
+          todayEvents={picked ? todayByStudent.get(picked.id) ?? [] : []}
           onGrade={handleGrade}
           onOstrzezenie={handleOstrzezenie}
           onZdejmijOstrzezenie={handleZdejmijOstrzezenie}
@@ -331,7 +333,7 @@ function StudentList({
   students: Student[];
   labels: Map<string, string>;
   todayByStudent: Map<string, RecapEvent[]>;
-  ostrzezenia: Map<string, RecapEvent>;
+  ostrzezenia: Map<string, RecapEvent[]>;
   flashId: string | null;
   selectedId?: string;
   onTap: (student: Student) => void;
@@ -359,9 +361,10 @@ function StudentList({
               <span className="min-w-0 flex-1 truncate text-gray-900">
                 <span className="font-medium">{st.lastName}</span> {st.firstName}
               </span>
-              {ostrzezenia.has(st.id) && (
+              {(ostrzezenia.get(st.id)?.length ?? 0) > 0 && (
                 <span title="ostrzeżenie" className="shrink-0 text-xs font-black text-amber-600">
                   {resultSymbol('ostrzezenie').symbol}
+                  {(ostrzezenia.get(st.id)?.length ?? 0) > 1 && ostrzezenia.get(st.id)?.length}
                 </span>
               )}
               {events.length > 0 && <TodayMarks events={events} />}
