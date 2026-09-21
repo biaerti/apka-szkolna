@@ -420,7 +420,14 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'VULCAN_UWAGA') {
     uwaga = message.payload;
     phase = 'uwaga-start';
-    render('Uwaga z apki jest gotowa. Otworzę zakładkę „Uwagi”, dodam ucznia, kategorię i treść, ale nie zapiszę.');
+    if (uwaga.background) {
+      // Auto-wpis w tle: wypełniamy formularz od razu, bez czekania na klik.
+      // Jak zawsze zatrzymujemy się przed „Zapisz” - to klika Bartek.
+      render('Uwaga z telefonu - wypełniam formularz w tle…');
+      void fillUwaga();
+    } else {
+      render('Uwaga z apki jest gotowa. Otworzę zakładkę „Uwagi”, dodam ucznia, kategorię i treść, ale nie zapiszę.');
+    }
     return;
   }
   if (message?.type === 'READ_VULCAN_SCHEDULE') {
@@ -445,7 +452,12 @@ chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga']).then
   if (pendingVulcanUwaga) {
     uwaga = pendingVulcanUwaga;
     phase = 'uwaga-start';
-    render('Uwaga z apki czekała na załadowanie VULCANA. Możesz otworzyć formularz.');
+    if (uwaga.background) {
+      render('Uwaga z telefonu czekała na załadowanie VULCANA - wypełniam formularz w tle…');
+      void fillUwaga();
+    } else {
+      render('Uwaga z apki czekała na załadowanie VULCANA. Możesz otworzyć formularz.');
+    }
     return;
   }
   if (!pendingVulcanTransfer) return;

@@ -71,6 +71,13 @@ export interface VulcanUwagaTransfer {
   student: { firstName: string; lastName: string; number: number };
   category: VulcanUwagaCategory;
   content: string;
+  /**
+   * Auto-wpis w tle (AutoVulcanUwaga): dodatek NIE wyciaga karty VULCANA na
+   * wierzch i sam odpala wypelnianie formularza - ale jak zawsze zatrzymuje
+   * sie przed "Zapisz". Bez flagi (przycisk "Wpisz do VULCANA") karta
+   * VULCANA jest aktywowana i bot czeka na klik w panelu pomocnika.
+   */
+  background?: boolean;
 }
 
 /**

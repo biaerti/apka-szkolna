@@ -30,10 +30,16 @@ import { LessonNotesPrint } from './pages/LessonNotesPrint';
 import { Journal } from './pages/Journal';
 import { Sala } from './pages/Sala';
 import { WazneInfoPage } from './pages/WazneInfo';
+import { AutoVulcanUwaga } from './components/uwagi/AutoVulcanUwaga';
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      {/* Poza trasami: pull zdarzen, auto-wpis uwag do VULCANA i nasluch
+          "zapisane" maja dzialac tez na ekranach prezentacji, gdzie AppShell
+          (a z nim popup uwag) jest odmontowany. */}
+      <AutoVulcanUwaga />
+      <Routes>
       {/* Ekrany projektora - bez paska bocznego, pelny ekran */}
       {/* Trasa zostaje: uruchamia ja slajd "recap" w prezentacji lekcji (LessonPresent) */}
       <Route path="/powtorka/:classId/:setId" element={<RecapScreen />} />
@@ -76,6 +82,7 @@ export default function App() {
         <Route path="/ustawienia" element={<SettingsPage />} />
         <Route path="*" element={<ModulePlaceholder title="Nie znaleziono strony" />} />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }

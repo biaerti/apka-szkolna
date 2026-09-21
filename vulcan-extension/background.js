@@ -28,9 +28,12 @@ async function vulcanTab() {
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'OPEN_VULCAN_UWAGA') {
     (async () => {
+      // background = auto-wpis w tle (uwaga z telefonu w trakcie lekcji):
+      // karta VULCANA NIE wyskakuje na wierzch, np. w trakcie prezentacji.
+      const wTle = !!message.payload?.background;
       let tab = await vulcanTab();
-      if (!tab?.id) tab = await chrome.tabs.create({ url: VULCAN_URL, active: true });
-      else await chrome.tabs.update(tab.id, { active: true });
+      if (!tab?.id) tab = await chrome.tabs.create({ url: VULCAN_URL, active: !wTle });
+      else if (!wTle) await chrome.tabs.update(tab.id, { active: true });
       if (!tab.id) throw new Error('Nie udało się otworzyć karty VULCANA.');
       await deliverUwaga(tab.id, message.payload);
       sendResponse({ ok: true });

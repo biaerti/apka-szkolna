@@ -6,8 +6,6 @@ import { useSyncStatus } from '../../data/remote/sync';
 import { CzytankiFab } from '../czytanki/CzytankiFab';
 import { UwagiPrzypomnienie, useUwagiDoWpisania } from '../uwagi/UwagiPrzypomnienie';
 import { IncomingUwagaToast } from '../uwagi/IncomingUwagaToast';
-import { useVulcanUwagaSaved } from '../uwagi/useVulcanUwaga';
-import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 import { usePilneWazneInfo } from '../wazneinfo/WazneInfoAlarm';
 
 // Krotkie menu - nauczyciel ma nie byc "milionerem na zakladkach, ktorych nie
@@ -46,11 +44,8 @@ export function AppShell() {
   const doWpisania = useUwagiDoWpisania().length;
   const pilneInfo = usePilneWazneInfo().length;
   const { pathname } = useLocation();
-  // Dzisiejsze zdarzenia z chmury (realtime + polling): uwaga dana z telefonu
-  // ma wyskoczyc na komputerze jako popup (IncomingUwagaToast).
-  useTodayEventsPull();
-  // Zapis uwagi w VULCANIE (przez pomocnika Chrome) odhacza ja jako wpisana.
-  useVulcanUwagaSaved();
+  // Pull zdarzen, auto-wpis uwag do VULCANA i nasluch "zapisane" sa poziom
+  // wyzej (App.tsx: AutoVulcanUwaga), zeby dzialaly tez na prezentacji.
   return (
     <div className="flex min-h-screen w-full max-w-full flex-col bg-gray-50 md:flex-row">
       <aside className="flex w-full min-w-0 max-w-full shrink-0 flex-col border-b border-gray-200 bg-white md:w-56 md:border-b-0 md:border-r">
