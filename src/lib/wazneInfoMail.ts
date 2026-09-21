@@ -21,7 +21,7 @@ import {
   type MailDoPrzerobienia,
   type PullResult,
   type WazneInfoPunkt,
-} from './wazneInfoExtract';
+} from './wazneInfoExtract.js';
 
 export const EXTRACT_MODEL = 'google/gemini-2.5-flash-lite';
 

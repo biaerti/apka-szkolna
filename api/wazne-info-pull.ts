@@ -2,8 +2,12 @@
 // nowe punkty do tabeli wazne_info (zakladka "Ważne info"). Hasla do skrzynki,
 // klucz OpenRouter i service role Supabase tylko po stronie serwera.
 // Ten sam endpoint w dev obsluguje middleware w vite.config.ts.
+//
+// Importy z rozszerzeniem .js: Vercel kompiluje TS do ESM bez przepisywania
+// sciezek, a Node w ESM nie doklada rozszerzen - bez .js funkcja pada na
+// ERR_MODULE_NOT_FOUND. Vite i vitest rozumieja .js -> .ts.
 
-import { handlePullRequest } from '../src/lib/wazneInfoMail';
+import { handlePullRequest } from '../src/lib/wazneInfoMail.js';
 
 interface VercelRequestLike {
   method?: string;

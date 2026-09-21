@@ -25,6 +25,7 @@ import {
 } from '../data/wazneInfo';
 import { buildPaczkaText, dniDoTerminu, formatTermin, type WazneInfo, type WazneInfoPunkt } from '../lib/wazneInfoExtract';
 import { copyToClipboard } from '../lib/clipboard';
+import { isSupabaseConfigured } from '../data/supabase';
 import { toDateKey } from '../lib/dates';
 
 export const SKRZYNKA = 'szkola@klippi.pl';
@@ -76,6 +77,13 @@ export function WazneInfoPage() {
     });
     setSprawdzam(false);
   }
+
+  // Wejscie do zakladki samo sprawdza skrzynke - Bartek nie ma pamietac o
+  // przycisku, ma tylko przeslac mail. Przycisk zostaje do ponowienia.
+  useEffect(() => {
+    if (isSupabaseConfigured()) void sprawdzSkrzynke();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function przelacz(id: string) {
     setZaznaczone((prev) => {

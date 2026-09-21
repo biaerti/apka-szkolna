@@ -2,7 +2,7 @@
 // Klucz API tylko po stronie serwera (env OPENROUTER_API_KEY) - nie trafia do bundla klienta.
 // Ten sam endpoint w dev obsluguje middleware w vite.config.ts.
 
-import { askPodstawaChat, parseChatMessages } from '../src/lib/podstawaChat';
+import { askPodstawaChat, parseChatMessages } from '../src/lib/podstawaChat.js';
 
 // Minimalne typy req/res zgodne z runtime @vercel/node (bez zaleznosci od pakietu typow).
 interface VercelRequestLike {

@@ -2,7 +2,7 @@
 // (pelna podstawa IV-VI + lista lektur) i wywolanie OpenRouter.
 // Uzywane przez funkcje serverless (api/podstawa-chat.ts) i dev middleware (vite.config.ts).
 
-import { PODSTAWA_SEKCJE, PODSTAWA_ZRODLO } from '../data/podstawaTekst';
+import { PODSTAWA_SEKCJE, PODSTAWA_ZRODLO } from '../data/podstawaTekst.js';
 import {
   LEKTURY_OBOWIAZKOWE,
   LEKTURY_KROTKIE,
@@ -10,7 +10,7 @@ import {
   LEKTURY_UZUPELNIAJACE,
   LEKTURY_UZUPELNIAJACE_ZASADA,
   Lektura,
-} from '../data/lektury';
+} from '../data/lektury.js';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
