@@ -121,8 +121,10 @@ function clickElement(element) {
   element.click();
 }
 
-function fieldByLabel(labelText) {
-  const label = findText(labelText, false, 'label, td, span, div');
+// `root` ogranicza szukanie np. do okna uwagi - bez tego bot potrafil wpisac
+// tresc w filtr drzewa POZA oknem (pierwszy zywy test).
+function fieldByLabel(labelText, root = document) {
+  const label = findTextIn(root, labelText, false, 'label, td, span, div');
   if (!label) return null;
   let node = label;
   for (let depth = 0; depth < 5 && node; depth += 1, node = node.parentElement) {
@@ -131,7 +133,8 @@ function fieldByLabel(labelText) {
     if (after) return after;
   }
   const labelRect = label.getBoundingClientRect();
-  return candidates('input:not([type="hidden"]), textarea, select')
+  return [...root.querySelectorAll('input:not([type="hidden"]), textarea, select')]
+    .filter(visible)
     .filter((field) => field.getBoundingClientRect().top >= labelRect.top - 10)
     .sort((a, b) => Math.abs(a.getBoundingClientRect().top - labelRect.top) - Math.abs(b.getBoundingClientRect().top - labelRect.top))[0] || null;
 }
@@ -203,8 +206,8 @@ async function selectScheduledLesson() {
   await sleep(650);
 }
 
-async function chooseDropdown(label, text) {
-  const field = fieldByLabel(label);
+async function chooseDropdown(label, text, root = document) {
+  const field = fieldByLabel(label, root);
   if (!field) throw new Error(`Nie znalazłem pola „${label}”.`);
   if (field instanceof HTMLSelectElement) {
     const option = [...field.options].find((item) => normalized(item.text).includes(normalized(text)));
@@ -213,8 +216,11 @@ async function chooseDropdown(label, text) {
     return;
   }
   clickElement(field);
-  await sleep(220);
-  const option = findText(text);
+  await sleep(300);
+  // Lista opcji potrafi doklejac sie do <body>, poza oknem - szukamy w calym
+  // dokumencie, ale NAJPIERW dokladnego trafienia ("Uwaga" to tez naglowek
+  // grupy i kawalek innych nazw).
+  const option = findText(text, true) || findText(text);
   if (!option) throw new Error(`Nie znalazłem opcji „${text}” w polu „${label}”.`);
   clickElement(option);
   await sleep(160);
@@ -348,17 +354,34 @@ async function pickStudentInModal(root, student) {
     .find((input) => normalized(input.placeholder).includes('wyszuk'));
   if (search) {
     setField(search, student.lastName);
-    await sleep(500);
+    await sleep(600);
   }
   const full = `${student.lastName} ${student.firstName}`;
-  const row = await waitFor(() => findTextIn(root, full, false, 'td, div, span') || findTextIn(root, student.lastName, false, 'td, div, span'), 4000);
+  const findRow = () => findTextIn(root, full, false, 'td, div, span') || findTextIn(root, student.lastName, false, 'td, div, span');
+  const row = await waitFor(findRow, 4000);
   if (!row) throw new Error(`Nie znalazłem ucznia ${full} na liście po lewej.`);
+  // Prawa lista pokazuje "Brak danych", dopoki nikt nie przeszedl do
+  // "Dotyczy" - to nasz sprawdzian, czy przeniesienie NAPRAWDE zaszlo
+  // (w pierwszym zywym tescie klik w ">" nic nie przeniosl).
+  const transferred = () => !findTextIn(root, 'Brak danych');
   clickElement(row);
-  await sleep(250);
+  await sleep(300);
   const arrow = findTextIn(root, '>', true, 'button, a, [role="button"], td, span, div');
-  if (!arrow) throw new Error('Nie znalazłem strzałki „>” przenoszącej ucznia do „Dotyczy”.');
-  clickElement(arrow);
-  await sleep(350);
+  if (arrow) {
+    clickElement(arrow);
+    await waitFor(transferred, 2500);
+  }
+  if (!transferred()) {
+    // Druga proba: dwuklik na wierszu tez przenosi w oknach VULCANA.
+    const again = findRow();
+    if (again) {
+      clickElement(again);
+      again.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+      await waitFor(transferred, 2500);
+    }
+  }
+  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (strzałką „>” ani dwuklikiem).`);
+  await sleep(250);
 }
 
 // Wsrod pasujacych elementow bierze ten najnizej na ekranie (a przy remisie
@@ -422,8 +445,8 @@ async function fillUwaga() {
     const root = await waitFor(modalRoot, 7000);
     if (!root) throw new Error('Nie otworzyło się okno dodawania uwagi.');
     await pickStudentInModal(root, uwaga.student);
-    await chooseDropdown('Kategoria', uwaga.category);
-    const content = fieldByLabel('Treść');
+    await chooseDropdown('Kategoria', uwaga.category, root);
+    const content = fieldByLabel('Treść', root);
     if (!(content instanceof HTMLTextAreaElement) && !(content instanceof HTMLInputElement)) throw new Error('Nie znalazłem pola „Treść”.');
     setField(content, uwaga.content);
     phase = 'uwaga-review';
