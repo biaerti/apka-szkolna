@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scaleTextBox, strokePath, TEXT_SIZE_MAX, TEXT_SIZE_MIN } from './annotations';
+import { heightenTextBox, scaleTextBox, strokePath, TEXT_SIZE_MAX, TEXT_SIZE_MIN, widenTextBox } from './annotations';
 
 const start = { width: 500, size: 50 };
 
@@ -34,5 +34,25 @@ describe('strokePath', () => {
     expect(strokePath([{ x: 0, y: 0 }, { x: 10, y: 10 }, { x: 20, y: 0 }])).toBe(
       'M 0 0 Q 10 10 15 5 Q 10 10 20 0',
     );
+  });
+});
+
+describe('widenTextBox', () => {
+  it('zmienia tylko szerokosc, litery zostaja', () => {
+    expect(widenTextBox({ width: 500, size: 50 }, 200, 1200)).toEqual({ width: 700, size: 50 });
+  });
+  it('nie wychodzi poza kartke ani ponizej minimum', () => {
+    expect(widenTextBox({ width: 500, size: 50 }, 5000, 800).width).toBe(800);
+    expect(widenTextBox({ width: 500, size: 50 }, -5000, 800).width).toBe(60);
+  });
+});
+
+describe('heightenTextBox', () => {
+  it('zmienia tylko litery, w proporcji do wysokosci tresci', () => {
+    expect(heightenTextBox({ width: 500, size: 50 }, 60, 120)).toEqual({ width: 500, size: 75 });
+  });
+  it('trzyma sie granic wielkosci liter', () => {
+    expect(heightenTextBox({ width: 500, size: 50 }, -5000, 120).size).toBe(TEXT_SIZE_MIN);
+    expect(heightenTextBox({ width: 500, size: 50 }, 50000, 120).size).toBe(TEXT_SIZE_MAX);
   });
 });

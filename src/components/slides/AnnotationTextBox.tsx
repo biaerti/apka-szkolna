@@ -8,16 +8,29 @@
 // wisi absolutnie poza polem. Nic z tego nie przesuwa liter, wiec zatwierdzenie
 // dopisku nie jest juz skokiem.
 //
-// Uchwyt w prawym dolnym rogu zmienia SZEROKOSC RAMKI I WIELKOSC LITER naraz
-// (scaleTextBox w annotations.ts) - ciagnie sie rog tak jak w kazdym innym
-// programie, a litery ida za ramka. A+/A- robia to samo klikiem, gdy uchwyt
-// jest za blisko krawedzi kartki.
+// Trzy uchwyty, jak w edytorze grafiki:
+// - rog (prawy dolny) zmienia SZEROKOSC RAMKI I WIELKOSC LITER naraz
+//   (scaleTextBox w annotations.ts) - litery ida za ramka;
+// - prawa krawedz zmienia TYLKO SZEROKOSC (widenTextBox) - zeby w jednej
+//   linijce miescilo sie wiecej liter, bez zmiany ich wielkosci;
+// - dolna krawedz zmienia TYLKO WIELKOSC LITER (heightenTextBox) - pole samo
+//   dopasowuje wysokosc do tresci, wiec "wyzsze" znaczy "wieksze litery".
+// A+/A- robia to co rog klikiem, gdy uchwyt jest za blisko krawedzi kartki.
 //
 // Wszystkie wymiary sa w pikselach kartki 1280x720 (patrz AnnotationLayer) -
 // dlatego przeliczamy ruch myszy przez skale kartki na ekranie.
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { scaleTextBox, TEXT_SIZE_MAX, TEXT_SIZE_MIN, type TextBoxSize } from './annotations';
+import {
+  heightenTextBox,
+  scaleTextBox,
+  TEXT_SIZE_MAX,
+  TEXT_SIZE_MIN,
+  widenTextBox,
+  type TextBoxSize,
+} from './annotations';
+
+type ResizeMode = 'both' | 'width' | 'height';
 
 export interface AnnotationTextBoxProps {
   x: number;
@@ -61,7 +74,7 @@ export function AnnotationTextBox({
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [resizing, setResizing] = useState(false);
   const [moving, setMoving] = useState(false);
-  const startRef = useRef<{ x: number; box: TextBoxSize } | null>(null);
+  const startRef = useRef<{ x: number; y: number; height: number; mode: ResizeMode; box: TextBoxSize } | null>(null);
   const moveRef = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);
 
   // Fokus dopiero po zamontowaniu pola, a nie przez `autoFocus`: przegladarka w
@@ -80,19 +93,26 @@ export function AnnotationTextBox({
     element.style.height = `${element.scrollHeight}px`;
   }, [value, width, size]);
 
-  function startResize(e: ReactPointerEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    e.currentTarget.setPointerCapture(e.pointerId);
-    startRef.current = { x: e.clientX, box: { width, size } };
-    setResizing(true);
+  function startResize(mode: ResizeMode) {
+    return (e: ReactPointerEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.currentTarget.setPointerCapture(e.pointerId);
+      // scrollHeight jest juz w pikselach kartki - warstwa jest przeskalowana transformem.
+      const height = textRef.current?.scrollHeight ?? size;
+      startRef.current = { x: e.clientX, y: e.clientY, height, mode, box: { width, size } };
+      setResizing(true);
+    };
   }
 
   function onResizeMove(e: ReactPointerEvent) {
     const start = startRef.current;
     if (!start || !resizing) return;
     const dx = (e.clientX - start.x) / (scale || 1);
-    onSize(scaleTextBox(start.box, dx, maxWidth));
+    const dy = (e.clientY - start.y) / (scale || 1);
+    if (start.mode === 'width') onSize(widenTextBox(start.box, dx, maxWidth));
+    else if (start.mode === 'height') onSize(heightenTextBox(start.box, dy, start.height));
+    else onSize(scaleTextBox(start.box, dx, maxWidth));
   }
 
   function endResize() {
@@ -230,13 +250,42 @@ export function AnnotationTextBox({
         style={{ color, caretColor: color, background: 'transparent', fontSize: size }}
       />
 
+      {/* Prawa krawedz: sama szerokosc (wiecej liter w linijce). */}
+      <div
+        role="slider"
+        tabIndex={-1}
+        aria-label="Szerokość pola tekstowego"
+        aria-valuenow={width}
+        title="Przeciągnij, żeby zmienić szerokość pola (litery zostają)"
+        onPointerDown={startResize('width')}
+        onPointerMove={onResizeMove}
+        onPointerUp={endResize}
+        onPointerCancel={endResize}
+        className="absolute -right-3.5 top-1/2 h-9 w-3 -translate-y-1/2 cursor-ew-resize rounded-full border-2 bg-gray-950 shadow-lg"
+        style={{ borderColor: color, touchAction: 'none' }}
+      />
+      {/* Dolna krawedz: sama wielkosc liter (szerokosc zostaje). */}
+      <div
+        role="slider"
+        tabIndex={-1}
+        aria-label="Wielkość liter"
+        aria-valuenow={size}
+        title="Przeciągnij, żeby zmienić wielkość liter (szerokość zostaje)"
+        onPointerDown={startResize('height')}
+        onPointerMove={onResizeMove}
+        onPointerUp={endResize}
+        onPointerCancel={endResize}
+        className="absolute -bottom-3.5 left-1/2 h-3 w-9 -translate-x-1/2 cursor-ns-resize rounded-full border-2 bg-gray-950 shadow-lg"
+        style={{ borderColor: color, touchAction: 'none' }}
+      />
+      {/* Rog: szerokosc i litery naraz. */}
       <div
         role="slider"
         tabIndex={-1}
         aria-label="Wielkość pola tekstowego"
         aria-valuenow={size}
-        title="Przeciągnij, żeby zmienić wielkość pola i liter"
-        onPointerDown={startResize}
+        title="Przeciągnij, żeby zmienić wielkość pola i liter naraz"
+        onPointerDown={startResize('both')}
         onPointerMove={onResizeMove}
         onPointerUp={endResize}
         onPointerCancel={endResize}

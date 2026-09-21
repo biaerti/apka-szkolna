@@ -82,6 +82,30 @@ export function scaleTextBox(start: TextBoxSize, dx: number, maxWidth: number): 
   return { width, size };
 }
 
+/**
+ * Uchwyt na prawej krawedzi: tylko szerokosc ramki, litery zostaja. Do
+ * wydluzenia pola, zeby wiecej liter weszlo w jedna linijke (albo zwezenia,
+ * zeby tekst sie zawinal).
+ */
+export function widenTextBox(start: TextBoxSize, dx: number, maxWidth: number): TextBoxSize {
+  const minWidth = Math.min(60, maxWidth);
+  const width = Math.round(Math.min(maxWidth, Math.max(minWidth, start.width + dx)));
+  return { width, size: start.size };
+}
+
+/**
+ * Uchwyt na dolnej krawedzi: tylko wielkosc liter, szerokosc ramki zostaje.
+ * Pole tekstowe samo dopasowuje wysokosc do tresci, wiec "wyzsze pole" znaczy
+ * "wieksze litery" - `startHeight` to wysokosc tresci w chwili zlapania uchwytu,
+ * a litery rosna w tej samej proporcji, w jakiej rosnie wysokosc.
+ */
+export function heightenTextBox(start: TextBoxSize, dy: number, startHeight: number): TextBoxSize {
+  const base = Math.max(1, startHeight);
+  const ratio = Math.max(0.05, (base + dy) / base);
+  const size = Math.round(Math.max(TEXT_SIZE_MIN, Math.min(TEXT_SIZE_MAX, start.size * ratio)));
+  return { width: start.width, size };
+}
+
 export type AnnotationShape = StrokeShape | LineShape | TextShape;
 
 /** Kolory pisaka. Pierwsze trzy czytelne na ciemnym slajdzie, czarny - na notatce i temacie. */
