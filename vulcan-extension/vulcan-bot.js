@@ -113,6 +113,60 @@ async function waitForText(text, timeout = 7000) {
   throw new Error(`Nie znalazłem kontrolki „${text}”.`);
 }
 
+// Uruchamia kod w SWIECIE STRONY (content script nie widzi window.Ext).
+// Wynik wraca CustomEventem; brak odpowiedzi (np. CSP blokuje inline
+// script) konczy sie null po 1500 ms.
+function pageEval(code) {
+  return new Promise((resolve) => {
+    const id = `apka-bot-${Math.random().toString(36).slice(2)}`;
+    const timer = setTimeout(() => {
+      window.removeEventListener(id, onResult);
+      resolve(null);
+    }, 1500);
+    function onResult(event) {
+      clearTimeout(timer);
+      window.removeEventListener(id, onResult);
+      resolve(event.detail);
+    }
+    window.addEventListener(id, onResult);
+    const script = document.createElement('script');
+    script.textContent = `(function(){var r;try{r=(function(){${code}})();}catch(e){r='ERR: '+e;}window.dispatchEvent(new CustomEvent('${id}',{detail:r}));})();document.currentScript.remove();`;
+    (document.head || document.documentElement).appendChild(script);
+  });
+}
+
+// Zaznacza wiersz grida i odpala handler przycisku przez API ExtJS - dziala
+// tam, gdzie syntetyczne klikniecia sa ignorowane (przenoszenie ucznia do
+// "Dotyczy" w oknie uwagi). Elementy wskazujemy atrybutem data-apka-bot.
+async function extTransfer(rowElement, arrowElement) {
+  rowElement.setAttribute('data-apka-bot', 'row');
+  if (arrowElement) arrowElement.setAttribute('data-apka-bot', 'arrow');
+  const result = await pageEval(`
+    if (!window.Ext || !Ext.getCmp) return 'no-ext';
+    function cmpUp(el, test) {
+      for (; el; el = el.parentElement) {
+        if (el.id) { var c = Ext.getCmp(el.id); if (c && test(c)) return c; }
+      }
+      return null;
+    }
+    var rowEl = document.querySelector('[data-apka-bot="row"]');
+    var grid = rowEl && cmpUp(rowEl, function (c) { return !!c.getSelectionModel; });
+    if (grid) {
+      var store = grid.getStore ? grid.getStore() : null;
+      if (store && store.getCount() > 0) grid.getSelectionModel().select(store.getAt(0));
+    }
+    var btnEl = document.querySelector('[data-apka-bot="arrow"]');
+    var btn = btnEl && cmpUp(btnEl, function (c) { return c.isButton || c.isXType && c.isXType('button'); });
+    if (!btn) return grid ? 'no-btn' : 'no-grid';
+    if (btn.handler) btn.handler.call(btn.scope || btn, btn, {});
+    else btn.fireEvent('click', btn, {});
+    return 'ok';
+  `);
+  rowElement.removeAttribute('data-apka-bot');
+  if (arrowElement) arrowElement.removeAttribute('data-apka-bot');
+  return result;
+}
+
 function clickElement(element) {
   if (!element) throw new Error('Nie znaleziono kontrolki.');
   element.scrollIntoView({ block: 'center', inline: 'center' });
@@ -338,7 +392,10 @@ function escapeHtml(value) {
 // --- uwaga: zakładka „Uwagi” w lekcji -> „Dodaj” -> okno z listą uczniów -----
 
 function modalRoot() {
-  // Okno dodawania uwagi: kontener, w którym są oba nagłówki list.
+  // Okno dodawania uwagi ma stabilny atrybut testowy VULCANA.
+  const editor = document.querySelector('[uitestid="DodajUwageEditorView"]');
+  if (editor && visible(editor)) return editor;
+  // Zapas: kontener, w którym są oba nagłówki list.
   const header = findText('Nazwisko i imię', true);
   if (!header) return null;
   let node = header;
@@ -376,41 +433,39 @@ async function pickStudentInModal(root, student) {
   const findRow = () => findTextIn(root, full, false, 'td, div, span') || findTextIn(root, student.lastName, false, 'td, div, span');
   const row = await waitFor(findRow, 4000);
   if (!row) throw new Error(`Nie znalazłem ucznia ${full} na liście po lewej.`);
+  // Sprawdzian POZYTYWNY: wiersz z nazwiskiem w PRAWYM gridzie
+  // (uitestid ze zrzutu DOM Bartka; geometryczny zapas, gdyby atrybut znikl).
+  const rightGrid = root.querySelector('[uitestid="vswitchpanel-right-grid"]');
   const dotyczy = findTextIn(root, 'Dotyczy', true);
-  // Sprawdzian POZYTYWNY: nazwisko ma pojawic sie w prawej liscie, pod
-  // naglowkiem "Dotyczy". (Zniknięcie "Brak danych" bywa myląca - czwarty
-  // test przeszedl mimo pustego "Dotyczy".)
   const rightEdge = dotyczy ? dotyczy.getBoundingClientRect().left : Infinity;
-  const transferred = () =>
-    [...root.querySelectorAll('td, div, span')].filter(visible).some((element) => {
+  const transferred = () => {
+    if (rightGrid) {
+      return [...rightGrid.querySelectorAll('.x-grid-cell-inner')].some((el) => normalized(el.textContent).includes(normalized(student.lastName)));
+    }
+    return [...root.querySelectorAll('td, div, span')].filter(visible).some((element) => {
       const text = normalized(textOf(element));
       return text.includes(normalized(student.lastName)) && element.getBoundingClientRect().left >= rightEdge - 24;
     });
-  // Glowna droga: dwuklik na wierszu - standard okien VULCANA (klik tylko
-  // zaznacza). Zapas: pierwszy przycisk-ikona miedzy listami, czyli ">".
+  };
+  // Zaznacz wiersz i klikaj ">" (a[uitestid=">"] - stabilny atrybut VULCANA).
+  // Syntetyczny klik bywa ignorowany, wiec dobijamy handlerem przez API
+  // ExtJS (extTransfer), a na koncu probujemy dwukliku.
   clickElement(row);
   await sleep(250);
-  row.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
-  await waitFor(transferred, 2500);
-  if (!transferred()) {
-    const header = findTextIn(root, 'Nazwisko i imię');
-    const leftEdge = header ? header.getBoundingClientRect().right : row.getBoundingClientRect().right;
-    const arrow = [...root.querySelectorAll('.x-btn, button, [role="button"], a')]
-      .filter(visible)
-      .filter((el) => {
-        const r = el.getBoundingClientRect();
-        return r.left >= leftEdge && r.right <= rightEdge && r.width <= 90 && r.height <= 60;
-      })
-      .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
-    if (arrow) {
-      const again = findRow();
-      if (again) clickElement(again);
-      await sleep(250);
-      clickElement(arrow);
-      await waitFor(transferred, 2500);
-    }
+  const arrow = root.querySelector('a[uitestid=">"]') || findTextIn(root, '>', true, 'a, button, span');
+  if (arrow) {
+    clickElement(arrow);
+    await waitFor(transferred, 2000);
   }
-  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (dwuklikiem ani strzałką „>”).`);
+  if (!transferred()) {
+    await extTransfer(row, arrow);
+    await waitFor(transferred, 2500);
+  }
+  if (!transferred()) {
+    row.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+    await waitFor(transferred, 2000);
+  }
+  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (strzałką „>”, przez API ExtJS ani dwuklikiem).`);
   await sleep(250);
 }
 
@@ -483,7 +538,7 @@ async function fillUwaga() {
     if (!root) throw new Error('Nie otworzyło się okno dodawania uwagi.');
     await pickStudentInModal(root, uwaga.student);
     await chooseKategoria(root, uwaga.category);
-    const content = fieldByLabel('Treść', root);
+    const content = document.getElementById('idTresc-inputEl') || fieldByLabel('Treść', root);
     if (!(content instanceof HTMLTextAreaElement) && !(content instanceof HTMLInputElement)) throw new Error('Nie znalazłem pola „Treść”.');
     setField(content, uwaga.content);
     // AUTO-ZAPIS (decyzja Bartka 2026-09-21): zatwierdzeniem uwagi jest samo
@@ -493,7 +548,7 @@ async function fillUwaga() {
     const brakuje = [];
     if (!kategoriaValue) brakuje.push('kategorii');
     if (!content.value.trim()) brakuje.push('treści');
-    const zapisz = findTextIn(root, 'Zapisz', true);
+    const zapisz = root.querySelector('a[uitestid="Zapisz"]') || findTextIn(root, 'Zapisz', true);
     if (!zapisz) brakuje.push('przycisku „Zapisz”');
     if (brakuje.length > 0) {
       phase = 'uwaga-review';
@@ -504,7 +559,25 @@ async function fillUwaga() {
     phase = 'uwaga-review';
     render('Formularz kompletny - klikam Zapisz…');
     clickElement(zapisz);
-    const gone = await waitFor(() => !document.contains(root) || !visible(root), 8000);
+    let gone = await waitFor(() => !document.contains(root) || !visible(root), 4000);
+    if (!gone) {
+      // Syntetyczny klik zignorowany (jak przy ">") - handler przez API ExtJS.
+      zapisz.setAttribute('data-apka-bot', 'zapisz');
+      await pageEval(`
+        var el = document.querySelector('[data-apka-bot="zapisz"]');
+        for (; el; el = el.parentElement) {
+          if (el.id && window.Ext && Ext.getCmp && Ext.getCmp(el.id) && Ext.getCmp(el.id).isButton) {
+            var b = Ext.getCmp(el.id);
+            if (b.handler) b.handler.call(b.scope || b, b, {});
+            else b.fireEvent('click', b, {});
+            return 'ok';
+          }
+        }
+        return 'no-btn';
+      `);
+      zapisz.removeAttribute('data-apka-bot');
+      gone = await waitFor(() => !document.contains(root) || !visible(root), 6000);
+    }
     if (gone) {
       await reportUwagaSaved();
     } else {
