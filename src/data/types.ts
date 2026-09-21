@@ -389,6 +389,20 @@ export interface Settings {
    * Klasa IV i V maja od 2026/2027 rozne podstawy programowe.
    */
   readingPlans?: Partial<Record<'IV' | 'V', ReadingPlanItem[]>>;
+  /**
+   * Glosowanie klasy nad lekturami (zakladka Lektury). Liczba glosow na id
+   * kandydata z KANDYDACI w lekturyOpisy.ts. Wynik przepisuje sie do
+   * readingPlans w kolejnosci od najwiecej glosow - to jest kolejnosc
+   * omawiania w roku. Opcjonalne jak readingPlans.
+   */
+  readingVotes?: Partial<Record<'IV' | 'V', ReadingVote>>;
+}
+
+export interface ReadingVote {
+  /** id kandydata -> liczba glosow (podniesionych rak) */
+  glosy: Record<string, number>;
+  /** Kandydaci schowani przed klasa, np. tytul, ktory klasa juz miala. */
+  wykluczone?: string[];
 }
 
 export interface ReadingPlanItem {

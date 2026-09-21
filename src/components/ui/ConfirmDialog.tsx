@@ -38,7 +38,7 @@ export function ConfirmDialog({
         </>
       }
     >
-      <p className="text-sm text-gray-600">{message}</p>
+      <p className="whitespace-pre-line text-sm text-gray-600">{message}</p>
     </Modal>
   );
 }

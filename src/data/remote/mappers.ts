@@ -339,6 +339,7 @@ export interface SettingsRow {
   answer_timer_sec: number | null;
   slide_font_percent: number | null;
   reading_plans: Settings['readingPlans'] | null;
+  reading_votes: Settings['readingVotes'] | null;
 }
 
 export function settingsToRow(s: Settings): SettingsRow {
@@ -353,6 +354,7 @@ export function settingsToRow(s: Settings): SettingsRow {
     answer_timer_sec: s.answerTimerSec,
     slide_font_percent: s.slideFontPercent,
     reading_plans: s.readingPlans ?? null,
+    reading_votes: s.readingVotes ?? null,
   };
 }
 
@@ -372,5 +374,6 @@ export function rowToSettings(row: SettingsRow): Settings {
     // Kolumna doszla z wielkoscia liter na projektorze (0014_wielkosc_liter.sql).
     slideFontPercent: row.slide_font_percent ?? 100,
     readingPlans: row.reading_plans ?? undefined,
+    readingVotes: row.reading_votes ?? undefined,
   };
 }

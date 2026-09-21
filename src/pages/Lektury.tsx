@@ -1,6 +1,7 @@
 import { FormEvent, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { PageHeader } from '../components/ui/PageHeader';
+import { Glosowanie } from '../components/lektury/Glosowanie';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import {
@@ -214,6 +215,8 @@ export function Lektury() {
           </button>
         ))}
       </div>
+
+      <Glosowanie rocznik={rocznik} />
 
       <section className="mb-8 overflow-hidden rounded-xl border border-gray-200 bg-white">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-gray-200 bg-gray-50 px-5 py-4">

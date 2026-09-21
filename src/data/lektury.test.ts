@@ -27,3 +27,25 @@ describe('katalogi lektur', () => {
     for (const id of LEKTURY_IV_2026_POLECANE_IDS) expect(ids.has(id)).toBe(true);
   });
 });
+
+describe('kandydaci do głosowania', () => {
+  it('każdy kandydat ma opis, okładkę i istnieje w katalogu', async () => {
+    const { KANDYDACI, OPISY_KANDYDATOW } = await import('./lekturyOpisy');
+    const fs = await import('node:fs');
+    const ids = new Set([
+      ...LEKTURY_IV_2026_KATALOG,
+      ...LEKTURY_OBOWIAZKOWE,
+      ...LEKTURY_UZUPELNIAJACE,
+    ].map((lektura) => lektura.id));
+    for (const kandydat of [...KANDYDACI.IV, ...KANDYDACI.V]) {
+      expect(ids.has(kandydat.id), kandydat.id).toBe(true);
+      expect(OPISY_KANDYDATOW[kandydat.klucz], kandydat.klucz).toBeDefined();
+      expect(fs.existsSync(`public/okladki/${kandydat.klucz}.jpg`), kandydat.klucz).toBe(true);
+    }
+  });
+
+  it('kandydaci dla IV są z listy polecanych', async () => {
+    const { KANDYDACI } = await import('./lekturyOpisy');
+    for (const kandydat of KANDYDACI.IV) expect(LEKTURY_IV_2026_POLECANE_IDS.has(kandydat.id)).toBe(true);
+  });
+});
