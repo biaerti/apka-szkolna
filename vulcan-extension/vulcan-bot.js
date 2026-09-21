@@ -87,7 +87,9 @@ function readAttendanceFromPage(period) {
 }
 
 function candidates(selector = 'button, a, input[type="button"], input[type="submit"], [role="button"], td, span, div') {
-  return [...document.querySelectorAll(selector)].filter(visible);
+  // Panel pomocnika tez zawiera teksty typu "Uwaga" czy tresc uwagi -
+  // bot nie moze klikac sam w siebie.
+  return [...document.querySelectorAll(selector)].filter((element) => visible(element) && !element.closest(`#${BOT_ID}`));
 }
 
 function textOf(element) {
@@ -359,52 +361,60 @@ async function pickStudentInModal(root, student) {
   await sleep(350);
 }
 
-// Otwiera w drzewie po lewej lekcję, do ktorej ma trafic uwaga. Zakładka
-// „Uwagi” istnieje dopiero PO otwarciu konkretnej lekcji (bez niej VULCAN
-// pokazuje "Wybierz konkretną porę lekcji"). Najpierw godzina z paczki
-// (uwaga.period), a dla uwagi poza planem - ostatnia lekcja tej klasy z dnia
-// uwagi. Dzien w drzewie bywa zwiniety, wiec klikamy go i probujemy znowu.
-async function openLessonForUwaga() {
+// Wsrod pasujacych elementow bierze ten najnizej na ekranie (a przy remisie
+// najmniejszy). Potrzebne, bo np. "Pochwały i uwagi" jest i na gornej wstazce,
+// i w menu dziennika oddzialu - klikamy to drugie.
+function findTextLowest(text, exact = false) {
+  const wanted = normalized(text);
+  return candidates()
+    .filter((element) => (exact ? normalized(textOf(element)) === wanted : normalized(textOf(element)).includes(wanted)))
+    .sort((a, b) => {
+      const ra = a.getBoundingClientRect();
+      const rb = b.getBoundingClientRect();
+      return rb.top - ra.top || ra.width * ra.height - rb.width * rb.height;
+    })[0];
+}
+
+// Droga do formularza uwagi przez DZIENNIK ODDZIALU (pomysl Bartka z
+// pierwszego zywego testu): uwagi w VULCANIE nie sa przypiete do lekcji,
+// tylko wisza luzem przy klasie i miesiacu, wiec nie trzeba otwierac zadnej
+// lekcji. Wstazka "Dziennik oddziału" -> klasa w drzewie ("4C (Sp 97)") ->
+// menu "Pochwały i uwagi" -> zakladka "Uwagi". Dalej to samo "Dodaj".
+async function openUwagiOddzialu() {
+  render('Otwieram dziennik oddziału…');
+  const ribbon = await waitFor(() => findText('Dziennik oddziału', true), 5000);
+  if (!ribbon) throw new Error('Nie znalazłem przycisku „Dziennik oddziału” na górnej wstążce.');
+  clickElement(ribbon);
+  await sleep(900);
+  render(`Otwieram klasę ${uwaga.vulcanClassName} w drzewie…`);
   const wanted = normalized(uwaga.vulcanClassName);
-  const pickLesson = () => {
-    const nodes = candidates('td, span, div, a, li')
+  const klasa = await waitFor(() => {
+    const matches = candidates('td, span, div, a, li')
       .map((element) => ({ element, text: normalized(textOf(element)) }))
-      .filter(({ text }) => /^\d{1,2}\.\s/.test(text) && text.includes(` ${wanted} `))
-      .map((node) => ({ ...node, period: Number(/^(\d{1,2})\./.exec(node.text)[1]) }))
+      .filter(({ text }) => text.startsWith(`${wanted} (`))
       .sort((a, b) => {
-        const rect = (n) => n.element.getBoundingClientRect();
-        return rect(a).width * rect(a).height - rect(b).width * rect(b).height;
+        const ra = a.element.getBoundingClientRect();
+        const rb = b.element.getBoundingClientRect();
+        return ra.width * ra.height - rb.width * rb.height;
       });
-    // Najmniejszy element per godzina = sam wpis w drzewie, nie kontener.
-    const byPeriod = new Map();
-    for (const node of nodes) if (!byPeriod.has(node.period)) byPeriod.set(node.period, node);
-    if (byPeriod.size === 0) return null;
-    if (uwaga.period && byPeriod.has(uwaga.period)) return byPeriod.get(uwaga.period).element;
-    return [...byPeriod.entries()].sort((a, b) => b[0] - a[0])[0][1].element;
-  };
-  const day = new Date(`${uwaga.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  let lesson = pickLesson();
-  for (let attempt = 0; attempt < 2 && !lesson; attempt += 1) {
-    const dayElement = findText(day);
-    if (!dayElement) throw new Error(`Nie znalazłem dnia „${day}” w drzewie po lewej.`);
-    clickElement(dayElement);
-    await sleep(700);
-    lesson = pickLesson();
-  }
-  if (!lesson) throw new Error(`Nie znalazłem w dniu ${uwaga.date} żadnej lekcji klasy ${uwaga.vulcanClassName} w drzewie po lewej.`);
-  clickElement(lesson);
-  await sleep(800);
+    return matches[0]?.element;
+  }, 8000);
+  if (!klasa) throw new Error(`Nie znalazłem klasy ${uwaga.vulcanClassName} w drzewie dzienników po lewej.`);
+  clickElement(klasa);
+  await sleep(900);
+  render('Otwieram „Pochwały i uwagi”…');
+  const menu = await waitFor(() => findTextLowest('Pochwały i uwagi', true), 8000);
+  if (!menu) throw new Error('Nie znalazłem pozycji „Pochwały i uwagi” w menu dziennika oddziału.');
+  clickElement(menu);
+  await sleep(700);
 }
 
 async function fillUwaga() {
   try {
-    if (!findText('Uwagi', true)) {
-      render('Otwieram lekcję w drzewie po lewej…');
-      await openLessonForUwaga();
-    }
+    await openUwagiOddzialu();
     render('Otwieram zakładkę „Uwagi”…');
-    const tab = await waitFor(() => findText('Uwagi', true), 7000);
-    if (!tab) throw new Error('Nie znalazłem zakładki „Uwagi” nad tabelą lekcji.');
+    const tab = await waitFor(() => findText('Uwagi', true), 8000);
+    if (!tab) throw new Error('Nie znalazłem zakładki „Uwagi” obok „Pochwały”.');
     clickElement(tab);
     const add = await waitForText('Dodaj', 6000);
     if (!add) throw new Error('Nie znalazłem przycisku „Dodaj” w zakładce „Uwagi”.');
