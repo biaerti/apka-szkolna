@@ -61,6 +61,14 @@ html.panel-gotowy .panel-pasek {
     break-after: auto;
   }
 
+  /* Karteczki z lekturami (src/pages/LekturyPrint.tsx) - A4 w poziomie,
+     dwie polowki A5, kreska do przeciecia w srodku. */
+  .lektury-a4 {
+    width: 297mm !important;
+    height: 210mm !important;
+    page: lektury;
+  }
+
   /* Reset kolorow dla calego wydruku - OMIJA elementy z klasa "print-color"
      (karty powtorkowe, rysunek kola fortuny), zeby zostaly czytelne na
      wydruku zamiast zgasnac do czerni. Sektory kola i tak rozroznia sie
@@ -75,6 +83,11 @@ html.panel-gotowy .panel-pasek {
 }
 
 @page lesson-notes {
+  size: A4 landscape;
+  margin: 0;
+}
+
+@page lektury {
   size: A4 landscape;
   margin: 0;
 }
