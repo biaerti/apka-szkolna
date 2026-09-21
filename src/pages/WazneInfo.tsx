@@ -71,8 +71,10 @@ export function WazneInfoPage() {
       const w = await pullFromMail();
       setKomunikat(
         w.przerobione === 0
-          ? `Nic nowego (w skrzynce: ${w.wSkrzynce}).`
-          : `Nowe maile: ${w.przerobione}, dodane punkty: ${w.punkty}.`,
+          ? `Nic nowego w skrzynce (maili: ${w.wSkrzynce}).`
+          : w.punkty === 0
+            ? `Nowe maile: ${w.przerobione}, ale model nie znalazł w nich nic dla rodziców - jeśli coś jednak jest, dodaj punkt ręcznie.`
+            : `Nowe maile: ${w.przerobione}, dodane punkty: ${w.punkty}.`,
       );
     });
     setSprawdzam(false);
