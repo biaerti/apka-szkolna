@@ -439,10 +439,17 @@ async function fillUwaga() {
     const tab = await waitFor(() => findText('Uwagi', true), 8000);
     if (!tab) throw new Error('Nie znalazłem zakładki „Uwagi” obok „Pochwały”.');
     clickElement(tab);
-    const add = await waitForText('Dodaj', 6000);
-    if (!add) throw new Error('Nie znalazłem przycisku „Dodaj” w zakładce „Uwagi”.');
-    clickElement(add);
-    const root = await waitFor(modalRoot, 7000);
+    // Panel zakladki dogrywa sie chwile po klikniecu (miesiac + lista uwag);
+    // za wczesny klik w "Dodaj" nie otwiera okna. Odczekujemy i probujemy
+    // do trzech razy, za kazdym razem swiezo znalezionym przyciskiem.
+    await sleep(800);
+    await waitForText('Dodaj', 8000);
+    let root = null;
+    for (let attempt = 0; attempt < 3 && !root; attempt += 1) {
+      const add = findText('Dodaj', true) || findText('Dodaj');
+      if (add) clickElement(add);
+      root = await waitFor(modalRoot, 3000);
+    }
     if (!root) throw new Error('Nie otworzyło się okno dodawania uwagi.');
     await pickStudentInModal(root, uwaga.student);
     await chooseDropdown('Kategoria', uwaga.category, root);
