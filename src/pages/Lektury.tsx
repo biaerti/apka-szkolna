@@ -1,4 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Glosowanie } from '../components/lektury/Glosowanie';
@@ -17,6 +18,7 @@ import {
   LEKTURY_ZRODLO,
   type Lektura,
 } from '../data/lektury';
+import { TERMINY } from '../data/lekturyOpisy';
 import { newId } from '../data/id';
 import { useStore } from '../data/store';
 import {
@@ -196,6 +198,7 @@ export function Lektury() {
       <PageHeader
         title="Lektury"
         description="Osobne spisy dla klas IV i V w roku szkolnym 2026/2027."
+        actions={<Link to="/lektury/druk" className="text-sm font-medium text-accent-700 hover:underline">Lista do wydruku</Link>}
       />
 
       <div className="mb-6 inline-flex rounded-lg border border-gray-200 bg-white p-1" role="tablist" aria-label="Wybierz rocznik">
@@ -256,6 +259,11 @@ export function Lektury() {
                   <OpisLektury lektura={lektura} />
                   {lektura.wlasna && <span className="mt-1 inline-block text-xs font-medium text-accent-700">Tytuł własny</span>}
                 </div>
+                {TERMINY[rocznik][index] && (
+                  <span className="text-sm text-gray-500">
+                    po dziale {TERMINY[rocznik][index].dzial} · {TERMINY[rocznik][index].kiedy}
+                  </span>
+                )}
                 {rocznik === 'V' && (
                   <label className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
                     <input

@@ -268,3 +268,28 @@ export const KANDYDACI: Record<'IV' | 'V', Kandydat[]> = {
 export function okladkaUrl(klucz: string): string {
   return `/okladki/${klucz}.jpg`;
 }
+
+// Kiedy omawiamy kolejne lektury - po parzystych dzialach podrecznika, zeby
+// klasa miala ~2 miesiace na przeczytanie. IV: GWO, 9 rozdzialow (dzial 1
+// konczy sie ok. polowy pazdziernika razem z powtorzeniem i sprawdzianem).
+// V: Nowa Era, 7 dzialow. Miesiace orientacyjne - drukuja sie na liscie dla
+// uczniow, wiec jak tempo sie rozjedzie, popraw tutaj.
+export interface Termin {
+  dzial: number;
+  kiedy: string;
+}
+
+export const TERMINY: Record<'IV' | 'V', Termin[]> = {
+  IV: [
+    { dzial: 2, kiedy: 'koniec listopada' },
+    { dzial: 4, kiedy: 'koniec stycznia' },
+    { dzial: 6, kiedy: 'koniec marca' },
+    { dzial: 8, kiedy: 'koniec maja' },
+  ],
+  V: [
+    { dzial: 2, kiedy: 'początek grudnia' },
+    { dzial: 4, kiedy: 'koniec lutego' },
+    { dzial: 6, kiedy: 'połowa maja' },
+    { dzial: 7, kiedy: 'czerwiec' },
+  ],
+};
