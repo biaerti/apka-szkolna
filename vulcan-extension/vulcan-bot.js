@@ -113,63 +113,30 @@ async function waitForText(text, timeout = 7000) {
   throw new Error(`Nie znalazłem kontrolki „${text}”.`);
 }
 
-// Uruchamia kod w SWIECIE STRONY (content script nie widzi window.Ext).
-// Wynik wraca CustomEventem; brak odpowiedzi (np. CSP blokuje inline
-// script) konczy sie null po 1500 ms.
-function pageEval(code) {
+// Odpala kod w SWIECIE STRONY przez background.js (chrome.scripting,
+// world: MAIN) - jedyna droga do window.Ext, ktorej CSP VULCANA nie
+// zablokuje (wstrzykiwany <script> byl blokowany). Elementy docelowe
+// oznaczamy atrybutem data-apka-bot, background siega do nich przez Ext.
+function extRun(kind, lastName) {
   return new Promise((resolve) => {
-    const id = `apka-bot-${Math.random().toString(36).slice(2)}`;
-    const timer = setTimeout(() => {
-      window.removeEventListener(id, onResult);
-      resolve(null);
-    }, 1500);
-    function onResult(event) {
-      clearTimeout(timer);
-      window.removeEventListener(id, onResult);
-      resolve(event.detail);
+    try {
+      chrome.runtime.sendMessage({ type: 'EXT_RUN', kind, lastName }, (response) => {
+        if (chrome.runtime.lastError) resolve('ERR: ' + chrome.runtime.lastError.message);
+        else resolve(response && response.ok ? response.result : 'ERR: ' + ((response && response.error) || 'brak odpowiedzi'));
+      });
+    } catch (error) {
+      resolve('ERR: ' + error);
     }
-    window.addEventListener(id, onResult);
-    const script = document.createElement('script');
-    script.textContent = `(function(){var r;try{r=(function(){${code}})();}catch(e){r='ERR: '+e;}window.dispatchEvent(new CustomEvent('${id}',{detail:r}));})();document.currentScript.remove();`;
-    (document.head || document.documentElement).appendChild(script);
   });
 }
 
-// Zaznacza wiersz grida i odpala handler przycisku przez API ExtJS - dziala
-// tam, gdzie syntetyczne klikniecia sa ignorowane (przenoszenie ucznia do
-// "Dotyczy" w oknie uwagi). Elementy wskazujemy atrybutem data-apka-bot.
+// Zaznacza rekord ucznia w gridzie (po nazwisku) i odpala handler przycisku
+// ">" przez API ExtJS - dziala tam, gdzie syntetyczne klikniecia sa
+// ignorowane (przenoszenie ucznia do "Dotyczy" w oknie uwagi).
 async function extTransfer(rowElement, arrowElement, lastName) {
   rowElement.setAttribute('data-apka-bot', 'row');
   if (arrowElement) arrowElement.setAttribute('data-apka-bot', 'arrow');
-  const result = await pageEval(`
-    if (!window.Ext || !Ext.getCmp) return 'no-ext';
-    function cmpUp(el, test) {
-      for (; el; el = el.parentElement) {
-        if (el.id) { var c = Ext.getCmp(el.id); if (c && test(c)) return c; }
-      }
-      return null;
-    }
-    var rowEl = document.querySelector('[data-apka-bot="row"]');
-    var grid = rowEl && cmpUp(rowEl, function (c) { return !!c.getSelectionModel; });
-    if (grid) {
-      var store = grid.getStore ? grid.getStore() : null;
-      if (store && store.getCount() > 0) {
-        // Rekord po nazwisku, nie "pierwszy z brzegu" - store bywa niefiltrowany.
-        var wanted = ${JSON.stringify(normalized(lastName || ''))};
-        var record = null;
-        store.each(function (r) {
-          if (!record && JSON.stringify(r.data).toLocaleLowerCase('pl').indexOf(wanted) !== -1) record = r;
-        });
-        grid.getSelectionModel().select(record || store.getAt(0));
-      }
-    }
-    var btnEl = document.querySelector('[data-apka-bot="arrow"]');
-    var btn = btnEl && cmpUp(btnEl, function (c) { return c.isButton || c.isXType && c.isXType('button'); });
-    if (!btn) return grid ? 'no-btn' : 'no-grid';
-    if (btn.handler) btn.handler.call(btn.scope || btn, btn, {});
-    else btn.fireEvent('click', btn, {});
-    return 'ok';
-  `);
+  const result = await extRun('transfer', normalized(lastName || ''));
   rowElement.removeAttribute('data-apka-bot');
   if (arrowElement) arrowElement.removeAttribute('data-apka-bot');
   return result;
@@ -579,19 +546,8 @@ async function fillUwaga() {
     let gone = await waitFor(() => !document.contains(root) || !visible(root), 4000);
     if (!gone) {
       // Syntetyczny klik zignorowany (jak przy ">") - handler przez API ExtJS.
-      zapisz.setAttribute('data-apka-bot', 'zapisz');
-      await pageEval(`
-        var el = document.querySelector('[data-apka-bot="zapisz"]');
-        for (; el; el = el.parentElement) {
-          if (el.id && window.Ext && Ext.getCmp && Ext.getCmp(el.id) && Ext.getCmp(el.id).isButton) {
-            var b = Ext.getCmp(el.id);
-            if (b.handler) b.handler.call(b.scope || b, b, {});
-            else b.fireEvent('click', b, {});
-            return 'ok';
-          }
-        }
-        return 'no-btn';
-      `);
+      zapisz.setAttribute('data-apka-bot', 'button');
+      await extRun('button');
       zapisz.removeAttribute('data-apka-bot');
       gone = await waitFor(() => !document.contains(root) || !visible(root), 6000);
     }

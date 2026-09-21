@@ -25,7 +25,71 @@ async function vulcanTab() {
   return tabs.find((candidate) => candidate.id && candidate.url?.includes('/wroclaw/003013/')) ?? tabs[0];
 }
 
+// Dziala w SWIECIE STRONY (world: MAIN przez chrome.scripting) - jedyna
+// droga do window.Ext, ktorej CSP VULCANA nie moze zablokowac. Elementy
+// docelowe sa oznaczone atrybutem data-apka-bot przez vulcan-bot.js.
+// kind 'transfer': zaznacz rekord po nazwisku i odpal handler przycisku ">".
+// kind 'button': odpal handler przycisku (np. Zapisz).
+function extMain(kind, lastName) {
+  try {
+    if (!window.Ext || !Ext.getCmp) return 'no-ext';
+    const cmpUp = (el, test) => {
+      for (; el; el = el.parentElement) {
+        if (el.id) {
+          const c = Ext.getCmp(el.id);
+          if (c && test(c)) return c;
+        }
+      }
+      return null;
+    };
+    const isButton = (c) => c.isButton || (c.isXType && c.isXType('button'));
+    if (kind === 'transfer') {
+      const rowEl = document.querySelector('[data-apka-bot="row"]');
+      const grid = rowEl && cmpUp(rowEl, (c) => !!c.getSelectionModel);
+      if (grid) {
+        const store = grid.getStore ? grid.getStore() : null;
+        if (store && store.getCount() > 0) {
+          const wanted = String(lastName || '').toLowerCase();
+          let record = null;
+          store.each((r) => {
+            if (!record && JSON.stringify(r.data).toLowerCase().indexOf(wanted) !== -1) record = r;
+          });
+          grid.getSelectionModel().select(record || store.getAt(0));
+        }
+      }
+      const arrowEl = document.querySelector('[data-apka-bot="arrow"]');
+      const arrow = arrowEl && cmpUp(arrowEl, isButton);
+      if (!arrow) return grid ? 'no-btn' : 'no-grid';
+      if (arrow.handler) arrow.handler.call(arrow.scope || arrow, arrow, {});
+      else arrow.fireEvent('click', arrow, {});
+      return 'ok';
+    }
+    const btnEl = document.querySelector('[data-apka-bot="button"]');
+    const btn = btnEl && cmpUp(btnEl, isButton);
+    if (!btn) return 'no-btn';
+    if (btn.handler) btn.handler.call(btn.scope || btn, btn, {});
+    else btn.fireEvent('click', btn, {});
+    return 'ok';
+  } catch (error) {
+    return 'ERR: ' + error;
+  }
+}
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'EXT_RUN') {
+    (async () => {
+      const tabId = _sender.tab?.id;
+      if (!tabId) throw new Error('Brak karty nadawcy.');
+      const [res] = await chrome.scripting.executeScript({
+        target: { tabId },
+        world: 'MAIN',
+        func: extMain,
+        args: [message.kind || 'button', message.lastName || ''],
+      });
+      sendResponse({ ok: true, result: res?.result });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
   if (message?.type === 'OPEN_VULCAN_UWAGA') {
     (async () => {
       // background = auto-wpis w tle (uwaga z telefonu w trakcie lekcji):
