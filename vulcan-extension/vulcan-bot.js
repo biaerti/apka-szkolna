@@ -133,14 +133,13 @@ function extRun(kind, lastName) {
 // PRAWDZIWE klikniecia myszy przez debugger Chrome (background.js:
 // realClicks) - w srodki podanych elementow, po kolei, z krotka pauza.
 async function realClick(elements) {
-  const points = elements.filter(Boolean).map((element) => {
-    element.scrollIntoView({ block: 'center', inline: 'center' });
-    const rect = element.getBoundingClientRect();
-    return { x: Math.round(rect.left + rect.width / 2), y: Math.round(rect.top + rect.height / 2), delayAfter: 350 };
-  });
-  return new Promise((resolve) => {
+  // Wspolrzedne mierzy background PO podpieciu debuggera (pasek debugowania
+  // spycha strone w dol) - my tylko znakujemy cele atrybutem z kolejnoscia.
+  const targets = elements.filter(Boolean);
+  targets.forEach((element, index) => element.setAttribute('data-apka-bot-click', String(index)));
+  const result = await new Promise((resolve) => {
     try {
-      chrome.runtime.sendMessage({ type: 'REAL_CLICKS', points }, (response) => {
+      chrome.runtime.sendMessage({ type: 'REAL_CLICKS', count: targets.length }, (response) => {
         if (chrome.runtime.lastError) resolve('ERR: ' + chrome.runtime.lastError.message);
         else resolve(response && response.ok ? 'ok' : 'ERR: ' + ((response && response.error) || 'brak odpowiedzi'));
       });
@@ -148,6 +147,8 @@ async function realClick(elements) {
       resolve('ERR: ' + error);
     }
   });
+  targets.forEach((element) => element.removeAttribute('data-apka-bot-click'));
+  return result;
 }
 
 // Zaznacza rekord ucznia w gridzie (po nazwisku) i odpala handler przycisku

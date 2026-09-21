@@ -79,11 +79,37 @@ function extMain(kind, lastName) {
 // dla strony nieodroznialne od reki. Ostatnia deska ratunku na przyciski
 // VULCANA, ktore ignoruja syntetyczne zdarzenia i handlery przez API.
 // Chrome pokazuje przy tym pasek "debugowanie" nad karta - znika po detach.
-async function realClicks(tabId, points) {
+// Mierzy w karcie AKTUALNE srodki elementow [data-apka-bot-click="0..n-1"].
+// Musi to sie dziac PO chrome.debugger.attach: zolty pasek "rozpoczal
+// debugowanie" spycha strone w dol i uniewaznia wspolrzedne zmierzone
+// wczesniej (przez to klikniecia 0.6.0 ladowaly nad celem).
+function measureClickTargets(count) {
+  const points = [];
+  for (let i = 0; i < count; i += 1) {
+    const el = document.querySelector(`[data-apka-bot-click="${i}"]`);
+    if (!el) return { error: `Brak elementu nr ${i}.` };
+    el.scrollIntoView({ block: 'center', inline: 'center' });
+    const rect = el.getBoundingClientRect();
+    points.push({ x: Math.round(rect.left + rect.width / 2), y: Math.round(rect.top + rect.height / 2) });
+  }
+  return { points };
+}
+
+async function realClicks(tabId, count) {
   const target = { tabId };
   await chrome.debugger.attach(target, '1.3');
   try {
-    for (const point of points) {
+    // Chwila na przelozenie strony po pojawieniu sie paska debugowania.
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    const [measured] = await chrome.scripting.executeScript({ target: { tabId }, func: measureClickTargets, args: [count] });
+    if (!measured?.result?.points) throw new Error(measured?.result?.error || 'Nie udało się zmierzyć celów kliknięć.');
+    for (const point of measured.result.points) {
+      await chrome.debugger.sendCommand(target, 'Input.dispatchMouseEvent', {
+        type: 'mouseMoved',
+        x: point.x,
+        y: point.y,
+        pointerType: 'mouse',
+      });
       for (const type of ['mousePressed', 'mouseReleased']) {
         await chrome.debugger.sendCommand(target, 'Input.dispatchMouseEvent', {
           type,
@@ -95,7 +121,7 @@ async function realClicks(tabId, points) {
           pointerType: 'mouse',
         });
       }
-      await new Promise((resolve) => setTimeout(resolve, point.delayAfter ?? 300));
+      await new Promise((resolve) => setTimeout(resolve, 400));
     }
   } finally {
     try { await chrome.debugger.detach(target); } catch { /* juz odpieta */ }
@@ -107,7 +133,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     (async () => {
       const tabId = _sender.tab?.id;
       if (!tabId) throw new Error('Brak karty nadawcy.');
-      await realClicks(tabId, Array.isArray(message.points) ? message.points : []);
+      await realClicks(tabId, Number(message.count) || 0);
       sendResponse({ ok: true });
     })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
     return true;
