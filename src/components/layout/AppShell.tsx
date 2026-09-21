@@ -8,6 +8,7 @@ import { UwagiPrzypomnienie, useUwagiDoWpisania } from '../uwagi/UwagiPrzypomnie
 import { IncomingUwagaToast } from '../uwagi/IncomingUwagaToast';
 import { useVulcanUwagaSaved } from '../uwagi/useVulcanUwaga';
 import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
+import { usePilneWazneInfo } from '../wazneinfo/WazneInfoAlarm';
 
 // Krotkie menu - nauczyciel ma nie byc "milionerem na zakladkach, ktorych nie
 // bedzie uzywal". Powtorka, Kalendarz i Statystyki zostaly wpiete w inne ekrany
@@ -21,6 +22,8 @@ import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 // dniach, a nie rozsypana po uczniach (patrz src/pages/Uwagi.tsx).
 // "Sala" to lawki klasy - glowny ekran na telefonie (APK startuje wlasnie tam),
 // wiec musi byc w menu, zeby dalo sie do niej wrocic z innej zakladki.
+// "Ważne info" to komunikaty dla rodzicow zebrane z maili (skrzynka szkola@klippi.pl),
+// z ktorych nauczyciel sklada paczki na WhatsAppa (patrz src/pages/WazneInfo.tsx).
 // "Dokumenty" to lista wydrukow: zasady lekcji dla dzieci, PSO dla rodzicow,
 // plan rozwoju dla dyrektora - jedna zakladka zamiast osobnej na kazdy papier.
 const NAV_ITEMS = [
@@ -32,6 +35,7 @@ const NAV_ITEMS = [
   { to: '/kartkowki', label: 'Kartkówki' },
   { to: '/plan', label: 'Plan' },
   { to: '/zebrania', label: 'Zebrania' },
+  { to: '/info', label: 'Ważne info' },
   { to: '/dokumenty', label: 'Dokumenty' },
   { to: '/podstawa', label: 'Podstawa programowa' },
   { to: '/lektury', label: 'Lektury' },
@@ -40,6 +44,7 @@ const NAV_ITEMS = [
 
 export function AppShell() {
   const doWpisania = useUwagiDoWpisania().length;
+  const pilneInfo = usePilneWazneInfo().length;
   const { pathname } = useLocation();
   // Dzisiejsze zdarzenia z chmury (realtime + polling): uwaga dana z telefonu
   // ma wyskoczyc na komputerze jako popup (IncomingUwagaToast).
@@ -68,6 +73,9 @@ export function AppShell() {
               {item.label}
               {item.to === '/uwagi' && doWpisania > 0 && (
                 <span className="ml-2 rounded-full bg-amber-100 px-1.5 text-xs font-semibold text-amber-800">{doWpisania}</span>
+              )}
+              {item.to === '/info' && pilneInfo > 0 && (
+                <span className="ml-2 rounded-full bg-red-100 px-1.5 text-xs font-semibold text-red-800">{pilneInfo}</span>
               )}
             </NavLink>
           ))}

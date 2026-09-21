@@ -10,6 +10,7 @@ import { QueuePreview } from '../components/dashboard/QueuePreview';
 import { StatTiles } from '../components/dashboard/StatTiles';
 import { QuickStart } from '../components/dashboard/QuickStart';
 import { classesOfGrade, lessonProgress } from '../lib/grade';
+import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
 
 export function Dashboard() {
   const classes = useStore((s) => s.classes);
@@ -46,6 +47,9 @@ export function Dashboard() {
   return (
     <div>
       <h1 className="mb-6 text-2xl font-semibold text-gray-900">{formatPl(today)}</h1>
+
+      {/* Termin dzis/jutro w "Ważne info" - nie moze przepasc. */}
+      <WazneInfoPasek />
 
       {/* Plan dzwonkowy (zakladka "Plan") - osobny od lekcji z kolejki ponizej. */}
       <TodayTimetableBar />

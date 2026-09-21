@@ -20,6 +20,7 @@ import { Uwagi } from './pages/Uwagi';
 import { SettingsPage } from './pages/Settings';
 import { Podstawa } from './pages/Podstawa';
 import { Lektury } from './pages/Lektury';
+import { LekturyPrint } from './pages/LekturyPrint';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
 import { RulesPrint } from './pages/RulesPrint';
 import { Dokumenty } from './pages/Dokumenty';
@@ -28,6 +29,7 @@ import { Panel } from './pages/Panel';
 import { LessonNotesPrint } from './pages/LessonNotesPrint';
 import { Journal } from './pages/Journal';
 import { Sala } from './pages/Sala';
+import { WazneInfoPage } from './pages/WazneInfo';
 
 export default function App() {
   return (
@@ -46,6 +48,7 @@ export default function App() {
       {/* PSO, plan rozwoju itp. - tresc w src/data/dokumenty.ts */}
       <Route path="/dokumenty/:slug" element={<DocPrint />} />
       <Route path="/lekcje/notatki/druk" element={<LessonNotesPrint />} />
+      <Route path="/lektury/druk" element={<LekturyPrint />} />
 
       <Route element={<AppShell />}>
         <Route path="/" element={<Dashboard />} />
@@ -65,6 +68,8 @@ export default function App() {
         <Route path="/sala/:classId" element={<Sala />} />
         <Route path="/zebrania" element={<Meetings />} />
         <Route path="/zebrania/:id" element={<MeetingDetail />} />
+        {/* Punkty dla rodzicow z maili (szkola@klippi.pl) -> paczki na WhatsAppa */}
+        <Route path="/info" element={<WazneInfoPage />} />
         <Route path="/dokumenty" element={<Dokumenty />} />
         <Route path="/podstawa" element={<Podstawa />} />
         <Route path="/lektury" element={<Lektury />} />

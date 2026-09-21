@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv, Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { askPodstawaChat, parseChatMessages } from './src/lib/podstawaChat';
+import { handlePullRequest, type PullHttpEnv } from './src/lib/wazneInfoMail';
 
 // Dev-owy odpowiednik funkcji serverless api/podstawa-chat.ts - dzieki temu
 // czat z podstawa programowa dziala tez na npm run dev. Klucz z .env.local
@@ -50,10 +51,33 @@ function podstawaChatDevPlugin(apiKey: string | undefined): Plugin {
   };
 }
 
+// Dev-owy odpowiednik api/wazne-info-pull.ts - sprawdzanie skrzynki
+// szkola@klippi.pl dziala tez na npm run dev (ustawienia MAIL_* z .env.local).
+function wazneInfoDevPlugin(env: PullHttpEnv): Plugin {
+  return {
+    name: 'wazne-info-dev',
+    configureServer(server) {
+      server.middlewares.use('/api/wazne-info-pull', (req, res) => {
+        void (async () => {
+          res.setHeader('Content-Type', 'application/json');
+          if (req.method !== 'POST') {
+            res.statusCode = 405;
+            res.end(JSON.stringify({ error: 'Tylko POST' }));
+            return;
+          }
+          const { status, body } = await handlePullRequest(req.headers.authorization, env);
+          res.statusCode = status;
+          res.end(JSON.stringify(body));
+        })();
+      });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    plugins: [react(), podstawaChatDevPlugin(env.OPENROUTER_API_KEY)],
+    plugins: [react(), podstawaChatDevPlugin(env.OPENROUTER_API_KEY), wazneInfoDevPlugin(env)],
     build: {
       target: 'es2020',
     },
