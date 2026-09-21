@@ -138,7 +138,7 @@ function pageEval(code) {
 // Zaznacza wiersz grida i odpala handler przycisku przez API ExtJS - dziala
 // tam, gdzie syntetyczne klikniecia sa ignorowane (przenoszenie ucznia do
 // "Dotyczy" w oknie uwagi). Elementy wskazujemy atrybutem data-apka-bot.
-async function extTransfer(rowElement, arrowElement) {
+async function extTransfer(rowElement, arrowElement, lastName) {
   rowElement.setAttribute('data-apka-bot', 'row');
   if (arrowElement) arrowElement.setAttribute('data-apka-bot', 'arrow');
   const result = await pageEval(`
@@ -153,7 +153,15 @@ async function extTransfer(rowElement, arrowElement) {
     var grid = rowEl && cmpUp(rowEl, function (c) { return !!c.getSelectionModel; });
     if (grid) {
       var store = grid.getStore ? grid.getStore() : null;
-      if (store && store.getCount() > 0) grid.getSelectionModel().select(store.getAt(0));
+      if (store && store.getCount() > 0) {
+        // Rekord po nazwisku, nie "pierwszy z brzegu" - store bywa niefiltrowany.
+        var wanted = ${JSON.stringify(normalized(lastName || ''))};
+        var record = null;
+        store.each(function (r) {
+          if (!record && JSON.stringify(r.data).toLocaleLowerCase('pl').indexOf(wanted) !== -1) record = r;
+        });
+        grid.getSelectionModel().select(record || store.getAt(0));
+      }
     }
     var btnEl = document.querySelector('[data-apka-bot="arrow"]');
     var btn = btnEl && cmpUp(btnEl, function (c) { return c.isButton || c.isXType && c.isXType('button'); });
@@ -447,25 +455,24 @@ async function pickStudentInModal(root, student) {
       return text.includes(normalized(student.lastName)) && element.getBoundingClientRect().left >= rightEdge - 24;
     });
   };
-  // Zaznacz wiersz i klikaj ">" (a[uitestid=">"] - stabilny atrybut VULCANA).
-  // Syntetyczny klik bywa ignorowany, wiec dobijamy handlerem przez API
-  // ExtJS (extTransfer), a na koncu probujemy dwukliku.
+  // Syntetyczne klikniecia dzialaja wszedzie POZA przyciskami ">"/">>",
+  // wiec od razu idziemy przez API ExtJS: zaznaczenie rekordu w selModel
+  // po nazwisku i wywolanie handlera przycisku (extTransfer). Klik i dwuklik
+  // zostaja jako zapas.
   clickElement(row);
   await sleep(250);
   const arrow = root.querySelector('a[uitestid=">"]') || findTextIn(root, '>', true, 'a, button, span');
-  if (arrow) {
+  await extTransfer(row, arrow, student.lastName);
+  await waitFor(transferred, 2500);
+  if (!transferred() && arrow) {
     clickElement(arrow);
     await waitFor(transferred, 2000);
-  }
-  if (!transferred()) {
-    await extTransfer(row, arrow);
-    await waitFor(transferred, 2500);
   }
   if (!transferred()) {
     row.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
     await waitFor(transferred, 2000);
   }
-  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (strzałką „>”, przez API ExtJS ani dwuklikiem).`);
+  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (przez API ExtJS, strzałką „>” ani dwuklikiem).`);
   await sleep(250);
 }
 
@@ -490,28 +497,37 @@ function findTextLowest(text, exact = false) {
 // menu "Pochwały i uwagi" -> zakladka "Uwagi". Dalej to samo "Dodaj".
 async function openUwagiOddzialu() {
   render('Otwieram dziennik oddziału…');
-  const ribbon = await waitFor(() => findText('Dziennik oddziału', true), 5000);
+  // Stale id ze zrzutu strony: rbbnDziennkiBtn to "Dziennik oddziału".
+  const ribbon = document.getElementById('rbbnDziennkiBtn') || (await waitFor(() => findText('Dziennik oddziału', true), 5000));
   if (!ribbon) throw new Error('Nie znalazłem przycisku „Dziennik oddziału” na górnej wstążce.');
   clickElement(ribbon);
   await sleep(900);
   render(`Otwieram klasę ${uwaga.vulcanClassName} w drzewie…`);
   const wanted = normalized(uwaga.vulcanClassName);
   const klasa = await waitFor(() => {
-    const matches = candidates('td, span, div, a, li')
-      .map((element) => ({ element, text: normalized(textOf(element)) }))
-      .filter(({ text }) => text.startsWith(`${wanted} (`))
-      .sort((a, b) => {
-        const ra = a.element.getBoundingClientRect();
-        const rb = b.element.getBoundingClientRect();
-        return ra.width * ra.height - rb.width * rb.height;
-      });
-    return matches[0]?.element;
+    const nodes = [...document.querySelectorAll('.x-tree-node-text')].filter(visible);
+    return (
+      nodes.find((el) => normalized(el.textContent).startsWith(`${wanted} (`)) ||
+      candidates('td, span, div, a, li')
+        .map((element) => ({ element, text: normalized(textOf(element)) }))
+        .filter(({ text }) => text.startsWith(`${wanted} (`))
+        .sort((a, b) => {
+          const ra = a.element.getBoundingClientRect();
+          const rb = b.element.getBoundingClientRect();
+          return ra.width * ra.height - rb.width * rb.height;
+        })[0]?.element
+    );
   }, 8000);
   if (!klasa) throw new Error(`Nie znalazłem klasy ${uwaga.vulcanClassName} w drzewie dzienników po lewej.`);
   clickElement(klasa);
   await sleep(900);
   render('Otwieram „Pochwały i uwagi”…');
-  const menu = await waitFor(() => findTextLowest('Pochwały i uwagi', true), 8000);
+  // Pozycja menu ma staly atrybut testowy; zapasem tekst najnizej na ekranie
+  // (na wstazce tez jest przycisk "Pochwaly i uwagi").
+  const menu = await waitFor(
+    () => document.querySelector('[uitestid="Dane dziennika-Pochwały i uwagi"]') || findTextLowest('Pochwały i uwagi', true),
+    8000,
+  );
   if (!menu) throw new Error('Nie znalazłem pozycji „Pochwały i uwagi” w menu dziennika oddziału.');
   clickElement(menu);
   await sleep(700);
@@ -519,6 +535,7 @@ async function openUwagiOddzialu() {
 
 async function fillUwaga() {
   try {
+    phase = 'uwaga-filling';
     await openUwagiOddzialu();
     render('Otwieram zakładkę „Uwagi”…');
     const tab = await waitFor(() => findText('Uwagi', true), 8000);
@@ -619,16 +636,12 @@ async function reportUwagaSaved() {
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'VULCAN_UWAGA') {
+    // Zadnego potwierdzania w paneliku (decyzja Bartka): danie uwagi w apce
+    // JEST zatwierdzeniem, bot od razu wypelnia i zapisuje.
     uwaga = message.payload;
-    phase = 'uwaga-start';
-    if (uwaga.background) {
-      // Auto-wpis w tle: wypełniamy formularz od razu, bez czekania na klik.
-      // Jak zawsze zatrzymujemy się przed „Zapisz” - to klika Bartek.
-      render('Uwaga z telefonu - wypełniam formularz w tle…');
-      void fillUwaga();
-    } else {
-      render('Uwaga z apki jest gotowa. Otworzę zakładkę „Uwagi”, dodam ucznia, kategorię i treść, ale nie zapiszę.');
-    }
+    phase = 'uwaga-filling';
+    render('Uwaga z apki - wpisuję do dziennika…');
+    void fillUwaga();
     return;
   }
   if (message?.type === 'READ_VULCAN_SCHEDULE') {
@@ -652,13 +665,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga']).then(({ pendingVulcanTransfer, pendingVulcanUwaga }) => {
   if (pendingVulcanUwaga) {
     uwaga = pendingVulcanUwaga;
-    phase = 'uwaga-start';
-    if (uwaga.background) {
-      render('Uwaga z telefonu czekała na załadowanie VULCANA - wypełniam formularz w tle…');
-      void fillUwaga();
-    } else {
-      render('Uwaga z apki czekała na załadowanie VULCANA. Możesz otworzyć formularz.');
-    }
+    phase = 'uwaga-filling';
+    render('Uwaga z apki czekała na załadowanie VULCANA - wpisuję do dziennika…');
+    void fillUwaga();
     return;
   }
   if (!pendingVulcanTransfer) return;
