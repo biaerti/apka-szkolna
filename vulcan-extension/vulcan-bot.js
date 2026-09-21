@@ -130,6 +130,26 @@ function extRun(kind, lastName) {
   });
 }
 
+// PRAWDZIWE klikniecia myszy przez debugger Chrome (background.js:
+// realClicks) - w srodki podanych elementow, po kolei, z krotka pauza.
+async function realClick(elements) {
+  const points = elements.filter(Boolean).map((element) => {
+    element.scrollIntoView({ block: 'center', inline: 'center' });
+    const rect = element.getBoundingClientRect();
+    return { x: Math.round(rect.left + rect.width / 2), y: Math.round(rect.top + rect.height / 2), delayAfter: 350 };
+  });
+  return new Promise((resolve) => {
+    try {
+      chrome.runtime.sendMessage({ type: 'REAL_CLICKS', points }, (response) => {
+        if (chrome.runtime.lastError) resolve('ERR: ' + chrome.runtime.lastError.message);
+        else resolve(response && response.ok ? 'ok' : 'ERR: ' + ((response && response.error) || 'brak odpowiedzi'));
+      });
+    } catch (error) {
+      resolve('ERR: ' + error);
+    }
+  });
+}
+
 // Zaznacza rekord ucznia w gridzie (po nazwisku) i odpala handler przycisku
 // ">" przez API ExtJS - dziala tam, gdzie syntetyczne klikniecia sa
 // ignorowane (przenoszenie ucznia do "Dotyczy" w oknie uwagi).
@@ -429,17 +449,18 @@ async function pickStudentInModal(root, student) {
   clickElement(row);
   await sleep(250);
   const arrow = root.querySelector('a[uitestid=">"]') || findTextIn(root, '>', true, 'a, button, span');
-  await extTransfer(row, arrow, student.lastName);
-  await waitFor(transferred, 2500);
-  if (!transferred() && arrow) {
-    clickElement(arrow);
-    await waitFor(transferred, 2000);
+  const api = await extTransfer(row, arrow, student.lastName);
+  await waitFor(transferred, 2000);
+  let realny = 'nieprobowany';
+  if (!transferred()) {
+    // Prawdziwe klikniecia przez debugger: wiersz (zaznaczenie), strzalka ">".
+    render('Przenoszę ucznia prawdziwym kliknięciem…');
+    realny = await realClick([findRow() || row, arrow]);
+    await waitFor(transferred, 2500);
   }
   if (!transferred()) {
-    row.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
-    await waitFor(transferred, 2000);
+    throw new Error(`Nie udało się przenieść ucznia ${full} do „Dotyczy”. API ExtJS: ${api}; klik przez debugger: ${realny}.`);
   }
-  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (przez API ExtJS, strzałką „>” ani dwuklikiem).`);
   await sleep(250);
 }
 
@@ -549,6 +570,11 @@ async function fillUwaga() {
       zapisz.setAttribute('data-apka-bot', 'button');
       await extRun('button');
       zapisz.removeAttribute('data-apka-bot');
+      gone = await waitFor(() => !document.contains(root) || !visible(root), 4000);
+    }
+    if (!gone) {
+      // Ostatecznosc: prawdziwe klikniecie przez debugger.
+      await realClick([zapisz]);
       gone = await waitFor(() => !document.contains(root) || !visible(root), 6000);
     }
     if (gone) {

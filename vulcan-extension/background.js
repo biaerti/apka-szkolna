@@ -75,7 +75,43 @@ function extMain(kind, lastName) {
   }
 }
 
+// PRAWDZIWE klikniecia myszy przez protokol DevTools (chrome.debugger) -
+// dla strony nieodroznialne od reki. Ostatnia deska ratunku na przyciski
+// VULCANA, ktore ignoruja syntetyczne zdarzenia i handlery przez API.
+// Chrome pokazuje przy tym pasek "debugowanie" nad karta - znika po detach.
+async function realClicks(tabId, points) {
+  const target = { tabId };
+  await chrome.debugger.attach(target, '1.3');
+  try {
+    for (const point of points) {
+      for (const type of ['mousePressed', 'mouseReleased']) {
+        await chrome.debugger.sendCommand(target, 'Input.dispatchMouseEvent', {
+          type,
+          x: point.x,
+          y: point.y,
+          button: 'left',
+          buttons: 1,
+          clickCount: 1,
+          pointerType: 'mouse',
+        });
+      }
+      await new Promise((resolve) => setTimeout(resolve, point.delayAfter ?? 300));
+    }
+  } finally {
+    try { await chrome.debugger.detach(target); } catch { /* juz odpieta */ }
+  }
+}
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'REAL_CLICKS') {
+    (async () => {
+      const tabId = _sender.tab?.id;
+      if (!tabId) throw new Error('Brak karty nadawcy.');
+      await realClicks(tabId, Array.isArray(message.points) ? message.points : []);
+      sendResponse({ ok: true });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
   if (message?.type === 'EXT_RUN') {
     (async () => {
       const tabId = _sender.tab?.id;
