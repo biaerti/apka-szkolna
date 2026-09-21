@@ -376,41 +376,41 @@ async function pickStudentInModal(root, student) {
   const findRow = () => findTextIn(root, full, false, 'td, div, span') || findTextIn(root, student.lastName, false, 'td, div, span');
   const row = await waitFor(findRow, 4000);
   if (!row) throw new Error(`Nie znalazłem ucznia ${full} na liście po lewej.`);
-  // Prawa lista pokazuje "Brak danych", dopoki nikt nie przeszedl do
-  // "Dotyczy" - to nasz sprawdzian, czy przeniesienie NAPRAWDE zaszlo
-  // (w pierwszym zywym tescie klik w ">" nic nie przeniosl).
-  const transferred = () => !findTextIn(root, 'Brak danych');
-  clickElement(row);
-  await sleep(300);
-  // Strzalka ">" to przycisk-ikona BEZ tekstu (x-btn-icon-el), wiec szukanie
-  // po tresci nie dziala. Bierzemy przyciski lezace poziomo MIEDZY listami
-  // (na prawo od lewej listy, na lewo od naglowka "Dotyczy"); pierwszy od
-  // gory to ">", drugi ">>" - oba przenosza zaznaczonego ucznia.
-  const header = findTextIn(root, 'Nazwisko i imię');
   const dotyczy = findTextIn(root, 'Dotyczy', true);
-  const leftEdge = header ? header.getBoundingClientRect().right : row.getBoundingClientRect().right;
+  // Sprawdzian POZYTYWNY: nazwisko ma pojawic sie w prawej liscie, pod
+  // naglowkiem "Dotyczy". (Zniknięcie "Brak danych" bywa myląca - czwarty
+  // test przeszedl mimo pustego "Dotyczy".)
   const rightEdge = dotyczy ? dotyczy.getBoundingClientRect().left : Infinity;
-  const arrow = [...root.querySelectorAll('.x-btn, button, [role="button"], a')]
-    .filter(visible)
-    .filter((el) => {
-      const r = el.getBoundingClientRect();
-      return r.left >= leftEdge && r.right <= rightEdge && r.width <= 90 && r.height <= 60;
-    })
-    .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
-  if (arrow) {
-    clickElement(arrow);
-    await waitFor(transferred, 2500);
-  }
+  const transferred = () =>
+    [...root.querySelectorAll('td, div, span')].filter(visible).some((element) => {
+      const text = normalized(textOf(element));
+      return text.includes(normalized(student.lastName)) && element.getBoundingClientRect().left >= rightEdge - 24;
+    });
+  // Glowna droga: dwuklik na wierszu - standard okien VULCANA (klik tylko
+  // zaznacza). Zapas: pierwszy przycisk-ikona miedzy listami, czyli ">".
+  clickElement(row);
+  await sleep(250);
+  row.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+  await waitFor(transferred, 2500);
   if (!transferred()) {
-    // Druga proba: dwuklik na wierszu tez przenosi w oknach VULCANA.
-    const again = findRow();
-    if (again) {
-      clickElement(again);
-      again.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+    const header = findTextIn(root, 'Nazwisko i imię');
+    const leftEdge = header ? header.getBoundingClientRect().right : row.getBoundingClientRect().right;
+    const arrow = [...root.querySelectorAll('.x-btn, button, [role="button"], a')]
+      .filter(visible)
+      .filter((el) => {
+        const r = el.getBoundingClientRect();
+        return r.left >= leftEdge && r.right <= rightEdge && r.width <= 90 && r.height <= 60;
+      })
+      .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+    if (arrow) {
+      const again = findRow();
+      if (again) clickElement(again);
+      await sleep(250);
+      clickElement(arrow);
       await waitFor(transferred, 2500);
     }
   }
-  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (strzałką „>” ani dwuklikiem).`);
+  if (!transferred()) throw new Error(`Nie udało się przenieść ucznia ${full} do listy „Dotyczy” (dwuklikiem ani strzałką „>”).`);
   await sleep(250);
 }
 
@@ -486,9 +486,31 @@ async function fillUwaga() {
     const content = fieldByLabel('Treść', root);
     if (!(content instanceof HTMLTextAreaElement) && !(content instanceof HTMLInputElement)) throw new Error('Nie znalazłem pola „Treść”.');
     setField(content, uwaga.content);
+    // AUTO-ZAPIS (decyzja Bartka 2026-09-21): zatwierdzeniem uwagi jest samo
+    // jej danie w apce/na telefonie, wiec bot klika Zapisz sam - ale TYLKO
+    // gdy formularz jest kompletny. Czegos brakuje -> stop i czlowiek.
+    const kategoriaValue = document.getElementById('cmbKategorieId-inputEl')?.value?.trim() ?? '';
+    const brakuje = [];
+    if (!kategoriaValue) brakuje.push('kategorii');
+    if (!content.value.trim()) brakuje.push('treści');
+    const zapisz = findTextIn(root, 'Zapisz', true);
+    if (!zapisz) brakuje.push('przycisku „Zapisz”');
+    if (brakuje.length > 0) {
+      phase = 'uwaga-review';
+      render(`Formularz prawie gotowy, ale nie zapisuję sam - brakuje: ${brakuje.join(', ')}. Uzupełnij i kliknij <strong>Zapisz</strong>.`, true);
+      watchUwagaSave(root);
+      return;
+    }
     phase = 'uwaga-review';
-    render('Formularz jest wypełniony. Sprawdź ucznia w „Dotyczy”, kategorię i treść, potem kliknij <strong>Zapisz</strong> w VULCANIE. Nic nie zostało jeszcze zapisane.');
-    watchUwagaSave(root);
+    render('Formularz kompletny - klikam Zapisz…');
+    clickElement(zapisz);
+    const gone = await waitFor(() => !document.contains(root) || !visible(root), 8000);
+    if (gone) {
+      await reportUwagaSaved();
+    } else {
+      render('Kliknąłem Zapisz, ale okno nie zniknęło - sprawdź komunikat VULCANA i dokończ ręcznie.', true);
+      watchUwagaSave(root);
+    }
   } catch (error) {
     phase = 'uwaga-start';
     render(`${error.message} Dokończ ten krok ręcznie - treść jest wyżej do skopiowania.`, true);
