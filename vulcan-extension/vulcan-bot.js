@@ -206,6 +206,22 @@ async function selectScheduledLesson() {
   await sleep(650);
 }
 
+// Kategoria uwagi: combo ExtJS ze stalym id (podejrzane w zywym VULCANIE),
+// opcje to .x-boundlist-item doklejone do <body>. Najpierw dokladny tekst.
+async function chooseKategoria(root, text) {
+  const input = document.getElementById('cmbKategorieId-inputEl') || fieldByLabel('Kategoria', root);
+  if (!input) throw new Error('Nie znalazłem pola „Kategoria”.');
+  clickElement(input);
+  const wanted = normalized(text);
+  const option = await waitFor(() => {
+    const items = [...document.querySelectorAll('.x-boundlist-item')].filter(visible);
+    return items.find((el) => normalized(el.textContent) === wanted) || items.find((el) => normalized(el.textContent).includes(wanted));
+  }, 4000);
+  if (!option) throw new Error(`Nie znalazłem opcji „${text}” na liście kategorii.`);
+  clickElement(option);
+  await sleep(250);
+}
+
 async function chooseDropdown(label, text, root = document) {
   const field = fieldByLabel(label, root);
   if (!field) throw new Error(`Nie znalazłem pola „${label}”.`);
@@ -366,7 +382,21 @@ async function pickStudentInModal(root, student) {
   const transferred = () => !findTextIn(root, 'Brak danych');
   clickElement(row);
   await sleep(300);
-  const arrow = findTextIn(root, '>', true, 'button, a, [role="button"], td, span, div');
+  // Strzalka ">" to przycisk-ikona BEZ tekstu (x-btn-icon-el), wiec szukanie
+  // po tresci nie dziala. Bierzemy przyciski lezace poziomo MIEDZY listami
+  // (na prawo od lewej listy, na lewo od naglowka "Dotyczy"); pierwszy od
+  // gory to ">", drugi ">>" - oba przenosza zaznaczonego ucznia.
+  const header = findTextIn(root, 'Nazwisko i imię');
+  const dotyczy = findTextIn(root, 'Dotyczy', true);
+  const leftEdge = header ? header.getBoundingClientRect().right : row.getBoundingClientRect().right;
+  const rightEdge = dotyczy ? dotyczy.getBoundingClientRect().left : Infinity;
+  const arrow = [...root.querySelectorAll('.x-btn, button, [role="button"], a')]
+    .filter(visible)
+    .filter((el) => {
+      const r = el.getBoundingClientRect();
+      return r.left >= leftEdge && r.right <= rightEdge && r.width <= 90 && r.height <= 60;
+    })
+    .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
   if (arrow) {
     clickElement(arrow);
     await waitFor(transferred, 2500);
@@ -452,7 +482,7 @@ async function fillUwaga() {
     }
     if (!root) throw new Error('Nie otworzyło się okno dodawania uwagi.');
     await pickStudentInModal(root, uwaga.student);
-    await chooseDropdown('Kategoria', uwaga.category, root);
+    await chooseKategoria(root, uwaga.category);
     const content = fieldByLabel('Treść', root);
     if (!(content instanceof HTMLTextAreaElement) && !(content instanceof HTMLInputElement)) throw new Error('Nie znalazłem pola „Treść”.');
     setField(content, uwaga.content);
