@@ -359,15 +359,51 @@ async function pickStudentInModal(root, student) {
   await sleep(350);
 }
 
+// Otwiera w drzewie po lewej lekcję, do ktorej ma trafic uwaga. Zakładka
+// „Uwagi” istnieje dopiero PO otwarciu konkretnej lekcji (bez niej VULCAN
+// pokazuje "Wybierz konkretną porę lekcji"). Najpierw godzina z paczki
+// (uwaga.period), a dla uwagi poza planem - ostatnia lekcja tej klasy z dnia
+// uwagi. Dzien w drzewie bywa zwiniety, wiec klikamy go i probujemy znowu.
+async function openLessonForUwaga() {
+  const wanted = normalized(uwaga.vulcanClassName);
+  const pickLesson = () => {
+    const nodes = candidates('td, span, div, a, li')
+      .map((element) => ({ element, text: normalized(textOf(element)) }))
+      .filter(({ text }) => /^\d{1,2}\.\s/.test(text) && text.includes(` ${wanted} `))
+      .map((node) => ({ ...node, period: Number(/^(\d{1,2})\./.exec(node.text)[1]) }))
+      .sort((a, b) => {
+        const rect = (n) => n.element.getBoundingClientRect();
+        return rect(a).width * rect(a).height - rect(b).width * rect(b).height;
+      });
+    // Najmniejszy element per godzina = sam wpis w drzewie, nie kontener.
+    const byPeriod = new Map();
+    for (const node of nodes) if (!byPeriod.has(node.period)) byPeriod.set(node.period, node);
+    if (byPeriod.size === 0) return null;
+    if (uwaga.period && byPeriod.has(uwaga.period)) return byPeriod.get(uwaga.period).element;
+    return [...byPeriod.entries()].sort((a, b) => b[0] - a[0])[0][1].element;
+  };
+  const day = new Date(`${uwaga.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  let lesson = pickLesson();
+  for (let attempt = 0; attempt < 2 && !lesson; attempt += 1) {
+    const dayElement = findText(day);
+    if (!dayElement) throw new Error(`Nie znalazłem dnia „${day}” w drzewie po lewej.`);
+    clickElement(dayElement);
+    await sleep(700);
+    lesson = pickLesson();
+  }
+  if (!lesson) throw new Error(`Nie znalazłem w dniu ${uwaga.date} żadnej lekcji klasy ${uwaga.vulcanClassName} w drzewie po lewej.`);
+  clickElement(lesson);
+  await sleep(800);
+}
+
 async function fillUwaga() {
   try {
-    if (uwaga.period) {
+    if (!findText('Uwagi', true)) {
       render('Otwieram lekcję w drzewie po lewej…');
-      transfer = { date: uwaga.date, period: uwaga.period, vulcanClassName: uwaga.vulcanClassName };
-      try { await selectScheduledLesson(); } catch (error) { render(`${error.message} Zostaję na otwartej lekcji.`); await sleep(900); }
+      await openLessonForUwaga();
     }
     render('Otwieram zakładkę „Uwagi”…');
-    const tab = findText('Uwagi', true);
+    const tab = await waitFor(() => findText('Uwagi', true), 7000);
     if (!tab) throw new Error('Nie znalazłem zakładki „Uwagi” nad tabelą lekcji.');
     clickElement(tab);
     const add = await waitForText('Dodaj', 6000);
