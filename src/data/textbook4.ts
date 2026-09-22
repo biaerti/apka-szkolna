@@ -242,6 +242,7 @@ const TOPICS: Topic[] = [
       slideText('Przypomnienie: fakt, opinia i bohater', 'Z tekstu potrafisz już wydobyć **fakty** i oddzielić je od **opinii**. Bohatera poznajesz po jego czynach, słowach i decyzjach.\n\nW „Naukach mędrca” sprawdź: **co się wydarzyło**, **co oceniali przechodnie** i **jak ich słowa wpływały na bohaterów**.', 'cechyBohatera'),
       slideTask('Z1', 'Na klasowym czacie pojawiły się trzy komentarze o prezentacji Mai:\n\n1. „Słabo”.\n2. „Za szybko mówiłaś, dlatego nie usłyszałem dwóch przykładów”.\n3. „Zmień temat, bo ja go nie lubię”.\n\nPodziel komentarze na **pomocne** i **niepomocne**. Przy każdym zapisz krótki powód. Potem przeredaguj jeden niepomocny komentarz tak, aby naprawdę pomagał.', 7 * 60, undefined, '**Pomocny:** 2, bo wskazuje konkretny problem i jego skutek.\n**Niepomocne:** 1, bo nie podaje powodu; 3, bo opiera się wyłącznie na upodobaniu autora.\n\nNp. „Temat jest ciekawy, ale dodaj przykład, który wyjaśni najtrudniejsze pojęcie”.'),
       slideTask('Z2', 'Dopisz do opowiadania krótkie zakończenie z punktu widzenia **syna**, czyli narratora-bohatera. Napisz **3 zdania**.\n\nUżyj dwóch epitetów opisujących bazar albo przechodniów oraz zdania zaczynającego się od **„Zrozumiałem, że...”**.', 7 * 60, 'narrator', 'Np. „Patrzyłem na gwarny bazar i surowe twarze przechodniów. Zrozumiałem, że nie zadowolimy wszystkich. Od tej pory chciałem słuchać rad, ale decyzje podejmować po namyśle.”'),
+      slideNote('Warto być sobą', '- Nie da się zadowolić wszystkich - każdy ma inne zdanie.\n- Fakt można sprawdzić, opinia to czyjeś zdanie.\n- Pomocna uwaga jest konkretna i życzliwa.'),
     ],
   },
   {
@@ -262,6 +263,7 @@ const TOPICS: Topic[] = [
       slideText('Przypomnienie: pomysł potrzebuje kolejnej próby', 'Z wcześniejszych lekcji pamiętasz **świat przedstawiony**, **narratora** i **epitet**. Teraz użyjesz ich, by rozwinąć prosty znak w krótki tekst.\n\nPodczas czytania sprawdź, co uruchomiło zmianę u Vashti i jak dziewczynka przekazała tę samą zachętę dalej.', 'opowiadanie'),
       slideTask('Z1', 'Jedna kropka staje się początkiem historii. Napisz **4 zdania** jako narrator-bohater.\n\nW tekście muszą pojawić się: miejsce, niespodziewane wydarzenie i dwa epitety. Ostatnie zdanie ma pokazać, w co zmieniła się kropka.', 8 * 60, 'opowiadanie', 'Np. „Na ciemnym ekranie zobaczyłem małą czerwoną kropkę. Dotknąłem jej i usłyszałem trzask. Nagle cały pokój zniknął. Kropka zmieniła się w planetę, na której właśnie wylądowałem.”'),
       slideTask('Z2', 'Dwie osoby komentują rysunek kolegi:\n\n**A.** „Ładne”.\n**B.** „Podoba mi się, jak z jednej kreski zrobiłeś ruch smoka. Co narysujesz w następnej scenie?”\n\nNapisz, który komentarz lepiej rozwija kreatywność i dlaczego. Potem ułóż własny komentarz, który zawiera **konkretne spostrzeżenie** i **pytanie otwierające następny krok**.', 6 * 60, undefined, 'Komentarz B pomaga bardziej, bo wskazuje konkretny element pracy i zachęca do dalszego tworzenia. Np. „Ciekawie połączyłaś dwa kolory w tle. Jak zmieni się obraz, jeśli dodasz trzeci?”'),
+      slideNote('Dzień Kropki', '- Międzynarodowy Dzień Kropki obchodzimy 15 września.\n- Kreatywność to tworzenie nowych pomysłów.\n- Zaczynamy od małego znaku i próbujemy dalej.'),
     ],
   },
   {
@@ -282,6 +284,7 @@ const TOPICS: Topic[] = [
       slideText('Przypomnienie: czasownik', 'Czasownik odpowiada na pytanie **co robi?** albo **co się z nim dzieje?**. Rozpoznajesz go też po zmianie czasu: **grał - gra - będzie grał**.\n\nPodczas pracy z podręcznikiem przypomnij sobie jeszcze jedną zasadę: **nie** z czasownikami zapisujemy oddzielnie.', 'czasownik'),
       slideTask('Z1', 'Wyszukaj czasowniki w tekście:\n\n„Olek uruchomił grę, ale nie wszedł od razu na serwer. Czytał wiadomości, martwił się wynikiem, a potem dołączył do drużyny.”\n\nPodziel je na **czynności** i **stany**. Przy formie z **nie** zapisz regułę pisowni.', 7 * 60, 'czasownik', '**Czynności:** uruchomił, nie wszedł, czytał, dołączył.\n**Stany:** martwił się.\n„Nie” z czasownikami zapisujemy oddzielnie.'),
       slideTask('Z2', 'Napisz **3 zdania** o jednym bohaterze: pierwsze w czasie przeszłym, drugie w teraźniejszym, trzecie w przyszłym.\n\nPisz jako narrator-bohater. Użyj jednego epitetu oraz jednego czasownika z przeczeniem **nie**. Podkreśl czasowniki.', 7 * 60, 'narrator', 'Np. „Wczoraj wszedłem do ciemnej jaskini. Dziś nie boję się już echa. Jutro odnajdę ukryte wyjście.”'),
+      slideNote('Czasownik', '- Czasownik nazywa czynności i stany.\n- Odpowiada na pytania: co robi? co się z nim dzieje?\n- „Nie” z czasownikami piszemy oddzielnie: nie piszę.'),
     ],
   },
   {
@@ -302,6 +305,7 @@ const TOPICS: Topic[] = [
       slideText('Przypomnienie: forma czasownika', 'Przy czasowniku sprawdzasz: **kto? ilu? kiedy?** W czasie przeszłym często rozpoznajesz także rodzaj.\n\nPamiętaj o formach, które nie wskazują wykonawcy: bezokoliczniku **robić** oraz formach **zrobiono, umyto**.', 'czasownikOdmiana'),
       slideTask('Z1', 'Dla każdej formy podaj **osobę, liczbę i czas**. Jeśli można, dopisz rodzaj:\n\n- zbudowałyście\n- gram\n- napiszą\n- czytaliśmy\n\nNa końcu wskaż formę, przy której nie da się określić rodzaju.', 8 * 60, 'czasownikOdmiana', '**zbudowałyście:** 2. os., lm., przeszły, niemęskoosobowy\n**gram:** 1. os., lp., teraźniejszy\n**napiszą:** 3. os., lm., przyszły\n**czytaliśmy:** 1. os., lm., przeszły, męskoosobowy\nRodzaju nie określimy przy „gram” i „napiszą”.'),
       slideTask('Z2', 'Przekształć zdanie **„Buduję bezpieczną bazę”** zgodnie z poleceniami:\n\n1. 1. osoba liczby mnogiej, czas przeszły\n2. 3. osoba liczby pojedynczej, czas przyszły\n3. bezokolicznik\n4. forma zakończona na **-no**\n\nDo jednej formy osobowej dodaj przeczenie **nie** i zapisz je poprawnie.', 8 * 60, 'czasownikOdmiana', '1. Budowaliśmy bezpieczną bazę.\n2. Zbuduje bezpieczną bazę.\n3. Budować bezpieczną bazę.\n4. Zbudowano bezpieczną bazę.\nNp. Nie budowaliśmy bezpiecznej bazy.'),
+      slideNote('Odmiana czasownika', '- Czasownik odmienia się przez osoby, liczby i czasy.\n- W czasie przeszłym także przez rodzaje: zrobił, zrobiła, zrobiło.\n- Formy nieosobowe: bezokolicznik (robić) i formy na -no, -to.'),
     ],
   },
   {
@@ -322,6 +326,7 @@ const TOPICS: Topic[] = [
       slideText('Przypomnienie: osobowa forma czasownika', 'Zdanie rozpoznajesz po **czasowniku w formie osobowej**. W równoważniku takiej formy nie ma.\n\nWykorzystaj wiedzę z poprzedniego tematu: jeśli przy czasowniku możesz określić osobę, wypowiedzenie jest zdaniem. Bezokolicznik tego warunku nie spełnia.', 'rodzajeZdan'),
       slideTask('Z1', 'Oznacz wypowiedzenia literą **Z** - zdanie albo **R** - równoważnik zdania. W zdaniach określ osobę czasownika:\n\n1. Spokój w ogrodzie.\n2. Poczekasz na mnie?\n3. Zrobiłem to!\n4. Gramatyka opanowana.\n5. Koniecznie to zapisz.\n6. Bałagan na biurku.', 7 * 60, 'rodzajeZdan', '1. R\n2. Z - poczekasz, 2. os.\n3. Z - zrobiłem, 1. os.\n4. R\n5. Z - zapisz, 2. os.\n6. R'),
       slideTask('Z2', 'Napisz **czteropunktowy plan popołudnia** za pomocą równoważników zdań. Następnie wybierz dwa punkty i przekształć je w zdania: jedno w czasie przeszłym, drugie w przyszłym.\n\nW zdaniach podkreśl czasowniki i określ ich osobę.', 8 * 60, 'rodzajeZdan', 'Np. R: „Powrót ze szkoły”. Z: „Wróciłem ze szkoły o czternastej” - 1. os., czas przeszły. R: „Trening piłki nożnej”. Z: „Pójdę na trening o szesnastej” - 1. os., czas przyszły.'),
+      slideNote('Zdanie i równoważnik zdania', '- Zdanie ma czasownik w formie osobowej: Pracujemy w ogrodzie.\n- Równoważnik zdania go nie ma: Praca w ogrodzie.\n- Równoważniki przydają się w planach i ogłoszeniach.'),
     ],
   },
   {
@@ -342,6 +347,7 @@ const TOPICS: Topic[] = [
       slideText('Przypomnienie: plan ramowy', 'Plan ramowy to spisane po kolei **najważniejsze wydarzenia** - bez szczegółów.\n\nDwie zasady: punkty układamy w **kolejności chronologicznej** i zapisujemy **jednolicie** - wszystkie jako zdania albo wszystkie jako równoważniki zdań, które znasz z poprzedniej lekcji.', 'kolejnoscZdarzen'),
       slideTask('Z1', 'Ktoś pomieszał plan ramowy „Historii o akceptacji”. Zapisz punkty we właściwej kolejności:\n\n- Śmiech klasy.\n- Uwaga dla Bartka.\n- Pytanie pani o znaczenie słowa „akceptować”.\n- Obrona Bartka przez Miłosza.\n- Wyjaśnienie Bartka, czym jest akceptacja.\n- Wsparcie mamy i taty dla Miłosza.', 7 * 60, undefined, '1. Pytanie pani o znaczenie słowa „akceptować”.\n2. Wyjaśnienie Bartka, czym jest akceptacja.\n3. Śmiech klasy.\n4. Uwaga dla Bartka.\n5. Obrona Bartka przez Miłosza.\n6. Wsparcie mamy i taty dla Miłosza.'),
       slideTask('Z2', 'Zapisz **plan ramowy** wyprawy w grze (np. Minecraft albo Roblox) w **5 punktach**. Użyj samych równoważników zdań.\n\nPotem przekształć dwa punkty w zdania: jedno w czasie przeszłym, drugie w przyszłym. Podkreśl czasowniki.', 8 * 60, 'kolejnoscZdarzen', 'Np. „1. Zbiórka ekwipunku. 2. Wyprawa do jaskini. 3. Walka ze szkieletem. 4. Powrót do bazy. 5. Budowa wieży.”\n\n„Zebrałem ekwipunek” - czas przeszły. „Zbuduję wieżę” - czas przyszły.'),
+      slideNote('Plan ramowy', '- Plan ramowy to najważniejsze wydarzenia w punktach, bez szczegółów.\n- Punkty układamy w kolejności chronologicznej.\n- Zapis jednolity: same zdania albo same równoważniki zdań.'),
     ],
   },
   {
@@ -362,6 +368,7 @@ const TOPICS: Topic[] = [
       slideText('Powtórka działu: mapa pojęć', 'Za Tobą cały dział. Sprawdź, czy pamiętasz: **świat przedstawiony** i **narratora**, **epitet**, **głoski, litery i sylaby**, **czasownik** i jego formy oraz **zdanie i równoważnik zdania**.\n\nJeśli któreś pojęcie ucieka, zajrzyj do mapy na s. 50 - to ściąga z całego rozdziału.', 'swiatPrzedstawiony'),
       slideTask('Z1', 'Przeczytaj wypowiedzenia z baśni i spoza niej:\n\n1. „Dość tego!”\n2. „Nie zamierzam się żenić!”\n3. „Twoje życzenie jest dla mnie rozkazem!”\n4. „Spokój w stawie.”\n\nOznacz je literami **Z** - zdanie albo **R** - równoważnik. W zdaniach wskaż czasownik w formie osobowej i określ jego osobę, liczbę i czas.', 8 * 60, undefined, '1. R\n2. Z - nie zamierzam: 1. os., lp., czas teraźniejszy\n3. Z - jest: 3. os., lp., czas teraźniejszy\n4. R'),
       slideTask('Z2', 'Czarownik zamienił Cię w zwierzę (albo w moba z gry). Napisz **4 zdania** jako narrator-bohater o tym, czego się nauczyłeś w nowej postaci.\n\nUżyj dwóch epitetów i jednego czasownika z przeczeniem **nie**. Ostatnie zdanie zacznij od **„Zrozumiałem, że...”**.', 8 * 60, 'narrator', 'Np. „Czarownik zamienił mnie w małego, szarego wilka. Biegałem po ciemnym lesie i nikt mnie nie poznawał. Nauczyłem się patrzeć na świat z dołu. Zrozumiałem, że jestem wart tyle samo w każdej postaci.”'),
+      slideNote('Powtórzenie działu I', '- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.\n- Epitet określa: jedwabna chusteczka.\n- Zdanie ma czasownik w formie osobowej, równoważnik - nie.\n- Nie udawaj innych i nie wstydź się tego, kim jesteś.'),
     ],
   },
 ];
@@ -407,6 +414,10 @@ function slideTask(code: string, body: string, timerSec: number, art?: SlideArt,
   return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, zeszyt: true };
 }
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
+/** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
+function slideNote(temat: string, body: string): Slide {
+  return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
+}
 function recap(questionSetId?: string): Slide[] { return questionSetId ? [slideRecap(questionSetId)] : []; }
 function slideHandoutFinish(): Slide {
   return {

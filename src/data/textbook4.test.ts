@@ -51,6 +51,9 @@ describe('buildTextbook4', () => {
       expect(lesson.slides.some((slide) => slide.kind === 'topic' && slide.variant === 'handout')).toBe(false);
       expect(lesson.slides.some((slide) => slide.kind === 'text' && slide.title === 'Wracamy do karty A5')).toBe(false);
       expect(lesson.notebookNote).toBeUndefined();
+      const closing = lesson.slides[lesson.slides.length - 1];
+      expect(closing).toMatchObject({ kind: 'note', title: 'Notatka do zeszytu' });
+      expect(closing.kind === 'note' ? closing.body : '').toMatch(/^\*\*Temat:\*\* /);
     }
   });
 
