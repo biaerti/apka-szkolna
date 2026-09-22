@@ -25,8 +25,6 @@ import { resultSymbol } from '../../lib/resultSymbol';
 export interface DeskGridProps {
   grid: Desk[][];
   classmates: Student[];
-  /** Dzisiejsze zdarzenia po uczniu - male symbole przy nazwisku. */
-  todayByStudent: Map<string, RecapEvent[]>;
   /** Wiszace ostrzezenia - osobno, bo nie sa zdarzeniem jednego dnia. Uczen moze miec kilka. */
   ostrzezenia: Map<string, RecapEvent[]>;
   editing: boolean;
@@ -39,7 +37,6 @@ export interface DeskGridProps {
 export function DeskGrid({
   grid,
   classmates,
-  todayByStudent,
   ostrzezenia,
   editing,
   selectedPos,
@@ -64,7 +61,6 @@ export function DeskGrid({
                     const pos: SeatPosition = { column: desk.column, row: desk.row, side: place.side };
                     const selected = selectedPos ? samePosition(selectedPos, pos) : false;
                     const student = place.student;
-                    const events = student ? todayByStudent.get(student.id) ?? [] : [];
                     const disabled = !editing && !student;
                     const podpis = student ? deskName(student, classmates) : ' ';
                     const ileOstrzezen = student ? ostrzezenia.get(student.id)?.length ?? 0 : 0;
@@ -89,15 +85,12 @@ export function DeskGrid({
                         )}
                       >
                         <span className="w-full truncate font-medium">{podpis}</span>
-                        {(ileOstrzezen > 0 || events.length > 0) && (
-                          <span className="flex w-full items-center gap-0.5">
-                            {ileOstrzezen > 0 && (
-                              <span title="ostrzeżenie" className="text-xs font-black text-amber-600">
-                                {resultSymbol('ostrzezenie').symbol}
-                                {ileOstrzezen > 1 && ileOstrzezen}
-                              </span>
-                            )}
-                            {events.length > 0 && <TodayMarks events={events} />}
+                        {ileOstrzezen > 0 && (
+                          <span className="flex w-full items-center">
+                            <span title="ostrzeżenie" className="text-xs font-black text-amber-600">
+                              {resultSymbol('ostrzezenie').symbol}
+                              {ileOstrzezen > 1 && ileOstrzezen}
+                            </span>
                           </span>
                         )}
                       </button>
@@ -126,30 +119,4 @@ function podpisRozmiar(podpis: string): string {
   if (podpis.length === 8) return 'text-[11px]';
   if (podpis.length <= 10) return 'text-[10px]';
   return 'text-[9px] tracking-tight';
-}
-
-/** Dzisiejsze wyniki ucznia jako ciag symboli ("+ + ▣"), uwaga jako "!". */
-export function TodayMarks({ events }: { events: RecapEvent[] }) {
-  return (
-    <span className="flex shrink-0 gap-0.5 text-xs font-black">
-      {events.map((e) => {
-        const sym = resultSymbol(e.result);
-        return (
-          <span
-            key={e.id}
-            title={sym.label}
-            className={clsx(
-              e.result === 'plus' && 'text-emerald-600',
-              e.result === 'kropka' && 'text-sky-600',
-              (e.result === 'plomba' || e.result === 'hint_plomba') && 'text-red-600',
-              e.result === 'uwaga' && 'text-orange-600',
-              e.result === 'pass' && 'text-amber-600',
-            )}
-          >
-            {sym.symbol}
-          </span>
-        );
-      })}
-    </span>
-  );
 }

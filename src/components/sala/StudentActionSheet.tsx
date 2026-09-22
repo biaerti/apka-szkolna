@@ -8,8 +8,8 @@
 // przycisk nigdy sie nie blokuje, a pod przyciskami jest "Zdejmij
 // ostrzezenie" - inaczej nie dalo by sie go cofnac po zamknieciu arkusza.
 //
-// Pod nazwiskiem stoi "Dzis:" z dzisiejszymi wpisami SLOWAMI ("P pas"),
-// zeby symbol przy nazwisku w lawce dalo sie rozszyfrowac bez legendy.
+// Pod nazwiskiem jest historia ostatnich wpisow slowami. Lawki pokazuja tylko
+// aktywne ostrzezenie, zeby nie zamienialy sie w rzad drobnych symboli.
 //
 // To celowo nie jest Modal ze srodka ekranu: na telefonie trzymanym jedna
 // reka gorna polowa ekranu jest poza kciukiem.
@@ -27,8 +27,8 @@ export interface StudentActionSheetProps {
   seatLabel?: string;
   /** Ile ostrzezen juz wisi - przy >0 dochodzi "Zdejmij ostrzezenie". */
   ostrzezenia?: number;
-  /** Dzisiejsze zdarzenia ucznia - linijka "Dzis:" pod nazwiskiem. */
-  todayEvents?: RecapEvent[];
+  /** Ostatnie zdarzenia ucznia, od najnowszego. */
+  recentEvents?: RecapEvent[];
   onGrade: (student: Student, result: SalaGrade) => void;
   onOstrzezenie: (student: Student) => void;
   onZdejmijOstrzezenie: (student: Student) => void;
@@ -46,7 +46,7 @@ export function StudentActionSheet({
   student,
   seatLabel,
   ostrzezenia = 0,
-  todayEvents = [],
+  recentEvents = [],
   onGrade,
   onOstrzezenie,
   onZdejmijOstrzezenie,
@@ -76,7 +76,7 @@ export function StudentActionSheet({
       <div
         role="dialog"
         aria-label={`${student.lastName} ${student.firstName}`}
-        className="w-full max-w-lg rounded-t-2xl bg-white px-4 pb-6 pt-3 shadow-xl"
+        className="max-h-[calc(100vh-1rem)] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-white px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-xl"
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300" />
         <div className="mb-1 flex items-baseline justify-between gap-2">
@@ -88,30 +88,30 @@ export function StudentActionSheet({
             {seatLabel && <> · ławka {seatLabel}</>}
           </p>
         </div>
-        {(todayEvents.length > 0 || ostrzezenia > 0) && (
-          <p className="mb-2 text-sm text-gray-600">
-            {ostrzezenia > 0 && (
-              <span className="mr-2 font-medium text-amber-700">
-                {resultSymbol('ostrzezenie').symbol} {ostrzezenia === 1 ? 'ostrzeżenie' : `${ostrzezenia} ostrzeżenia`}
-              </span>
-            )}
-            {todayEvents.length > 0 && (
-              <>
-                Dziś:{' '}
-                {todayEvents.map((e, i) => {
-                  const sym = resultSymbol(e.result);
-                  return (
-                    <span key={e.id}>
-                      {i > 0 && ', '}
-                      <span className="font-black">{sym.symbol}</span> {sym.label}
-                    </span>
-                  );
-                })}
-              </>
-            )}
+        {ostrzezenia > 0 && (
+          <p className="mb-2 text-sm font-medium text-amber-700">
+            {resultSymbol('ostrzezenie').symbol} {ostrzezenia === 1 ? 'Aktywne ostrzeżenie' : `Aktywne ostrzeżenia: ${ostrzezenia}`}
           </p>
         )}
-        <div className="mb-2" />
+
+        {recentEvents.length > 0 && (
+          <div className="mb-3 rounded-lg bg-gray-50 px-3 py-2">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">Ostatnie wpisy</p>
+            <ul className="max-h-28 divide-y divide-gray-200 overflow-y-auto">
+              {recentEvents.map((event) => (
+                <li key={event.id} className="flex items-start justify-between gap-3 py-1 text-sm">
+                  <span className="min-w-0 text-gray-700">
+                    <span className="font-medium text-gray-900">{resultSymbol(event.result).label}</span>
+                    {event.note && <span className="block truncate text-xs text-gray-500">{event.note}</span>}
+                  </span>
+                  <time className="shrink-0 text-xs tabular-nums text-gray-500" dateTime={event.at}>
+                    {historyTime(event.at)}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {uwaga ? (
           <UwagaNoteChoices
@@ -178,4 +178,15 @@ export function StudentActionSheet({
     </div>,
     document.body,
   );
+}
+
+function historyTime(value: string): string {
+  const date = new Date(value);
+  const today = new Date();
+  const sameDay = date.getFullYear() === today.getFullYear()
+    && date.getMonth() === today.getMonth()
+    && date.getDate() === today.getDate();
+  return new Intl.DateTimeFormat('pl-PL', sameDay
+    ? { hour: '2-digit', minute: '2-digit' }
+    : { day: 'numeric', month: 'short' }).format(date);
 }

@@ -22,10 +22,9 @@ import type { RecapEvent, Student } from '../data/types';
 import { useTodayEventsPull } from '../data/remote/useTodayEventsPull';
 import { buildDeskGrid, seatLabelByStudent, unseatedStudents, type SeatPosition } from '../lib/seating';
 import { warningsByStudent } from '../lib/ostrzezenia';
-import { toDateKey } from '../lib/dates';
 import { currentOrNextEntry } from '../lib/timetable';
 import { resultSymbol } from '../lib/resultSymbol';
-import { DeskGrid, TodayMarks } from '../components/sala/DeskGrid';
+import { DeskGrid } from '../components/sala/DeskGrid';
 import { StudentActionSheet, type SalaGrade } from '../components/sala/StudentActionSheet';
 import { useSalaSelection, type SalaMove } from '../components/sala/useSalaSelection';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
@@ -80,20 +79,22 @@ export function Sala() {
   const labels = useMemo(() => (classId ? seatLabelByStudent(seats, classId) : new Map<string, string>()), [seats, classId]);
   const unseated = useMemo(() => (classId ? unseatedStudents(seats, students, classId) : []), [seats, students, classId]);
 
-  const todayByStudent = useMemo(() => {
-    const today = toDateKey(new Date());
+  const recentByStudent = useMemo(() => {
     const out = new Map<string, RecapEvent[]>();
     for (const e of recapEvents) {
-      if (e.classId !== classId || toDateKey(new Date(e.at)) !== today) continue;
+      if (e.classId !== classId || e.result === 'ostrzezenie') continue;
       const list = out.get(e.studentId) ?? [];
       list.push(e);
       out.set(e.studentId, list);
     }
-    for (const list of out.values()) list.sort((a, b) => a.at.localeCompare(b.at));
+    for (const [studentId, list] of out) {
+      list.sort((a, b) => b.at.localeCompare(a.at));
+      out.set(studentId, list.slice(0, 8));
+    }
     return out;
   }, [recapEvents, classId]);
 
-  // Ostrzezenia sa POZA todayByStudent: zostaja przy uczniu z lekcji na lekcje,
+  // Ostrzezenia sa POZA historia: zostaja przy uczniu z lekcji na lekcje,
   // wiec filtr po dzisiejszej dacie by je gubil (patrz src/lib/ostrzezenia.ts).
   const ostrzezenia = useMemo(
     () => (classId ? warningsByStudent(recapEvents, classId) : new Map<string, RecapEvent[]>()),
@@ -232,7 +233,6 @@ export function Sala() {
         <DeskGrid
           grid={grid}
           classmates={classmates}
-          todayByStudent={todayByStudent}
           ostrzezenia={ostrzezenia}
           editing={editing}
           selectedPos={selectedPos}
@@ -243,7 +243,6 @@ export function Sala() {
         <StudentList
           students={classmates}
           labels={labels}
-          todayByStudent={todayByStudent}
           ostrzezenia={ostrzezenia}
           flashId={flashId}
           onTap={handleTapListed}
@@ -256,7 +255,6 @@ export function Sala() {
           <StudentList
             students={unseated}
             labels={labels}
-            todayByStudent={todayByStudent}
             ostrzezenia={ostrzezenia}
             flashId={flashId}
             selectedId={selectedStudentId}
@@ -278,7 +276,7 @@ export function Sala() {
           student={picked}
           seatLabel={picked ? labels.get(picked.id) : undefined}
           ostrzezenia={picked ? ostrzezenia.get(picked.id)?.length ?? 0 : 0}
-          todayEvents={picked ? todayByStudent.get(picked.id) ?? [] : []}
+          recentEvents={picked ? recentByStudent.get(picked.id) ?? [] : []}
           onGrade={handleGrade}
           onOstrzezenie={handleOstrzezenie}
           onZdejmijOstrzezenie={handleZdejmijOstrzezenie}
@@ -324,7 +322,6 @@ export function Sala() {
 function StudentList({
   students,
   labels,
-  todayByStudent,
   ostrzezenia,
   flashId,
   selectedId,
@@ -332,7 +329,6 @@ function StudentList({
 }: {
   students: Student[];
   labels: Map<string, string>;
-  todayByStudent: Map<string, RecapEvent[]>;
   ostrzezenia: Map<string, RecapEvent[]>;
   flashId: string | null;
   selectedId?: string;
@@ -344,7 +340,6 @@ function StudentList({
   return (
     <ul className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
       {students.map((st) => {
-        const events = todayByStudent.get(st.id) ?? [];
         return (
           <li key={st.id}>
             <button
@@ -367,7 +362,6 @@ function StudentList({
                   {(ostrzezenia.get(st.id)?.length ?? 0) > 1 && ostrzezenia.get(st.id)?.length}
                 </span>
               )}
-              {events.length > 0 && <TodayMarks events={events} />}
               <span className="w-7 shrink-0 text-right text-xs font-semibold tabular-nums text-gray-400">{labels.get(st.id) ?? ''}</span>
             </button>
           </li>

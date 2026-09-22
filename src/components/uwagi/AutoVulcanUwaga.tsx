@@ -31,6 +31,8 @@ import { isIncomingUwaga } from './useIncomingUwagi';
 const LS_KEY = 'vulcan-uwaga-auto';
 /** Po tylu ms wpis w pamieci "juz poszlo" jest sprzatany (2 dni). */
 const KEEP_MS = 2 * 24 * 60 * 60 * 1000;
+/** Po restarcie/odświeżeniu komputera nadrabiamy tylko świeże uwagi. */
+const CATCH_UP_MS = 15 * 60 * 1000;
 
 function readSent(): Record<string, number> {
   try {
@@ -62,14 +64,15 @@ export function AutoVulcanUwaga() {
   useVulcanUwagaSaved();
 
   const recapEvents = useStore((s) => s.recapEvents);
-  // Jak w useIncomingUwagi: stan store przy pierwszym renderze uchodzi za
-  // widziany - odswiezenie strony nie ma wypelniac formularzy z calego dnia.
   const seen = useRef<Set<string> | null>(null);
 
   useEffect(() => {
     if (!seen.current) {
-      seen.current = new Set(recapEvents.map((e) => e.id));
-      return;
+      // Nie ignorujemy całego stanu początkowego. Jeśli uwaga przyszła z
+      // telefonu chwilę przed odświeżeniem karty, aktywna sesja komputera ma
+      // ją podjąć. Limit czasu chroni przed automatycznym wysłaniem starego
+      // backlogu z całego dnia.
+      seen.current = new Set();
     }
     const own = getDeviceId();
     const today = toDateKey(new Date());
@@ -77,6 +80,7 @@ export function AutoVulcanUwaga() {
       if (seen.current.has(e.id)) continue;
       seen.current.add(e.id);
       if (!isIncomingUwaga(e, own, today)) continue;
+      if (Date.now() - new Date(e.at).getTime() > CATCH_UP_MS) continue;
       if (!claimAutoSend(e.id)) continue;
       const s = useStore.getState();
       const student = s.students.find((st) => st.id === e.studentId);

@@ -30,7 +30,7 @@ async function vulcanTab() {
 // docelowe sa oznaczone atrybutem data-apka-bot przez vulcan-bot.js.
 // kind 'transfer': zaznacz rekord po nazwisku i odpal handler przycisku ">".
 // kind 'button': odpal handler przycisku (np. Zapisz).
-function extMain(kind, lastName) {
+function extMain(kind, lastName, payload) {
   try {
     if (!window.Ext || !Ext.getCmp) return 'no-ext';
     const cmpUp = (el, test) => {
@@ -43,6 +43,44 @@ function extMain(kind, lastName) {
       return null;
     };
     const isButton = (c) => c.isButton || (c.isXType && c.isXType('button'));
+    if (kind === 'uwaga-fields') {
+      const norm = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('pl');
+      const categoryInput = document.getElementById('cmbKategorieId-inputEl');
+      const contentInput = document.getElementById('idTresc-inputEl');
+      const combo = (categoryInput && cmpUp(categoryInput, (c) => !!c.setValue && !!c.getStore)) || Ext.getCmp('cmbKategorieId');
+      const textField = (contentInput && cmpUp(contentInput, (c) => !!c.setValue && !c.getStore)) || Ext.getCmp('idTresc');
+      if (!combo || !textField) return { error: !combo ? 'no-category-component' : 'no-content-component' };
+
+      const wanted = norm(payload && payload.category);
+      const store = combo.getStore && combo.getStore();
+      let record = null;
+      if (store) {
+        store.each((candidate) => {
+          if (record) return;
+          const values = Object.values(candidate.data || {}).map(norm);
+          if (values.includes(wanted) || values.some((value) => value.includes(wanted))) record = candidate;
+        });
+      }
+      if (!record) return { error: 'no-category-record' };
+
+      if (combo.select) combo.select(record);
+      const valueField = combo.valueField || 'Id';
+      const categoryValue = record.get ? record.get(valueField) : record.data?.[valueField];
+      if (categoryValue !== undefined && categoryValue !== null) combo.setValue(categoryValue);
+      if (combo.fireEvent) {
+        combo.fireEvent('select', combo, [record]);
+        combo.fireEvent('change', combo, combo.getValue(), null);
+      }
+      textField.setValue(String(payload && payload.content || ''));
+      if (textField.fireEvent) textField.fireEvent('change', textField, textField.getValue(), '');
+
+      return {
+        categoryModel: String(combo.getValue?.() ?? '').trim(),
+        categoryText: String(categoryInput?.value ?? '').trim(),
+        contentModel: String(textField.getValue?.() ?? '').trim(),
+        contentText: String(contentInput?.value ?? '').trim(),
+      };
+    }
     if (kind === 'transfer') {
       const rowEl = document.querySelector('[data-apka-bot="row"]');
       const grid = rowEl && cmpUp(rowEl, (c) => !!c.getSelectionModel);
@@ -146,7 +184,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         target: { tabId },
         world: 'MAIN',
         func: extMain,
-        args: [message.kind || 'button', message.lastName || ''],
+        args: [message.kind || 'button', message.lastName || '', message.payload || null],
       });
       sendResponse({ ok: true, result: res?.result });
     })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));

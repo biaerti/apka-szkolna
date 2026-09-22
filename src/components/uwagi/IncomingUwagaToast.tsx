@@ -13,6 +13,7 @@
 
 import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
 import { useStore } from '../../data/store';
 import { uwagaLabel } from '../../lib/uwagi';
 import { useIncomingUwagi } from './useIncomingUwagi';
@@ -40,7 +41,10 @@ export function IncomingUwagaToast({ tone = 'light' }: { tone?: 'light' | 'dark'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current?.id]);
 
-  if (!current) return null;
+  // Ten komunikat sluzy komputerowi z dodatkiem Chrome. W APK przycisk
+  // "Wpisz do VULCANA" nie moze zadzialac, a uwaga dodana na tym samym
+  // telefonie i tak ma osobne potwierdzenie w arkuszu ucznia.
+  if (!current || Capacitor.isNativePlatform()) return null;
   const student = studentById.get(current.studentId);
   const cls = classById.get(current.classId);
   const dark = tone === 'dark';

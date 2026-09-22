@@ -73,7 +73,13 @@ export function Uwagi() {
         </span>
       </div>
 
-      <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${shown.length}, minmax(0, 1fr))` }}>
+      {/* Na telefonie dni muszą iść jeden pod drugim. Pięć równych kolumn
+          ściskało kartę uwagi do kilku pikseli i łamało nazwisko litera po
+          literze. Szersze ekrany nadal zachowują tygodniowy układ kolumnowy. */}
+      <div
+        className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:[grid-template-columns:repeat(var(--uwagi-day-count),minmax(0,1fr))]"
+        style={{ '--uwagi-day-count': shown.length } as React.CSSProperties}
+      >
         {shown.map((day) => {
           const key = toDateKey(day);
           const uwagi = byDay.get(key) ?? [];

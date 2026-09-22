@@ -5,6 +5,11 @@ let phase = 'start';
 // temat + frekwencja; ten sam panel pomocnika, inne fazy: uwaga-start ->
 // uwaga-review (formularz wypełniony, Bartek klika Zapisz sam) -> done.
 let uwaga = null;
+// Kilka otwartych kart Apki szkolnej może odebrać ten sam wpis z Supabase.
+// Jedna uwaga jest obrabiana tylko raz, a kolejne czekają w kolejce zamiast
+// uruchamiać drugi formularz w połowie pierwszego.
+let activeUwagaEventId = null;
+const uwagaQueue = [];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const normalized = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('pl');
@@ -117,10 +122,10 @@ async function waitForText(text, timeout = 7000) {
 // world: MAIN) - jedyna droga do window.Ext, ktorej CSP VULCANA nie
 // zablokuje (wstrzykiwany <script> byl blokowany). Elementy docelowe
 // oznaczamy atrybutem data-apka-bot, background siega do nich przez Ext.
-function extRun(kind, lastName) {
+function extRun(kind, lastName, payload) {
   return new Promise((resolve) => {
     try {
-      chrome.runtime.sendMessage({ type: 'EXT_RUN', kind, lastName }, (response) => {
+      chrome.runtime.sendMessage({ type: 'EXT_RUN', kind, lastName, payload }, (response) => {
         if (chrome.runtime.lastError) resolve('ERR: ' + chrome.runtime.lastError.message);
         else resolve(response && response.ok ? response.result : 'ERR: ' + ((response && response.error) || 'brak odpowiedzi'));
       });
@@ -426,30 +431,49 @@ async function waitFor(check, timeout = 7000) {
 }
 
 async function pickStudentInModal(root, student) {
-  const search = [...root.querySelectorAll('input')].filter(visible)
-    .find((input) => normalized(input.placeholder).includes('wyszuk'));
-  if (search) {
-    setField(search, student.lastName);
-    await sleep(600);
-  }
   const full = `${student.lastName} ${student.firstName}`;
-  const findRow = () => findTextIn(root, full, false, 'td, div, span') || findTextIn(root, student.lastName, false, 'td, div, span');
-  const row = await waitFor(findRow, 4000);
-  if (!row) throw new Error(`Nie znalazłem ucznia ${full} na liście po lewej.`);
-  // Sprawdzian POZYTYWNY: wiersz z nazwiskiem w PRAWYM gridzie
-  // (uitestid ze zrzutu DOM Bartka; geometryczny zapas, gdyby atrybut znikl).
-  const rightGrid = root.querySelector('[uitestid="vswitchpanel-right-grid"]');
-  const dotyczy = findTextIn(root, 'Dotyczy', true);
-  const rightEdge = dotyczy ? dotyczy.getBoundingClientRect().left : Infinity;
   const transferred = () => {
+    const rightGrid = root.querySelector('[uitestid="vswitchpanel-right-grid"]');
     if (rightGrid) {
-      return [...rightGrid.querySelectorAll('.x-grid-cell-inner')].some((el) => normalized(el.textContent).includes(normalized(student.lastName)));
+      return [...rightGrid.querySelectorAll('.x-grid-cell-inner')]
+        .some((el) => normalized(el.textContent).includes(normalized(student.lastName)));
     }
+    const dotyczy = findTextIn(root, 'Dotyczy', true);
+    const rightEdge = dotyczy ? dotyczy.getBoundingClientRect().left : Infinity;
     return [...root.querySelectorAll('td, div, span')].filter(visible).some((element) => {
       const text = normalized(textOf(element));
       return text.includes(normalized(student.lastName)) && element.getBoundingClientRect().left >= rightEdge - 24;
     });
   };
+  // Ponowiona paczka może trafić tu, gdy uczeń został już przeniesiony.
+  // Wtedy lewa lista jest pusta i nie wolno zgłaszać fałszywego błędu.
+  if (transferred()) return;
+
+  const search = [...root.querySelectorAll('input')].filter(visible)
+    .find((input) => normalized(input.placeholder).includes('wyszuk'));
+  if (search) {
+    setField(search, student.lastName);
+    await sleep(900);
+  }
+  // Nie uzywamy tutaj ogolnego findTextIn(). ExtJS ma jednopikselowe
+  // kontenery .x-box-target, ktore zawieraja tekst calej listy. Poniewaz
+  // findTextIn wybiera najmniejszy element, taki kontener wygrywal z komorka
+  // ucznia i bot klikal gore okna zamiast wiersza. Szukamy tylko komorek
+  // lewego gridu i zwracamy prawdziwy <tr>, na ktorym dziala selection model.
+  const findRow = () => {
+    // Grid jest pobierany za każdym razem, bo filtrowanie listy potrafi
+    // podmienić jego DOM i unieważnić wcześniejszą referencję.
+    const scope = root.querySelector('[uitestid="vswitchpanel-left-grid"]') || root;
+    const wantedFull = normalized(full);
+    const wantedLastName = normalized(student.lastName);
+    const cells = [...scope.querySelectorAll('.x-grid-cell-inner')].filter(visible);
+    const cell = cells.find((element) => normalized(element.textContent).includes(wantedFull))
+      || cells.find((element) => normalized(element.textContent).includes(wantedLastName));
+    return cell?.closest('tr.x-grid-row') || cell || null;
+  };
+  const row = await waitFor(() => transferred() || findRow(), 6000);
+  if (row === true || transferred()) return;
+  if (!row) throw new Error(`Nie znalazłem ucznia ${full} na liście po lewej.`);
   // Syntetyczne klikniecia dzialaja wszedzie POZA przyciskami ">"/">>",
   // wiec od razu idziemy przez API ExtJS: zaznaczenie rekordu w selModel
   // po nazwisku i wywolanie handlera przycisku (extTransfer). Klik i dwuklik
@@ -469,7 +493,9 @@ async function pickStudentInModal(root, student) {
   if (!transferred()) {
     throw new Error(`Nie udało się przenieść ucznia ${full} do „Dotyczy”. API ExtJS: ${api}; klik przez debugger: ${realny}.`);
   }
-  await sleep(250);
+  // Dolna część formularza jest renderowana osobno po zmianie listy uczniów.
+  await waitFor(() => visible(document.getElementById('cmbKategorieId-inputEl')) && visible(document.getElementById('idTresc-inputEl')), 5000);
+  await sleep(700);
 }
 
 // Wsrod pasujacych elementow bierze ten najnizej na ekranie (a przy remisie
@@ -550,18 +576,42 @@ async function fillUwaga() {
     }
     if (!root) throw new Error('Nie otworzyło się okno dodawania uwagi.');
     await pickStudentInModal(root, uwaga.student);
-    await chooseKategoria(root, uwaga.category);
-    const content = document.getElementById('idTresc-inputEl') || fieldByLabel('Treść', root);
+    // VULCAN trzyma wartości formularza we własnych komponentach ExtJS.
+    // Samo ustawienie tekstu w <input>/<textarea> wygląda poprawnie, ale przy
+    // zapisie Ext potrafi wysłać puste wartości. Ustawiamy więc kategorię i
+    // treść przez API komponentów w świecie strony, a zwykły DOM zostaje jako
+    // zapas dla innych wersji VULCANA.
+    const model = await extRun('uwaga-fields', '', { category: uwaga.category, content: uwaga.content });
+    root = modalRoot() || root;
+    let category = document.getElementById('cmbKategorieId-inputEl') || fieldByLabel('Kategoria', root);
+    let content = document.getElementById('idTresc-inputEl') || fieldByLabel('Treść', root);
+    if (!category?.value?.trim()) {
+      await chooseKategoria(root, uwaga.category);
+      category = document.getElementById('cmbKategorieId-inputEl') || fieldByLabel('Kategoria', root);
+    }
     if (!(content instanceof HTMLTextAreaElement) && !(content instanceof HTMLInputElement)) throw new Error('Nie znalazłem pola „Treść”.');
-    setField(content, uwaga.content);
+    if (!content.value.trim()) setField(content, uwaga.content);
+    await sleep(300);
+    // Pobieramy kontrolki ponownie po zmianach, bo ExtJS potrafi przebudować
+    // fragment okna i unieważnić wcześniejsze referencje DOM.
+    root = modalRoot() || root;
+    category = document.getElementById('cmbKategorieId-inputEl') || fieldByLabel('Kategoria', root);
+    content = document.getElementById('idTresc-inputEl') || fieldByLabel('Treść', root);
     // AUTO-ZAPIS (decyzja Bartka 2026-09-21): zatwierdzeniem uwagi jest samo
     // jej danie w apce/na telefonie, wiec bot klika Zapisz sam - ale TYLKO
     // gdy formularz jest kompletny. Czegos brakuje -> stop i czlowiek.
-    const kategoriaValue = document.getElementById('cmbKategorieId-inputEl')?.value?.trim() ?? '';
+    const kategoriaValue = category?.value?.trim() ?? '';
     const brakuje = [];
-    if (!kategoriaValue) brakuje.push('kategorii');
-    if (!content.value.trim()) brakuje.push('treści');
-    const zapisz = root.querySelector('a[uitestid="Zapisz"]') || findTextIn(root, 'Zapisz', true);
+    if (!kategoriaValue || (model && typeof model === 'object' && !model.categoryModel)) brakuje.push('kategorii');
+    if (!content?.value?.trim() || (model && typeof model === 'object' && !model.contentModel)) brakuje.push('treści');
+    // Stopka z przyciskiem bywa rodzeństwem DodajUwageEditorView, a nie jego
+    // dzieckiem. Szukamy najpierw w całym oknie ExtJS, potem globalnie wśród
+    // widocznych przycisków o stabilnym uitestid.
+    const windowRoot = root.closest('.x-window') || root;
+    const zapisz = [...windowRoot.querySelectorAll('a[uitestid="Zapisz"]')].find(visible)
+      || [...document.querySelectorAll('a[uitestid="Zapisz"]')].find(visible)
+      || findTextIn(windowRoot, 'Zapisz', true)
+      || findTextIn(document.body, 'Zapisz', true);
     if (!zapisz) brakuje.push('przycisku „Zapisz”');
     if (brakuje.length > 0) {
       phase = 'uwaga-review';
@@ -600,9 +650,10 @@ async function fillUwaga() {
 // Po kliknięciu „Zapisz” w oknie uwagi (nie „Anuluj”) i zniknięciu okna
 // zgłaszamy zapis do apki. Bez klikania na ślepo: to Bartek klika Zapisz.
 function watchUwagaSave(root) {
+  const windowRoot = root.closest('.x-window') || root;
   const onClick = (event) => {
     const target = event.target instanceof Element ? event.target.closest('button, a, [role="button"], td, span, div') : null;
-    if (!target || !root.contains(target)) return;
+    if (!target || !windowRoot.contains(target)) return;
     if (normalized(textOf(target)) !== 'zapisz') return;
     document.removeEventListener('click', onClick, true);
     void (async () => {
@@ -622,16 +673,30 @@ async function reportUwagaSaved() {
   phase = 'done';
   render('Gotowe. Uwaga jest zapisana w VULCANIE i odhaczona w apce.');
   uwaga = null;
+  activeUwagaEventId = null;
+  const next = uwagaQueue.shift();
+  if (next) setTimeout(() => beginUwaga(next, 'Wpisuję kolejną uwagę z telefonu…'), 900);
+}
+
+function beginUwaga(payload, message = 'Uwaga z apki - wpisuję do dziennika…') {
+  if (!payload?.eventId) return;
+  if (payload.eventId === activeUwagaEventId || uwagaQueue.some((item) => item.eventId === payload.eventId)) return;
+  if (activeUwagaEventId) {
+    uwagaQueue.push(payload);
+    return;
+  }
+  activeUwagaEventId = payload.eventId;
+  uwaga = payload;
+  phase = 'uwaga-filling';
+  render(message);
+  void fillUwaga();
 }
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'VULCAN_UWAGA') {
     // Zadnego potwierdzania w paneliku (decyzja Bartka): danie uwagi w apce
     // JEST zatwierdzeniem, bot od razu wypelnia i zapisuje.
-    uwaga = message.payload;
-    phase = 'uwaga-filling';
-    render('Uwaga z apki - wpisuję do dziennika…');
-    void fillUwaga();
+    beginUwaga(message.payload);
     return;
   }
   if (message?.type === 'READ_VULCAN_SCHEDULE') {
@@ -654,10 +719,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
 chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga']).then(({ pendingVulcanTransfer, pendingVulcanUwaga }) => {
   if (pendingVulcanUwaga) {
-    uwaga = pendingVulcanUwaga;
-    phase = 'uwaga-filling';
-    render('Uwaga z apki czekała na załadowanie VULCANA - wpisuję do dziennika…');
-    void fillUwaga();
+    beginUwaga(pendingVulcanUwaga, 'Uwaga z apki czekała na załadowanie VULCANA - wpisuję do dziennika…');
     return;
   }
   if (!pendingVulcanTransfer) return;
