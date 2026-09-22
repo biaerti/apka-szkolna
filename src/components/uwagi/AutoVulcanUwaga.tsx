@@ -31,6 +31,8 @@ import { isIncomingUwaga } from './useIncomingUwagi';
 const LS_KEY = 'vulcan-uwaga-auto';
 /** Po tylu ms wpis w pamieci "juz poszlo" jest sprzatany (2 dni). */
 const KEEP_MS = 2 * 24 * 60 * 60 * 1000;
+/** Nieudana próba może zostać podjęta ponownie po odświeżeniu karty. */
+const RETRY_MS = 2 * 60 * 1000;
 /** Po restarcie/odświeżeniu komputera nadrabiamy tylko świeże uwagi. */
 const CATCH_UP_MS = 15 * 60 * 1000;
 
@@ -46,7 +48,7 @@ function readSent(): Record<string, number> {
 /** true = ta uwaga jeszcze nie szla; oznacza ja i kaze wysylac. */
 export function claimAutoSend(eventId: string, now = Date.now()): boolean {
   const sent = readSent();
-  if (sent[eventId]) return false;
+  if (sent[eventId] && now - sent[eventId] < RETRY_MS) return false;
   const next: Record<string, number> = { [eventId]: now };
   for (const [id, at] of Object.entries(sent)) {
     if (typeof at === 'number' && now - at < KEEP_MS) next[id] = at;
