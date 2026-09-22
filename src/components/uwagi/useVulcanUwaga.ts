@@ -14,7 +14,7 @@ export type VulcanUwagaState = 'idle' | 'sending' | VulcanSendResult | 'no-stude
 export const VULCAN_STATE_LABEL: Record<VulcanUwagaState, string> = {
   idle: '',
   sending: 'Wysyłam do VULCANA…',
-  sent: 'Otwarte w VULCANIE - sprawdź formularz i kliknij Zapisz.',
+  sent: 'Przekazano do pomocnika VULCAN - zapis trwa…',
   missing: 'Brak pomocnika Chrome. Zainstaluj folder vulcan-extension i odśwież kartę.',
   error: 'Pomocnik nie odpowiedział. Odśwież kartę apki i VULCANA.',
   'no-student': 'Nie ma tego ucznia albo klasy - wpisz uwagę ręcznie.',

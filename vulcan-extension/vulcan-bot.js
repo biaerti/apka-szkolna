@@ -621,21 +621,38 @@ async function fillUwaga() {
     }
     phase = 'uwaga-review';
     render('Formularz kompletny - klikam Zapisz…');
+    const formCleared = () => {
+      const currentCategory = document.getElementById('cmbKategorieId-inputEl');
+      const currentContent = document.getElementById('idTresc-inputEl');
+      return Boolean(currentCategory && currentContent && !currentCategory.value.trim() && !currentContent.value.trim());
+    };
+    const saved = () => !document.contains(root) || !visible(root) || formCleared();
     clickElement(zapisz);
-    let gone = await waitFor(() => !document.contains(root) || !visible(root), 4000);
-    if (!gone) {
+    let completed = await waitFor(saved, 6000);
+    if (!completed) {
       // Syntetyczny klik zignorowany (jak przy ">") - handler przez API ExtJS.
       zapisz.setAttribute('data-apka-bot', 'button');
       await extRun('button');
       zapisz.removeAttribute('data-apka-bot');
-      gone = await waitFor(() => !document.contains(root) || !visible(root), 4000);
+      completed = await waitFor(saved, 6000);
     }
-    if (!gone) {
+    if (!completed) {
       // Ostatecznosc: prawdziwe klikniecie przez debugger.
       await realClick([zapisz]);
-      gone = await waitFor(() => !document.contains(root) || !visible(root), 6000);
+      completed = await waitFor(saved, 8000);
     }
-    if (gone) {
+    if (completed) {
+      // Po udanym zapisie VULCAN często czyści formularz, ale pozostawia go
+      // otwartego do dodania następnego wpisu. Zamykamy pusty formularz, aby
+      // kolejna uwaga z kolejki zaczęła od przewidywalnego stanu.
+      if (document.contains(root) && visible(root) && formCleared()) {
+        const anuluj = [...document.querySelectorAll('a[uitestid="Anuluj"]')].find(visible)
+          || findTextIn(document.body, 'Anuluj', true);
+        if (anuluj) {
+          clickElement(anuluj);
+          await waitFor(() => !document.contains(root) || !visible(root), 3000);
+        }
+      }
       await reportUwagaSaved();
     } else {
       render('Kliknąłem Zapisz, ale okno nie zniknęło - sprawdź komunikat VULCANA i dokończ ręcznie.', true);
