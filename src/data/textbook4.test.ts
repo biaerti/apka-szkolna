@@ -14,8 +14,7 @@ describe('buildTextbook4', () => {
 
   it('pierwsze piec tematow zaczyna karta A5 i nie ma slajdu do przepisywania notatki', () => {
     const bundle = buildTextbook4('IV', ['4a']);
-    expect(bundle.lessons).toHaveLength(5);
-    for (const lesson of bundle.lessons) {
+    for (const lesson of bundle.lessons.slice(0, 5)) {
       expect(lesson.exercisePage).toBeUndefined();
       const opening = lesson.slides[0];
       expect(opening).toMatchObject({ kind: 'topic', variant: 'handout' });
@@ -31,6 +30,30 @@ describe('buildTextbook4', () => {
     expect(firstRead).toMatchObject({ page: 12, pageTo: 15, timerSec: 20 * 60 });
   });
 
+  it('kolejne tematy maja prezentacje i zadania bez dodatkowych kart A5', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const lessons = bundle.lessons.slice(5);
+    expect(lessons).toHaveLength(7);
+    expect(lessons.map((lesson) => lesson.title)).toEqual([
+      '8. Dlaczego warto być sobą?',
+      '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
+      '11. Czas na czasownik',
+      '12-13. Misja odmiana! Tajemnice czasownika',
+      '14. Czy każda nasza wypowiedź jest zdaniem?',
+      '15. Tworzymy plan ramowy',
+      '16. Co już wiesz? Co umiesz?',
+    ]);
+    for (const lesson of lessons) {
+      expect(lesson.slides[0]).toMatchObject({ kind: 'topic', variant: 'write' });
+      expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
+      expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(2);
+      expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
+      expect(lesson.slides.some((slide) => slide.kind === 'topic' && slide.variant === 'handout')).toBe(false);
+      expect(lesson.slides.some((slide) => slide.kind === 'text' && slide.title === 'Wracamy do karty A5')).toBe(false);
+      expect(lesson.notebookNote).toBeUndefined();
+    }
+  });
+
   it('zadania mieszcza sie na slajdzie projektora', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const tasks = bundle.lessons.flatMap((lesson) => lesson.slides.filter((slide) => slide.kind === 'task'));
@@ -41,11 +64,13 @@ describe('buildTextbook4', () => {
     }
   });
 
-  it('kazdy temat ma notatke A5 i pytania do kola z odpowiedziami', () => {
+  it('pierwsze piec tematow ma notatke A5, a kazdy temat pytania do kola z odpowiedziami', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     expect(bundle.questionSets).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
-    for (const lesson of bundle.lessons) {
+    for (const lesson of bundle.lessons.slice(0, 5)) {
       expect(lesson.notebookNote).toBeTruthy();
+    }
+    for (const lesson of bundle.lessons) {
       const qs = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
       expect(qs.length).toBeGreaterThanOrEqual(4);
       expect(qs.every((q) => Boolean(q.answer))).toBe(true);
