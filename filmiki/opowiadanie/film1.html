@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Opowiadanie - co to jest i jak je napisać - film 1</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* ===== scena 01: formy wypowiedzi ===== */
+#s01 { padding: 56px 90px; text-align: center; }
+#s01 h2 { font-size: 66px; color: var(--pomarancz); animation-delay: .3s; }
+#s01 .podtytul { font-size: 36px; font-weight: 800; margin-top: 8px; animation-delay: 9.0s; }
+#s01 .kafelki { display: flex; gap: 30px; margin-top: 44px; justify-content: center; }
+#s01 .kafelek {
+  background: var(--bialy); border-radius: 24px; padding: 22px 24px; width: 210px;
+  border: 4px solid #d9c9b2; font-size: 32px; font-weight: 800;
+  box-shadow: 0 8px 0 rgba(74,59,50,.08);
+}
+#s01 .kafelek .emoji { display: block; font-size: 66px; margin-bottom: 8px; }
+#s01 .k1 { animation-delay: 12.7s; }
+#s01 .k2 { animation-delay: 15.1s; }
+#s01 .k3 { animation-delay: 16.6s; }
+#s01 .k4 { animation-delay: 21.1s; }
+#s01 .opowiadanie {
+  margin-top: 40px; display: inline-block; background: var(--roz); color: #fff;
+  border-radius: 28px; padding: 22px 56px; font-family: 'Baloo 2'; font-size: 54px;
+  font-weight: 800; animation-delay: 24.0s;
+}
+
+/* ===== scena 02: co to jest opowiadanie ===== */
+#s02 { padding: 60px 90px; }
+#s02 h2 { font-size: 60px; color: var(--roz); text-align: center; animation-delay: .3s; }
+#s02 .historia {
+  margin-top: 30px; text-align: center; font-size: 38px; font-weight: 800;
+  animation-delay: 3.9s;
+}
+#s02 .strzalki { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 36px; }
+#s02 .zdarzenie {
+  background: var(--bialy); border: 4px solid var(--pomarancz); border-radius: 20px;
+  padding: 16px 26px; font-size: 32px; font-weight: 800;
+}
+#s02 .strzalka { font-size: 44px; color: var(--pomarancz); font-weight: 800; }
+#s02 .strzalki { animation-delay: 9.1s; }
+#s02 .info-rzad { display: flex; gap: 30px; justify-content: center; margin-top: 34px; }
+#s02 .info {
+  background: var(--zolty); border-radius: 20px; padding: 16px 30px; font-size: 32px;
+  font-weight: 800; color: var(--ciemny);
+}
+#s02 .info-rzad { animation-delay: 12.1s; }
+#s02 .narrator-rzad { display: flex; gap: 40px; justify-content: center; margin-top: 40px; }
+#s02 .narrator {
+  border-radius: 20px; padding: 18px 30px; font-size: 30px; font-weight: 800; color: #fff;
+  text-align: center; width: 300px;
+}
+#s02 .narrator-ja { background: var(--pomarancz); animation-delay: 15.5s; }
+#s02 .narrator-obs { background: var(--ciemny); animation-delay: 20.5s; }
+#s02 .narrator span { display: block; font-size: 22px; font-weight: 600; margin-top: 6px; }
+
+/* ===== scena 03: gdzie spotykamy opowiadania ===== */
+#s03 { padding: 56px 90px; text-align: center; }
+#s03 h2 { font-size: 52px; color: var(--pomarancz); animation-delay: .3s; }
+#s03 .miejsca { display: flex; gap: 24px; justify-content: center; margin-top: 40px; }
+#s03 .miejsce {
+  background: var(--bialy); border-radius: 22px; padding: 20px 20px; width: 216px;
+  border: 4px solid #d9c9b2; font-size: 26px; font-weight: 800;
+}
+#s03 .miejsce .emoji { display: block; font-size: 58px; margin-bottom: 8px; }
+#s03 .m-ksiazka { animation-delay: 9.3s; }
+#s03 .m-czasopismo { animation-delay: 11.3s; }
+#s03 .m-rozmowa { animation-delay: 18.3s; }
+#s03 .m-szkola { animation-delay: 23.9s; }
+#s03 .egzamin {
+  margin-top: 30px; display: inline-block; background: var(--roz); color: #fff;
+  border-radius: 999px; padding: 12px 34px; font-size: 32px; font-weight: 800;
+  animation-delay: 28.5s;
+}
+#s03 .morat { margin-top: 22px; font-size: 28px; font-weight: 800; animation-delay: 29.8s; }
+
+/* ===== scena 04: budowa opowiadania ===== */
+#s04 { padding: 56px 90px; text-align: center; }
+#s04 h2 { font-size: 56px; color: var(--roz); animation-delay: .3s; }
+#s04 .bloki { display: flex; align-items: flex-end; gap: 26px; justify-content: center; margin-top: 44px; height: 320px; }
+#s04 .blok {
+  border-radius: 22px 22px 0 0; color: #fff; font-family: 'Baloo 2'; font-weight: 800;
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 18px;
+  width: 260px; font-size: 34px; transition: none;
+}
+#s04 .blok-wstep { background: var(--pomarancz); height: 130px; animation-delay: 4.7s; }
+#s04 .blok-rozw { background: var(--roz); height: 300px; animation-delay: 11.9s; }
+#s04 .blok-zak { background: var(--pomarancz); height: 130px; animation-delay: 15.4s; }
+#s04 .blok.aktywny { outline: 8px solid var(--zolty); }
+#s04 .akapit {
+  margin-top: 40px; background: var(--bialy); border: 4px solid #d9c9b2; border-radius: 18px;
+  padding: 18px 30px; font-size: 28px; font-weight: 600; text-align: left; display: inline-block;
+  animation-delay: 17.5s;
+}
+#s04 .akapit .wciecie { display: inline-block; width: 44px; }
+
+/* ===== scena 05: wstęp ===== */
+#s05 { padding: 34px 90px; text-align: center; }
+#s05 h2 { font-size: 50px; color: var(--pomarancz); animation-delay: .3s; }
+#s05 .pytania3 { display: flex; gap: 30px; justify-content: center; margin-top: 20px; }
+#s05 .pyt3 {
+  background: var(--pomarancz); color: #fff; border-radius: 999px; padding: 10px 32px;
+  font-family: 'Baloo 2'; font-size: 32px; font-weight: 800;
+}
+#s05 .pytania3 { animation-delay: 5.3s; }
+#s05 .porada { margin-top: 18px; font-size: 26px; font-weight: 800; color: #7a6a5c; animation-delay: 10.3s; }
+#s05 .jak-zaczac {
+  margin-top: 14px; font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: var(--roz);
+  animation-delay: 11.2s;
+}
+#s05 .przyklady5 { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+#s05 .przyklad5 {
+  background: var(--bialy); border: 3px solid #d9c9b2; border-radius: 16px; padding: 10px 24px;
+  font-size: 24px; font-weight: 700; font-style: italic;
+}
+#s05 .e1 { animation-delay: 13.0s; }
+#s05 .e2 { animation-delay: 15.7s; }
+#s05 .e3 { animation-delay: 18.3s; }
+#s05 .e4 { animation-delay: 20.5s; }
+
+/* ===== scena 06: rozwinięcie ===== */
+#s06 { padding: 46px 90px; text-align: center; }
+#s06 h2 { font-size: 52px; color: var(--roz); animation-delay: .3s; }
+#s06 .kolejnosc { margin-top: 8px; font-size: 26px; font-weight: 800; color: #7a6a5c; animation-delay: 5.1s; }
+#s06 .slowa-rzad { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+#s06 .slowo-k {
+  background: var(--zolty); border-radius: 14px; padding: 8px 18px; font-size: 24px; font-weight: 800;
+}
+#s06 .slowa-rzad { animation-delay: 10.0s; }
+#s06 .zwrot-akcji {
+  margin-top: 22px; display: inline-block; background: var(--roz); color: #fff;
+  border-radius: 999px; padding: 10px 30px; font-family: 'Baloo 2'; font-size: 32px;
+  font-weight: 800; animation-delay: 16.7s;
+}
+#s06 .blysk { font-size: 40px; animation-delay: 16.7s; }
+#s06 .slowa-akcji { margin-top: 10px; font-size: 22px; font-weight: 800; color: var(--roz); animation-delay: 23.1s; }
+#s06 .dialog-rama {
+  margin-top: 20px; background: var(--bialy); border: 3px solid #d9c9b2; border-radius: 16px;
+  padding: 14px 26px; text-align: left; display: inline-block; font-size: 24px; font-weight: 700;
+  line-height: 1.5;
+}
+#s06 .dialog-l1 { animation-delay: 24.5s; }
+#s06 .dialog-l2 { animation-delay: 25.5s; }
+
+/* ===== scena 07: zakończenie ===== */
+#s07 { padding: 50px 90px; text-align: center; }
+#s07 h2 { font-size: 58px; color: var(--pomarancz); animation-delay: .3s; }
+#s07 .refleksja { margin-top: 20px; font-size: 32px; font-weight: 800; animation-delay: 9.9s; }
+#s07 .prompt7 { margin-top: 22px; font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: var(--roz); animation-delay: 11.2s; }
+#s07 .zwroty { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+#s07 .zwrot7 {
+  background: var(--bialy); border: 3px solid #d9c9b2; border-radius: 16px; padding: 10px 26px;
+  font-size: 27px; font-weight: 700; font-style: italic;
+}
+#s07 .z1 { animation-delay: 12.5s; }
+#s07 .z2 { animation-delay: 14.8s; }
+#s07 .z3 { animation-delay: 16.2s; }
+#s07 .z4 { animation-delay: 17.8s; }
+
+/* ===== scena 08: trzy zasady ===== */
+#s08 { padding: 46px 100px; text-align: center; }
+#s08 h2 { font-size: 54px; color: var(--roz); animation-delay: .3s; }
+#s08 .zasada { margin-top: 22px; display: flex; align-items: center; gap: 24px; justify-content: center; }
+#s08 .numer {
+  background: var(--pomarancz); color: #fff; border-radius: 50%; width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2'; font-size: 34px;
+  font-weight: 800; flex-shrink: 0;
+}
+#s08 .tresc8 { font-size: 30px; font-weight: 800; text-align: left; }
+#s08 .zas1 { animation-delay: 5.6s; }
+#s08 .czasy { margin-top: 10px; font-size: 28px; font-weight: 800; }
+#s08 .czasy .ok { color: #2e9e5b; }
+#s08 .czasy .zle { color: var(--roz); text-decoration: line-through; }
+#s08 .przyklad8 { animation-delay: 8.1s; }
+#s08 .zas2 { animation-delay: 10.4s; }
+#s08 .zas3 { animation-delay: 14.0s; }
+
+/* ===== scena 09: przykład ===== */
+#s09 { padding: 40px 90px; }
+#s09 h2 { font-size: 46px; color: var(--pomarancz); text-align: center; animation-delay: .3s; }
+#s09 .kartka {
+  margin-top: 20px; background: var(--bialy); border: 4px solid #d9c9b2; border-radius: 20px;
+  padding: 26px 40px; font-size: 26px; line-height: 1.6; font-weight: 600;
+}
+#s09 .etyk9 {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 18px; font-weight: 800; color: #fff;
+  border-radius: 8px; padding: 2px 10px; margin-right: 8px; vertical-align: middle;
+}
+#s09 .etyk-w { background: var(--pomarancz); }
+#s09 .etyk-r { background: var(--roz); }
+#s09 .etyk-z { background: var(--ciemny); }
+#s09 .cz-wstep { animation-delay: 5.7s; }
+#s09 .cz-rozw { animation-delay: 13.1s; }
+#s09 .cz-dialog { animation-delay: 15.1s; }
+#s09 .cz-rozw2 { animation-delay: 18.9s; }
+#s09 .cz-zak { animation-delay: 21.0s; }
+
+/* ===== scena 10: podsumowanie ===== */
+#s10 { padding: 28px 100px; }
+#s10 h2 { font-size: 50px; color: var(--roz); text-align: center; animation-delay: .3s; }
+#s10 .lista10 { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+#s10 .punkt10 {
+  display: flex; align-items: center; gap: 22px; background: var(--bialy);
+  border-radius: 18px; padding: 12px 28px; font-size: 27px; font-weight: 800;
+  border: 4px solid #d9c9b2;
+}
+#s10 .punkt10 .ptaszek { font-size: 32px; color: var(--pomarancz); font-family: 'Baloo 2'; }
+#s10 .punkt10 b { color: var(--roz); }
+#s10 .pk0 { animation-delay: 4.3s; }
+#s10 .pk1 { animation-delay: 6.3s; }
+#s10 .pk2 { animation-delay: 10.3s; }
+#s10 .pk3 { animation-delay: 14.5s; }
+#s10 .final10 {
+  margin-top: 18px; text-align: center; font-family: 'Baloo 2'; font-size: 38px;
+  font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px;
+  padding: 10px 30px; animation-delay: 15.0s;
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena" data-id="01-formy" id="s01">
+    <h2 class="pop">Formy wypowiedzi</h2>
+    <div class="podtytul zjaw">Dziś poznamy jedną z nich - opowiadanie</div>
+    <div class="kafelki">
+      <div class="kafelek k1 pop"><span class="emoji">🎉</span>zaproszenie</div>
+      <div class="kafelek k2 pop"><span class="emoji">📢</span>ogłoszenie</div>
+      <div class="kafelek k3 pop"><span class="emoji">✉️</span>list / e-mail</div>
+      <div class="kafelek k4 pop"><span class="emoji">🖼️</span>opis</div>
+    </div>
+    <div class="opowiadanie pop">📖 OPOWIADANIE</div>
+  </section>
+
+  <section class="scena" data-id="02-co-to" id="s02">
+    <h2 class="wjazd-dol">Czym jest opowiadanie?</h2>
+    <div class="historia zjaw">To tekst, który opowiada jakąś <b style="color:var(--roz)">historię</b>.</div>
+    <div class="strzalki wjazd-dol">
+      <div class="zdarzenie">zdarzenie 1</div>
+      <div class="strzalka">→</div>
+      <div class="zdarzenie">zdarzenie 2</div>
+      <div class="strzalka">→</div>
+      <div class="zdarzenie">zdarzenie 3</div>
+    </div>
+    <div class="info-rzad wjazd-dol">
+      <div class="info">bohaterowie</div>
+      <div class="info">miejsce</div>
+      <div class="info">czas akcji</div>
+    </div>
+    <div class="narrator-rzad">
+      <div class="narrator narrator-ja pop">NARRATOR = „ja”<span>bierze udział w wydarzeniach</span></div>
+      <div class="narrator narrator-obs pop">NARRATOR = obserwator<span>opowiada o innych</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="03-gdzie" id="s03">
+    <h2 class="pop">Gdzie spotykamy opowiadania?</h2>
+    <div class="miejsca">
+      <div class="miejsce m-ksiazka pop"><span class="emoji">📚</span>książka<br><span style="font-size:.8em">„Sztuka programowania”</span></div>
+      <div class="miejsce m-czasopismo pop"><span class="emoji">📰</span>czasopismo,<br>podręcznik</div>
+      <div class="miejsce m-rozmowa pop"><span class="emoji">💬</span>rozmowa<br>„co było w weekend”</div>
+      <div class="miejsce m-szkola pop"><span class="emoji">📄</span>w szkole<br>1-2 strony</div>
+    </div>
+    <div class="egzamin pop">🎓 egzamin ósmoklasisty</div>
+    <div class="morat zjaw">Dlatego warto nauczyć się tego porządnie już teraz.</div>
+  </section>
+
+  <section class="scena" data-id="04-budowa" id="s04">
+    <h2 class="pop">Budowa opowiadania</h2>
+    <div class="bloki">
+      <div class="blok blok-wstep pop">WSTĘP</div>
+      <div class="blok blok-rozw pop">ROZWINIĘCIE</div>
+      <div class="blok blok-zak pop">ZAKOŃCZENIE</div>
+    </div>
+    <div class="akapit pop"><span class="wciecie"></span>Każdą część zaczynamy od <b>nowego akapitu</b> - od nowej linijki, z małym wcięciem.</div>
+  </section>
+
+  <section class="scena" data-id="05-wstep" id="s05">
+    <h2 class="pop">Wstęp</h2>
+    <div class="pytania3">
+      <div class="pyt3">kto?</div>
+      <div class="pyt3">gdzie?</div>
+      <div class="pyt3">kiedy?</div>
+    </div>
+    <div class="porada zjaw">Przedstawiamy bohaterów, miejsce i czas. Wystarczą 2-3 zdania.</div>
+    <div class="jak-zaczac zjaw">Jak zacząć?</div>
+    <div class="przyklady5">
+      <div class="przyklad5 e1 wjazd-lewo">„Pewnego dnia…”</div>
+      <div class="przyklad5 e2 wjazd-prawo">„Było słoneczne, lipcowe popołudnie…”</div>
+      <div class="przyklad5 e3 wjazd-lewo">„Nigdy nie zapomnę dnia, w którym…”</div>
+      <div class="przyklad5 e4 wjazd-prawo">„Chcę wam opowiedzieć o przygodzie, która zdarzyła się…”</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="06-rozwiniecie" id="s06">
+    <h2 class="pop">Rozwinięcie - serce opowiadania</h2>
+    <div class="kolejnosc zjaw">wydarzenia po kolei</div>
+    <div class="slowa-rzad">
+      <div class="slowo-k">najpierw</div>
+      <div class="slowo-k">potem</div>
+      <div class="slowo-k">następnie</div>
+      <div class="slowo-k">po chwili</div>
+      <div class="slowo-k">wtedy</div>
+    </div>
+    <div><span class="zwrot-akcji pop">⚡ zwrot akcji</span> <span class="blysk pop">💥</span></div>
+    <div class="slowa-akcji zjaw">nagle • w ułamku sekundy • niespodziewanie • jak grom z jasnego nieba</div>
+    <div class="dialog-rama">
+      <div class="dialog-l1 zjaw">– Słyszałeś? – szepnął Kuba.</div>
+      <div class="dialog-l2 zjaw">– To chyba wiatr - odpowiedziałem.</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="07-zakonczenie" id="s07">
+    <h2 class="pop">Zakończenie</h2>
+    <div class="refleksja zjaw">Jak skończyła się historia? Czego bohater się nauczył?</div>
+    <div class="prompt7 zjaw">Pomogą ci zwroty:</div>
+    <div class="zwroty">
+      <div class="zwrot7 z1 wjazd-lewo">„Od tamtej pory…”</div>
+      <div class="zwrot7 z2 wjazd-prawo">„Ta przygoda nauczyła mnie, że…”</div>
+      <div class="zwrot7 z3 wjazd-lewo">„Do dziś pamiętam…”</div>
+      <div class="zwrot7 z4 wjazd-prawo">„Na długo zapamiętam ten dzień”</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="08-zasady" id="s08">
+    <h2 class="pop">Trzy ważne zasady</h2>
+    <div class="zasada zas1 wjazd-lewo">
+      <div class="numer">1</div>
+      <div class="tresc8">Pisz w <b>jednym czasie</b> - najlepiej w przeszłym.
+        <div class="czasy przyklad8 zjaw"><span class="ok">poszłam ✓</span> &nbsp; <span class="zle">idę ✗</span></div>
+      </div>
+    </div>
+    <div class="zasada zas2 wjazd-lewo">
+      <div class="numer">2</div>
+      <div class="tresc8">Nadaj opowiadaniu <b>tytuł</b>.</div>
+    </div>
+    <div class="zasada zas3 wjazd-lewo">
+      <div class="numer">3</div>
+      <div class="tresc8">Pilnuj <b>kolejności</b> - co wydarzyło się najpierw, a co potem.</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="09-przyklad" id="s09">
+    <h2 class="pop">Zobaczmy krótki przykład</h2>
+    <div class="kartka pop">
+      <div class="cz-wstep zjaw"><span class="etyk9 etyk-w">WSTĘP</span>„W sobotni poranek poszedłem z Kubą do parku”.</div>
+      <div class="cz-rozw zjaw" style="margin-top:14px"><span class="etyk9 etyk-r">ROZWINIĘCIE</span>„Najpierw rzucaliśmy piłką. Potem usiedliśmy na ławce. Nagle w krzakach coś zaszeleściło.</div>
+      <div class="cz-dialog zjaw" style="margin-top:6px; padding-left: 30px;">– Słyszałeś? – szepnął Kuba.</div>
+      <div class="cz-rozw2 zjaw" style="margin-top:6px; padding-left: 30px;">Po chwili wyskoczył stamtąd mały, przemoczony pies”.</div>
+      <div class="cz-zak zjaw" style="margin-top:14px"><span class="etyk9 etyk-z">ZAKOŃCZENIE</span>„Zanieśliśmy go do schroniska, a po tygodniu odnalazł się jego właściciel. Do dziś pamiętam jego radość”.</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="10-podsumowanie" id="s10">
+    <h2 class="pop">Podsumujmy 📌</h2>
+    <div class="lista10">
+      <div class="punkt10 pk0 wjazd-lewo"><span class="ptaszek">✔</span><span>Opowiadanie to <b>historia</b>, którą opowiada <b>narrator</b>.</span></div>
+      <div class="punkt10 pk1 wjazd-lewo"><span class="ptaszek">✔</span><span><b>Wstęp</b> - kto, gdzie, kiedy.</span></div>
+      <div class="punkt10 pk2 wjazd-lewo"><span class="ptaszek">✔</span><span><b>Rozwinięcie</b> - wydarzenia po kolei, zwrot akcji i dialog.</span></div>
+      <div class="punkt10 pk3 wjazd-lewo"><span class="ptaszek">✔</span><span><b>Zakończenie</b> - jak się skończyło i czego nas to nauczyło.</span></div>
+    </div>
+    <div class="final10 pop">Teraz twoja kolej! ✍️</div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

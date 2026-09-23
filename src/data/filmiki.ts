@@ -19,6 +19,7 @@ export type Filmik = {
 export const FILMIKI: Filmik[] = [
   { id: 'czasownik-film1', lekcja: '11', title: 'Czasownik - czynności, stany i „nie”' },
   { id: 'czasownik-film2', lekcja: '12-13', title: 'Odmiana czasownika - osoba, liczba, czas, rodzaj' },
+  { id: 'opowiadanie-film1', lekcja: 'V.3', title: 'Opowiadanie - co to jest i jak je napisać' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

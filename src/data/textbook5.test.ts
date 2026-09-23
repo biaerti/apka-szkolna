@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildTextbook5, TEXTBOOK5_TOPIC_COUNT } from './textbook5';
+import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from './textbook5';
 
 describe('buildTextbook5', () => {
   const bundle = buildTextbook5('V', ['klasa-5a']);
@@ -8,9 +8,10 @@ describe('buildTextbook5', () => {
     expect(() => buildTextbook5('IV', [])).toThrow();
   });
 
-  it('zaczyna od omowienia Sztuki programowania i konczy powtorzeniem', () => {
+  it('zaczyna od dialogu na Sztuce programowania i konczy powtorzeniem', () => {
     expect(bundle.lessons).toHaveLength(TEXTBOOK5_TOPIC_COUNT);
-    expect(bundle.lessons[0].title).toContain('Sztuka programowania');
+    expect(bundle.lessons[0].title).toContain('dialog');
+    expect(bundle.lessons[0].teacherPlan).toContain('Sztuk');
     expect(bundle.lessons[bundle.lessons.length - 1].title).toContain('powtórzenie');
   });
 
@@ -36,5 +37,9 @@ describe('buildTextbook5', () => {
       expect(text).not.toMatch(/(^|[^*\w])\*[^*\s][^*]*[^*\s]\*(?!\*)/);
       expect(text).not.toMatch(/\| \w+ \|/);
     }
+  });
+
+  it('wycofane tematy nie wracaja w materiale', () => {
+    for (const lesson of bundle.lessons) expect(RETIRED_TEXTBOOK5_TITLES.has(lesson.title)).toBe(false);
   });
 });

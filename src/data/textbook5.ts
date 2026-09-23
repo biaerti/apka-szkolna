@@ -2,12 +2,12 @@
 // prezentacje. Nie przepisujemy podrecznika jeden do jednego: z dzialu
 // wybrane sa trzy czytanki (Pax, Dziesiaty poziom, K kontra K), a pomiedzy
 // nimi ida lekcje praktyczne - pisanie, gramatyka, internet - zeby nie kazda
-// lekcja byla czytaniem. Lekcja 1 to omowienie "Sztuki programowania", ktora
-// klasa przeczytala wczesniej.
+// lekcja byla czytaniem. "Sztuke programowania" klasa przeczytala wczesniej -
+// omawiamy ja na lekcji o dialogu (lekcja 2, bo jest w niej duzo dialogow).
 //
 // Kazda lekcja ma `teacherPlan` - sciagawke tylko dla nauczyciela (przycisk
 // "Plan" na liscie lekcji): co czytamy, o czym powiedziec, jak wyjasnic, co
-// narysowac na tablicy. Nagrania czytanek sa w src/data/czytanki.ts (V.1...).
+// narysowac na tablicy. Nagrania czytanek sa w src/data/czytanki.ts (V.2...).
 
 import type { Lesson, Question, QuestionSet, Slide, SlideArt } from './types';
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
@@ -31,124 +31,89 @@ function plan(...sections: Array<[string, string]>): string {
 
 const TOPICS: Topic[] = [
   {
-    title: '1. Sztuka programowania - omówienie',
-    topic: 'Sztuka programowania',
-    textbookPage: 14,
-    teacherPlan: plan(
-      ['Co dziś', 'Tekst jest już przeczytany - dziś tylko rozmowa i zadania, bez czytania na głos. Podręcznik otwarty na s. 14-18, dzieci szukają w nim dowodów.\nNagranie całości: głośnik „Czytanki” → V.1 (9 min). Przydaje się dla nieobecnych albo żeby puścić samą scenę na boisku (s. 16).'],
-      ['Przebieg (45 min)', [
-        '1. **Temat do zeszytu + obecność** (3 min). Koło powtórzeniowe: to pierwsza lekcja działu, więc albo je pomijasz, albo odpalasz z listy na pytaniach z ostatniej powtórki.',
-        '2. **Rozgrzewka: co się stało?** (6 min). Każda wylosowana osoba mówi jedno zdanie z fabuły, po kolei. Ty w tym czasie rysujesz na tablicy oś wydarzeń (niżej).',
-        '3. **Z1 - narrator** (4 min).',
-        '4. **Z2 - Radek przed i po** (8 min) + rozmowa: zad. 2 i 4 ze s. 18.',
-        '5. **Z3 - ciężar spadł z serca** (7 min) + zad. 7: czego wymaga przyjaźń? Słowa zbierasz na tablicy.',
-        '6. **Z4 - dialog pod lupą** (5 min) - pomost do następnej lekcji.',
-        '7. **Notatka do zeszytu** (5 min).',
-      ].join('\n')],
-      ['Jak wyjaśnić', [
-        '- **Narrator:** zapytaj „Kto nam to opowiada? Czy on tam jest? Mówi «ja»?”. Nie mówi „ja”, opowiada o Radku - więc tylko obserwuje.',
-        '- **Radek:** nie oceniaj go od razu. Zapytaj: „A wy? Cała drużyna się śmieje, Modry popycha nowego - co robicie?”. Chodzi o uczciwą odpowiedź: Radek bał się, że straci kolegów. Jego błąd to milczenie, a nie złośliwość. Potem sam go naprawił.',
-        '- **Jacek:** nie mścił się i wybaczył („Nic nie pamiętam”). To też jest sztuka.',
-        '- **Tytuł na koniec:** „Dlaczego «Sztuka programowania», skoro to opowiadanie o przyjaźni?”. Przyjaźni też trzeba się nauczyć, jak programowania - najpierw nic nie rozumiesz, potem „zaskakują kable”.',
-      ].join('\n')],
-      ['Tablica', 'Oś wydarzeń: Nowy w klasie → kujon? → kurs w MDK → Koks i Matylda → boisko: Modry popycha, Radek milczy → Jacek się odsuwa → wypadek, zaginiony Koks → Radek szuka i znajduje → „nic nie pamiętam”.\nPod osią dwie kolumny: **Radek zawiódł, bo...** | **Radek naprawił, bo...**'],
-      ['Praca domowa (jeśli chcesz)', 'Zad. 10, s. 18: jesteś Jackiem - 5 zdań o pierwszych dniach w nowej szkole, w 1. osobie („ja”).'],
-    ),
-    questions: [
-      { text: 'Jak klasa przyjęła nowego ucznia, Jacka?', answer: 'Bez entuzjazmu. Koledzy uznali go za kujona, bo czytał książkę o programowaniu.' },
-      { text: 'Na jaki kurs zapisał się Radek i kogo tam spotkał?', answer: 'Na kurs programowania w MDK. Spotkał tam Jacka.' },
-      { text: 'Jak zachował się Radek, gdy Modry popchnął Jacka na boisku?', answer: 'Nie zareagował. Odwrócił się i udawał, że wiąże sznurowadło.' },
-      { text: 'W jaki sposób Radek naprawił swój błąd?', answer: 'Odnalazł zaginionego psa Jacka, Koksa, i przyprowadził go do domu.' },
-      { text: 'Co znaczy wyrażenie „ciężar spadł z serca”?', answer: 'Poczuć ulgę, pozbyć się zmartwienia albo wyrzutów sumienia.' },
-    ],
-    makeSlides: () => [
-      slideTopic('Sztuka programowania'),
-      slideRead('Wracamy do tekstu', 14, 18, 'Opowiadanie już znamy. Dziś szukamy w nim dowodów: kto opowiada, jak zmienia się Radek i czego wymaga przyjaźń. Miej otwarty podręcznik.', 5 * 60),
-      slideText('Przypomnienie: kto opowiada?', '**Narrator** to osoba, która opowiada historię.\n\n- może **brać udział** w wydarzeniach - mówi wtedy „ja”: „Pobiegłem do domu”,\n- może je tylko **obserwować** i opowiadać o innych: „Radek pobiegł do domu”.', 'narrator'),
-      slideTask('Z1', 'Kto opowiada „Sztukę programowania”?\n\nZapisz w zeszycie: czy narrator **bierze udział** w wydarzeniach, czy je tylko **obserwuje**. Przepisz z tekstu jedno zdanie, które to udowadnia.', 4 * 60, 'narrator', 'Narrator tylko obserwuje. Opowiada o Radku, nie mówi „ja”, np. „Radek szybkim ruchem wyrwał Jackowi książkę”.'),
-      slideTask('Z2', 'Radek przed i po. Dokończ w zeszycie trzy zdania:\n\n1. Na początku Radek uważał Jacka za...\n2. Kiedy Modry popchnął Jacka, Radek...\n3. Kiedy zaginął Koks, Radek...\n\nPod spodem napisz jedno słowo: **dlaczego** Radek zachował się tak na boisku?', 7 * 60, 'kolejnoscZdarzen', '1. ...kujona, dziwaka.\n2. ...nie zareagował, odwrócił się i udawał, że wiąże sznurowadło.\n3. ...szukał go do nocy, a rano pojechał rowerem do Jabłonki, uwolnił psa z łańcucha i przyprowadził go do Jacka.\n\nDlaczego: bał się (kolegów, śmiechu, że straci drużynę).'),
-      slideTask('Z3', 'Na końcu czytamy, że Radkowi „wielki ciężar spadł z serca”.\n\n1. Co znaczy to wyrażenie?\n2. Jaki to był ciężar i dlaczego zniknął?\n3. Dokończ zdanie: **Przyjaźń wymaga...** (podaj dwa słowa).', 6 * 60, 'frazeologizm', '1. Poczuć ulgę.\n2. Wyrzuty sumienia, że zawiódł Jacka. Zniknęły, bo Radek naprawił błąd i Jacek mu wybaczył („Nic nie pamiętam”).\n3. Np. odwagi, lojalności, stawania w obronie, umiejętności przeproszenia i wybaczenia.'),
-      slideTask('Z4', 'Dialog pod lupą (zad. 8, s. 18).\n\nPrzepisz z tekstu wypowiedź: **– Zjeżdżaj, kujonie! – krzyknął Modry.**\n\nZakreśl kolorem: myślnik na początku, znak na końcu słów bohatera i myślnik przed słowami narratora. Jaką literą zaczynają się słowa narratora?', 4 * 60, 'dialog', 'Wypowiedź zaczyna się od myślnika. Wykrzyknik zostaje przy słowach bohatera. Potem myślnik i słowa narratora - **małą literą**: „krzyknął Modry”.'),
-      slideNote('Sztuka programowania', '- Narrator obserwuje wydarzenia i opowiada o Radku.\n- Radek nie obronił Jacka, bo bał się kolegów. Naprawił to - odnalazł Koksa.\n- „Ciężar spadł z serca” = poczuć ulgę.\n- Przyjaźń wymaga odwagi i lojalności.'),
-    ],
-  },
-  {
     title: '2. Jak zapisać dialog?',
     topic: 'Jak zapisać dialog?',
-    textbookPage: 20,
+    textbookPage: 14,
     teacherPlan: plan(
-      ['Co dziś', 'Bez czytanki. Lekcja warsztatowa: zasady zapisu dialogu (s. 20) i ćwiczenia. Podręcznik niepotrzebny - wszystko jest na slajdach.'],
+      ['Co dziś', '„Sztukę programowania” już przeczytaliście, więc nie ma osobnej lekcji omówienia. Tekst omawiamy przy okazji dialogów - jest ich w nim pełno. Na początku krótka rozmowa o fabule, potem zasady zapisu dialogu na przykładach z tekstu.\nPodręcznik otwarty na s. 14-18. Nagranie całości: „Czytanki” → V.2 (9 min), gdyby ktoś był nieobecny.'],
       ['Przebieg (45 min)', [
-        '1. **Temat + koło powtórzeniowe** (8 min) - pytania o „Sztukę programowania”.',
-        '2. **Haczyk** (3 min): na tablicy piszesz jednym ciągiem, bez żadnych znaków: idziesz na mecz zapytał Radek nie wiem odpowiedział Jacek. Pytasz: „Kto tu mówi? Ile osób?”. Potem to samo rozpisane porządnie - różnica od razu widać.',
-        '3. **Slajd z trzema zasadami** (5 min) - przepisują wzory z tablicy.',
-        '4. **Z1** (7 min), **Z2** (6 min), **Z3** w parach (8 min). Na koniec Z3 dwie pary czytają swój dialog z podziałem na role.',
-        '5. **Notatka** (4 min).',
+        '1. **Temat + obecność** (3 min). Pierwsza lekcja działu, więc koło powtórzeniowe możesz pominąć.',
+        '2. **Co pamiętamy?** (6 min). Pytasz ustnie, koło losuje: Kim jest Jacek i jak przyjęła go klasa? Co zrobił Radek, gdy Modry popchnął Jacka? Jak Radek to naprawił? Co znaczy „ciężar spadł mu z serca”? Ty rysujesz na tablicy oś wydarzeń.',
+        '3. **Slajd z zasadami** (5 min). Każdą zasadę pokazujesz na zdaniu z tekstu. Przepisują trzy wzory z tablicy.',
+        '4. **Z1** - dialog na boisku (6 min).',
+        '5. **Z2** - telefon do Matyldy (6 min).',
+        '6. **Z3** - czasowniki z tekstu (5 min).',
+        '7. **Z4** w parach (7 min). Dwie pary czytają na głos z podziałem na role.',
+        '8. **Notatka** (4 min).',
       ].join('\n')],
       ['Jak wyjaśnić', [
-        '- Dwa rodzaje tekstu: **to, co mówi bohater** (wypowiedź) i **to, co dopowiada narrator** (kto mówi i jak). Myślnik oddziela jedno od drugiego.',
-        '- Zabawa na żywo: dwoje ochotników mówi po jednym zdaniu, a klasa dyktuje ci, jak to zapisać na tablicy („myślnik... teraz wielka litera... pytajnik... myślnik... zapytała Ola...”).',
-        '- Najczęstszy błąd: kropka przed słowami narratora („– Idę. – powiedział”). Pokaż: kropka idzie **na koniec całego zdania**, po narratorze.',
-        '- Pytajnik i wykrzyknik zostają przy bohaterze, bo to jego intonacja.',
+        '- W dialogu są dwa rodzaje tekstu: **to, co mówi bohater** (wypowiedź), i **to, co dopowiada narrator** (kto mówi i jak). Myślnik oddziela jedno od drugiego.',
+        '- Pokaż na „– Spadaj! – mruknął Modry.”: myślnik, słowa Modrego, wykrzyknik zostaje przy nich, myślnik, narrator małą literą, kropka na samym końcu.',
+        '- Najczęstszy błąd: kropka przed narratorem („– Idę. – powiedział”). Kropka idzie na koniec całego zdania.',
+        '- Przy Z1 wróć do treści: Jacek pyta, Modry odpowiada, a Radek w tej rozmowie **milczy**. To milczenie jest jego błędem. Zapytaj: „Co wy byście powiedzieli?” - to prowadzi prosto do Z4.',
+        '- Czasowniki z Z3 są w podręczniku pogrubione, a ramki „Przydatne słowa” (s. 14-15) wyjaśniają dwa z nich.',
       ].join('\n')],
-      ['Tablica', 'Trzy wzory jeden pod drugim, znaki zakreślone kolorem:\n– Idę do domu – powiedział Kacper.\n– Idziesz już? – zapytała Ola.\n– Idę – powiedział Kacper. – Mama czeka.\nObok **bank czasowników mówienia** - dopisujesz podczas Z2: szepnął, krzyknął, mruknął, zażartował, jęknął, zaproponowała, westchnęła...'],
+      ['Tablica', 'Oś wydarzeń (rysujesz w punkcie 2): Nowy w klasie → kurs w MDK → Koks i Matylda → boisko: Radek milczy → zaginiony Koks → Radek szuka i znajduje → „Nic nie pamiętam”.\nPod nią trzy wzory, znaki zakreślone kolorem:\n– Spadaj! – mruknął Modry.\n– Mógłbym z wami zagrać? – spytał Jacek.\n– Dzień dobry – mruknął. – Jestem Jacek.'],
     ),
     questions: [
+      { text: 'Jak zachował się Radek, gdy Modry popchnął Jacka na boisku?', answer: 'Nie zareagował. Odwrócił się i udawał, że wiąże sznurowadło.' },
+      { text: 'W jaki sposób Radek naprawił swój błąd?', answer: 'Odnalazł zaginionego psa Jacka, Koksa, i przyprowadził go do domu.' },
       { text: 'Od jakiego znaku zaczyna się każda wypowiedź w dialogu?', answer: 'Od myślnika, i to w nowej linijce.' },
-      { text: 'Jaką literą zaczynamy słowa narratora po wypowiedzi bohatera?', answer: 'Małą, np. „– Idę – powiedział Kacper”.' },
-      { text: 'Gdzie postawisz kropkę w zdaniu: „– Idę – powiedział Kacper”?', answer: 'Na końcu, po słowach narratora.' },
-      { text: 'Jakim znakiem kończymy zdanie, które wprowadza dialog?', answer: 'Dwukropkiem, np. „Patrzył na mnie i zapytał:”.' },
-      { text: 'Podaj trzy czasowniki, którymi można zastąpić „powiedział”.', answer: 'Np. szepnął, krzyknął, mruknął, zapytał, westchnął, zażartował.' },
+      { text: 'Jaką literą zaczynamy słowa narratora po wypowiedzi bohatera?', answer: 'Małą, np. „– Spadaj! – mruknął Modry”.' },
+      { text: 'Co znaczy, że ktoś „zaoponował”?', answer: 'Sprzeciwił się, zaprotestował.' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: () => [
       slideTopic('Jak zapisać dialog?'),
-      ...recap(previousSetId),
-      slideText('Trzy zasady dialogu', '1. Każda wypowiedź od **nowej linijki** i od **myślnika**.\n2. Słowa narratora oddziel myślnikiem i zacznij **małą literą**: – Idę – **powiedział** Kacper.\n3. **?** i **!** zostają przy bohaterze, a **kropkę** stawiamy dopiero po słowach narratora.\n\nZdanie, które wprowadza dialog, kończy się **dwukropkiem**.', 'dialog'),
-      slideTask('Z1', 'Ktoś zgubił wszystkie myślniki i znaki. Przepisz dialog poprawnie:\n\nIdziesz jutro na trening zapytał Kuba\nNie wiem odpowiedziała Ola chyba boli mnie noga\nSzkoda westchnął Kuba bez ciebie przegramy', 6 * 60, 'dialog', '– Idziesz jutro na trening? – zapytał Kuba.\n– Nie wiem – odpowiedziała Ola. – Chyba boli mnie noga.\n– Szkoda – westchnął Kuba. – Bez ciebie przegramy.'),
-      slideTask('Z2', 'Zamień nudne **„powiedział / powiedziała”** na czasowniki, które pokazują, **jak** ktoś mówi:\n\n– Uwaga, pies! – powiedział Tomek.\n– Cicho, bo usłyszy – powiedziała Zuza.\n– Wcale się nie boję – powiedział Tomek, ale głos mu drżał.\n– To idź pierwszy – powiedziała Zuza ze śmiechem.', 5 * 60, 'dialog', 'Np. **krzyknął** Tomek, **szepnęła** Zuza, **zapewnił / wyjąkał** Tomek, **zakpiła / zaproponowała** Zuza.'),
-      slideTask('Z3', 'W parach: Radek i Jacek spotykają się po dwudziestu latach. Napiszcie ich rozmowę.\n\n- zdanie wprowadzające zakończone dwukropkiem,\n- 4 wypowiedzi,\n- przy dwóch komentarz narratora,\n- jeden czasownik z naszego banku.', 8 * 60, 'dialog', 'Np. Na przystanku ktoś klepnął Radka w ramię i zapytał:\n– Pamiętasz mnie?\n– Jacek?! – krzyknął Radek. – Nadal programujesz?\n– Robię gry – uśmiechnął się Jacek.\n– A Koks? – zapytał cicho Radek.'),
-      slideNote('Jak zapisać dialog?', '- Każda wypowiedź od nowej linijki i od myślnika.\n- Słowa narratora po myślniku, małą literą.\n- ? i ! zostają przy bohaterze, kropka po słowach narratora.\n- Przed dialogiem stawiamy dwukropek.'),
+      slideRead('Wracamy do „Sztuki programowania”', 14, 18, 'Przypominamy sobie historię Radka i Jacka. Dziś szukamy w tekście dialogów i uczymy się, jak się je zapisuje.', 6 * 60),
+      slideText('Trzy zasady dialogu', '1. Każda wypowiedź od **nowej linijki** i od **myślnika**.\n2. Słowa narratora oddziel myślnikiem i zacznij **małą literą**: – Spadaj! – **mruknął** Modry.\n3. **?** i **!** zostają przy bohaterze, a **kropkę** stawiamy dopiero po słowach narratora.\n\nZdanie, które wprowadza dialog, kończy się **dwukropkiem**.', 'dialog'),
+      slideTask('Z1', 'Otwórz podręcznik na s. 16. Znajdź rozmowę na boisku (od „Mógłbym z wami zagrać?”).\n\n1. Przepisz **dwie wypowiedzi** razem ze słowami narratora.\n2. Zakreśl kolorem myślniki i znaki na końcu słów bohatera.\n3. Odpowiedz: kto w tej rozmowie **nic nie mówi** i dlaczego?', 6 * 60, 'dialog', '1. – Spadaj! – mruknął Modry.\n– Zjeżdżaj, kujonie! – krzyknął Modry.\n3. Radek. Był zakłopotany i bał się kolegów, więc tylko unikał wzroku Jacka.'),
+      slideTask('Z2', 'Radek dzwoni do Matyldy. Ktoś zgubił wszystkie myślniki i znaki - przepisz rozmowę poprawnie:\n\nCześć tu Radek powiedział niepewnie co z Koksem\nUciekł odpowiedziała Matylda Jacek jest w szpitalu\nJak mogę pomóc zapytał Radek', 6 * 60, 'dialog', '– Cześć, tu Radek – powiedział niepewnie. – Co z Koksem?\n– Uciekł – odpowiedziała Matylda. – Jacek jest w szpitalu.\n– Jak mogę pomóc? – zapytał Radek.'),
+      slideTask('Z3', 'Zamiast „powiedział” autor używa ciekawszych czasowników. Połącz je ze znaczeniem:\n\n1. mruknął  2. zaoponował  3. żachnął się  4. roześmiał się  5. zdenerwował się\n\na) sprzeciwił się\nb) powiedział cicho i niewyraźnie\nc) powiedział ze złością\nd) lekko się oburzył\ne) powiedział ze śmiechem', 5 * 60, 'dialog', '1 - b, 2 - a, 3 - d, 4 - e, 5 - c'),
+      slideTask('Z4', 'W parach: cofnijmy czas. Na boisku Radek tym razem **staje w obronie** Jacka.\n\nNapiszcie 4 wypowiedzi (Jacek, Modry, Radek). Przy każdej dodajcie słowa narratora i użyjcie **dwóch czasowników z Z3**.', 7 * 60, 'dialog', '– Mógłbym z wami zagrać? – spytał Jacek.\n– Spadaj! – mruknął Modry.\n– Czemu? Jacek dobrze gra – zaoponował Radek.\n– Dobra, niech zagra – żachnął się Modry.'),
+      slideNote('Jak zapisać dialog?', '- Każda wypowiedź od nowej linijki i od myślnika.\n- Słowa narratora po myślniku, małą literą.\n- ? i ! zostają przy bohaterze, kropka po słowach narratora.\n- Radek nie obronił Jacka, ale naprawił błąd - odnalazł Koksa.'),
     ],
   },
   {
     title: '3. Opowiadanie twórcze z dialogiem',
-    topic: 'Opowiadanie z dialogiem',
+    topic: 'Opowiadanie - jak je napisać?',
     textbookPage: 19,
     teacherPlan: plan(
-      ['Co dziś', 'Bez czytanki. Planujemy opowiadanie w grupach 3-4 osobowych, a piszą je w domu. Wzór opowiadania jest na s. 21 („Poszukiwacze skarbów”), zasady na s. 19, zdjęcie namiotu do zad. 6 na s. 22.'],
+      ['Co dziś', 'Lekcja z filmikiem. Najpierw film (ok. 4-5 min): czym są formy wypowiedzi, czym jest opowiadanie, gdzie je spotykamy (książki, rozmowa, egzamin ósmoklasisty), z czego się składa, jak zacząć i jak skończyć. Potem trzy zadania, które razem budują jedno małe opowiadanie: układanka części, własny wstęp, własne zakończenie. W domu piszą całe opowiadanie.\nW podręczniku jest to samo na s. 19-21 (s. 21 to wzór opowiadania z podpisanymi częściami) - możesz go pokazać zamiast czytać.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło** (8 min) - pytania o dialog.',
-        '2. **Kanapka** (5 min): rysujesz schemat opowiadania, oni przepisują.',
-        '3. **Grupy.** Każda grupa dostaje ten sam tytuł „Niezwykły dzień” i robi Z1 (6 min) i Z2 (7 min). Kręcisz kołem - z każdej grupy odpowiada wylosowana osoba, nie lider.',
-        '4. **Z3 - zwrot akcji** (7 min) - indywidualnie.',
-        '5. **Notatka** (4 min) + zadanie domowe na slajdzie.',
+        '2. **Film** (5 min). Zanim puścisz: „Po filmie zapytam, z jakich trzech części składa się opowiadanie”.',
+        '3. **Po filmie** (3 min), ustnie: Jakie formy wypowiedzi pojawiły się na początku? Z jakich części składa się opowiadanie? Która część jest najdłuższa?',
+        '4. **Z1 - układanka** (7 min). Pomieszane zdania jednej historii: układają je po kolei i podpisują W / R / Z.',
+        '5. **Z2 - wstęp** (7 min). Każdy pisze wstęp do „Zagubionego klucza”.',
+        '6. **Z3 - zakończenie** (7 min). Rozwinięcie jest na slajdzie, oni dopisują zakończenie. Wylosowane osoby czytają całość: swój wstęp, rozwinięcie ze slajdu i swoje zakończenie.',
+        '7. **Notatka + zadanie domowe** (5 min).',
       ].join('\n')],
       ['Jak wyjaśnić', [
-        '- Opowiadanie to **kanapka**: wstęp i zakończenie to chleb (krótkie), a rozwinięcie to wszystko, co ważne w środku.',
-        '- **Wstęp** odpowiada na trzy pytania: kto? gdzie? kiedy? Wystarczą 2-3 zdania.',
-        '- **Zwrot akcji** to moment, w którym czytelnik myśli „o nie!”. Słowa-sygnały: nagle, w ułamku sekundy, znienacka, jak grom z jasnego nieba.',
-        '- **Jeden czas.** Kto zaczął w przeszłym („poszłam”), ten nie przeskakuje na teraźniejszy („idę”).',
-        '- Dialog ożywia opowiadanie, ale niech nie zajmie całego - 2-4 wypowiedzi wystarczą.',
+        '- **Forma wypowiedzi** to rodzaj tekstu z własnymi zasadami: zaproszenie ma kto/gdzie/kiedy, e-mail ma temat i podpis, a **opowiadanie ma wstęp, rozwinięcie i zakończenie**.',
+        '- **Opowiadanie** to historia, w której wydarzenia dzieją się po kolei, a opowiada je narrator. „Sztuka programowania” to opowiadanie.',
+        '- **Wstęp** = kto? gdzie? kiedy? - 2-3 zdania. **Rozwinięcie** = co się działo, po kolei, ze zwrotem akcji i dialogiem - najdłuższa część. **Zakończenie** = jak się skończyło + czego to nauczyło - 1-2 zdania.',
+        '- Przy Z1 podpowiedz: szukajcie słów-sygnałów. „Najpierw” i „nagle” są w rozwinięciu, „od tamtej pory” w zakończeniu.',
+        '- **Jeden czas**: kto zaczął od „poszedłem”, nie przeskakuje na „idę”.',
       ].join('\n')],
-      ['Tablica', 'Kanapka z trzech warstw:\n**WSTĘP** - kto, gdzie, kiedy\n**ROZWINIĘCIE** - wydarzenia po kolei + dialog + zwrot akcji\n**ZAKOŃCZENIE** - jak się skończyło, czego się nauczyłem\nZ boku: nagle / w ułamku sekundy / znienacka / jak grom z jasnego nieba.'],
-      ['Zadanie domowe', 'Opowiadanie „Niezwykły dzień” z planu grupy - minimum strona w zeszycie, z dialogiem (co najmniej 3 wypowiedzi). Termin: za tydzień.'],
+      ['Tablica', 'Trzy prostokąty jeden pod drugim, środkowy najwyższy:\n**WSTĘP** - kto? gdzie? kiedy? (Pewnego dnia… / Było słoneczne popołudnie…)\n**ROZWINIĘCIE** - najpierw, potem, NAGLE!, dialog\n**ZAKOŃCZENIE** - Od tamtej pory… / Ta przygoda nauczyła mnie, że…\nZ boku: jeden czas, tytuł, każda część od akapitu.'],
+      ['Zadanie domowe', 'Opowiadanie „Niezwykły dzień” - minimum strona w zeszycie: tytuł, wstęp, rozwinięcie (co najmniej 3 wydarzenia, zwrot akcji i 2 wypowiedzi w dialogu), zakończenie. Termin: za tydzień. Lista kontrolna jest na slajdzie - niech ją przepiszą.'],
     ),
     questions: [
       { text: 'Z jakich trzech części składa się opowiadanie?', answer: 'Ze wstępu, rozwinięcia i zakończenia.' },
-      { text: 'Na jakie pytania odpowiada wstęp opowiadania?', answer: 'Kto? Gdzie? Kiedy? - przedstawia bohaterów, miejsce i czas.' },
-      { text: 'Podaj dwa wyrazy, które zapowiadają zwrot akcji.', answer: 'Np. nagle, w ułamku sekundy, znienacka, jak grom z jasnego nieba.' },
-      { text: 'Dlaczego nie mieszamy czasów w opowiadaniu?', answer: 'Bo czytelnik się gubi. Piszemy w jednym czasie, np. w przeszłym.' },
-      { text: 'Po co w opowiadaniu dialog?', answer: 'Ożywia tekst, pokazuje bohaterów i ich emocje, sprawia, że jest ciekawiej.' },
+      { text: 'Na jakie pytania odpowiada wstęp opowiadania?', answer: 'Kto? Gdzie? Kiedy?' },
+      { text: 'Która część opowiadania jest najdłuższa i co w niej piszemy?', answer: 'Rozwinięcie - wydarzenia po kolei, zwrot akcji i dialog.' },
+      { text: 'Podaj dwa wyrazy, które zapowiadają zwrot akcji.', answer: 'Np. nagle, w ułamku sekundy, niespodziewanie, jak grom z jasnego nieba.' },
+      { text: 'Podaj zwrot, od którego można zacząć zakończenie.', answer: 'Np. „Od tamtej pory…”, „Ta przygoda nauczyła mnie, że…”, „Do dziś pamiętam…”.' },
     ],
     makeSlides: (previousSetId) => [
-      slideTopic('Opowiadanie z dialogiem'),
+      slideTopic('Opowiadanie - jak je napisać?'),
       ...recap(previousSetId),
-      slideText('Opowiadanie to kanapka', '**Wstęp** - kto? gdzie? kiedy?\n\n**Rozwinięcie** - wydarzenia po kolei, dialog i **zwrot akcji** (nagle, w ułamku sekundy, jak grom z jasnego nieba).\n\n**Zakończenie** - jak się skończyło i czego to nauczyło bohatera.\n\nPiszemy w **jednym czasie**.', 'opowiadanie'),
-      slideTask('Z1', 'Grupa: tytuł **„Niezwykły dzień”**.\n\nNarysujcie w zeszycie tabelkę z trzema rubrykami: **czas, miejsce, bohaterowie**. Wypełnijcie ją.\n\nKażda rubryka ma być konkretna: nie „kiedyś”, tylko „w sobotę o świcie”.', 5 * 60, 'swiatPrzedstawiony', 'Np. **Czas:** sobota, świt. **Miejsce:** namiot nad jeziorem. **Bohaterowie:** ja, mój brat Kuba i tajemniczy pies.'),
-      slideTask('Z2', 'Ułóżcie **plan wydarzeń** w 5 punktach (krótko, bez czasowników w formie osobowej).\n\nPunkt 3 albo 4 ma być **zwrotem akcji**.', 7 * 60, 'kolejnoscZdarzen', 'Np. 1. Wyjazd pod namiot. 2. Rozbijanie obozu nad jeziorem. 3. Nocne szczekanie za namiotem. 4. Odkrycie zaginionego psa sąsiadów. 5. Powrót psa do domu i nagroda.'),
-      slideTask('Z3', 'Nudny fragment - ożyw go! Przepisz i dodaj **dwa słowa zwrotu akcji** oraz **jedną wypowiedź** bohatera w dialogu:\n\n„Szedłem przez park. Było cicho. Na ławce leżała paczka. Podszedłem bliżej. Paczka się poruszyła.”', 7 * 60, 'opowiadanie', 'Np. „Szedłem przez pusty park. Było cicho. Na ławce leżała szara paczka. Podszedłem bliżej i **nagle** paczka się poruszyła!\n– Kto tam? – szepnąłem.\n**W ułamku sekundy** z pudełka wyskoczył mały kot.”'),
-      slideText('Zadanie domowe', 'Napisz opowiadanie **„Niezwykły dzień”** według planu twojej grupy.\n\n- co najmniej strona w zeszycie,\n- wstęp, rozwinięcie, zakończenie,\n- dialog: minimum 3 wypowiedzi,\n- jeden zwrot akcji.\n\nTermin: za tydzień.', 'opowiadanie'),
-      slideNote('Opowiadanie z dialogiem', '- Wstęp: kto, gdzie, kiedy.\n- Rozwinięcie: wydarzenia po kolei, dialog, zwrot akcji.\n- Zakończenie: jak się skończyło.\n- Piszę w jednym czasie.'),
+      slideVideo('opowiadanie-film1'),
+      slideTask('Z1', 'Ktoś pomieszał zdania jednej historii. Zapisz litery **we właściwej kolejności** i przy każdej napisz: **W** - wstęp, **R** - rozwinięcie, **Z** - zakończenie.\n\nA. Od tamtej pory zawsze zamykam furtkę.\nB. W niedzielę rano bawiłam się z psem Burkiem w ogrodzie babci.\nC. Nagle zobaczyłam, że furtka jest otwarta, a Burka nigdzie nie ma!\nD. Najpierw rzucałam mu patyk, a potem poszłam do domu po wodę.\nE. – Burek! – wołałam, biegnąc ulicą.\nF. Znalazłam go przed sklepem, gdzie merdał ogonem do pani z kiełbasą.', 7 * 60, 'opowiadanie', 'B - W\nD - R\nC - R (zwrot akcji: „nagle”)\nE - R (dialog)\nF - R\nA - Z (zwrot „od tamtej pory”)'),
+      slideTask('Z2', 'Napisz **wstęp** do opowiadania **„Zagubiony klucz”** (2-3 zdania).\n\nWstęp musi odpowiadać na pytania: **kto? gdzie? kiedy?**\nZacznij od jednego z początków z filmu, np. „Pewnego dnia…”, „Było deszczowe popołudnie…”, „Nigdy nie zapomnę dnia, w którym…”.', 6 * 60, 'opowiadanie', 'Np. „Nigdy nie zapomnę dnia, w którym zgubiłem klucz do domu. Było deszczowe, listopadowe popołudnie. Wróciłem ze szkoły, a mamy nie było w domu.”'),
+      slideTask('Z3', 'Oto **rozwinięcie** „Zagubionego klucza”:\n\n„Najpierw szukałem klucza w plecaku. Potem przetrząsnąłem wszystkie kieszenie. Nagle usłyszałem cichy brzęk – klucz leżał pod wycieraczką, a obok siedział kot sąsiadów.”\n\nDopisz **zakończenie** (1-2 zdania). Zacznij od „Od tamtej pory…” albo „Ta przygoda nauczyła mnie, że…”.', 6 * 60, 'opowiadanie', 'Np. „Od tamtej pory noszę klucz na smyczy przy plecaku. A kot sąsiadów dostaje ode mnie czasem kawałek szynki.”'),
+      slideText('Zadanie domowe', 'Napisz opowiadanie **„Niezwykły dzień”** - minimum strona w zeszycie.\n\n- tytuł,\n- wstęp: kto, gdzie, kiedy,\n- rozwinięcie: co najmniej 3 wydarzenia po kolei, zwrot akcji, 2 wypowiedzi w dialogu,\n- zakończenie: jak się skończyło i czego cię to nauczyło,\n- jeden czas - przeszły.\n\nTermin: za tydzień.', 'opowiadanie'),
+      slideNote('Opowiadanie', '- Opowiadanie to historia opowiadana przez narratora.\n- Wstęp: kto, gdzie, kiedy.\n- Rozwinięcie: wydarzenia po kolei, zwrot akcji, dialog.\n- Zakończenie: jak się skończyło i czego to nauczyło.\n- Piszę w jednym czasie i każdą część od akapitu.'),
     ],
   },
   {
@@ -643,6 +608,12 @@ export function buildTextbook5(grade: string, classIds: string[]): FreshMaterial
 
 export const TEXTBOOK5_TOPIC_COUNT = TOPICS.length;
 
+/**
+ * Tematy wycofane z materialu - "Odswiez wstawione materialy" usuwa je z
+ * rocznika. Omowienie "Sztuki programowania" weszlo do lekcji o dialogu.
+ */
+export const RETIRED_TEXTBOOK5_TITLES = new Set<string>(['1. Sztuka programowania - omówienie']);
+
 function slideTopic(topic: string): Slide {
   return { id: newId(), kind: 'topic', topic, variant: 'write' };
 }
@@ -653,6 +624,7 @@ function slideText(title: string, body: string, art?: SlideArt): Slide { return 
 function slideTask(code: string, body: string, timerSec: number, art?: SlideArt, answerExample?: string): Slide {
   return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, studentAction: 'write-answer' };
 }
+function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
 function slideNote(temat: string, body: string): Slide {

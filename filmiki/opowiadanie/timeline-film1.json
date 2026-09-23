@@ -1,0 +1,55 @@
+{
+  "sceny": [
+    {
+      "id": "01-formy",
+      "start": 0.8,
+      "dur": 26.436
+    },
+    {
+      "id": "02-co-to",
+      "start": 28.136,
+      "dur": 22.674
+    },
+    {
+      "id": "03-gdzie",
+      "start": 51.71,
+      "dur": 31.556
+    },
+    {
+      "id": "04-budowa",
+      "start": 84.166,
+      "dur": 21.081
+    },
+    {
+      "id": "05-wstep",
+      "start": 106.147,
+      "dur": 23.171
+    },
+    {
+      "id": "06-rozwiniecie",
+      "start": 130.218,
+      "dur": 29.466
+    },
+    {
+      "id": "07-zakonczenie",
+      "start": 160.584,
+      "dur": 19.409
+    },
+    {
+      "id": "08-zasady",
+      "start": 180.893,
+      "dur": 16.666
+    },
+    {
+      "id": "09-przyklad",
+      "start": 198.459,
+      "dur": 27.246
+    },
+    {
+      "id": "10-podsumowanie",
+      "start": 226.604,
+      "dur": 15.569
+    }
+  ],
+  "total": 243.673
+}

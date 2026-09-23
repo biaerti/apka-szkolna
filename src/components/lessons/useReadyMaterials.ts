@@ -15,7 +15,7 @@ import { buildRecap13 } from '../../data/recap13';
 import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson } from '../../data/intro';
 import { buildTextbook4, RETIRED_TEXTBOOK4_TITLES, TEXTBOOK4_TOPIC_COUNT } from '../../data/textbook4';
-import { buildTextbook5, TEXTBOOK5_TOPIC_COUNT } from '../../data/textbook5';
+import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from '../../data/textbook5';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import {
   classifyMatch,
@@ -342,7 +342,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
       // tematy. Przy przejsciu na piec dopracowanych prezentacji usuwamy tylko
       // te dokladnie znane pozycje - wlasne lekcje nauczyciela zostaja.
       for (const lesson of gradeLessons) {
-        if (lessonMaterialType(lesson) === 'textbook' && RETIRED_TEXTBOOK4_TITLES.has(lesson.title)) {
+        if (lessonMaterialType(lesson) === 'textbook' && (RETIRED_TEXTBOOK4_TITLES.has(lesson.title) || RETIRED_TEXTBOOK5_TITLES.has(lesson.title))) {
           removeLesson(lesson.id);
         }
       }

@@ -33,7 +33,7 @@ export const CZYTANKI: Czytanka[] = [
   { id: 'historia-o-akceptacji', lekcja: '15', temat: 'Tworzymy plan ramowy', title: 'Historia o akceptacji. Stoję murem za Bartkiem', author: 'Marek Michalak', pages: '46-47' },
   { id: 'ksiaze-ktory-chcial-byc-zaba', lekcja: '16', temat: 'Co już wiesz? Co umiesz?', title: 'Książę, który chciał być żabą', author: 'Àlex Rovira, Francesc Miralles', pages: '50-52' },
   // Klasa 5, dzial "W poszukiwaniu przyjazni" (src/data/textbook5.ts).
-  { id: 'sztuka-programowania', lekcja: 'V.1', temat: 'Sztuka programowania - omówienie', title: 'Sztuka programowania', author: 'Wojciech Cesarz', pages: '14-18' },
+  { id: 'sztuka-programowania', lekcja: 'V.2', temat: 'Jak zapisać dialog? (Sztuka programowania)', title: 'Sztuka programowania', author: 'Wojciech Cesarz', pages: '14-18' },
   { id: 'pax', lekcja: 'V.5', temat: 'Pax - przyjaźń oczami lisa', title: 'Pax', author: 'Sara Pennypacker', pages: '25-27' },
   { id: 'dziesiaty-poziom', lekcja: 'V.7', temat: 'Dziesiąty poziom - czym jest pomaganie?', title: 'Dziesiąty poziom', author: 'Jody J. Little', pages: '31-34' },
   { id: 'wielki-wybuch-k-kontra-k', lekcja: 'V.9', temat: 'Wielki wybuch, czyli K kontra K', title: 'Wielki wybuch, czyli K kontra K', author: 'Barbara Kosmowska, Grzegorz Kasdepke', pages: '36-39' },
