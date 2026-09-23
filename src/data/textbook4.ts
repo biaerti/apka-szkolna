@@ -26,16 +26,16 @@ const TOPICS: Topic[] = [
       'To wszystko, co autor umieścił w historii:',
       '- **czas** - kiedy dzieją się wydarzenia,',
       '- **miejsce** - gdzie się dzieją,',
-      '- **{{bohaterowie}}** - kto bierze w nich udział,',
+      '- **bohaterowie** - kto bierze w nich udział,',
       '- **wydarzenia** - co się dzieje.', '',
       '## Autor i narrator',
-      '**Autor** tworzy tekst. **{{Narrator}}** opowiada historię. Nie są tą samą osobą.', '',
+      '**Autor** tworzy tekst. **Narrator** opowiada historię. Nie są tą samą osobą.', '',
       '## Jak rozpoznać narratora?',
       '- **narrator-bohater** uczestniczy w wydarzeniach: „Wszedłem do kopalni”,',
       '- **narrator-obserwator** opowiada o innych: „Antek wszedł do kopalni”.', '',
       '## Przykład',
       '„Wieczorem Lena zbudowała bazę w lesie”.',
-      '**Czas:** wieczór. **Miejsce:** las. **Bohaterka:** Lena. **Wydarzenie:** budowa bazy. **Narrator:** {{obserwator}}.',
+      '**Czas:** wieczór. **Miejsce:** las. **Bohaterka:** Lena. **Wydarzenie:** budowa bazy. **Narrator:** obserwator.',
     ].join('\n'),
     questions: [
       { text: 'Wymień pięć elementów świata przedstawionego.', answer: 'Czas, miejsce, bohaterowie, wydarzenia i narrator.' },
@@ -45,17 +45,13 @@ const TOPICS: Topic[] = [
       { text: 'Co zmieniło się w nastawieniu Antka i Ulki do cioci Larysy?', answer: 'Najpierw bali się wspólnych wakacji, a później chcieli, żeby ciocia znów się nimi opiekowała.' },
     ],
     makeSlides: () => [
-      slideHandout('Świat przedstawiony i narrator', [
-        'wskazać czas, miejsce, bohaterów i wydarzenia',
-        'odróżnić autora od narratora',
-        'rozpoznać narratora-bohatera i narratora-obserwatora',
-      ]),
+      slideTopic('Świat przedstawiony i narrator'),
       slideRead('Otwieramy podręcznik', 12, 15, 'Czytamy „Moje lato z szablozębnym” razem z listem i fragmentem „9 września”. Potem rozmawiamy o tekście i wykonujemy zadania 1-3. Nie przepisuj poleceń.', 20 * 60),
       slideText('Pięć pytań otwiera każdą historię', '**Kiedy? Gdzie? Kto? Co się wydarzyło? Kto to opowiada?**\n\nOdpowiedzi tworzą **świat przedstawiony**: czas, miejsce, bohaterów, wydarzenia i narratora.\n\n**Autor** wymyśla tekst. **Narrator** opowiada historię.', 'swiatPrzedstawiony'),
       slideTask('Z1', 'Przeczytaj dwa początki historii:\n\n**A.** „O 19.30 Maja weszła na serwer Minecraft. W opuszczonej kopalni znalazła skrzynię.”\n\n**B.** „Kuba uruchomił grę i zobaczył wiadomość.”\n\nW zeszycie wypisz elementy świata przedstawionego w tekście A. Potem napisz, jakich **dwóch informacji** brakuje w tekście B, i uzupełnij go własnym pomysłem.', 6 * 60, 'swiatPrzedstawiony', '**A:** czas - 19.30; miejsce - serwer i opuszczona kopalnia; bohaterka - Maja; wydarzenie - znalezienie skrzyni.\n\n**B:** brakuje czasu i dokładnego miejsca. Np. „Wieczorem Kuba uruchomił grę w swoim pokoju i zobaczył wiadomość.”'),
       slideTask('Z2', 'Kto tu opowiada? Przy każdym fragmencie zapisz: **narrator-bohater** albo **narrator-obserwator**. Podkreśl słowo, które było wskazówką.\n\n1. „Zbudowałam schron, zanim zapadła noc.”\n2. „Olek zobaczył na mapie migający punkt.”\n3. „Nie wiedzieliśmy, kto zostawił znak przy portalu.”\n\nNa koniec przepisz zdanie 2 tak, aby opowiadał je Olek.', 5 * 60, 'narrator', '1. narrator-bohater - „zbudowałam”\n2. narrator-obserwator - „Olek”\n3. narrator-bohater - „wiedzieliśmy”\n\nZmiana: „Zobaczyłem na mapie migający punkt.”'),
       slideTask('Z3', 'Stwórz **mikroopowieść w 4 zdaniach**. Muszą się w niej pojawić:\n\n- dokładny czas i miejsce,\n- bohater z konkretnym celem,\n- niespodziewane wydarzenie,\n- narrator-bohater mówiący „ja”.\n\nMożesz wybrać świat gry, szkoły, komiksu albo własny.', 7 * 60, 'opowiadanie', 'Np. „W sobotę o 18.00 wszedłem do opuszczonej kopalni. Chciałem znaleźć ostatni diament. Nagle za mną zatrzasnęły się kamienne drzwi. Zamiast skarbu zobaczyłem świecący portal.”'),
-      slideHandoutFinish(),
+      slideNote('Świat przedstawiony i narrator', '- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.\n- Autor tworzy tekst, a narrator opowiada historię.\n- Narrator-bohater mówi „ja”, narrator-obserwator opowiada o innych.'),
     ],
   },
   {
@@ -64,15 +60,15 @@ const TOPICS: Topic[] = [
     textbookPage: 16,
     notebookNote: [
       '## Kto mówi w wierszu?',
-      '**{{Podmiot liryczny}}** to osoba mówiąca w wierszu. Poznajemy ją po jej słowach, uczuciach i myślach.', '',
+      '**Podmiot liryczny** to osoba mówiąca w wierszu. Poznajemy ją po jej słowach, uczuciach i myślach.', '',
       '## Autor to nie osoba mówiąca',
-      '**{{Poeta}}** jest autorem wiersza, ale nie musi być podmiotem lirycznym.',
+      '**Poeta** jest autorem wiersza, ale nie musi być podmiotem lirycznym.',
       '- w opowiadaniu historię przedstawia **narrator**,',
       '- w wierszu wypowiada się **podmiot liryczny**.', '',
       '## Jak go rozpoznać?',
       'Szukaj słów: **ja, czuję, myślę, marzę, jesteśmy**. Zwróć uwagę na uczucia, opinie i pragnienia.', '',
       '## Przykład',
-      '„Stoję w lobby całkiem cicho, lecz mam swój własny styl”. Podmiotem lirycznym może być **{{gracz}}**. Wskazówki: **stoję, mam**. Nie wiemy, kto jest poetą.',
+      '„Stoję w lobby całkiem cicho, lecz mam swój własny styl”. Podmiotem lirycznym może być **gracz**. Wskazówki: **stoję, mam**. Nie wiemy, kto jest poetą.',
       '**Być sobą** to znać swoje mocne strony i nie udawać kogoś dla cudzej aprobaty.',
     ].join('\n'),
     questions: [
@@ -83,18 +79,14 @@ const TOPICS: Topic[] = [
       { text: 'Co według wiersza „Ja” znaczy być sobą?', answer: 'Nie czekać, aż dopiero kiedyś się kimś zostanie, lecz uznać własną wartość już teraz.' },
     ],
     makeSlides: (previousSetId) => [
-      slideHandout('Podmiot liryczny - kto mówi w wierszu?', [
-        'wskazać osobę mówiącą w wierszu',
-        'odróżnić poetę od podmiotu lirycznego',
-        'znaleźć w tekście słowa, które zdradzają mówiącego',
-      ]),
+      slideTopic('Podmiot liryczny - kto mówi w wierszu?'),
       ...recap(previousSetId),
       slideRead('Otwieramy podręcznik', 16, 17, 'Czytamy wiersz „Ja”, rozmawiamy o osobie mówiącej i wspólnie wykonujemy zadania 1-3.', 15 * 60),
       slideText('Autor to nie osoba mówiąca', '**Poeta** napisał wiersz. **Podmiot liryczny** mówi w wierszu.\n\nO osobie mówiącej dowiadujemy się z jej słów, myśli i uczuć. Szukamy form: **ja, czuję, jestem, marzę, robimy**.\n\nW opowiadaniu szukaliśmy narratora. W wierszu szukamy podmiotu lirycznego.', 'narrator'),
       slideTask('Z1', 'Przeczytaj:\n\n„W lobby stoję całkiem cicho,\nchoć w słuchawkach dudni bit.\nNie mam skina jak bohater,\nale mam swój własny styl.”\n\nZapisz: kto może być podmiotem lirycznym? Wypisz **dwie wskazówki** z tekstu. Czy wiemy, kto jest autorem? Uzasadnij.', 5 * 60, 'narrator', 'Podmiotem lirycznym może być gracz lub graczka. Wskazówki: „stoję” i „mam swój własny styl”. Nie znamy autora - osoba mówiąca w wierszu nie musi nim być.'),
       slideTask('Z2', 'Porównaj dwa teksty:\n\n**A.** „Nina zamknęła grę. Była dumna z wyniku.”\n\n**B.** „Zamykam grę. Jestem dumna z wyniku.”\n\nZapisz, kto mówi w każdym tekście: **narrator-obserwator**, **narrator-bohater** czy **podmiot liryczny**. Uwaga: jeden opis nie wystarcza - ważne jest także to, czy tekst jest prozą, czy wierszem.', 5 * 60, 'wiersz', '**A:** narrator-obserwator, bo mówi o Ninie.\n**B:** narrator-bohater, bo mówi o sobie.\n\nOba fragmenty są prozą, więc nie nazywamy osoby mówiącej podmiotem lirycznym.'),
       slideTask('Z3', 'Napisz czterowersowy tekst pod tytułem **„Ja online i ja offline”**.\n\n- mów w pierwszej osobie,\n- pokaż jedną rzecz, którą lubisz, i jedną, która jest dla ciebie ważna,\n- użyj jednego rzeczownika, czasownika i przymiotnika - podkreśl je i podpisz: **R, CZ, P**.', 8 * 60, 'wiersz', 'Np. „W sieci buduję **wysoki** (P) dom,\npo szkole **gram** (CZ), gdy chwilę mam.\nLecz ważny jest dla mnie **przyjaciel** (R),\nz nim nawet zwykły dzień nabiera barw.”'),
-      slideHandoutFinish(),
+      slideNote('Podmiot liryczny', '- Podmiot liryczny to osoba mówiąca w wierszu.\n- Poeta jest autorem, ale nie musi być podmiotem lirycznym.\n- W prozie opowiada narrator, w wierszu mówi podmiot liryczny.'),
     ],
   },
   {
@@ -103,11 +95,11 @@ const TOPICS: Topic[] = [
     textbookPage: 18,
     notebookNote: [
       '## Dobra notatka',
-      'Wybiera **najważniejsze informacje** - nie kopiuje wszystkiego. Stosuje zasadę **3K: krótko, {{konkretnie}}, czytelnie**.', '',
+      'Wybiera **najważniejsze informacje** - nie kopiuje wszystkiego. Stosuje zasadę **3K: krótko, konkretnie, czytelnie**.', '',
       '## Dobierz właściwą formę',
       '- **punkty** - fakty albo kolejne kroki,',
-      '- **{{tabela}}** - porównanie co najmniej dwóch rzeczy,',
-      '- **{{mapa myśli}}** - związki i skojarzenia,',
+      '- **tabela** - porównanie co najmniej dwóch rzeczy,',
+      '- **mapa myśli** - związki i skojarzenia,',
       '- **sketchnotka** - słowa połączone z prostymi symbolami.', '',
       '## Trzy kroki',
       '1. Przeczytaj cały fragment.',
@@ -127,11 +119,7 @@ const TOPICS: Topic[] = [
       { text: 'Co oznacza zasada 3K?', answer: 'Krótko, konkretnie, czytelnie.' },
     ],
     makeSlides: (previousSetId) => [
-      slideHandout('Jak zrobić notatkę, która naprawdę pomaga?', [
-        'wybrać z tekstu najważniejsze informacje',
-        'dobrać punkty, tabelę lub mapę myśli do celu',
-        'stosować zasadę 3K',
-      ]),
+      slideTopic('Jak zrobić notatkę, która naprawdę pomaga?'),
       ...recap(previousSetId),
       slideRead('Otwieramy podręcznik', 18, 21, 'Poznajemy sposoby notowania, porównujemy przykłady i wspólnie wykonujemy zadania 1-3.', 18 * 60),
       slideText('Najpierw cel, potem forma', 'Dobra notatka odpowiada na pytanie: **do czego jej użyję?**\n\n- lista kroków - **punkty**\n- porównanie - **tabela**\n- związki i skojarzenia - **mapa myśli**\n- szybkie zapamiętanie - **sketchnotka**\n\nZasada **3K**: krótko, konkretnie, czytelnie.', 'zeszyt'),
@@ -139,7 +127,7 @@ const TOPICS: Topic[] = [
       slideTask('Z2', 'Dwaj twórcy pokazali poradniki do budowania domu w Minecraft:\n\n**Film A:** 45 sekund, 3 kroki, same napisy, łatwy.\n**Film B:** 6 minut, 8 kroków, komentarz głosowy, trudniejszy.\n\nZrób tabelę porównującą oba filmy. Sam wybierz **cztery nagłówki wierszy**. Pod tabelą napisz, który poradnik wybierasz i dlaczego.', 7 * 60, undefined, 'Np. nagłówki: **czas, liczba kroków, sposób objaśnienia, poziom trudności**.\n\n„Wybieram film A, bo chcę szybko poznać podstawy i łatwo powtórzyć trzy kroki.”'),
       slideTask('Z3', 'Dwie osoby zrobiły notatki z tego samego tematu przyrody:\n\n**Notatka A:** pół strony, 5 krótkich punktów, same słowa-klucze, bez rysunków.\n**Notatka B:** cała strona, mapa myśli z 5 gałęziami, słowa-klucze i proste symbole.\n\nZrób tabelę porównującą obie notatki. Sam wybierz **cztery nagłówki wierszy**. Pod tabelą napisz, z której notatki wolisz się uczyć i dlaczego.', 7 * 60, undefined, 'Np. nagłówki: **długość, forma, sposób zapisu, ilustracje**.\n\n„Wybieram notatkę B, bo symbole i gałęzie mapy myśli pomagają mi zapamiętać związki między informacjami.”'),
       slideTask('Z4', 'Zrób małą mapę myśli pod hasłem **„Dobra opowieść”**.\n\nWykorzystaj wiedzę z pierwszej lekcji: czas, miejsce, bohaterowie, wydarzenia, narrator. Do każdej gałęzi dopisz po jednym własnym przykładzie. Jedną informację zastąp prostym symbolem lub rysunkiem.', 7 * 60, 'swiatPrzedstawiony', 'Np. **Dobra opowieść** → czas: noc; miejsce: opuszczony zamek; bohater: odważna Maja; wydarzenie: odkrycie przejścia; narrator: bohater mówiący „ja”.'),
-      slideHandoutFinish(),
+      slideNote('Dobra notatka', '- Notatka wybiera najważniejsze informacje.\n- Formy: punkty, tabela, mapa myśli, sketchnotka.\n- Zasada 3K: krótko, konkretnie, czytelnie.'),
     ],
   },
   {
@@ -148,9 +136,9 @@ const TOPICS: Topic[] = [
     textbookPage: 22,
     notebookNote: [
       '## Głoska, litera, sylaba',
-      '- **{{głoskę}}** słyszymy i wymawiamy,',
-      '- **{{literę}}** widzimy i piszemy,',
-      '- **{{sylaba}}** to część wyrazu wymawiana jednym otwarciem ust.', '',
+      '- **głoskę** słyszymy i wymawiamy,',
+      '- **literę** widzimy i piszemy,',
+      '- **sylaba** to część wyrazu wymawiana jednym otwarciem ust.', '',
       '## Samogłoski i dwuznaki',
       'Samogłoski: **a, ą, e, ę, i, o, u (ó), y**. Każda sylaba ma samogłoskę.',
       'Jedną głoskę mogą zapisywać dwie litery: **sz, cz, rz, ch, dz, dż, dź**.', '',
@@ -171,18 +159,14 @@ const TOPICS: Topic[] = [
       { text: 'Gdzie wolno przenieść wyraz do następnej linii?', answer: 'Między sylabami.' },
     ],
     makeSlides: (previousSetId) => [
-      slideHandout('Głoski, litery i sylaby - kod języka', [
-        'odróżnić głoskę, literę i sylabę',
-        'policzyć głoski i litery w wyrazie',
-        'poprawnie dzielić i przenosić wyrazy',
-      ]),
+      slideTopic('Głoski, litery i sylaby - kod języka'),
       ...recap(previousSetId),
       slideRead('Otwieramy podręcznik', 22, 24, 'Czytamy reguły, wspólnie sprawdzamy przykłady i wykonujemy zadania 5, 7 i 8.', 18 * 60),
       slideText('Ucho, oko i rytm', '**Głoskę** słyszymy i wymawiamy. **Literę** widzimy i piszemy.\n\nJedna głoska może mieć dwie litery: **sz, cz, rz, ch, dz, dż, dź**.\n\nKażda sylaba ma samogłoskę. Wyraz przenosimy do nowej linii tylko **między sylabami**.', 'dwuznak'),
       slideTask('Z1', 'Posortuj wyrazy do dwóch skrzyń:\n\n**A - tyle samo liter i głosek**\n**B - więcej liter niż głosek**\n\nchata, gracz, mapa, chmura, dom, miecz, rower, dżem\n\nPrzepisz wyrazy w dwóch grupach. W grupie B podkreśl dwuznaki.', 6 * 60, 'dwuznak', '**A:** mapa, dom, rower\n\n**B:** chata, gracz, chmura, miecz, dżem. W tych wyrazach dwie litery zapisują jedną głoskę.'),
       slideTask('Z2', 'Rozszyfruj ekwipunek gracza. Przy każdym wyrazie zapisz liczbę **liter, głosek i sylab**:\n\n1. mapa\n2. szafa\n3. dżem\n4. chmura\n\nWzór: **mapa - 4 litery, 4 głoski, 2 sylaby: ma-pa**.', 7 * 60, 'sylaby', 'mapa - 4 litery, 4 głoski, 2 sylaby: ma-pa\nszafa - 5 liter, 4 głoski, 2 sylaby: sza-fa\ndżem - 4 litery, 3 głoski, 1 sylaba\nchmura - 6 liter, 5 głosek, 2 sylaby: chmu-ra'),
       slideTask('Z3', 'Administrator serwera może użyć tylko nicku, który ma **dokładnie 6 liter i 5 głosek**.\n\nSprawdź nicki: **Chmura, Rzeka, Gracz, Szyfr**. Zapisz ten, który spełnia warunek, i uzasadnij liczbami.\n\nPotem wymyśl własny wyraz z dwuznakiem i podziel go na sylaby.', 6 * 60, 'dwuznak', '**Chmura** spełnia warunek: ma 6 liter i 5 głosek, ponieważ „ch” zapisuje jedną głoskę. Dzielimy: chmu-ra.\n\nWłasny przykład: szafa - sza-fa.'),
-      slideHandoutFinish(),
+      slideNote('Głoski, litery i sylaby', '- Głoskę słyszymy, literę widzimy i piszemy.\n- Dwuznaki: sz, cz, rz, ch, dz, dż, dź - dwie litery, jedna głoska.\n- Każda sylaba ma samogłoskę. Wyrazy przenosimy między sylabami.'),
     ],
   },
   {
@@ -191,13 +175,13 @@ const TOPICS: Topic[] = [
     textbookPage: 25,
     notebookNote: [
       '## Epitet',
-      '**{{Epitet}}** to określenie rzeczownika. Najczęściej jest przymiotnikiem. Odpowiada na pytania: **{{jaki?}} jaka? jakie? czyj? czyja? czyje?**', '',
+      '**Epitet** to określenie rzeczownika. Najczęściej jest przymiotnikiem. Odpowiada na pytania: **jaki? jaka? jakie? czyj? czyja? czyje?**', '',
       '## Po co go używamy?',
       'Epitet pomaga zobaczyć, usłyszeć albo poczuć opisywany świat i buduje nastrój.',
       '„Las” przekazuje informację. „**Ciemny, wilgotny las**” uruchamia wyobraźnię.', '',
       '## Przykład',
       '„**Samotny** awatar wszedł do **opuszczonego** zamku. Zobaczył **mroczny** korytarz i **żelazne** drzwi”.',
-      'Epitety budują **{{tajemniczy}} i niebezpieczny nastrój**.', '',
+      'Epitety budują **tajemniczy i niebezpieczny nastrój**.', '',
       '## Precyzyjny opis i autoportret',
       'Zamiast „fajny skin” napisz: „**neonowy skin z pękniętą maską**”.',
       '**Autoportret** to portret samego siebie wykonany obrazem, zdjęciem albo słowami. Pokazuje wygląd, charakter i zainteresowania.',
@@ -210,18 +194,14 @@ const TOPICS: Topic[] = [
       { text: 'Wskaż epitet w wyrażeniu „opuszczony zamek”.', answer: 'Opuszczony.' },
     ],
     makeSlides: (previousSetId) => [
-      slideHandout('Epitet - słowo, które uruchamia wyobraźnię', [
-        'rozpoznać epitet i rzeczownik, który określa',
-        'wyjaśnić, jak epitet wpływa na obraz i nastrój',
-        'tworzyć dokładniejsze, ciekawsze opisy',
-      ]),
+      slideTopic('Epitet - słowo, które uruchamia wyobraźnię'),
       ...recap(previousSetId),
       slideRead('Otwieramy podręcznik', 25, 28, 'Czytamy wiersz „Autoportret”, oglądamy przykłady opisu i wykonujemy zadania wskazane przez nauczyciela.', 18 * 60),
       slideText('Epitet dodaje obraz i nastrój', '**Epitet** określa rzeczownik i odpowiada na pytania: **jaki? jaka? jakie? czyj?**\n\n„Las” to informacja. **„Ciemny, wilgotny las”** to obraz i nastrój.\n\nNajlepszy epitet jest dokładny. Zamiast „fajny” wybierz słowo, po którym inni zobaczą to samo co ty.', 'opis'),
       slideTask('Z1', 'Dwa opisy tej samej sceny:\n\n**A.** „Awatar wszedł do zamku. Zobaczył korytarz i drzwi.”\n\n**B.** „Samotny awatar wszedł do opuszczonego zamku. Zobaczył mroczny korytarz i żelazne drzwi.”\n\nWypisz epitety z tekstu B. Następnie jednym zdaniem wyjaśnij, jak zmieniły obraz lub nastrój sceny.', 5 * 60, 'opis', 'Epitety: **samotny** awatar, **opuszczony** zamek, **mroczny** korytarz, **żelazne** drzwi. Dzięki nim scena wydaje się niebezpieczna i tajemnicza.'),
       slideTask('Z2', 'Ulepsz opis, ale nie używaj słów **fajny, super, ładny**:\n\n„W Robloxie zobaczyłem parkour. Były tam platformy, światła i tunel.”\n\nPrzepisz tekst, dodając co najmniej **5 trafnych epitetów**. Podkreśl epitety, a rzeczowniki, które określają, otocz kółkiem.', 7 * 60, 'opis', 'Np. „W Robloxie zobaczyłem **podniebny** parkour. Były tam **wąskie, ruchome** platformy, **pulsujące** światła i **ciemny, kręty** tunel.”'),
       slideTask('Z3', 'Zaprojektuj słowny kadr komiksu zatytułowany **„Sekundę przed katastrofą”**.\n\nNapisz 3-4 zdania. Podaj czas, miejsce, bohatera i wydarzenie. Użyj minimum **4 epitetów**, które budują napięcie. Na końcu dopisz, kto jest narratorem.', 8 * 60, 'swiatPrzedstawiony', 'Np. „O północy wszedłem do **pustego** laboratorium. Nad **szklanym** stołem wisiała **czerwona** lampka. Nagle usłyszałem **metaliczny** trzask i podłoga zadrżała. Narrator-bohater: uczestniczę w wydarzeniach i mówię „ja”.”'),
-      slideHandoutFinish(),
+      slideNote('Epitet', '- Epitet to określenie rzeczownika, najczęściej przymiotnik.\n- Odpowiada na pytania: jaki? jaka? jakie? czyj?\n- Epitety tworzą obraz i budują nastrój.'),
     ],
   },
   {
@@ -453,20 +433,10 @@ function slideTopic(topic: string): Slide {
   return { id: newId(), kind: 'topic', topic, variant: 'write' };
 }
 
-function slideHandout(topic: string, goals: string[]): Slide {
-  return {
-    id: newId(),
-    kind: 'topic',
-    topic,
-    variant: 'handout',
-    goals,
-    note: 'Wklejamy karty A5 do zeszytu. Puste pola uzupełnimy pod koniec.',
-  };
-}
 function slideRead(title: string, page: number, pageTo: number, body: string, timerSec: number): Slide { return { id: newId(), kind: 'read', title, source: 'Podręcznik', page, pageTo, body, timerSec }; }
 function slideText(title: string, body: string, art?: SlideArt): Slide { return { id: newId(), kind: 'text', title, body, art }; }
 function slideTask(code: string, body: string, timerSec: number, art?: SlideArt, answerExample?: string): Slide {
-  return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, zeszyt: true };
+  return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample };
 }
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
@@ -474,13 +444,3 @@ function slideNote(temat: string, body: string): Slide {
   return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
 }
 function recap(questionSetId?: string): Slide[] { return questionSetId ? [slideRecap(questionSetId)] : []; }
-function slideHandoutFinish(): Slide {
-  return {
-    id: newId(),
-    kind: 'text',
-    title: 'Wracamy do karty A5',
-    body: 'Uzupełnij **puste miejsca** pojedynczymi słowami.\n\nPotem zasłoń kartę i wyjaśnij własnymi słowami **dwa wybrane pojęcia**. Osoba obok sprawdza odpowiedź.',
-    art: 'zeszyt',
-    zeszyt: true,
-  };
-}

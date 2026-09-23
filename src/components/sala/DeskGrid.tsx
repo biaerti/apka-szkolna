@@ -19,7 +19,7 @@
 import clsx from 'clsx';
 import type { RecapEvent, Student } from '../../data/types';
 import type { Desk, SeatPosition } from '../../lib/seating';
-import { deskName, samePosition } from '../../lib/seating';
+import { deskName, podpisRozmiar, samePosition } from '../../lib/seating';
 import { resultSymbol } from '../../lib/resultSymbol';
 
 export interface DeskGridProps {
@@ -107,16 +107,4 @@ export function DeskGrid({
       </div>
     </div>
   );
-}
-
-/**
- * Klasa Tailwind z wielkoscia pisma dobrana do dlugosci imienia. Progi wyszly z
- * pomiaru szerokosci tekstu w miejscu (ok. 50 px): "Mateusz" miesci sie w 12 px,
- * "Aleksandra" dopiero w 10 px, a "Maksymilian" w 9 px z ciasniejszym odstepem.
- */
-function podpisRozmiar(podpis: string): string {
-  if (podpis.length <= 7) return 'text-xs';
-  if (podpis.length === 8) return 'text-[11px]';
-  if (podpis.length <= 10) return 'text-[10px]';
-  return 'text-[9px] tracking-tight';
 }

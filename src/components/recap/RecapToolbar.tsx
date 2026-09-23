@@ -100,6 +100,7 @@ export function RecapToolbar({
           >
             <option value="wheel">koło</option>
             <option value="sequential">po kolei</option>
+            <option value="sala">rozkład klasy</option>
           </select>
         </label>
         <label className="flex items-center gap-1.5">

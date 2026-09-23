@@ -118,6 +118,7 @@ export function useRecapSession({
   }
 
   return {
+    classId,
     classStudents,
     absentSet: attendance.absentSet,
     togglePresent: attendance.togglePresent,

@@ -147,3 +147,17 @@ export function deskName(student: Student, classmates: Student[]): string {
   const clash = koledzy.some((other) => other.id !== student.id && other.firstName === imie);
   return clash ? shortName(pierwsze(student), koledzy) : imie;
 }
+
+/**
+ * Klasa Tailwind z wielkoscia pisma dobrana do dlugosci imienia na miejscu w
+ * lawce (ok. 50 px szerokosci). Progi wyszly z pomiaru: "Mateusz" miesci sie
+ * w 12 px, "Aleksandra" dopiero w 10 px, a "Maksymilian" w 9 px z ciasniejszym
+ * odstepem. Wspolna dla widoku Sala (DeskGrid) i losowania na rozkladzie
+ * (SeatingPicker).
+ */
+export function podpisRozmiar(podpis: string): string {
+  if (podpis.length <= 7) return 'text-xs';
+  if (podpis.length === 8) return 'text-[11px]';
+  if (podpis.length <= 10) return 'text-[10px]';
+  return 'text-[9px] tracking-tight';
+}

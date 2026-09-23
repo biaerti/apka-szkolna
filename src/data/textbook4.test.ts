@@ -12,29 +12,9 @@ describe('buildTextbook4', () => {
     expect([...pages].sort((a, b) => a - b)).toEqual(pages);
   });
 
-  it('pierwsze piec tematow zaczyna karta A5 i nie ma slajdu do przepisywania notatki', () => {
+  it('kazda lekcja zaczyna sie zapisaniem tematu i konczy notatka do zeszytu', () => {
     const bundle = buildTextbook4('IV', ['4a']);
-    for (const lesson of bundle.lessons.slice(0, 5)) {
-      expect(lesson.exercisePage).toBeUndefined();
-      const opening = lesson.slides[0];
-      expect(opening).toMatchObject({ kind: 'topic', variant: 'handout' });
-      expect(opening.kind === 'topic' ? opening.goals : undefined).toHaveLength(3);
-      expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
-      expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(lesson.title.startsWith('4.') ? 4 : 3);
-      expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
-      expect(lesson.slides.some((slide) => slide.kind === 'note')).toBe(false);
-      expect(lesson.slides[lesson.slides.length - 1]).toMatchObject({ kind: 'text', title: 'Wracamy do karty A5', zeszyt: true });
-      expect(lesson.notebookNote?.match(/\{\{[^{}]+\}\}/g)).toHaveLength(3);
-    }
-    const firstRead = bundle.lessons[0].slides.find((slide) => slide.kind === 'read');
-    expect(firstRead).toMatchObject({ page: 12, pageTo: 15, timerSec: 20 * 60 });
-  });
-
-  it('kolejne tematy maja prezentacje i zadania bez dodatkowych kart A5', () => {
-    const bundle = buildTextbook4('IV', ['4a']);
-    const lessons = bundle.lessons.slice(5);
-    expect(lessons).toHaveLength(7);
-    expect(lessons.map((lesson) => lesson.title)).toEqual([
+    expect(bundle.lessons.slice(5).map((lesson) => lesson.title)).toEqual([
       '8. Dlaczego warto być sobą?',
       '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
       '11. Czas na czasownik',
@@ -43,22 +23,30 @@ describe('buildTextbook4', () => {
       '15. Tworzymy plan ramowy',
       '16. Co już wiesz? Co umiesz?',
     ]);
-    for (const lesson of lessons) {
+    for (const [index, lesson] of bundle.lessons.entries()) {
+      expect(lesson.exercisePage).toBeUndefined();
       expect(lesson.slides[0]).toMatchObject({ kind: 'topic', variant: 'write' });
       expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
-      expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(2);
+      // Pierwsze piec tematow ma 3-4 zadania, krotsze prezentacje podsumowujace - 2.
+      const expectedTasks = index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
+      expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(expectedTasks);
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
+      // Zadnych slajdow zwiazanych z kartami A5 - Bartek moze ich nie drukowac.
       expect(lesson.slides.some((slide) => slide.kind === 'topic' && slide.variant === 'handout')).toBe(false);
       expect(lesson.slides.some((slide) => slide.kind === 'text' && slide.title === 'Wracamy do karty A5')).toBe(false);
-      // Notatka A5 do wydruku jest pelna (bez luk {{...}}) - te lekcje nie
-      // maja slajdu wracania do karty, wiec nie ma kiedy uzupelniac pol.
-      expect(lesson.notebookNote).toBeTruthy();
-      expect(lesson.notebookNote).not.toMatch(/\{\{/);
-      expect(lesson.notebookNote).toContain('## Najważniejsze');
+      // Zadania bez plakietki "do zeszytu" - Bartek ja wycofal z tych prezentacji.
+      expect(lesson.slides.filter((slide) => slide.kind === 'task').some((slide) => slide.zeszyt)).toBe(false);
+      // Kazda lekcje zamyka notatka "Temat: ..." do przepisania.
       const closing = lesson.slides[lesson.slides.length - 1];
       expect(closing).toMatchObject({ kind: 'note', title: 'Notatka do zeszytu' });
       expect(closing.kind === 'note' ? closing.body : '').toMatch(/^\*\*Temat:\*\* /);
+      // Notatka A5 do wydruku jest pelna (bez luk {{...}}) - nie ma juz slajdu
+      // wracania do karty, wiec nie byloby kiedy uzupelniac pol.
+      expect(lesson.notebookNote).toBeTruthy();
+      expect(lesson.notebookNote).not.toMatch(/\{\{/);
     }
+    const firstRead = bundle.lessons[0].slides.find((slide) => slide.kind === 'read');
+    expect(firstRead).toMatchObject({ page: 12, pageTo: 15, timerSec: 20 * 60 });
   });
 
   it('zadania mieszcza sie na slajdzie projektora', () => {

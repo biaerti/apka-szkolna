@@ -31,7 +31,8 @@ import {
   type RecapMode,
 } from '../../lib/recap';
 
-export type PickMode = 'wheel' | 'sequential';
+/** 'sala' = losowanie na rozkladzie lawek (podswietlenie skacze po miejscach). */
+export type PickMode = 'wheel' | 'sequential' | 'sala';
 
 type LastActionKind = 'grade' | 'hint' | 'uwaga' | 'pick';
 
@@ -106,6 +107,8 @@ export function useRecapDraw({
   const [lastAction, setLastAction] = useState<LastAction | null>(null);
   const [pickMode, setPickMode] = useState<PickMode>(initialPickMode);
   const [grading, setGrading] = useState(initialGrading);
+  /** Uczen, na ktorym ma wyladowac animacja trybu 'sala' (odpowiednik wheelTarget). */
+  const [salaTargetId, setSalaTargetId] = useState<string | null>(null);
 
   // Wpis wylosowany, ale jeszcze nie ujawniony - kolo dopiero sie kreci.
   // Nazwisko ma sie pokazac DOPIERO, gdy kolo stanie (patrz handleSpinEnd),
@@ -142,11 +145,16 @@ export function useRecapDraw({
     // sektora.
     const poolIdx = Math.min(pool.length - 1, Math.floor(Math.random() * pool.length));
     const entry = pool[poolIdx];
-    const sectorIdx = entries.findIndex((en) => en.key === entry.key);
-    const angle = wheelTargetAngle(Math.max(0, sectorIdx), entries.length, 5, Math.random);
     pendingEntryRef.current = entry;
     setSpinning(true);
-    setWheelTarget(angle);
+    if (pickMode === 'sala') {
+      // Rozklad klasy nie ma kata - SeatingPicker dostaje cel wprost i sam
+      // prowadzi animacje skaczacego podswietlenia, konczac ja handleSpinEnd.
+      setSalaTargetId(entry.student.id);
+    } else {
+      const sectorIdx = entries.findIndex((en) => en.key === entry.key);
+      setWheelTarget(wheelTargetAngle(Math.max(0, sectorIdx), entries.length, 5, Math.random));
+    }
     setSpinToken((t) => t + 1);
   }
 
@@ -157,12 +165,15 @@ export function useRecapDraw({
     if (entry) applyPickRef.current(entry);
   }, []);
 
-  // Bezpiecznik: gdy w trakcie krecenia nauczyciel przelaczy sie na tryb "po
-  // kolei", kolo znika z ekranu i nigdy nie zglosi konca animacji - konczymy ja
-  // recznie, zeby wylosowana osoba nie utknela w zawieszeniu.
+  // Bezpiecznik: gdy w trakcie animacji nauczyciel przelaczy tryb wyboru,
+  // dotychczasowy animator (kolo albo rozklad klasy) znika z ekranu i nigdy
+  // nie zglosi konca animacji - konczymy ja recznie, zeby wylosowana osoba
+  // nie utknela w zawieszeniu.
+  const prevPickModeRef = useRef(pickMode);
   useEffect(() => {
-    if (pickMode === 'wheel' || !spinning) return;
-    handleSpinEnd();
+    if (prevPickModeRef.current === pickMode) return;
+    prevPickModeRef.current = pickMode;
+    if (spinning) handleSpinEnd();
   }, [pickMode, spinning, handleSpinEnd]);
 
   /**
@@ -262,6 +273,7 @@ export function useRecapDraw({
     graded,
     spinning,
     wheelTarget,
+    salaTargetId,
     spinToken,
     canSpin,
     spin,

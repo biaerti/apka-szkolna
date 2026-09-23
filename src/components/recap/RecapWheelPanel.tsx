@@ -7,6 +7,7 @@
 // pod kolem: zamiast "Krec" pojawia sie "zacznij nowa runde".
 
 import { useEffect, useRef, useState } from 'react';
+import { SeatingPicker } from './SeatingPicker';
 import { SequentialPicker } from './SequentialPicker';
 import { Wheel } from './Wheel';
 import type { RecapSessionState } from './useRecapSession';
@@ -53,6 +54,18 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
             nextStudentId={session.pool[0]?.student.id ?? null}
             currentStudentId={session.currentStudent?.id ?? null}
           />
+        ) : session.pickMode === 'sala' ? (
+          <SeatingPicker
+            classId={session.classId}
+            students={session.classStudents}
+            absentSet={session.absentSet}
+            usedCount={session.usedCount}
+            currentStudentId={session.currentStudent?.id ?? null}
+            spinning={session.spinning}
+            spinToken={session.spinToken}
+            targetStudentId={session.salaTargetId}
+            onSpinEnd={session.handleSpinEnd}
+          />
         ) : (
           <Wheel
             /* Wszystkie wpisy rundy, nie sama pula losowania - kto juz
@@ -87,7 +100,7 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
           disabled={!session.canSpin}
           className="shrink-0 rounded-lg bg-accent-600 px-8 py-2.5 text-xl font-semibold hover:bg-accent-700 disabled:opacity-40"
         >
-          {session.pickMode === 'sequential' ? 'Następny uczeń (Spacja)' : 'Kręć (Spacja)'}
+          {session.pickMode === 'sequential' ? 'Następny uczeń (Spacja)' : session.pickMode === 'sala' ? 'Losuj (Spacja)' : 'Kręć (Spacja)'}
         </button>
       )}
     </div>

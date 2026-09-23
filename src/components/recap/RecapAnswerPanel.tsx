@@ -56,7 +56,7 @@ export function RecapAnswerPanel({
             className="text-center font-bold leading-tight text-gray-400"
             style={{ fontSize: 'clamp(40px, 6vw, 100px)' }}
           >
-            Kręć kołem
+            {session.pickMode === 'sequential' ? 'Wybierz ucznia' : session.pickMode === 'sala' ? 'Losuj z rozkładu' : 'Kręć kołem'}
           </p>
         )}
       </div>

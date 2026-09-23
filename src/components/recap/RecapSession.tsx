@@ -74,7 +74,7 @@ export function RecapSession({
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const queryPick = searchParams.get('pick');
   const explicitPick: PickMode | undefined =
-    queryPick === 'sequential' || queryPick === 'wheel' ? queryPick : undefined;
+    queryPick === 'sequential' || queryPick === 'wheel' || queryPick === 'sala' ? queryPick : undefined;
   const explicitRandom = searchParams.has('random') ? searchParams.get('random') === '1' : undefined;
   const explicitGrading = searchParams.has('grading') ? searchParams.get('grading') === '1' : undefined;
   const queryTryb = searchParams.get('tryb');
@@ -237,7 +237,7 @@ export function RecapSession({
           </span>
         </span>
         <span className="min-w-0 flex-1 truncate">
-        {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : 'Spacja: kręć'}
+        {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : session.pickMode === 'sala' ? 'Spacja: losuj' : 'Spacja: kręć'}
         {session.grading
           ? session.recapMode === 'powtorzeniowe'
             ? ' - 1: dobrze - 2: częściowo - 3: źle - 4: pas'
