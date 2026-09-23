@@ -31,6 +31,7 @@ import type {
   Settings,
   Student,
   TimetableEntry,
+  VulcanLesson,
 } from './types';
 
 export const STORAGE_KEY = 'apka-szkolna';
@@ -62,6 +63,7 @@ interface AppState {
   timetable: TimetableEntry[];
   absences: Absence[];
   seats: Seat[];
+  vulcanLessons: VulcanLesson[];
   settings: Settings;
   manuallyEditedLessonIds: ManuallyEditedLessonIds;
 
@@ -168,6 +170,13 @@ interface AppState {
   /** Czysci cale rozsadzenie klasy. */
   clearSeating: (classId: string) => void;
 
+  /**
+   * Plan dnia z VULCANA: zastepuje wszystkie lekcje z VULCANA na ten dzien
+   * podanymi (id z vulcanLessonId). Nic nie zmienia, gdy odczyt jest taki sam
+   * jak zapisany - dodatek czyta drzewo co chwile.
+   */
+  setVulcanDay: (date: string, lessons: VulcanLesson[]) => void;
+
   updateSettings: (patch: Partial<Settings>) => void;
 
   // Reset / import calego stanu
@@ -186,6 +195,7 @@ interface AppState {
       | 'timetable'
       | 'absences'
       | 'seats'
+      | 'vulcanLessons'
       | 'settings'
     >,
   ) => void;
@@ -328,6 +338,7 @@ export const useStore = create<AppState>()(
       timetable: [],
       absences: [],
       seats: [],
+      vulcanLessons: [],
       settings: {
         passesPerMonth: 2,
         hintGivesMinus: true,
@@ -364,6 +375,7 @@ export const useStore = create<AppState>()(
           timetable: s.timetable.filter((e) => e.classId !== id),
           absences: s.absences.filter((a) => a.classId !== id),
           seats: s.seats.filter((seat) => seat.classId !== id),
+          vulcanLessons: s.vulcanLessons.map((l) => (l.classId === id ? { ...l, classId: undefined } : l)),
           questionSets: s.questionSets.map((qs) => ({ ...qs, classIds: qs.classIds.filter((c) => c !== id) })),
         }));
       },
@@ -599,6 +611,16 @@ export const useStore = create<AppState>()(
         set((s) => ({ seats: s.seats.filter((seat) => seat.classId !== classId) }));
       },
 
+      setVulcanDay: (date, lessons) => {
+        set((s) => {
+          const current = s.vulcanLessons.filter((l) => l.date === date);
+          const key = (list: VulcanLesson[]) =>
+            JSON.stringify([...list].sort((a, b) => a.period - b.period).map((l) => [l.id, l.classId ?? '', l.className, l.subject, l.replacement ?? '']));
+          if (key(current) === key(lessons)) return {};
+          return { vulcanLessons: [...s.vulcanLessons.filter((l) => l.date !== date), ...lessons] };
+        });
+      },
+
       updateSettings: (patch) => {
         set((s) => ({ settings: { ...s.settings, ...patch } }));
       },
@@ -621,6 +643,7 @@ export const useStore = create<AppState>()(
           timetable: buildSeedTimetable(seed.classes),
           absences: [],
           seats: [],
+          vulcanLessons: [],
           settings: seed.settings,
           manuallyEditedLessonIds: {},
         }));
@@ -628,7 +651,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 17,
+      version: 18,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -673,6 +696,7 @@ export const useStore = create<AppState>()(
       // Stare dane dostaja pusta liste.
       // v16 -> v17: dochodzi kolekcja seats (miejsca w lawkach, widok "Sala").
       // Stare dane dostaja pusta liste - rozsadzenie robi sie recznie.
+      // v17 -> v18: dochodzi kolekcja vulcanLessons (plan dnia z VULCANA).
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -686,6 +710,7 @@ export const useStore = create<AppState>()(
           timetable?: TimetableEntry[];
           absences?: Absence[];
           seats?: Seat[];
+          vulcanLessons?: VulcanLesson[];
           [key: string]: unknown;
         };
         if (version < 2) {
@@ -758,6 +783,9 @@ export const useStore = create<AppState>()(
         }
         if (version < 17 && !Array.isArray(state.seats)) {
           state.seats = [];
+        }
+        if (version < 18 && !Array.isArray(state.vulcanLessons)) {
+          state.vulcanLessons = [];
         }
         if (version < 14 && state.settings) {
           state.settings = { ...state.settings, slideFontPercent: state.settings.slideFontPercent ?? 100 };

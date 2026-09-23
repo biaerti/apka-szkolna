@@ -599,3 +599,28 @@ export interface Seat {
   /** 1 = lewe miejsce w lawce (patrzac na tablice), 2 = prawe. */
   side: 1 | 2;
 }
+
+// --- Plan z VULCANA ------------------------------------------------------------
+
+/**
+ * Lekcja nauczyciela na konkretny DZIEN odczytana z drzewa lekcji VULCANA
+ * (dodatek "pomocnik VULCAN", vulcan-bot.js: readScheduleFromPage). W odroznieniu
+ * od TimetableEntry (plan tygodniowy) zna zastepstwa i zamiany - dlatego gdy na
+ * dany dzien sa wpisy z VULCANA, panel i zegar biora je zamiast planu tygodniowego
+ * (patrz src/lib/vulcanPlan.ts).
+ *
+ * Id wyliczane z dnia i godziny ("vl-RRRR-MM-DD-<nr>") - jedna lekcja nauczyciela
+ * na godzine, ponowny odczyt to zwykly upsert.
+ */
+export interface VulcanLesson {
+  id: ID;
+  date: string; // "RRRR-MM-DD"
+  period: number; // LessonPeriod.no
+  /** Klasa apki dopasowana po nazwie; brak = klasa spoza apki (np. zastepstwo w cudzej klasie). */
+  classId?: ID;
+  /** Nazwa klasy jak w VULCANIE ("4B"). */
+  className: string;
+  subject: string;
+  /** "zastępstwo za ..." gdy VULCAN tak oznaczyl lekcje. */
+  replacement?: string;
+}

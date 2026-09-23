@@ -46,6 +46,7 @@ import {
 } from './timetableMappers';
 import { absenceToRow, rowToAbsence, type AbsenceRow } from './absenceMappers';
 import { rowToSeat, seatToRow, type SeatRow } from './seatMappers';
+import { rowToVulcanLesson, vulcanLessonToRow, type VulcanLessonRow } from './vulcanLessonMappers';
 import { DEFAULT_PERIODS, buildSeedTimetable } from '../timetableSeed';
 import { decryptStudentRows, encryptStudentRows } from '../../lib/studentCrypto';
 import type {
@@ -62,6 +63,7 @@ import type {
   Settings,
   Student,
   TimetableEntry,
+  VulcanLesson,
 } from '../types';
 
 const PAGE_SIZE = 1000;
@@ -85,6 +87,7 @@ export interface RemoteData {
   timetable: TimetableEntry[];
   absences: Absence[];
   seats: Seat[];
+  vulcanLessons: VulcanLesson[];
   settings: Settings;
 }
 
@@ -141,6 +144,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
     timetableRows,
     absenceRows,
     seatRows,
+    vulcanLessonRows,
     settingsRows,
   ] =
     await Promise.all([
@@ -156,6 +160,8 @@ async function fetchRemote(): Promise<RemoteLoad> {
       fetchAllRows<TimetableEntryRow>('timetable_entries'),
       fetchAllRows<AbsenceRow>('absences'),
       fetchAllRows<SeatRow>('seats'),
+      // Tabela z migracji 0029 - bez niej (starsza baza) pusta lista zamiast bledu logowania.
+      fetchAllRows<VulcanLessonRow>('vulcan_lessons').catch(() => [] as VulcanLessonRow[]),
       fetchAllRows<SettingsRow>('settings'),
     ]);
 
@@ -183,6 +189,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
       timetable: timetableSeeded ? buildSeedTimetable(classes) : timetableRows.map(rowToTimetableEntry),
       absences: absenceRows.map(rowToAbsence),
       seats: seatRows.map(rowToSeat),
+      vulcanLessons: vulcanLessonRows.map(rowToVulcanLesson),
       settings: settingsRows[0] ? rowToSettings(settingsRows[0]) : DEFAULT_SETTINGS,
     },
   };
@@ -227,6 +234,7 @@ type CollectionName =
   | 'timetable'
   | 'absences'
   | 'seats'
+  | 'vulcanLessons'
   | 'settings';
 
 // Kolejnosc dla upsertow - rodzice przed dziecmi (zgodnie z FK w 0001_init.sql).
@@ -243,6 +251,7 @@ const UPSERT_ORDER: CollectionName[] = [
   'timetable', // FK do classes - po 'classes'
   'absences', // FK do students i classes
   'seats', // FK do students i classes
+  'vulcanLessons', // FK do classes
   'settings',
 ];
 const DELETE_ORDER: CollectionName[] = [...UPSERT_ORDER].reverse();
@@ -260,6 +269,7 @@ const TABLE_NAMES: Record<CollectionName, string> = {
   timetable: 'timetable_entries',
   absences: 'absences',
   seats: 'seats',
+  vulcanLessons: 'vulcan_lessons',
   settings: 'settings',
 };
 
@@ -276,6 +286,7 @@ interface StoreSlice {
   timetable: TimetableEntry[];
   absences: Absence[];
   seats: Seat[];
+  vulcanLessons: VulcanLesson[];
   settings: Settings;
 }
 
@@ -305,6 +316,8 @@ function rowsFor(collection: CollectionName, state: StoreSlice): Array<{ id: str
       return state.absences.map(absenceToRow);
     case 'seats':
       return state.seats.map(seatToRow);
+    case 'vulcanLessons':
+      return state.vulcanLessons.map(vulcanLessonToRow);
     case 'settings':
       return [settingsToRow(state.settings)];
   }
@@ -324,6 +337,7 @@ function emptySnapshots(): Record<CollectionName, Snapshot> {
     timetable: new Map(),
     absences: new Map(),
     seats: new Map(),
+    vulcanLessons: new Map(),
     settings: new Map(),
   };
 }
@@ -555,18 +569,24 @@ export async function pullTodayRecapEvents(): Promise<void> {
 
   let eventRows: RecapEventRow[];
   let absenceRows: AbsenceRow[];
+  let vulcanRows: VulcanLessonRow[];
   try {
     const supabase = getSupabase();
     // Nieobecni z dzisiaj tez: panel zaznacza obecnosc, a kolo powtorzeniowe
     // w apce webowej ma ich nie losowac (patrz src/lib/attendance.ts).
-    const [events, absences] = await Promise.all([
+    // Plan dnia z VULCANA: panel (bez dodatku) dowiaduje sie o zastepstwach
+    // odczytanych przez apke w Chrome. Blad tej tabeli (brak migracji 0029)
+    // nie blokuje reszty.
+    const [events, absences, vulcan] = await Promise.all([
       supabase.from('recap_events').select('*').gte('at', startOfDay.toISOString()),
       supabase.from('absences').select('*').eq('date', todayKey),
+      supabase.from('vulcan_lessons').select('*').eq('date', todayKey),
     ]);
     if (events.error) throw events.error;
     if (absences.error) throw absences.error;
     eventRows = (events.data ?? []) as RecapEventRow[];
     absenceRows = (absences.data ?? []) as AbsenceRow[];
+    vulcanRows = vulcan.error ? [] : ((vulcan.data ?? []) as VulcanLessonRow[]);
   } catch {
     // Odswiezenie w tle - blad sieci nie ma czym straszyc nauczyciela na lekcji.
     return;
@@ -574,6 +594,7 @@ export async function pullTodayRecapEvents(): Promise<void> {
 
   mergeToday('recapEvents', eventRows.map(rowToRecapEvent), (e) => new Date(e.at).getTime() >= sinceMs);
   mergeToday('absences', absenceRows.map(rowToAbsence), (a) => a.date === todayKey);
+  mergeToday('vulcanLessons', vulcanRows.map(rowToVulcanLesson), (l) => l.date === todayKey);
 }
 
 /**
@@ -614,34 +635,54 @@ function localDateKey(d: Date): string {
  * przy pullTodayRecapEvents. `isToday` wybiera lokalne wpisy z tego samego
  * zakresu, zeby nie kasowac starszych dni, ktorych nie pobieralismy.
  */
-function mergeToday<K extends 'recapEvents' | 'absences'>(
+function mergeToday<K extends 'recapEvents' | 'absences' | 'vulcanLessons'>(
   collection: K,
   remote: StoreSlice[K],
   isToday: (item: StoreSlice[K][number]) => boolean,
 ): void {
   type Item = StoreSlice[K][number];
-  const remoteIds = new Set(remote.map((e) => e.id));
+  const toRow = (item: Item) =>
+    collection === 'absences'
+      ? absenceToRow(item as Absence)
+      : collection === 'vulcanLessons'
+        ? vulcanLessonToRow(item as VulcanLesson)
+        : recapEventToRow(item as RecapEvent);
+  const remoteById = new Map((remote as Item[]).map((e) => [e.id, e]));
   const local = useStore.getState()[collection] as Item[];
   const localIds = new Set(local.map((e) => e.id));
 
   const added = (remote as Item[]).filter((e) => !localIds.has(e.id));
   const removedIds = new Set(
     local
-      .filter((e) => isToday(e) && !remoteIds.has(e.id) && snapshots[collection].has(e.id))
+      .filter((e) => isToday(e) && !remoteById.has(e.id) && snapshots[collection].has(e.id))
       .map((e) => e.id),
   );
-  if (added.length === 0 && removedIds.size === 0) return;
+  // Plan z VULCANA zmienia sie w miejscu (to samo id godziny, inna klasa po
+  // zastepstwie), wiec tu bierzemy tez zmienione wiersze - ale tylko te juz
+  // wyslane (lokalny wiersz == snapshot), zeby nie zjesc czekajacej zmiany.
+  const updated = new Map<string, Item>();
+  if (collection === 'vulcanLessons') {
+    for (const e of local) {
+      const r = remoteById.get(e.id);
+      if (!r) continue;
+      const localJson = JSON.stringify(toRow(e));
+      const remoteJson = JSON.stringify(toRow(r));
+      if (localJson !== remoteJson && snapshots[collection].get(e.id) === localJson) updated.set(e.id, r);
+    }
+  }
+  if (added.length === 0 && removedIds.size === 0 && updated.size === 0) return;
 
-  const next = local.filter((e) => !removedIds.has(e.id)).concat(added);
+  const next = local
+    .filter((e) => !removedIds.has(e.id))
+    .map((e) => updated.get(e.id) ?? e)
+    .concat(added);
   applyingRemote = true;
   try {
     useStore.setState({ [collection]: next } as Partial<StoreSlice>);
   } finally {
     applyingRemote = false;
   }
-  const toRow = (item: Item) =>
-    collection === 'absences' ? absenceToRow(item as Absence) : recapEventToRow(item as RecapEvent);
-  for (const e of added) {
+  for (const e of [...added, ...updated.values()]) {
     snapshots[collection].set(e.id, JSON.stringify(toRow(e)));
   }
   for (const id of removedIds) {

@@ -28,6 +28,7 @@ import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 import { useVulcanUwagaSaved } from './useVulcanUwaga';
 import { isIncomingUwaga } from './useIncomingUwagi';
 import { useAutoVulcanAttendance } from '../attendance/useAutoVulcanAttendance';
+import { useAutoVulcanSchedule } from '../attendance/useAutoVulcanSchedule';
 
 const LS_KEY = 'vulcan-uwaga-auto';
 /** Po tylu ms wpis w pamieci "juz poszlo" jest sprzatany (2 dni). */
@@ -66,6 +67,7 @@ export function AutoVulcanUwaga() {
   useTodayEventsPull();
   useVulcanUwagaSaved();
   useAutoVulcanAttendance();
+  useAutoVulcanSchedule();
 
   const recapEvents = useStore((s) => s.recapEvents);
   const seen = useRef<Set<string> | null>(null);

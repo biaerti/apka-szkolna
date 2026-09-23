@@ -22,7 +22,12 @@
 // LEKCJA idzie SAMA z planu (zakladka "Plan"): trwajaca, a na przerwie i przed
 // lekcjami - najblizsza. W naglowku wybiera sie lekcje z dzisiejszego planu
 // ("2. IV B"), a klase bez lekcji tylko na zastepstwa; reczny wybor wygrywa do
-// nastepnej lekcji z planu. Pigulka pokazuje zegar i czas do dzwonka.
+// nastepnej lekcji z planu. Gdy apka w Chrome odczytala plan dnia z VULCANA
+// (zastepstwa, zamiany - src/lib/vulcanPlan.ts), dzisiaj liczy sie on, a nie
+// plan tygodniowy.
+//
+// PIGULKA (panel zwiniety) stoi na projektorze nad podrecznikiem, wiec jest
+// czytelna z lawek: klasa i numer lekcji, duzy zegar i ile zostalo do dzwonka.
 //
 // Rozmiar okna idzie za tym, co jest na ekranie (patrz ROZMIARY): pigulka po
 // zwinieciu, wysokie okno pod kolo, niskie pod stoper, a srodkowy przycisk w
@@ -36,6 +41,7 @@ import { formatMmSs } from '../lib/timer';
 import { toDateKey } from '../lib/dates';
 import { currentOrNextEntry, entriesForDay, formatRemaining, periodStatus, weekdayOf } from '../lib/timetable';
 import { useNow } from '../components/timetable/useNow';
+import { effectiveTimetable, vulcanLessonsForDate } from '../lib/vulcanPlan';
 import { useCountdown } from '../components/slides/useCountdown';
 import { useTaskWheel } from '../components/lessons/useTaskWheel';
 import { PanelNaglowek, type PanelTryb } from '../components/panel/PanelNaglowek';
@@ -53,7 +59,8 @@ const ADNOTACJA = 'podręcznik';
 // Rozmiary okna. Stoper dostaje wlasna wysokosc, bo w oknie kola zostawal pod
 // czasem wielki pusty prostokat; KOMPAKT to jeszcze mniej - samo polecenie
 // i czas (srodkowy przycisk w naglowku).
-const PIGULKA = { width: 250, height: 44 };
+// Pigulka jest czytana z lawek (zegar i czas do dzwonka), stad duze cyfry.
+const PIGULKA = { width: 380, height: 80 };
 const ROZMIARY = {
   // 390 px, bo w naglowku jest wybor lekcji ("2. IV B"), trzy tryby, Obecność i
   // trzy przyciski okna - przy 360 px ✕ wypadal za prawa krawedz.
@@ -86,9 +93,11 @@ export function Panel() {
   // Lekcja z planu. Efekt odpala sie tylko przy ZMIANIE lekcji z planu (klucz:
   // dzien + komorka), wiec reczny wybor w naglowku nie jest co sekunde
   // nadpisywany - trzyma sie do nastepnego dzwonka.
-  const timetable = useStore((s) => s.timetable);
+  const planTygodniowy = useStore((s) => s.timetable);
+  const vulcanLessons = useStore((s) => s.vulcanLessons);
   const periods = useStore((s) => s.periods);
   const now = useNow(1000);
+  const timetable = effectiveTimetable(planTygodniowy, vulcanLessons, now);
   const lekcjaZPlanu = currentOrNextEntry(timetable, periods, now);
   const dzisiaj = toDateKey(now);
   const kluczLekcji = lekcjaZPlanu ? `${dzisiaj}:${lekcjaZPlanu.id}` : '';
@@ -272,9 +281,15 @@ export function Panel() {
   const nazwaPo = new Map(sortedClasses.map((c) => [c.id, c.name]));
 
   if (!rozwiniety) {
+    // Trwajaca godzina: klasa z VULCANA, gdy to klasa spoza apki (zastepstwo
+    // w cudzej klasie) - panel nie ma jej na liscie, a uczniowie maja widziec swoja.
+    const nrLekcji = status.kind === 'lesson' ? status.period.no : null;
+    const zVulcana =
+      nrLekcji !== null ? vulcanLessonsForDate(vulcanLessons, dzisiaj).find((l) => l.period === nrLekcji) : undefined;
     return (
       <Pigulka
-        nazwaKlasy={nazwaKlasy}
+        nazwaKlasy={zVulcana && !zVulcana.classId ? zVulcana.className : nazwaKlasy}
+        podpis={nrLekcji !== null ? `${nrLekcji}. lekcja` : status.kind === 'break' ? 'przerwa' : null}
         // Zwiniety panel ma dalej pokazywac odliczanie - inaczej "zwin, zeby nie
         // zaslanialo" znaczyloby "strac stoper z oczu".
         stoper={stoper.running || stoper.finished ? formatMmSs(stoper.remainingSec) : null}
@@ -283,9 +298,9 @@ export function Panel() {
         zegar={`${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`}
         dzwonek={
           status.kind === 'lesson'
-            ? { tekst: formatRemaining(status.remainingSec), sec: status.remainingSec }
+            ? { tekst: formatRemaining(status.remainingSec), podpis: 'do końca', sec: status.remainingSec }
             : status.kind === 'break'
-              ? { tekst: `przerwa ${formatRemaining(status.remainingSec)}`, sec: null }
+              ? { tekst: formatRemaining(status.remainingSec), podpis: 'do lekcji', sec: null }
               : null
         }
         onRozwin={() => setRozwiniety(true)}
@@ -355,6 +370,7 @@ export function Panel() {
 
 function Pigulka({
   nazwaKlasy,
+  podpis,
   stoper,
   koniecCzasu,
   czytanka,
@@ -363,17 +379,38 @@ function Pigulka({
   onRozwin,
 }: {
   nazwaKlasy: string;
+  /** "2. lekcja" / "przerwa"; poza planem null. */
+  podpis: string | null;
   stoper: string | null;
   koniecCzasu: boolean;
   /** Pozostaly czas grajacej czytanki - pigulka pokazuje, ze lektor czyta. */
   czytanka: string | null;
   /** Aktualna godzina "10:42". */
   zegar: string;
-  /** Do dzwonka wg planu: na lekcji "23 min" (z sekundami do kolorow), na przerwie opis; poza planem null. */
-  dzwonek: { tekst: string; sec: number | null } | null;
+  /** Do dzwonka wg planu: "23 min" + podpis; sec tylko na lekcji (kolory); poza planem null. */
+  dzwonek: { tekst: string; podpis: string; sec: number | null } | null;
   onRozwin: () => void;
 }) {
   const uchwyt = useUchwytPrzeciagania(onRozwin);
+  // Prawa kolumna: stoper wygrywa z czytanka, czytanka z dzwonkiem.
+  const prawa = stoper
+    ? { tekst: stoper, podpis: koniecCzasu ? 'koniec czasu' : 'stoper', kolor: 'text-white' }
+    : czytanka
+      ? { tekst: czytanka, podpis: 'czytanka', kolor: 'text-accent-300' }
+      : dzwonek
+        ? {
+            tekst: dzwonek.tekst,
+            podpis: dzwonek.podpis,
+            kolor:
+              dzwonek.sec === null
+                ? 'text-gray-300'
+                : dzwonek.sec <= 60
+                  ? 'text-red-400'
+                  : dzwonek.sec <= 5 * 60
+                    ? 'text-amber-300'
+                    : 'text-white',
+          }
+        : null;
   return (
     <div className="flex h-full w-full items-center justify-center p-1">
       <div
@@ -384,32 +421,20 @@ function Pigulka({
           if (e.key === 'Enter' || e.key === ' ') onRozwin();
         }}
         title="Panel lekcji - kliknij, żeby rozwinąć; przeciągnij, żeby przesunąć"
-        className={`flex h-full w-full cursor-pointer select-none items-center gap-2 rounded-full px-4 shadow-lg ring-1 ring-gray-700 ${
+        className={`flex h-full w-full cursor-pointer select-none items-center gap-3 rounded-2xl pl-3 pr-4 shadow-lg ring-1 ring-gray-700 ${
           koniecCzasu ? 'bg-red-700 text-white' : 'bg-gray-900 text-gray-100 hover:bg-gray-800'
         }`}
       >
-        <span aria-hidden className="text-lg leading-none">🎡</span>
-        <span className="text-sm font-semibold">{nazwaKlasy}</span>
-        {stoper ? (
-          <span className="ml-auto text-sm font-bold tabular-nums">{stoper}</span>
-        ) : czytanka ? (
-          <span className="ml-auto text-sm tabular-nums text-accent-300">🔊 {czytanka}</span>
-        ) : (
-          <span className="ml-auto flex items-baseline gap-2 tabular-nums">
-            <span className="text-xs text-gray-400">{zegar}</span>
-            {dzwonek && (
-              <span
-                className={
-                  dzwonek.sec === null
-                    ? 'text-xs text-gray-400'
-                    : `text-sm font-semibold ${
-                        dzwonek.sec <= 60 ? 'text-red-400' : dzwonek.sec <= 5 * 60 ? 'text-amber-300' : 'text-gray-100'
-                      }`
-                }
-              >
-                {dzwonek.tekst}
-              </span>
-            )}
+        <span aria-hidden className="text-xl leading-none">🎡</span>
+        <span className="flex min-w-0 flex-col leading-tight">
+          <span className="truncate text-xl font-bold">{nazwaKlasy}</span>
+          {podpis && <span className="text-sm text-gray-400">{podpis}</span>}
+        </span>
+        <span className="ml-auto text-4xl font-bold tabular-nums leading-none">{zegar}</span>
+        {prawa && (
+          <span className="flex flex-col items-end border-l border-gray-700 pl-3 leading-tight">
+            <span className={`text-2xl font-bold tabular-nums ${prawa.kolor}`}>{prawa.tekst}</span>
+            <span className="text-xs text-gray-400">{prawa.podpis}</span>
           </span>
         )}
       </div>

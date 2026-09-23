@@ -14,6 +14,7 @@ import type {
   Settings,
   Student,
   TimetableEntry,
+  VulcanLesson,
 } from './types';
 import { useStore } from './store';
 
@@ -37,13 +38,15 @@ export interface BackupData {
   absences?: Absence[];
   /** Doszlo w wersji 6 backupu (miejsca w lawkach) - starsze pliki tego pola nie maja. */
   seats?: Seat[];
+  /** Doszlo w wersji 7 backupu (plan dnia z VULCANA). */
+  vulcanLessons?: VulcanLesson[];
   settings: Settings;
 }
 
 export function buildBackup(): BackupData {
   const s = useStore.getState();
   return {
-    version: 6,
+    version: 7,
     exportedAt: new Date().toISOString(),
     classes: s.classes,
     students: s.students,
@@ -57,6 +60,7 @@ export function buildBackup(): BackupData {
     timetable: s.timetable,
     absences: s.absences,
     seats: s.seats,
+    vulcanLessons: s.vulcanLessons,
     settings: s.settings,
   };
 }
@@ -109,6 +113,7 @@ export function applyBackup(data: BackupData): void {
     timetable: data.timetable ?? useStore.getState().timetable,
     absences: data.absences ?? useStore.getState().absences,
     seats: data.seats ?? useStore.getState().seats,
+    vulcanLessons: data.vulcanLessons ?? useStore.getState().vulcanLessons,
     settings: data.settings,
   });
 }

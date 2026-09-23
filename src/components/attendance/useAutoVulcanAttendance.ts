@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useStore } from '../../data/store';
 import { toDateKey } from '../../lib/dates';
 import { currentEntry } from '../../lib/timetable';
+import { effectiveTimetable } from '../../lib/vulcanPlan';
 import { matchVulcanAttendance, requestVulcanAttendance } from '../../lib/vulcanAttendance';
 
 const APP_SOURCE = 'apka-szkolna';
@@ -38,7 +39,8 @@ export function useAutoVulcanAttendance(): void {
     async function sync(changedAt: number, attempt = 0): Promise<void> {
       if (changedAt <= lastApplied() || syncing.current) return;
       const state = useStore.getState();
-      const lesson = currentEntry(state.timetable, state.periods, new Date());
+      const now = new Date();
+      const lesson = currentEntry(effectiveTimetable(state.timetable, state.vulcanLessons, now), state.periods, now);
       if (!lesson?.classId) return;
       const classId = lesson.classId;
       const classmates = state.students.filter((student) => student.classId === classId && student.active);

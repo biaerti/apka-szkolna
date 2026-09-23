@@ -37,7 +37,10 @@ function readScheduleFromPage() {
       lastLessonLine = -2;
       continue;
     }
-    const lesson = /^(\d{1,2})\.\s+([0-9IVX]+\s*[A-Z])\s+(Język polski)(.*)$/i.exec(line);
+    // Dowolny przedmiot, nie tylko polski: zastepstwo bywa z innego przedmiotu,
+    // a panel musi wiedziec, ze ta godzina jest zajeta i w jakiej klasie.
+    // Dziennik lekcji w apce sam odsiewa polski (Journal.tsx).
+    const lesson = /^(\d{1,2})\.\s+([0-9IVX]+\s*[A-Za-z])\s+([A-ZĄĆĘŁŃÓŚŹŻ][^,(]*?)\s*([,(].*)?$/.exec(line);
     if (!lesson) {
       lastLessonLine = -2;
       continue;
@@ -46,8 +49,8 @@ function readScheduleFromPage() {
       date,
       period: Number(lesson[1]),
       className: lesson[2].replace(/\s+/g, ''),
-      subject: lesson[3],
-      replacement: /zastępstwo/i.test(lesson[4]) ? lesson[4].replace(/^[,\s]+/, '').trim() : undefined,
+      subject: lesson[3].trim(),
+      replacement: /zastępstwo/i.test(lesson[4] || '') ? lesson[4].replace(/^[,(\s]+|\)$/g, '').trim() : undefined,
     });
     lastLessonLine = lineIndex;
   }
