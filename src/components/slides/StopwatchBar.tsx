@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 import { formatMmSs } from '../../lib/timer';
@@ -14,14 +15,23 @@ export function StopwatchBar({
   onAdjust,
   onRemove,
   compact = false,
+  adjustStepSec = 60,
+  autoStart = false,
 }: {
   timerSec: number;
   onAdjust?: (deltaSec: number) => void;
   onRemove?: () => void;
   compact?: boolean;
+  adjustStepSec?: number;
+  autoStart?: boolean;
 }) {
   const { remainingSec, running, finished, start, pause, reset } = useCountdown(timerSec);
   const isLow = remainingSec < 10 && remainingSec > 0;
+  useEffect(() => {
+    if (autoStart) start();
+    // Nowy `key` stopera odpowiada za ponowne uruchomienie po zmianie czasu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div
       className={clsx(
@@ -34,7 +44,7 @@ export function StopwatchBar({
       <span
         className={clsx(
           'font-mono font-bold tabular-nums',
-          compact ? 'text-4xl' : 'text-6xl',
+          compact ? 'text-5xl' : 'text-7xl',
           finished ? 'text-white' : isLow ? 'animate-pulse text-red-500' : 'text-white',
         )}
       >
@@ -54,22 +64,22 @@ export function StopwatchBar({
             <>
               <button
                 type="button"
-                onClick={() => onAdjust(-60)}
-                disabled={timerSec <= 60}
-                title="Minuta mniej"
-                aria-label="Minuta mniej"
+                onClick={() => onAdjust(-adjustStepSec)}
+                disabled={timerSec <= adjustStepSec}
+                title={`${formatAdjust(adjustStepSec)} mniej`}
+                aria-label={`${formatAdjust(adjustStepSec)} mniej`}
                 className={adjustClasses(compact)}
               >
-                -1
+                -{formatAdjust(adjustStepSec)}
               </button>
               <button
                 type="button"
-                onClick={() => onAdjust(60)}
-                title="Minuta więcej"
-                aria-label="Minuta więcej"
+                onClick={() => onAdjust(adjustStepSec)}
+                title={`${formatAdjust(adjustStepSec)} więcej`}
+                aria-label={`${formatAdjust(adjustStepSec)} więcej`}
                 className={adjustClasses(compact)}
               >
-                +1
+                +{formatAdjust(adjustStepSec)}
               </button>
             </>
           )}
@@ -80,6 +90,10 @@ export function StopwatchBar({
       )}
     </div>
   );
+}
+
+function formatAdjust(seconds: number): string {
+  return seconds % 60 === 0 ? `${seconds / 60} min` : `${seconds} s`;
 }
 
 function TimerIconButton({

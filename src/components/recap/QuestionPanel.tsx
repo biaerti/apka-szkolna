@@ -9,7 +9,6 @@
 
 import { useEffect, useState } from 'react';
 import type { Question } from '../../data/types';
-import { ThinkingTimer } from './ThinkingTimer';
 
 /**
  * Rozmiar pytania dobrany do jego dlugosci: krotkie pytania maja byc OGROMNE
@@ -49,9 +48,11 @@ export interface QuestionPanelProps {
   onPrev: () => void;
   randomOrder: boolean;
   onToggleRandom: (value: boolean) => void;
+  showRandomControl?: boolean;
   showAnswer: boolean;
   onToggleShowAnswer: () => void;
   onUpdateQuestion?: (id: string, patch: Partial<Question>) => void;
+  onShowOverview?: () => void;
 }
 
 export function QuestionPanel({
@@ -64,9 +65,11 @@ export function QuestionPanel({
   onPrev,
   randomOrder,
   onToggleRandom,
+  showRandomControl = true,
   showAnswer,
   onToggleShowAnswer,
   onUpdateQuestion,
+  onShowOverview,
 }: QuestionPanelProps) {
   const [editing, setEditing] = useState(false);
   const [questionDraft, setQuestionDraft] = useState(question?.text ?? '');
@@ -109,6 +112,15 @@ export function QuestionPanel({
           pytanie {index + 1}/{total}
         </span>
         <div className="flex items-center gap-3">
+          {onShowOverview && (
+            <button
+              type="button"
+              onClick={onShowOverview}
+              className="rounded-md border border-gray-600 px-2.5 py-1 text-gray-200 hover:bg-gray-800"
+            >
+              wszystkie 3 pytania
+            </button>
+          )}
           {question && onUpdateQuestion && (
             <button
               type="button"
@@ -118,15 +130,17 @@ export function QuestionPanel({
               {editing ? 'anuluj edycję' : 'edytuj pytanie'}
             </button>
           )}
-          <label className="flex items-center gap-1.5">
-            <input
-              type="checkbox"
-              checked={randomOrder}
-              onChange={(e) => onToggleRandom(e.target.checked)}
-              className="rounded border-gray-500"
-            />
-            losowo
-          </label>
+          {showRandomControl && (
+            <label className="flex items-center gap-1.5">
+              <input
+                type="checkbox"
+                checked={randomOrder}
+                onChange={(e) => onToggleRandom(e.target.checked)}
+                className="rounded border-gray-500"
+              />
+              losowo
+            </label>
+          )}
         </div>
       </div>
 
@@ -202,8 +216,6 @@ export function QuestionPanel({
           {question?.text ?? '-'}
         </p>
       )}
-
-      {!editing && <ThinkingTimer questionId={question?.id} />}
 
       {!editing && question?.answer && (
         <div className="mt-2 shrink-0">

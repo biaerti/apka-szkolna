@@ -69,7 +69,7 @@ export function TopicSlideForm({
         <Input
           value={slide.note ?? ''}
           onChange={(e) => onChange({ ...slide, note: e.target.value || undefined })}
-          placeholder="Przepisz temat z kodem i dzisiejszą datą"
+          placeholder="Zapisz temat i otwórz podręcznik."
         />
       </div>
     </div>

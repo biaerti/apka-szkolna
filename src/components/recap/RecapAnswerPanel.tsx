@@ -10,6 +10,9 @@ import type { Question } from '../../data/types';
 export interface RecapAnswerPanelProps {
   session: RecapSessionState;
   onUpdateQuestion: (id: string, patch: Partial<Question>) => void;
+  onGrade: (result: 'plus' | 'kropka') => void;
+  onSkip: () => void;
+  onShowOverview: () => void;
   /** Stale polecenie rundy - wazniejsze niz wylosowane pytanie (patrz QuestionPanel). */
   prompt?: string | null;
   promptHint?: string | null;
@@ -18,6 +21,9 @@ export interface RecapAnswerPanelProps {
 export function RecapAnswerPanel({
   session,
   onUpdateQuestion,
+  onGrade,
+  onSkip,
+  onShowOverview,
   prompt,
   promptHint,
 }: RecapAnswerPanelProps) {
@@ -60,9 +66,11 @@ export function RecapAnswerPanel({
           onPrev={session.prevQuestion}
           randomOrder={session.randomOrder}
           onToggleRandom={session.setRandomOrder}
+          showRandomControl={session.recapMode !== 'powtorzeniowe'}
           showAnswer={session.showAnswer}
           onToggleShowAnswer={() => session.setShowAnswer((v) => !v)}
           onUpdateQuestion={onUpdateQuestion}
+          onShowOverview={onShowOverview}
         />
       </div>
 
@@ -72,13 +80,13 @@ export function RecapAnswerPanel({
             disabled={!session.currentStudent}
             graded={session.graded}
             recapMode={session.recapMode}
-            onGrade={session.grade}
-            onSkip={session.markDoneNoGrade}
+            onGrade={onGrade}
+            onSkip={onSkip}
           />
         ) : (
           <button
             type="button"
-            onClick={session.markDoneNoGrade}
+            onClick={onSkip}
             disabled={!session.currentStudent}
             className="w-full rounded-lg bg-accent-600 px-4 py-4 text-2xl font-semibold text-white hover:bg-accent-700 disabled:opacity-40"
           >

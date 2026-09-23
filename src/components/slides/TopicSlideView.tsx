@@ -16,39 +16,11 @@
 // zeby zeszyt i dziennik mowily to samo.
 
 import { useState } from 'react';
-import clsx from 'clsx';
 import type { Slide } from '../../data/types';
 import { StopwatchBar } from './StopwatchBar';
 import { ZeszytIcon } from './ZeszytBadge';
 import { fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
-
-/** Kolejne pozycje kolka stopera (w minutach); 0 = bez stopera. */
-const TIMER_MINUTES = [0, 1, 2, 3, 5];
-
-/** Male kolko w rogu slajdu - jedno klikniecie zmienia czas na zapisanie tematu. */
-function TimerDial({ minutes, onCycle }: { minutes: number; onCycle: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onCycle}
-      title="Czas na zapisanie tematu: klik zmienia 1, 2, 3, 5 minut albo wyłącza stoper"
-      className={clsx(
-        'absolute bottom-8 right-10 flex h-20 w-20 flex-col items-center justify-center rounded-full border-4 leading-none',
-        minutes > 0 ? 'border-accent-500 text-accent-700' : 'border-gray-300 text-gray-400',
-      )}
-    >
-      {minutes > 0 ? (
-        <>
-          <span className="text-3xl font-bold tabular-nums">{minutes}</span>
-          <span className="text-xs uppercase tracking-widest">min</span>
-        </>
-      ) : (
-        <span className="text-sm uppercase tracking-widest">czas</span>
-      )}
-    </button>
-  );
-}
 
 const RULED_LINES_STYLE = {
   backgroundImage:
@@ -60,17 +32,26 @@ export function TopicSlideView({
   slide,
   code,
   lessonTopic,
+  textbookPage,
 }: {
   slide: Extract<Slide, { kind: 'topic' }>;
   code?: string;
   lessonTopic?: string;
+  textbookPage?: { from: number; to?: number };
 }) {
   const topic = (slide.topic || lessonTopic || '').trim();
   const scale = useSlideFontScale();
   const hasGoals = !!slide.goals?.length;
   const topicSize = fitFontSize(topic, { width: 1080, height: hasGoals ? 220 : 300, min: 40, max: 92, scale, lineHeight: 1.25 });
-  // Stoper startuje wylaczony przy kazdym wejsciu na slajd - patrz uwaga na gorze.
-  const [timerMin, setTimerMin] = useState(0);
+  const [timerSec, setTimerSec] = useState(90);
+  const dateLabel = new Intl.DateTimeFormat('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(new Date());
+  const pageLabel = textbookPage
+    ? `s. ${textbookPage.from}${textbookPage.to ? `-${textbookPage.to}` : ''}`
+    : null;
 
   if (slide.variant === 'handout') {
     return (
@@ -117,27 +98,19 @@ export function TopicSlideView({
     );
   }
 
-  function cycleTimer() {
-    const next = TIMER_MINUTES[(TIMER_MINUTES.indexOf(timerMin) + 1) % TIMER_MINUTES.length];
-    setTimerMin(next);
-  }
-
   return (
     <div
       className="relative flex h-full flex-col bg-amber-50 px-16 py-10 text-amber-950"
       style={RULED_LINES_STYLE}
     >
-      <div className="flex items-center gap-6">
-        <span className="text-3xl font-semibold uppercase tracking-widest text-amber-800">Temat</span>
-        {code && (
-          <span className="rounded-2xl border-4 border-accent-500 px-7 py-2 text-[80px] font-bold leading-none tabular-nums text-accent-700">
-            {code}
-          </span>
-        )}
+      <div className="flex items-center justify-between gap-6">
+        <span className="text-3xl font-semibold tabular-nums text-amber-800">{dateLabel}</span>
+        {pageLabel && <span className="text-4xl font-bold text-accent-700">Podręcznik {pageLabel}</span>}
       </div>
 
-      <div className="flex flex-1 flex-col justify-center gap-8">
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-6">
         <p className="font-bold leading-snug text-amber-950" style={{ fontSize: topicSize }}>
+          {code && <span className="mr-5 text-accent-700">{code}.</span>}
           {topic || 'Temat lekcji'}
         </p>
         {hasGoals && (
@@ -150,20 +123,20 @@ export function TopicSlideView({
         )}
       </div>
 
-      {/* Ta sama ikonka co plakietka "do zeszytu" na ciemnych slajdach - jedna umowa. */}
       <p className="flex items-center justify-center gap-3 text-center text-3xl font-semibold text-amber-800">
         <ZeszytIcon className="h-10 w-10 text-amber-600" />
-        {slide.note?.trim() || 'Przepisz temat z kodem i dzisiejszą datą'}
+        {slide.note?.trim() || (pageLabel ? 'Zapisz temat i otwórz podręcznik.' : 'Zapisz temat w zeszycie.')}
       </p>
 
-      {timerMin > 0 && (
-        <div className="mt-4 flex justify-center">
-          {/* key = wybrana dlugosc: zmiana na kolku przestawia stoper od nowa */}
-          <StopwatchBar key={timerMin} timerSec={timerMin * 60} />
-        </div>
-      )}
-
-      <TimerDial minutes={timerMin} onCycle={cycleTimer} />
+      <div className="mt-3 flex justify-center">
+        <StopwatchBar
+          key={timerSec}
+          timerSec={timerSec}
+          autoStart
+          adjustStepSec={30}
+          onAdjust={(delta) => setTimerSec((value) => Math.max(30, value + delta))}
+        />
+      </div>
     </div>
   );
 }

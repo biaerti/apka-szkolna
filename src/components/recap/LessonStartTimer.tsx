@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { formatMmSs } from '../../lib/timer';
 import { useCountdown } from '../slides/useCountdown';
 
-const PREPARATION_SECONDS = 90;
+const DEFAULT_PREPARATION_SECONDS = 60;
 
 export function LessonStartTimer({ onContinue }: { onContinue: () => void }) {
-  const { remainingSec, running, finished, start, pause, reset } = useCountdown(PREPARATION_SECONDS);
+  const [timerSec, setTimerSec] = useState(DEFAULT_PREPARATION_SECONDS);
+  const { remainingSec, running, finished, start, pause, reset } = useCountdown(timerSec);
 
   useEffect(() => {
     start();
@@ -17,6 +18,10 @@ export function LessonStartTimer({ onContinue }: { onContinue: () => void }) {
   function restart() {
     reset();
     start();
+  }
+
+  function adjust(delta: number) {
+    setTimerSec((value) => Math.max(30, value + delta));
   }
 
   return (
@@ -31,7 +36,7 @@ export function LessonStartTimer({ onContinue }: { onContinue: () => void }) {
           type="button"
           onClick={running ? pause : start}
           className={clsx(
-            'mt-10 rounded-2xl px-10 py-5 font-mono text-8xl font-bold tabular-nums outline-none focus-visible:ring-4 focus-visible:ring-white sm:text-9xl',
+            'mt-8 rounded-2xl px-12 py-6 font-mono text-[112px] font-bold leading-none tabular-nums outline-none focus-visible:ring-4 focus-visible:ring-white sm:text-[144px]',
             finished ? 'bg-red-700 text-white' : 'bg-gray-900 text-accent-200 hover:bg-gray-800',
           )}
           aria-label={running ? 'Zatrzymaj stoper przygotowania' : 'Uruchom stoper przygotowania'}
@@ -43,13 +48,28 @@ export function LessonStartTimer({ onContinue }: { onContinue: () => void }) {
           {finished ? 'Czas minął. Zaczynamy powtórkę.' : running ? 'Kliknij czas, aby zatrzymać.' : 'Stoper zatrzymany.'}
         </p>
 
-        <div className="mt-9 flex flex-wrap justify-center gap-4">
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => adjust(-15)}
+            disabled={timerSec <= 30}
+            className="rounded-xl border border-gray-600 px-5 py-3 text-lg font-semibold text-gray-200 hover:bg-gray-800 disabled:opacity-30"
+          >
+            -15 s
+          </button>
+          <button
+            type="button"
+            onClick={() => adjust(15)}
+            className="rounded-xl border border-gray-600 px-5 py-3 text-lg font-semibold text-gray-200 hover:bg-gray-800"
+          >
+            +15 s
+          </button>
           <button
             type="button"
             onClick={restart}
             className="rounded-xl border border-gray-600 px-6 py-3 text-xl font-semibold text-gray-200 hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white"
           >
-            Od nowa 1:30
+            Od nowa
           </button>
           <button
             type="button"

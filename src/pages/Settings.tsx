@@ -268,18 +268,11 @@ export function SettingsPage() {
           </div>
           <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              Limit pytań koła powtórzeniowego
+              Pytania koła powtórzeniowego
             </label>
-            <p className="mb-1.5 text-xs text-gray-500">
-              Miękki limit - po jego osiągnięciu koło proponuje zakończenie, ale można kręcić dalej.
+            <p className="text-sm text-gray-600">
+              Koło pokazuje jednocześnie 3 pytania i losuje po jednej osobie do każdego z nich.
             </p>
-            <Input
-              type="number"
-              min={1}
-              value={settings.reviewQuestionCount}
-              onChange={(e) => updateSettings({ reviewQuestionCount: parseInt(e.target.value, 10) || 1 })}
-              className="max-w-[10rem]"
-            />
           </div>
           <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-700">

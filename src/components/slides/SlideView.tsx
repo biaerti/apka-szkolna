@@ -27,6 +27,8 @@ export interface SlideViewProps {
   lessonCode?: string;
   /** Temat lekcji do zeszytu - uzywany przez slajd `topic`, gdy nie ma wlasnego. */
   lessonTopic?: string;
+  /** Strony z pierwszego slajdu podręcznikowego, łączone w pokazie ze slajdem tematu. */
+  textbookPage?: { from: number; to?: number };
   /**
    * Warstwa rysowania (AnnotationLayer) - renderowana NA kartce 1280x720, wiec
    * kreski skaluja sie razem z trescia slajdu. Podglad w edytorze jej nie podaje.
@@ -83,7 +85,7 @@ function LessonCodeBadge({ code, onLightBackground }: { code: string; onLightBac
   );
 }
 
-export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, overlay }: SlideViewProps) {
+export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, textbookPage, overlay }: SlideViewProps) {
   // Kolo fortuny: wlasny uklad na caly ekran, bez kartki i bez znacznika w rogu
   // (ma wlasny gorny pasek z nazwa klasy i zestawu).
   if (slide.kind === 'recap') {
@@ -100,7 +102,7 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
         <LessonCodeBadge code={lessonCode} onLightBackground={slide.kind === 'note'} />
       )}
       {slide.kind === 'title' && <TitleSlideView slide={slide} />}
-      {slide.kind === 'topic' && <TopicSlideView slide={slide} code={lessonCode} lessonTopic={lessonTopic} />}
+      {slide.kind === 'topic' && <TopicSlideView slide={slide} code={lessonCode} lessonTopic={lessonTopic} textbookPage={textbookPage} />}
       {slide.kind === 'text' && <TextSlideView slide={slide} />}
       {slide.kind === 'task' && <TaskSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'read' && <ReadSlideView slide={slide} />}

@@ -12,9 +12,11 @@ import { StudentSidebar } from './StudentSidebar';
 import { RecapToolbar } from './RecapToolbar';
 import { RecapWheelPanel } from './RecapWheelPanel';
 import { RecapAnswerPanel } from './RecapAnswerPanel';
-import { LessonStartTimer } from './LessonStartTimer';
 import { useRecapKeys } from './useRecapKeys';
 import { useRecapSession, type PickMode } from './useRecapSession';
+import { RecapQuestionsOverview } from './RecapQuestionsOverview';
+
+const REVIEW_QUESTION_COUNT = 3;
 
 export interface RecapSessionProps {
   classId: string;
@@ -61,6 +63,7 @@ export function RecapSession({
   const schoolClass = useStore((s) => s.classes.find((c) => c.id === classId));
   const questionSet = useStore((s) => s.questionSets.find((qs) => qs.id === setId));
   const updateQuestion = useStore((s) => s.updateQuestion);
+  const removeQuestion = useStore((s) => s.removeQuestion);
 
   // Ustawienia trybow (wybor ucznia / pytania / ocenianie) czytane w kolejnosci:
   // 1) query string (?pick=sequential&random=1&grading=0) - RecapScreen przekazuje
@@ -118,11 +121,11 @@ export function RecapSession({
     // rundach z losowymi pytaniami kazdy nowy uczen dostaje nowe pytanie.
     advanceQuestionOnPick: !isIntroTopic,
   });
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [questionPickerOpen, setQuestionPickerOpen] = useState(false);
-  const [preparationOpen, setPreparationOpen] = useState(
-    embedded === true && resolvedRecapMode === 'powtorzeniowe',
-  );
+  const [overviewOpen, setOverviewOpen] = useState(resolvedRecapMode === 'powtorzeniowe');
+  const [completedQuestionIds, setCompletedQuestionIds] = useState<Set<string>>(new Set());
+  const reviewQuestions = session.allQuestions.slice(0, REVIEW_QUESTION_COUNT);
 
   // Historia odpowiedzi tej klasy per pytanie - do panelu "wybierz pytanie".
   const answersMap = useMemo(
@@ -158,7 +161,28 @@ export function RecapSession({
     }
   }
 
-  useRecapKeys(session, embedded, handleExit, toggleFullscreen, preparationOpen);
+  useRecapKeys(session, embedded, handleExit, toggleFullscreen, overviewOpen);
+
+  function selectQuestion(questionId: string) {
+    session.jumpToQuestion(questionId);
+    setOverviewOpen(false);
+  }
+
+  function completeCurrentQuestion(result: 'plus' | 'kropka') {
+    const questionId = session.currentQuestion?.id;
+    if (!questionId || !session.currentStudent || session.graded) return;
+    session.grade(result);
+    setCompletedQuestionIds((current) => new Set(current).add(questionId));
+    setOverviewOpen(true);
+  }
+
+  function completeWithoutGrade() {
+    const questionId = session.currentQuestion?.id;
+    if (!questionId || !session.currentStudent) return;
+    session.markDoneNoGrade();
+    setCompletedQuestionIds((current) => new Set(current).add(questionId));
+    setOverviewOpen(true);
+  }
 
   if (!schoolClass || !questionSet) {
     return (
@@ -166,10 +190,6 @@ export function RecapSession({
         Nie znaleziono klasy lub zestawu pytań.
       </div>
     );
-  }
-
-  if (preparationOpen) {
-    return <LessonStartTimer onContinue={() => setPreparationOpen(false)} />;
   }
 
   return (
@@ -187,9 +207,9 @@ export function RecapSession({
         allowRepeats={session.allowRepeats}
         onChangeAllowRepeats={session.setAllowRepeats}
         drawsCompleted={session.drawsCompleted}
-        plannedTotal={session.plannedTotal}
+        plannedTotal={session.recapMode === 'powtorzeniowe' ? REVIEW_QUESTION_COUNT : session.plannedTotal}
         inProgress={!!session.currentStudent && !session.graded}
-        reviewQuestionCount={session.settings.reviewQuestionCount}
+        reviewQuestionCount={REVIEW_QUESTION_COUNT}
         canUndo={session.canUndo}
         onUndo={session.undoLast}
         onOpenQuestionPicker={() => setQuestionPickerOpen(true)}
@@ -200,15 +220,31 @@ export function RecapSession({
 
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
-          <RecapWheelPanel session={session} />
-          <RecapAnswerPanel
-            session={session}
-            onUpdateQuestion={updateQuestion}
-            /* Lekcja zapoznawcza: na ekranie rzadzi "Przedstaw sie", a wylosowane
-               pytanie jest dodatkiem. */
-            prompt={isIntroLesson ? INTRO_PROMPT : null}
-            promptHint={isIntroLesson ? INTRO_PROMPT_HINT : null}
-          />
+          {overviewOpen ? (
+            <RecapQuestionsOverview
+              questions={reviewQuestions}
+              completedQuestionIds={completedQuestionIds}
+              onSelect={selectQuestion}
+              onUpdate={updateQuestion}
+              onRemove={removeQuestion}
+              onFinish={handleExit}
+            />
+          ) : (
+            <>
+              <RecapWheelPanel session={session} />
+              <RecapAnswerPanel
+                session={session}
+                onUpdateQuestion={updateQuestion}
+                onGrade={completeCurrentQuestion}
+                onSkip={completeWithoutGrade}
+                onShowOverview={() => setOverviewOpen(true)}
+                /* Lekcja zapoznawcza: na ekranie rzadzi "Przedstaw sie", a wylosowane
+                   pytanie jest dodatkiem. */
+                prompt={isIntroLesson ? INTRO_PROMPT : null}
+                promptHint={isIntroLesson ? INTRO_PROMPT_HINT : null}
+              />
+            </>
+          )}
         </div>
 
         <StudentSidebar
@@ -248,12 +284,12 @@ export function RecapSession({
 
       <QuestionPicker
         open={questionPickerOpen}
-        questions={session.allQuestions}
+        questions={reviewQuestions}
         currentQuestionId={session.currentQuestion?.id ?? null}
         askedQuestionIds={session.askedQuestionIds}
         answersFor={(questionId) => answersMap.get(questionId) ?? []}
         students={session.classStudents}
-        onPick={session.jumpToQuestion}
+        onPick={selectQuestion}
         onClose={() => setQuestionPickerOpen(false)}
       />
     </div>
