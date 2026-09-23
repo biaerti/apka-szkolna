@@ -27,6 +27,7 @@ export interface DeskGridProps {
   classmates: Student[];
   /** Wiszace ostrzezenia - osobno, bo nie sa zdarzeniem jednego dnia. Uczen moze miec kilka. */
   ostrzezenia: Map<string, RecapEvent[]>;
+  absentSet: Set<string>;
   editing: boolean;
   selectedPos?: SeatPosition;
   /** Uczen podswietlony po zapisie (krotki flash "wzielo"). */
@@ -38,6 +39,7 @@ export function DeskGrid({
   grid,
   classmates,
   ostrzezenia,
+  absentSet,
   editing,
   selectedPos,
   flashStudentId,
@@ -64,6 +66,7 @@ export function DeskGrid({
                     const disabled = !editing && !student;
                     const podpis = student ? deskName(student, classmates) : ' ';
                     const ileOstrzezen = student ? ostrzezenia.get(student.id)?.length ?? 0 : 0;
+                    const absent = student ? absentSet.has(student.id) : false;
                     return (
                       <button
                         key={place.side}
@@ -82,9 +85,11 @@ export function DeskGrid({
                           editing && !student && 'active:bg-accent-50',
                           selected && 'ring-2 ring-accent-500 bg-accent-50',
                           flashStudentId && student?.id === flashStudentId && 'bg-emerald-100',
+                          absent && 'bg-red-50 text-gray-400 opacity-70',
                         )}
                       >
-                        <span className="w-full truncate font-medium">{podpis}</span>
+                        <span className={clsx('w-full truncate font-medium', absent && 'line-through')}>{podpis}</span>
+                        {absent && <span className="w-full truncate text-[9px] font-semibold text-red-600">nieob.</span>}
                         {ileOstrzezen > 0 && (
                           <span className="flex w-full items-center">
                             <span title="ostrzeżenie" className="text-xs font-black text-amber-600">

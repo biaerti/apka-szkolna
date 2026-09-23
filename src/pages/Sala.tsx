@@ -22,7 +22,9 @@ import type { RecapEvent, Student } from '../data/types';
 import { useTodayEventsPull } from '../data/remote/useTodayEventsPull';
 import { buildDeskGrid, seatLabelByStudent, unseatedStudents, type SeatPosition } from '../lib/seating';
 import { warningsByStudent } from '../lib/ostrzezenia';
-import { currentOrNextEntry } from '../lib/timetable';
+import { currentEntry, currentOrNextEntry } from '../lib/timetable';
+import { absentOnDay } from '../lib/attendance';
+import { toDateKey } from '../lib/dates';
 import { resultSymbol } from '../lib/resultSymbol';
 import { DeskGrid } from '../components/sala/DeskGrid';
 import { StudentActionSheet, type SalaGrade } from '../components/sala/StudentActionSheet';
@@ -41,6 +43,7 @@ export function Sala() {
   const students = useStore((s) => s.students);
   const seats = useStore((s) => s.seats);
   const recapEvents = useStore((s) => s.recapEvents);
+  const absences = useStore((s) => s.absences);
   const timetable = useStore((s) => s.timetable);
   const periods = useStore((s) => s.periods);
   const addRecapEvent = useStore((s) => s.addRecapEvent);
@@ -78,6 +81,12 @@ export function Sala() {
   const grid = useMemo(() => (classId ? buildDeskGrid(seats, students, classId) : []), [seats, students, classId]);
   const labels = useMemo(() => (classId ? seatLabelByStudent(seats, classId) : new Map<string, string>()), [seats, classId]);
   const unseated = useMemo(() => (classId ? unseatedStudents(seats, students, classId) : []), [seats, students, classId]);
+  const absentSet = useMemo(() => {
+    if (!classId) return new Set<string>();
+    const lesson = currentEntry(timetable, periods, new Date());
+    const period = lesson?.classId === classId ? lesson.period : undefined;
+    return absentOnDay(absences, classId, toDateKey(new Date()), period);
+  }, [absences, classId, timetable, periods]);
 
   const recentByStudent = useMemo(() => {
     const out = new Map<string, RecapEvent[]>();
@@ -234,6 +243,7 @@ export function Sala() {
           grid={grid}
           classmates={classmates}
           ostrzezenia={ostrzezenia}
+          absentSet={absentSet}
           editing={editing}
           selectedPos={selectedPos}
           flashStudentId={flashId}
@@ -244,6 +254,7 @@ export function Sala() {
           students={classmates}
           labels={labels}
           ostrzezenia={ostrzezenia}
+          absentSet={absentSet}
           flashId={flashId}
           onTap={handleTapListed}
         />
@@ -256,6 +267,7 @@ export function Sala() {
             students={unseated}
             labels={labels}
             ostrzezenia={ostrzezenia}
+            absentSet={absentSet}
             flashId={flashId}
             selectedId={selectedStudentId}
             onTap={handleTapListed}
@@ -323,6 +335,7 @@ function StudentList({
   students,
   labels,
   ostrzezenia,
+  absentSet,
   flashId,
   selectedId,
   onTap,
@@ -330,6 +343,7 @@ function StudentList({
   students: Student[];
   labels: Map<string, string>;
   ostrzezenia: Map<string, RecapEvent[]>;
+  absentSet: Set<string>;
   flashId: string | null;
   selectedId?: string;
   onTap: (student: Student) => void;
@@ -340,6 +354,7 @@ function StudentList({
   return (
     <ul className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
       {students.map((st) => {
+        const absent = absentSet.has(st.id);
         return (
           <li key={st.id}>
             <button
@@ -350,12 +365,14 @@ function StudentList({
                 'flex w-full items-center gap-3 px-3 py-2.5 text-left text-base active:bg-accent-50',
                 selectedId === st.id && 'bg-accent-50 ring-2 ring-inset ring-accent-500',
                 flashId === st.id && 'bg-emerald-100',
+                absent && 'bg-red-50 opacity-70',
               )}
             >
               <span className="w-6 shrink-0 text-right text-sm tabular-nums text-gray-400">{st.number}</span>
-              <span className="min-w-0 flex-1 truncate text-gray-900">
+              <span className={clsx('min-w-0 flex-1 truncate text-gray-900', absent && 'line-through text-gray-500')}>
                 <span className="font-medium">{st.lastName}</span> {st.firstName}
               </span>
+              {absent && <span className="shrink-0 text-xs font-semibold text-red-600">nieob.</span>}
               {(ostrzezenia.get(st.id)?.length ?? 0) > 0 && (
                 <span title="ostrzeżenie" className="shrink-0 text-xs font-black text-amber-600">
                   {resultSymbol('ostrzezenie').symbol}

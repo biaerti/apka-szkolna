@@ -10,6 +10,31 @@ async function deliver(tabId, payload) {
 }
 
 const APP_URLS = ['https://szkola.klippi.pl/*', 'http://localhost:5173/*', 'http://127.0.0.1:5173/*'];
+const SYNC_STATE_KEY = 'vulcanSyncState';
+
+async function appTabsBroadcast(message) {
+  const tabs = await chrome.tabs.query({ url: APP_URLS });
+  for (const tab of tabs) {
+    if (!tab.id) continue;
+    try { await chrome.tabs.sendMessage(tab.id, message); } catch { /* karta bez mostu albo w trakcie odświeżania */ }
+  }
+}
+
+async function readSyncState() {
+  const stored = await chrome.storage.local.get(SYNC_STATE_KEY);
+  const value = stored[SYNC_STATE_KEY];
+  return value && typeof value === 'object' ? value : { savedUwagi: [], attendanceChangedAt: 0 };
+}
+
+async function rememberSavedUwaga(eventId) {
+  const state = await readSyncState();
+  const now = Date.now();
+  const savedUwagi = [
+    { eventId, at: now },
+    ...(Array.isArray(state.savedUwagi) ? state.savedUwagi : []).filter((item) => item?.eventId !== eventId && now - Number(item?.at || 0) < 7 * 24 * 60 * 60 * 1000),
+  ].slice(0, 100);
+  await chrome.storage.local.set({ [SYNC_STATE_KEY]: { ...state, savedUwagi } });
+}
 
 async function deliverUwaga(tabId, payload) {
   await chrome.storage.session.set({ pendingVulcanUwaga: payload });
@@ -208,13 +233,31 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     // Z karty VULCANA do wszystkich kart apki: uwaga zapisana, odhacz ją.
     (async () => {
       await chrome.storage.session.remove('pendingVulcanUwaga');
-      const tabs = await chrome.tabs.query({ url: APP_URLS });
-      for (const tab of tabs) {
-        if (!tab.id) continue;
-        try { await chrome.tabs.sendMessage(tab.id, { type: 'VULCAN_UWAGA_SAVED', eventId: message.eventId }); } catch { /* karta bez mostu */ }
-      }
+      await rememberSavedUwaga(message.eventId);
+      await appTabsBroadcast({ type: 'VULCAN_UWAGA_SAVED', eventId: message.eventId });
       sendResponse({ ok: true });
-    })();
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
+  if (message?.type === 'VULCAN_ATTENDANCE_CHANGED') {
+    (async () => {
+      const state = await readSyncState();
+      const changedAt = Date.now();
+      await chrome.storage.local.set({ [SYNC_STATE_KEY]: { ...state, attendanceChangedAt: changedAt } });
+      await appTabsBroadcast({ type: 'VULCAN_ATTENDANCE_CHANGED', changedAt });
+      sendResponse({ ok: true });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
+  if (message?.type === 'GET_VULCAN_SYNC_STATE') {
+    (async () => {
+      const state = await readSyncState();
+      const now = Date.now();
+      const savedUwagaEventIds = (Array.isArray(state.savedUwagi) ? state.savedUwagi : [])
+        .filter((item) => item?.eventId && now - Number(item?.at || 0) < 7 * 24 * 60 * 60 * 1000)
+        .map((item) => item.eventId);
+      sendResponse({ ok: true, savedUwagaEventIds, attendanceChangedAt: Number(state.attendanceChangedAt || 0) });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
     return true;
   }
   if (message?.type === 'READ_VULCAN_SCHEDULE') {

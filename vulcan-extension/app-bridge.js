@@ -5,15 +5,32 @@ function reply(type, detail) {
   window.postMessage({ source: EXTENSION_SOURCE, type, detail }, '*');
 }
 
+// Wiadomości zwrotne z aktywnej karty VULCANA. Nasłuch musi istnieć od
+// załadowania content scriptu, a nie dopiero po pierwszym pingu apki.
+chrome.runtime.onMessage.addListener((message) => {
+  if (message?.type === 'VULCAN_UWAGA_SAVED' && message.eventId) {
+    reply('VULCAN_UWAGA_SAVED', { eventId: message.eventId });
+  }
+  if (message?.type === 'VULCAN_ATTENDANCE_CHANGED') {
+    reply('VULCAN_ATTENDANCE_CHANGED', { changedAt: message.changedAt });
+  }
+});
+
 window.addEventListener('message', (event) => {
   if (event.source !== window || !event.data || event.data.source !== PAGE_SOURCE) return;
   if (event.data.type === 'VULCAN_BRIDGE_PING') {
-    // Z karty VULCANA (przez background.js): uwaga zapisana - apka odhacza ją jako wpisaną.
-chrome.runtime.onMessage.addListener((message) => {
-  if (message?.type === 'VULCAN_UWAGA_SAVED' && message.eventId) reply('VULCAN_UWAGA_SAVED', { eventId: message.eventId });
-});
-
-reply('VULCAN_BRIDGE_READY');
+    reply('VULCAN_BRIDGE_READY');
+    // Odzyskaj potwierdzenia, które przyszły, gdy karta apki spała albo była
+    // właśnie odświeżana. Aktualizacja wpisane=true jest idempotentna.
+    chrome.runtime.sendMessage({ type: 'GET_VULCAN_SYNC_STATE' }, (response) => {
+      if (chrome.runtime.lastError || !response?.ok) return;
+      for (const eventId of response.savedUwagaEventIds ?? []) {
+        reply('VULCAN_UWAGA_SAVED', { eventId });
+      }
+      if (response.attendanceChangedAt) {
+        reply('VULCAN_ATTENDANCE_CHANGED', { changedAt: response.attendanceChangedAt });
+      }
+    });
     return;
   }
   if (event.data.type === 'VULCAN_SCHEDULE_REQUEST') {

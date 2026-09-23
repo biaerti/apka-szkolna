@@ -6,8 +6,8 @@
 // Gdy z INNEGO urzadzenia przyjdzie nowa uwaga (te same reguly co popup -
 // isIncomingUwaga), komputer od razu wysyla ja do pomocnika Chrome z flaga
 // `background`: dodatek wypelnia formularz w karcie VULCANA BEZ wyciagania
-// jej na wierzch i jak zawsze zatrzymuje sie przed "Zapisz" - zapis klika
-// Bartek (zasada z PRODUCT.md: czlowiek zatwierdza).
+// jej na wierzch, wypelnia formularz i zapisuje. Potwierdzenie wraca przez
+// dodatek i automatycznie ustawia `wpisane=true` w apce.
 //
 // localStorage (klucz vulcan-uwaga-auto) pamieta, ktore uwagi juz poszly:
 // apka i plywajacy panel to dwa okna tej samej domeny i bez tego obie
@@ -27,6 +27,7 @@ import { buildVulcanUwagaTransfer } from '../../lib/vulcanUwaga';
 import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
 import { useVulcanUwagaSaved } from './useVulcanUwaga';
 import { isIncomingUwaga } from './useIncomingUwagi';
+import { useAutoVulcanAttendance } from '../attendance/useAutoVulcanAttendance';
 
 const LS_KEY = 'vulcan-uwaga-auto';
 /** Po tylu ms wpis w pamieci "juz poszlo" jest sprzatany (2 dni). */
@@ -64,6 +65,7 @@ export function claimAutoSend(eventId: string, now = Date.now()): boolean {
 export function AutoVulcanUwaga() {
   useTodayEventsPull();
   useVulcanUwagaSaved();
+  useAutoVulcanAttendance();
 
   const recapEvents = useStore((s) => s.recapEvents);
   const seen = useRef<Set<string> | null>(null);

@@ -668,18 +668,48 @@ async function fillUwaga() {
 // zgłaszamy zapis do apki. Bez klikania na ślepo: to Bartek klika Zapisz.
 function watchUwagaSave(root) {
   const windowRoot = root.closest('.x-window') || root;
+  const formCleared = () => {
+    const category = document.getElementById('cmbKategorieId-inputEl');
+    const content = document.getElementById('idTresc-inputEl');
+    return Boolean(category && content && !category.value.trim() && !content.value.trim());
+  };
   const onClick = (event) => {
     const target = event.target instanceof Element ? event.target.closest('button, a, [role="button"], td, span, div') : null;
     if (!target || !windowRoot.contains(target)) return;
     if (normalized(textOf(target)) !== 'zapisz') return;
     document.removeEventListener('click', onClick, true);
     void (async () => {
-      const gone = await waitFor(() => !document.contains(root) || !visible(root), 8000);
-      if (gone) await reportUwagaSaved();
+      // VULCAN po zapisie nie zawsze zamyka okno. Czasem zostawia pusty
+      // formularz do dodania kolejnej uwagi - to również jest sukces.
+      const saved = await waitFor(() => !document.contains(root) || !visible(root) || formCleared(), 8000);
+      if (saved) await reportUwagaSaved();
     })();
   };
   document.addEventListener('click', onClick, true);
 }
+
+// Gdy Bartek zapisze frekwencję normalnie w VULCANIE, informujemy kartę
+// aplikacji. Aplikacja sama odczyta bieżącą kolumnę i zapisze obecnych,
+// nieobecnych oraz spóźnionych dla tej godziny.
+let lastAttendanceSaveSignal = 0;
+document.addEventListener('click', (event) => {
+  const target = event.target instanceof Element
+    ? event.target.closest('button, a, input[type="button"], input[type="submit"], [role="button"], td, span')
+    : null;
+  if (!target || target.closest(`#${BOT_ID}`)) return;
+  const label = normalized(textOf(target));
+  if (label !== 'zapisz' && label !== 'ok') return;
+  const context = target.closest('.x-window') || target.closest('form');
+  if (!context || !normalized(context.textContent).includes('frekwenc')) return;
+  // Zdarzenie capture pojawia się przed faktycznym zapisem. Dajemy ExtJS
+  // czas na odpowiedź serwera i przebudowanie tabeli.
+  const now = Date.now();
+  if (now - lastAttendanceSaveSignal < 2500) return;
+  lastAttendanceSaveSignal = now;
+  window.setTimeout(() => {
+    void chrome.runtime.sendMessage({ type: 'VULCAN_ATTENDANCE_CHANGED' });
+  }, 1600);
+}, true);
 
 async function reportUwagaSaved() {
   if (!uwaga) return;

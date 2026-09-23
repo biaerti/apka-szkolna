@@ -45,5 +45,12 @@ export function useVulcanUwaga() {
  */
 export function useVulcanUwagaSaved(): void {
   const updateRecapEvent = useStore((s) => s.updateRecapEvent);
-  useEffect(() => onVulcanUwagaSaved((eventId) => updateRecapEvent(eventId, { wpisane: true })), [updateRecapEvent]);
+  useEffect(
+    () =>
+      onVulcanUwagaSaved((eventId) => {
+        const event = useStore.getState().recapEvents.find((item) => item.id === eventId);
+        if (event && !event.wpisane) updateRecapEvent(eventId, { wpisane: true });
+      }),
+    [updateRecapEvent],
+  );
 }
