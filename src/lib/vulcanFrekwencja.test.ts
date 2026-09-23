@@ -57,12 +57,15 @@ describe('buildFrekwencjaTransfer', () => {
       createdAt: '',
     };
     const cls: SchoolClass = { id: 'c1', name: 'V A' } as SchoolClass;
-    const t = buildFrekwencjaTransfer(job, cls, [st('b', 2, 'B', 'b'), st('a', 1, 'A', 'a')]);
+    const ni = { ...st('n', 9, 'N', 'n', false), note: 'nauczanie indywidualne' };
+    const odszedl = st('o', 12, 'O', 'o', false);
+    const t = buildFrekwencjaTransfer(job, cls, [st('b', 2, 'B', 'b'), st('a', 1, 'A', 'a'), ni, odszedl]);
     expect(t.vulcanClassName).toBe('5A');
     expect(t.topic).toBe('Temat');
     expect(t.students.map((s) => [s.number, s.legend])).toEqual([
       [1, 'nieobecność'],
       [2, 'spóźnienie'],
+      [9, 'nauczanie indywidualne'],
     ]);
   });
 });

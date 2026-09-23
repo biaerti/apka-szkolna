@@ -984,8 +984,11 @@ async function markFrekAttendance(root) {
   const header = periodHeader(root, rows);
   if (!header) throw new Error(`Nie znalazłem kolumny ${frek.period}. lekcji w oknie frekwencji.`);
 
+  // Uczen z nauczaniem indywidualnym jest w apce wylaczony - gdy VULCAN go nie
+  // ma (albo juz ma "ni"), nie ma o czym meldowac.
   const missing = frek.students.filter((student) => !rows.some((row) => startsWithName(row.name, student)));
-  const order = ['obecność', 'nieobecność', 'spóźnienie'];
+  const reportMissing = missing.filter((student) => student.legend !== 'nauczanie indywidualne');
+  const order = ['obecność', 'nieobecność', 'spóźnienie', 'nauczanie indywidualne'];
   const symbols = {};
   let useRealClicks = false;
   for (const legendName of order) {
@@ -1034,7 +1037,7 @@ async function markFrekAttendance(root) {
   if (wrong.length > 0) {
     throw new Error(`Kolumna się nie zgadza (${wrong.map(frekStudentLabel).join(', ')}) - nie zapisuję. Sprawdź okno frekwencji.`);
   }
-  return { roster, missing };
+  return { roster, missing: reportMissing };
 }
 
 async function saveFrekEditor(root) {

@@ -67,7 +67,7 @@ export function rowToFrekwencjaJob(row: FrekwencjaJobRow): FrekwencjaJob {
 }
 
 /** Nazwa pozycji w legendzie VULCANA ("Zmień frekwencję" -> tabela Sym./Nazwa). */
-export type VulcanLegendName = 'obecność' | 'nieobecność' | 'spóźnienie';
+export type VulcanLegendName = 'obecność' | 'nieobecność' | 'spóźnienie' | 'nauczanie indywidualne';
 
 export function legendNameFor(status: AttendanceStatus): VulcanLegendName {
   return status === 'absent' ? 'nieobecność' : status === 'late' ? 'spóźnienie' : 'obecność';
@@ -86,6 +86,15 @@ export interface VulcanFrekwencjaTransfer {
   background: true;
 }
 
+/**
+ * Nauczanie indywidualne: uczen wylaczony w apce (nie ma go na liscie w
+ * telefonie), ale wciaz w dzienniku klasy. Rozpoznajemy go po notatce ucznia
+ * ("nauczanie indywidualne", "NI") - bot wpisuje mu wtedy "ni".
+ */
+export function isIndividual(st: Pick<Student, 'active' | 'note'>): boolean {
+  return !st.active && /indywidualn|^\s*ni\s*$/i.test(st.note ?? '');
+}
+
 export function buildFrekwencjaTransfer(job: FrekwencjaJob, schoolClass: SchoolClass, students: Student[]): VulcanFrekwencjaTransfer {
   const statusById = new Map(job.marks.map((m) => [m.studentId, m.status]));
   return {
@@ -97,13 +106,13 @@ export function buildFrekwencjaTransfer(job: FrekwencjaJob, schoolClass: SchoolC
     vulcanClassName: vulcanClassName(schoolClass.name),
     topic: job.topic.trim(),
     students: students
-      .filter((st) => st.classId === schoolClass.id && st.active && statusById.has(st.id))
+      .filter((st) => st.classId === schoolClass.id && ((st.active && statusById.has(st.id)) || isIndividual(st)))
       .sort((a, b) => a.number - b.number)
       .map((st) => ({
         number: st.number,
         lastName: st.lastName,
         firstName: st.firstName,
-        legend: legendNameFor(statusById.get(st.id) ?? 'present'),
+        legend: isIndividual(st) ? 'nauczanie indywidualne' : legendNameFor(statusById.get(st.id) ?? 'present'),
       })),
     background: true,
   };
@@ -140,11 +149,13 @@ export interface RosterCheck {
 /** Porownuje liste klasy z VULCANA z aktywnymi uczniami klasy w apce. */
 export function checkRoster(rows: RosterRow[], classStudents: Student[]): RosterCheck {
   const active = classStudents.filter((st) => st.active);
+  // Nauczanie indywidualne: wylaczony w apce, ale jest w VULCANIE - to nie brak.
+  const known = [...active, ...classStudents.filter(isIndividual)];
   const used = new Set<string>();
   const numberFixes: RosterCheck['numberFixes'] = [];
   const missingInApp: RosterRow[] = [];
   for (const row of rows) {
-    const st = active.find((candidate) => !used.has(candidate.id) && rowMatchesStudent(row.name, candidate));
+    const st = known.find((candidate) => !used.has(candidate.id) && rowMatchesStudent(row.name, candidate));
     if (!st) {
       missingInApp.push(row);
       continue;

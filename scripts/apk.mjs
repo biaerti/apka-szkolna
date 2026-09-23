@@ -8,7 +8,7 @@
 // npm run apk -- --bez-instalacji  buduje sam plik, bez podlaczonego telefonu.
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
 
@@ -42,10 +42,27 @@ function znajdzJdk() {
   return jdk;
 }
 
+/** SDK z android/local.properties (tam wskazuje go tez Gradle), potem typowe miejsca. */
+function sdkZLocalProperties() {
+  const plik = path.join(KATALOG, 'android/local.properties');
+  if (!existsSync(plik)) return undefined;
+  const linia = readFileSync(plik, 'utf8').split(/\r?\n/).find((l) => l.startsWith('sdk.dir='));
+  // Format .properties: "D\:/..." albo "C\:\\Users\\..." - zdejmujemy escapowanie.
+  return linia ? linia.slice('sdk.dir='.length).replace(/\\:/g, ':').replace(/\\\\/g, '/').trim() : undefined;
+}
+
 function znajdzAdb() {
-  const sdk = process.env.ANDROID_HOME ?? process.env.ANDROID_SDK_ROOT ?? path.join(homedir(), 'AppData/Local/Android/Sdk');
-  const adb = pierwsza([path.join(sdk, 'platform-tools/adb.exe'), path.join(sdk, 'platform-tools/adb')]);
-  if (!adb) throw new Error(`Nie znalazlem adb w ${sdk}/platform-tools`);
+  // 2026-09-23 folder Android przeniesiono z C: na D:\AppData, a skrot na C:
+  // sie zepsul - dlatego najpierw local.properties, a nie AppData/Local.
+  const sdki = [
+    sdkZLocalProperties(),
+    process.env.ANDROID_HOME,
+    process.env.ANDROID_SDK_ROOT,
+    'D:/AppData/Android/Sdk',
+    path.join(homedir(), 'AppData/Local/Android/Sdk'),
+  ].filter(Boolean);
+  const adb = pierwsza(sdki.flatMap((sdk) => [path.join(sdk, 'platform-tools/adb.exe'), path.join(sdk, 'platform-tools/adb')]));
+  if (!adb) throw new Error(`Nie znalazlem adb w zadnym z: ${sdki.join(', ')}`);
   return adb;
 }
 
