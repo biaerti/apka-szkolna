@@ -35,7 +35,7 @@ const TOPICS: Topic[] = [
     topic: 'Sztuka programowania',
     textbookPage: 14,
     teacherPlan: plan(
-      ['Co dziś', 'Tekst jest już przeczytany - dziś tylko rozmowa i zadania, bez czytania na głos. Podręcznik otwarty na s. 14-18, dzieci szukają w nim dowodów.\nNagranie całości: głośnik „Czytanki” → V.1 (ok. 10 min). Przydaje się dla nieobecnych albo żeby puścić samą scenę na boisku (s. 16).'],
+      ['Co dziś', 'Tekst jest już przeczytany - dziś tylko rozmowa i zadania, bez czytania na głos. Podręcznik otwarty na s. 14-18, dzieci szukają w nim dowodów.\nNagranie całości: głośnik „Czytanki” → V.1 (9 min). Przydaje się dla nieobecnych albo żeby puścić samą scenę na boisku (s. 16).'],
       ['Przebieg (45 min)', [
         '1. **Temat do zeszytu + obecność** (3 min). Koło powtórzeniowe: to pierwsza lekcja działu, więc albo je pomijasz, albo odpalasz z listy na pytaniach z ostatniej powtórki.',
         '2. **Rozgrzewka: co się stało?** (6 min). Każda wylosowana osoba mówi jedno zdanie z fabuły, po kolei. Ty w tym czasie rysujesz na tablicy oś wydarzeń (niżej).',
@@ -195,7 +195,7 @@ const TOPICS: Topic[] = [
     topic: 'Pax - oczami lisa',
     textbookPage: 25,
     teacherPlan: plan(
-      ['Co dziś czytamy', '**Sara Pennypacker, „Pax”**, s. 25-27. Nagranie: głośnik „Czytanki” → V.5 (ok. 7 min). Puszczasz całe - dzieci śledzą w podręczniku.\nPrzed czytaniem koniecznie pokaż ramkę „Kilka słów o książce” (s. 25): wojna, ojciec idzie do wojska, Peter jedzie do dziadka 500 km dalej. Bez tego nie rozumieją, dlaczego ojciec każe zostawić lisa.'],
+      ['Co dziś czytamy', '**Sara Pennypacker, „Pax”**, s. 25-27. Nagranie: głośnik „Czytanki” → V.5 (6 min). Puszczasz całe - dzieci śledzą w podręczniku.\nPrzed czytaniem koniecznie pokaż ramkę „Kilka słów o książce” (s. 25): wojna, ojciec idzie do wojska, Peter jedzie do dziadka 500 km dalej. Bez tego nie rozumieją, dlaczego ojciec każe zostawić lisa.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło** (7 min).',
         '2. **Zanim przeczytasz** (4 min): „Empatia - kto wie, co to?”. Robisz mapę myśli, jedno zdanie ze słownika na slajdzie.',
@@ -273,7 +273,7 @@ const TOPICS: Topic[] = [
     topic: 'Dziesiąty poziom',
     textbookPage: 31,
     teacherPlan: plan(
-      ['Co dziś czytamy', '**Jody J. Little, „Dziesiąty poziom”**, s. 31-34. Czytamy **w rolach** - w tekście jest dużo dialogów, więc przećwiczą to, co było na lekcji o dialogu. Role: narrator (ty albo najlepiej czytająca osoba), Jędrek, mama, Dawid, Dominik. Zmieniaj obsadę co stronę.\nNagranie awaryjne: „Czytanki” → V.7 (ok. 9 min).'],
+      ['Co dziś czytamy', '**Jody J. Little, „Dziesiąty poziom”**, s. 31-34. Czytamy **w rolach** - w tekście jest dużo dialogów, więc przećwiczą to, co było na lekcji o dialogu. Role: narrator (ty albo najlepiej czytająca osoba), Jędrek, mama, Dawid, Dominik. Zmieniaj obsadę co stronę.\nNagranie awaryjne: „Czytanki” → V.7 (7 min).'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło** (7 min).',
         '2. **Haczyk** (2 min): „Na którym poziomie jesteście w swojej grze? Co jest na ostatnim?”.',
@@ -352,7 +352,7 @@ const TOPICS: Topic[] = [
     topic: 'Kryspin w sieci i naprawdę',
     textbookPage: 36,
     teacherPlan: plan(
-      ['Co dziś czytamy', '**Barbara Kosmowska, Grzegorz Kasdepke, „Wielki wybuch, czyli K kontra K”**, s. 36-39. Nagranie: „Czytanki” → V.9 (ok. 7 min). Najlepiej: s. 36-38 z nagrania, a e-mail Kryspina (s. 38-39) czyta na głos wylosowany uczeń - od razu widać różnicę między tym, co było, a co napisał.\nPrzed czytaniem ramka „Kilka słów o książce” (s. 36): Kryspin i Ksenia grają razem online, ale nie znają się naprawdę.'],
+      ['Co dziś czytamy', '**Barbara Kosmowska, Grzegorz Kasdepke, „Wielki wybuch, czyli K kontra K”**, s. 36-39. Nagranie: „Czytanki” → V.9 (ok. 6 min). Najlepiej: s. 36-38 z nagrania, a e-mail Kryspina (s. 38-39) czyta na głos wylosowany uczeń - od razu widać różnicę między tym, co było, a co napisał.\nPrzed czytaniem ramka „Kilka słów o książce” (s. 36): Kryspin i Ksenia grają razem online, ale nie znają się naprawdę.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło** (7 min).',
         '2. **Haczyk** (3 min): „Podnieście rękę, jeśli w grze albo w sieci jesteście trochę inni niż na co dzień”. Bez komentarzy, tylko rozgrzewka.',
