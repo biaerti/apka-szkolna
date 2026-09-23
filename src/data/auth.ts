@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { getSupabase } from './supabase';
+import { forgetDeviceKey } from '../lib/studentCrypto';
 
 export type AuthStatus = 'unknown' | 'signed-out' | 'signed-in';
 
@@ -52,6 +53,8 @@ export function useAuth(): UseAuthResult {
   async function signOut(): Promise<void> {
     const supabase = getSupabase();
     await supabase.auth.signOut();
+    // Klucz do danych uczniow nie zostaje na urzadzeniu po wylogowaniu (wspolny komputer w szkole).
+    forgetDeviceKey();
   }
 
   return { ...state, signIn, signOut };

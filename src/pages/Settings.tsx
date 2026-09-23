@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../data/store';
 import { downloadBackup, importBackupFromFile } from '../data/backup';
 import { isSupabaseConfigured } from '../data/supabase';
 import { useAuth } from '../data/auth';
-import { pullAllFromRemote, pushAllToRemote, useSyncStatus } from '../data/remote/sync';
+import { pullAllFromRemote, pushAllStudentsToRemote, pushAllToRemote, useSyncStatus } from '../data/remote/sync';
+import { enableStudentCrypto, fetchStudentCryptoMeta } from '../data/remote/studentCryptoRemote';
 import {
   SLIDE_FONT_PERCENT_MAX,
   SLIDE_FONT_PERCENT_MIN,
@@ -99,6 +100,87 @@ function CloudSection() {
         onCancel={() => setPushOpen(false)}
         onConfirm={handlePush}
       />
+    </section>
+  );
+}
+
+function StudentCryptoSection() {
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+  const [password, setPassword] = useState('');
+  const [repeat, setRepeat] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchStudentCryptoMeta()
+      .then((meta) => setEnabled(meta !== null))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Nie udało się sprawdzić szyfrowania.'));
+  }, []);
+
+  async function handleEnable() {
+    setError(null);
+    if (password.length < 8) {
+      setError('Hasło musi mieć co najmniej 8 znaków.');
+      return;
+    }
+    if (password !== repeat) {
+      setError('Hasła się różnią.');
+      return;
+    }
+    setBusy(true);
+    try {
+      await enableStudentCrypto(password);
+      // Nadpisuje jawne wiersze w chmurze zaszyfrowanymi.
+      await pushAllStudentsToRemote();
+      setEnabled(true);
+      setPassword('');
+      setRepeat('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Nie udało się włączyć szyfrowania.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
+      <h2 className="mb-1 text-base font-semibold text-gray-900">Szyfrowanie danych uczniów</h2>
+      {enabled === null && !error && <p className="text-sm text-gray-500">Sprawdzanie...</p>}
+      {enabled === true && (
+        <p className="text-sm text-gray-500">
+          Włączone. Imiona, nazwiska i notatki uczniów są w chmurze zaszyfrowane, a klucz jest tylko na Twoich
+          urządzeniach. Na nowym urządzeniu apka zapyta o hasło, a po wylogowaniu je zapomni.
+        </p>
+      )}
+      {enabled === false && (
+        <>
+          <p className="mb-4 text-sm text-gray-500">
+            Imiona, nazwiska i notatki uczniów będą szyfrowane w przeglądarce, zanim trafią do chmury. Supabase ani
+            nikt inny ich nie odczyta. Zapisz hasło w bezpiecznym miejscu: bez niego nazwisk w chmurze nie da się
+            odzyskać (listę klasy trzeba by wgrać od nowa z VULCANA).
+          </p>
+          <div className="mb-3 grid gap-3 sm:grid-cols-2">
+            <Input
+              type="password"
+              placeholder="Hasło (min. 8 znaków)"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Powtórz hasło"
+              autoComplete="new-password"
+              value={repeat}
+              onChange={(e) => setRepeat(e.target.value)}
+            />
+          </div>
+          <Button disabled={busy} onClick={handleEnable}>
+            {busy ? 'Szyfrowanie...' : 'Włącz szyfrowanie'}
+          </Button>
+        </>
+      )}
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </section>
   );
 }
@@ -262,6 +344,7 @@ export function SettingsPage() {
       </section>
 
       {isSupabaseConfigured() && <CloudSection />}
+      {isSupabaseConfigured() && <StudentCryptoSection />}
 
       <section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
         <h2 className="mb-1 text-base font-semibold text-gray-900">Kopia zapasowa</h2>

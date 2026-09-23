@@ -8,6 +8,8 @@ import { useAuth } from '../../data/auth';
 import { Login } from '../../pages/Login';
 import { initialSync, startSync, stopSync } from '../../data/remote/sync';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { resolveStudentCryptoState } from '../../data/remote/studentCryptoRemote';
+import { UnlockStudents } from '../../pages/UnlockStudents';
 
 export function AuthGate({ children }: { children: ReactNode }) {
   if (!isSupabaseConfigured()) {
@@ -29,12 +31,19 @@ function AuthGateCloud({ children }: { children: ReactNode }) {
   const syncedSessionRef = useRef<string | null>(null);
   const [needsUploadConfirm, setNeedsUploadConfirm] = useState(false);
   const [ready, setReady] = useState(false);
+  // Dane uczniow zaszyfrowane, a to urzadzenie nie ma klucza - najpierw haslo.
+  const [locked, setLocked] = useState(false);
+  const [startError, setStartError] = useState<string | null>(null);
+  const cancelStartRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (status !== 'signed-in' || !session) {
       syncedSessionRef.current = null;
       setReady(false);
       setNeedsUploadConfirm(false);
+      setLocked(false);
+      setStartError(null);
+      cancelStartRef.current();
       stopSync();
       return;
     }
@@ -46,10 +55,34 @@ function AuthGateCloud({ children }: { children: ReactNode }) {
     }
     syncedSessionRef.current = session.user.id;
 
-    let cancelled = false;
     setReady(false);
+    // Anulowanie tylko przy wylogowaniu (cancelStartRef), nie w cleanupie efektu -
+    // StrictMode odpala cleanup od razu, a drugie przejscie konczy sie na ref powyzej.
+    startAfterLogin();
+  }, [status, session?.user.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    initialSync().then((result) => {
+  useEffect(() => {
+    return () => stopSync();
+  }, []);
+
+  // Najpierw sprawdzamy szyfrowanie danych uczniow (bez klucza nie da sie ich
+  // ani odczytac, ani bezpiecznie wyslac), potem initialSync jak dotad.
+  function startAfterLogin(): void {
+    let cancelled = false;
+    cancelStartRef.current();
+    cancelStartRef.current = () => {
+      cancelled = true;
+    };
+    setStartError(null);
+    (async () => {
+      const cryptoState = await resolveStudentCryptoState();
+      if (cancelled) return;
+      if (cryptoState === 'locked') {
+        setLocked(true);
+        return;
+      }
+      setLocked(false);
+      const result = await initialSync();
       if (cancelled) return;
       if (result.needsUpload) {
         setNeedsUploadConfirm(true);
@@ -57,22 +90,23 @@ function AuthGateCloud({ children }: { children: ReactNode }) {
         startSync();
         setReady(true);
       }
+    })().catch((err: unknown) => {
+      if (cancelled) return;
+      setStartError(err instanceof Error ? err.message : 'Nie udało się połączyć z chmurą.');
     });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [status, session?.user.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    return () => stopSync();
-  }, []);
+  }
 
   if (status === 'unknown') {
     return <CenteredMessage text="Łączenie..." />;
   }
   if (status === 'signed-out') {
     return <Login />;
+  }
+  if (locked) {
+    return <UnlockStudents onUnlocked={() => startAfterLogin()} onSignOut={() => void signOut()} />;
+  }
+  if (startError) {
+    return <CenteredMessage text={`Błąd połączenia z chmurą: ${startError}. Odśwież stronę.`} />;
   }
 
   function confirmUpload() {

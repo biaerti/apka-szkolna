@@ -47,6 +47,7 @@ import {
 import { absenceToRow, rowToAbsence, type AbsenceRow } from './absenceMappers';
 import { rowToSeat, seatToRow, type SeatRow } from './seatMappers';
 import { DEFAULT_PERIODS, buildSeedTimetable } from '../timetableSeed';
+import { decryptStudentRows, encryptStudentRows } from '../../lib/studentCrypto';
 import type {
   Absence,
   Lesson,
@@ -171,7 +172,7 @@ async function fetchRemote(): Promise<RemoteLoad> {
     timetableSeeded,
     data: {
       classes,
-      students: studentRows.map(rowToStudent),
+      students: (await decryptStudentRows(studentRows)).map(rowToStudent),
       questionSets: questionSetRows.map(rowToQuestionSet),
       questions: questionRows.map(rowToQuestion),
       lessons: lessonRows.map(rowToLesson),
@@ -422,8 +423,10 @@ async function syncNow(): Promise<void> {
           for (const c of UPSERT_ORDER) {
             const rows = diffs[c].upserts;
             for (let i = 0; i < rows.length; i += UPSERT_BATCH_SIZE) {
-              const batch = rows.slice(i, i + UPSERT_BATCH_SIZE);
+              const plain = rows.slice(i, i + UPSERT_BATCH_SIZE);
               failedContext = { table: TABLE_NAMES[c], operation: 'upsert' };
+              // Snapshoty i diff sa na jawnych danych; szyfrujemy dopiero wysylke.
+              const batch = c === 'students' ? await encryptStudentRows(plain as StudentRow[]) : plain;
               const { error } = await supabase.from(TABLE_NAMES[c]).upsert(batch, { onConflict: 'id' });
               if (error) throw error;
             }
@@ -706,4 +709,10 @@ export async function pushAllToRemote(): Promise<void> {
 /** Pelny pull - nadpisuje store zawartoscia chmury (bez generowania wysylki). */
 export async function pullAllFromRemote(): Promise<void> {
   applyRemoteToStore(await fetchRemote());
+}
+
+/** Wysyla od nowa wszystkich uczniow (np. zaraz po wlaczeniu szyfrowania - nadpisuje jawne wiersze). */
+export async function pushAllStudentsToRemote(): Promise<void> {
+  snapshots.students = new Map();
+  await syncNow();
 }
