@@ -225,6 +225,10 @@ export function classifyMatch(manuallyEdited: boolean): RefreshClassification {
  * lekcji materialu, ktora moze byc odswiezana w tej samej petli (wtedy jej
  * nowy id jest w `updatedReviewSetIds`) albo juz istniec w bazie bez zmian
  * (wtedy bierzemy jej biezacy `reviewQuestionSetId`).
+ *
+ * Gdy nauczyciel usunal lekcje-wlasciciela (np. pominal dzien tematyczny),
+ * powtorka cofa sie do najblizszego wczesniejszego tematu materialu, ktory w
+ * bazie zostal - tak samo jak robi to usuwanie lekcji (lessonDeletion.ts).
  */
 export function resolveForeignReviewSetId(
   gradeLessons: Lesson[],
@@ -232,11 +236,15 @@ export function resolveForeignReviewSetId(
   freshBundle: FreshMaterialsBundle,
   updatedReviewSetIds: ReadonlyMap<string, string>,
 ): string | undefined {
-  const owner = freshBundle.lessons.find((l) => l.reviewQuestionSetId === tempId);
-  if (!owner) return undefined;
-  const ownerOldLesson = gradeLessons.find((l) => titleMatchKey(l.title) === titleMatchKey(owner.title));
-  if (!ownerOldLesson) return undefined;
-  return updatedReviewSetIds.get(ownerOldLesson.id) ?? ownerOldLesson.reviewQuestionSetId;
+  const ownerIndex = freshBundle.lessons.findIndex((l) => l.reviewQuestionSetId === tempId);
+  if (ownerIndex < 0) return undefined;
+  for (let i = ownerIndex; i >= 0; i--) {
+    const owner = freshBundle.lessons[i];
+    const ownerOldLesson = gradeLessons.find((l) => titleMatchKey(l.title) === titleMatchKey(owner.title));
+    if (!ownerOldLesson) continue;
+    return updatedReviewSetIds.get(ownerOldLesson.id) ?? ownerOldLesson.reviewQuestionSetId;
+  }
+  return undefined;
 }
 
 /**

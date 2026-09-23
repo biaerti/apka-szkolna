@@ -196,3 +196,32 @@ describe('titleMatchKey', () => {
     );
   });
 });
+
+describe('resolveForeignReviewSetId: usunieta lekcja-wlasciciel', () => {
+  // Nauczyciel usunal lekcje ze srodka materialu (np. dzien tematyczny).
+  // Slajd otwierajacy nastepnej lekcji ma po odswiezeniu cofnac powtorke do
+  // najblizszego wczesniejszego tematu, ktory w bazie zostal - a nie zostac
+  // z tymczasowym id nieistniejacego zestawu.
+  it('cofa sie do najblizszego wczesniejszego istniejacego tematu', () => {
+    const fresh: FreshMaterialsBundle = {
+      lessons: [
+        { grade: 'IV', title: '8. Dlaczego warto być sobą?', progress: {}, slides: [], questionSetId: 'temp8', reviewQuestionSetId: 'temp8' },
+        { grade: 'IV', title: '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki', progress: {}, slides: [], questionSetId: 'tempK', reviewQuestionSetId: 'tempK' },
+        { grade: 'IV', title: '11. Czas na czasownik', progress: {}, slides: [], questionSetId: 'temp11', reviewQuestionSetId: 'temp11' },
+      ],
+      questionSets: [],
+      questions: [],
+    };
+    const gradeLessons = [
+      lesson({ id: 'l8', title: '8. Dlaczego warto być sobą?', questionSetId: 'set8', reviewQuestionSetId: 'set8' }),
+      // Kropki celowo brak - usunieta.
+      lesson({ id: 'l11', title: '11. Czas na czasownik', questionSetId: 'set11', reviewQuestionSetId: 'set11' }),
+    ];
+
+    expect(resolveForeignReviewSetId(gradeLessons, 'tempK', fresh, new Map())).toBe('set8');
+    // Swiezo odswiezony wlasciciel z tej samej petli ma pierwszenstwo.
+    expect(resolveForeignReviewSetId(gradeLessons, 'tempK', fresh, new Map([['l8', 'set8-nowy']]))).toBe('set8-nowy');
+    // Zwykly przypadek bez usuniec dziala jak dotad.
+    expect(resolveForeignReviewSetId(gradeLessons, 'temp8', fresh, new Map())).toBe('set8');
+  });
+});
