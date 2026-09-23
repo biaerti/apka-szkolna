@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Czas na czasownik - film 1</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* ===== scena 01: intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .tytul {
+  font-size: 110px; font-weight: 800; line-height: .95; text-align: center;
+  color: var(--roz); animation-delay: .5s;
+}
+#s01 .tytul small { display: block; font-size: 54px; color: var(--pomarancz); }
+#s01 .slowa { display: flex; gap: 28px; margin-top: 52px; }
+#s01 .slowo {
+  background: var(--bialy); border: 4px solid var(--pomarancz); border-radius: 24px;
+  padding: 18px 30px; font-size: 40px; font-weight: 800; text-align: center;
+  box-shadow: 0 6px 0 rgba(245,130,32,.25);
+}
+#s01 .slowo span { display: block; font-size: 52px; }
+#s01 .to-czasowniki {
+  margin-top: 44px; font-family: 'Baloo 2'; font-size: 54px; font-weight: 800;
+  color: #fff; background: var(--pomarancz); padding: 10px 42px; border-radius: 999px;
+  animation-delay: 9.7s;
+}
+
+/* ===== scena 02: czesci mowy ===== */
+#s02 { padding: 70px 90px; }
+#s02 h2 { font-size: 64px; color: var(--pomarancz); animation-delay: 3.2s; }
+#s02 .karty { display: flex; gap: 50px; margin-top: 60px; align-items: stretch; }
+.karta {
+  background: var(--bialy); border-radius: 28px; padding: 36px 44px; flex: 1;
+  border: 5px solid #d9c9b2;
+}
+.karta h3 { font-family: 'Baloo 2'; font-size: 46px; margin-bottom: 18px; }
+.karta .przyklady { font-size: 36px; font-weight: 600; line-height: 1.6; }
+#s02 .karta-rzecz { animation-delay: 7.3s; }
+#s02 .karta-rzecz h3 { color: #3E8ED0; }
+#s02 .karta-rzecz .przyklady { animation-delay: 8.9s; }
+#s02 .karta-czas { border-color: var(--pomarancz); background: #FFF0DC; animation-delay: 13.3s; }
+#s02 .karta-czas h3 { color: var(--roz); font-size: 54px; }
+#s02 .haslo {
+  margin-top: 46px; font-size: 40px; font-weight: 800; text-align: center;
+  color: var(--ciemny); animation-delay: 15.9s;
+}
+
+/* ===== scena 03: definicja ===== */
+#s03 { padding: 56px 80px; display: flex; flex-direction: column; justify-content: center; }
+.ramka {
+  border: 6px solid var(--pomarancz); border-radius: 30px; background: var(--bialy);
+  padding: 28px 40px; text-align: center;
+}
+#s03 .ramka { animation-delay: 1.0s; }
+#s03 .ramka .def { font-size: 44px; font-weight: 800; }
+#s03 .ramka .def b { color: var(--pomarancz); }
+#s03 .ramka .def i { color: var(--roz); font-style: normal; font-weight: 800; }
+#s03 .def b.pop-w { display: inline-block; animation: pop .5s cubic-bezier(.2,1.4,.4,1) both; animation-delay: 3.6s; }
+#s03 .def i.pop-w { display: inline-block; animation: pop .5s cubic-bezier(.2,1.4,.4,1) both; animation-delay: 4.6s; }
+#s03 .pytania { display: flex; gap: 46px; margin-top: 52px; }
+.dymek {
+  flex: 1; border-radius: 30px; padding: 30px 36px; text-align: center; color: #fff;
+}
+.dymek .pyt { font-family: 'Baloo 2'; font-size: 48px; font-weight: 800; }
+.dymek .odp { margin-top: 14px; font-size: 38px; font-weight: 800; background: rgba(255,255,255,.92); border-radius: 18px; padding: 12px; }
+#s03 .dymek1 { background: var(--pomarancz); animation-delay: 9.1s; }
+#s03 .dymek1 .odp { color: var(--pomarancz); animation-delay: 11.0s; }
+#s03 .dymek2 { background: var(--roz); animation-delay: 15.0s; }
+#s03 .dymek2 .odp { color: var(--roz); animation-delay: 17.4s; }
+
+/* ===== sceny 04/05: kafelki ===== */
+.kafelkowa { padding: 56px 90px; text-align: center; }
+.kafelkowa h2 { font-size: 74px; animation-delay: .7s; }
+.kafelkowa .podtytul { font-size: 40px; font-weight: 800; margin-top: 6px; }
+.kafelki { display: flex; gap: 36px; margin-top: 48px; justify-content: center; }
+.kafelek {
+  background: var(--bialy); border-radius: 26px; padding: 26px 30px; width: 240px;
+  border: 4px solid #d9c9b2; font-size: 40px; font-weight: 800;
+  box-shadow: 0 8px 0 rgba(74,59,50,.08);
+}
+.kafelek .emoji { display: block; font-size: 84px; margin-bottom: 10px; }
+.kafelkowa .morat { margin-top: 48px; font-size: 38px; font-weight: 800; }
+#s04 h2 { color: var(--pomarancz); }
+#s04 .podtytul { animation-delay: .9s; }
+#s04 .kafelek:nth-child(1) { animation-delay: 2.9s; }
+#s04 .kafelek:nth-child(2) { animation-delay: 3.4s; }
+#s04 .kafelek:nth-child(3) { animation-delay: 3.9s; }
+#s04 .kafelek:nth-child(4) { animation-delay: 4.4s; }
+#s04 .morat { animation-delay: 6.0s; }
+#s04 .gry { margin-top: 22px; font-size: 34px; font-weight: 600; color: #7a6a5c; animation-delay: 9.0s; }
+#s05 h2 { color: var(--roz); }
+#s05 .podtytul { animation-delay: 3.0s; }
+#s05 .kafelek:nth-child(1) { animation-delay: 7.4s; }
+#s05 .kafelek:nth-child(2) { animation-delay: 7.9s; }
+#s05 .kafelek:nth-child(3) { animation-delay: 8.4s; }
+#s05 .kafelek:nth-child(4) { animation-delay: 8.9s; }
+#s05 .morat { animation-delay: 14.0s; }
+#s05 .morat .dymkowe { color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 26px; }
+
+/* ===== scena 06: cwiczenie ===== */
+#s06 { padding: 60px 90px; text-align: center; }
+#s06 h2 { font-size: 58px; color: var(--pomarancz); animation-delay: .5s; }
+#s06 .zdanie {
+  margin-top: 56px; font-size: 52px; font-weight: 800; line-height: 1.5;
+  animation-delay: 2.4s;
+}
+#s06 .wyraz { display: inline-block; padding: 2px 10px; border-radius: 14px; }
+#s06 .pytanie {
+  margin-top: 44px; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--ciemny); display: inline-block;
+  padding: 8px 34px; border-radius: 999px; animation-delay: 7.2s;
+}
+@keyframes podswietl-pomarancz { to { background: var(--pomarancz); color: #fff; } }
+@keyframes podswietl-roz { to { background: var(--roz); color: #fff; } }
+#s06 .w-skacze { animation: podswietl-pomarancz .5s ease-out both 12.7s; }
+#s06 .w-spi { animation: podswietl-roz .5s ease-out both 15.6s; }
+#s06 .etykiety { display: flex; justify-content: center; gap: 60px; margin-top: 46px; }
+#s06 .etyk { font-size: 36px; font-weight: 800; padding: 8px 28px; border-radius: 16px; color: #fff; }
+#s06 .etyk-czyn { background: var(--pomarancz); animation-delay: 13.2s; }
+#s06 .etyk-stan { background: var(--roz); animation-delay: 16.1s; }
+
+/* ===== scena 07: nie ===== */
+#s07 { padding: 36px 90px; text-align: center; }
+#s07 h2 { font-size: 50px; color: var(--ciemny); animation-delay: .6s; }
+#s07 .scenka { display: flex; align-items: center; justify-content: center; gap: 0; margin-top: 28px; }
+#s07 .blok {
+  font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 26px;
+  padding: 22px 48px; font-size: 64px;
+}
+#s07 .blok-nie { background: var(--ciemny); animation-delay: 3.7s; }
+#s07 .blok-czas { background: var(--pomarancz); animation-delay: 3.7s; }
+#s07 .przerwa {
+  width: 110px; text-align: center; font-size: 44px; font-weight: 800; color: var(--roz);
+  animation-delay: 4.6s;
+}
+#s07 .przyklady { margin-top: 28px; font-size: 44px; font-weight: 800; line-height: 1.55; }
+#s07 .przyklady .p1 { animation-delay: 7.2s; }
+#s07 .przyklady .p2 { animation-delay: 8.2s; }
+#s07 .przyklady .p3 { animation-delay: 9.2s; }
+#s07 .przyklady em { font-style: normal; color: var(--roz); border-bottom: 5px dotted var(--roz); }
+#s07 .stempel {
+  display: inline-block; margin-top: 24px; font-family: 'Baloo 2'; font-size: 50px;
+  font-weight: 800; color: var(--roz); border: 6px solid var(--roz); border-radius: 18px;
+  padding: 4px 34px; transform: rotate(-4deg); animation-delay: 10.4s;
+}
+
+/* ===== scena 08: podsumowanie ===== */
+#s08 { padding: 36px 110px; }
+#s08 h2 { font-size: 64px; color: var(--pomarancz); text-align: center; animation-delay: .5s; }
+#s08 .lista { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+#s08 .punkt {
+  display: flex; align-items: center; gap: 24px; background: var(--bialy);
+  border-radius: 22px; padding: 18px 32px; font-size: 38px; font-weight: 800;
+  border: 4px solid #d9c9b2;
+}
+#s08 .punkt .ptaszek { font-size: 44px; color: var(--pomarancz); font-family: 'Baloo 2'; }
+#s08 .punkt b { color: var(--roz); }
+#s08 .p1 { animation-delay: 2.2s; }
+#s08 .p2 { animation-delay: 6.4s; }
+#s08 .p3 { animation-delay: 11.2s; }
+#s08 .final {
+  margin-top: 30px; text-align: center; font-family: 'Baloo 2'; font-size: 42px;
+  font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px;
+  padding: 10px 30px; animation-delay: 14.2s;
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="tytul pop">CZAS<br><small>na</small>CZASOWNIK</div>
+    <div class="slowa">
+      <div class="slowo pop" style="animation-delay:6.4s"><span>🏃</span>biegam</div>
+      <div class="slowo pop" style="animation-delay:7.0s"><span>😴</span>śpię</div>
+      <div class="slowo pop" style="animation-delay:7.6s"><span>🎮</span>gram</div>
+      <div class="slowo pop" style="animation-delay:8.3s"><span>💭</span>marzę</div>
+    </div>
+    <div class="to-czasowniki pop">To czasowniki!</div>
+  </section>
+
+  <section class="scena" data-id="02-czesci-mowy" id="s02">
+    <h2 class="wjazd-dol">Części mowy</h2>
+    <div class="karty">
+      <div class="karta karta-rzecz wjazd-lewo">
+        <h3>RZECZOWNIK</h3>
+        <div class="przyklady zjaw">kot &nbsp;•&nbsp; szkoła &nbsp;•&nbsp; piłka<br>nazywa ludzi, zwierzęta i&nbsp;rzeczy</div>
+      </div>
+      <div class="karta karta-czas pop">
+        <h3>CZASOWNIK</h3>
+        <div class="przyklady">kolejna część mowy -<br>dziś go poznajemy!</div>
+      </div>
+    </div>
+    <div class="haslo zjaw">Bez czasownika żadne zdanie nie ruszy z miejsca. 🚀</div>
+  </section>
+
+  <section class="scena" data-id="03-definicja" id="s03">
+    <div class="ramka pop">
+      <div class="def">CZASOWNIK nazywa <b class="pop-w">CZYNNOŚCI</b> i <i class="pop-w">STANY</i></div>
+    </div>
+    <div class="pytania">
+      <div class="dymek dymek1 pop">
+        <div class="pyt">co robi?</div>
+        <div class="odp zjaw">czyta • skacze • słucha</div>
+      </div>
+      <div class="dymek dymek2 pop">
+        <div class="pyt">co się z nim dzieje?</div>
+        <div class="odp zjaw">śpi • rośnie • marzy</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena kafelkowa" data-id="04-czynnosci" id="s04">
+    <h2 class="pop">CZYNNOŚCI</h2>
+    <div class="podtytul zjaw">czyli działania - ktoś coś robi</div>
+    <div class="kafelki">
+      <div class="kafelek pop"><span class="emoji">🏃</span>biegnie</div>
+      <div class="kafelek pop"><span class="emoji">✏️</span>pisze</div>
+      <div class="kafelek pop"><span class="emoji">🧱</span>buduje</div>
+      <div class="kafelek pop"><span class="emoji">⚽</span>gra</div>
+    </div>
+    <div class="morat zjaw">Czynności często wiążą się z <b style="color:var(--pomarancz)">ruchem</b>.</div>
+    <div class="gry zjaw">gra w piłkę • pisanie w zeszycie • budowanie w Minecrafcie</div>
+  </section>
+
+  <section class="scena kafelkowa" data-id="05-stany" id="s05">
+    <h2 class="pop">STANY</h2>
+    <div class="podtytul zjaw">sytuacje, które dzieją się same</div>
+    <div class="kafelki">
+      <div class="kafelek pop"><span class="emoji">😴</span>śpi</div>
+      <div class="kafelek pop"><span class="emoji">😨</span>boi się</div>
+      <div class="kafelek pop"><span class="emoji">🌱</span>rośnie</div>
+      <div class="kafelek pop"><span class="emoji">🥶</span>marznie</div>
+    </div>
+    <div class="morat zjaw">O stany pytamy: <span class="dymkowe">co się z nim dzieje?</span></div>
+  </section>
+
+  <section class="scena" data-id="06-cwiczenie" id="s06">
+    <h2 class="pop">Sprawdźmy to!</h2>
+    <div class="zdanie wjazd-dol">
+      Kot <span class="wyraz w-skacze">skacze</span> po kanapie,<br>
+      a pies smacznie <span class="wyraz w-spi">śpi</span>.
+    </div>
+    <div><span class="pytanie pop">Które wyrazy to czasowniki? 🤔</span></div>
+    <div class="etykiety">
+      <div class="etyk etyk-czyn pop">skacze = CZYNNOŚĆ</div>
+      <div class="etyk etyk-stan pop">śpi = STAN</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="07-nie" id="s07">
+    <h2 class="wjazd-dol">Ważna zasada pisowni ✍️</h2>
+    <div class="scenka">
+      <div class="blok blok-nie wjazd-lewo">NIE</div>
+      <div class="przerwa pop">↔</div>
+      <div class="blok blok-czas wjazd-prawo">czasownik</div>
+    </div>
+    <div class="przyklady">
+      <div class="p1 zjaw"><em>nie</em> powiem</div>
+      <div class="p2 zjaw"><em>nie</em> zamierzali</div>
+      <div class="p3 zjaw"><em>nie</em> przeczytała</div>
+    </div>
+    <div><span class="stempel pop">ZAWSZE ODDZIELNIE!</span></div>
+  </section>
+
+  <section class="scena" data-id="08-podsumowanie" id="s08">
+    <h2 class="pop">Podsumujmy 📌</h2>
+    <div class="lista">
+      <div class="punkt p1 wjazd-lewo"><span class="ptaszek">✔</span><span>Czasownik nazywa <b>czynności</b> i <b>stany</b>.</span></div>
+      <div class="punkt p2 wjazd-lewo"><span class="ptaszek">✔</span><span>Pytania: <b>co robi?</b> i <b>co się z nim dzieje?</b></span></div>
+      <div class="punkt p3 wjazd-lewo"><span class="ptaszek">✔</span><span><b>Nie</b> z czasownikami piszemy <b>oddzielnie</b>.</span></div>
+    </div>
+    <div class="final pop">Czasowniki nie mają przed wami tajemnic! 🎉</div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

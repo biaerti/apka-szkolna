@@ -8,3 +8,6 @@ audio-czytanki/teksty/
 public/audio/czytanki/
 
 .vercel
+
+# narracje filmikow - generowane z ElevenLabs, lokalnie
+filmiki/*/audio/

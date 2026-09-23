@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Misja: odmiana! - film 2</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* ===== scena 01: intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .tytul {
+  font-size: 78px; font-weight: 800; line-height: 1.05; text-align: center;
+  color: var(--roz); animation-delay: .4s;
+}
+#s01 .tytul small { display: block; font-size: 42px; color: var(--pomarancz); margin-top: 4px; }
+#s01 .slowa { display: flex; gap: 22px; margin-top: 48px; }
+#s01 .slowo {
+  background: var(--bialy); border: 4px solid var(--pomarancz); border-radius: 22px;
+  padding: 16px 26px; font-size: 34px; font-weight: 800; text-align: center;
+  box-shadow: 0 6px 0 rgba(245,130,32,.25); white-space: nowrap;
+}
+#s01 .haslo {
+  margin-top: 44px; font-family: 'Baloo 2'; font-size: 42px; font-weight: 800;
+  color: #fff; background: var(--roz); padding: 14px 40px; border-radius: 999px;
+  text-align: center; animation-delay: 14.2s;
+}
+
+/* ===== scena 02: osoby ===== */
+#s02 { padding: 60px 90px; text-align: center; }
+#s02 h2 { font-size: 62px; color: var(--pomarancz); animation-delay: .5s; }
+#s02 .kolumny { display: flex; gap: 56px; margin-top: 46px; justify-content: center; }
+#s02 .kolumna {
+  background: var(--bialy); border-radius: 28px; padding: 30px 40px; width: 480px;
+  border: 5px solid #d9c9b2; text-align: left;
+}
+#s02 .kol-poj { border-color: var(--pomarancz); }
+#s02 .kol-mn { border-color: var(--roz); }
+#s02 .kolumna h3 { font-family: 'Baloo 2'; font-size: 38px; text-align: center; margin-bottom: 18px; }
+#s02 .kol-poj h3 { color: var(--pomarancz); animation-delay: 3.0s; }
+#s02 .kol-mn h3 { color: var(--roz); animation-delay: 12.5s; }
+#s02 .wiersz { font-size: 33px; font-weight: 700; padding: 9px 0; border-bottom: 3px dashed #e8dcc8; }
+#s02 .wiersz:last-child { border-bottom: none; }
+#s02 .kol-poj .w1 { animation-delay: 7.7s; }
+#s02 .kol-poj .w2 { animation-delay: 9.2s; }
+#s02 .kol-poj .w3 { animation-delay: 11.0s; }
+#s02 .kol-mn .w1 { animation-delay: 14.0s; }
+#s02 .kol-mn .w2 { animation-delay: 14.9s; }
+#s02 .kol-mn .w3 { animation-delay: 16.4s; }
+#s02 .morat { margin-top: 36px; font-size: 34px; font-weight: 800; animation-delay: 17.8s; }
+
+/* ===== scena 03: liczby ===== */
+#s03 { padding: 56px 90px; text-align: center; }
+#s03 h2 { font-size: 62px; color: var(--roz); animation-delay: .4s; }
+#s03 .karty { display: flex; gap: 60px; margin-top: 54px; justify-content: center; }
+#s03 .karta {
+  background: var(--bialy); border-radius: 28px; padding: 34px 46px; width: 440px;
+  border: 5px solid #d9c9b2; text-align: center;
+}
+#s03 .karta .emoji { font-size: 92px; display: block; }
+#s03 .karta .etyk { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; margin-top: 12px; }
+#s03 .karta .przyklad { font-size: 40px; font-weight: 800; margin-top: 10px; }
+#s03 .karta-poj { border-color: var(--pomarancz); animation-delay: 5.0s; }
+#s03 .karta-poj .etyk { color: var(--pomarancz); }
+#s03 .karta-mn { border-color: var(--roz); animation-delay: 8.0s; }
+#s03 .karta-mn .etyk { color: var(--roz); }
+
+/* ===== scena 04: czasy ===== */
+#s04 { padding: 52px 80px; text-align: center; }
+#s04 h2 { font-size: 58px; color: var(--pomarancz); animation-delay: .4s; }
+#s04 .os { display: flex; align-items: center; gap: 18px; margin-top: 40px; justify-content: center; }
+#s04 .box {
+  background: var(--bialy); border-radius: 26px; padding: 22px 28px; width: 300px;
+  border: 5px solid #d9c9b2;
+}
+#s04 .box .etyk { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; }
+#s04 .box .przyklad { font-size: 34px; font-weight: 800; margin-top: 8px; }
+#s04 .box-przeszly { animation-delay: 5.6s; }
+#s04 .box-przeszly .etyk { color: #7a6a5c; }
+#s04 .box-teraz { animation-delay: 9.6s; }
+#s04 .box-teraz .etyk { color: var(--pomarancz); }
+#s04 .box-przyszly { animation-delay: 12.7s; border-color: var(--roz); }
+#s04 .box-przyszly .etyk { color: var(--roz); }
+#s04 .strzalka { font-size: 44px; font-weight: 800; color: var(--roz); animation-delay: 12.7s; }
+#s04 .uwaga-blok { margin-top: 38px; }
+#s04 .uwaga {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 36px; font-weight: 800;
+  color: #fff; background: var(--ciemny); padding: 8px 32px; border-radius: 999px;
+  animation-delay: 13.6s;
+}
+#s04 .postacie { display: flex; gap: 40px; margin-top: 26px; justify-content: center; }
+#s04 .postac {
+  background: var(--bialy); border-radius: 22px; padding: 18px 30px; width: 380px;
+  border: 4px solid var(--roz);
+}
+#s04 .postac .nazwa { font-size: 28px; font-weight: 800; color: var(--roz); }
+#s04 .postac .wyraz { font-size: 38px; font-weight: 800; margin-top: 6px; }
+#s04 .postac-prosty { animation-delay: 16.5s; }
+#s04 .postac-zlozony { animation-delay: 18.6s; }
+
+/* ===== scena 05: rodzaje ===== */
+#s05 { padding: 46px 80px; text-align: center; }
+#s05 h2 { font-size: 58px; color: var(--roz); animation-delay: .4s; }
+#s05 .sub { font-size: 34px; font-weight: 800; margin-top: 30px; color: var(--ciemny); }
+#s05 .sub-poj { animation-delay: 4.4s; }
+#s05 .sub-mn { animation-delay: 15.3s; margin-top: 28px; }
+#s05 .rzad { display: flex; gap: 30px; margin-top: 22px; justify-content: center; }
+#s05 .chip {
+  background: var(--bialy); border-radius: 22px; padding: 16px 26px; width: 330px;
+  border: 4px solid #d9c9b2;
+}
+#s05 .chip .nazwa { font-family: 'Baloo 2'; font-size: 28px; font-weight: 800; color: var(--pomarancz); }
+#s05 .chip .przyklad { font-size: 30px; font-weight: 800; margin-top: 6px; }
+#s05 .chip-meski { animation-delay: 7.0s; }
+#s05 .chip-zenski { animation-delay: 9.9s; }
+#s05 .chip-nijaki { animation-delay: 12.6s; }
+#s05 .chip-mos { animation-delay: 16.8s; width: 400px; }
+#s05 .chip-nmos { animation-delay: 18.3s; width: 400px; }
+#s05 .chip-mos .nazwa, #s05 .chip-nmos .nazwa { color: var(--roz); }
+
+/* ===== scena 06: nieosobowe ===== */
+#s06 { padding: 48px 90px; text-align: center; }
+#s06 h2 { font-size: 56px; color: var(--pomarancz); animation-delay: .5s; }
+#s06 .karty { display: flex; gap: 50px; margin-top: 40px; justify-content: center; align-items: stretch; }
+#s06 .karta {
+  background: var(--bialy); border-radius: 28px; padding: 28px 36px; width: 500px;
+  border: 5px solid #d9c9b2;
+}
+#s06 .karta h3 { font-family: 'Baloo 2'; font-size: 36px; margin-bottom: 16px; }
+#s06 .karta-bezok { border-color: var(--pomarancz); animation-delay: 6.5s; }
+#s06 .karta-bezok h3 { color: var(--pomarancz); }
+#s06 .karta-nieznane { border-color: var(--roz); animation-delay: 14.6s; }
+#s06 .karta-nieznane h3 { color: var(--roz); }
+#s06 .slowka { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+#s06 .slowko {
+  background: var(--krem); border-radius: 16px; padding: 10px 22px; font-size: 32px; font-weight: 800;
+}
+#s06 .karta-bezok .s1 { animation-delay: 11.6s; }
+#s06 .karta-bezok .s2 { animation-delay: 12.1s; }
+#s06 .karta-bezok .s3 { animation-delay: 12.6s; }
+#s06 .karta-nieznane .s1 { animation-delay: 15.3s; }
+#s06 .karta-nieznane .s2 { animation-delay: 15.8s; }
+#s06 .morat { margin-top: 34px; font-size: 32px; font-weight: 800; animation-delay: 18.0s; }
+#s06 .morat b { color: var(--roz); }
+
+/* ===== scena 07: podsumowanie ===== */
+#s07 { padding: 44px 110px; }
+#s07 h2 { font-size: 60px; color: var(--pomarancz); text-align: center; animation-delay: .4s; }
+#s07 .lista { margin-top: 30px; display: flex; flex-direction: column; gap: 20px; }
+#s07 .punkt {
+  display: flex; align-items: center; gap: 24px; background: var(--bialy);
+  border-radius: 22px; padding: 18px 32px; font-size: 34px; font-weight: 800;
+  border: 4px solid #d9c9b2;
+}
+#s07 .punkt .ptaszek { font-size: 40px; color: var(--pomarancz); font-family: 'Baloo 2'; }
+#s07 .punkt b { color: var(--roz); }
+#s07 .p1 { animation-delay: 2.5s; }
+#s07 .p2 { animation-delay: 6.5s; }
+#s07 .final {
+  margin-top: 26px; text-align: center; font-family: 'Baloo 2'; font-size: 40px;
+  font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px;
+  padding: 10px 30px; animation-delay: 10.0s;
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="tytul pop">🕵️ MISJA: ODMIANA!<small>Tajemnice czasownika</small></div>
+    <div class="slowa">
+      <div class="slowo pop" style="animation-delay:6.7s">czytam</div>
+      <div class="slowo pop" style="animation-delay:7.4s">czytasz</div>
+      <div class="slowo pop" style="animation-delay:8.6s">przeczytaliśmy</div>
+      <div class="slowo pop" style="animation-delay:9.5s">będę czytać</div>
+    </div>
+    <div class="haslo pop">czasownik się ODMIENIA = zmienia formę</div>
+  </section>
+
+  <section class="scena" data-id="02-osoby" id="s02">
+    <h2 class="wjazd-dol">Tajemnica 1: OSOBY</h2>
+    <div class="kolumny">
+      <div class="kolumna kol-poj pop">
+        <h3 class="pop">liczba pojedyncza</h3>
+        <div class="wiersz w1 zjaw">ja <b>robię</b></div>
+        <div class="wiersz w2 zjaw">ty <b>robisz</b></div>
+        <div class="wiersz w3 zjaw">on / ona / ono <b>robi</b></div>
+      </div>
+      <div class="kolumna kol-mn pop">
+        <h3 class="pop">liczba mnoga</h3>
+        <div class="wiersz w1 zjaw">my <b>robimy</b></div>
+        <div class="wiersz w2 zjaw">wy <b>robicie</b></div>
+        <div class="wiersz w3 zjaw">oni / one <b>robią</b></div>
+      </div>
+    </div>
+    <div class="morat zjaw">Forma czasownika zdradza, kto wykonuje czynność. 🔎</div>
+  </section>
+
+  <section class="scena" data-id="03-liczby" id="s03">
+    <h2 class="pop">Tajemnica 2: LICZBY</h2>
+    <div class="karty">
+      <div class="karta karta-poj pop">
+        <span class="emoji">🧍</span>
+        <div class="etyk">liczba pojedyncza</div>
+        <div class="przyklad">robię</div>
+      </div>
+      <div class="karta karta-mn pop">
+        <span class="emoji">🧑‍🤝‍🧑</span>
+        <div class="etyk">liczba mnoga</div>
+        <div class="przyklad">robimy</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="04-czasy" id="s04">
+    <h2 class="pop">Tajemnica 3: CZASY</h2>
+    <div class="os">
+      <div class="box box-przeszly pop">
+        <div class="etyk">PRZESZŁY</div>
+        <div class="przyklad">robiłem</div>
+      </div>
+      <div class="strzalka pop">→</div>
+      <div class="box box-teraz pop">
+        <div class="etyk">TERAŹNIEJSZY</div>
+        <div class="przyklad">robię</div>
+      </div>
+      <div class="strzalka pop">→</div>
+      <div class="box box-przyszly pop">
+        <div class="etyk">PRZYSZŁY</div>
+        <div class="przyklad">co będzie</div>
+      </div>
+    </div>
+    <div class="uwaga-blok">
+      <span class="uwaga pop">Uwaga! ⚠️</span>
+      <div class="postacie">
+        <div class="postac postac-prosty pop">
+          <div class="nazwa">PROSTY (1 wyraz)</div>
+          <div class="wyraz">zrobię</div>
+        </div>
+        <div class="postac postac-zlozony pop">
+          <div class="nazwa">ZŁOŻONY (2 wyrazy)</div>
+          <div class="wyraz">będę robić</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="05-rodzaje" id="s05">
+    <h2 class="pop">Tajemnica 4: RODZAJE</h2>
+    <div class="sub sub-poj zjaw">liczba pojedyncza</div>
+    <div class="rzad">
+      <div class="chip chip-meski pop">
+        <div class="nazwa">męski</div>
+        <div class="przyklad">ten chłopiec <b>zrobił</b></div>
+      </div>
+      <div class="chip chip-zenski pop">
+        <div class="nazwa">żeński</div>
+        <div class="przyklad">ta dziewczynka <b>zrobiła</b></div>
+      </div>
+      <div class="chip chip-nijaki pop">
+        <div class="nazwa">nijaki</div>
+        <div class="przyklad">to dziecko <b>zrobiło</b></div>
+      </div>
+    </div>
+    <div class="sub sub-mn zjaw">liczba mnoga</div>
+    <div class="rzad">
+      <div class="chip chip-mos pop">
+        <div class="nazwa">męskoosobowy</div>
+        <div class="przyklad">oni <b>zrobili</b></div>
+      </div>
+      <div class="chip chip-nmos pop">
+        <div class="nazwa">niemęskoosobowy</div>
+        <div class="przyklad">one <b>zrobiły</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="06-nieosobowe" id="s06">
+    <h2 class="wjazd-dol">Formy nieosobowe</h2>
+    <div class="karty">
+      <div class="karta karta-bezok pop">
+        <h3>BEZOKOLICZNIK</h3>
+        <div class="slowka">
+          <div class="slowko s1 pop">biec</div>
+          <div class="slowko s2 pop">wziąć</div>
+          <div class="slowko s3 pop">czytać</div>
+        </div>
+      </div>
+      <div class="karta karta-nieznane pop">
+        <h3>FORMY NA -NO, -TO</h3>
+        <div class="slowka">
+          <div class="slowko s1 pop">zrobiono</div>
+          <div class="slowko s2 pop">umyto</div>
+        </div>
+      </div>
+    </div>
+    <div class="morat zjaw">Nie wiadomo <b>KTO</b>, wiadomo tylko, że <b>zrobione</b>! ✅</div>
+  </section>
+
+  <section class="scena" data-id="07-podsumowanie" id="s07">
+    <h2 class="pop">Misja wykonana! ✅</h2>
+    <div class="lista">
+      <div class="punkt p1 wjazd-lewo"><span class="ptaszek">✔</span><span>Czasownik odmienia się przez <b>osoby, liczby, czasy</b> i <b>rodzaje</b>.</span></div>
+      <div class="punkt p2 wjazd-lewo"><span class="ptaszek">✔</span><span>Ma też formy nieosobowe: <b>bezokolicznik</b>, <b>zrobiono</b>, <b>umyto</b>.</span></div>
+    </div>
+    <div class="final pop">Brawo, agenci od czasownika! 🕵️</div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film2-sciezka.mp3';</script>
+<script src="timeline-film2.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

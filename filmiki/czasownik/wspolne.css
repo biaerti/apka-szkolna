@@ -1,0 +1,73 @@
+/* Wspolny styl filmikow - paleta podrecznika GWO: krem, pomarancz, roz. */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;800&display=swap&subset=latin-ext');
+
+:root {
+  --krem: #FFF7EA;
+  --pomarancz: #F58220;
+  --roz: #E8425A;
+  --zolty: #FFC93C;
+  --ciemny: #4A3B32;
+  --bialy: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #222; }
+body { font-family: 'Nunito', sans-serif; color: var(--ciemny); }
+
+#stage {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  background: var(--krem);
+}
+
+.scena { position: absolute; inset: 0; }
+
+h1, h2, .tytul { font-family: 'Baloo 2', sans-serif; }
+
+/* Przycisk podgladu */
+#playBtn {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  border: 0;
+  cursor: pointer;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  font-size: 90px;
+  font-family: 'Baloo 2', sans-serif;
+}
+
+/* Klocki animacji - wszystkie z fill: both (deterministyczny seek) */
+@keyframes pop {
+  0% { opacity: 0; transform: scale(.3); }
+  70% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes wjazd-dol {
+  from { opacity: 0; transform: translateY(60px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes wjazd-lewo {
+  from { opacity: 0; transform: translateX(-80px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes wjazd-prawo {
+  from { opacity: 0; transform: translateX(80px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes zjaw {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes kiwanie {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.pop { opacity: 0; animation: pop .5s cubic-bezier(.2,1.4,.4,1) both; }
+.wjazd-dol { opacity: 0; animation: wjazd-dol .5s ease-out both; }
+.wjazd-lewo { opacity: 0; animation: wjazd-lewo .5s ease-out both; }
+.wjazd-prawo { opacity: 0; animation: wjazd-prawo .5s ease-out both; }
+.zjaw { opacity: 0; animation: zjaw .6s ease-out both; }
