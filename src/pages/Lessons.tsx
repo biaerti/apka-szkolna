@@ -17,6 +17,7 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { Table, TBody, TH, THead, TR } from '../components/ui/Table';
 import { LessonRow } from '../components/lessons/LessonRow';
 import { LessonRegisterModal } from '../components/lessons/LessonRegisterModal';
+import { LessonPlanModal } from '../components/lessons/LessonPlanModal';
 import { LessonQuestionsModal } from '../components/lessons/LessonQuestionsModal';
 import { NewLessonModal } from '../components/lessons/NewLessonModal';
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
@@ -115,10 +116,12 @@ export function Lessons() {
   const [questionsLessonId, setQuestionsLessonId] = useState<string | null>(null);
   const registerLesson = gradeLessons.find((l) => l.id === registerLessonId) ?? null;
   const questionsLesson = gradeLessons.find((l) => l.id === questionsLessonId) ?? null;
+  const [planLessonId, setPlanLessonId] = useState<string | null>(null);
+  const planLesson = gradeLessons.find((l) => l.id === planLessonId) ?? null;
 
   const ready = useReadyMaterials(grade, gradeClasses.map((c) => c.id), gradeLessons);
   const visibleMaterials = ready.materials.filter((material) =>
-    materialType === 'textbook' ? material.key === 'textbook4' : material.key !== 'textbook4',
+    materialType === 'textbook' ? material.key.startsWith('textbook') : !material.key.startsWith('textbook'),
   );
   const firstVisibleIndex = gradeLessons.findIndex((lesson) => visibleLessons[0]?.id === lesson.id);
   const drag = useLessonDrag(visibleLessons, (lessonId, toIndex) => moveLesson(lessonId, Math.max(0, firstVisibleIndex) + toIndex));
@@ -192,6 +195,7 @@ export function Lessons() {
       textbookPage: lesson.textbookPage,
       exercisePage: lesson.exercisePage,
       notebookNote: lesson.notebookNote,
+      teacherPlan: lesson.teacherPlan,
       dzial: lesson.dzial,
       questionSetId: lesson.questionSetId,
       registerTopic: lesson.registerTopic,
@@ -315,6 +319,7 @@ export function Lessons() {
               onAddSlot={(slot) => addSlot(lesson, slot)}
               onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
               onSetStatus={(status) => setStatus(lesson, status)}
+              onShowPlan={() => setPlanLessonId(lesson.id)}
             />
           ))}
         </div>
@@ -371,6 +376,7 @@ export function Lessons() {
                   onAddSlot={(slot) => addSlot(lesson, slot)}
                   onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
                   onShowRegister={() => setRegisterLessonId(lesson.id)}
+                  onShowPlan={() => setPlanLessonId(lesson.id)}
                   onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}
                   onDuplicate={() => copyLessonTo(lesson, grade, `${lesson.title} (kopia)`)}
@@ -386,6 +392,8 @@ export function Lessons() {
       )}
 
       <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} initialType={materialType} />
+
+      {planLesson && <LessonPlanModal lesson={planLesson} onClose={() => setPlanLessonId(null)} />}
 
       {registerLesson && (
         <LessonRegisterModal

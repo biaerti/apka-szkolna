@@ -147,6 +147,12 @@ export interface Lesson {
   /** Oryginalna, krótka notatka do wydruku na jednej stronie A5. */
   notebookNote?: string;
   /**
+   * Plan lekcji dla nauczyciela (markdown-lite): co czytamy, co powiedziec,
+   * jak wyjasnic, co narysowac na tablicy. Widzi go tylko nauczyciel - przycisk
+   * "Plan" na liscie lekcji, nigdy na projektorze.
+   */
+  teacherPlan?: string;
+  /**
    * Kod lekcji do zeszytu, np. "4.3" (rocznik.numer). Nadawany raz, przy
    * tworzeniu lekcji, i juz sie nie zmienia - dziecko ma po nim odnalezc temat
    * w zeszycie nawet wtedy, gdy nauczyciel przestawi kolejnosc lekcji. Kody

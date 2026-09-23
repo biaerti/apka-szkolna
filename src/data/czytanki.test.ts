@@ -10,7 +10,7 @@ describe('czytanki', () => {
 
   it('grupuje kolejne czytanki tej samej lekcji w jedna grupe', () => {
     const grupy = grupujWgLekcji(CZYTANKI);
-    expect(grupy.map((g) => g.lekcja)).toEqual(['1-2', '3', '4', '5-6', '7', '8', '9-10', '15', '16']);
+    expect(grupy.map((g) => g.lekcja)).toEqual(['1-2', '3', '4', '5-6', '7', '8', '9-10', '15', '16', 'V.1', 'V.5', 'V.7', 'V.9']);
     expect(grupy.find((g) => g.lekcja === '9-10')?.czytanki.map((c) => c.id)).toEqual([
       'dzien-kropki',
       'kropka',

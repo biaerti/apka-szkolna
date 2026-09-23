@@ -174,6 +174,16 @@ export function LessonEditor() {
             />
           </div>
           <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Plan lekcji dla mnie</label>
+            <textarea
+              value={lesson.teacherPlan ?? ''}
+              onChange={(e) => updateLesson(lesson.id, { teacherPlan: e.target.value || undefined })}
+              rows={8}
+              placeholder="Co czytamy, o czym powiedzieć, jak wyjaśnić, co narysować na tablicy. Widać tylko pod przyciskiem Plan, nie na projektorze."
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
+            />
+          </div>
+          <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">Zestaw pytań do koła</label>
             {/* Zestaw pytan do kola powtorzeniowego na poczatku nastepnej lekcji
                 (pytania inne niz zadania z lekcji). Kolo na lekcji nie korzysta

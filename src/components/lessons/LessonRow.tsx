@@ -42,6 +42,7 @@ export interface LessonRowProps {
   onAddSlot: (slot: LessonSlot) => void;
   onRemoveSlot: (slotId: string) => void;
   onShowRegister: () => void;
+  onShowPlan: () => void;
   onShowQuestions: () => void;
   onAddQuestions: () => void;
   onDuplicate: () => void;
@@ -146,6 +147,20 @@ export function LessonRow(p: LessonRowProps) {
           {lesson.title}
         </p>
         <p className="mt-0.5 flex items-center gap-x-1.5 text-xs text-gray-500">
+          {/* Plan dla nauczyciela: co czytamy, jak wyjasnic, co na tablicy. */}
+          {lesson.teacherPlan && (
+            <>
+              <button
+                type="button"
+                onClick={p.onShowPlan}
+                title="Co czytamy, jak wyjaśnić, co na tablicy - tylko dla ciebie"
+                className="shrink-0 rounded border border-accent-200 bg-accent-50 px-1.5 py-0.5 font-medium text-accent-700 hover:bg-accent-100"
+              >
+                Plan lekcji
+              </button>
+              <span aria-hidden="true">·</span>
+            </>
+          )}
           {lesson.textbookPage && (
             <>
               <span className="shrink-0 font-medium text-gray-600">Podręcznik s. {lesson.textbookPage}</span>

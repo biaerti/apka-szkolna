@@ -127,7 +127,7 @@ function questionsFingerprint(questions: Question[]): Array<[string, string]> {
 }
 
 /** Fragment lekcji potrzebny do policzenia fingerprintu - wspolny dla Lesson i "surowej" definicji z kodu. */
-type FingerprintableLesson = Pick<Lesson, 'title' | 'registerTopic' | 'curriculum' | 'slides' | 'materialType' | 'textbookPage' | 'exercisePage' | 'notebookNote' | 'dzial'>;
+type FingerprintableLesson = Pick<Lesson, 'title' | 'registerTopic' | 'curriculum' | 'slides' | 'materialType' | 'textbookPage' | 'exercisePage' | 'notebookNote' | 'teacherPlan' | 'dzial'>;
 
 /**
  * Wersja formatu fingerprintu - czysto informacyjna czesc `lessonFingerprint`,
@@ -157,6 +157,7 @@ export function lessonFingerprint(
     textbookPage: lesson.textbookPage ?? null,
     exercisePage: lesson.exercisePage ?? null,
     notebookNote: lesson.notebookNote ?? '',
+    teacherPlan: lesson.teacherPlan ?? '',
     dzial: lesson.dzial ?? '',
     registerTopic: lesson.registerTopic ?? '',
     curriculum: lesson.curriculum ?? [],

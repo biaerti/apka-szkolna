@@ -15,6 +15,7 @@ import { buildRecap13 } from '../../data/recap13';
 import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson } from '../../data/intro';
 import { buildTextbook4, RETIRED_TEXTBOOK4_TITLES, TEXTBOOK4_TOPIC_COUNT } from '../../data/textbook4';
+import { buildTextbook5, TEXTBOOK5_TOPIC_COUNT } from '../../data/textbook5';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import {
   classifyMatch,
@@ -30,7 +31,7 @@ import {
 } from './refreshMaterials';
 
 interface MaterialDefinition {
-  key: 'intro' | 'recap13' | 'recap4' | 'textbook4';
+  key: 'intro' | 'recap13' | 'recap4' | 'textbook4' | 'textbook5';
   /** Nazwa do menu, np. "Lekcja zapoznawcza", "Powtórka klas 1-3". */
   label: string;
   /** Jedno zdanie do dialogu potwierdzenia: co dokladnie zostanie dodane. */
@@ -56,6 +57,12 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
     build: buildTextbook4,
   },
   {
+    key: 'textbook5',
+    label: 'Klasa 5 - W poszukiwaniu przyjaźni',
+    description: `Doda ${TEXTBOOK5_TOPIC_COUNT} lekcji działu „W poszukiwaniu przyjaźni”: prezentacje, notatki do zeszytu, pytania do koła i plan lekcji dla nauczyciela.`,
+    build: buildTextbook5,
+  },
+  {
     key: 'intro',
     label: 'Lekcja zapoznawcza',
     description: 'Doda lekcję zapoznawczą wraz z zestawem 20 pytań "Poznajmy się".',
@@ -79,7 +86,7 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
 
 /** Jeden gotowy material w stanie gotowym do wyswietlenia w panelu. */
 export interface ReadyMaterial {
-  key: 'intro' | 'recap13' | 'recap4' | 'textbook4';
+  key: 'intro' | 'recap13' | 'recap4' | 'textbook4' | 'textbook5';
   /** Nazwa do menu, np. "Lekcja zapoznawcza", "Powtórka klas 1-3", "Powtórka klasy 4" */
   label: string;
   /** Jedno zdanie do dialogu potwierdzenia: co dokładnie zostanie dodane */
@@ -318,6 +325,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         textbookPage: match.newLesson.textbookPage,
         exercisePage: match.newLesson.exercisePage,
         notebookNote: match.newLesson.notebookNote,
+        teacherPlan: match.newLesson.teacherPlan,
         questionSetId: effectiveSetId,
         reviewQuestionSetId: effectiveReviewSetId,
         slides: mappedSlides,
