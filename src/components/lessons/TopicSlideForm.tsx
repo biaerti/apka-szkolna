@@ -54,23 +54,22 @@ export function TopicSlideForm({
           Puste pole = temat z lekcji: {lessonTopic || '(uzupełnij temat lekcji wyżej)'}
         </p>
       </div>
-      {slide.variant === 'handout' && (
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Czego uczniowie się nauczą - jeden punkt w wierszu</label>
-          <Textarea
-            rows={4}
-            value={(slide.goals ?? []).join('\n')}
-            onChange={(e) => onChange({ ...slide, goals: e.target.value.split('\n').map((line) => line.trim()).filter(Boolean) })}
-            placeholder={'rozpoznawać...\nodróżniać...\nstosować...'}
-          />
-        </div>
-      )}
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Polecenie na dole (opcjonalnie)</label>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Po lekcji uczeń potrafi - jeden punkt w wierszu</label>
+        <Textarea
+          rows={4}
+          value={(slide.goals ?? []).join('\n')}
+          onChange={(e) => onChange({ ...slide, goals: e.target.value.split('\n').map((line) => line.trim()).filter(Boolean) })}
+          placeholder={'znaleźć czasownik w zdaniu\nokreślić jego czas'}
+        />
+        <p className="mt-1 text-xs text-gray-500">Cel jest widoczny na slajdzie. Uczniowie nie muszą go przepisywać.</p>
+      </div>
+      <div>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Krótki komunikat dla uczniów (opcjonalnie)</label>
         <Input
           value={slide.note ?? ''}
           onChange={(e) => onChange({ ...slide, note: e.target.value || undefined })}
-          placeholder="Zapiszcie temat z kodem i dzisiejszą datą w zeszycie"
+          placeholder="Przepisz temat z kodem i dzisiejszą datą"
         />
       </div>
     </div>

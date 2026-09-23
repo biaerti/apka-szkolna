@@ -151,7 +151,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
         >
           <span className="mr-2 font-black">{resultSymbol('kropka').symbol}</span>
           Kropka
-          <span className="block text-xs font-normal opacity-75">słabo albo wcale · klawisz 2</span>
+          <span className="block text-xs font-normal opacity-75">bez plusa · klawisz 2</span>
         </button>
       </div>
 

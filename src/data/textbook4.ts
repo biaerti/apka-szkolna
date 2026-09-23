@@ -436,7 +436,7 @@ function slideTopic(topic: string): Slide {
 function slideRead(title: string, page: number, pageTo: number, body: string, timerSec: number): Slide { return { id: newId(), kind: 'read', title, source: 'Podręcznik', page, pageTo, body, timerSec }; }
 function slideText(title: string, body: string, art?: SlideArt): Slide { return { id: newId(), kind: 'text', title, body, art }; }
 function slideTask(code: string, body: string, timerSec: number, art?: SlideArt, answerExample?: string): Slide {
-  return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample };
+  return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, studentAction: 'write-answer' };
 }
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */

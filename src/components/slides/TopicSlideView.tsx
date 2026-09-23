@@ -67,7 +67,8 @@ export function TopicSlideView({
 }) {
   const topic = (slide.topic || lessonTopic || '').trim();
   const scale = useSlideFontScale();
-  const topicSize = fitFontSize(topic, { width: 1080, height: 300, min: 40, max: 92, scale, lineHeight: 1.25 });
+  const hasGoals = !!slide.goals?.length;
+  const topicSize = fitFontSize(topic, { width: 1080, height: hasGoals ? 220 : 300, min: 40, max: 92, scale, lineHeight: 1.25 });
   // Stoper startuje wylaczony przy kazdym wejsciu na slajd - patrz uwaga na gorze.
   const [timerMin, setTimerMin] = useState(0);
 
@@ -135,16 +136,24 @@ export function TopicSlideView({
         )}
       </div>
 
-      <div className="flex flex-1 items-center">
+      <div className="flex flex-1 flex-col justify-center gap-8">
         <p className="font-bold leading-snug text-amber-950" style={{ fontSize: topicSize }}>
           {topic || 'Temat lekcji'}
         </p>
+        {hasGoals && (
+          <div className="max-w-[1050px] rounded-xl bg-white/80 px-7 py-4 text-gray-900">
+            <p className="mb-2 text-2xl font-bold text-accent-700">Po lekcji potrafisz:</p>
+            <ul className="space-y-1 text-3xl leading-tight">
+              {slide.goals!.map((goal) => <li key={goal}>- {goal}</li>)}
+            </ul>
+          </div>
+        )}
       </div>
 
       {/* Ta sama ikonka co plakietka "do zeszytu" na ciemnych slajdach - jedna umowa. */}
       <p className="flex items-center justify-center gap-3 text-center text-3xl font-semibold text-amber-800">
         <ZeszytIcon className="h-10 w-10 text-amber-600" />
-        {slide.note?.trim() || 'Zapiszcie temat z kodem i dzisiejszą datą w zeszycie'}
+        {slide.note?.trim() || 'Przepisz temat z kodem i dzisiejszą datą'}
       </p>
 
       {timerMin > 0 && (

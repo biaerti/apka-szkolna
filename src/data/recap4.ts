@@ -824,6 +824,7 @@ function slideTask(
     exerciseNo: exerciseNo ? String(exerciseNo) : undefined,
     timerSec,
     art,
+    studentAction: 'write-answer',
   };
 }
 

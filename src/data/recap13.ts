@@ -701,6 +701,7 @@ function slideTask(
     timerSec,
     art,
     zeszyt,
+    studentAction: zeszyt === false ? undefined : 'write-answer',
   };
 }
 

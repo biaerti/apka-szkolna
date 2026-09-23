@@ -7,6 +7,7 @@ import { RichText } from './RichText';
 import { StopwatchBar } from './StopwatchBar';
 import { fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
+import { StudentActionBadge } from './StudentActionBadge';
 
 function TextbookIcon() {
   return (
@@ -35,7 +36,12 @@ export function ReadSlideView({ slide }: { slide: Extract<Slide, { kind: 'read' 
     : 0;
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6 px-16 py-8 text-center">
+    <div className="relative flex h-full flex-col items-center justify-center gap-6 px-16 py-8 text-center">
+      {slide.studentAction && (
+        <div className="absolute right-8 top-14">
+          <StudentActionBadge action={slide.studentAction} text={slide.studentActionText} />
+        </div>
+      )}
       {slide.title && (
         <h2 className="font-bold leading-tight text-white" style={{ fontSize: titleSize }}>
           {slide.title}

@@ -13,7 +13,7 @@ import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView } from './art';
 import { StopwatchBar } from './StopwatchBar';
-import { ZeszytBadge } from './ZeszytBadge';
+import { resolvedStudentAction, StudentActionBadge } from './StudentActionBadge';
 import { estimateTextHeight, fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
 
@@ -31,6 +31,7 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
   const [timerSec, setTimerSec] = useState(typeof slide.timerSec === 'number' ? slide.timerSec : 0);
   const [showExample, setShowExample] = useState(false);
   const hasTimer = timerSec > 0;
+  const studentAction = resolvedStudentAction(slide.studentAction, slide.zeszyt, 'write-answer');
 
   // Z ilustracja tekst dostaje wezsza kolumne - reszta kartki nalezy do obrazka.
   const width = slide.art ? 620 : 1000;
@@ -59,7 +60,7 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
               {slide.exerciseNo && <span>ćw. {slide.exerciseNo}</span>}
             </div>
           )}
-          {slide.zeszyt && <ZeszytBadge />}
+          {studentAction && <StudentActionBadge action={studentAction} text={slide.studentActionText} />}
         </div>
       </div>
 

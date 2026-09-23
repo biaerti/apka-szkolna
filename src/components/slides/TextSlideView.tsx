@@ -6,7 +6,7 @@
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView, WIDE_ART } from './art';
-import { ZeszytBadge } from './ZeszytBadge';
+import { resolvedStudentAction, StudentActionBadge } from './StudentActionBadge';
 import { estimateTextHeight, fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
 
@@ -22,6 +22,7 @@ function titleHeight(title: string, size: number, width: number): number {
 
 export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' }> }) {
   const scale = useSlideFontScale();
+  const studentAction = resolvedStudentAction(slide.studentAction, slide.zeszyt, 'copy');
 
   function block(width: number, height: number) {
     const tSize = slide.title ? titleSize(slide.title, width, scale) : 0;
@@ -45,10 +46,10 @@ export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' 
 
   // Ikonka "do zeszytu" wisi w prawym gornym rogu, nad ukladem kolumn -
   // wspolne miejsce dla wszystkich trzech wariantow slajdu.
-  const badge = slide.zeszyt ? (
+  const badge = studentAction ? (
     // top-14: nizej niz zegar prezentacji (PresentClock, fixed w rogu ekranu).
     <div className="absolute right-8 top-14 z-10">
-      <ZeszytBadge />
+      <StudentActionBadge action={studentAction} text={slide.studentActionText} />
     </div>
   ) : null;
 

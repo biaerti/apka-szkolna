@@ -161,8 +161,7 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
   }));
 
   const secGraKolo = ruleSection('Gramy w koło fortuny');
-  const secWygranaPrzegrana = ruleSection('Co można wygrać, a co przegrać');
-  const secPasy = ruleSection('Pasy');
+  const secWynik = ruleSection('Wynik odpowiedzi');
   const secZleZachowania = ruleSection('Co liczy się jako przeszkadzanie');
   // Ostatni punkt sekcji mowi, za co uwagi NIE ma - dostaje wlasny slajd, bo dla
   // dziecka to najwazniejsze zdanie calej lekcji: nieumiejetnosc nie jest karana.
@@ -177,8 +176,8 @@ export function buildIntroLesson(grade: string, classIds: string[]): IntroBundle
   // Punkt o przelicznikach na oceny dostaje wlasny slajd z ilustracja "stopnie",
   // reszta zostaje przy definicjach plusa, kropki i plomby.
   const { matched: ocenyStopnie, rest: ocenyBiezace } = partitionItems(
-    secWygranaPrzegrana.items,
-    /piątka|jedynka/i,
+    secWynik.items,
+    /piątkę/i,
   );
   const secLekcja = ruleSection('Jak wygląda nasza lekcja');
   // Punkt o kodzie lekcji zostaje wspomniany na koniec slajdu jako osobne
@@ -278,8 +277,8 @@ Te progi obowiązują w całej szkole (WZO) - to nie mój wymysł, tak oceniają
 
 - są zasady
 - można wygrać
-- można przegrać
-- jest nagroda i jest kara
+- każdy zna zasady
+- każdy dostaje chwilę na samodzielną odpowiedź
 
 Bez zasad nie ma gry.
 
@@ -305,28 +304,23 @@ Zasady są po to, żeby dało się grać uczciwie. Są jawne i takie same dla ws
       // Demo: dziala jak zwykla runda (bez "Przedstaw się", bez ocen).
       slideRecap(setId, 'demo'),
 
-      // 14. Plus, kropka, plomba (z zasady.ts, bez punktu o ocenach)
-      slideText('Co można wygrać, a co przegrać', asBulletList(ocenyBiezace), 'oceny'),
+      // 14. Plus i neutralna kropka (z zasady.ts, bez punktu o ocenach)
+      slideText('Wynik odpowiedzi', asBulletList(ocenyBiezace), 'oceny'),
 
       // 15. Przelicznik na oceny - wlasny slajd, bo to najwazniejsza konsekwencja
       slideText('Kiedy plusy zamieniają się w ocenę', asBulletList(ocenyStopnie), 'stopnie'),
 
-      // 16. Pasy (z zasady.ts) - odrabianie plomb JUZ USUNIETE, nie przywracac
-      slideText('Pasy', asBulletList(secPasy.items), 'pas'),
-
-      // 17. Przyklad rundy na pytaniu, na ktorym widac roznice miedzy odpowiedziami.
-      // Glowny przyklad to kolo powtorzeniowe (gra o wszystko); na koncu krotki
-      // przyklad kola na lekcji (po zadaniu Z1 - tylko plus albo kropka).
+      // 16. Przyklad rundy na pytaniu, na ktorym widac roznice miedzy odpowiedziami.
       slideText(
         'Przykład rundy',
         `Pytanie: **"Wymień trzy znaki interpunkcyjne."** (koło powtórzeniowe)
 
+- Najpierw każdy zapisuje własną odpowiedź
+- Potem koło losuje osobę, która ją przedstawia
 - Wymieniasz trzy (np. kropka, przecinek, pytajnik) → plus
-- Wymieniasz jeden albo dwa → kropka
-- Odpowiadasz źle albo wcale → plomba
-- Mówisz "pas" → nic się nie dzieje, ale zużywasz 1 z 2 pasów na ten miesiąc
+- Wymieniasz mniej albo odpowiedź wymaga poprawy → neutralna kropka
 
-Na kole na lekcji, po każdym zadaniu, można tylko zyskać: plus albo kropka, plomby nie ma. Zadanie Z1 zrobione dobrze → plus. Zrobione w połowie albo wcale → kropka.`,
+Na **kole na lekcji** zasada jest taka sama. Zadanie Z1 zrobione dobrze → plus. Odpowiedź bez plusa → neutralna kropka.`,
       ),
 
       // 18. Przebieg lekcji (z zasady.ts) - zaraz po przykladzie rundy, bo dopiero
@@ -340,9 +334,7 @@ Na kole na lekcji, po każdym zadaniu, można tylko zyskać: plus albo kropka, p
         'Dwa koła: na lekcji i powtórzeniowe',
         `${asBulletList([secGraKolo.items[2], secGraKolo.items[3]].map(boldNazwyKol))}
 
-Na **kole na lekcji** nie ma się czego bać - można tylko zyskać.
-
-Na **kole powtórzeniowym** gra się o wszystko: plus, kropka albo plomba.`,
+Na obu kołach wynik jest taki sam: **plus albo neutralna kropka**.`,
         'kolo',
       ),
 
@@ -384,7 +376,7 @@ Na **kole powtórzeniowym** gra się o wszystko: plus, kropka albo plomba.`,
 2. Co lubisz robić.
 3. Odpowiedz na pytanie, które wylosowało koło.
 
-Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
+Dzisiaj nie zapisujemy wyników. Dzisiaj się poznajemy.`,
         'kolo',
       ),
 
@@ -395,9 +387,9 @@ Dzisiaj nie ma plusów ani plomb. Dzisiaj się poznajemy.`,
       slideNote(
         'Notatka do zeszytu',
         `- Koło losuje, kto odpowiada.
-- Koło na lekcji - tylko zysk. Koło powtórzeniowe - gra się o wszystko.
-- Plus, kropka, plomba. 3 plusy = 5, 3 plomby = 1 (koniec miesiąca).
-- 2 pasy w miesiącu.`,
+- Najpierw każdy sam odpowiada, potem losujemy osobę.
+- Wynik odpowiedzi: plus albo neutralna kropka.
+- 3 plusy = 5. Kropek nie zamieniamy na ocenę.`,
       ),
 
       // 28. Zakonczenie

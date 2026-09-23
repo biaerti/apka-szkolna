@@ -3,6 +3,7 @@ import type { Slide } from '../../data/types';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Select } from '../ui/Select';
+import { StudentActionFields } from './StudentActionFields';
 
 type TaskSlide = Extract<Slide, { kind: 'task' }>;
 
@@ -52,15 +53,13 @@ export function TaskSlideForm({ slide, onChange }: { slide: TaskSlide; onChange:
         />
       </div>
 
-      <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
-        <input
-          type="checkbox"
-          className="rounded border-gray-300 text-accent-600 focus:ring-accent-500"
-          checked={slide.zeszyt === true}
-          onChange={(e) => onChange({ ...slide, zeszyt: e.target.checked || undefined })}
-        />
-        Ikonka "do zeszytu" (uczniowie zapisują rozwiązanie w zeszycie)
-      </label>
+      <StudentActionFields
+        action={slide.studentAction ?? (slide.zeszyt ? 'write-answer' : undefined)}
+        customText={slide.studentActionText}
+        onChange={(studentAction, studentActionText) =>
+          onChange({ ...slide, studentAction, studentActionText, zeszyt: undefined })
+        }
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div>

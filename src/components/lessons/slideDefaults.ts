@@ -64,7 +64,7 @@ export function createSlide(kind: SlideKind, existingSlides: Slide[]): Slide {
     case 'text':
       return { id, kind: 'text', title: '', body: '' };
     case 'task':
-      return { id, kind: 'task', code: suggestNextTaskCode(existingSlides), title: '', body: '' };
+      return { id, kind: 'task', code: suggestNextTaskCode(existingSlides), title: '', body: '', studentAction: 'write-answer' };
     case 'read':
       return { id, kind: 'read', title: '' };
     case 'note':

@@ -107,8 +107,6 @@ export function StudentSidebar({
                   <span className="flex items-center gap-1.5">
                     <Tally label="plusy" value={balance.plus} result="plus" />
                     <Tally label="kropki" value={balance.kropka} result="kropka" />
-                    <Tally label="plomby" value={balance.plombyTotal} result="plomba" />
-                    <Tally label="pasy" value={balance.pass} result="pass" />
                   </span>
                 )}
                 {absent ? <span>nieobecny/a</span> : used ? <span className="text-red-400">już był/a</span> : null}

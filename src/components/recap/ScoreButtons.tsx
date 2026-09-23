@@ -1,7 +1,6 @@
-// Przyciski oceny odpowiedzi ucznia + licznik pasow + wejscia do "kto
-// podpowiadal" i "uwaga". Uklad zalezy od trybu rundy (src/lib/recap.ts:
-// RecapMode):
-// - 'powtorzeniowe' - pelne ocenianie plus/kropka/plomba/pas.
+// Przyciski wyniku odpowiedzi. Aktualna zasada kola jest prosta:
+// - 'powtorzeniowe' - plus albo neutralna kropka; bez plomb, pasow i kar za
+//   podpowiadanie,
 // - 'po-lekcji' - STARY tryb (wycofany, zostaje dla starych danych - patrz
 //   src/lib/recap.ts): mozna tylko zyskac: tylko dwa przyciski, "Dobrze" i
 //   "Dalej" (neutralne, nic sie nie zapisuje). Nie ma tu "Źle" wcale - ten tryb
@@ -20,15 +19,9 @@ export interface ScoreButtonsProps {
   disabled: boolean;
   graded: boolean;
   recapMode: RecapMode;
-  onGrade: (result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba' | 'pass'>) => void;
+  onGrade: (result: Extract<RecapResult, 'plus' | 'kropka'>) => void;
   /** "Dalej" w starym trybie po-lekcji - jak "gotowe, następny", nic nie zapisuje. */
   onSkip: () => void;
-  canPass: boolean;
-  passesUsed: number;
-  passesPerMonth: number;
-  hintGivesMinus: boolean;
-  onOpenHint: () => void;
-  onOpenUwaga: () => void;
 }
 
 export function ScoreButtons({
@@ -37,19 +30,13 @@ export function ScoreButtons({
   recapMode,
   onGrade,
   onSkip,
-  canPass,
-  passesUsed,
-  passesPerMonth,
-  hintGivesMinus,
-  onOpenHint,
-  onOpenUwaga,
 }: ScoreButtonsProps) {
   const gradeDisabled = disabled || graded;
   const isPowtorzeniowe = recapMode === 'powtorzeniowe';
 
   return (
     <div className="flex w-full flex-col gap-1.5">
-      <div className={isPowtorzeniowe ? 'grid grid-cols-4 gap-2' : 'grid grid-cols-2 gap-2'}>
+      <div className="grid grid-cols-2 gap-2">
         <button
           type="button"
           onClick={() => onGrade('plus')}
@@ -69,8 +56,8 @@ export function ScoreButtons({
             className="whitespace-nowrap rounded-lg bg-sky-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-sky-500 disabled:opacity-40 sm:text-3xl"
           >
             <span className="mr-2 font-black">{resultSymbol('kropka').symbol}</span>
-            Częściowo
-            <span className="block text-sm font-normal opacity-75">klawisz 2</span>
+            Kropka
+            <span className="block text-sm font-normal opacity-75">bez plusa · klawisz 2</span>
           </button>
         ) : (
           <button
@@ -84,61 +71,7 @@ export function ScoreButtons({
           </button>
         )}
 
-        {isPowtorzeniowe && (
-          <button
-            type="button"
-            onClick={() => onGrade('plomba')}
-            disabled={gradeDisabled}
-            className="whitespace-nowrap rounded-lg bg-red-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-red-500 disabled:opacity-40 sm:text-3xl"
-          >
-            <span className="mr-2 font-black">{resultSymbol('plomba').symbol}</span>
-            Źle
-            <span className="block text-sm font-normal opacity-75">klawisz 3</span>
-          </button>
-        )}
-
-        {isPowtorzeniowe && (
-          <button
-            type="button"
-            onClick={() => onGrade('pass')}
-            disabled={gradeDisabled || !canPass}
-            title={!canPass ? 'Limit pasów w tym miesiącu wyczerpany' : undefined}
-            className="whitespace-nowrap rounded-lg bg-amber-600 px-2 py-3 text-2xl font-semibold text-white hover:bg-amber-500 disabled:opacity-40 sm:text-3xl"
-          >
-            <span className="mr-2 font-black">{resultSymbol('pass').symbol}</span>
-            Pas
-            <span className="block text-sm font-normal opacity-75">klawisz 4</span>
-          </button>
-        )}
       </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        {hintGivesMinus && (
-          <button
-            type="button"
-            onClick={onOpenHint}
-            disabled={disabled}
-            className="whitespace-nowrap rounded-lg bg-gray-600 px-2 py-2.5 text-xl font-semibold text-white hover:bg-gray-500 disabled:opacity-40"
-          >
-            Podpowiadał(a)<span className="block text-sm font-normal opacity-75">plomba dla innego ucznia</span>
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={onOpenUwaga}
-          className="whitespace-nowrap rounded-lg bg-orange-700 px-2 py-2.5 text-xl font-semibold text-white hover:bg-orange-600"
-        >
-          Uwaga<span className="block text-sm font-normal opacity-75">wpis do dziennika</span>
-        </button>
-      </div>
-
-      {isPowtorzeniowe && (
-        <div className="flex items-center justify-between text-sm text-gray-400">
-          <span>
-            pasy w tym miesiącu: {passesUsed}/{passesPerMonth}
-          </span>
-        </div>
-      )}
     </div>
   );
 }

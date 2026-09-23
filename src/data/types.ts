@@ -2,6 +2,12 @@
 
 export type ID = string;
 
+/**
+ * Jednoznaczna instrukcja widoczna na slajdzie. Rozdziela rzeczy, ktore
+ * dawniej miescily sie w nieprecyzyjnej plakietce "do zeszytu".
+ */
+export type StudentAction = 'copy' | 'write-answer' | 'oral' | 'look';
+
 export interface SchoolClass {
   id: ID;
   name: string; // np. "IV A"
@@ -267,7 +273,18 @@ export type Slide =
   // pytaly, czy trzeba przepisywac - ikonka odpowiada za nauczyciela. Slajdy
   // `topic` i `note` maja ikonke zawsze (jasna kartka w liniaturze i tak znaczy
   // "to sie przepisuje" - ikonka tylko domyka te sama umowe).
-  | { id: ID; kind: 'text'; title?: string; body: string; art?: SlideArt; zeszyt?: boolean } // markdown-lite: akapity, listy
+  | {
+      id: ID;
+      kind: 'text';
+      title?: string;
+      body: string;
+      art?: SlideArt;
+      /** Pole historyczne. Nowe slajdy korzystaja z `studentAction`. */
+      zeszyt?: boolean;
+      studentAction?: StudentAction;
+      /** Opcjonalny wlasny tekst zamiast domyslnej etykiety akcji. */
+      studentActionText?: string;
+    } // markdown-lite: akapity, listy
   // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + krotka wersja
   // tematu do zeszytu (celowo krotsza niz `registerTopic` w dzienniku Vulcan -
   // dzieci pisza wolno, wiec zeszytowy temat ma byc jak najkrotszy). Pusty
@@ -306,8 +323,10 @@ export type Slide =
       // pisze w zeszycie i ma wzor przed oczami, zamiast patrzec na sama liste
       // polecen. Szczegolnie wazne w klasach 1-3.
       art?: SlideArt;
-      // Ikonka "do zeszytu" - patrz komentarz przy slajdzie 'text'.
+      // Pole historyczne - nowe slajdy korzystaja z precyzyjnego studentAction.
       zeszyt?: boolean;
+      studentAction?: StudentAction;
+      studentActionText?: string;
     }
   // Praca z tekstem: strona i czas calego bloku podrecznikowego musza byc
   // widoczne od razu, duzymi cyframi. To nie jest czas samego czytania - obejmuje
@@ -321,6 +340,8 @@ export type Slide =
       pageTo?: number; // zakres stron: s. 124-126
       body?: string; // na co zwrocic uwage podczas czytania
       timerSec?: number; // czas na caly blok pracy z tekstem
+      studentAction?: StudentAction;
+      studentActionText?: string;
     }
   // Notatka do zeszytu - zamyka lekcje ("zapisujecie notatkę i jesteście wolni").
   | { id: ID; kind: 'note'; title?: string; body: string }

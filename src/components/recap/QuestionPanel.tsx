@@ -7,7 +7,9 @@
 // zapoznawcza: "Przedstaw sie", a pytanie z kola jest tylko dodatkiem). Gdy jest
 // ustawione, to ono dostaje najwiekszy font, a pytanie schodzi do ramki ponizej.
 
+import { useEffect, useState } from 'react';
 import type { Question } from '../../data/types';
+import { ThinkingTimer } from './ThinkingTimer';
 
 /**
  * Rozmiar pytania dobrany do jego dlugosci: krotkie pytania maja byc OGROMNE
@@ -49,6 +51,7 @@ export interface QuestionPanelProps {
   onToggleRandom: (value: boolean) => void;
   showAnswer: boolean;
   onToggleShowAnswer: () => void;
+  onUpdateQuestion?: (id: string, patch: Partial<Question>) => void;
 }
 
 export function QuestionPanel({
@@ -63,7 +66,25 @@ export function QuestionPanel({
   onToggleRandom,
   showAnswer,
   onToggleShowAnswer,
+  onUpdateQuestion,
 }: QuestionPanelProps) {
+  const [editing, setEditing] = useState(false);
+  const [questionDraft, setQuestionDraft] = useState(question?.text ?? '');
+  const [answerDraft, setAnswerDraft] = useState(question?.answer ?? '');
+
+  useEffect(() => {
+    setEditing(false);
+    setQuestionDraft(question?.text ?? '');
+    setAnswerDraft(question?.answer ?? '');
+  }, [question?.id]);
+
+  function saveQuestion() {
+    const text = questionDraft.trim();
+    if (!question || !text || !onUpdateQuestion) return;
+    onUpdateQuestion(question.id, { text, answer: answerDraft.trim() || undefined });
+    setEditing(false);
+  }
+
   if (total === 0) {
     // Bez pytan wciaz jest co pokazac, jesli runda ma stale polecenie.
     if (!prompt) return <p className="text-2xl text-gray-400">Ten zestaw nie ma jeszcze pytań.</p>;
@@ -87,18 +108,68 @@ export function QuestionPanel({
         <span>
           pytanie {index + 1}/{total}
         </span>
-        <label className="flex items-center gap-1.5">
-          <input
-            type="checkbox"
-            checked={randomOrder}
-            onChange={(e) => onToggleRandom(e.target.checked)}
-            className="rounded border-gray-500"
-          />
-          losowo
-        </label>
+        <div className="flex items-center gap-3">
+          {question && onUpdateQuestion && (
+            <button
+              type="button"
+              onClick={() => setEditing((value) => !value)}
+              className="rounded-md border border-gray-600 px-2.5 py-1 text-gray-200 hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              {editing ? 'anuluj edycję' : 'edytuj pytanie'}
+            </button>
+          )}
+          <label className="flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              checked={randomOrder}
+              onChange={(e) => onToggleRandom(e.target.checked)}
+              className="rounded border-gray-500"
+            />
+            losowo
+          </label>
+        </div>
       </div>
 
-      {prompt ? (
+      {editing ? (
+        <div className="flex min-h-0 flex-1 flex-col justify-center gap-3">
+          <label className="text-sm font-medium text-gray-300">
+            Pytanie
+            <textarea
+              value={questionDraft}
+              onChange={(event) => setQuestionDraft(event.target.value)}
+              rows={3}
+              className="mt-1 block w-full resize-none rounded-lg border border-gray-600 bg-gray-950 px-4 py-3 text-2xl leading-snug text-white outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-500/30"
+            />
+          </label>
+          <label className="text-sm font-medium text-gray-300">
+            Odpowiedź
+            <textarea
+              value={answerDraft}
+              onChange={(event) => setAnswerDraft(event.target.value)}
+              rows={2}
+              placeholder="Opcjonalnie"
+              className="mt-1 block w-full resize-none rounded-lg border border-gray-600 bg-gray-950 px-4 py-3 text-xl leading-snug text-white outline-none placeholder:text-gray-500 focus:border-accent-400 focus:ring-2 focus:ring-accent-500/30"
+            />
+          </label>
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              className="rounded-md border border-gray-600 px-4 py-2 text-gray-200 hover:bg-gray-800"
+            >
+              Anuluj
+            </button>
+            <button
+              type="button"
+              onClick={saveQuestion}
+              disabled={!questionDraft.trim()}
+              className="rounded-md bg-accent-600 px-4 py-2 font-semibold text-white hover:bg-accent-500 disabled:opacity-40"
+            >
+              Zapisz pytanie
+            </button>
+          </div>
+        </div>
+      ) : prompt ? (
         /* Polecenie u gory, pytanie z kola w ramce pod nim. Rozmiary sa
            mniejsze niz przy samym pytaniu, bo nad panelem stoi jeszcze ramka z
            nazwiskiem ucznia - przy wiekszych literach tekst uciekal poza panel. */
@@ -132,7 +203,9 @@ export function QuestionPanel({
         </p>
       )}
 
-      {question?.answer && (
+      {!editing && <ThinkingTimer questionId={question?.id} />}
+
+      {!editing && question?.answer && (
         <div className="mt-2 shrink-0">
           {showAnswer && (
             <p
@@ -152,7 +225,7 @@ export function QuestionPanel({
         </div>
       )}
 
-      <div className="mt-2 flex shrink-0 justify-between">
+      {!editing && <div className="mt-2 flex shrink-0 justify-between">
         <button
           type="button"
           onClick={onPrev}
@@ -169,7 +242,7 @@ export function QuestionPanel({
         >
           następne pytanie (N)
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

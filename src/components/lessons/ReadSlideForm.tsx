@@ -3,6 +3,7 @@ import type { Slide } from '../../data/types';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Select } from '../ui/Select';
+import { StudentActionFields } from './StudentActionFields';
 
 type ReadSlide = Extract<Slide, { kind: 'read' }>;
 
@@ -70,6 +71,12 @@ export function ReadSlideForm({ slide, onChange }: { slide: ReadSlide; onChange:
           onChange={(e) => onChange({ ...slide, body: e.target.value || undefined })}
         />
       </div>
+
+      <StudentActionFields
+        action={slide.studentAction}
+        customText={slide.studentActionText}
+        onChange={(studentAction, studentActionText) => onChange({ ...slide, studentAction, studentActionText })}
+      />
 
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-700">Czas na przeczytanie</label>

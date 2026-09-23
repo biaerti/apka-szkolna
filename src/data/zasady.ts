@@ -34,36 +34,27 @@ export const RULE_SECTIONS: RuleSection[] = [
     items: [
       'Po każdym zadaniu kręcimy kołem. Na kole są wasze imiona.',
       // indeks 1 - wykorzystywany wprost w intro.ts, nie przesuwac
-      'Kto się wylosuje, ten odpowiada. Nie zgłaszamy się - losuje koło. To jest gra.',
+      'Najpierw każdy sam myśli i zapisuje odpowiedź. Dopiero potem koło losuje osobę, która ją przedstawia.',
       // Dwa kola - nomenklatura kluczowa dla calego systemu (kolo NA LEKCJI po
       // kazdym zadaniu i kolo POWTORZENIOWE na poczatku nastepnej lekcji), patrz
       // tez sekcja "Uwagi za zachowanie", slajd "Przyklad rundy"
       // w intro.ts i logika w src/lib/recap.ts. Dawne "kolo po lekcji" (te same
       // pytania drugi raz na koncu tematu) USUNIETE - nie przywracac.
       // indeksy 2 i 3 - wykorzystywane wprost w intro.ts (slajd "Dwa kola"), nie przesuwac
-      'Koło na lekcji kręcimy po każdym zadaniu - kto się wylosuje, pokazuje swoje rozwiązanie. Tu można tylko zyskać: zadanie zrobione dobrze to plus, zrobione słabo albo wcale - kropka. Plomby na kole na lekcji nie ma.',
-      'Koło powtórzeniowe kręcimy na początku następnej lekcji, z pytaniami z poprzedniego tematu - innymi niż zadania z lekcji. Tu gra się o wszystko: plus, kropkę i plombę.',
+      'Koło na lekcji kręcimy po zadaniu - kto się wylosuje, pokazuje swoje rozwiązanie. Dobra odpowiedź to plus, a odpowiedź bez plusa to neutralna kropka.',
+      'Koło powtórzeniowe kręcimy na początku następnej lekcji, z pytaniami z poprzedniego tematu. Najpierw odpowiada każdy, potem koło wybiera osobę. Wynik to plus albo neutralna kropka.',
       'Uwagi za zachowanie można dostać zawsze, niezależnie od tego, które koło akurat kręcimy.',
       'Na kole na lekcji losujemy jedną osobę do każdego zadania. Na kole powtórzeniowym jest tyle pytań, ile było zadań - zwykle od 3 do 5.',
       'Na początku może być stresująco. To normalne. Po kilku lekcjach się przyzwyczaicie i będzie dobrze.',
     ],
   },
   {
-    title: 'Co można wygrać, a co przegrać',
+    title: 'Wynik odpowiedzi',
     items: [
       'Plus - za bardzo dobrą odpowiedź.',
-      'Kropka - za odpowiedź częściową. Zaliczone, ale bez plusa.',
-      'Plomba - za złą odpowiedź albo za jej brak.',
-      'Plusy, kropki i plomby rozliczamy na koniec miesiąca: 3 plusy = piątka, 3 plomby = jedynka.',
-      'Za podpowiadanie koledze albo koleżance - plomba dla podpowiadającego.',
-    ],
-  },
-  {
-    title: 'Pasy',
-    items: [
-      // indeks 0 - wykorzystywany wprost w intro.ts, nie przesuwac
-      'Każdy ma 2 pasy w miesiącu. Pas znaczy "dzisiaj nie odpowiadam" - bez plomby.',
-      'Limit pasów odnawia się na początku każdego miesiąca.',
+      'Kropka - odpowiedź bez plusa. Jest neutralna i nie obniża oceny.',
+      'W kole są tylko dwa wyniki: plus albo neutralna kropka.',
+      'Trzy plusy zamieniają się w piątkę. Kropek nie zamieniamy na ocenę.',
     ],
   },
   // Sekcja o uwagach PRZED "Co liczy sie jako przeszkadzanie" - patrz uwaga na
@@ -84,7 +75,7 @@ export const RULE_SECTIONS: RuleSection[] = [
       // liczbe wierszy, a rozbicie tego na osiem osobnych punktow ucinalo na
       // wydruku koncowke sekcji.
       'Krzyk, gadanie i przekrzykiwanie, kiedy ktoś odpowiada albo kiedy tłumaczę temat.',
-      'Podpowiadanie - kolega traci szansę na plusa, a podpowiadający dostaje plombę.',
+      'Podpowiadanie podczas czasu na samodzielne myślenie - kolega traci możliwość pokazania własnej odpowiedzi.',
       'Ściągawki, odpisywanie na sprawdzianie, **telefon** na ławce albo w ręce.',
       'Śmianie się z czyjejś odpowiedzi, przezywanie, chodzenie po klasie, rzucanie rzeczami.',
       'To NIE jest przeszkadzanie: zła odpowiedź, "nie wiem", pytanie do mnie albo prośba o powtórzenie.',

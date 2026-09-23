@@ -7,13 +7,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../../data/store';
 import { INTRO_PROMPT, INTRO_PROMPT_HINT, INTRO_SET_TOPIC } from '../../data/intro';
 import { answersByQuestion, type RecapMode } from '../../lib/recap';
-import { StudentPicker } from './StudentPicker';
-import { UwagaPicker } from '../uwagi/UwagaPicker';
 import { QuestionPicker } from './QuestionPicker';
 import { StudentSidebar } from './StudentSidebar';
 import { RecapToolbar } from './RecapToolbar';
 import { RecapWheelPanel } from './RecapWheelPanel';
 import { RecapAnswerPanel } from './RecapAnswerPanel';
+import { LessonStartTimer } from './LessonStartTimer';
 import { useRecapKeys } from './useRecapKeys';
 import { useRecapSession, type PickMode } from './useRecapSession';
 
@@ -61,6 +60,7 @@ export function RecapSession({
   const location = useLocation();
   const schoolClass = useStore((s) => s.classes.find((c) => c.id === classId));
   const questionSet = useStore((s) => s.questionSets.find((qs) => qs.id === setId));
+  const updateQuestion = useStore((s) => s.updateQuestion);
 
   // Ustawienia trybow (wybor ucznia / pytania / ocenianie) czytane w kolejnosci:
   // 1) query string (?pick=sequential&random=1&grading=0) - RecapScreen przekazuje
@@ -119,9 +119,10 @@ export function RecapSession({
     advanceQuestionOnPick: !isIntroTopic,
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [hintOpen, setHintOpen] = useState(false);
-  const [uwagaOpen, setUwagaOpen] = useState(false);
   const [questionPickerOpen, setQuestionPickerOpen] = useState(false);
+  const [preparationOpen, setPreparationOpen] = useState(
+    embedded === true && resolvedRecapMode === 'powtorzeniowe',
+  );
 
   // Historia odpowiedzi tej klasy per pytanie - do panelu "wybierz pytanie".
   const answersMap = useMemo(
@@ -157,7 +158,7 @@ export function RecapSession({
     }
   }
 
-  useRecapKeys(session, embedded, handleExit, toggleFullscreen);
+  useRecapKeys(session, embedded, handleExit, toggleFullscreen, preparationOpen);
 
   if (!schoolClass || !questionSet) {
     return (
@@ -165,6 +166,10 @@ export function RecapSession({
         Nie znaleziono klasy lub zestawu pytań.
       </div>
     );
+  }
+
+  if (preparationOpen) {
+    return <LessonStartTimer onContinue={() => setPreparationOpen(false)} />;
   }
 
   return (
@@ -198,8 +203,7 @@ export function RecapSession({
           <RecapWheelPanel session={session} />
           <RecapAnswerPanel
             session={session}
-            onOpenHint={() => setHintOpen(true)}
-            onOpenUwaga={() => setUwagaOpen(true)}
+            onUpdateQuestion={updateQuestion}
             /* Lekcja zapoznawcza: na ekranie rzadzi "Przedstaw sie", a wylosowane
                pytanie jest dodatkiem. */
             prompt={isIntroLesson ? INTRO_PROMPT : null}
@@ -227,20 +231,14 @@ export function RecapSession({
             <span className="font-bold text-emerald-400">+</span> dobrze
           </span>
           <span>
-            <span className="font-bold text-sky-400">•</span> częściowo
-          </span>
-          <span>
-            <span className="font-bold text-red-400">▣</span> plomba
-          </span>
-          <span>
-            <span className="font-bold text-amber-400">P</span> pas
+            <span className="font-bold text-sky-400">•</span> kropka - bez plusa
           </span>
         </span>
         <span className="min-w-0 flex-1 truncate">
         {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : session.pickMode === 'sala' ? 'Spacja: losuj' : 'Spacja: kręć'}
         {session.grading
           ? session.recapMode === 'powtorzeniowe'
-            ? ' - 1: dobrze - 2: częściowo - 3: źle - 4: pas'
+            ? ' - 1: dobrze - 2: kropka'
             : ' - 1: dobrze - 2: dalej'
           : ' - Enter: gotowe, następny'}
         {' '}- N: następne pytanie - O: pokaż/ukryj odpowiedź
@@ -248,20 +246,6 @@ export function RecapSession({
         </span>
       </div>
 
-      <StudentPicker
-        open={hintOpen}
-        title="Kto podpowiadał?"
-        students={session.presentStudents}
-        excludeStudentId={session.currentStudent?.id ?? null}
-        onPick={session.addHint}
-        onClose={() => setHintOpen(false)}
-      />
-      <UwagaPicker
-        open={uwagaOpen}
-        students={session.presentStudents}
-        onPick={session.addUwaga}
-        onClose={() => setUwagaOpen(false)}
-      />
       <QuestionPicker
         open={questionPickerOpen}
         questions={session.allQuestions}

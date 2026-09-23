@@ -85,10 +85,12 @@ describe('buildIntroLesson', () => {
       .join(' \n ');
   }
 
-  it('wspomina o 2 pasach, a nie o starym limicie 3 pasow', () => {
+  it('nie zawiera wycofanych pasow, plomb ani minusow', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
-    const text = allText(lesson);
-    expect(text).toContain('2 pasy');
+    const text = allText(lesson).toLowerCase();
+    expect(text).not.toContain('pasów');
+    expect(text).not.toContain('plomba');
+    expect(text).not.toContain('minus');
   });
 
   it('nie zawiera juz usunietego watku odrabiania plomb / zadan naprawczych', () => {
@@ -112,10 +114,10 @@ describe('buildIntroLesson', () => {
     expect(allText(lesson4)).not.toContain('egzamin ósmoklasisty');
   });
 
-  it('ma slajd o pasach i slajd z przykladem rundy', () => {
+  it('ma slajd z wynikiem odpowiedzi i przykladem rundy', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const titles = lesson.slides.map((s) => ('title' in s ? s.title : undefined));
-    expect(titles).toContain('Pasy');
+    expect(titles).toContain('Wynik odpowiedzi');
     expect(titles).toContain('Przykład rundy');
   });
 
@@ -134,13 +136,14 @@ describe('buildIntroLesson', () => {
     expect(text).not.toContain('koła po lekcji');
   });
 
-  it('przyklad rundy dotyczy kola powtorzeniowego i zaznacza, ze na kole na lekcji mozna tylko zyskac', () => {
+  it('przyklad rundy dotyczy kola powtorzeniowego i nie zawiera ujemnego wyniku', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
     const slide = lesson.slides.find((s) => 'title' in s && s.title === 'Przykład rundy');
     const body = slide && 'body' in slide ? slide.body : '';
     expect(body).toContain('powtórzeniowe');
     expect(body).toContain('kole na lekcji');
-    expect(body).toContain('tylko zyskać');
+    expect(body).toContain('plus');
+    expect(body).toContain('neutralna kropka');
     // Krotki przyklad kola na lekcji: zadanie zrobione dobrze -> plus, slabo/wcale -> kropka.
     expect(body).toContain('Z1');
     expect(body).not.toContain('kole po lekcji');
@@ -153,8 +156,6 @@ describe('buildIntroLesson', () => {
     const body = slide && 'body' in slide ? slide.body : '';
     expect(body).toContain('**Koło na lekcji**');
     expect(body).toContain('**Koło powtórzeniowe**');
-    expect(body).toContain('**kole na lekcji**');
-    expect(body).toContain('**kole powtórzeniowym**');
   });
 
   it('po przykladzie rundy tlumaczy przebieg lekcji, a potem rozroznia dwa kola', () => {
@@ -203,9 +204,11 @@ describe('buildIntroLesson', () => {
     expect(titles.indexOf('Wasz głos')).toBe(gdzie + 1);
   });
 
-  it('wspomina o rozliczeniu plusow/plomb na koniec miesiaca', () => {
+  it('wspomina o zamianie plusow na ocene, bez zamiany kropek', () => {
     const { lesson } = buildIntroLesson('IV', [CLASS_ID]);
-    expect(allText(lesson)).toContain('koniec miesiąca');
+    const text = allText(lesson);
+    expect(text).toContain('Trzy plusy');
+    expect(text).toContain('Kropek nie zamieniamy na ocenę');
   });
 
   it('nie zawiera juz usunietej odpowiedzialnosci zbiorowej za dodatkowe miejsca w kole', () => {
@@ -241,11 +244,13 @@ describe('RULE_SECTIONS', () => {
     }
   });
 
-  it('nie zawiera slowa "minus" - w zasadach obowiazuje "plomba"', () => {
+  it('nie zawiera dawnych ujemnych wynikow kola', () => {
     const all = RULE_SECTIONS.map((s) => `${s.title} ${s.items.join(' ')}`)
       .join(' ')
       .toLowerCase();
     expect(all).not.toContain('minus');
+    expect(all).not.toContain('plomba');
+    expect(all).not.toContain('pasy');
   });
 
   it('sekcja "Zeszyt i sprawdziany" istnieje i jest ostatnia w tablicy', () => {
@@ -271,11 +276,11 @@ describe('RULE_SECTIONS', () => {
     expect(section).toBeDefined();
     const items = section?.items ?? [];
     // intro.ts siega po indeksach 1, 2 i 3 - pilnujemy, ze nic sie nie przesunelo.
-    expect(items[1]).toContain('losuje koło');
+    expect(items[1]).toContain('koło losuje');
     expect(items[2]).toMatch(/^Koło na lekcji/);
-    expect(items[2]).toContain('Plomby na kole na lekcji nie ma');
+    expect(items[2]).toContain('neutralna kropka');
     expect(items[3]).toMatch(/^Koło powtórzeniowe/);
-    expect(items[3]).toContain('innymi niż zadania z lekcji');
+    expect(items[3]).toContain('Najpierw odpowiada każdy');
     const all = RULE_SECTIONS.map((s) => s.items.join(' ')).join(' ').toLowerCase();
     expect(all).not.toContain('po lekcji');
   });
