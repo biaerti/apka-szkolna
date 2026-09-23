@@ -120,6 +120,7 @@ export function RecapSession({
     // zmienia je dopiero nauczyciel ("nastepne pytanie" / N). W zwyklych
     // rundach z losowymi pytaniami kazdy nowy uczen dostaje nowe pytanie.
     advanceQuestionOnPick: !isIntroTopic,
+    questionLimit: resolvedRecapMode === 'powtorzeniowe' ? REVIEW_QUESTION_COUNT : undefined,
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [questionPickerOpen, setQuestionPickerOpen] = useState(false);
@@ -161,27 +162,33 @@ export function RecapSession({
     }
   }
 
-  useRecapKeys(session, embedded, handleExit, toggleFullscreen, overviewOpen);
+  // Ocena zostaje na kole: kropka = "nie wie", uczen jest juz skreslony, wiec
+  // krecimy dalej przy tym samym pytaniu. Plus zamyka pytanie (przekreslone na
+  // ekranie trzech pytan), a na nastepne przechodzi nauczyciel klawiszem N.
+  function gradeAndTrack(result: Parameters<typeof session.grade>[0]) {
+    const questionId = session.currentQuestion?.id;
+    if (!questionId || !session.currentStudent || session.graded) return;
+    session.grade(result);
+    if (result === 'plus') setCompletedQuestionIds((current) => new Set(current).add(questionId));
+  }
+
+  useRecapKeys({ ...session, grade: gradeAndTrack }, embedded, handleExit, toggleFullscreen, overviewOpen);
 
   function selectQuestion(questionId: string) {
     session.jumpToQuestion(questionId);
     setOverviewOpen(false);
   }
 
-  function completeCurrentQuestion(result: 'plus' | 'kropka') {
-    const questionId = session.currentQuestion?.id;
-    if (!questionId || !session.currentStudent || session.graded) return;
-    session.grade(result);
-    setCompletedQuestionIds((current) => new Set(current).add(questionId));
-    setOverviewOpen(true);
+  // Jeden przycisk "Przejdz do kola" - startuje od pierwszego pytania bez plusa.
+  function startWheel() {
+    const next = reviewQuestions.find((question) => !completedQuestionIds.has(question.id)) ?? reviewQuestions[0];
+    if (next) session.jumpToQuestion(next.id);
+    setOverviewOpen(false);
   }
 
   function completeWithoutGrade() {
-    const questionId = session.currentQuestion?.id;
-    if (!questionId || !session.currentStudent) return;
+    if (!session.currentQuestion || !session.currentStudent) return;
     session.markDoneNoGrade();
-    setCompletedQuestionIds((current) => new Set(current).add(questionId));
-    setOverviewOpen(true);
   }
 
   if (!schoolClass || !questionSet) {
@@ -224,7 +231,7 @@ export function RecapSession({
             <RecapQuestionsOverview
               questions={reviewQuestions}
               completedQuestionIds={completedQuestionIds}
-              onSelect={selectQuestion}
+              onStart={startWheel}
               onUpdate={updateQuestion}
               onRemove={removeQuestion}
               onFinish={handleExit}
@@ -235,7 +242,7 @@ export function RecapSession({
               <RecapAnswerPanel
                 session={session}
                 onUpdateQuestion={updateQuestion}
-                onGrade={completeCurrentQuestion}
+                onGrade={gradeAndTrack}
                 onSkip={completeWithoutGrade}
                 onShowOverview={() => setOverviewOpen(true)}
                 /* Lekcja zapoznawcza: na ekranie rzadzi "Przedstaw sie", a wylosowane

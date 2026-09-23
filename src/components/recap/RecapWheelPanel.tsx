@@ -10,7 +10,15 @@ import { useEffect, useRef, useState } from 'react';
 import { SeatingPicker } from './SeatingPicker';
 import { SequentialPicker } from './SequentialPicker';
 import { Wheel } from './Wheel';
-import type { RecapSessionState } from './useRecapSession';
+import type { PickMode, RecapSessionState } from './useRecapSession';
+
+// Szybka zmiana widoku wprost nad kolem - to samo, co "wybór ucznia" w pasku,
+// ale duze i pod reka. Lista = po kolei wg numeru z dziennika.
+const VIEWS: Array<{ mode: PickMode; label: string }> = [
+  { mode: 'wheel', label: 'koło' },
+  { mode: 'sequential', label: 'lista' },
+  { mode: 'sala', label: 'sala' },
+];
 
 export interface RecapWheelPanelProps {
   session: RecapSessionState;
@@ -43,9 +51,27 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
 
   return (
     <div
-      className="flex min-h-0 flex-col items-center justify-center gap-2 border-r border-gray-800 px-2 py-2"
+      className="relative flex min-h-0 flex-col items-center justify-center gap-2 border-r border-gray-800 px-2 py-2"
       style={{ width: '50%' }}
     >
+      <div className="absolute right-2 top-2 z-10 flex rounded-lg border border-gray-700 bg-gray-950/80 p-0.5 text-sm">
+        {VIEWS.map((view) => (
+          <button
+            key={view.mode}
+            type="button"
+            onClick={() => session.setPickMode(view.mode)}
+            disabled={session.spinning}
+            aria-pressed={session.pickMode === view.mode}
+            className={
+              session.pickMode === view.mode
+                ? 'rounded-md bg-gray-700 px-3 py-1 font-semibold text-white'
+                : 'rounded-md px-3 py-1 text-gray-400 hover:text-gray-200 disabled:opacity-40'
+            }
+          >
+            {view.label}
+          </button>
+        ))}
+      </div>
       <div ref={wheelAreaRef} className="flex min-h-0 w-full flex-1 items-center justify-center">
         {session.pickMode === 'sequential' ? (
           <SequentialPicker

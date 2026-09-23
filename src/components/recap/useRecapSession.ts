@@ -36,6 +36,12 @@ export interface UseRecapSessionArgs {
    * Domyslnie true; lekcja zapoznawcza daje false - patrz useRecapDraw.
    */
   advanceQuestionOnPick?: boolean;
+  /**
+   * Ile pierwszych pytan zestawu bierze udzial w rundzie. Kolo powtorzeniowe
+   * pokazuje trzy pytania na ekranie startowym - kolo ma chodzic po tych samych
+   * trzech, a nie po calym zestawie (wczesniej bylo "pytanie 2/5").
+   */
+  questionLimit?: number;
 }
 
 export function useRecapSession({
@@ -46,6 +52,7 @@ export function useRecapSession({
   initialRandomOrder = false,
   recapMode = 'po-lekcji',
   advanceQuestionOnPick = true,
+  questionLimit,
 }: UseRecapSessionArgs) {
   const students = useStore((s) => s.students);
   const questions = useStore((s) => s.questions);
@@ -72,8 +79,11 @@ export function useRecapSession({
   const poolState = usePool(attendance.presentStudents, classId);
 
   const setQuestions = useMemo(
-    () => questions.filter((q) => q.setId === setId).sort((a, b) => a.order - b.order),
-    [questions, setId],
+    () => {
+      const sorted = questions.filter((q) => q.setId === setId).sort((a, b) => a.order - b.order);
+      return questionLimit ? sorted.slice(0, questionLimit) : sorted;
+    },
+    [questions, setId, questionLimit],
   );
   const questionOrder = useQuestionOrder(setQuestions, initialRandomOrder);
 

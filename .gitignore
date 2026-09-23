@@ -11,3 +11,6 @@ public/audio/czytanki/
 
 # narracje filmikow - generowane z ElevenLabs, lokalnie
 filmiki/*/audio/
+
+# filmiki mp4 - w dev z public/, w produkcji z bucketu Supabase "filmiki"
+public/filmiki/

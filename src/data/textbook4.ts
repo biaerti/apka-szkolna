@@ -285,6 +285,7 @@ const TOPICS: Topic[] = [
       ...recap(previousSetId),
       slideRead('Otwieramy podręcznik', 37, 39, 'Przypominamy, czym jest czasownik, rozróżniamy czynności i stany oraz ćwiczymy zapis czasowników z przeczeniem „nie”.', 18 * 60),
       slideText('Przypomnienie: czasownik', 'Czasownik odpowiada na pytanie **co robi?** albo **co się z nim dzieje?**. Rozpoznajesz go też po zmianie czasu: **grał - gra - będzie grał**.\n\nPodczas pracy z podręcznikiem przypomnij sobie jeszcze jedną zasadę: **nie** z czasownikami zapisujemy oddzielnie.', 'czasownik'),
+      slideVideo('czasownik-film1'),
       slideTask('Z1', 'Wyszukaj czasowniki w tekście:\n\n„Olek uruchomił grę, ale nie wszedł od razu na serwer. Czytał wiadomości, martwił się wynikiem, a potem dołączył do drużyny.”\n\nPodziel je na **czynności** i **stany**. Przy formie z **nie** zapisz regułę pisowni.', 7 * 60, 'czasownik', '**Czynności:** uruchomił, nie wszedł, czytał, dołączył.\n**Stany:** martwił się.\n„Nie” z czasownikami zapisujemy oddzielnie.'),
       slideTask('Z2', 'Napisz **3 zdania** o jednym bohaterze: pierwsze w czasie przeszłym, drugie w teraźniejszym, trzecie w przyszłym.\n\nPisz jako narrator-bohater. Użyj jednego epitetu oraz jednego czasownika z przeczeniem **nie**. Podkreśl czasowniki.', 7 * 60, 'narrator', 'Np. „Wczoraj wszedłem do ciemnej jaskini. Dziś nie boję się już echa. Jutro odnajdę ukryte wyjście.”'),
       slideNote('Czasownik', '- Czasownik nazywa czynności i stany.\n- Odpowiada na pytania: co robi? co się z nim dzieje?\n- „Nie” z czasownikami piszemy oddzielnie: nie piszę.'),
@@ -314,6 +315,7 @@ const TOPICS: Topic[] = [
       ...recap(previousSetId),
       slideRead('Otwieramy podręcznik', 40, 42, 'Poznajemy kategorie gramatyczne czasownika: osobę, liczbę, czas i rodzaj. Odróżniamy formy osobowe od nieosobowych.', 20 * 60),
       slideText('Przypomnienie: forma czasownika', 'Przy czasowniku sprawdzasz: **kto? ilu? kiedy?** W czasie przeszłym często rozpoznajesz także rodzaj.\n\nPamiętaj o formach, które nie wskazują wykonawcy: bezokoliczniku **robić** oraz formach **zrobiono, umyto**.', 'czasownikOdmiana'),
+      slideVideo('czasownik-film2'),
       slideTask('Z1', 'Dla każdej formy podaj **osobę, liczbę i czas**. Jeśli można, dopisz rodzaj:\n\n- zbudowałyście\n- gram\n- napiszą\n- czytaliśmy\n\nNa końcu wskaż formę, przy której nie da się określić rodzaju.', 8 * 60, 'czasownikOdmiana', '**zbudowałyście:** 2. os., lm., przeszły, niemęskoosobowy\n**gram:** 1. os., lp., teraźniejszy\n**napiszą:** 3. os., lm., przyszły\n**czytaliśmy:** 1. os., lm., przeszły, męskoosobowy\nRodzaju nie określimy przy „gram” i „napiszą”.'),
       slideTask('Z2', 'Przekształć zdanie **„Buduję bezpieczną bazę”** zgodnie z poleceniami:\n\n1. 1. osoba liczby mnogiej, czas przeszły\n2. 3. osoba liczby pojedynczej, czas przyszły\n3. bezokolicznik\n4. forma zakończona na **-no**\n\nDo jednej formy osobowej dodaj przeczenie **nie** i zapisz je poprawnie.', 8 * 60, 'czasownikOdmiana', '1. Budowaliśmy bezpieczną bazę.\n2. Zbuduje bezpieczną bazę.\n3. Budować bezpieczną bazę.\n4. Zbudowano bezpieczną bazę.\nNp. Nie budowaliśmy bezpiecznej bazy.'),
       slideNote('Odmiana czasownika', '- Czasownik odmienia się przez osoby, liczby i czasy.\n- W czasie przeszłym także przez rodzaje: zrobił, zrobiła, zrobiło.\n- Formy nieosobowe: bezokolicznik (robić) i formy na -no, -to.'),
@@ -440,6 +442,7 @@ function slideTask(code: string, body: string, timerSec: number, art?: SlideArt,
 }
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
+function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
 function slideNote(temat: string, body: string): Slide {
   return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
 }

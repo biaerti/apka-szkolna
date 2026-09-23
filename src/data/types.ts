@@ -373,7 +373,9 @@ export type Slide =
   // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac
   // sam naglowek nad zdjeciem (np. "Znacie teleturniej Kolo Fortuny?").
   // `caption` zostaje jako podpis pod zdjeciem dla prostszych slajdow.
-  | { id: ID; kind: 'image'; url: string; caption?: string; title?: string; body?: string };
+  | { id: ID; kind: 'image'; url: string; caption?: string; title?: string; body?: string }
+  // Filmik lekcyjny z rejestru src/data/filmiki.ts (mp4 w prywatnym buckecie).
+  | { id: ID; kind: 'video'; videoId: string; title?: string };
 
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
