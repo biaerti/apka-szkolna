@@ -12,6 +12,7 @@ import { classGrade } from '../lib/grade';
 import { nextLessonCode } from '../lib/lessonCode';
 import { titleMatchKey } from '../lib/titleMatchKey';
 import { timetableCellId } from '../lib/timetable';
+import { removeLessonWithRecapFallback, repairOrphanedLessonRecaps } from '../lib/lessonDeletion';
 import { absenceId, attendanceId, type AttendanceStatus } from '../lib/attendance';
 import { placeStudent, type SeatPosition } from '../lib/seating';
 import { getDeviceId } from '../lib/device';
@@ -473,7 +474,7 @@ export const useStore = create<AppState>()(
         set((s) => {
           const manuallyEditedLessonIds = { ...s.manuallyEditedLessonIds };
           delete manuallyEditedLessonIds[id];
-          return { lessons: s.lessons.filter((l) => l.id !== id), manuallyEditedLessonIds };
+          return { lessons: removeLessonWithRecapFallback(s.lessons, id), manuallyEditedLessonIds };
         });
       },
       moveLesson: (id, toIndex) => {
@@ -651,7 +652,7 @@ export const useStore = create<AppState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 18,
+      version: 19,
       // v1 -> v2: nazewnictwo "minus" -> "plomba" (zasady kola, zeby nie budzic
       // negatywnych skojarzen u dzieci) oraz nowe pola ustawien pod przeliczanie
       // plusow/plomb na oceny.
@@ -697,6 +698,9 @@ export const useStore = create<AppState>()(
       // v16 -> v17: dochodzi kolekcja seats (miejsca w lawkach, widok "Sala").
       // Stare dane dostaja pusta liste - rozsadzenie robi sie recznie.
       // v17 -> v18: dochodzi kolekcja vulcanLessons (plan dnia z VULCANA).
+      // v18 -> v19: naprawa lancucha powtorek po usunieciu lekcji. Starsza
+      // wersja usuwala temat, ale zostawiala w nastepnej lekcji slajd recapu
+      // wskazujacy jego zestaw. Teraz wraca on do poprzedniego tematu.
       migrate: (persistedState, version) => {
         const state = persistedState as {
           classes?: SchoolClass[];
@@ -786,6 +790,12 @@ export const useStore = create<AppState>()(
         }
         if (version < 18 && !Array.isArray(state.vulcanLessons)) {
           state.vulcanLessons = [];
+        }
+        if (version < 19 && Array.isArray(state.lessons)) {
+          state.lessons = repairOrphanedLessonRecaps(
+            state.lessons as unknown as Lesson[],
+            state.manuallyEditedLessonIds,
+          ) as unknown as Array<Record<string, unknown>>;
         }
         if (version < 14 && state.settings) {
           state.settings = { ...state.settings, slideFontPercent: state.settings.slideFontPercent ?? 100 };
