@@ -50,7 +50,11 @@ describe('buildTextbook4', () => {
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
       expect(lesson.slides.some((slide) => slide.kind === 'topic' && slide.variant === 'handout')).toBe(false);
       expect(lesson.slides.some((slide) => slide.kind === 'text' && slide.title === 'Wracamy do karty A5')).toBe(false);
-      expect(lesson.notebookNote).toBeUndefined();
+      // Notatka A5 do wydruku jest pelna (bez luk {{...}}) - te lekcje nie
+      // maja slajdu wracania do karty, wiec nie ma kiedy uzupelniac pol.
+      expect(lesson.notebookNote).toBeTruthy();
+      expect(lesson.notebookNote).not.toMatch(/\{\{/);
+      expect(lesson.notebookNote).toContain('## Najważniejsze');
       const closing = lesson.slides[lesson.slides.length - 1];
       expect(closing).toMatchObject({ kind: 'note', title: 'Notatka do zeszytu' });
       expect(closing.kind === 'note' ? closing.body : '').toMatch(/^\*\*Temat:\*\* /);
@@ -67,10 +71,10 @@ describe('buildTextbook4', () => {
     }
   });
 
-  it('pierwsze piec tematow ma notatke A5, a kazdy temat pytania do kola z odpowiedziami', () => {
+  it('kazdy temat ma notatke A5 i pytania do kola z odpowiedziami', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     expect(bundle.questionSets).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
-    for (const lesson of bundle.lessons.slice(0, 5)) {
+    for (const lesson of bundle.lessons) {
       expect(lesson.notebookNote).toBeTruthy();
     }
     for (const lesson of bundle.lessons) {

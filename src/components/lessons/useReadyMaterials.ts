@@ -52,7 +52,7 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
   {
     key: 'textbook4',
     label: 'Podręcznik klasy 4 - tematy z rozdziału I',
-    description: `Doda ${TEXTBOOK4_TOPIC_COUNT} pierwszych tematów jako pełne prezentacje: praca z podręcznikiem, zadania do zeszytu i pytania do koła. Pierwszych pięć lekcji zawiera także notatkę A5.`,
+    description: `Doda ${TEXTBOOK4_TOPIC_COUNT} pierwszych tematów jako pełne prezentacje: praca z podręcznikiem, zadania do zeszytu, notatka A5 i pytania do koła.`,
     build: buildTextbook4,
   },
   {

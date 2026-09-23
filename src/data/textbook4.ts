@@ -228,6 +228,14 @@ const TOPICS: Topic[] = [
     title: '8. Dlaczego warto być sobą?',
     topic: 'Być sobą mimo opinii innych',
     textbookPage: 29,
+    notebookNote: [
+      '## Najważniejsze',
+      '- Nie da się zadowolić wszystkich - każdy ma inne zdanie.',
+      '- **Fakt** można sprawdzić, **opinia** to czyjeś zdanie.',
+      '- Pomocna uwaga jest konkretna i życzliwa.', '',
+      '## Morał „Nauk mędrca”',
+      'Mędrzec i syn po każdej krytyce zmieniali sposób podróży - i zawsze ktoś ich wyśmiał. **Rób to, co uważasz za słuszne, i idź własną drogą.**',
+    ].join('\n'),
     questions: [
       { text: 'Dlaczego mędrzec kilka razy zmieniał sposób podróży na bazar?', answer: 'Ponieważ za każdym razem słuchał krytycznych opinii napotkanych ludzi.' },
       { text: 'Co wydarzyło się, gdy mędrzec i syn próbowali zadowolić wszystkich?', answer: 'Każda kolejna grupa i tak ich krytykowała, choć postępowali inaczej.' },
@@ -249,6 +257,13 @@ const TOPICS: Topic[] = [
     title: '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
     topic: 'Kreatywność rośnie od pierwszej próby',
     textbookPage: 33,
+    notebookNote: [
+      '## Najważniejsze',
+      '- Międzynarodowy Dzień Kropki obchodzimy **15 września**.',
+      '- **Kreatywność** to tworzenie nowych pomysłów.', '',
+      '## O czym były teksty',
+      'Vashti zaczęła od jednej kropki, uwierzyła w siebie, a potem tak samo zachęciła chłopca. **Wielkie rzeczy zaczynają się od małej próby.**',
+    ].join('\n'),
     questions: [
       { text: 'Kiedy obchodzimy Międzynarodowy Dzień Kropki?', answer: '15 września.' },
       { text: 'Dlaczego Vashti narysowała pierwszą kropkę?', answer: 'Nie wierzyła, że potrafi rysować, a nauczycielka zachęciła ją, by postawiła znak i sprawdziła, co się stanie.' },
@@ -270,6 +285,14 @@ const TOPICS: Topic[] = [
     title: '11. Czas na czasownik',
     topic: 'Czasownik - czynności, stany i pisownia z „nie”',
     textbookPage: 37,
+    notebookNote: [
+      '## Najważniejsze',
+      '- **Czasownik** nazywa czynności i stany.',
+      '- Odpowiada na pytania: **co robi? co się z nim dzieje?**',
+      '- **„Nie”** z czasownikami piszemy **oddzielnie**: nie piszę.', '',
+      '## Przykład',
+      '**gra** - czynność, **marzy** - stan, **nie gram** - osobno.',
+    ].join('\n'),
     questions: [
       { text: 'Co nazywa czasownik?', answer: 'Czynności i stany.' },
       { text: 'Na jakie dwa pytania odpowiada czasownik?', answer: 'Co robi? Co się z nim dzieje?' },
@@ -291,6 +314,14 @@ const TOPICS: Topic[] = [
     title: '12-13. Misja odmiana! Tajemnice czasownika',
     topic: 'Osoba, liczba, rodzaj i czas czasownika',
     textbookPage: 40,
+    notebookNote: [
+      '## Najważniejsze',
+      '- Czasownik odmienia się przez **osoby, liczby i czasy**.',
+      '- W czasie przeszłym także przez **rodzaje**: zrobił, zrobiła, zrobiło.',
+      '- Formy **nieosobowe**: bezokolicznik (robić) i formy na **-no, -to**.', '',
+      '## Przykład',
+      '**zbudowałyście** - 2. os., liczba mnoga, czas przeszły, rodzaj niemęskoosobowy.',
+    ].join('\n'),
     questions: [
       { text: 'Przez jakie kategorie odmienia się czasownik?', answer: 'Przez osoby, liczby, czasy, a w części form także przez rodzaje.' },
       { text: 'Jaka to osoba i liczba: „robimy”?', answer: 'Pierwsza osoba liczby mnogiej.' },
@@ -312,6 +343,14 @@ const TOPICS: Topic[] = [
     title: '14. Czy każda nasza wypowiedź jest zdaniem?',
     topic: 'Zdanie i równoważnik zdania',
     textbookPage: 43,
+    notebookNote: [
+      '## Najważniejsze',
+      '- **Zdanie** zawiera czasownik w formie osobowej.',
+      '- **Równoważnik zdania** go nie ma.',
+      '- Równoważniki przydają się w planach i ogłoszeniach.', '',
+      '## Przykład',
+      '„**Pracujemy** w ogrodzie” - zdanie. „Praca w ogrodzie” - równoważnik zdania.',
+    ].join('\n'),
     questions: [
       { text: 'Co to jest wypowiedzenie?', answer: 'Słowo lub grupa słów, za pomocą których przekazujemy informację, pytanie, polecenie albo uczucie.' },
       { text: 'Po czym rozpoznasz zdanie?', answer: 'Zawiera czasownik w formie osobowej.' },
@@ -333,6 +372,14 @@ const TOPICS: Topic[] = [
     title: '15. Tworzymy plan ramowy',
     topic: 'Plan ramowy - najważniejsze wydarzenia po kolei',
     textbookPage: 46,
+    notebookNote: [
+      '## Najważniejsze',
+      '- **Plan ramowy** to najważniejsze wydarzenia w punktach, bez szczegółów.',
+      '- Punkty układamy w **kolejności chronologicznej**.',
+      '- Zapis **jednolity**: same zdania albo same równoważniki zdań.', '',
+      '## Morał „Historii o akceptacji”',
+      'Każdy może się pomylić - nawet dorosły. Gdy zwracamy komuś uwagę, **liczy się forma i życzliwość**. Warto rozmawiać i tłumaczyć.',
+    ].join('\n'),
     questions: [
       { text: 'Co to jest plan ramowy?', answer: 'Spisane w punktach najważniejsze wydarzenia opowieści, bez podawania szczegółów.' },
       { text: 'W jakiej kolejności zapisujemy punkty planu ramowego?', answer: 'W kolejności chronologicznej - od pierwszego do ostatniego wydarzenia.' },
@@ -354,6 +401,14 @@ const TOPICS: Topic[] = [
     title: '16. Co już wiesz? Co umiesz?',
     topic: 'Powtórzenie działu I - o emocjach, relacjach i uczeniu się',
     textbookPage: 50,
+    notebookNote: [
+      '## Najważniejsze',
+      '- **Świat przedstawiony**: czas, miejsce, bohaterowie, wydarzenia.',
+      '- **Epitet** określa: jedwabna chusteczka.',
+      '- **Zdanie** ma czasownik w formie osobowej, **równoważnik** - nie.', '',
+      '## Morał baśni o księciu',
+      'Książę jako żaba poznał osobę, która polubiła go za to, jaki jest. **Nie udawaj innych i nie wstydź się tego, kim jesteś.**',
+    ].join('\n'),
     questions: [
       { text: 'Co składa się na świat przedstawiony utworu?', answer: 'Czas i miejsce wydarzeń, bohaterowie oraz wydarzenia.' },
       { text: 'Po czym poznasz, że wypowiedzenie jest zdaniem?', answer: 'Zawiera czasownik w formie osobowej.' },
