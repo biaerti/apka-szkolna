@@ -18,6 +18,7 @@ import { Table, TBody, TH, THead, TR } from '../components/ui/Table';
 import { LessonRow } from '../components/lessons/LessonRow';
 import { LessonRegisterModal } from '../components/lessons/LessonRegisterModal';
 import { LessonPlanModal } from '../components/lessons/LessonPlanModal';
+import { LessonFilmModal } from '../components/lessons/LessonFilmModal';
 import { LessonQuestionsModal } from '../components/lessons/LessonQuestionsModal';
 import { NewLessonModal } from '../components/lessons/NewLessonModal';
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
@@ -118,6 +119,8 @@ export function Lessons() {
   const questionsLesson = gradeLessons.find((l) => l.id === questionsLessonId) ?? null;
   const [planLessonId, setPlanLessonId] = useState<string | null>(null);
   const planLesson = gradeLessons.find((l) => l.id === planLessonId) ?? null;
+  const [filmLessonId, setFilmLessonId] = useState<string | null>(null);
+  const filmLesson = gradeLessons.find((l) => l.id === filmLessonId) ?? null;
 
   const ready = useReadyMaterials(grade, gradeClasses.map((c) => c.id), gradeLessons);
   const visibleMaterials = ready.materials.filter((material) =>
@@ -320,6 +323,7 @@ export function Lessons() {
               onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
               onSetStatus={(status) => setStatus(lesson, status)}
               onShowPlan={() => setPlanLessonId(lesson.id)}
+              onShowFilm={() => setFilmLessonId(lesson.id)}
             />
           ))}
         </div>
@@ -377,6 +381,7 @@ export function Lessons() {
                   onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
                   onShowRegister={() => setRegisterLessonId(lesson.id)}
                   onShowPlan={() => setPlanLessonId(lesson.id)}
+                  onShowFilm={() => setFilmLessonId(lesson.id)}
                   onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}
                   onDuplicate={() => copyLessonTo(lesson, grade, `${lesson.title} (kopia)`)}
@@ -394,6 +399,8 @@ export function Lessons() {
       <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} initialType={materialType} />
 
       {planLesson && <LessonPlanModal lesson={planLesson} onClose={() => setPlanLessonId(null)} />}
+
+      {filmLesson && <LessonFilmModal lesson={filmLesson} onClose={() => setFilmLessonId(null)} />}
 
       {registerLesson && (
         <LessonRegisterModal
@@ -436,7 +443,7 @@ export function Lessons() {
       <ConfirmDialog
         open={!!removeTarget}
         title="Usuń lekcję"
-        message={`Lekcja „${removeTarget?.title}" zniknie z: ${classNames}, razem z postępem. Tej operacji nie można cofnąć.`}
+        message={`Lekcja „${removeTarget?.title}” zniknie z: ${classNames}, razem z postępem. Jeżeli następna lekcja powtarza ten temat, jej powtórka wróci do poprzedniego pozostawionego tematu. Tej operacji nie można cofnąć.`}
         confirmLabel="Usuń"
         onCancel={() => setRemoveTarget(null)}
         onConfirm={() => {

@@ -17,6 +17,7 @@ import { resolveRecapMode } from '../../lib/recap';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import { isCurrentSlot, slotDisplayLabel, type LessonSlotOption } from '../../lib/lessonSlots';
 import { LessonSlotPicker } from './LessonSlotPicker';
+import { lessonFilmIds } from './LessonFilmModal';
 
 export interface LessonRowProps {
   lesson: Lesson;
@@ -43,6 +44,7 @@ export interface LessonRowProps {
   onRemoveSlot: (slotId: string) => void;
   onShowRegister: () => void;
   onShowPlan: () => void;
+  onShowFilm: () => void;
   onShowQuestions: () => void;
   onAddQuestions: () => void;
   onDuplicate: () => void;
@@ -157,6 +159,20 @@ export function LessonRow(p: LessonRowProps) {
                 className="shrink-0 rounded border border-accent-200 bg-accent-50 px-1.5 py-0.5 font-medium text-accent-700 hover:bg-accent-100"
               >
                 Plan lekcji
+              </button>
+              <span aria-hidden="true">·</span>
+            </>
+          )}
+          {/* Filmik lekcyjny: od razu widac, ktory temat go ma; klik odtwarza bez prezentacji. */}
+          {lessonFilmIds(lesson).length > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={p.onShowFilm}
+                title="Ta lekcja ma filmik - obejrzyj bez wchodzenia w prezentację"
+                className="shrink-0 rounded border border-accent-200 bg-accent-50 px-1.5 py-0.5 font-medium text-accent-700 hover:bg-accent-100"
+              >
+                Film
               </button>
               <span aria-hidden="true">·</span>
             </>

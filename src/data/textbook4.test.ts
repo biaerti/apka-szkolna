@@ -72,6 +72,23 @@ describe('buildTextbook4', () => {
     }
   });
 
+  it('lekcje o czasowniku maja proste zadania wedlug pokazanego wzoru', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const verbLessons = bundle.lessons.filter((lesson) =>
+      lesson.title === '11. Czas na czasownik'
+      || lesson.title === '12-13. Misja odmiana! Tajemnice czasownika',
+    );
+
+    expect(verbLessons).toHaveLength(2);
+    for (const lesson of verbLessons) {
+      const tasks = lesson.slides.filter((slide) => slide.kind === 'task');
+      expect(tasks).toHaveLength(2);
+      expect(tasks.every((task) => task.body.includes('**Przykład:**'))).toBe(true);
+      expect(tasks.every((task) => task.body.includes('**Teraz ty:**'))).toBe(true);
+      expect(tasks.every((task) => Boolean(task.answerExample))).toBe(true);
+    }
+  });
+
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {
     expect(() => buildTextbook4('V', [])).toThrow();
   });

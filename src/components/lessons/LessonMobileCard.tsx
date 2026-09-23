@@ -6,6 +6,7 @@ import { lessonMaterialType } from '../../lib/lessonMaterial';
 import { Button } from '../ui/Button';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { LessonSlotPicker } from './LessonSlotPicker';
+import { lessonFilmIds } from './LessonFilmModal';
 
 interface Props {
   lesson: Lesson;
@@ -22,6 +23,7 @@ interface Props {
   onRemoveSlot: (slotId: string) => void;
   onSetStatus: (status: LessonProgress['status']) => void;
   onShowPlan: () => void;
+  onShowFilm: () => void;
 }
 
 export function LessonMobileCard(p: Props) {
@@ -70,6 +72,7 @@ export function LessonMobileCard(p: Props) {
         </select>
         <div className="flex justify-end gap-1">
           {p.lesson.teacherPlan && <Button size="sm" variant="ghost" onClick={p.onShowPlan}>Plan</Button>}
+          {lessonFilmIds(p.lesson).length > 0 && <Button size="sm" variant="ghost" onClick={p.onShowFilm}>Film</Button>}
           <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${p.lesson.id}/pokaz/${p.classId}?${query}`)}>Pokaż</Button>
           <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${p.lesson.id}/edytuj?${query}`)}>Edytuj</Button>
         </div>
