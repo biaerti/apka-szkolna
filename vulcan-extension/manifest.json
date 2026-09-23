@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Apka szkolna - pomocnik VULCAN",
-  "version": "0.8.0",
-  "description": "Przenosi temat, podstawę programową , frekwencję i uwagi między Apką szkolną a zalogowaną kartą VULCANA.",
+  "version": "0.9.0",
+  "description": "Przenosi temat, podstawę programową , frekwencję (także z telefonu) i uwagi między Apką szkolną a zalogowaną kartą VULCANA.",
   "permissions": ["tabs", "storage", "scripting", "debugger"],
   "host_permissions": [
     "https://szkola.klippi.pl/*",

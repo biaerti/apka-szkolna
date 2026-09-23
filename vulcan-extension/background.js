@@ -45,6 +45,15 @@ async function deliverUwaga(tabId, payload) {
   }
 }
 
+async function deliverFrekwencja(tabId, payload) {
+  await chrome.storage.session.set({ pendingVulcanFrekwencja: payload });
+  try {
+    await chrome.tabs.sendMessage(tabId, { type: 'VULCAN_FREKWENCJA', payload });
+  } catch {
+    // Content script odbierze paczkę po pełnym załadowaniu karty.
+  }
+}
+
 async function vulcanTab() {
   const tabs = await chrome.tabs.query({ url: 'https://dziennik-dziennik.vulcan.net.pl/*' });
   return tabs.find((candidate) => candidate.id && candidate.url?.includes('/wroclaw/003013/')) ?? tabs[0];
@@ -105,6 +114,29 @@ function extMain(kind, lastName, payload) {
         contentModel: String(textField.getValue?.() ?? '').trim(),
         contentText: String(contentInput?.value ?? '').trim(),
       };
+    }
+    if (kind === 'set-field') {
+      // Pole tekstowe ExtJS (np. Temat): wartosc przez komponent, nie przez DOM.
+      const input = document.querySelector('[data-apka-bot="field"]');
+      const field = input && cmpUp(input, (c) => !!c.setValue);
+      if (!field) return { error: 'no-field-component' };
+      field.setValue(String(payload && payload.value || ''));
+      if (field.fireEvent) field.fireEvent('change', field, field.getValue(), '');
+      return { value: String(field.getValue?.() ?? '') };
+    }
+    if (kind === 'expand-day') {
+      // Wezel dnia w drzewie lekcji - rozwiniecie przez API drzewa.
+      const el = document.querySelector('[data-apka-bot="day"]');
+      const tree = el && cmpUp(el, (c) => !!c.getView && !!c.getRootNode);
+      if (!tree) return 'no-tree';
+      const wanted = String(payload && payload.day || '').toLowerCase();
+      let found = null;
+      tree.getRootNode().cascadeBy((node) => {
+        if (!found && String(node.get('text') || '').replace(/<[^>]+>/g, '').toLowerCase().indexOf(wanted) !== -1) found = node;
+      });
+      if (!found) return 'no-node';
+      found.expand();
+      return 'ok';
     }
     if (kind === 'transfer') {
       const rowEl = document.querySelector('[data-apka-bot="row"]');
@@ -192,6 +224,11 @@ async function realClicks(tabId, count) {
 }
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'SLEEP') {
+    // Zegar dla karty VULCANA w tle - patrz sleep() w vulcan-bot.js.
+    setTimeout(() => sendResponse({ ok: true }), Math.max(0, Math.min(Number(message.ms) || 0, 30000)));
+    return true;
+  }
   if (message?.type === 'REAL_CLICKS') {
     (async () => {
       const tabId = _sender.tab?.id;
@@ -225,6 +262,26 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       else if (!wTle) await chrome.tabs.update(tab.id, { active: true });
       if (!tab.id) throw new Error('Nie udało się otworzyć karty VULCANA.');
       await deliverUwaga(tab.id, message.payload);
+      sendResponse({ ok: true });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
+  if (message?.type === 'OPEN_VULCAN_FREKWENCJA') {
+    (async () => {
+      // Frekwencja z telefonu: zawsze w tle, karta VULCANA nie wyskakuje nad
+      // prezentacje. Bez otwartej karty otwieramy nowa, tez w tle.
+      let tab = await vulcanTab();
+      if (!tab?.id) tab = await chrome.tabs.create({ url: VULCAN_URL, active: false });
+      if (!tab.id) throw new Error('Nie udało się otworzyć karty VULCANA.');
+      await deliverFrekwencja(tab.id, message.payload);
+      sendResponse({ ok: true });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
+  if (message?.type === 'VULCAN_FREKWENCJA_DONE') {
+    (async () => {
+      await chrome.storage.session.remove('pendingVulcanFrekwencja');
+      await appTabsBroadcast({ type: 'VULCAN_FREKWENCJA_RESULT', result: message.result });
       sendResponse({ ok: true });
     })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
     return true;
@@ -296,7 +353,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
 chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
   if (info.status !== 'complete' || !tab.url?.startsWith('https://dziennik-dziennik.vulcan.net.pl/')) return;
-  const { pendingVulcanTransfer, pendingVulcanUwaga } = await chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga']);
+  const { pendingVulcanTransfer, pendingVulcanUwaga, pendingVulcanFrekwencja } = await chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga', 'pendingVulcanFrekwencja']);
   if (pendingVulcanTransfer) await deliver(tabId, pendingVulcanTransfer);
   if (pendingVulcanUwaga) await deliverUwaga(tabId, pendingVulcanUwaga);
+  if (pendingVulcanFrekwencja) await deliverFrekwencja(tabId, pendingVulcanFrekwencja);
 });

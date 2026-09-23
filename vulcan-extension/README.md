@@ -39,3 +39,22 @@ VULCAN zmienia czasem strukturę strony. Jeżeli pomocnik nie rozpozna kontrolki
 3. Sprawdź formularz i kliknij Zapisz w VULCANIE. Pomocnik zauważy zniknięcie
    okna i odhaczy uwagę w apce jako wpisaną. Gdyby nie zauważył, kliknij w panelu
    „Zapisałem w VULCANIE”.
+
+## Frekwencja z telefonu (wersja 0.9)
+
+1. Na telefonie: Sala -> **Obecność**. Lista jest po numerach z dziennika,
+   tap w ucznia przestawia: obecny -> nieobecny -> spóźniony.
+2. **Zapisz w VULCANIE**. Komputer z otwartą apką i kartą VULCANA podejmuje
+   zlecenie (do 15 s) i w tle, bez wyciągania karty na wierzch: otwiera lekcję
+   w drzewie, tworzy ją, jeśli jej nie ma (temat z telefonu), ustawia
+   frekwencję, sprawdza całą kolumnę i klika Zapisz. Status wraca na telefon.
+3. Spóźniony przyszedł? Tap w niego i **Wyślij poprawkę do VULCANA**.
+
+W chmurze są tylko id uczniów i statusy - nazwiska dokleja komputer lokalnie.
+Przy każdym zapisie apka porównuje listę klasy z VULCANEM: poprawia numery
+z dziennika i w statusie pisze, kogo (po numerze) brakuje po którejś stronie.
+Uczniowie wyłączeni w apce (np. nauczanie indywidualne) zostają w VULCANIE
+nietknięci.
+
+Po aktualizacji dodatku: `chrome://extensions` -> odśwież dodatek, potem
+odśwież kartę VULCANA i kartę apki.

@@ -11,7 +11,18 @@ let uwaga = null;
 let activeUwagaEventId = null;
 const uwagaQueue = [];
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// Karta VULCANA pracuje zwykle W TLE (frekwencja z telefonu w trakcie
+// prezentacji), a Chrome dlawi timery ukrytych kart - lancuch setTimeoutow
+// potrafi dostac jeden tik na minute. Czekanie odmierza wiec service worker
+// dodatku (bez dlawienia), a zwykly setTimeout zostaje jako zapas.
+const sleep = (ms) => new Promise((resolve) => {
+  let done = false;
+  const finish = () => { if (!done) { done = true; resolve(); } };
+  try {
+    chrome.runtime.sendMessage({ type: 'SLEEP', ms }, () => { void chrome.runtime.lastError; finish(); });
+  } catch { /* kontekst dodatku uniewazniony po przeladowaniu */ }
+  setTimeout(finish, ms + 1500);
+});
 const normalized = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('pl');
 const visible = (element) => Boolean(element && element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden');
 
@@ -238,7 +249,11 @@ function render(message, error = false) {
   const buttons = root.querySelector('[data-slot="buttons"]');
   const absent = transfer?.attendance?.filter((row) => row.status === 'absent').length ?? 0;
   const late = transfer?.attendance?.filter((row) => row.status === 'late').length ?? 0;
-  const summary = uwaga
+  const absentCount = frek?.students?.filter((row) => row.legend === 'nieobecność').length ?? 0;
+  const lateCount = frek?.students?.filter((row) => row.legend === 'spóźnienie').length ?? 0;
+  const summary = frek
+    ? `<div class="summary"><strong>Frekwencja z telefonu · ${frek.period}. lekcja · ${escapeHtml(frek.vulcanClassName)}</strong><br>Nieobecni: ${absentCount}, spóźnieni: ${lateCount}${frek.topic ? `<br>Temat: ${escapeHtml(frek.topic)}` : ''}</div>`
+    : uwaga
     ? `<div class="summary"><strong>Uwaga · ${escapeHtml(uwaga.student.lastName)} ${escapeHtml(uwaga.student.firstName)} (${escapeHtml(uwaga.vulcanClassName)})</strong><br>${escapeHtml(uwaga.category)}<br>${escapeHtml(uwaga.content)}</div>`
     : transfer
       ? `<div class="summary"><strong>${transfer.period}. lekcja · ${transfer.vulcanClassName}</strong><br>${transfer.topic}<br>Nieobecni: ${absent}, spóźnieni: ${late}</div>`
@@ -726,12 +741,13 @@ async function reportUwagaSaved() {
   activeUwagaEventId = null;
   const next = uwagaQueue.shift();
   if (next) setTimeout(() => beginUwaga(next, 'Wpisuję kolejną uwagę z telefonu…'), 900);
+  else if (frekQueue.length > 0) setTimeout(() => beginFrekwencja(frekQueue.shift()), 900);
 }
 
 function beginUwaga(payload, message = 'Uwaga z apki - wpisuję do dziennika…') {
   if (!payload?.eventId) return;
   if (payload.eventId === activeUwagaEventId || uwagaQueue.some((item) => item.eventId === payload.eventId)) return;
-  if (activeUwagaEventId) {
+  if (activeUwagaEventId || activeFrekJobId) {
     uwagaQueue.push(payload);
     return;
   }
@@ -742,7 +758,361 @@ function beginUwaga(payload, message = 'Uwaga z apki - wpisuję do dziennika…'
   void fillUwaga();
 }
 
+// --- frekwencja z telefonu: pelny automat az po Zapisz --------------------
+//
+// Paczka (src/lib/vulcanFrekwencja.ts) przychodzi z komputera, ktory odebral
+// zlecenie z telefonu. Kroki: wstazka "Lekcja" -> dzien i godzina w drzewie
+// -> (gdy lekcji nie ma) "Utwórz lekcję" z tematem z telefonu -> zakladka
+// "Frekwencja" -> "Zmień frekwencję" -> symbol z legendy + klik w komorke
+// ucznia -> sprawdzenie calej kolumny -> Zapisz. Cokolwiek sie nie zgadza,
+// bot staje PRZED zapisem i zglasza, na ktorym kroku.
+//
+// Siatka frekwencji ma kolumny ucznia (Nr, Uczeń) i kolumny godzin w dwoch
+// osobnych czesciach, wiec komorke znajdujemy geometrycznie: wysokosc
+// wiersza z nazwiskiem x srodek naglowka godziny.
+
+let frek = null;
+let activeFrekJobId = null;
+const frekQueue = [];
+
+function frekStudentLabel(student) {
+  return `nr ${student.number}`;
+}
+
+function startsWithName(text, student) {
+  const row = normalized(text);
+  const wanted = normalized(`${student.lastName} ${student.firstName}`);
+  return row === wanted || row.startsWith(`${wanted} `) || row.startsWith(`${wanted}…`);
+}
+
+function exactVisible(root, text, selector = 'td, span, div, a, label, button') {
+  const wanted = normalized(text);
+  return [...root.querySelectorAll(selector)]
+    .filter((element) => visible(element) && !element.closest(`#${BOT_ID}`) && normalized(textOf(element)) === wanted)
+    .sort((a, b) => a.getBoundingClientRect().width * a.getBoundingClientRect().height - b.getBoundingClientRect().width * b.getBoundingClientRect().height);
+}
+
+async function openLekcjaView() {
+  let ribbon = exactVisible(document, 'Lekcja', 'a, span, div, button')
+    .filter((element) => element.getBoundingClientRect().top < 260)[0];
+  if (!ribbon) {
+    const dziennikTab = exactVisible(document, 'Dziennik', 'a, span, div, button')
+      .filter((element) => element.getBoundingClientRect().top < 160)[0];
+    if (dziennikTab) {
+      clickElement(dziennikTab);
+      await sleep(600);
+    }
+    ribbon = exactVisible(document, 'Lekcja', 'a, span, div, button').filter((element) => element.getBoundingClientRect().top < 260)[0];
+  }
+  if (!ribbon) throw new Error('Nie znalazłem przycisku „Lekcja” na wstążce VULCANA.');
+  clickElement(ribbon);
+  await sleep(900);
+}
+
+function findLessonNode(period, className) {
+  const pattern = new RegExp(`^${period}\\.\\s*${className.replace(/\s+/g, '\\s*')}(\\s|$)`, 'i');
+  const nodes = [...document.querySelectorAll('.x-tree-node-text')].filter(visible);
+  const pool = nodes.length > 0 ? nodes : candidates('span, div, td, a');
+  return pool
+    .filter((element) => pattern.test(normalized(textOf(element))))
+    .sort((a, b) => a.getBoundingClientRect().width * a.getBoundingClientRect().height - b.getBoundingClientRect().width * b.getBoundingClientRect().height)[0] || null;
+}
+
+async function openFrekLesson() {
+  render('Otwieram lekcję w drzewie…');
+  const day = new Date(`${frek.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  let node = findLessonNode(frek.period, frek.vulcanClassName);
+  if (!node) {
+    const dayElement = await waitFor(() => findText(day), 6000);
+    if (!dayElement) throw new Error(`Nie ma dnia „${day}” w drzewie lekcji (inny tydzień?).`);
+    dayElement.setAttribute('data-apka-bot', 'day');
+    await extRun('expand-day', '', { day });
+    dayElement.removeAttribute('data-apka-bot');
+    node = await waitFor(() => findLessonNode(frek.period, frek.vulcanClassName), 2500);
+    if (!node) {
+      dayElement.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+      node = await waitFor(() => findLessonNode(frek.period, frek.vulcanClassName), 3000);
+    }
+  }
+  if (!node) throw new Error(`Nie znalazłem ${frek.period}. lekcji klasy ${frek.vulcanClassName} w drzewie.`);
+  clickElement(node);
+  await sleep(1200);
+  const opis = exactVisible(document, 'Opis lekcji')[0];
+  if (opis) {
+    clickElement(opis);
+    await sleep(700);
+  }
+  const state = await waitFor(() => (findText('Utwórz lekcję') ? 'new' : findText('Cechy ogólne lekcji') ? 'exists' : null), 8000);
+  if (!state) throw new Error('Po kliknięciu lekcji nie pojawił się jej opis.');
+  return state;
+}
+
+async function createFrekLesson() {
+  if (!frek.topic) {
+    throw new Error('Tej lekcji nie ma jeszcze w VULCANIE, a do utworzenia potrzebny jest temat - wpisz go na telefonie i wyślij jeszcze raz.');
+  }
+  render('Tworzę lekcję z tematem z telefonu…');
+  clickElement(await waitForText('Utwórz lekcję'));
+  await waitForText('Dodawanie lekcji');
+  await sleep(500);
+  clickElement(exactVisible(document, 'Dalej')[0] || (await waitForText('Dalej')));
+  const title = await waitForText('Dodawanie tematu lekcji', 8000);
+  await sleep(600);
+  const win = title.closest('.x-window') || document.body;
+  const topicField = fieldByLabel('Temat:', win);
+  if (!topicField) throw new Error('Nie znalazłem pola „Temat” w oknie tworzenia lekcji.');
+  setField(topicField, frek.topic);
+  topicField.setAttribute('data-apka-bot', 'field');
+  await extRun('set-field', '', { value: frek.topic });
+  topicField.removeAttribute('data-apka-bot');
+  await sleep(300);
+  if (normalized(topicField.value) !== normalized(frek.topic)) throw new Error('Temat nie wpisał się w pole „Temat”.');
+  const zapisz = [...win.querySelectorAll('a[uitestid="Zapisz"]')].find(visible) || findTextIn(win, 'Zapisz', true);
+  if (!zapisz) throw new Error('Nie znalazłem „Zapisz” w oknie tematu.');
+  const closed = () => !document.contains(win) || !visible(win) || !findText('Dodawanie tematu lekcji');
+  clickElement(zapisz);
+  let ok = await waitFor(closed, 6000);
+  if (!ok) {
+    zapisz.setAttribute('data-apka-bot', 'button');
+    await extRun('button');
+    zapisz.removeAttribute('data-apka-bot');
+    ok = await waitFor(closed, 6000);
+  }
+  if (!ok) throw new Error('Okno tematu nie zamknęło się po „Zapisz” - sprawdź komunikat VULCANA.');
+  if (!(await waitFor(() => findText('Cechy ogólne lekcji'), 8000))) throw new Error('Lekcja nie pokazała się po utworzeniu.');
+}
+
+async function openFrekEditor() {
+  render('Otwieram frekwencję…');
+  const tab = await waitFor(() => exactVisible(document, 'Frekwencja')[0], 6000);
+  if (!tab) throw new Error('Nie znalazłem zakładki „Frekwencja”.');
+  clickElement(tab);
+  const change = await waitFor(() => exactVisible(document, 'Zmień frekwencję')[0] || findText('Zmień frekwencję'), 8000);
+  if (!change) throw new Error('Nie znalazłem przycisku „Zmień frekwencję”.');
+  await sleep(500);
+  clickElement(change);
+  const legend = await waitFor(() => exactVisible(document, 'nieobecność', 'td, div, span')[0], 8000);
+  if (!legend) throw new Error('Nie otworzyło się okno zmiany frekwencji (brak legendy symboli).');
+  await sleep(700);
+  return legend.closest('.x-window') || document.body;
+}
+
+function centerOf(element) {
+  const rect = element.getBoundingClientRect();
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, rect };
+}
+
+// Wiersze uczniow w oknie frekwencji: komorki pod naglowkiem "Uczeń".
+function frekRows(root) {
+  const header = exactVisible(root, 'Uczeń')[0];
+  if (!header) throw new Error('Nie znalazłem kolumny „Uczeń” w oknie frekwencji.');
+  const h = centerOf(header);
+  const nrHeader = exactVisible(root, 'Nr')[0];
+  const nrX = nrHeader ? centerOf(nrHeader).x : null;
+  const cells = [...root.querySelectorAll('td')].filter((cell) => {
+    if (!visible(cell)) return false;
+    const rect = cell.getBoundingClientRect();
+    return rect.left <= h.x && rect.right >= h.x && rect.top > h.rect.bottom - 2 && /\p{Lu}/u.test(cell.textContent || '');
+  });
+  const tds = [...root.querySelectorAll('td')].filter(visible);
+  return cells
+    .filter((cell) => !/^(obecnych|nieobecnych)$/.test(normalized(cell.textContent)))
+    .map((cell) => {
+      const c = centerOf(cell);
+      const numberCell = nrX === null ? null : tds.find((td) => {
+        const r = td.getBoundingClientRect();
+        return r.left <= nrX && r.right >= nrX && Math.abs(r.top + r.height / 2 - c.y) < 5;
+      });
+      const number = numberCell ? Number(normalized(numberCell.textContent)) : NaN;
+      return { cell, name: (cell.textContent || '').replace(/\s+/g, ' ').trim(), number: Number.isFinite(number) ? number : undefined };
+    });
+}
+
+// Naglowek kolumny godziny: dokladny numer, NAD wierszami uczniow (w wierszach
+// tez sa liczby - kolumna Nr) i najnizej z takich (wyzej jest data dnia).
+function periodHeader(root, rows) {
+  const firstTop = Math.min(...rows.map((row) => row.cell.getBoundingClientRect().top));
+  const uczen = exactVisible(root, 'Uczeń')[0];
+  const minX = uczen ? uczen.getBoundingClientRect().right - 2 : 0;
+  return exactVisible(root, String(frek.period), 'td, div, span')
+    .filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.bottom <= firstTop + 2 && rect.left >= minX;
+    })
+    .sort((a, b) => b.getBoundingClientRect().top - a.getBoundingClientRect().top)[0] || null;
+}
+
+// Komorka pod punktem liczona z prostokatow, nie elementsFromPoint - ten
+// widzi tylko to, co akurat jest w oknie przegladarki.
+function cellAt(root, x, y) {
+  const hits = [...root.querySelectorAll('td')].filter((td) => {
+    if (!visible(td) || td.closest(`#${BOT_ID}`)) return false;
+    const rect = td.getBoundingClientRect();
+    return rect.left <= x && rect.right >= x && rect.top <= y && rect.bottom >= y;
+  });
+  // Zagniezdzone tabele ExtJS: najmniejsza komorka to ta wlasciwa.
+  return hits.sort((a, b) => a.getBoundingClientRect().width * a.getBoundingClientRect().height - b.getBoundingClientRect().width * b.getBoundingClientRect().height)[0] || null;
+}
+
+function markCell(root, student, header) {
+  const row = frekRows(root).find((candidate) => startsWithName(candidate.name, student));
+  if (!row) return null;
+  row.cell.scrollIntoView({ block: 'nearest' });
+  return cellAt(root, centerOf(header).x, centerOf(row.cell).y);
+}
+
+function legendRow(root, name) {
+  const cell = exactVisible(root, name, 'td, div')[0];
+  if (!cell) return null;
+  const tr = cell.closest('tr');
+  const symbol = tr ? normalized(tr.cells[0]?.textContent || '') : '';
+  return { cell, symbol };
+}
+
+const symbolMatches = (text, symbol) => {
+  const value = normalized(text);
+  if (!symbol) return value !== '' && value !== '?';
+  const dash = (v) => v.replace(/[—–−-]/g, '-');
+  const dot = (v) => v.replace(/[•●∙·.]/g, '.');
+  return value === symbol || dash(dot(value)) === dash(dot(symbol));
+};
+
+async function markFrekAttendance(root) {
+  const rows = frekRows(root);
+  if (rows.length === 0) throw new Error('Nie widzę uczniów w oknie frekwencji.');
+  const roster = rows.map((row) => ({ number: row.number, name: row.name })).filter((row) => row.number !== undefined);
+  const header = periodHeader(root, rows);
+  if (!header) throw new Error(`Nie znalazłem kolumny ${frek.period}. lekcji w oknie frekwencji.`);
+
+  const missing = frek.students.filter((student) => !rows.some((row) => startsWithName(row.name, student)));
+  const order = ['obecność', 'nieobecność', 'spóźnienie'];
+  const symbols = {};
+  let useRealClicks = false;
+  for (const legendName of order) {
+    const group = frek.students.filter((student) => student.legend === legendName && !missing.includes(student));
+    if (group.length === 0) continue;
+    const legend = legendRow(root, legendName);
+    if (!legend) throw new Error(`Nie ma symbolu „${legendName}” w legendzie.`);
+    symbols[legendName] = legend.symbol;
+    render(`Zaznaczam: ${legendName} (${group.length})…`);
+    const todo = group.filter((student) => {
+      const cell = markCell(root, student, header);
+      return !cell || !symbolMatches(cell.textContent, legend.symbol);
+    });
+    if (todo.length === 0) continue;
+    if (!useRealClicks) {
+      clickElement(legend.cell);
+      await sleep(250);
+      for (const student of todo) {
+        const cell = markCell(root, student, header);
+        if (!cell) continue;
+        clickElement(cell);
+        await sleep(120);
+        if (!symbolMatches(markCell(root, student, header)?.textContent, legend.symbol)) {
+          useRealClicks = true;
+          break;
+        }
+      }
+    }
+    if (useRealClicks) {
+      const still = group.filter((student) => !symbolMatches(markCell(root, student, header)?.textContent, legend.symbol));
+      if (still.length > 0) {
+        render(`Zaznaczam prawdziwymi kliknięciami: ${legendName} (${still.length})…`);
+        const cells = still.map((student) => markCell(root, student, header)).filter(Boolean);
+        const result = await realClick([legend.cell, ...cells]);
+        if (result !== 'ok') throw new Error(`Kliknięcia przez debugger nie przeszły: ${result}.`);
+        await sleep(400);
+      }
+    }
+  }
+
+  const wrong = frek.students.filter((student) => {
+    if (missing.includes(student)) return false;
+    const cell = markCell(root, student, header);
+    return !cell || !symbolMatches(cell.textContent, symbols[student.legend]);
+  });
+  if (wrong.length > 0) {
+    throw new Error(`Kolumna się nie zgadza (${wrong.map(frekStudentLabel).join(', ')}) - nie zapisuję. Sprawdź okno frekwencji.`);
+  }
+  return { roster, missing };
+}
+
+async function saveFrekEditor(root) {
+  render('Zapisuję frekwencję…');
+  const zapisz = [...root.querySelectorAll('a[uitestid="Zapisz"]')].find(visible) || findTextIn(root, 'Zapisz', true);
+  if (!zapisz) throw new Error('Nie znalazłem „Zapisz” w oknie frekwencji.');
+  const closed = () => !exactVisible(document, 'nieobecność', 'td, div, span')[0];
+  clickElement(zapisz);
+  let ok = await waitFor(closed, 6000);
+  if (!ok) {
+    zapisz.setAttribute('data-apka-bot', 'button');
+    await extRun('button');
+    zapisz.removeAttribute('data-apka-bot');
+    ok = await waitFor(closed, 6000);
+  }
+  if (!ok) {
+    await realClick([zapisz]);
+    ok = await waitFor(closed, 8000);
+  }
+  if (!ok) throw new Error('Kliknąłem Zapisz, ale okno frekwencji zostało otwarte - sprawdź komunikat VULCANA.');
+}
+
+async function finishFrek(result) {
+  try {
+    await chrome.runtime.sendMessage({ type: 'VULCAN_FREKWENCJA_DONE', result: { jobId: frek.jobId, ...result } });
+  } catch { /* apka zamknieta - zlecenie samo przejdzie w blad po czasie */ }
+}
+
+async function runFrekwencja() {
+  let roster = [];
+  try {
+    await openLekcjaView();
+    const state = await openFrekLesson();
+    if (state === 'new') await createFrekLesson();
+    const root = await openFrekEditor();
+    const marked = await markFrekAttendance(root);
+    roster = marked.roster;
+    await saveFrekEditor(root);
+    const note = marked.missing.length > 0 ? ` Nie było w VULCANIE: ${marked.missing.map(frekStudentLabel).join(', ')}.` : '';
+    phase = 'done';
+    render(`Gotowe. Frekwencja zapisana.${note}`);
+    await finishFrek({ ok: true, message: note.trim(), roster });
+  } catch (error) {
+    phase = 'done';
+    const message = String(error?.message || error);
+    render(message, true);
+    await finishFrek({ ok: false, message, roster });
+  } finally {
+    frek = null;
+    activeFrekJobId = null;
+    const next = frekQueue.shift();
+    const nextUwaga = next ? null : uwagaQueue.shift();
+    if (next) setTimeout(() => beginFrekwencja(next), 900);
+    else if (nextUwaga) setTimeout(() => beginUwaga(nextUwaga, 'Wpisuję uwagę z telefonu…'), 900);
+  }
+}
+
+function beginFrekwencja(payload) {
+  if (!payload?.jobId || payload.kind !== 'frekwencja') return;
+  if (payload.jobId === activeFrekJobId || frekQueue.some((item) => item.jobId === payload.jobId)) return;
+  // Uwaga, ktora padla na bledzie, nie zwalnia activeUwagaEventId - czekamy
+  // tylko na uwage, ktora naprawde jest w trakcie wypelniania.
+  if (activeFrekJobId || (activeUwagaEventId && phase === 'uwaga-filling')) {
+    frekQueue.push(payload);
+    return;
+  }
+  activeFrekJobId = payload.jobId;
+  frek = payload;
+  phase = 'frek';
+  render('Frekwencja z telefonu - wpisuję do dziennika…');
+  void runFrekwencja();
+}
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'VULCAN_FREKWENCJA') {
+    beginFrekwencja(message.payload);
+    return;
+  }
   if (message?.type === 'VULCAN_UWAGA') {
     // Zadnego potwierdzania w paneliku (decyzja Bartka): danie uwagi w apce
     // JEST zatwierdzeniem, bot od razu wypelnia i zapisuje.
@@ -767,7 +1137,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   render('Paczka jest gotowa. Najpierw otworzę wskazaną lekcję i uzupełnię opis bez zapisywania.');
 });
 
-chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga']).then(({ pendingVulcanTransfer, pendingVulcanUwaga }) => {
+chrome.storage.session.get(['pendingVulcanTransfer', 'pendingVulcanUwaga', 'pendingVulcanFrekwencja']).then(({ pendingVulcanTransfer, pendingVulcanUwaga, pendingVulcanFrekwencja }) => {
+  if (pendingVulcanFrekwencja) beginFrekwencja(pendingVulcanFrekwencja);
   if (pendingVulcanUwaga) {
     beginUwaga(pendingVulcanUwaga, 'Uwaga z apki czekała na załadowanie VULCANA - wpisuję do dziennika…');
     return;

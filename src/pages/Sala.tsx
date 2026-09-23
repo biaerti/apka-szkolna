@@ -22,7 +22,8 @@ import type { RecapEvent, Student } from '../data/types';
 import { useTodayEventsPull } from '../data/remote/useTodayEventsPull';
 import { buildDeskGrid, seatLabelByStudent, unseatedStudents, type SeatPosition } from '../lib/seating';
 import { warningsByStudent } from '../lib/ostrzezenia';
-import { currentEntry, currentOrNextEntry } from '../lib/timetable';
+import { currentEntry, currentOrNextEntry, entriesForDay, weekdayOf } from '../lib/timetable';
+import { effectiveTimetable } from '../lib/vulcanPlan';
 import { absentOnDay } from '../lib/attendance';
 import { toDateKey } from '../lib/dates';
 import { resultSymbol } from '../lib/resultSymbol';
@@ -31,8 +32,9 @@ import { StudentActionSheet, type SalaGrade } from '../components/sala/StudentAc
 import { useSalaSelection, type SalaMove } from '../components/sala/useSalaSelection';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { EmptyState } from '../components/ui/EmptyState';
+import { FrekwencjaView, type LessonOption } from '../components/sala/FrekwencjaView';
 
-type View = 'lawki' | 'lista';
+type View = 'lawki' | 'lista' | 'obecnosc';
 
 const UNDO_MS = 5000;
 
@@ -44,7 +46,8 @@ export function Sala() {
   const seats = useStore((s) => s.seats);
   const recapEvents = useStore((s) => s.recapEvents);
   const absences = useStore((s) => s.absences);
-  const timetable = useStore((s) => s.timetable);
+  const weeklyTimetable = useStore((s) => s.timetable);
+  const vulcanLessons = useStore((s) => s.vulcanLessons);
   const periods = useStore((s) => s.periods);
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
@@ -54,6 +57,10 @@ export function Sala() {
 
   useTodayEventsPull(5000);
 
+  // Plan dnia z VULCANA (zastepstwa!) ma pierwszenstwo przed tygodniowym.
+  // Liczony przy renderze - odswiezenie co 5 s i tak przerysowuje widok.
+  const timetable = effectiveTimetable(weeklyTimetable, vulcanLessons, new Date());
+
   // Bez klasy w adresie: trwajaca (albo najblizsza) lekcja z planu, a poza
   // planem - pierwsza klasa. Telefon otwiera /sala z ikony na ekranie glownym.
   useEffect(() => {
@@ -61,10 +68,22 @@ export function Sala() {
     const entry = currentOrNextEntry(timetable, periods, new Date());
     const fallback = entry?.classId ?? [...classes].sort((a, b) => a.order - b.order)[0]?.id;
     if (fallback) navigate(`/sala/${fallback}`, { replace: true });
-  }, [classId, classes, timetable, periods, navigate]);
+  }, [classId, classes, weeklyTimetable, vulcanLessons, periods, navigate]);
 
   const schoolClass = classes.find((c) => c.id === classId);
   const [view, setView] = useState<View>('lawki');
+  const today = toDateKey(new Date());
+  // Dzisiejsze lekcje tej klasy do sprawdzania obecnosci; domyslnie trwajaca
+  // albo najblizsza (na przerwie przed lekcja sprawdza sie juz te nastepna).
+  const lessonOptions: LessonOption[] = useMemo(
+    () =>
+      entriesForDay(timetable, weekdayOf(new Date()))
+        .filter((e) => e.classId === classId)
+        .map((e) => ({ period: e.period, label: `${e.period}. lekcja${e.note ? ` (${e.note})` : ''}` })),
+    [weeklyTimetable, vulcanLessons, classId, today],
+  );
+  const nowEntry = currentOrNextEntry(timetable, periods, new Date());
+  const defaultPeriod = nowEntry && nowEntry.classId === classId ? nowEntry.period : undefined;
   const [editing, setEditing] = useState(false);
   const [picked, setPicked] = useState<Student | null>(null);
   const [flashId, setFlashId] = useState<string | null>(null);
@@ -86,7 +105,7 @@ export function Sala() {
     const lesson = currentEntry(timetable, periods, new Date());
     const period = lesson?.classId === classId ? lesson.period : undefined;
     return absentOnDay(absences, classId, toDateKey(new Date()), period);
-  }, [absences, classId, timetable, periods]);
+  }, [absences, classId, weeklyTimetable, vulcanLessons, periods]);
 
   const recentByStudent = useMemo(() => {
     const out = new Map<string, RecapEvent[]>();
@@ -201,16 +220,16 @@ export function Sala() {
             ))}
         </select>
         <div className="ml-auto flex rounded-md border border-gray-300 bg-white p-0.5 text-sm" role="tablist" aria-label="Widok">
-          {(['lawki', 'lista'] as View[]).map((v) => (
+          {(['lawki', 'lista', 'obecnosc'] as View[]).map((v) => (
             <button
               key={v}
               type="button"
               role="tab"
               aria-selected={view === v}
               onClick={() => setView(v)}
-              className={clsx('rounded px-3 py-1 font-medium', view === v ? 'bg-accent-600 text-white' : 'text-gray-600')}
+              className={clsx('rounded px-2 py-1 font-medium', view === v ? 'bg-accent-600 text-white' : 'text-gray-600')}
             >
-              {v === 'lawki' ? 'Ławki' : 'Lista'}
+              {v === 'lawki' ? 'Ławki' : v === 'lista' ? 'Lista' : 'Obecność'}
             </button>
           ))}
         </div>
@@ -222,7 +241,7 @@ export function Sala() {
           }}
           aria-pressed={editing}
           className={clsx(
-            'rounded-md border px-3 py-1.5 text-sm font-medium',
+            'rounded-md border px-2 py-1.5 text-sm font-medium',
             editing ? 'border-accent-600 bg-accent-600 text-white' : 'border-gray-300 bg-white text-gray-700',
           )}
         >
@@ -238,7 +257,9 @@ export function Sala() {
         </p>
       )}
 
-      {view === 'lawki' || editing ? (
+      {view === 'obecnosc' && !editing ? (
+        <FrekwencjaView classId={classId} students={[...classmates].sort((a, b) => a.number - b.number)} date={today} lessons={lessonOptions} defaultPeriod={defaultPeriod} />
+      ) : view === 'lawki' || editing ? (
         <DeskGrid
           grid={grid}
           classmates={classmates}

@@ -14,6 +14,9 @@ chrome.runtime.onMessage.addListener((message) => {
   if (message?.type === 'VULCAN_ATTENDANCE_CHANGED') {
     reply('VULCAN_ATTENDANCE_CHANGED', { changedAt: message.changedAt });
   }
+  if (message?.type === 'VULCAN_FREKWENCJA_RESULT' && message.result?.jobId) {
+    reply('VULCAN_FREKWENCJA_RESULT', message.result);
+  }
 });
 
 window.addEventListener('message', (event) => {
@@ -50,6 +53,23 @@ window.addEventListener('message', (event) => {
         return;
       }
       reply('VULCAN_ATTENDANCE_RESULT', { rows: response.rows });
+    });
+    return;
+  }
+  if (event.data.type === 'VULCAN_FREKWENCJA') {
+    const job = event.data.payload;
+    if (!job || job.version !== 1 || job.kind !== 'frekwencja' || !job.jobId || !Array.isArray(job.students)) {
+      reply('VULCAN_FREKWENCJA_RESULT', { jobId: job?.jobId, ok: false, message: 'Nieprawidłowa paczka frekwencji.' });
+      return;
+    }
+    chrome.runtime.sendMessage({ type: 'OPEN_VULCAN_FREKWENCJA', payload: job }, (response) => {
+      if (chrome.runtime.lastError || !response?.ok) {
+        reply('VULCAN_FREKWENCJA_RESULT', {
+          jobId: job.jobId,
+          ok: false,
+          message: chrome.runtime.lastError?.message || response?.error || 'Brak odpowiedzi dodatku.',
+        });
+      }
     });
     return;
   }

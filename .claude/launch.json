@@ -45,6 +45,18 @@
         "przeglad"
       ],
       "port": 5176
+    },
+    {
+      "name": "apka-szkolna-przeglad-3",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "--port",
+        "5177",
+        "--mode",
+        "przeglad"
+      ],
+      "port": 5177
     }
   ]
 }
