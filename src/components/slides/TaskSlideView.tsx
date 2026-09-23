@@ -22,7 +22,12 @@ const TITLE_FIT = { lineHeight: 1.15, charRatio: 0.55 };
 /** Czas stopera, gdy slajd go nie ma, a nauczyciel wlaczy go na lekcji. */
 const DEFAULT_TIMER_SEC = 180;
 
-export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' }> }) {
+/**
+ * `narrow` - tryb pisania (klawisz P w prezentacji): zadanie zajmuje lewa
+ * kolumne kartki, bez ilustracji i plakietki, a prawa czesc jest pusta do
+ * pisania po niej (patrz WritePaneStage w SlideView).
+ */
+export function TaskSlideView({ slide, narrow = false }: { slide: Extract<Slide, { kind: 'task' }>; narrow?: boolean }) {
   const scale = useSlideFontScale();
   const hasSource = slide.page || slide.exerciseNo;
   // Czas stopera zyje tylko w tym pokazie (SlideView keyuje slajd po id, wiec
@@ -34,7 +39,8 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
   const studentAction = resolvedStudentAction(slide.studentAction, slide.zeszyt, 'write-answer');
 
   // Z ilustracja tekst dostaje wezsza kolumne - reszta kartki nalezy do obrazka.
-  const width = slide.art ? 620 : 1000;
+  const art = narrow ? undefined : slide.art;
+  const width = narrow ? 440 : art ? 620 : 1000;
   // Wysokosc do dyspozycji pod naglowkiem z kodem zadania: stoper zabiera pasek
   // przy dolnej krawedzi (patrz padding kontenera nizej).
   const available = hasTimer ? 430 : 480;
@@ -46,27 +52,27 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
   const bSize = fitFontSize(slide.body, { width, height: available - used, min: 26, max: 66, scale });
 
   return (
-    <div className={clsx('relative flex h-full flex-col px-16 pt-8', hasTimer ? 'pb-28' : 'pb-16')}>
+    <div className={clsx('relative flex h-full flex-col pt-8', narrow ? 'px-10' : 'px-16', hasTimer ? 'pb-28' : 'pb-16')}>
       <div className="flex items-start justify-between">
         <div className="rounded-2xl border-4 border-accent-400 px-8 py-3">
           <span className="text-[96px] font-bold leading-none text-accent-300">{slide.code}</span>
         </div>
         {/* mt-5: zegar prezentacji (PresentClock, fixed w rogu ekranu) nachodzi na sam gorny skraj kartki. */}
         <div className="mt-5 flex items-center gap-4">
-          {hasSource && (
+          {hasSource && !narrow && (
             <div className="rounded-lg bg-black/30 px-5 py-2 text-3xl text-gray-200">
               {slide.page && <span>Podręcznik s. {slide.page}</span>}
               {slide.page && slide.exerciseNo && <span>, </span>}
               {slide.exerciseNo && <span>ćw. {slide.exerciseNo}</span>}
             </div>
           )}
-          {studentAction && <StudentActionBadge action={studentAction} text={slide.studentActionText} />}
+          {studentAction && !narrow && <StudentActionBadge action={studentAction} text={slide.studentActionText} />}
         </div>
       </div>
 
-      <div className={`flex flex-1 items-center justify-center gap-10 ${slide.art ? 'px-2' : 'px-8'}`}>
+      <div className={`flex flex-1 items-center justify-center gap-10 ${art || narrow ? 'px-2' : 'px-8'}`}>
         <div
-          className={`flex flex-col justify-center gap-5 ${slide.art ? 'flex-1 text-left' : 'flex-1 items-center text-center'}`}
+          className={`flex flex-col justify-center gap-5 ${art || narrow ? 'flex-1 text-left' : 'flex-1 items-center text-center'}`}
         >
           {slide.title && (
             <h2 className="font-bold leading-tight text-white" style={{ fontSize: tSize }}>
@@ -79,15 +85,15 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
             style={{ fontSize: bSize }}
           />
         </div>
-        {slide.art && (
+        {art && (
           <div className="flex items-center justify-center" style={{ width: 460 }}>
-            <SlideArtView art={slide.art} className="h-auto w-full" />
+            <SlideArtView art={art} className="h-auto w-full" />
           </div>
         )}
       </div>
 
       {/* Prawy dolny rog, na lewo od kodu lekcji (LessonCodeBadge w SlideView). */}
-      <div className="absolute bottom-5 right-28">
+      <div className={narrow ? 'absolute bottom-5 left-8' : 'absolute bottom-5 right-28'}>
         {hasTimer ? (
           /* key = dlugosc: zmiana -1/+1 min przestawia stoper od nowa */
           <StopwatchBar
@@ -119,7 +125,7 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
             event.stopPropagation();
             setShowExample(true);
           }}
-          className="absolute bottom-6 left-16 rounded-lg bg-white/10 px-4 py-2 text-lg font-semibold text-gray-200 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className={`absolute ${narrow ? 'right-6 top-12' : 'bottom-6 left-16'} rounded-lg bg-white/10 px-4 py-2 text-lg font-semibold text-gray-200 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white`}
         >
           Pokaż przykład odpowiedzi
         </button>
@@ -127,12 +133,12 @@ export function TaskSlideView({ slide }: { slide: Extract<Slide, { kind: 'task' 
 
       {showExample && slide.answerExample && (
         <div
-          className="absolute inset-10 z-20 flex items-center justify-center rounded-2xl bg-gray-900/95 p-12 shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
+          className={`absolute z-20 flex items-center justify-center rounded-2xl bg-gray-900/95 ${narrow ? 'inset-4 p-6' : 'inset-10 p-12'} shadow-[0_18px_60px_rgba(0,0,0,0.55)]`}
           onClick={(event) => event.stopPropagation()}
         >
           <div className="max-w-[980px] text-center">
             <p className="mb-7 text-3xl font-semibold uppercase tracking-wider text-accent-300">Przykład odpowiedzi</p>
-            <RichText text={slide.answerExample} className="space-y-[0.6em] text-5xl leading-snug text-white" />
+            <RichText text={slide.answerExample} className={`space-y-[0.6em] leading-snug text-white ${narrow ? 'text-3xl' : 'text-5xl'}`} />
             <button
               type="button"
               onClick={() => setShowExample(false)}

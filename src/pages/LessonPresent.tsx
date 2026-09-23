@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
-import { SlideView } from '../components/slides/SlideView';
+import { SlideView, supportsWritePane } from '../components/slides/SlideView';
 import { AnnotationLayer } from '../components/slides/AnnotationLayer';
 import { AnnotationToolbar } from '../components/slides/AnnotationToolbar';
 import { PresentationBoard } from '../components/slides/PresentationBoard';
@@ -73,6 +73,9 @@ export function LessonPresent() {
 
   const [index, setIndex] = useState(0);
   const [boardOpen, setBoardOpen] = useState(false);
+  // Tryb pisania (P): zostaje wlaczony przy przechodzeniu miedzy slajdami,
+  // ale dziala tylko na slajdach zadan i tekstowych.
+  const [writePane, setWritePane] = useState(false);
   const [classPanelOpen, setClassPanelOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [globalTimerVisible, setGlobalTimerVisible] = useState(false);
@@ -110,7 +113,12 @@ export function LessonPresent() {
   const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : '';
   // Rysowanie po slajdzie - stan trzyma prezentacja, wiec kreski przezywaja
   // przejscie na kolejny slajd i powrot (patrz useSlideAnnotations).
-  const ann = useSlideAnnotations(boardOpen ? `board:${lesson?.id ?? 'lesson'}` : currentStep?.id);
+  const writePaneOn = writePane && !boardOpen && supportsWritePane(currentSlide);
+  // Pismo z pola obok tresci trzyma sie osobno od kresek po zwyklym slajdzie -
+  // po wyjsciu z trybu pisania nie lezy na ilustracji.
+  const ann = useSlideAnnotations(
+    boardOpen ? `board:${lesson?.id ?? 'lesson'}` : writePaneOn ? `${currentStep?.id}:pisanie` : currentStep?.id,
+  );
 
   usePresentKeys({
     index,
@@ -136,6 +144,13 @@ export function LessonPresent() {
     onDrawUndo: ann.undo,
     onToggleNoisePause: noise.togglePause,
     onToggleGlobalTimer: () => setGlobalTimerVisible((visible) => !visible),
+    onToggleWritePane: () => {
+      const next = !writePane;
+      setWritePane(next);
+      // Wejscie w tryb pisania od razu daje pisak - po to sie go wlacza.
+      if (next && ann.tool === 'off') ann.setTool('pen');
+      if (!next) ann.setTool('off');
+    },
   });
 
   function toggleFullscreen() {
@@ -230,6 +245,7 @@ export function LessonPresent() {
             textbookPage={presentation.textbookPage}
             onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
             overlay={<AnnotationLayer ann={ann} />}
+            writePane={writePaneOn}
           />
         ) : null}
       </div>

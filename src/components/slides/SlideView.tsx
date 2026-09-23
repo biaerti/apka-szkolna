@@ -35,6 +35,13 @@ export interface SlideViewProps {
    * kreski skaluja sie razem z trescia slajdu. Podglad w edytorze jej nie podaje.
    */
   overlay?: ReactNode;
+  /**
+   * Tryb pisania (klawisz P w prezentacji): tresc zadania albo slajdu
+   * tekstowego zweza sie do lewej kolumny, a prawe ~56% kartki jest puste -
+   * nauczyciel pisze i rysuje tam narzedziami adnotacji. Dziala dla slajdow
+   * `task` i `text`; pozostale rysuja sie normalnie (patrz supportsWritePane).
+   */
+  writePane?: boolean;
 }
 
 /** Kartka 1280x720 wyskalowana do kontenera, wysrodkowana. */
@@ -86,7 +93,26 @@ function LessonCodeBadge({ code, onLightBackground }: { code: string; onLightBac
   );
 }
 
-export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, textbookPage, overlay }: SlideViewProps) {
+/** Szerokosc lewej kolumny w trybie pisania - reszta kartki 1280 to pole do pisania. */
+const WRITE_PANE_TEXT_W = 560;
+
+export function supportsWritePane(slide: Slide | undefined): boolean {
+  return slide?.kind === 'task' || slide?.kind === 'text';
+}
+
+/** Puste pole do pisania - kropkowana podkladka jak w widoku "P" na kartkowkach. */
+function WritePad() {
+  return (
+    <div className="relative h-full flex-1 border-l border-gray-800">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{ backgroundImage: 'radial-gradient(circle, rgba(156,163,175,.3) 1.25px, transparent 1.25px)', backgroundSize: '28px 28px' }}
+      />
+    </div>
+  );
+}
+
+export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, textbookPage, overlay, writePane = false }: SlideViewProps) {
   // Kolo fortuny: wlasny uklad na caly ekran, bez kartki i bez znacznika w rogu
   // (ma wlasny gorny pasek z nazwa klasy i zestawu).
   if (slide.kind === 'recap') {
@@ -94,6 +120,21 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
       <div className="h-full w-full bg-gray-950 text-gray-100">
         <RecapSlideView slide={slide} classId={classId} onExit={onRecapExit} />
       </div>
+    );
+  }
+
+  if (writePane && (slide.kind === 'task' || slide.kind === 'text')) {
+    return (
+      <SlideStage>
+        <div className="absolute inset-0 flex">
+          <div className="relative h-full shrink-0" style={{ width: WRITE_PANE_TEXT_W }}>
+            {slide.kind === 'task' ? <TaskSlideView key={slide.id} slide={slide} narrow /> : <TextSlideView slide={slide} narrow />}
+          </div>
+          <WritePad />
+        </div>
+        {lessonCode && <LessonCodeBadge code={lessonCode} onLightBackground={false} />}
+        {overlay}
+      </SlideStage>
     );
   }
 

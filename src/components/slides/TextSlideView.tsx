@@ -20,7 +20,8 @@ function titleHeight(title: string, size: number, width: number): number {
   return estimateTextHeight(title, size, { width, height: 0, min: 0, max: 0, ...TITLE_FIT });
 }
 
-export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' }> }) {
+/** `narrow` - tryb pisania (klawisz P): sam tekst w lewej kolumnie, bez ilustracji. */
+export function TextSlideView({ slide, narrow = false }: { slide: Extract<Slide, { kind: 'text' }>; narrow?: boolean }) {
   const scale = useSlideFontScale();
   const studentAction = resolvedStudentAction(slide.studentAction, slide.zeszyt, 'copy');
 
@@ -52,6 +53,14 @@ export function TextSlideView({ slide }: { slide: Extract<Slide, { kind: 'text' 
       <StudentActionBadge action={studentAction} text={slide.studentActionText} />
     </div>
   ) : null;
+
+  if (narrow) {
+    return (
+      <div className="relative flex h-full flex-col justify-center gap-6 px-10 py-14">
+        {block(480, 600)}
+      </div>
+    );
+  }
 
   if (!slide.art) {
     return (
