@@ -381,7 +381,10 @@ export type Slide =
   // `caption` zostaje jako podpis pod zdjeciem dla prostszych slajdow.
   | { id: ID; kind: 'image'; url: string; caption?: string; title?: string; body?: string }
   // Filmik lekcyjny z rejestru src/data/filmiki.ts (mp4 w prywatnym buckecie).
-  | { id: ID; kind: 'video'; videoId: string; title?: string };
+  | { id: ID; kind: 'video'; videoId: string; title?: string }
+  // Czytanka z lektorem (src/data/czytanki.ts): tekst na slajdzie przewija sie
+  // i podswietla slowo po slowie w rytm nagrania - dzieci sledza w podreczniku.
+  | { id: ID; kind: 'czytanka'; czytankaId: string };
 
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki

@@ -11,8 +11,7 @@
 //    ostatnia kreske (przy wylaczonym rysowaniu - ostatnia ocene z kola);
 //    przy wlaczonym rysowaniu Esc najpierw chowa pasek (klikanie w slajd
 //    wraca do przewijania),
-// 6. M pauzuje ladowanie kartkowki decybelomierza (gdy mowi nauczyciel),
-// 7. P wlacza tryb pisania: tresc w lewej kolumnie, z prawej puste pole do
+// 6. P wlacza tryb pisania: tresc w lewej kolumnie, z prawej puste pole do
 //    pisania i rysowania (jak P na pokazie kartkowki).
 
 import { useEffect } from 'react';
@@ -47,8 +46,6 @@ export interface PresentKeysArgs {
   onToggleBoard: () => void;
   onDrawOff: () => void;
   onDrawUndo: () => void;
-  /** M = mute: pauza ladowania kartkowki na czas, gdy mowi nauczyciel. */
-  onToggleNoisePause: () => void;
   /** S pokazuje lub chowa stoper dostepny na kazdym slajdzie. */
   onToggleGlobalTimer: () => void;
   /** P - tryb pisania obok tresci slajdu. */
@@ -104,11 +101,6 @@ export function usePresentKeys(args: PresentKeysArgs) {
       if (!args.onRecap && (e.key === 'l' || e.key === 'L')) {
         e.preventDefault();
         args.onLineTool();
-        return;
-      }
-      if (e.key === 'm' || e.key === 'M') {
-        e.preventDefault();
-        args.onToggleNoisePause();
         return;
       }
       if (!args.onRecap && (e.key === 'p' || e.key === 'P')) {

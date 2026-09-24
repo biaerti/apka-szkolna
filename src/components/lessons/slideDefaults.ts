@@ -14,6 +14,7 @@ export const SLIDE_KIND_LABELS: Record<SlideKind, string> = {
   recap: 'Powtórka',
   image: 'Obraz',
   video: 'Film',
+  czytanka: 'Czytanka z lektorem',
   note: 'Notatka do zeszytu',
 };
 
@@ -41,6 +42,8 @@ export function slideSummary(slide: Slide): string {
       return slide.caption || slide.url || '(bez obrazu)';
     case 'video':
       return slide.title || (slide.videoId ? `Film: ${slide.videoId}` : '(bez filmu)');
+    case 'czytanka':
+      return slide.czytankaId ? `Czytanka: ${slide.czytankaId}` : '(bez czytanki)';
     default:
       return '';
   }
@@ -80,6 +83,8 @@ export function createSlide(kind: SlideKind, existingSlides: Slide[]): Slide {
       return { id, kind: 'image', url: '', caption: '' };
     case 'video':
       return { id, kind: 'video', videoId: '' };
+    case 'czytanka':
+      return { id, kind: 'czytanka', czytankaId: '' };
     default:
       throw new Error(`Nieznany typ slajdu: ${kind}`);
   }

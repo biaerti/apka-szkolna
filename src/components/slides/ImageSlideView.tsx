@@ -1,18 +1,42 @@
+import { useEffect, useState } from 'react';
 import type { Slide } from '../../data/types';
+import { CZYTANKI_URL_PREFIX, czytankiPlikUrl } from '../../data/czytanki';
 import { RichText } from './RichText';
 import { fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
 
 type ImageSlide = Extract<Slide, { kind: 'image' }>;
 
+/**
+ * "czytanki:plik.webp" = skan z podrecznika w prywatnym buckecie czytanek
+ * (repo jest publiczne, skanow nie commitujemy) - podpisujemy URL przy wyswietleniu.
+ */
+function useImageUrl(url: string): string | null {
+  const prywatny = url.startsWith(CZYTANKI_URL_PREFIX);
+  const [signed, setSigned] = useState<string | null>(null);
+  useEffect(() => {
+    if (!prywatny) return;
+    let cancelled = false;
+    setSigned(null);
+    czytankiPlikUrl(url.slice(CZYTANKI_URL_PREFIX.length))
+      .then((next) => !cancelled && setSigned(next))
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [url, prywatny]);
+  return prywatny ? signed : url;
+}
+
 function SlideImg({ slide, className }: { slide: ImageSlide; className: string }) {
-  return slide.url ? (
-    <img src={slide.url} alt={slide.caption ?? slide.title ?? ''} className={className} />
+  const src = useImageUrl(slide.url);
+  return src ? (
+    <img src={src} alt={slide.caption ?? slide.title ?? ''} className={className} />
   ) : (
     <div
       className={`flex items-center justify-center rounded-lg border-2 border-dashed border-gray-600 text-3xl text-gray-400 ${className}`}
     >
-      Brak obrazu
+      {slide.url ? 'Ładuję obraz...' : 'Brak obrazu'}
     </div>
   );
 }
@@ -49,13 +73,16 @@ export function ImageSlideView({ slide }: { slide: ImageSlide }) {
 
   // Sam naglowek nad zdjeciem, bez tekstu - np. "Znacie teleturniej Kolo Fortuny?"
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6 px-10 py-10">
+    <div className="flex h-full flex-col items-center justify-center gap-6 px-10 py-8">
       {slide.title && (
         <h2 className="font-bold leading-tight text-white" style={{ fontSize: titleSize }}>
           {slide.title}
         </h2>
       )}
-      <SlideImg slide={slide} className="max-h-[75%] max-w-full rounded-lg object-contain" />
+      <SlideImg
+        slide={slide}
+        className={`${slide.title || slide.caption ? 'max-h-[75%]' : 'max-h-full'} max-w-full rounded-lg object-contain`}
+      />
       {slide.caption && (
         <p className="text-gray-300" style={{ fontSize: captionSize }}>
           {slide.caption}

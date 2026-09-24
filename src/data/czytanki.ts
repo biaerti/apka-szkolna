@@ -54,11 +54,37 @@ export function grupujWgLekcji(czytanki: Czytanka[]): GrupaCzytanek[] {
 
 const WAZNOSC_URL_S = 8 * 60 * 60; // caly dzien lekcji bez ponownego podpisywania
 
-/** Adres mp3 do odtworzenia. Rzuca blad z czytelnym komunikatem, gdy nie da sie go dostac. */
-export async function czytankaUrl(c: Czytanka): Promise<string> {
-  const plik = `${c.id}.mp3`;
+/**
+ * Adres pliku z prywatnego bucketu "czytanki" (mp3, json z czasami slow,
+ * skany ramek z podrecznika). Rzuca blad z czytelnym komunikatem.
+ */
+export async function czytankiPlikUrl(plik: string): Promise<string> {
   if (import.meta.env.DEV || !isSupabaseConfigured()) return `/audio/czytanki/${plik}`;
   const { data, error } = await getSupabase().storage.from('czytanki').createSignedUrl(plik, WAZNOSC_URL_S);
-  if (error || !data) throw new Error('Brak nagrania w chmurze albo nie jesteś zalogowany.');
+  if (error || !data) throw new Error('Brak pliku w chmurze albo nie jesteś zalogowany.');
   return data.signedUrl;
 }
+
+/** Adres mp3 do odtworzenia. */
+export function czytankaUrl(c: Czytanka): Promise<string> {
+  return czytankiPlikUrl(`${c.id}.mp3`);
+}
+
+export function czytankaById(id: string): Czytanka | undefined {
+  return CZYTANKI.find((c) => c.id === id);
+}
+
+/** Slowo czytanki: [tekst, start_s, koniec_s] - z audio-czytanki/synchronizuj.py. */
+export type SlowoCzytanki = [string, number, number];
+export type AkapitCzytanki = { slowa: SlowoCzytanki[]; odstep: boolean };
+
+/** Czasy slow do podswietlania tekstu w rytm lektorki (<id>.json obok mp3). */
+export async function wczytajSynchro(c: Czytanka): Promise<AkapitCzytanki[]> {
+  const res = await fetch(await czytankiPlikUrl(`${c.id}.json`));
+  if (!res.ok) throw new Error('Brak tekstu z czasami słów (synchronizuj.py).');
+  const data = (await res.json()) as { akapity: AkapitCzytanki[] };
+  return data.akapity;
+}
+
+/** Obraz z bucketu czytanek podany w slajdzie jako "czytanki:plik.webp". */
+export const CZYTANKI_URL_PREFIX = 'czytanki:';

@@ -372,11 +372,14 @@ const TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Tworzymy plan ramowy'),
       ...recap(previousSetId),
-      slideRead('Otwieramy podręcznik', 46, 49, 'Czytamy „Historię o akceptacji. Stoję murem za Bartkiem”, porządkujemy wydarzenia z lekcji pani Temperówki i uczymy się zapisywać je jako plan ramowy.', 22 * 60),
-      slideText('Przypomnienie: plan ramowy', 'Plan ramowy to spisane po kolei **najważniejsze wydarzenia** - bez szczegółów.\n\nDwie zasady: punkty układamy w **kolejności chronologicznej** i zapisujemy **jednolicie** - wszystkie jako zdania albo wszystkie jako równoważniki zdań, które znasz z poprzedniej lekcji.', 'kolejnoscZdarzen'),
-      slideTask('Z1', 'Ktoś pomieszał plan ramowy „Historii o akceptacji”. Zapisz punkty we właściwej kolejności:\n\n- Śmiech klasy.\n- Uwaga dla Bartka.\n- Pytanie pani o znaczenie słowa „akceptować”.\n- Obrona Bartka przez Miłosza.\n- Wyjaśnienie Bartka, czym jest akceptacja.\n- Wsparcie mamy i taty dla Miłosza.', 7 * 60, undefined, '1. Pytanie pani o znaczenie słowa „akceptować”.\n2. Wyjaśnienie Bartka, czym jest akceptacja.\n3. Śmiech klasy.\n4. Uwaga dla Bartka.\n5. Obrona Bartka przez Miłosza.\n6. Wsparcie mamy i taty dla Miłosza.'),
-      slideTask('Z2', 'Zapisz **plan ramowy** wyprawy w grze (np. Minecraft albo Roblox) w **5 punktach**. Użyj samych równoważników zdań.\n\nPotem przekształć dwa punkty w zdania: jedno w czasie przeszłym, drugie w przyszłym. Podkreśl czasowniki.', 8 * 60, 'kolejnoscZdarzen', 'Np. „1. Zbiórka ekwipunku. 2. Wyprawa do jaskini. 3. Walka ze szkieletem. 4. Powrót do bazy. 5. Budowa wieży.”\n\n„Zebrałem ekwipunek” - czas przeszły. „Zbuduję wieżę” - czas przyszły.'),
+      // Lekcja z czytanka: omowienie ustne -> czytanka z lektorem -> ramka
+      // z podrecznika czytana razem -> notatka -> krotkie zadania.
+      slideCzytanka('historia-o-akceptacji'),
+      slideImage('czytanki:plan-ramowy-ramka.webp'),
       slideNote('Plan ramowy', '- Plan ramowy to najważniejsze wydarzenia w punktach, bez szczegółów.\n- Punkty układamy w kolejności chronologicznej.\n- Zapis jednolity: same zdania albo same równoważniki zdań.'),
+      slideTask('Z1', 'Ułóż plan „Historii o akceptacji” we właściwej kolejności. Zapisz w zeszycie same numery.\n\n**A.** Śmiech klasy.\n**B.** Pytanie pani o słowo „akceptować”.\n**C.** Uwaga dla Bartka.\n**D.** Obrona Bartka przez Miłosza.', 4 * 60, undefined, '1. B - pytanie pani\n2. A - śmiech klasy\n3. C - uwaga dla Bartka\n4. D - obrona przez Miłosza'),
+      slideTask('Z2', 'Zamień równoważniki zdań w zdania. Dopisz **czasownik**.\n\nWzór: „Wyprowadzenie psa.” → „**Wyprowadzę** psa.”\n\n1. Sprzątanie biurka.\n2. Podlanie kwiatków.\n3. Odrobienie lekcji.', 4 * 60, undefined, '1. Posprzątam biurko.\n2. Podleję kwiatki.\n3. Odrobię lekcje.'),
+      slideTask('Z3', 'Napisz plan swojego dnia w **4 punktach**. Użyj samych równoważników zdań.\n\nNp. „1. Pobudka.”', 5 * 60, undefined, 'Np. 1. Pobudka. 2. Droga do szkoły. 3. Trening piłki. 4. Czytanie przed snem.'),
     ],
   },
   {
@@ -443,6 +446,8 @@ function slideTask(code: string, body: string, timerSec: number, art?: SlideArt,
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
 function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
+function slideCzytanka(czytankaId: string): Slide { return { id: newId(), kind: 'czytanka', czytankaId }; }
+function slideImage(url: string): Slide { return { id: newId(), kind: 'image', url }; }
 function slideNote(temat: string, body: string): Slide {
   return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
 }

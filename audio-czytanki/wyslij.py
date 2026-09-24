@@ -2,7 +2,7 @@
 
 Uzycie:
   python audio-czytanki/wyslij.py              # wszystkie z public/audio/czytanki
-  python audio-czytanki/wyslij.py kropka.mp3   # wybrane
+  python audio-czytanki/wyslij.py kropka.mp3   # wybrane (tez .json z czasami slow i skany .webp)
 
 Klucz: SUPABASE_SERVICE_ROLE_KEY z .env.local (Supabase -> Project Settings ->
 API Keys -> service_role / secret). Nie trafia do repo (*.local w .gitignore).
@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MP3 = ROOT / "public" / "audio" / "czytanki"
+TYPY = {".mp3": "audio/mpeg", ".json": "application/json", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg"}
 
 
 def env() -> dict[str, str]:
@@ -42,7 +43,7 @@ def main() -> None:
             headers={
                 "apikey": key,
                 "Authorization": f"Bearer {key}",
-                "Content-Type": "audio/mpeg",
+                "Content-Type": TYPY[plik.suffix],
                 "x-upsert": "true",
                 "Cache-Control": "max-age=86400",
             },
@@ -52,7 +53,7 @@ def main() -> None:
                 print(f"ok  {nazwa} ({plik.stat().st_size // 1024} KB)", flush=True)
         except urllib.error.HTTPError as err:
             sys.exit(f"BLAD {nazwa}: {err.code} {err.read().decode('utf-8', 'replace')}\n"
-                     f"Bez service role key potrzebna polityka:{TYMCZASOWA_POLITYKA}")
+                     "Sprawdz SUPABASE_SERVICE_ROLE_KEY i dozwolone typy plikow bucketu.")
 
 
 if __name__ == "__main__":

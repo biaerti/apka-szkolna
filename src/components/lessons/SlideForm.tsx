@@ -8,6 +8,7 @@ import { NoteSlideForm } from './NoteSlideForm';
 import { RecapSlideForm } from './RecapSlideForm';
 import { ImageSlideForm } from './ImageSlideForm';
 import { VideoSlideForm } from './VideoSlideForm';
+import { CzytankaSlideForm } from './CzytankaSlideForm';
 
 export function SlideForm({
   slide,
@@ -45,6 +46,8 @@ export function SlideForm({
       return <ImageSlideForm slide={slide} onChange={onChange} />;
     case 'video':
       return <VideoSlideForm slide={slide} onChange={onChange} />;
+    case 'czytanka':
+      return <CzytankaSlideForm slide={slide} onChange={onChange} />;
     default:
       return null;
   }

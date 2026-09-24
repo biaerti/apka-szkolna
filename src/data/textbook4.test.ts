@@ -26,9 +26,13 @@ describe('buildTextbook4', () => {
     for (const [index, lesson] of bundle.lessons.entries()) {
       expect(lesson.exercisePage).toBeUndefined();
       expect(lesson.slides[0]).toMatchObject({ kind: 'topic', variant: 'write' });
-      expect(lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
-      // Pierwsze piec tematow ma 3-4 zadania, krotsze prezentacje podsumowujace - 2.
-      const expectedTasks = index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
+      // Dwa formaty: praca z podrecznikiem (slajd read) albo lekcja z czytanka
+      // z lektorem - tam notatka idzie PRZED zadaniami (czytanka -> ramka -> notatka -> zadania).
+      const czytanka = lesson.slides.some((slide) => slide.kind === 'czytanka');
+      expect(czytanka || lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
+      // Pierwsze piec tematow ma 3-4 zadania, krotsze prezentacje podsumowujace - 2,
+      // lekcje z czytanka - 3 krotkie.
+      const expectedTasks = czytanka ? 3 : index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
       expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(expectedTasks);
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
       // Zadnych slajdow zwiazanych z kartami A5 - Bartek moze ich nie drukowac.
@@ -37,7 +41,7 @@ describe('buildTextbook4', () => {
       // Zadania bez plakietki "do zeszytu" - Bartek ja wycofal z tych prezentacji.
       expect(lesson.slides.filter((slide) => slide.kind === 'task').some((slide) => slide.zeszyt)).toBe(false);
       // Kazda lekcje zamyka notatka "Temat: ..." do przepisania.
-      const closing = lesson.slides[lesson.slides.length - 1];
+      const closing = czytanka ? lesson.slides.find((slide) => slide.kind === 'note')! : lesson.slides[lesson.slides.length - 1];
       expect(closing).toMatchObject({ kind: 'note', title: 'Notatka do zeszytu' });
       expect(closing.kind === 'note' ? closing.body : '').toMatch(/^\*\*Temat:\*\* /);
       // Notatka A5 do wydruku jest pelna (bez luk {{...}}) - nie ma juz slajdu
