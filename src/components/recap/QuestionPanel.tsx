@@ -275,17 +275,21 @@ export function QuestionPanel({
           type="button"
           onClick={onPrev}
           disabled={index <= 0}
-          className="rounded-md border border-gray-600 px-4 py-1.5 text-base text-gray-200 hover:bg-gray-800 disabled:opacity-40"
+          title="Poprzednie pytanie"
+          aria-label="Poprzednie pytanie"
+          className="rounded-md border border-gray-600 px-5 py-1 text-2xl leading-none text-gray-200 hover:bg-gray-800 disabled:opacity-40"
         >
-          poprzednie pytanie
+          ←
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={index >= total - 1}
-          className="rounded-md border border-gray-600 px-4 py-1.5 text-base text-gray-200 hover:bg-gray-800 disabled:opacity-40"
+          title="Następne pytanie (N)"
+          aria-label="Następne pytanie"
+          className="rounded-md border border-gray-600 px-5 py-1 text-2xl leading-none text-gray-200 hover:bg-gray-800 disabled:opacity-40"
         >
-          następne pytanie (N)
+          →
         </button>
       </div>}
     </div>

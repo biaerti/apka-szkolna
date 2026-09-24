@@ -1,5 +1,8 @@
 // Dane startowe ladowane przy pierwszym uruchomieniu (pusty store).
-// Klasa "IV A" z 20 uczniami (docs/SEED_IVA.txt) + puste klasy IV B, IV C, V A.
+// Klasa "IV A" (docs/SEED_IVA.txt) + puste klasy IV B, IV C, V A. To tylko dane
+// startowe trybu lokalnego - prawdziwa, aktualna lista (z przejsciami miedzy
+// klasami) jest zaszyfrowana w Supabase. Nowych nazwisk tu nie dopisujemy, bo
+// repo jest publiczne; dwie osoby, ktore opuscily IV A, zostaly usuniete.
 
 import { newId } from './id';
 import { parseStudentsText } from '../lib/parseStudents';
@@ -11,21 +14,19 @@ const SEED_IVA_TEXT = `
 3. Khaladtsou Pavel
 4. Koleśnikowicz Mateusz
 5. Kowalska Paulina
-6. Kuzmenko Nikita
-7. Lendhai Jascha - orzeczenie
-8. Łakatosz Santiago - orzeczenie
-9. Maruda Diana
-10. Pagacz Antonina
-11. Patejuk Ignacy - orzeczenie
-12. Podiuk Aleksandra
-13. Radysh Artem
-14. Rychwicki Dawid
-15. Snopczyńska Gabriela
-16. Szybka Alicja
-17. Vinnyk Denys
-18. Zimnowodzki Wiktor
-19. Żukowska Zuzanna
-20. Żurek Zuzanna
+6. Łakatosz Santiago - orzeczenie
+7. Maruda Diana
+8. Pagacz Antonina
+9. Patejuk Ignacy - orzeczenie
+10. Podiuk Aleksandra
+11. Radysh Artem
+12. Rychwicki Dawid
+13. Snopczyńska Gabriela
+14. Szybka Alicja
+15. Vinnyk Denys
+16. Zimnowodzki Wiktor
+17. Żukowska Zuzanna
+18. Żurek Zuzanna
 `.trim();
 
 export interface SeedData {
