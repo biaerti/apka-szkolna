@@ -82,7 +82,7 @@ describe('buildTextbook4', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const lesson = bundle.lessons.find((l) => l.title === '11-13. Czas na czasownik')!;
     expect(lesson.slides.map((slide) => slide.kind)).toEqual([
-      'topic', 'recap', 'image', 'video', 'recap', 'note', 'image', 'image', 'image', 'image', 'image',
+      'topic', 'recap', 'image', 'video', 'recap', 'note', 'title', 'image', 'image', 'image', 'image', 'image',
     ]);
     // Kolo na start powtarza poprzednia lekcje, kolo po filmie pyta o zadania z filmu.
     expect(lesson.slides[1]).toMatchObject({ kind: 'recap' });
@@ -91,7 +91,7 @@ describe('buildTextbook4', () => {
     const setQuestions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
     expect(setQuestions).toHaveLength(4);
     // Kazdy screen zadania ma strone i kod, wiec dziala na nim kolo na lekcji.
-    const screeny = lesson.slides.slice(6);
+    const screeny = lesson.slides.slice(7);
     expect(screeny.every((slide) => slide.kind === 'image' && typeof slide.page === 'number' && Boolean(slide.code))).toBe(true);
   });
 

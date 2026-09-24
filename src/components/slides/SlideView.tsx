@@ -149,7 +149,7 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
       {slide.kind === 'text' && <TextSlideView slide={slide} />}
       {slide.kind === 'task' && <TaskSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'read' && <ReadSlideView slide={slide} />}
-      {slide.kind === 'note' && <NoteSlideView slide={slide} />}
+      {slide.kind === 'note' && <NoteSlideView slide={slide} code={lessonCode} />}
       {slide.kind === 'image' && <ImageSlideView slide={slide} />}
       {slide.kind === 'video' && <VideoSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'czytanka' && <CzytankaSlideView key={slide.id} slide={slide} />}

@@ -355,7 +355,8 @@ export type Slide =
       studentActionText?: string;
     }
   // Notatka do zeszytu - zamyka lekcje ("zapisujecie notatkę i jesteście wolni").
-  | { id: ID; kind: 'note'; title?: string; body: string }
+  // timerSec: stoper na przepisanie notatki (np. 4 min), startuje sam.
+  | { id: ID; kind: 'note'; title?: string; body: string; timerSec?: number }
   // slajd uruchamia kolo fortuny; variant 'demo' = pierwsze pokazanie kola w
   // lekcji zapoznawczej - dziala jak zwykla runda (bez naglowka "Przedstaw się"
   // i bez "dodatkowego pytania"), tryb intro/przedstawiania wynika z topicu

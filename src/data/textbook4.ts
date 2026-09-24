@@ -293,7 +293,8 @@ const TOPICS: Topic[] = [
       slideVideo('czasownik-film3'),
       // Kolo po filmiku: cztery zadania z filmu, kazde dla jednej wylosowanej osoby.
       ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4, afterVideo: true }] : []),
-      slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.'),
+      slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.', 4 * 60),
+      slideDoZadan('Otwórzcie podręczniki'),
       slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4', 'textbook'),
       slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5', 'textbook', 'Podkreśl w podręczniku'),
       slideTextbookTask('czytanki:czasownik-s41-zad2.webp', 41, 's.41 zad.2', 'Zadanie 2', 'textbook'),
@@ -356,7 +357,8 @@ const TOPICS: Topic[] = [
       // z podrecznika czytana razem -> notatka -> krotkie zadania.
       slideCzytanka('historia-o-akceptacji'),
       slideImage('czytanki:plan-ramowy-ramka.webp'),
-      slideNote('Plan ramowy', '- Plan ramowy to najważniejsze wydarzenia w punktach, bez szczegółów.\n- Punkty układamy w kolejności chronologicznej.\n- Zapis jednolity: same zdania albo same równoważniki zdań.'),
+      slideNote('Plan ramowy', '- Plan ramowy to najważniejsze wydarzenia w punktach, bez szczegółów.\n- Punkty układamy w kolejności chronologicznej.\n- Zapis jednolity: same zdania albo same równoważniki zdań.', 4 * 60),
+      slideDoZadan(),
       slideTask('Z1', 'Ułóż plan „Historii o akceptacji” we właściwej kolejności. Zapisz w zeszycie same numery.\n\n**A.** Śmiech klasy.\n**B.** Pytanie pani o słowo „akceptować”.\n**C.** Uwaga dla Bartka.\n**D.** Obrona Bartka przez Miłosza.', 4 * 60, undefined, '1. B - pytanie pani\n2. A - śmiech klasy\n3. C - uwaga dla Bartka\n4. D - obrona przez Miłosza'),
       slideTask('Z2', 'Zamień równoważniki zdań w zdania. Dopisz **czasownik**.\n\nWzór: „Wyprowadzenie psa.” → „**Wyprowadzę** psa.”\n\n1. Sprzątanie biurka.\n2. Podlanie kwiatków.\n3. Odrobienie lekcji.', 4 * 60, undefined, '1. Posprzątam biurko.\n2. Podleję kwiatki.\n3. Odrobię lekcje.'),
       slideTask('Z3', 'Napisz plan swojego dnia w **4 punktach**. Użyj samych równoważników zdań.\n\nNp. „1. Pobudka.”', 5 * 60, undefined, 'Np. 1. Pobudka. 2. Droga do szkoły. 3. Trening piłki. 4. Czytanie przed snem.'),
@@ -400,7 +402,7 @@ export function buildTextbook4(grade: string, classIds: string[]): FreshMaterial
   const lessons: Array<Omit<Lesson, 'id' | 'order'>> = TOPICS.map((topic, index) => {
     const setId = questionSets[index].id;
     topic.questions.forEach((question, order) => questions.push({ id: newId(), setId, ...question, order }));
-    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: ROZDZIAL_1, progress: {}, slides: topic.makeSlides(questionSets[index - 1]?.id, setId) };
+    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: ROZDZIAL_1, progress: {}, slides: sameTopicInNote(topic.makeSlides(questionSets[index - 1]?.id, setId)) };
   });
   return { lessons, questionSets, questions };
 }
@@ -417,6 +419,20 @@ export const RETIRED_TEXTBOOK4_TITLES = new Set<string>([
   // sie w miejscu - alias w refreshMaterials.ts)
   '12-13. Misja odmiana! Tajemnice czasownika',
 ]);
+
+/**
+ * Temat w notatce ma byc DOKLADNIE taki jak na slajdzie tematu (kod lekcji
+ * dokleja NoteSlideView) - dzieci zapisuja go raz, a nie dwie rozne wersje.
+ */
+function sameTopicInNote(slides: Slide[]): Slide[] {
+  const topicSlide = slides.find((s): s is Extract<Slide, { kind: 'topic' }> => s.kind === 'topic');
+  if (!topicSlide?.topic) return slides;
+  return slides.map((s) =>
+    s.kind === 'note' && s.body.startsWith('**Temat:** ')
+      ? { ...s, body: `**Temat:** ${topicSlide.topic}${s.body.slice(s.body.indexOf('\n'))}` }
+      : s,
+  );
+}
 
 function slideTopic(topic: string): Slide {
   return { id: newId(), kind: 'topic', topic, variant: 'write' };
@@ -440,7 +456,11 @@ function slideTextbookImage(url: string, page: number, title: string): Slide {
 function slideTextbookTask(url: string, page: number, code: string, title: string, studentAction: StudentAction, studentActionText?: string): Slide {
   return { id: newId(), kind: 'image', url, page, code, title, studentAction, studentActionText };
 }
-function slideNote(temat: string, body: string): Slide {
-  return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
+function slideNote(temat: string, body: string, timerSec?: number): Slide {
+  return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}`, timerSec };
+}
+/** Przejscie do zadan po notatce (lekcje z filmikiem i czytanka). */
+function slideDoZadan(subtitle?: string): Slide {
+  return { id: newId(), kind: 'title', title: 'Przechodzimy do zadań', subtitle };
 }
 function recap(questionSetId?: string): Slide[] { return questionSetId ? [slideRecap(questionSetId)] : []; }
