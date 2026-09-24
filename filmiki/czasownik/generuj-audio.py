@@ -6,6 +6,10 @@ Uzycie:
   python filmiki/czasownik/generuj-audio.py film1 --tylko-timeline  # bez API
 
 Teksty: narracja/filmN/NN-nazwa.txt -> audio/filmN/NN-nazwa.mp3.
+Nazwa moze konczyc sie "+P" (np. 05-zadanie1+20.txt): P sekund CISZY na
+samodzielna prace uczniow po narracji tej sceny - scena dostaje w timeline
+pole "pauza", a sciezka audio odpowiednio dluzsza przerwe przed kolejna scena
+(HTML rysuje w tym czasie odliczanie).
 Po wygenerowaniu mierzy ffprobe dlugosci, zapisuje timeline-filmN.js/.json
 (start i czas trwania kazdej sceny, z przerwami) i skleja pelna sciezke
 audio/filmN-sciezka.mp3 (cisza na poczatku + przerwy miedzy scenami).
@@ -90,8 +94,13 @@ def main() -> None:
         if not mp3.exists():
             sys.exit(f"Brak {mp3} - najpierw wygeneruj audio")
         d = dlugosc(mp3)
-        sceny.append({"id": txt.stem, "start": round(t, 3), "dur": round(d, 3)})
-        t += d + PRZERWA
+        # "+P" w nazwie = P sekund ciszy na prace uczniow po narracji sceny
+        pauza = float(txt.stem.rsplit("+", 1)[1]) if "+" in txt.stem else 0.0
+        scena = {"id": txt.stem, "start": round(t, 3), "dur": round(d, 3)}
+        if pauza:
+            scena["pauza"] = pauza
+        sceny.append(scena)
+        t += d + pauza + PRZERWA
     total = t - PRZERWA + CISZA_KONIEC
 
     timeline = {"sceny": sceny, "total": round(total, 3)}

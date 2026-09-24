@@ -1,0 +1,1 @@
+Zadanie pierwsze! Gramy - która to osoba i liczba? A - pierwsza osoba liczby mnogiej. B - druga osoba liczby pojedynczej. C - trzecia osoba liczby mnogiej. Zapisz literę. Dwadzieścia sekund. Start!

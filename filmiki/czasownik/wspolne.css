@@ -71,3 +71,25 @@ h1, h2, .tytul { font-family: 'Baloo 2', sans-serif; }
 .wjazd-lewo { opacity: 0; animation: wjazd-lewo .5s ease-out both; }
 .wjazd-prawo { opacity: 0; animation: wjazd-prawo .5s ease-out both; }
 .zjaw { opacity: 0; animation: zjaw .6s ease-out both; }
+
+/* Odliczanie na zadanie: pasek kurczy sie liniowo przez czas pauzy sceny.
+   Uzycie: <div class="odliczanie"><div class="odliczanie-pasek"
+   style="animation-delay: <koniec narracji>s; animation-duration: <pauza>s"></div></div>
+   Delay liczony wzgledem wejscia sceny (0.45s wyprzedzenia + dlugosc mp3). */
+@keyframes kurcz {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+.odliczanie {
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(74, 59, 50, .15);
+  overflow: hidden;
+}
+.odliczanie-pasek {
+  height: 100%;
+  border-radius: 9px;
+  background: linear-gradient(90deg, var(--pomarancz), var(--roz));
+  transform-origin: left center;
+  animation: kurcz linear both;
+}
