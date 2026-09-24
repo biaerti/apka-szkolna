@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Głoski - przypomnienie i rodzaje głosek</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --szary: #7a6a5c; --ramka: #d9c9b2; }
+
+h2.naglowek { font-size: 54px; color: var(--pomarancz); text-align: center; line-height: 1.1; }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 30px;
+}
+.kafel {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 74px; height: 84px;
+  padding: 0 14px; border-radius: 18px; font-family: 'Baloo 2'; font-size: 54px; font-weight: 800;
+  background: var(--bialy); border: 4px solid var(--ramka);
+}
+.pom { color: var(--pomarancz); }
+.roz { color: var(--roz); }
+.nieb { color: var(--niebieski); }
+b.m { color: var(--roz); }
+
+/* Sceny-zadania: bez sprawdzen - odpowiedzi rozlicza kolo fortuny po filmie */
+.zadanie { padding: 44px 90px; text-align: center; }
+.zadanie .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 46px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 8px 40px;
+}
+.zadanie .polecenie { margin-top: 24px; font-size: 42px; font-weight: 800; line-height: 1.4; }
+.zadanie .pisz { margin-top: 26px; font-size: 34px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 30px auto 0; width: 860px; }
+.zadanie .wyrazy { display: flex; gap: 30px; justify-content: center; margin-top: 30px; }
+.zadanie .wyraz {
+  font-family: 'Baloo 2'; font-size: 64px; font-weight: 800; background: var(--bialy);
+  border: 5px solid var(--ramka); border-radius: 24px; padding: 6px 36px;
+}
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .tytul { font-size: 130px; font-weight: 800; line-height: .9; text-align: center; color: var(--roz); }
+#s01 .tytul small { display: block; font-size: 46px; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 26px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; background: var(--ciemny); }
+#s01 .zapowiedz { margin-top: 34px; font-size: 48px; background: var(--pomarancz); padding: 10px 44px; }
+#s01 .zeszyt { margin-top: 26px; font-size: 40px; font-weight: 800; }
+#s01 .kolo { margin-top: 18px; font-size: 38px; font-weight: 800; color: var(--roz); }
+
+/* ===== 02 glоska i litera ===== */
+#s02 { padding: 36px 70px; text-align: center; }
+#s02 .para { display: flex; gap: 30px; justify-content: center; }
+#s02 .para .karta { width: 520px; padding: 16px 20px; }
+#s02 .para .nazwa { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; }
+#s02 .para .opis { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s02 .slowo { margin-top: 26px; font-family: 'Baloo 2'; font-size: 60px; font-weight: 800; }
+#s02 .wiersz { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+#s02 .wiersz .etyk { width: 190px; text-align: right; font-size: 32px; font-weight: 800; margin-right: 14px; }
+#s02 .wiersz .kafel { font-size: 44px; height: 66px; min-width: 60px; }
+#s02 .gloski .kafel { border-color: var(--roz); }
+#s02 .dwuznaki { margin-top: 24px; display: flex; gap: 26px; justify-content: center; }
+#s02 .dwuznaki .chip { font-size: 36px; background: var(--roz); }
+
+/* ===== 03 samogloski ===== */
+#s03 { padding: 50px 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+#s03 .rzad { display: flex; gap: 14px; margin-top: 26px; }
+#s03 .rzad .kafel { border-color: var(--pomarancz); color: var(--pomarancz); }
+#s03 .liczba { margin-top: 18px; font-size: 38px; font-weight: 800; }
+#s03 .spol { margin-top: 40px; width: 1000px; padding: 18px 30px; text-align: center; }
+#s03 .spol .nazwa { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; color: var(--niebieski); }
+#s03 .spol .opis { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s03 .puenta { margin-top: 34px; font-size: 40px; background: var(--roz); }
+
+/* ===== 04 sylaba ===== */
+#s04 { padding: 34px 70px; text-align: center; }
+#s04 .ramka {
+  border: 6px solid var(--pomarancz); border-radius: 30px; background: var(--bialy);
+  padding: 16px 30px; font-size: 40px; font-weight: 800;
+}
+#s04 .przyklady { display: flex; gap: 40px; justify-content: center; margin-top: 22px; }
+#s04 .przyklady .kafel { font-size: 50px; height: 76px; padding: 0 26px; }
+#s04 .kreska { color: var(--roz); margin: 0 6px; }
+#s04 .zasady { display: flex; gap: 24px; margin-top: 28px; }
+#s04 .zasada { flex: 1; padding: 16px 18px; }
+#s04 .zasada .nr { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; color: #fff; background: var(--ciemny); border-radius: 12px; padding: 0 14px; }
+#s04 .zasada .co { margin-top: 10px; font-size: 28px; font-weight: 800; color: var(--szary); min-height: 76px; }
+#s04 .zasada .przyk { margin-top: 8px; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; }
+#s04 .zasada .przyk.dwa { font-size: 34px; white-space: nowrap; }
+
+/* ===== 05-06 zadania o sylabach ===== */
+#s05 .pytania { display: flex; gap: 26px; justify-content: center; margin-top: 30px; }
+#s05 .pytania .chip { font-size: 40px; background: var(--pomarancz); }
+#s05 .podkresl { margin-top: 22px; font-size: 38px; font-weight: 800; }
+#s05 .podkresl u { text-decoration-color: var(--roz); text-decoration-thickness: 5px; }
+#s06 .podzial { margin-top: 30px; font-family: 'Baloo 2'; font-size: 70px; font-weight: 800; }
+#s06 .podzial .kreska { color: var(--roz); margin: 0 10px; }
+#s06 .drugi { margin-top: 18px; font-family: 'Baloo 2'; font-size: 60px; font-weight: 800; color: var(--roz); }
+
+/* ===== 07 miekkie i twarde ===== */
+#s07 { padding: 28px 80px; text-align: center; }
+#s07 .pary { display: flex; gap: 40px; justify-content: center; margin-top: 18px; }
+#s07 .para { width: 420px; padding: 14px; }
+#s07 .para .w { font-family: 'Baloo 2'; font-size: 64px; font-weight: 800; }
+#s07 .para .chip { font-size: 28px; }
+#s07 .twarda .chip { background: var(--niebieski); }
+#s07 .miekka .chip { background: var(--roz); }
+#s07 .test { margin: 18px auto 0; width: 1000px; padding: 16px 30px; text-align: left; }
+#s07 .test div { font-size: 34px; font-weight: 800; padding: 4px 0; }
+#s07 .len { margin-top: 12px; font-family: 'Baloo 2'; font-size: 50px; font-weight: 800; }
+#s07 .lista { margin-top: 8px; font-size: 27px; font-weight: 800; color: var(--szary); }
+
+/* ===== 08 zapis miekkosci ===== */
+#s08 { padding: 40px 70px; text-align: center; }
+#s08 .kolumny { display: flex; gap: 36px; margin-top: 28px; }
+#s08 .kol { flex: 1; padding: 20px 24px; }
+#s08 .kol .nazwa { font-family: 'Baloo 2'; font-size: 46px; font-weight: 800; color: var(--roz); }
+#s08 .kol .kiedy { font-size: 30px; font-weight: 800; color: var(--szary); margin-top: 4px; }
+#s08 .kol .przyk { font-family: 'Baloo 2'; font-size: 50px; font-weight: 800; margin-top: 8px; }
+#s08 .puenta { margin-top: 30px; font-size: 36px; background: var(--ciemny); }
+
+/* ===== 09 zadanie 3 ===== */
+#s09 .uwaga { margin-top: 26px; font-size: 38px; font-weight: 800; color: var(--roz); }
+
+/* ===== 10 syczace, szumiace, ciszace ===== */
+#s10 { padding: 30px 60px; text-align: center; }
+#s10 .grupy { display: flex; gap: 26px; margin-top: 20px; }
+#s10 .grupa { flex: 1; padding: 14px 16px; }
+#s10 .grupa .nazwa { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; }
+#s10 .grupa .litery { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; border-radius: 16px; padding: 2px 10px; margin-top: 6px; }
+#s10 .grupa .slowa { margin-top: 10px; font-size: 32px; font-weight: 800; line-height: 1.45; }
+#s10 .g1 .nazwa { color: var(--niebieski); } #s10 .g1 .litery { background: var(--niebieski); }
+#s10 .g2 .nazwa { color: var(--pomarancz); } #s10 .g2 .litery { background: var(--pomarancz); }
+#s10 .g3 .nazwa { color: var(--roz); } #s10 .g3 .litery { background: var(--roz); }
+#s10 .miekkie { margin-top: 8px; font-size: 26px; background: var(--roz); }
+#s10 .kasa { display: flex; gap: 22px; justify-content: center; margin-top: 20px; }
+#s10 .kasa .kafel { font-size: 46px; height: 70px; padding: 0 26px; }
+
+/* ===== 11 zadanie 4 ===== */
+#s11 .opcje { display: flex; gap: 20px; justify-content: center; margin-top: 26px; }
+#s11 .opcje .chip { font-size: 34px; }
+
+/* ===== 12 dzwieczne i bezdzwieczne ===== */
+#s12 { padding: 30px 60px; text-align: center; }
+#s12 .test { display: flex; gap: 30px; margin-top: 18px; }
+#s12 .test .karta { flex: 1; padding: 14px 18px; }
+#s12 .test .dzwiek { font-family: 'Baloo 2'; font-size: 52px; font-weight: 800; }
+#s12 .test .chip { font-size: 32px; margin-top: 4px; }
+#s12 .dz .chip { background: var(--roz); }
+#s12 .bdz .chip { background: var(--niebieski); }
+#s12 .test .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; }
+#s12 .paryG { display: flex; flex-wrap: nowrap; gap: 8px; justify-content: center; margin-top: 20px; }
+#s12 .paryG .kafel { font-size: 32px; height: 56px; min-width: 0; padding: 0 12px; }
+#s12 .paryG .kafel b { color: var(--roz); } #s12 .paryG .kafel i { font-style: normal; color: var(--niebieski); }
+#s12 .zmiany { display: flex; gap: 26px; justify-content: center; margin-top: 20px; }
+#s12 .zmiany .kafel { font-size: 38px; height: 62px; padding: 0 22px; }
+
+/* ===== 13 chleb ===== */
+#s13 { padding: 50px 90px; text-align: center; }
+#s13 .zasada { margin-top: 20px; padding: 18px 20px; font-size: 33px; font-weight: 800; }
+#s13 .kroki { display: flex; gap: 26px; justify-content: center; margin-top: 36px; }
+#s13 .krok { width: 330px; padding: 18px; }
+#s13 .krok .co { font-size: 30px; font-weight: 800; color: var(--szary); }
+#s13 .krok .w { font-family: 'Baloo 2'; font-size: 64px; font-weight: 800; }
+#s13 .krok .em { font-size: 50px; }
+
+/* ===== 14 zadanie 5 ===== */
+#s14 .wyraz u { text-decoration: none; color: #fff; background: var(--roz); border-radius: 12px; padding: 0 8px; }
+
+/* ===== 15 final - plansza do kola (zostaje na ekranie) ===== */
+#s15 { padding: 26px 90px; }
+#s15 h2 { font-size: 54px; color: var(--roz); text-align: center; }
+#s15 .lista { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+#s15 .zad {
+  display: flex; align-items: center; gap: 22px; background: var(--bialy);
+  border-radius: 20px; padding: 9px 26px; font-size: 31px; font-weight: 800; border: 4px solid var(--ramka);
+}
+#s15 .zad .nr { font-family: 'Baloo 2'; font-size: 34px; color: #fff; background: var(--pomarancz); border-radius: 12px; padding: 0 16px; }
+#s15 .final {
+  margin-top: 18px; text-align: center; font-family: 'Baloo 2'; font-size: 38px;
+  font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 8px 28px;
+}
+</style>
+</head>
+<body>
+<div id="stage">
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="tytul pop" data-t="0"><small>wszystko o</small>GŁOSKACH</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="przypomnimy">głoska · litera · sylaba</span>
+      <span class="chip pop" data-slowo="grupy">miękkie · syczące · dźwięczne</span>
+    </div>
+    <div><span class="chip zapowiedz pop" data-slowo="pięć">W tym filmie: 5 zadań!</span></div>
+    <div class="zeszyt pop" data-slowo="zapisujcie">📓 Każdą odpowiedź zapisz w zeszycie</div>
+    <div class="kolo pop" data-slowo="kole">🎡 Sprawdzimy je PO filmie - na kole fortuny!</div>
+  </section>
+
+  <section class="scena" data-id="02-gloska-litera" id="s02">
+    <div class="para">
+      <div class="karta wjazd-lewo" data-slowo="głoska">
+        <div class="nazwa roz">GŁOSKA 👂</div>
+        <div class="opis">najmniejszy dźwięk mowy - wymawiam i słyszę</div>
+      </div>
+      <div class="karta wjazd-prawo" data-slowo="litery">
+        <div class="nazwa pom">LITERA 👁️</div>
+        <div class="opis">znak, którym zapisuję głoskę - piszę i widzę</div>
+      </div>
+    </div>
+    <div class="slowo wjazd-dol" data-slowo="pszczoła">🐝 PSZCZOŁA</div>
+    <div class="wiersz litery">
+      <span class="etyk pom zjaw" data-slowo="ośmioma">8 liter:</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.1">p</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.2">s</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.3">z</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.4">c</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.5">z</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.6">o</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.7">ł</span>
+      <span class="kafel pop" data-slowo="ośmioma" data-po="0.8">a</span>
+    </div>
+    <div class="wiersz gloski">
+      <span class="etyk roz zjaw" data-slowo="sześć">6 głosek:</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.1">p</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.2">sz</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.3">cz</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.4">o</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.5">ł</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.6">a</span>
+    </div>
+    <div class="dwuznaki">
+      <span class="chip pop" data-slowo="szafa">sz - szafa</span>
+      <span class="chip pop" data-slowo="czapka">cz - czapka</span>
+      <span class="chip pop" data-slowo="chmura">ch - chmura</span>
+    </div>
+  </section>
+
+  <section class="scena" data-id="03-samogloski" id="s03">
+    <h2 class="naglowek wjazd-dol" data-t="0">Samogłoski i spółgłoski</h2>
+    <div class="rzad">
+      <span class="kafel pop" data-slowo="osiem" data-po="0.0">a</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.15">e</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.3">i</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.45">o</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.6">u (ó)</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.75">y</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.9">ę</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="1.05">ą</span>
+    </div>
+    <div class="liczba zjaw" data-slowo="osiem" data-po="1.2"><span class="pom">SAMOGŁOSKI</span> - jest ich tylko 8</div>
+    <div class="karta spol wjazd-dol" data-slowo="wszystkie">
+      <div class="nazwa">SPÓŁGŁOSKI</div>
+      <div class="opis">wszystkie pozostałe: b, c, d, f, g, h, k, l, ł, m, n, p, r, s, t, w, z...</div>
+    </div>
+    <span class="chip puenta pop" data-slowo="bez">Bez samogłoski nie ma sylaby!</span>
+  </section>
+
+  <section class="scena" data-id="04-sylaba" id="s04">
+    <div class="ramka pop" data-t="0">SYLABA = cząstka wyrazu, zawsze z <span class="pom">samogłoską</span></div>
+    <div class="przyklady">
+      <span class="kafel pop" data-slowo="pszczo">pszczo<span class="kreska">-</span>ła</span>
+      <span class="kafel pop" data-slowo="e"><span class="roz">e</span><span class="kreska">-</span>cho</span>
+    </div>
+    <div class="zasady">
+      <div class="karta zasada wjazd-dol" data-slowo="pierwsza">
+        <span class="nr">1</span>
+        <div class="co">krótkich, jednosylabowych wyrazów nie dzielimy</div>
+        <div class="przyk">dom, kot</div>
+      </div>
+      <div class="karta zasada wjazd-dol" data-slowo="druga">
+        <span class="nr">2</span>
+        <div class="co">dwie takie same litery rozdzielamy</div>
+        <div class="przyk">wan<span class="kreska">-</span>na</div>
+      </div>
+      <div class="karta zasada wjazd-dol" data-slowo="trzecia">
+        <span class="nr">3</span>
+        <div class="co">różne spółgłoski dzielimy na kilka sposobów</div>
+        <div class="przyk dwa"><span class="zjaw" data-slowo="sios">sios<span class="kreska">-</span>tra</span> <span class="zjaw" data-slowo="sio">/ sio<span class="kreska">-</span>stra</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="05-zadanie1+25" id="s05">
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="wyrazy"><span class="wyraz pop" data-slowo="puszcza">PUSZCZA</span></div>
+    <div class="pytania">
+      <span class="chip pop" data-slowo="liter">ile liter?</span>
+      <span class="chip pop" data-slowo="głosek">ile głosek?</span>
+      <span class="chip pop" data-slowo="sylab">ile sylab?</span>
+    </div>
+    <div class="podkresl zjaw" data-slowo="podkreślcie"><u>Podkreśl</u> samogłoski</div>
+    <div class="pisz zjaw" data-slowo="dwadzieścia">Zapisz w zeszycie 📓 (sprawdzimy na kole!)</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena zadanie" data-id="06-zadanie2+15" id="s06">
+    <div><span class="badge pop" data-t="0" style="background: var(--ciemny)">ZADANIE 2 ⚡</span></div>
+    <div class="podzial wjazd-dol" data-slowo="prze">prze<span class="kreska">-</span>kąs<span class="kreska">-</span>ka</div>
+    <div class="drugi pop" data-slowo="drugi">drugi sposób: ❓</div>
+    <div class="pisz zjaw" data-slowo="zapiszcie">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="07-miekkie" id="s07">
+    <h2 class="naglowek wjazd-dol" data-slowo="miękkie">Spółgłoski <span class="roz">miękkie</span> i <span class="nieb">twarde</span></h2>
+    <div class="pary">
+      <div class="karta para twarda wjazd-lewo" data-slowo="nic">
+        <div class="w">ni<span class="nieb">c</span></div>
+        <span class="chip">c - twarda</span>
+      </div>
+      <div class="karta para miekka wjazd-prawo" data-slowo="nić">
+        <div class="w">ni<span class="roz">ć</span></div>
+        <span class="chip">ć - miękka</span>
+      </div>
+    </div>
+    <div class="karta test zjaw" data-slowo="przy">
+      <div>👅 <span class="roz">miękka</span> - środkowa część języka unosi się do podniebienia</div>
+      <div class="zjaw" data-slowo="twardej">👅 <span class="nieb">twarda</span> - język się nie unosi</div>
+    </div>
+    <div class="len pop" data-slowo="len">len <span class="nieb">n</span> · leń <span class="roz">ń</span></div>
+    <div class="lista zjaw" data-slowo="listy">miękkie to m.in.: ć, ś, ź, ń, dź, j, pi, bi, mi, wi, ki, gi, li - nie ucz się na pamięć</div>
+  </section>
+
+  <section class="scena" data-id="08-miekkie-zapis" id="s08">
+    <h2 class="naglowek wjazd-dol" data-t="0">Jak zapisać miękkość?</h2>
+    <div class="kolumny">
+      <div class="karta kol wjazd-lewo" data-slowo="kreską">
+        <div class="nazwa">KRESKA ´</div>
+        <div class="kiedy">na końcu wyrazu i przed spółgłoską</div>
+        <div class="przyk pop" data-slowo="koń">ko<b class="m">ń</b></div>
+        <div class="przyk pop" data-slowo="ćwiczenie"><b class="m">ć</b>wiczenie</div>
+      </div>
+      <div class="karta kol wjazd-prawo" data-slowo="albo">
+        <div class="nazwa">LITERA i</div>
+        <div class="kiedy">gdy dalej stoi samogłoska</div>
+        <div class="przyk pop" data-slowo="ciepło"><b class="m">ci</b>epło</div>
+        <div class="przyk pop" data-slowo="kosiarka">ko<b class="m">si</b>arka</div>
+        <div class="przyk pop" data-slowo="koniec">ko<b class="m">ni</b>ec</div>
+      </div>
+    </div>
+    <span class="chip puenta pop" data-slowo="wtedy">„i” nie jest tu osobną głoską - tylko zmiękcza</span>
+  </section>
+
+  <section class="scena zadanie" data-id="09-zadanie3+20" id="s09">
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wypiszcie">Wypisz wszystkie spółgłoski <span class="roz">miękkie</span>:</div>
+    <div class="wyrazy">
+      <span class="wyraz pop" data-slowo="kość">KOŚĆ</span>
+      <span class="wyraz pop" data-slowo="koń">KOŃ</span>
+      <span class="wyraz pop" data-slowo="ciasto">CIASTO</span>
+    </div>
+    <div class="uwaga pop" data-slowo="uwaga">⚠️ W jednym słowie są aż dwie!</div>
+    <div class="pisz zjaw" data-slowo="dwadzieścia">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="10-syczace" id="s10">
+    <h2 class="naglowek wjazd-dol" data-t="0">Jak brzmią głoski?</h2>
+    <div class="grupy">
+      <div class="karta grupa g1 wjazd-dol" data-slowo="syczące">
+        <div class="nazwa">SYCZĄCE 🐍</div>
+        <div><span class="litery">s · z · c · dz</span></div>
+        <div class="slowa zjaw" data-slowo="sowa">sowa, zebra,<br>cebula, dzwon</div>
+      </div>
+      <div class="karta grupa g2 wjazd-dol" data-slowo="szumiące">
+        <div class="nazwa">SZUMIĄCE 🌲</div>
+        <div><span class="litery">sz · ż (rz) · cz · dż</span></div>
+        <div class="slowa zjaw" data-slowo="szafa">szafa, żaba,<br>czapka, dżem</div>
+      </div>
+      <div class="karta grupa g3 wjazd-dol" data-slowo="ciszące">
+        <div class="nazwa">CISZĄCE 🤫</div>
+        <div><span class="litery">ś · ź · ć · dź</span></div>
+        <div class="slowa zjaw" data-slowo="ślimak">ślimak, źrebię,<br>ćma, dźwig</div>
+        <span class="chip miekkie pop" data-slowo="znajome">to głoski miękkie!</span>
+      </div>
+    </div>
+    <div class="kasa">
+      <span class="kafel pop" data-slowo="kasa">ka<span class="nieb">s</span>a</span>
+      <span class="kafel pop" data-slowo="kasza">ka<span class="pom">sz</span>a</span>
+      <span class="kafel pop" data-slowo="kasia">Ka<span class="roz">si</span>a</span>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="11-zadanie4+20" id="s11">
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="jaka">Jaka jest PIERWSZA głoska?</div>
+    <div class="wyrazy">
+      <span class="wyraz pop" data-slowo="cukier">CUKIER</span>
+      <span class="wyraz pop" data-slowo="czekolada">CZEKOLADA</span>
+      <span class="wyraz pop" data-slowo="ciastko">CIASTKO</span>
+    </div>
+    <div class="opcje">
+      <span class="chip pop" data-slowo="sycząca" style="background: var(--niebieski)">sycząca 🐍</span>
+      <span class="chip pop" data-slowo="szumiąca" style="background: var(--pomarancz)">szumiąca 🌲</span>
+      <span class="chip pop" data-slowo="cisząca" style="background: var(--roz)">cisząca 🤫</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="zapiszcie">Zapisz przy każdym słowie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="12-dzwieczne" id="s12">
+    <h2 class="naglowek wjazd-dol" data-t="0">✋ Dłoń na szyi!</h2>
+    <div class="test">
+      <div class="karta dz wjazd-lewo" data-slowo="bzzzz">
+        <div class="dzwiek">bzzzz 🪰</div>
+        <span class="chip pop" data-slowo="dźwięczna">DŹWIĘCZNA</span>
+        <div class="opis zjaw" data-slowo="drgają">drgają więzadła głosowe</div>
+      </div>
+      <div class="karta bdz wjazd-prawo" data-slowo="wąż" data-po="0.5">
+        <div class="dzwiek">ssss 🐍</div>
+        <span class="chip pop" data-slowo="bezdźwięczna">BEZDŹWIĘCZNA</span>
+        <div class="opis zjaw" data-slowo="cisza">pod palcami cisza</div>
+      </div>
+    </div>
+    <div class="paryG">
+      <span class="kafel pop" data-slowo="parach" data-po="0.0"><b>b</b>-<i>p</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.1"><b>d</b>-<i>t</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.2"><b>g</b>-<i>k</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.3"><b>w</b>-<i>f</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.4"><b>z</b>-<i>s</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.5"><b>ż</b>-<i>sz</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.6"><b>dz</b>-<i>c</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.7"><b>dż</b>-<i>cz</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.8"><b>ź</b>-<i>ś</i></span>
+      <span class="kafel pop" data-slowo="parach" data-po="0.9"><b>dź</b>-<i>ć</i></span>
+    </div>
+    <div class="zmiany">
+      <span class="kafel pop" data-slowo="bije"><b class="m">b</b>ije - <span class="nieb">p</span>ije</span>
+      <span class="kafel pop" data-slowo="domek"><b class="m">d</b>omek - <span class="nieb">T</span>omek</span>
+      <span class="kafel pop" data-slowo="góra"><b class="m">g</b>óra - <span class="nieb">k</span>ura</span>
+    </div>
+  </section>
+
+  <section class="scena" data-id="13-chleb" id="s13">
+    <h2 class="naglowek wjazd-dol" data-t="0">Sztuczka do pisania ✍️</h2>
+    <div class="karta zasada zjaw" data-slowo="na">Na końcu wyrazu głoska <span class="roz">dźwięczna</span> brzmi jak <span class="nieb">bezdźwięczna</span></div>
+    <div class="kroki">
+      <div class="karta krok pop" data-slowo="mówimy">
+        <div class="co">mówię</div>
+        <div class="w">chle<span class="nieb">p</span></div>
+        <div class="em">🗣️</div>
+      </div>
+      <div class="karta krok pop" data-slowo="piszemy">
+        <div class="co">piszę</div>
+        <div class="w">chle<span class="roz">b</span></div>
+        <div class="em">✍️</div>
+      </div>
+      <div class="karta krok pop" data-slowo="zmieniamy">
+        <div class="co">sprawdzam</div>
+        <div class="w zjaw" data-slowo="chleba">chle<span class="roz">b</span>a</div>
+        <div class="em">✅</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="14-zadanie5+20" id="s14">
+    <div><span class="badge pop" data-t="0">ZADANIE 5 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamieńcie">Zamień zaznaczoną głoskę na jej parę<br>i zapisz nowe słowo:</div>
+    <div class="wyrazy">
+      <span class="wyraz pop" data-slowo="tama"><u>T</u>AMA → ❓</span>
+      <span class="wyraz pop" data-slowo="pąk"><u>P</u>ĄK → ❓</span>
+      <span class="wyraz pop" data-slowo="kosa">KO<u>S</u>A → ❓</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="dwadzieścia">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="15-final" id="s15">
+    <h2 class="pop" data-t="0">🎡 Koniec filmu - czas na koło fortuny!</h2>
+    <div class="lista">
+      <div class="zad wjazd-lewo" data-slowo="macie" data-po="0.0"><span class="nr">Z1</span><span>PUSZCZA - ile liter, ile głosek, ile sylab?</span></div>
+      <div class="zad wjazd-lewo" data-slowo="macie" data-po="0.4"><span class="nr">Z2</span><span>PRZEKĄSKA - drugi podział na sylaby</span></div>
+      <div class="zad wjazd-lewo" data-slowo="macie" data-po="0.8"><span class="nr">Z3</span><span>Spółgłoski miękkie: kość, koń, ciasto</span></div>
+      <div class="zad wjazd-lewo" data-slowo="macie" data-po="1.2"><span class="nr">Z4</span><span>cukier, czekolada, ciastko - sycząca, szumiąca, cisząca?</span></div>
+      <div class="zad wjazd-lewo" data-slowo="macie" data-po="1.6"><span class="nr">Z5</span><span>tama, pąk, kosa - zamień głoskę na parę</span></div>
+    </div>
+    <div class="final pop" data-slowo="dobra">Koło wybiera. Dobrze = ➕, brak odpowiedzi = plomba.</div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

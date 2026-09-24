@@ -8,11 +8,21 @@ describe('buildTextbook5', () => {
     expect(() => buildTextbook5('IV', [])).toThrow();
   });
 
-  it('zaczyna od dialogu na Sztuce programowania i konczy powtorzeniem', () => {
+  it('zaczyna od dialogu na Sztuce programowania', () => {
     expect(bundle.lessons).toHaveLength(TEXTBOOK5_TOPIC_COUNT);
     expect(bundle.lessons[0].title).toContain('dialog');
     expect(bundle.lessons[0].teacherPlan).toContain('Sztuk');
-    expect(bundle.lessons[bundle.lessons.length - 1].title).toContain('powtórzenie');
+  });
+
+  it('lekcja o gloskach: film, kolo z jej 5 zadaniami, zadanie z podrecznika', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('4. Głoski'))!;
+    expect(lesson.teacherPlan).toContain('## Po lekcji uczeń');
+    const kinds = lesson.slides.map((s) => s.kind);
+    expect(kinds).toEqual(['topic', 'recap', 'video', 'recap', 'image', 'task', 'task', 'note']);
+    const own = lesson.slides[3];
+    expect(own.kind === 'recap' && own.questionSetId).toBe(lesson.questionSetId);
+    expect(own.kind === 'recap' && own.questionCount).toBe(5);
+    expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId)).toHaveLength(5);
   });
 
   it('kazda lekcja ma plan dla nauczyciela, temat na starcie i notatke na koncu', () => {
@@ -25,7 +35,7 @@ describe('buildTextbook5', () => {
 
   it('kolo powtorzeniowe lekcji N pyta o lekcje N-1', () => {
     bundle.lessons.forEach((lesson, index) => {
-      const recap = lesson.slides.find((s) => s.kind === 'recap');
+      const recap = lesson.slides.find((s) => s.kind === 'recap' && s.questionSetId !== lesson.questionSetId);
       if (index === 0) expect(recap).toBeUndefined();
       else expect(recap && recap.kind === 'recap' && recap.questionSetId).toBe(bundle.lessons[index - 1].questionSetId);
     });
