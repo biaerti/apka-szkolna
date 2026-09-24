@@ -19,6 +19,7 @@ import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from 
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import {
   classifyMatch,
+  findOldLesson,
   codeVersion,
   isMatchStale,
   lessonQuestionSetId,
@@ -170,8 +171,9 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
   // dlatego wstawianie dokłada brakujace lekcje zamiast byc blokowane po pierwszej.
   function missingLessons(bundle: FreshMaterialsBundle | undefined): FreshMaterialsBundle['lessons'] {
     if (!bundle) return [];
-    const maja = new Set(gradeLessons.map((l) => titleMatchKey(l.title)));
-    return bundle.lessons.filter((l) => !maja.has(titleMatchKey(l.title)));
+    // Po starym tytule tez (TITLE_ALIASES) - inaczej scalony temat (11 -> 11-13)
+    // wstawilby sie drugi raz obok lekcji, ktora automat i tak odswiezy.
+    return bundle.lessons.filter((l) => !findOldLesson(gradeLessons, l));
   }
 
   /**

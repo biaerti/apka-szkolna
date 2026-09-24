@@ -68,7 +68,7 @@ const TITLE_ALIASES: Record<string, string> = {
  * (stary tytul z kodu, ktory zdazyl sie zmienic bardziej niz tylko kolejnoscia
  * slow/diakrytykami).
  */
-function findOldLesson(classLessons: Lesson[], newLesson: Omit<Lesson, 'id' | 'order'>): Lesson | undefined {
+export function findOldLesson(classLessons: Lesson[], newLesson: Omit<Lesson, 'id' | 'order'>): Lesson | undefined {
   const key = titleMatchKey(newLesson.title);
   const direct = classLessons.find((l) => titleMatchKey(l.title) === key);
   if (direct) return direct;
