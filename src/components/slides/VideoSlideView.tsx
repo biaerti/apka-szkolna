@@ -1,5 +1,7 @@
 // Slajd z filmikiem lekcyjnym. Spacja na tym slajdzie odtwarza/pauzuje film
-// (zamiast przechodzic dalej) - strzalki dalej zmieniaja slajdy.
+// (zamiast przechodzic dalej) - strzalki dalej zmieniaja slajdy. Zejscie ze
+// slajdu zatrzymuje film i odpina zrodlo, zeby dzwiek nie gral pod kolejnym
+// slajdem; klik w odtwarzacz nie przewija prezentacji.
 
 import { useEffect, useRef, useState } from 'react';
 import type { Slide } from '../../data/types';
@@ -30,6 +32,19 @@ export function VideoSlideView({ slide }: { slide: VideoSlide }) {
     };
   }, [slide.videoId]);
 
+  // Zejscie ze slajdu (albo zmiana filmu): stop i odpiecie zrodla. Samo
+  // odlaczenie <video> od DOM nie zawsze ucisza dzwiek (pelny ekran, PiP).
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    return () => {
+      video.pause();
+      if (document.fullscreenElement === video) void document.exitFullscreen().catch(() => {});
+      video.removeAttribute('src');
+      video.load();
+    };
+  }, [url]);
+
   // Faza capture na window - przed obsluga klawiszy prezentacji (usePresentKeys na document).
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -54,6 +69,8 @@ export function VideoSlideView({ slide }: { slide: VideoSlide }) {
           src={url}
           controls
           preload="auto"
+          // Klik w przyciski odtwarzacza nie moze trafic do "klik = nastepny slajd".
+          onClick={(e) => e.stopPropagation()}
           className="min-h-0 w-full flex-1 rounded-xl bg-black object-contain"
         />
       ) : (

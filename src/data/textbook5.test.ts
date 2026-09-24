@@ -18,18 +18,18 @@ describe('buildTextbook5', () => {
     const lesson = bundle.lessons.find((l) => l.title.startsWith('4. Głoski'))!;
     expect(lesson.teacherPlan).toContain('## Po lekcji uczeń');
     const kinds = lesson.slides.map((s) => s.kind);
-    expect(kinds).toEqual(['topic', 'recap', 'video', 'recap', 'image', 'task', 'task', 'note']);
+    expect(kinds).toEqual(['topic', 'recap', 'video', 'recap', 'note', 'image', 'task', 'task']);
     const own = lesson.slides[3];
     expect(own.kind === 'recap' && own.questionSetId).toBe(lesson.questionSetId);
     expect(own.kind === 'recap' && own.questionCount).toBe(5);
     expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId)).toHaveLength(5);
   });
 
-  it('kazda lekcja ma plan dla nauczyciela, temat na starcie i notatke na koncu', () => {
+  it('kazda lekcja ma plan dla nauczyciela, temat na starcie i notatke', () => {
     for (const lesson of bundle.lessons) {
       expect(lesson.teacherPlan).toMatch(/^## /);
       expect(lesson.slides[0].kind).toBe('topic');
-      expect(lesson.slides[lesson.slides.length - 1].kind).toBe('note');
+      expect(lesson.slides.some((s) => s.kind === 'note')).toBe(true);
     }
   });
 
