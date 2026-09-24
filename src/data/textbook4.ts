@@ -294,11 +294,11 @@ const TOPICS: Topic[] = [
       // Kolo po filmiku: cztery zadania z filmu, kazde dla jednej wylosowanej osoby.
       ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4, afterVideo: true }] : []),
       slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.'),
-      slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4 · ćwiczy punkt 1 notatki', 'textbook'),
-      slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5 · ćwiczy punkt 1 notatki', 'textbook', 'Podkreśl w podręczniku'),
-      slideTextbookTask('czytanki:czasownik-s41-zad2.webp', 41, 's.41 zad.2', 'Zadanie 2 · ćwiczy punkt 3 notatki', 'textbook'),
-      slideTextbookTask('czytanki:czasownik-s42-zad3.webp', 42, 's.42 zad.3', 'Zadanie 3 · ćwiczy punkty 3 i 4 notatki', 'write-answer', 'Do zeszytu'),
-      slideTextbookTask('czytanki:czasownik-s42-zad4.webp', 42, 's.42 zad.4', 'Zadanie 4 · ćwiczy punkty 2 i 3 notatki', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4', 'textbook'),
+      slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5', 'textbook', 'Podkreśl w podręczniku'),
+      slideTextbookTask('czytanki:czasownik-s41-zad2.webp', 41, 's.41 zad.2', 'Zadanie 2', 'textbook'),
+      slideTextbookTask('czytanki:czasownik-s42-zad3.webp', 42, 's.42 zad.3', 'Zadanie 3', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:czasownik-s42-zad4.webp', 42, 's.42 zad.4', 'Zadanie 4', 'write-answer', 'Do zeszytu'),
     ],
   },
   {

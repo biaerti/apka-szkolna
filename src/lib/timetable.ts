@@ -119,6 +119,29 @@ export function currentEntry(timetable: TimetableEntry[], periods: LessonPeriod[
 }
 
 /**
+ * Numer godziny, na ktora sprawdzamy dzis obecnosc klasy `classId`: trwajaca
+ * lekcja tej klasy, a gdy jej nie ma - ostatnia dzisiejsza, ktora juz sie
+ * zaczela (kolo po dzwonku albo po lekcjach), a przed pierwsza - pierwsza.
+ */
+export function classPeriodToday(
+  timetable: TimetableEntry[],
+  periods: LessonPeriod[],
+  classId: string,
+  now: Date,
+): number | undefined {
+  const current = currentEntry(timetable, periods, now);
+  if (current?.classId === classId) return current.period;
+  const weekday = weekdayOf(now);
+  if (weekday === 0) return undefined;
+  const today = entriesForDay(timetable, weekday).filter((e) => e.classId === classId);
+  if (today.length === 0) return undefined;
+  const nowMin = minutesOfDay(now);
+  const startOf = new Map(validPeriods(periods).map((p) => [p.no, parseHm(p.start)]));
+  const started = today.filter((e) => (startOf.get(e.period) ?? Infinity) <= nowMin);
+  return (started[started.length - 1] ?? today[0]).period;
+}
+
+/**
  * Wpis "biezacy albo najblizszy" na dzis: trwajaca lekcja, a jesli jej nie ma
  * (przerwa / przed lekcjami) - pierwsza jeszcze nierozpoczeta. Po ostatniej
  * lekcji dnia undefined. Uzywane na pulpicie do podswietlenia.

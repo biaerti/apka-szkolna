@@ -28,7 +28,8 @@ export interface VulcanGridRow {
  */
 export function statusFromVulcanSymbol(symbol: string): AttendanceStatus | undefined {
   const s = symbol.replace(/\s+/g, '').toLocaleLowerCase('pl');
-  if (s === '-' || s === '−' || s === '–' || s === 'nb') return 'absent';
+  // VULCAN rysuje nieobecnosc dlugim myslnikiem (—), recznie wpisana bywa krotkim.
+  if (s === '-' || s === '−' || s === '–' || s === '—' || s === 'nb') return 'absent';
   if (s === 's' || s === 'sp') return 'late';
   if (s === '.' || s === '∙' || s === '•' || s === '●') return 'present';
   // "u" (usprawiedliwiona) i "ns" to tez nieobecnosc na lekcji.
@@ -56,7 +57,12 @@ export interface MatchResult {
  * (w obu kolejnosciach), a gdy nazwiska nie ma - po numerze z dziennika.
  * Wiersze z nieznanym symbolem sa pomijane w calosci.
  */
-export function matchVulcanAttendance(rows: VulcanGridRow[], students: Student[]): MatchResult {
+export function matchVulcanAttendance(
+  rows: VulcanGridRow[],
+  students: Student[],
+  /** Automat: tylko po nazwisku - karta VULCANA moze akurat pokazywac INNA klase z tymi samymi numerami. */
+  opts: { byNameOnly?: boolean } = {},
+): MatchResult {
   const byName = new Map<string, Student>();
   for (const st of students) {
     byName.set(nameKey(`${st.lastName} ${st.firstName}`), st);
@@ -69,7 +75,8 @@ export function matchVulcanAttendance(rows: VulcanGridRow[], students: Student[]
   for (const row of rows) {
     const status = statusFromVulcanSymbol(row.symbol);
     if (!status) continue;
-    const student = byName.get(nameKey(row.name)) ?? (row.number !== undefined ? byNumber.get(row.number) : undefined);
+    const student =
+      byName.get(nameKey(row.name)) ?? (!opts.byNameOnly && row.number !== undefined ? byNumber.get(row.number) : undefined);
     if (!student) {
       unmatched.push(row.name);
       continue;

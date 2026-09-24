@@ -4,13 +4,18 @@
 // webowej i z szuflady kola w prezentacji (drugie okno dociaga je z chmury,
 // patrz pullTodayRecapEvents). Pula losowania liczy sie wprost z obecnych.
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useStore } from '../../data/store';
 import type { Student } from '../../data/types';
-import { absentOnDay } from '../../lib/attendance';
+import { absentOnDay, attendanceForLesson } from '../../lib/attendance';
 import { toDateKey } from '../../lib/dates';
-import { currentEntry } from '../../lib/timetable';
+import { classPeriodToday } from '../../lib/timetable';
 import { matchVulcanAttendance, requestVulcanAttendance } from '../../lib/vulcanAttendance';
+
+/** Co ile automat dociaga frekwencje z VULCANA, gdy kolo jest otwarte. */
+const AUTO_PULL_MS = 60_000;
+/** Kolo w prezentacji i kolo powtorzeniowe moga byc zamontowane naraz - jeden odczyt na raz wystarczy. */
+let lastAutoPullAt = 0;
 
 export function useAttendance(classStudents: Student[], classId: string) {
   const absences = useStore((s) => s.absences);
@@ -18,20 +23,19 @@ export function useAttendance(classStudents: Student[], classId: string) {
   const date = toDateKey(new Date());
 
   const { timetable, periods } = useStore.getState();
-  const currentLesson = currentEntry(timetable, periods, new Date());
-  const period = currentLesson?.classId === classId ? currentLesson.period : undefined;
+  // Godzina tej klasy dzis - trwajaca albo ostatnia, ktora sie zaczela (kolo
+  // po dzwonku nadal widzi nieobecnych z tej lekcji).
+  const period = classPeriodToday(timetable, periods, classId, new Date());
   const absentSet = useMemo(() => absentOnDay(absences, classId, date, period), [absences, classId, date, period]);
 
   function togglePresent(studentId: string) {
     const { timetable, periods } = useStore.getState();
-    // Numer lekcji tylko wtedy, gdy plan mowi, ze to wlasnie lekcja tej klasy.
-    const lekcja = currentEntry(timetable, periods, new Date());
     setAbsent({
       studentId,
       classId,
       date,
       absent: !absentSet.has(studentId),
-      period: lekcja?.classId === classId ? lekcja.period : undefined,
+      period: classPeriodToday(timetable, periods, classId, new Date()),
     });
   }
 
@@ -42,26 +46,44 @@ export function useAttendance(classStudents: Student[], classId: string) {
 
   /**
    * Dociaga frekwencje z otwartej karty VULCANA (dodatek Chrome) i nanosi ja
-   * na dzisiejsza godzine - nieobecni od razu wypadaja z kola. Dziala tylko w
-   * czasie lekcji tej klasy wg planu (dodatek musi wiedziec, ktora kolumne
-   * czytac). Zwraca krotkie podsumowanie do pokazania przy przycisku.
+   * na dzisiejsza godzine tej klasy - nieobecni od razu wypadaja z kola.
+   * `auto` = cichy odczyt automatu: tylko po nazwisku i tylko zmiany.
+   * Zwraca krotkie podsumowanie do pokazania przy przycisku.
    */
-  async function pullFromVulcan(): Promise<string> {
-    const { timetable, periods, setAttendance } = useStore.getState();
-    const lekcja = currentEntry(timetable, periods, new Date());
-    if (lekcja?.classId !== classId) {
-      throw new Error('Wg planu nie trwa teraz lekcja tej klasy - nie wiem, którą godzinę odczytać.');
+  async function pullFromVulcan(auto = false): Promise<string> {
+    const { timetable, periods, setAttendance, absences } = useStore.getState();
+    const lessonPeriod = classPeriodToday(timetable, periods, classId, new Date());
+    if (lessonPeriod === undefined) {
+      throw new Error('Wg planu ta klasa nie ma dziś lekcji - nie wiem, którą godzinę odczytać.');
     }
-    const rows = await requestVulcanAttendance(lekcja.period);
-    const { matched, unmatched } = matchVulcanAttendance(rows, classStudents);
+    const rows = await requestVulcanAttendance(lessonPeriod);
+    const { matched, unmatched } = matchVulcanAttendance(rows, classStudents, { byNameOnly: auto });
+    const before = attendanceForLesson(absences, classId, date, lessonPeriod);
     for (const item of matched) {
-      setAttendance({ studentId: item.studentId, classId, date, period: lekcja.period, status: item.status });
+      if (auto && (before.get(item.studentId) ?? 'present') === item.status) continue;
+      setAttendance({ studentId: item.studentId, classId, date, period: lessonPeriod, status: item.status });
     }
     const absent = matched.filter((m) => m.status === 'absent').length;
     const late = matched.filter((m) => m.status === 'late').length;
     const tail = unmatched.length > 0 ? ` · bez pary: ${unmatched.join(', ')}` : '';
     return `Nieobecni: ${absent}, spóźnieni: ${late}${tail}`;
   }
+
+  // Automat: frekwencja wpisana w VULCANIE (recznie albo z telefonu) sama
+  // trafia na kolo - przy otwarciu kola i potem co minute. Bez dodatku albo
+  // bez karty VULCANA odczyt po cichu sie nie udaje i nic sie nie zmienia.
+  useEffect(() => {
+    if (!classId || classStudents.length === 0) return;
+    function tick() {
+      if (Date.now() - lastAutoPullAt < AUTO_PULL_MS / 2) return;
+      lastAutoPullAt = Date.now();
+      pullFromVulcan(true).catch(() => undefined);
+    }
+    tick();
+    const timer = window.setInterval(tick, AUTO_PULL_MS);
+    return () => window.clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classId, classStudents.length]);
 
   return {
     absentSet,
