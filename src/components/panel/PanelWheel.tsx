@@ -86,7 +86,7 @@ export function PanelWheel({ wheel, adnotacja, onObecnosc }: PanelWheelProps) {
         )}
       </div>
 
-      <div className="grid shrink-0 grid-cols-2 gap-2 px-3 pt-2">
+      <div className="grid shrink-0 grid-cols-3 gap-2 px-3 pt-2">
         <button
           type="button"
           onClick={() => wheel.grade('plus', adnotacja)}
@@ -106,6 +106,16 @@ export function PanelWheel({ wheel, adnotacja, onObecnosc }: PanelWheelProps) {
           <span className="mr-1.5 font-black">{resultSymbol('kropka').symbol}</span>
           Kropka
           <span className="block text-[10px] font-normal opacity-75">klawisz 2</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => wheel.grade('plomba', adnotacja)}
+          disabled={ocenaZablokowana}
+          className="rounded-lg bg-red-700 py-2 text-base font-semibold text-white hover:bg-red-600 disabled:opacity-40"
+        >
+          <span className="mr-1.5 font-black">{resultSymbol('plomba').symbol}</span>
+          Plomba
+          <span className="block text-[10px] font-normal opacity-75">klawisz 3</span>
         </button>
       </div>
 

@@ -57,6 +57,9 @@ const TITLE_ALIASES: Record<string, string> = {
   [titleMatchKey('Powtorka 1-3: Teksty i formy wypowiedzi')]: titleMatchKey(
     'Powtórka 1-3: Formy wypowiedzi i czytanie',
   ),
+  // Temat 11 wchlonal 12-13 (jedna prezentacja o czasowniku na dwie godziny) -
+  // stara lekcja 11 aktualizuje sie w miejscu i zachowuje postep klas.
+  [titleMatchKey('11. Czas na czasownik')]: titleMatchKey('11-13. Czas na czasownik'),
 };
 
 /**

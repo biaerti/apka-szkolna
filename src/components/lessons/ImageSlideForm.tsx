@@ -1,5 +1,6 @@
 import type { Slide } from '../../data/types';
 import { Input } from '../ui/Input';
+import { StudentActionFields } from './StudentActionFields';
 
 type ImageSlide = Extract<Slide, { kind: 'image' }>;
 
@@ -46,6 +47,22 @@ export function ImageSlideForm({ slide, onChange }: { slide: ImageSlide; onChang
           onChange={(e) => onChange({ ...slide, caption: e.target.value || undefined })}
         />
       </div>
+      <div>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Strona podręcznika (screen z książki)</label>
+        <Input
+          type="number"
+          value={slide.page ?? ''}
+          onChange={(e) => onChange({ ...slide, page: e.target.value ? Number(e.target.value) : undefined })}
+          placeholder="Puste = zwykły obraz"
+        />
+      </div>
+      {typeof slide.page === 'number' && (
+        <StudentActionFields
+          action={slide.studentAction}
+          customText={slide.studentActionText}
+          onChange={(studentAction, studentActionText) => onChange({ ...slide, studentAction, studentActionText })}
+        />
+      )}
     </div>
   );
 }

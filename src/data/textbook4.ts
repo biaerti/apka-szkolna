@@ -1,7 +1,7 @@
 // Pierwsze dziesiec tematow z podrecznika "Miedzy nami 4" jako pelne prezentacje.
 // Podrecznik jest etapem lekcji, a nie zewnetrznym celem przycisku "Pokaz".
 
-import type { Lesson, Question, QuestionSet, Slide, SlideArt } from './types';
+import type { Lesson, Question, QuestionSet, Slide, SlideArt, StudentAction } from './types';
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
 
@@ -11,7 +11,8 @@ interface Topic {
   textbookPage: number;
   notebookNote?: string;
   questions: Array<{ text: string; answer: string }>;
-  makeSlides: (previousQuestionSetId?: string) => Slide[];
+  /** ownQuestionSetId - zestaw pytan tej lekcji (kolo po filmie z jej wlasnymi pytaniami). */
+  makeSlides: (previousQuestionSetId?: string, ownQuestionSetId?: string) => Slide[];
 }
 
 const ROZDZIAL_1 = 'Rozdział I. Poznajemy siebie i innych';
@@ -262,63 +263,38 @@ const TOPICS: Topic[] = [
     ],
   },
   {
-    title: '11. Czas na czasownik',
-    topic: 'Czasownik - czynności, stany i pisownia z „nie”',
+    // Tematy 11 i 12-13 z podrecznika scalone w jedna prezentacje na dwie
+    // godziny (Bartek 2026-09-24): ramka z s. 37 -> filmik z 4 zadaniami ->
+    // kolo fortuny z odpowiedziami z filmu -> notatka w 4 punktach -> zadania
+    // ze screenow podrecznika, kazde podpiete pod punkt notatki.
+    title: '11-13. Czas na czasownik',
+    topic: 'Czasownik - czynności, stany, odmiana i formy nieosobowe',
     textbookPage: 37,
     notebookNote: [
-      '## Najważniejsze',
-      '- **Czasownik** nazywa czynności i stany.',
-      '- Odpowiada na pytania: **co robi? co się z nim dzieje?**',
-      '- **„Nie”** z czasownikami piszemy **oddzielnie**: nie piszę.', '',
-      '## Przykład',
-      '**gra** - czynność, **marzy** - stan, **nie gram** - osobno.',
+      '## Czasownik',
+      '1. **Czasownik** nazywa **czynności** (co robi? - czyta) i **stany** (co się z nim dzieje? - śpi).',
+      '2. **„Nie”** z czasownikami piszemy **oddzielnie**: nie wiem, nie umiem.',
+      '3. Czasownik odmienia się przez **osoby, liczby, czasy i rodzaje**: zrobiłam - 1. osoba, liczba pojedyncza, czas przeszły, rodzaj żeński.',
+      '4. **Formy nieosobowe** - bezokolicznik (czytać, piec) i formy na **-no, -to** (zrobiono, umyto). Nie określamy w nich osoby, liczby ani rodzaju.',
     ].join('\n'),
+    // Pytania do kola po filmie = cztery zadania z filmiku (czasownik-film3).
     questions: [
-      { text: 'Co nazywa czasownik?', answer: 'Czynności i stany.' },
-      { text: 'Na jakie dwa pytania odpowiada czasownik?', answer: 'Co robi? Co się z nim dzieje?' },
-      { text: 'Czy wyraz „marzy” oznacza czynność czy stan?', answer: 'Stan.' },
-      { text: 'Jak zapisujemy „nie” z czasownikami?', answer: 'Oddzielnie, np. nie piszę.' },
-      { text: 'Podaj czasownik w trzech czasach.', answer: 'Np. grał, gra, będzie grał.' },
+      { text: 'Zadanie 1 z filmu: które słowo to czasownik? A - wysoki, B - skacze, C - kot, D - wesoło.', answer: 'B - skacze.' },
+      { text: 'Zadanie 2 z filmu: dopisz „nie” do czasownika „biegnę”.', answer: 'nie biegnę - osobno.' },
+      { text: 'Zadanie 3 z filmu: „gramy” - która to osoba i liczba?', answer: 'A - pierwsza osoba liczby mnogiej.' },
+      { text: 'Zadanie 4 z filmu: zamień „czytam” na czas przeszły i przyszły.', answer: 'czytałem / czytałam; będę czytać / przeczytam.' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: (_previousSetId, ownSetId) => [
       slideTopic('Czas na czasownik'),
-      ...recap(previousSetId),
-      slideRead('Otwieramy podręcznik', 37, 39, 'Przypominamy, czym jest czasownik, rozróżniamy czynności i stany oraz ćwiczymy zapis czasowników z przeczeniem „nie”.', 18 * 60),
-      slideText('Przypomnienie: czasownik', 'Czasownik odpowiada na pytanie **co robi?** albo **co się z nim dzieje?**. Rozpoznajesz go też po zmianie czasu: **grał - gra - będzie grał**.\n\nPodczas pracy z podręcznikiem przypomnij sobie jeszcze jedną zasadę: **nie** z czasownikami zapisujemy oddzielnie.', 'czasownik'),
-      slideVideo('czasownik-film1'),
-      slideTask('Z1', '**Przykład:** Ala **czyta** książkę.\nPytamy: **co robi Ala?** - czyta. „Czyta” to czasownik oznaczający czynność.\n\n**Teraz ty:** przepisz zdania i podkreśl czasowniki. Napisz obok: **czynność** albo **stan**.\n\n1. Olek buduje bazę.\n2. Zosia marzy o wakacjach.\n3. Kot śpi na fotelu.', 6 * 60, 'czasownik', '1. **buduje** - czynność\n2. **marzy** - stan\n3. **śpi** - stan'),
-      slideTask('Z2', '**Przykład:** gram - **nie gram**.\n„Nie” z czasownikiem zapisujemy osobno.\n\n**Teraz ty:** dopisz **nie** do czasowników. Potem ułóż jedno krótkie zdanie z wybraną parą.\n\n- czytam\n- biegnę\n- czekam', 5 * 60, 'czasownik', '**nie czytam, nie biegnę, nie czekam**\nNp. „Dziś nie czytam komiksu.”'),
-      slideNote('Czasownik', '- Czasownik nazywa czynności i stany.\n- Odpowiada na pytania: co robi? co się z nim dzieje?\n- „Nie” z czasownikami piszemy oddzielnie: nie piszę.'),
-    ],
-  },
-  {
-    title: '12-13. Misja odmiana! Tajemnice czasownika',
-    topic: 'Osoba, liczba, rodzaj i czas czasownika',
-    textbookPage: 40,
-    notebookNote: [
-      '## Najważniejsze',
-      '- Czasownik odmienia się przez **osoby, liczby i czasy**.',
-      '- W czasie przeszłym także przez **rodzaje**: zrobił, zrobiła, zrobiło.',
-      '- Formy **nieosobowe**: bezokolicznik (robić) i formy na **-no, -to**.', '',
-      '## Przykład',
-      '**zbudowałyście** - 2. os., liczba mnoga, czas przeszły, rodzaj niemęskoosobowy.',
-    ].join('\n'),
-    questions: [
-      { text: 'Przez jakie kategorie odmienia się czasownik?', answer: 'Przez osoby, liczby, czasy, a w części form także przez rodzaje.' },
-      { text: 'Jaka to osoba i liczba: „robimy”?', answer: 'Pierwsza osoba liczby mnogiej.' },
-      { text: 'Jaki to czas: „będę czytać”?', answer: 'Czas przyszły.' },
-      { text: 'Kiedy można określić rodzaj czasownika?', answer: 'Między innymi w czasie przeszłym, np. zrobił, zrobiła, zrobiło.' },
-      { text: 'Podaj dwa rodzaje form nieosobowych.', answer: 'Bezokolicznik oraz formy zakończone na -no, -to.' },
-    ],
-    makeSlides: (previousSetId) => [
-      slideTopic('Misja odmiana! Tajemnice czasownika'),
-      ...recap(previousSetId),
-      slideRead('Otwieramy podręcznik', 40, 42, 'Poznajemy kategorie gramatyczne czasownika: osobę, liczbę, czas i rodzaj. Odróżniamy formy osobowe od nieosobowych.', 20 * 60),
-      slideText('Przypomnienie: forma czasownika', 'Przy czasowniku sprawdzasz: **kto? ilu? kiedy?** W czasie przeszłym często rozpoznajesz także rodzaj.\n\nPamiętaj o formach, które nie wskazują wykonawcy: bezokoliczniku **robić** oraz formach **zrobiono, umyto**.', 'czasownikOdmiana'),
-      slideVideo('czasownik-film2'),
-      slideTask('Z1', '**Przykład:** **czytam** - ja, 1. osoba, liczba pojedyncza, czas teraźniejszy.\n\n**Teraz ty:** uzupełnij taki sam schemat.\n\n1. **piszesz** - ty, ... osoba, ... liczba, ... czas\n2. **gramy** - my, ... osoba, ... liczba, ... czas\n3. **przeczytają** - oni, ... osoba, ... liczba, ... czas', 6 * 60, 'czasownikOdmiana', '1. piszesz - ty, 2. osoba, liczba pojedyncza, czas teraźniejszy\n2. gramy - my, 1. osoba, liczba mnoga, czas teraźniejszy\n3. przeczytają - oni, 3. osoba, liczba mnoga, czas przyszły'),
-      slideTask('Z2', '**Przykład:** ja rysuję - **my rysujemy**. Zmieniamy osobę i liczbę, ale czynność zostaje ta sama.\n\n**Teraz ty:** przepisz i zmień formę czasownika według wzoru.\n\n1. ja czytam - my ...\n2. ty grasz - wy ...\n3. on napisał - ona ...', 6 * 60, 'czasownikOdmiana', '1. my **czytamy**\n2. wy **gracie**\n3. ona **napisała**'),
-      slideNote('Odmiana czasownika', '- Czasownik odmienia się przez osoby, liczby i czasy.\n- W czasie przeszłym także przez rodzaje: zrobił, zrobiła, zrobiło.\n- Formy nieosobowe: bezokolicznik (robić) i formy na -no, -to.'),
+      slideTextbookImage('czytanki:czasownik-ramka-s37.webp', 37, 'Czasownik - przypomnienie'),
+      slideVideo('czasownik-film3'),
+      ...recap(ownSetId),
+      slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.'),
+      slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4 · ćwiczy punkt 1 notatki', 'textbook'),
+      slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5 · ćwiczy punkt 1 notatki', 'textbook', 'Podkreśl w podręczniku'),
+      slideTextbookTask('czytanki:czasownik-s41-zad2.webp', 41, 's.41 zad.2', 'Zadanie 2 · ćwiczy punkt 3 notatki', 'textbook'),
+      slideTextbookTask('czytanki:czasownik-s42-zad3.webp', 42, 's.42 zad.3', 'Zadanie 3 · ćwiczy punkty 3 i 4 notatki', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:czasownik-s42-zad4.webp', 42, 's.42 zad.4', 'Zadanie 4 · ćwiczy punkty 2 i 3 notatki', 'write-answer', 'Do zeszytu'),
     ],
   },
   {
@@ -420,7 +396,7 @@ export function buildTextbook4(grade: string, classIds: string[]): FreshMaterial
   const lessons: Array<Omit<Lesson, 'id' | 'order'>> = TOPICS.map((topic, index) => {
     const setId = questionSets[index].id;
     topic.questions.forEach((question, order) => questions.push({ id: newId(), setId, ...question, order }));
-    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: ROZDZIAL_1, progress: {}, slides: topic.makeSlides(questionSets[index - 1]?.id) };
+    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: ROZDZIAL_1, progress: {}, slides: topic.makeSlides(questionSets[index - 1]?.id, setId) };
   });
   return { lessons, questionSets, questions };
 }
@@ -432,7 +408,11 @@ export const TEXTBOOK4_TOPIC_COUNT = TOPICS.length;
  * Dawniej siedzialy tu tematy 15-16 - dzis sa pelnoprawnymi pozycjami TOPICS,
  * wiec refresh dopasowuje je po tytule zamiast kasowac.
  */
-export const RETIRED_TEXTBOOK4_TITLES = new Set<string>([]);
+export const RETIRED_TEXTBOOK4_TITLES = new Set<string>([
+  // wchloniete przez '11-13. Czas na czasownik' (dawna lekcja 11 aktualizuje
+  // sie w miejscu - alias w refreshMaterials.ts)
+  '12-13. Misja odmiana! Tajemnice czasownika',
+]);
 
 function slideTopic(topic: string): Slide {
   return { id: newId(), kind: 'topic', topic, variant: 'write' };
@@ -448,6 +428,14 @@ function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 
 function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
 function slideCzytanka(czytankaId: string): Slide { return { id: newId(), kind: 'czytanka', czytankaId }; }
 function slideImage(url: string): Slide { return { id: newId(), kind: 'image', url }; }
+/** Screen z podrecznika (ramka teorii) z numerem strony nad obrazem. */
+function slideTextbookImage(url: string, page: number, title: string): Slide {
+  return { id: newId(), kind: 'image', url, page, title, studentAction: 'look' };
+}
+/** Screen zadania z podrecznika - z kodem, wiec dziala na nim kolo na lekcji (K). */
+function slideTextbookTask(url: string, page: number, code: string, title: string, studentAction: StudentAction, studentActionText?: string): Slide {
+  return { id: newId(), kind: 'image', url, page, code, title, studentAction, studentActionText };
+}
 function slideNote(temat: string, body: string): Slide {
   return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
 }

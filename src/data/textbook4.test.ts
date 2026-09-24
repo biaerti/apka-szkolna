@@ -17,8 +17,7 @@ describe('buildTextbook4', () => {
     expect(bundle.lessons.slice(5).map((lesson) => lesson.title)).toEqual([
       '8. Dlaczego warto być sobą?',
       '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
-      '11. Czas na czasownik',
-      '12-13. Misja odmiana! Tajemnice czasownika',
+      '11-13. Czas na czasownik',
       '14. Czy każda nasza wypowiedź jest zdaniem?',
       '15. Tworzymy plan ramowy',
       '16. Co już wiesz? Co umiesz?',
@@ -26,13 +25,16 @@ describe('buildTextbook4', () => {
     for (const [index, lesson] of bundle.lessons.entries()) {
       expect(lesson.exercisePage).toBeUndefined();
       expect(lesson.slides[0]).toMatchObject({ kind: 'topic', variant: 'write' });
-      // Dwa formaty: praca z podrecznikiem (slajd read) albo lekcja z czytanka
-      // z lektorem - tam notatka idzie PRZED zadaniami (czytanka -> ramka -> notatka -> zadania).
+      // Formaty: dawny (slajd read, notatka na koniec) albo nowy - czytanka z
+      // lektorem lub filmik, a notatka PRZED zadaniami. Zadania nowego formatu
+      // moga byc screenami z podrecznika (obraz ze strona i kodem).
       const czytanka = lesson.slides.some((slide) => slide.kind === 'czytanka');
-      expect(czytanka || lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
+      const screeny = lesson.slides.filter((slide) => slide.kind === 'image' && slide.code);
+      const nowyFormat = czytanka || screeny.length > 0;
+      expect(nowyFormat || lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
       // Pierwsze piec tematow ma 3-4 zadania, krotsze prezentacje podsumowujace - 2,
-      // lekcje z czytanka - 3 krotkie.
-      const expectedTasks = czytanka ? 3 : index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
+      // lekcje z czytanka - 3 krotkie, lekcje ze screenami - same screeny.
+      const expectedTasks = screeny.length > 0 ? 0 : czytanka ? 3 : index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
       expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(expectedTasks);
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
       // Zadnych slajdow zwiazanych z kartami A5 - Bartek moze ich nie drukowac.
@@ -41,7 +43,7 @@ describe('buildTextbook4', () => {
       // Zadania bez plakietki "do zeszytu" - Bartek ja wycofal z tych prezentacji.
       expect(lesson.slides.filter((slide) => slide.kind === 'task').some((slide) => slide.zeszyt)).toBe(false);
       // Kazda lekcje zamyka notatka "Temat: ..." do przepisania.
-      const closing = czytanka ? lesson.slides.find((slide) => slide.kind === 'note')! : lesson.slides[lesson.slides.length - 1];
+      const closing = nowyFormat ? lesson.slides.find((slide) => slide.kind === 'note')! : lesson.slides[lesson.slides.length - 1];
       expect(closing).toMatchObject({ kind: 'note', title: 'Notatka do zeszytu' });
       expect(closing.kind === 'note' ? closing.body : '').toMatch(/^\*\*Temat:\*\* /);
       // Notatka A5 do wydruku jest pelna (bez luk {{...}}) - nie ma juz slajdu
@@ -76,21 +78,19 @@ describe('buildTextbook4', () => {
     }
   });
 
-  it('lekcje o czasowniku maja proste zadania wedlug pokazanego wzoru', () => {
+  it('czasownik: ramka, filmik, kolo z pytaniami z filmu, notatka i screeny zadan', () => {
     const bundle = buildTextbook4('IV', ['4a']);
-    const verbLessons = bundle.lessons.filter((lesson) =>
-      lesson.title === '11. Czas na czasownik'
-      || lesson.title === '12-13. Misja odmiana! Tajemnice czasownika',
-    );
-
-    expect(verbLessons).toHaveLength(2);
-    for (const lesson of verbLessons) {
-      const tasks = lesson.slides.filter((slide) => slide.kind === 'task');
-      expect(tasks).toHaveLength(2);
-      expect(tasks.every((task) => task.body.includes('**Przykład:**'))).toBe(true);
-      expect(tasks.every((task) => task.body.includes('**Teraz ty:**'))).toBe(true);
-      expect(tasks.every((task) => Boolean(task.answerExample))).toBe(true);
-    }
+    const lesson = bundle.lessons.find((l) => l.title === '11-13. Czas na czasownik')!;
+    expect(lesson.slides.map((slide) => slide.kind)).toEqual([
+      'topic', 'image', 'video', 'recap', 'note', 'image', 'image', 'image', 'image', 'image',
+    ]);
+    // Kolo po filmie pyta o zadania z filmu - wlasny zestaw lekcji, nie poprzedniej.
+    expect(lesson.slides[3]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId });
+    const setQuestions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
+    expect(setQuestions).toHaveLength(4);
+    // Kazdy screen zadania ma strone i kod, wiec dziala na nim kolo na lekcji.
+    const screeny = lesson.slides.slice(5);
+    expect(screeny.every((slide) => slide.kind === 'image' && typeof slide.page === 'number' && Boolean(slide.code))).toBe(true);
   });
 
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {

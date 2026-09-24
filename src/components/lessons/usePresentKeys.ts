@@ -5,7 +5,7 @@
 // 2. na slajdzie recap Spacja/Esc naleza do sesji kola powtorzeniowego,
 // 3. na slajdzie `task` klawisz K przelacza szuflade kola na lekcji; przy
 //    otwartej szufladzie Spacja KRECI (nie zmienia slajdu), 1 = plus,
-//    2 = kropka, Backspace albo Ctrl+Z = cofnij ostatnia ocene,
+//    2 = kropka, 3 = plomba, Backspace albo Ctrl+Z = cofnij ostatnia ocene,
 // 4. strzalki / PageUp / PageDown / Home / End nawiguja zawsze, F = pelny ekran,
 // 5. R wlacza/wylacza rysowanie po slajdzie, T dopisek tekstowy, Ctrl+Z cofa
 //    ostatnia kreske (przy wylaczonym rysowaniu - ostatnia ocene z kola);
@@ -32,7 +32,7 @@ export interface PresentKeysArgs {
   wheelOpen: boolean;
   setWheelOpen: (open: boolean) => void;
   onSpin: () => void;
-  onGrade: (result: 'plus' | 'kropka') => void;
+  onGrade: (result: 'plus' | 'kropka' | 'plomba') => void;
   onUndo: () => void;
   goTo: (index: number) => void;
   toggleFullscreen: () => void;
@@ -134,6 +134,11 @@ export function usePresentKeys(args: PresentKeysArgs) {
         if (e.key === '2') {
           e.preventDefault();
           args.onGrade('kropka');
+          return;
+        }
+        if (e.key === '3') {
+          e.preventDefault();
+          args.onGrade('plomba');
           return;
         }
         if (e.key === 'Backspace') {

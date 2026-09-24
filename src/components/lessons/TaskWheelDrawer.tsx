@@ -2,7 +2,7 @@
 // zadanie zostaje glownym elementem ekranu, a kolo jest "gdzies obok". Od
 // gory: naglowek z kodem zadania, kolo (Wheel z modulu recap, rozmiar z
 // ResizeObservera), przycisk "Krec", ramka "Odpowiada" z duzym nazwiskiem i
-// dwa przyciski oceny: plus (dobrze) i kropka (slabo albo wcale) - nic wiecej,
+// trzy przyciski oceny: plus (dobrze), kropka (slabo) i plomba (brak odpowiedzi) - nic wiecej,
 // na lekcji nie ma plomby ani pasa (src/lib/recap.ts, LessonWheelResult).
 //
 // Stan (useTaskWheel) siedzi w LessonPresent - szuflada tylko go rysuje, wiec
@@ -132,7 +132,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
         )}
       </div>
 
-      <div className="grid shrink-0 grid-cols-2 gap-2 px-3 pt-2">
+      <div className="grid shrink-0 grid-cols-3 gap-2 px-3 pt-2">
         <button
           type="button"
           onClick={() => wheel.grade('plus', taskCode)}
@@ -152,6 +152,16 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
           <span className="mr-2 font-black">{resultSymbol('kropka').symbol}</span>
           Kropka
           <span className="block text-xs font-normal opacity-75">bez plusa · klawisz 2</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => wheel.grade('plomba', taskCode)}
+          disabled={gradeDisabled}
+          className="whitespace-nowrap rounded-lg bg-red-700 px-2 py-2.5 text-xl font-semibold text-white hover:bg-red-600 disabled:opacity-40"
+        >
+          <span className="mr-2 font-black">{resultSymbol('plomba').symbol}</span>
+          Plomba
+          <span className="block text-xs font-normal opacity-75">brak odpowiedzi · klawisz 3</span>
         </button>
       </div>
 

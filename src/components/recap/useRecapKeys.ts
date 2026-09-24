@@ -3,7 +3,7 @@
 //
 // Spacja = losuj/nastepny, Enter = gotowe-nastepny (tryb bez ocen). W trybie
 // ocen klawisze 1-2 zaleza od trybu rundy (recapMode, patrz src/lib/recap.ts):
-// - powtorzeniowe: 1/2 = dobrze/kropka,
+// - powtorzeniowe: 1/2/3 = dobrze/kropka/plomba,
 // - po-lekcji (stary tryb, tylko dla starych danych - patrz src/lib/recap.ts):
 //   1 = dobrze, 2 = dalej (jak Enter w trybie bez ocen) - to jedyne dwa
 //   przyciski, ten tryb nigdy nie dawal plomby.
@@ -48,6 +48,8 @@ export function useRecapKeys(
         if (!s.grading) return;
         if (s.recapMode === 'powtorzeniowe') s.grade('kropka');
         else if (s.currentStudent && !s.graded) s.markDoneNoGrade();
+      } else if (e.key === '3') {
+        if (s.grading && s.recapMode === 'powtorzeniowe') s.grade('plomba');
       } else if (e.key === 'n' || e.key === 'N') {
         s.nextQuestion();
       } else if (e.key === 'o' || e.key === 'O') {

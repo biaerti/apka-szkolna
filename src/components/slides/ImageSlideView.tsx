@@ -4,6 +4,7 @@ import { CZYTANKI_URL_PREFIX, czytankiPlikUrl } from '../../data/czytanki';
 import { RichText } from './RichText';
 import { fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
+import { StudentActionBadge } from './StudentActionBadge';
 
 type ImageSlide = Extract<Slide, { kind: 'image' }>;
 
@@ -47,6 +48,26 @@ export function ImageSlideView({ slide }: { slide: ImageSlide }) {
   const scale = useSlideFontScale();
   const titleSize = Math.round(56 * scale);
   const captionSize = Math.round(34 * scale);
+
+  // Screen z podrecznika (ramka teorii albo zadanie): strona u gory, zeby dzieci
+  // wiedzialy, gdzie to jest w ksiazce; obok plakietka "W podręczniku" / "Do zeszytu".
+  if (typeof slide.page === 'number') {
+    return (
+      <div className="flex h-full flex-col gap-4 px-12 pb-12 pt-7">
+        <div className="flex shrink-0 items-center justify-between gap-6 pr-28">
+          <div className="min-w-0">
+            <span className="block text-[40px] font-bold leading-tight text-accent-300">Podręcznik s. {slide.page}</span>
+            {slide.title && <span className="block text-[28px] leading-tight text-gray-300">{slide.title}</span>}
+          </div>
+          {slide.studentAction && <StudentActionBadge action={slide.studentAction} text={slide.studentActionText} />}
+        </div>
+        {/* Do lewej: pionowa ramka zostawia z prawej miejsce na pisanie po slajdzie. */}
+        <div className="flex min-h-0 flex-1 items-start justify-start">
+          <SlideImg slide={slide} className="max-h-full max-w-full rounded-lg object-contain" />
+        </div>
+      </div>
+    );
+  }
 
   // Zdjecie + tekst obok - np. "Kim jestem". Naglowek nad calym slajdem,
   // zdjecie po lewej, tekst po prawej - czytelne na 1280x720.

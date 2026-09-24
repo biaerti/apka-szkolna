@@ -1,6 +1,6 @@
 // Przyciski wyniku odpowiedzi. Aktualna zasada kola jest prosta:
-// - 'powtorzeniowe' - plus albo neutralna kropka; bez plomb, pasow i kar za
-//   podpowiadanie,
+// - 'powtorzeniowe' - plus, neutralna kropka albo plomba za brak odpowiedzi;
+//   bez pasow i kar za podpowiadanie,
 // - 'po-lekcji' - STARY tryb (wycofany, zostaje dla starych danych - patrz
 //   src/lib/recap.ts): mozna tylko zyskac: tylko dwa przyciski, "Dobrze" i
 //   "Dalej" (neutralne, nic sie nie zapisuje). Nie ma tu "Źle" wcale - ten tryb
@@ -19,7 +19,7 @@ export interface ScoreButtonsProps {
   disabled: boolean;
   graded: boolean;
   recapMode: RecapMode;
-  onGrade: (result: Extract<RecapResult, 'plus' | 'kropka'>) => void;
+  onGrade: (result: Extract<RecapResult, 'plus' | 'kropka' | 'plomba'>) => void;
   /** "Dalej" w starym trybie po-lekcji - jak "gotowe, następny", nic nie zapisuje. */
   onSkip: () => void;
 }
@@ -36,7 +36,7 @@ export function ScoreButtons({
 
   return (
     <div className="flex w-full flex-col gap-1.5">
-      <div className="grid grid-cols-2 gap-2">
+      <div className={`grid gap-2 ${isPowtorzeniowe ? 'grid-cols-3' : 'grid-cols-2'}`}>
         <button
           type="button"
           onClick={() => onGrade('plus')}
@@ -71,6 +71,18 @@ export function ScoreButtons({
           </button>
         )}
 
+        {isPowtorzeniowe && (
+        <button
+          type="button"
+          onClick={() => onGrade('plomba')}
+          disabled={gradeDisabled}
+          className="whitespace-nowrap rounded-lg bg-red-700 px-2 py-3 text-2xl sm:text-3xl font-semibold text-white hover:bg-red-600 disabled:opacity-40"
+        >
+          <span className="mr-2 font-black">{resultSymbol('plomba').symbol}</span>
+          Plomba
+          <span className="block text-sm font-normal opacity-75">brak odpowiedzi · klawisz 3</span>
+        </button>
+        )}
       </div>
     </div>
   );

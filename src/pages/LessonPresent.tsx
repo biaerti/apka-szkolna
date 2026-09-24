@@ -106,7 +106,8 @@ export function LessonPresent() {
 
   const currentStep = presentation.steps[index];
   const currentSlide = currentStep?.kind === 'slide' ? currentStep.slide : undefined;
-  const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : '';
+  // Kolo na lekcji: slajd zadania albo screen zadania z podrecznika (obraz z kodem).
+  const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : currentSlide?.kind === 'image' ? (currentSlide.code ?? '') : '';
   // Rysowanie po slajdzie - stan trzyma prezentacja, wiec kreski przezywaja
   // przejscie na kolejny slajd i powrot (patrz useSlideAnnotations).
   const writePaneOn = writePane && !boardOpen && supportsWritePane(currentSlide);
@@ -120,7 +121,7 @@ export function LessonPresent() {
     index,
     total,
     onRecap: !boardOpen && currentSlide?.kind === 'recap',
-    onTask: !boardOpen && currentSlide?.kind === 'task',
+    onTask: !boardOpen && taskCode !== '',
     classPanelOpen,
     setClassPanelOpen,
     wheelOpen: wheel.open,
@@ -205,7 +206,7 @@ export function LessonPresent() {
 
   const isPreparation = !boardOpen && currentStep.kind === 'preparation';
   const isRecap = !boardOpen && currentSlide?.kind === 'recap';
-  const isTask = !boardOpen && currentSlide?.kind === 'task';
+  const isTask = !boardOpen && taskCode !== '';
   const isLast = index === total - 1;
   const drawerOpen = isTask && wheel.open;
 

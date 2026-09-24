@@ -245,6 +245,8 @@ export function Panel() {
         if (currentStudent && !graded) grade('plus', ADNOTACJA);
       } else if (e.key === '2') {
         if (currentStudent && !graded) grade('kropka', ADNOTACJA);
+      } else if (e.key === '3') {
+        if (currentStudent && !graded) grade('plomba', ADNOTACJA);
       } else if (e.key === 'Backspace') {
         e.preventDefault();
         if (canUndo) undoLast();

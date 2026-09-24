@@ -6,7 +6,7 @@ export type ID = string;
  * Jednoznaczna instrukcja widoczna na slajdzie. Rozdziela rzeczy, ktore
  * dawniej miescily sie w nieprecyzyjnej plakietce "do zeszytu".
  */
-export type StudentAction = 'copy' | 'write-answer' | 'oral' | 'look';
+export type StudentAction = 'copy' | 'write-answer' | 'oral' | 'look' | 'textbook';
 
 export interface SchoolClass {
   id: ID;
@@ -379,7 +379,20 @@ export type Slide =
   // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac
   // sam naglowek nad zdjeciem (np. "Znacie teleturniej Kolo Fortuny?").
   // `caption` zostaje jako podpis pod zdjeciem dla prostszych slajdow.
-  | { id: ID; kind: 'image'; url: string; caption?: string; title?: string; body?: string }
+  | {
+      id: ID;
+      kind: 'image';
+      url: string;
+      caption?: string;
+      title?: string;
+      body?: string;
+      /** Screen z podrecznika: "Podręcznik s. 39" nad obrazem, obraz na reszte kartki. */
+      page?: number;
+      /** Kod zadania ze screena (np. "s.39 zad.4") - wtedy na slajdzie dziala kolo na lekcji jak na `task`. */
+      code?: string;
+      studentAction?: StudentAction;
+      studentActionText?: string;
+    }
   // Filmik lekcyjny z rejestru src/data/filmiki.ts (mp4 w prywatnym buckecie).
   | { id: ID; kind: 'video'; videoId: string; title?: string }
   // Czytanka z lektorem (src/data/czytanki.ts): tekst na slajdzie przewija sie

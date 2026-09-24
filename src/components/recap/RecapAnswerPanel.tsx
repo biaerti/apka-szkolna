@@ -10,7 +10,7 @@ import type { Question } from '../../data/types';
 export interface RecapAnswerPanelProps {
   session: RecapSessionState;
   onUpdateQuestion: (id: string, patch: Partial<Question>) => void;
-  onGrade: (result: 'plus' | 'kropka') => void;
+  onGrade: (result: 'plus' | 'kropka' | 'plomba') => void;
   onSkip: () => void;
   onShowOverview: () => void;
   /** Stale polecenie rundy - wazniejsze niz wylosowane pytanie (patrz QuestionPanel). */

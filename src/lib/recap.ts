@@ -276,10 +276,10 @@ export function earnedFive(events: RecapEvent[], studentId: string, settings: Se
 
 /**
  * Ocena z kola NA LEKCJI: plus za dobrze zrobione zadanie, kropka za zadanie
- * zrobione slabo albo wcale. Plomby ani pasa tu nie ma - na lekcji nie da sie
- * nic stracic (tak jak kiedys na kole po lekcji).
+ * zrobione slabo, plomba za brak odpowiedzi (Bartek 2026-09-24: bez plomby
+ * czesc klasy nic nie robila). Pasa tu nie ma.
  */
-export type LessonWheelResult = Extract<RecapResult, 'plus' | 'kropka'>;
+export type LessonWheelResult = Extract<RecapResult, 'plus' | 'kropka' | 'plomba'>;
 
 /**
  * Adnotacja zdarzenia z kola na lekcji - zamiast questionId (zadanie nie jest

@@ -7,6 +7,7 @@ const ACTION_COPY: Record<StudentAction, { label: string; detail: string }> = {
   'write-answer': { label: 'Zapisz odpowiedź', detail: 'Nie przepisuj polecenia' },
   oral: { label: 'Przygotuj odpowiedź', detail: 'Nic nie zapisuj' },
   look: { label: 'Patrz', detail: 'Nic nie zapisuj' },
+  textbook: { label: 'W podręczniku', detail: 'Uzupełnij w podręczniku' },
 };
 
 function EyeIcon() {
@@ -27,6 +28,15 @@ function SpeechIcon() {
   );
 }
 
+function BookIcon() {
+  return (
+    <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round">
+      <path d="M5 11c7-3 13-2 19 3v24c-6-5-12-6-19-3z" />
+      <path d="M43 11c-7-3-13-2-19 3v24c6-5 12-6 19-3z" />
+    </svg>
+  );
+}
+
 export function StudentActionBadge({ action, text }: { action: StudentAction; text?: string }) {
   const copy = ACTION_COPY[action];
   const notebook = action === 'copy' || action === 'write-answer';
@@ -39,7 +49,7 @@ export function StudentActionBadge({ action, text }: { action: StudentAction; te
           : 'border-sky-400/70 bg-sky-400/10 text-sky-100',
       )}
     >
-      {notebook ? <ZeszytIcon className="h-10 w-10 shrink-0" /> : action === 'oral' ? <SpeechIcon /> : <EyeIcon />}
+      {notebook ? <ZeszytIcon className="h-10 w-10 shrink-0" /> : action === 'oral' ? <SpeechIcon /> : action === 'textbook' ? <BookIcon /> : <EyeIcon />}
       <span className="min-w-0">
         <span className="block text-2xl font-bold uppercase leading-tight tracking-wide">{text?.trim() || copy.label}</span>
         <span className="block text-lg leading-tight opacity-80">{copy.detail}</span>

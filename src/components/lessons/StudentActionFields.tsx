@@ -21,6 +21,7 @@ export function StudentActionFields({
           <option value="copy">Przepisz treść slajdu</option>
           <option value="oral">Przygotuj odpowiedź ustnie - nic nie zapisuj</option>
           <option value="look">Patrz - nic nie zapisuj</option>
+          <option value="textbook">Uzupełnij w podręczniku</option>
         </Select>
       </div>
       {action && (
