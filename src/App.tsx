@@ -31,6 +31,7 @@ import { Journal } from './pages/Journal';
 import { Sala } from './pages/Sala';
 import { WazneInfoPage } from './pages/WazneInfo';
 import { AutoVulcanUwaga } from './components/uwagi/AutoVulcanUwaga';
+import { AutoRefreshMaterials } from './components/lessons/AutoRefreshMaterials';
 
 export default function App() {
   return (
@@ -39,6 +40,8 @@ export default function App() {
           "zapisane" maja dzialac tez na ekranach prezentacji, gdzie AppShell
           (a z nim popup uwag) jest odmontowany. */}
       <AutoVulcanUwaga />
+      {/* Gotowe materialy odswiezaja sie same po zmianie w kodzie. */}
+      <AutoRefreshMaterials />
       <Routes>
       {/* Ekrany projektora - bez paska bocznego, pelny ekran */}
       {/* Trasa zostaje: uruchamia ja slajd "recap" w prezentacji lekcji (LessonPresent) */}

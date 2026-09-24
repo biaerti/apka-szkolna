@@ -12,9 +12,10 @@ import { Modal } from '../ui/Modal';
 import { RichText } from '../slides/RichText';
 
 export function LessonPlanModal({ lesson, onClose }: { lesson: Lesson; onClose: () => void }) {
-  // Reczna zmiana planu = lekcja "edytowana recznie": "Odswiez wstawione
-  // materialy" ostrzeze, zanim nadpisze wersje nauczyciela wersja z kodu.
-  const updateLesson = useStore((s) => s.updateLessonFromEditor);
+  // Zmiana planu NIE oznacza lekcji jako edytowanej recznie - inaczej automat
+  // przestalby ja odswiezac. Plan nauczyciela przetrwa odswiezenie, gdy kod
+  // nie ma wlasnego planu (useReadyMaterials.applyRefresh).
+  const updateLesson = useStore((s) => s.updateLesson);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(lesson.teacherPlan ?? '');
 

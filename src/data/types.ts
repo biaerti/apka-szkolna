@@ -153,6 +153,11 @@ export interface Lesson {
    */
   teacherPlan?: string;
   /**
+   * Wersja gotowego materialu z kodu wstawiona ostatnio do tej lekcji (hash
+   * tresci z buildXxx). Inna niz w kodzie = apka sama odswieza lekcje przy starcie.
+   */
+  sourceVersion?: string;
+  /**
    * Kod lekcji do zeszytu, np. "4.3" (rocznik.numer). Nadawany raz, przy
    * tworzeniu lekcji, i juz sie nie zmienia - dziecko ma po nim odnalezc temat
    * w zeszycie nawet wtedy, gdy nauczyciel przestawi kolejnosc lekcji. Kody
@@ -654,3 +659,6 @@ export interface VulcanLesson {
   /** "zastępstwo za ..." gdy VULCAN tak oznaczyl lekcje. */
   replacement?: string;
 }
+
+/** Lesson.sourceVersion lekcji zapisanej recznie w edytorze - automat odswiezania jej nie rusza. */
+export const MANUAL_SOURCE_VERSION = 'reczna';

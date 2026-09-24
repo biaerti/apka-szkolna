@@ -10,7 +10,7 @@
 
 import { useMemo } from 'react';
 import { useStore } from '../../data/store';
-import type { Lesson, Question, QuestionSet } from '../../data/types';
+import { MANUAL_SOURCE_VERSION, type Lesson, type Question, type QuestionSet } from '../../data/types';
 import { buildRecap13 } from '../../data/recap13';
 import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson } from '../../data/intro';
@@ -19,6 +19,7 @@ import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from 
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import {
   classifyMatch,
+  codeVersion,
   isMatchStale,
   lessonQuestionSetId,
   matchLessonsForRefresh,
@@ -28,6 +29,7 @@ import {
   titleMatchKey,
   type ClassifiedRefreshMatch,
   type FreshMaterialsBundle,
+  type RefreshMatch,
 } from './refreshMaterials';
 
 interface MaterialDefinition {
@@ -156,7 +158,9 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         .filter((m) => isMatchStale(m, questions))
         .map((m) => ({
           ...m,
-          classification: classifyMatch(manuallyEditedLessonIds[m.oldLesson.id] === true),
+          classification: classifyMatch(
+            manuallyEditedLessonIds[m.oldLesson.id] === true || m.oldLesson.sourceVersion === MANUAL_SOURCE_VERSION,
+          ),
         })),
     [freshBundle, gradeLessons, questions, manuallyEditedLessonIds],
   );
@@ -228,6 +232,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
       const mappedSlides = remapRecapSlides(lesson.slides, (tempId) => resolveSetId(tempId, bundle, setIdMap));
       addLesson({
         ...lesson,
+        sourceVersion: codeVersion(lesson, bundle.questions.filter((q) => q.setId === lesson.questionSetId), bundle),
         questionSetId: mappedQuestionSetId,
         // Wymuszone rowne questionSetId (a nie osobno resolveSetId(lesson.reviewQuestionSetId, ...)) -
         // nowe lekcje NIGDY nie dostaja osobnego, zdublowanego zestawu powtorkowego,
@@ -247,6 +252,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     effectiveSetId: string | undefined,
     newSet: QuestionSet | undefined,
     newQuestions: Question[],
+    keepExtraQuestions = false,
   ): string | undefined {
     if (effectiveSetId && questionSets.some((qs) => qs.id === effectiveSetId)) {
       if (newSet) {
@@ -259,7 +265,8 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         const oq = oldQuestions[i];
         if (nq && oq) updateQuestion(oq.id, { text: nq.text, answer: nq.answer });
         else if (nq && !oq) addQuestion({ setId: effectiveSetId, text: nq.text, answer: nq.answer });
-        else if (!nq && oq) removeQuestion(oq.id);
+        // Automat nie kasuje pytan dopisanych przez nauczyciela na kole ("+").
+        else if (!nq && oq && !keepExtraQuestions) removeQuestion(oq.id);
       }
       return effectiveSetId;
     }
@@ -287,9 +294,45 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
   // odswiezenie nie zgubilo recznych zmian.
   function refresh(confirmedManualIds?: ReadonlySet<string>) {
     if (!grade) return;
-    const toRefresh = refreshMatches.filter(
-      (m) => m.classification === 'code-newer' || confirmedManualIds?.has(m.oldLesson.id),
+    applyRefresh(
+      refreshMatches.filter((m) => m.classification === 'code-newer' || confirmedManualIds?.has(m.oldLesson.id)),
+      false,
     );
+  }
+
+  /**
+   * Automat przy starcie apki (useAutoRefreshMaterials): odswieza lekcje, dla
+   * ktorych KOD ma inna wersje niz ta zapisana w Lesson.sourceVersion - bez
+   * klikania "Odswiez wstawione materialy". Nie rusza lekcji edytowanych
+   * recznie w edytorze (zostaja do recznego odswiezenia z menu) i nie kasuje
+   * pytan dopisanych na kole. Lekcja bez sourceVersion (wstawiona przed
+   * automatem) jest odswiezana tylko wtedy, gdy jej tresc rozni sie od kodu;
+   * gdy sie nie rozni - dostaje sama wersje. Zwraca liczbe odswiezonych lekcji.
+   */
+  function autoRefresh(): number {
+    if (!grade) return 0;
+    const toRefresh: RefreshMatch[] = [];
+    for (const m of matchLessonsForRefresh(gradeLessons, freshBundle)) {
+      const version = codeVersion(m.newLesson, m.newQuestions, freshBundle);
+      if (m.oldLesson.sourceVersion === version) continue;
+      if (manuallyEditedLessonIds[m.oldLesson.id] || m.oldLesson.sourceVersion === MANUAL_SOURCE_VERSION) continue;
+      if (!m.oldLesson.sourceVersion && !isMatchStale(m, questions)) {
+        updateLesson(m.oldLesson.id, { sourceVersion: version });
+        continue;
+      }
+      toRefresh.push(m);
+    }
+    const retired = gradeLessons.some((l) => isRetired(l) && !manuallyEditedLessonIds[l.id]);
+    if (toRefresh.length === 0 && !retired) return 0;
+    applyRefresh(toRefresh, true);
+    return toRefresh.length;
+  }
+
+  function isRetired(lesson: Lesson): boolean {
+    return lessonMaterialType(lesson) === 'textbook' && (RETIRED_TEXTBOOK4_TITLES.has(lesson.title) || RETIRED_TEXTBOOK5_TITLES.has(lesson.title));
+  }
+
+  function applyRefresh(toRefresh: RefreshMatch[], automatic: boolean) {
     // lekcja.id (stare) -> nowy id zestawu powtorkowego (= jej wlasny
     // questionSetId) - zeby slajd otwierajacy NASTEPNEJ odswiezanej lekcji w
     // tej samej petli widzial swiezy id, a nie ten sprzed odswiezenia.
@@ -301,6 +344,7 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         lessonQuestionSetId(match.oldLesson),
         match.newQuestionSet,
         match.newQuestions,
+        automatic,
       );
       // Wymuszone rowne effectiveSetId (bez osobnego syncQuestionSetInPlace na
       // match.oldLesson.reviewQuestionSetId) - stary, prawdziwie osobny zestaw
@@ -325,7 +369,9 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         textbookPage: match.newLesson.textbookPage,
         exercisePage: match.newLesson.exercisePage,
         notebookNote: match.newLesson.notebookNote,
-        teacherPlan: match.newLesson.teacherPlan,
+        // Plan z kodu, a gdy kod go nie ma - plan dopisany przez nauczyciela zostaje.
+        teacherPlan: match.newLesson.teacherPlan ?? match.oldLesson.teacherPlan,
+        sourceVersion: codeVersion(match.newLesson, match.newQuestions, freshBundle),
         questionSetId: effectiveSetId,
         reviewQuestionSetId: effectiveReviewSetId,
         slides: mappedSlides,
@@ -337,14 +383,11 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
       clearManualEdit(match.oldLesson.id);
     }
 
-    if (toRefresh.length > 0) {
-      // Pierwszy pakiet podrecznikowy zawieral dalsze, jeszcze nieopracowane
-      // tematy. Przy przejsciu na piec dopracowanych prezentacji usuwamy tylko
-      // te dokladnie znane pozycje - wlasne lekcje nauczyciela zostaja.
+    if (toRefresh.length > 0 || automatic) {
+      // Tematy wycofane albo wchloniete przez inne (np. 12-13 w 11-13) - usuwamy
+      // tylko te dokladnie znane pozycje; wlasne lekcje nauczyciela zostaja.
       for (const lesson of gradeLessons) {
-        if (lessonMaterialType(lesson) === 'textbook' && (RETIRED_TEXTBOOK4_TITLES.has(lesson.title) || RETIRED_TEXTBOOK5_TITLES.has(lesson.title))) {
-          removeLesson(lesson.id);
-        }
+        if (isRetired(lesson) && !(automatic && manuallyEditedLessonIds[lesson.id])) removeLesson(lesson.id);
       }
       cleanupOrphanQuestionSets(beforeQuestionSetIds);
     }
@@ -397,5 +440,6 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
     materials,
     refreshMatches,
     refresh,
+    autoRefresh,
   };
 }

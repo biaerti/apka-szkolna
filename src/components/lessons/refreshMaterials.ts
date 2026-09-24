@@ -273,3 +273,42 @@ export function orphanedQuestionSetIds(lessons: Lesson[], questionSetIds: string
   }
   return questionSetIds.filter((id) => !referenced.has(id));
 }
+
+// --- automatyczne odswiezanie (useAutoRefreshMaterials) ------------------------
+
+/** Krotki, stabilny hash napisu (FNV-1a 32 bit) - wystarczy do "czy kod sie zmienil". */
+function hashString(text: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+
+/**
+ * Wersja definicji lekcji z kodu - zapisywana w Lesson.sourceVersion przy
+ * wstawieniu i odswiezeniu. Tymczasowe id z buildXxx (slajdy, zestawy pytan)
+ * sa losowe przy kazdym buildzie, wiec slajdy recap wskazuja tu na zestaw po
+ * TYTULE lekcji-wlasciciela, a id slajdow sa pomijane. Dzieki temu wersja
+ * zmienia sie tylko wtedy, gdy zmienila sie tresc w kodzie - nie wtedy, gdy
+ * nauczyciel dopisal pytanie na kole albo poprawil plan.
+ */
+export function codeVersion(
+  newLesson: Omit<Lesson, 'id' | 'order'>,
+  newQuestions: Question[],
+  fresh: FreshMaterialsBundle,
+): string {
+  const ownerTitle = (setId: string) =>
+    fresh.lessons.find((l) => l.questionSetId === setId || l.reviewQuestionSetId === setId)?.title ?? '?';
+  const slides = newLesson.slides.map(({ id: _id, ...rest }) =>
+    rest.kind === 'recap' ? { ...rest, questionSetId: ownerTitle(rest.questionSetId) } : rest,
+  );
+  return hashString(
+    JSON.stringify({
+      v: 1,
+      lesson: { ...newLesson, slides, questionSetId: undefined, reviewQuestionSetId: undefined, progress: undefined },
+      questions: questionsFingerprint(newQuestions),
+    }),
+  );
+}

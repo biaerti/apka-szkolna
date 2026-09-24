@@ -141,6 +141,7 @@ export interface LessonRow {
   exercise_page: number | null;
   notebook_note: string | null;
   teacher_plan?: string | null;
+  source_version?: string | null;
   code: string | null;
   topic: string | null;
   order: number;
@@ -164,6 +165,7 @@ export function lessonToRow(l: Lesson): LessonRow {
     exercise_page: l.exercisePage ?? null,
     notebook_note: l.notebookNote ?? null,
     teacher_plan: l.teacherPlan ?? null,
+    source_version: l.sourceVersion ?? null,
     code: l.code ?? null,
     topic: l.topic ?? null,
     order: l.order,
@@ -188,6 +190,7 @@ export function rowToLesson(row: LessonRow): Lesson {
     exercisePage: row.exercise_page ?? undefined,
     notebookNote: row.notebook_note ?? undefined,
     teacherPlan: row.teacher_plan ?? undefined,
+    sourceVersion: row.source_version ?? undefined,
     code: row.code ?? undefined,
     topic: row.topic ?? undefined,
     order: row.order,

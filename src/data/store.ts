@@ -34,6 +34,7 @@ import type {
   TimetableEntry,
   VulcanLesson,
 } from './types';
+import { MANUAL_SOURCE_VERSION } from './types';
 
 export const STORAGE_KEY = 'apka-szkolna';
 
@@ -458,7 +459,9 @@ export const useStore = create<AppState>()(
       },
       updateLessonFromEditor: (id, patch) => {
         set((s) => ({
-          lessons: s.lessons.map((l) => (l.id === id ? { ...l, ...patch } : l)),
+          // sourceVersion 'reczna' leci z lekcja do chmury - automat odswiezania
+          // nie ruszy jej na zadnym urzadzeniu (flaga nizej jest tylko lokalna).
+          lessons: s.lessons.map((l) => (l.id === id ? { ...l, ...patch, sourceVersion: MANUAL_SOURCE_VERSION } : l)),
           manuallyEditedLessonIds: { ...s.manuallyEditedLessonIds, [id]: true },
         }));
       },
