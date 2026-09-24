@@ -169,7 +169,7 @@ const TOPICS: Topic[] = [
       ...recap(previousSetId),
       slideVideo('gloski-film1'),
       ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : []),
-      slideTextbookTask('czytanki:gloski-s24-zad4.webp', 24, 's.24 zad.4', 'Zadanie 4 · ćwiczy punkt 2 notatki', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:gloski-s24-zad4.webp', 24, 's.24 zad.4', 'Zadanie 4', 'write-answer', 'Do zeszytu'),
       slideTask('Z6', 'Posortuj wyrazy do trzech kolumn według **pierwszej głoski**: **syczące · szumiące · ciszące**.\n\nsanki, szalik, śnieg, cebula, czapka, ćma, zegar, żaba, źrebię', 4 * 60, undefined, '**Syczące:** sanki, cebula, zegar\n**Szumiące:** szalik, czapka, żaba\n**Ciszące:** śnieg, ćma, źrebię'),
       slideTask('Z7', 'Dźwięczna czy bezdźwięczna? Przepisz wyrazy z właściwą literą. Sprawdzaj, zmieniając formę: chleb → chle**b**a.\n\n1. chle(b/p)\n2. grzy(b/p)\n3. słu(b/p)\n4. ogró(d/t)\n5. nó(ż/sz)\n6. ko(ż/sz)', 5 * 60, undefined, '1. chleb (chleba)\n2. grzyb (grzyby)\n3. słup (słupy)\n4. ogród (ogrody)\n5. nóż (noże)\n6. kosz (kosze)'),
       slideNote('Głoski miękkie i twarde', '1. Głoskę słyszę, literę widzę. Sylaba zawsze ma samogłoskę.\n2. Miękkie (środek języka do góry): ć, ś, ź, ń, dź. Kreska na końcu i przed spółgłoską (koń), „i” przed samogłoską (koniec).\n3. Syczące: s, z, c, dz. Szumiące: sz, ż (rz), cz, dż. Ciszące: ś, ź, ć, dź.\n4. Dźwięczne i bezdźwięczne w parach: b-p, d-t, z-s. Piszę chleb, bo chleba.'),
