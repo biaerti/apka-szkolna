@@ -56,6 +56,7 @@ export function RecapQuestionsOverview({
   onRemove,
   onAdd,
   onFinish,
+  afterVideo = false,
 }: {
   questions: Question[];
   completedQuestionIds: Set<string>;
@@ -65,6 +66,8 @@ export function RecapQuestionsOverview({
   /** Plus pod lista: nauczyciel dopisuje wlasne pytanie (i odpowiedz) do zestawu. */
   onAdd?: (text: string, answer?: string) => void;
   onFinish: () => void;
+  /** Pytania z filmiku - juz zapisane, wiec stoper stoi na 00:00 i nie rusza sam. */
+  afterVideo?: boolean;
 }) {
   const [timerSec, setTimerSec] = useState(DEFAULT_THINKING_SECONDS);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -75,7 +78,12 @@ export function RecapQuestionsOverview({
   const [adding, setAdding] = useState(false);
   const { remainingSec, running, finished, start, pause, reset } = useCountdown(timerSec);
 
+  // Po filmiku stoper nie jest czasem na prace - pokazuje 00:00, dopoki
+  // nauczyciel sam go nie wlaczy (klik w stoper albo "od nowa").
+  const [timerArmed, setTimerArmed] = useState(!afterVideo);
+
   useEffect(() => {
+    if (!timerArmed) return;
     start();
     // Pierwsze pokazanie trzech pytan od razu uruchamia czas na samodzielna prace.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,7 +159,9 @@ export function RecapQuestionsOverview({
           <h1 className="text-4xl font-bold text-white">
             Odpowiedz na {LICZBY[questions.length] ?? questions.length} {pytaniaWord(questions.length)}
           </h1>
-          <p className="mt-1 text-xl text-gray-300">Każdy zapisuje odpowiedzi. W tym czasie sprawdzamy obecność.</p>
+          <p className="mt-1 text-xl text-gray-300">
+            {afterVideo ? 'Pytania z filmu - odpowiedzi macie już w zeszycie.' : 'Każdy zapisuje odpowiedzi. W tym czasie sprawdzamy obecność.'}
+          </p>
         </div>
 
         {questions.length === 0 ? (
@@ -300,15 +310,22 @@ export function RecapQuestionsOverview({
       <div className="flex w-[clamp(300px,26vw,440px)] shrink-0 flex-col gap-4">
         <button
           type="button"
-          onClick={running ? pause : start}
+          onClick={() => {
+            if (!timerArmed) {
+              setTimerArmed(true);
+              reset();
+              start();
+            } else if (running) pause();
+            else start();
+          }}
           title={running ? 'Zatrzymaj' : 'Wznów'}
           className={clsx(
             'w-full rounded-2xl py-6 font-mono font-bold leading-none tabular-nums focus-visible:outline focus-visible:outline-4 focus-visible:outline-white',
-            finished ? 'bg-red-700 text-white' : running ? 'bg-gray-900 text-accent-200 hover:bg-gray-800' : 'bg-gray-900 text-gray-500 hover:bg-gray-800',
+            timerArmed && finished ? 'bg-red-700 text-white' : running ? 'bg-gray-900 text-accent-200 hover:bg-gray-800' : 'bg-gray-900 text-gray-500 hover:bg-gray-800',
           )}
           style={{ fontSize: 'clamp(72px, 8vw, 150px)' }}
         >
-          {formatMmSs(remainingSec)}
+          {formatMmSs(timerArmed ? remainingSec : 0)}
         </button>
         <div className="grid grid-cols-3 gap-2">
           <button
@@ -329,6 +346,7 @@ export function RecapQuestionsOverview({
           <button
             type="button"
             onClick={() => {
+              setTimerArmed(true);
               reset();
               start();
             }}

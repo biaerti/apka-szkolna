@@ -387,6 +387,12 @@ export type Slide =
       mode?: 'po-lekcji' | 'powtorzeniowe' | 'demo';
       /** Ile pytan z zestawu idzie na kolo (domyslnie 3) - np. 4 zadania z filmiku. */
       questionCount?: number;
+      /**
+       * Kolo po filmiku: dzieci juz zapisaly odpowiedzi w trakcie filmu, wiec
+       * ekran pytan nie odpala stopera (stoi na 00:00) - nauczyciel tylko
+       * przypomina pytania i od razu idzie do kola.
+       */
+      afterVideo?: boolean;
     }
   // `title`/`body` opcjonalne: pozwalaja polaczyc zdjecie z krotkim tekstem na
   // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac

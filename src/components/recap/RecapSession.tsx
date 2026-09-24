@@ -47,6 +47,8 @@ export interface RecapSessionProps {
   recapMode?: RecapMode;
   /** Ile pytan z zestawu na kole powtorzeniowym (domyslnie REVIEW_QUESTION_COUNT). */
   questionCount?: number;
+  /** Kolo zaraz po filmiku - bez stopera na ekranie pytan (patrz Slide recap.afterVideo). */
+  afterVideo?: boolean;
 }
 
 export function RecapSession({
@@ -60,6 +62,7 @@ export function RecapSession({
   demoVariant,
   recapMode,
   questionCount,
+  afterVideo,
 }: RecapSessionProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -246,6 +249,7 @@ export function RecapSession({
                 setAddedCount((n) => n + 1);
               }}
               onFinish={handleExit}
+              afterVideo={afterVideo}
             />
           ) : (
             <>

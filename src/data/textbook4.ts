@@ -292,7 +292,7 @@ const TOPICS: Topic[] = [
       slideTextbookImage('czytanki:czasownik-ramka-s37.webp', 37, 'Czasownik - przypomnienie'),
       slideVideo('czasownik-film3'),
       // Kolo po filmiku: cztery zadania z filmu, kazde dla jednej wylosowanej osoby.
-      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4 }] : []),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4, afterVideo: true }] : []),
       slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.'),
       slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4 · ćwiczy punkt 1 notatki', 'textbook'),
       slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5 · ćwiczy punkt 1 notatki', 'textbook', 'Podkreśl w podręczniku'),
