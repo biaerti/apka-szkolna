@@ -45,6 +45,8 @@ export interface RecapSessionProps {
    * RecapScreen) - dzieki temu ten sam link dziala tez spoza slajdu recap.
    */
   recapMode?: RecapMode;
+  /** Ile pytan z zestawu na kole powtorzeniowym (domyslnie REVIEW_QUESTION_COUNT). */
+  questionCount?: number;
 }
 
 export function RecapSession({
@@ -57,6 +59,7 @@ export function RecapSession({
   initialRandomQuestions,
   demoVariant,
   recapMode,
+  questionCount,
 }: RecapSessionProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,6 +67,10 @@ export function RecapSession({
   const questionSet = useStore((s) => s.questionSets.find((qs) => qs.id === setId));
   const updateQuestion = useStore((s) => s.updateQuestion);
   const removeQuestion = useStore((s) => s.removeQuestion);
+  const addQuestion = useStore((s) => s.addQuestion);
+  // Pytania dopisane w trakcie (plus na liscie pytan) wchodza ponad limit zestawu.
+  const [addedCount, setAddedCount] = useState(0);
+  const reviewCount = (questionCount ?? REVIEW_QUESTION_COUNT) + addedCount;
 
   // Ustawienia trybow (wybor ucznia / pytania / ocenianie) czytane w kolejnosci:
   // 1) query string (?pick=sequential&random=1&grading=0) - RecapScreen przekazuje
@@ -120,13 +127,13 @@ export function RecapSession({
     // zmienia je dopiero nauczyciel ("nastepne pytanie" / N). W zwyklych
     // rundach z losowymi pytaniami kazdy nowy uczen dostaje nowe pytanie.
     advanceQuestionOnPick: !isIntroTopic,
-    questionLimit: resolvedRecapMode === 'powtorzeniowe' ? REVIEW_QUESTION_COUNT : undefined,
+    questionLimit: resolvedRecapMode === 'powtorzeniowe' ? reviewCount : undefined,
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [questionPickerOpen, setQuestionPickerOpen] = useState(false);
   const [overviewOpen, setOverviewOpen] = useState(resolvedRecapMode === 'powtorzeniowe');
   const [completedQuestionIds, setCompletedQuestionIds] = useState<Set<string>>(new Set());
-  const reviewQuestions = session.allQuestions.slice(0, REVIEW_QUESTION_COUNT);
+  const reviewQuestions = session.allQuestions.slice(0, reviewCount);
 
   // Historia odpowiedzi tej klasy per pytanie - do panelu "wybierz pytanie".
   const answersMap = useMemo(
@@ -162,14 +169,14 @@ export function RecapSession({
     }
   }
 
-  // Ocena zostaje na kole: kropka = "nie wie", uczen jest juz skreslony, wiec
-  // krecimy dalej przy tym samym pytaniu. Plus zamyka pytanie (przekreslone na
-  // ekranie trzech pytan), a na nastepne przechodzi nauczyciel klawiszem N.
+  // Plus i plomba zamykaja pytanie (przy plombie nauczyciel sam mowi odpowiedz),
+  // kropka = odpowiedz czesciowa, wiec mozna krecic dalej przy tym samym pytaniu.
+  // Na nastepne pytanie przechodzi nauczyciel klawiszem N albo numerem pytania.
   function gradeAndTrack(result: Parameters<typeof session.grade>[0]) {
     const questionId = session.currentQuestion?.id;
     if (!questionId || !session.currentStudent || session.graded) return;
     session.grade(result);
-    if (result === 'plus') setCompletedQuestionIds((current) => new Set(current).add(questionId));
+    if (result === 'plus' || result === 'plomba') setCompletedQuestionIds((current) => new Set(current).add(questionId));
   }
 
   useRecapKeys({ ...session, grade: gradeAndTrack }, embedded, handleExit, toggleFullscreen, overviewOpen);
@@ -214,9 +221,9 @@ export function RecapSession({
         allowRepeats={session.allowRepeats}
         onChangeAllowRepeats={session.setAllowRepeats}
         drawsCompleted={session.drawsCompleted}
-        plannedTotal={session.recapMode === 'powtorzeniowe' ? REVIEW_QUESTION_COUNT : session.plannedTotal}
+        plannedTotal={session.recapMode === 'powtorzeniowe' ? reviewQuestions.length : session.plannedTotal}
         inProgress={!!session.currentStudent && !session.graded}
-        reviewQuestionCount={REVIEW_QUESTION_COUNT}
+        reviewQuestionCount={reviewQuestions.length}
         canUndo={session.canUndo}
         onUndo={session.undoLast}
         onOpenQuestionPicker={() => setQuestionPickerOpen(true)}
@@ -234,6 +241,10 @@ export function RecapSession({
               onStart={startWheel}
               onUpdate={updateQuestion}
               onRemove={removeQuestion}
+              onAdd={(text, answer) => {
+                addQuestion({ setId, text, answer });
+                setAddedCount((n) => n + 1);
+              }}
               onFinish={handleExit}
             />
           ) : (
@@ -245,6 +256,9 @@ export function RecapSession({
                 onGrade={gradeAndTrack}
                 onSkip={completeWithoutGrade}
                 onShowOverview={() => setOverviewOpen(true)}
+                questions={reviewQuestions}
+                completedQuestionIds={completedQuestionIds}
+                onJumpToQuestion={session.jumpToQuestion}
                 /* Lekcja zapoznawcza: na ekranie rzadzi "Przedstaw sie", a wylosowane
                    pytanie jest dodatkiem. */
                 prompt={isIntroLesson ? INTRO_PROMPT : null}
@@ -276,12 +290,15 @@ export function RecapSession({
           <span>
             <span className="font-bold text-sky-400">•</span> kropka - bez plusa
           </span>
+          <span>
+            <span className="font-bold text-red-300">▣</span> plomba - brak odpowiedzi
+          </span>
         </span>
         <span className="min-w-0 flex-1 truncate">
         {session.pickMode === 'sequential' ? 'Spacja: następny uczeń' : session.pickMode === 'sala' ? 'Spacja: losuj' : 'Spacja: kręć'}
         {session.grading
           ? session.recapMode === 'powtorzeniowe'
-            ? ' - 1: dobrze - 2: kropka'
+            ? ' - 1: dobrze - 2: kropka - 3: plomba'
             : ' - 1: dobrze - 2: dalej'
           : ' - Enter: gotowe, następny'}
         {' '}- N: następne pytanie - O: pokaż/ukryj odpowiedź

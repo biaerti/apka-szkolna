@@ -264,7 +264,7 @@ const TOPICS: Topic[] = [
   },
   {
     // Tematy 11 i 12-13 z podrecznika scalone w jedna prezentacje na dwie
-    // godziny (Bartek 2026-09-24): ramka z s. 37 -> filmik z 4 zadaniami ->
+    // godziny (Bartek 2026-09-24): kolo z poprzedniej lekcji -> ramka z s. 37 -> filmik z 4 zadaniami ->
     // kolo fortuny z odpowiedziami z filmu -> notatka w 4 punktach -> zadania
     // ze screenow podrecznika, kazde podpiete pod punkt notatki.
     title: '11-13. Czas na czasownik',
@@ -279,16 +279,20 @@ const TOPICS: Topic[] = [
     ].join('\n'),
     // Pytania do kola po filmie = cztery zadania z filmiku (czasownik-film3).
     questions: [
-      { text: 'Zadanie 1 z filmu: które słowo to czasownik? A - wysoki, B - skacze, C - kot, D - wesoło.', answer: 'B - skacze.' },
-      { text: 'Zadanie 2 z filmu: dopisz „nie” do czasownika „biegnę”.', answer: 'nie biegnę - osobno.' },
-      { text: 'Zadanie 3 z filmu: „gramy” - która to osoba i liczba?', answer: 'A - pierwsza osoba liczby mnogiej.' },
-      { text: 'Zadanie 4 z filmu: zamień „czytam” na czas przeszły i przyszły.', answer: 'czytałem / czytałam; będę czytać / przeczytam.' },
+      { text: 'Które słowo to czasownik: wysoki, skacze, kot, wesoło?', answer: 'B - skacze.' },
+      { text: 'Dopisz „nie” do słowa „biegnę”.', answer: 'nie biegnę - osobno.' },
+      { text: '„Gramy” - która osoba i liczba?', answer: 'A - 1. osoba, liczba mnoga.' },
+      { text: '„Czytam” w czasie przeszłym i przyszłym?', answer: 'czytałem / czytałam; będę czytać / przeczytam.' },
     ],
-    makeSlides: (_previousSetId, ownSetId) => [
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Czas na czasownik'),
+      // Pierwsze kolo (pokaz przenosi je na start) powtarza POPRZEDNIA lekcje;
+      // drugie, po filmiku, pyta o zadania z filmu.
+      ...recap(previousSetId),
       slideTextbookImage('czytanki:czasownik-ramka-s37.webp', 37, 'Czasownik - przypomnienie'),
       slideVideo('czasownik-film3'),
-      ...recap(ownSetId),
+      // Kolo po filmiku: cztery zadania z filmu, kazde dla jednej wylosowanej osoby.
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4 }] : []),
       slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.'),
       slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4 · ćwiczy punkt 1 notatki', 'textbook'),
       slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5 · ćwiczy punkt 1 notatki', 'textbook', 'Podkreśl w podręczniku'),

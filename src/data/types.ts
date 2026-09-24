@@ -374,7 +374,15 @@ export type Slide =
   // pory KAZDY recap na koncu lekcji dzialal tak jak dawne 'po-lekcji'
   // (patrz src/lib/recap.ts: resolveRecapMode). Odczyt starych danych nie moze
   // sie wywalic - stad pole opcjonalne, a nie wymagane.
-  | { id: ID; kind: 'recap'; questionSetId: ID; variant?: 'demo'; mode?: 'po-lekcji' | 'powtorzeniowe' | 'demo' }
+  | {
+      id: ID;
+      kind: 'recap';
+      questionSetId: ID;
+      variant?: 'demo';
+      mode?: 'po-lekcji' | 'powtorzeniowe' | 'demo';
+      /** Ile pytan z zestawu idzie na kolo (domyslnie 3) - np. 4 zadania z filmiku. */
+      questionCount?: number;
+    }
   // `title`/`body` opcjonalne: pozwalaja polaczyc zdjecie z krotkim tekstem na
   // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac
   // sam naglowek nad zdjeciem (np. "Znacie teleturniej Kolo Fortuny?").

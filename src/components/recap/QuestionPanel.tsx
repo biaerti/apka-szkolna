@@ -53,6 +53,10 @@ export interface QuestionPanelProps {
   onToggleShowAnswer: () => void;
   onUpdateQuestion?: (id: string, patch: Partial<Question>) => void;
   onShowOverview?: () => void;
+  /** Numerki wszystkich pytan rundy: biezace podswietlone, zamkniete na zielono. */
+  questions?: Question[];
+  completedQuestionIds?: Set<string>;
+  onJumpToQuestion?: (id: string) => void;
 }
 
 export function QuestionPanel({
@@ -70,6 +74,9 @@ export function QuestionPanel({
   onToggleShowAnswer,
   onUpdateQuestion,
   onShowOverview,
+  questions,
+  completedQuestionIds,
+  onJumpToQuestion,
 }: QuestionPanelProps) {
   const [editing, setEditing] = useState(false);
   const [questionDraft, setQuestionDraft] = useState(question?.text ?? '');
@@ -108,9 +115,35 @@ export function QuestionPanel({
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-gray-700 bg-gray-900/70 p-3">
       <div className="mb-2 flex shrink-0 items-center justify-between text-sm text-gray-400">
-        <span>
-          pytanie {index + 1}/{total}
-        </span>
+        {questions && questions.length > 1 && onJumpToQuestion ? (
+          <div className="flex items-center gap-1.5">
+            {questions.map((q, i) => {
+              const current = q.id === question?.id;
+              const done = completedQuestionIds?.has(q.id);
+              return (
+                <button
+                  key={q.id}
+                  type="button"
+                  onClick={() => onJumpToQuestion(q.id)}
+                  aria-label={`Pytanie ${i + 1}`}
+                  className={`h-9 w-9 rounded-lg text-lg font-bold tabular-nums ${
+                    current
+                      ? 'bg-accent-500 text-white ring-2 ring-accent-200'
+                      : done
+                        ? 'bg-emerald-900/60 text-emerald-300'
+                        : 'border border-gray-600 text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <span>
+            pytanie {index + 1}/{total}
+          </span>
+        )}
         <div className="flex items-center gap-3">
           {onShowOverview && (
             <button
@@ -118,7 +151,7 @@ export function QuestionPanel({
               onClick={onShowOverview}
               className="rounded-md border border-gray-600 px-2.5 py-1 text-gray-200 hover:bg-gray-800"
             >
-              wszystkie 3 pytania
+              wszystkie pytania
             </button>
           )}
           {question && onUpdateQuestion && (

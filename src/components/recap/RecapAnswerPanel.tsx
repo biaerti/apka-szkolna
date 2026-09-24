@@ -13,6 +13,10 @@ export interface RecapAnswerPanelProps {
   onGrade: (result: 'plus' | 'kropka' | 'plomba') => void;
   onSkip: () => void;
   onShowOverview: () => void;
+  /** Pytania rundy jako numerki nad pytaniem - klik podswietla wybrane pytanie. */
+  questions?: Question[];
+  completedQuestionIds?: Set<string>;
+  onJumpToQuestion?: (id: string) => void;
   /** Stale polecenie rundy - wazniejsze niz wylosowane pytanie (patrz QuestionPanel). */
   prompt?: string | null;
   promptHint?: string | null;
@@ -24,6 +28,9 @@ export function RecapAnswerPanel({
   onGrade,
   onSkip,
   onShowOverview,
+  questions,
+  completedQuestionIds,
+  onJumpToQuestion,
   prompt,
   promptHint,
 }: RecapAnswerPanelProps) {
@@ -71,6 +78,9 @@ export function RecapAnswerPanel({
           onToggleShowAnswer={() => session.setShowAnswer((v) => !v)}
           onUpdateQuestion={onUpdateQuestion}
           onShowOverview={onShowOverview}
+          questions={questions}
+          completedQuestionIds={completedQuestionIds}
+          onJumpToQuestion={onJumpToQuestion}
         />
       </div>
 

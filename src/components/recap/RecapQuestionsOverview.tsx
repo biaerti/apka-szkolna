@@ -1,4 +1,4 @@
-// Ekran startowy kola powtorzeniowego: trzy pytania pod soba (duze, czytelne z
+// Ekran startowy kola powtorzeniowego: pytania rundy pod soba (zwykle trzy, po filmiku cztery) (duze, czytelne z
 // konca sali), obok stoper na samodzielne zapisanie odpowiedzi - w tym czasie
 // nauczyciel sprawdza obecnosc. Do kola prowadzi jeden przycisk, bo i tak
 // wszystkie pytania ida przez to samo kolo; kolejne pytanie to N na kole.
@@ -11,7 +11,36 @@ import { useCountdown } from '../slides/useCountdown';
 
 const DEFAULT_THINKING_SECONDS = 120;
 
-/** Dluzsze pytania schodza nizej, zeby trzy zmiescily sie pod soba bez przewijania. */
+function pytaniaWord(n: number): string {
+  if (n === 1) return 'pytanie';
+  const last = n % 10;
+  const lastTwo = n % 100;
+  return last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14) ? 'pytania' : 'pytań';
+}
+
+const LICZBY = ['', 'jedno', 'dwa', 'trzy', 'cztery', 'pięć', 'sześć'];
+
+/** Male ikonki akcji przy pytaniu - zamiast slow "odpowiedz / edytuj / usun". */
+function IconButton({ label, onClick, danger, active, children }: { label: string; onClick: () => void; danger?: boolean; active?: boolean; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={label}
+      aria-label={label}
+      className={clsx(
+        'flex h-10 w-10 items-center justify-center rounded-lg border',
+        danger ? 'border-red-700 bg-red-700 text-white hover:bg-red-600' : active ? 'border-accent-400 bg-accent-900/50 text-accent-200' : 'border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200',
+      )}
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        {children}
+      </svg>
+    </button>
+  );
+}
+
+/** Dluzsze pytania schodza nizej, zeby wszystkie zmiescily sie pod soba bez przewijania. */
 function overviewFontSize(text: string): string {
   const len = text.trim().length;
   if (len <= 45) return 'clamp(30px, 3.4vw, 64px)';
@@ -25,6 +54,7 @@ export function RecapQuestionsOverview({
   onStart,
   onUpdate,
   onRemove,
+  onAdd,
   onFinish,
 }: {
   questions: Question[];
@@ -32,6 +62,8 @@ export function RecapQuestionsOverview({
   onStart: () => void;
   onUpdate: (id: string, patch: Partial<Question>) => void;
   onRemove: (id: string) => void;
+  /** Plus pod lista: nauczyciel dopisuje wlasne pytanie (i odpowiedz) do zestawu. */
+  onAdd?: (text: string, answer?: string) => void;
   onFinish: () => void;
 }) {
   const [timerSec, setTimerSec] = useState(DEFAULT_THINKING_SECONDS);
@@ -40,6 +72,7 @@ export function RecapQuestionsOverview({
   const [answerDraft, setAnswerDraft] = useState('');
   const [answerOpen, setAnswerOpen] = useState<Set<string>>(new Set());
   const [removeId, setRemoveId] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
   const { remainingSec, running, finished, start, pause, reset } = useCountdown(timerSec);
 
   useEffect(() => {
@@ -53,7 +86,7 @@ export function RecapQuestionsOverview({
     function onKeyDown(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null;
       if (target && ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target.tagName)) return;
-      if (editingId || questions.length === 0) return;
+      if (editingId || adding || questions.length === 0) return;
       if (e.key === 'Enter' || e.code === 'Space') {
         e.preventDefault();
         onStart();
@@ -61,9 +94,10 @@ export function RecapQuestionsOverview({
     }
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [editingId, questions.length, onStart]);
+  }, [editingId, adding, questions.length, onStart]);
 
   function edit(question: Question) {
+    setAdding(false);
     setEditingId(question.id);
     setQuestionDraft(question.text);
     setAnswerDraft(question.answer ?? '');
@@ -75,6 +109,23 @@ export function RecapQuestionsOverview({
     if (!text) return;
     onUpdate(question.id, { text, answer: answerDraft.trim() || undefined });
     setEditingId(null);
+  }
+
+  function saveNew() {
+    const text = questionDraft.trim();
+    if (!text || !onAdd) return;
+    onAdd(text, answerDraft.trim() || undefined);
+    setAdding(false);
+    setQuestionDraft('');
+    setAnswerDraft('');
+  }
+
+  function startAdding() {
+    setEditingId(null);
+    setRemoveId(null);
+    setQuestionDraft('');
+    setAnswerDraft('');
+    setAdding(true);
   }
 
   function adjustTimer(delta: number) {
@@ -91,14 +142,15 @@ export function RecapQuestionsOverview({
   }
 
   const allCompleted = questions.length > 0 && questions.every((question) => completedQuestionIds.has(question.id));
-  const smallButton = 'rounded-lg border border-gray-700 px-3 py-1.5 text-sm text-gray-400 hover:bg-gray-800 hover:text-gray-200';
 
   return (
     // pt-14: w prezentacji lewy gorny rog zajmuje zegar lekcji.
     <div className="flex min-h-0 flex-1 gap-6 overflow-hidden px-6 pb-5 pt-14">
       <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4">
         <div className="shrink-0">
-          <h1 className="text-4xl font-bold text-white">Odpowiedz na trzy pytania</h1>
+          <h1 className="text-4xl font-bold text-white">
+            Odpowiedz na {LICZBY[questions.length] ?? questions.length} {pytaniaWord(questions.length)}
+          </h1>
           <p className="mt-1 text-xl text-gray-300">Każdy zapisuje odpowiedzi. W tym czasie sprawdzamy obecność.</p>
         </div>
 
@@ -168,28 +220,33 @@ export function RecapQuestionsOverview({
                   )}
 
                   {!editing && (
-                    <div className="flex shrink-0 flex-col items-end justify-center gap-1.5">
+                    <div className="flex shrink-0 items-center gap-1.5">
                       {question.answer && (
-                        <button type="button" onClick={() => toggleAnswer(question.id)} className={smallButton}>
-                          {answerOpen.has(question.id) ? 'ukryj odpowiedź' : 'odpowiedź'}
-                        </button>
+                        <IconButton
+                          label={answerOpen.has(question.id) ? 'Ukryj odpowiedź' : 'Pokaż odpowiedź'}
+                          active={answerOpen.has(question.id)}
+                          onClick={() => toggleAnswer(question.id)}
+                        >
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </IconButton>
                       )}
-                      <button type="button" onClick={() => edit(question)} className={smallButton}>
-                        edytuj
-                      </button>
+                      <IconButton label="Edytuj pytanie" onClick={() => edit(question)}>
+                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                      </IconButton>
                       {removeId === question.id ? (
-                        <span className="flex gap-1.5">
-                          <button type="button" onClick={() => setRemoveId(null)} className={smallButton}>
-                            nie
-                          </button>
-                          <button type="button" onClick={() => { onRemove(question.id); setRemoveId(null); }} className="rounded-lg bg-red-700 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600">
-                            usuń
-                          </button>
-                        </span>
+                        <>
+                          <IconButton label="Nie usuwaj" onClick={() => setRemoveId(null)}>
+                            <path d="M18 6 6 18M6 6l12 12" />
+                          </IconButton>
+                          <IconButton label="Tak, usuń" danger onClick={() => { onRemove(question.id); setRemoveId(null); }}>
+                            <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" />
+                          </IconButton>
+                        </>
                       ) : (
-                        <button type="button" onClick={() => setRemoveId(question.id)} className={smallButton}>
-                          usuń
-                        </button>
+                        <IconButton label="Usuń pytanie" onClick={() => setRemoveId(question.id)}>
+                          <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" />
+                        </IconButton>
                       )}
                     </div>
                   )}
@@ -198,6 +255,46 @@ export function RecapQuestionsOverview({
             })}
           </ol>
         )}
+
+        {onAdd && (adding ? (
+          <div className="flex shrink-0 flex-col gap-2 rounded-xl border border-accent-700 bg-gray-900 px-5 py-3">
+            <textarea
+              rows={2}
+              autoFocus
+              value={questionDraft}
+              onChange={(event) => setQuestionDraft(event.target.value)}
+              placeholder="Nowe pytanie"
+              aria-label="Nowe pytanie"
+              className="block w-full resize-none rounded-lg border border-gray-600 bg-gray-950 px-3 py-2 text-2xl text-white outline-none placeholder:text-gray-500 focus:border-accent-400"
+            />
+            <textarea
+              rows={1}
+              value={answerDraft}
+              onChange={(event) => setAnswerDraft(event.target.value)}
+              placeholder="Odpowiedź (opcjonalnie)"
+              aria-label="Odpowiedź do nowego pytania"
+              className="block w-full resize-none rounded-lg border border-gray-600 bg-gray-950 px-3 py-2 text-lg text-white outline-none placeholder:text-gray-500 focus:border-accent-400"
+            />
+            <div className="flex justify-end gap-2">
+              <button type="button" onClick={() => setAdding(false)} className="rounded-lg border border-gray-600 px-3 py-1.5 text-gray-200 hover:bg-gray-800">
+                Anuluj
+              </button>
+              <button type="button" onClick={saveNew} disabled={!questionDraft.trim()} className="rounded-lg bg-accent-600 px-4 py-1.5 font-semibold text-white hover:bg-accent-500 disabled:opacity-30">
+                Dodaj pytanie
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={startAdding}
+            title="Dodaj pytanie"
+            aria-label="Dodaj pytanie"
+            className="flex h-12 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-700 text-3xl font-bold text-gray-500 hover:border-accent-500 hover:text-accent-300"
+          >
+            +
+          </button>
+        ))}
       </div>
 
       <div className="flex w-[clamp(300px,26vw,440px)] shrink-0 flex-col gap-4">
