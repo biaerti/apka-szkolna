@@ -19,6 +19,8 @@ export type Filmik = {
 export const FILMIKI: Filmik[] = [
   { id: 'czasownik-film1', lekcja: '11', title: 'Czasownik - czynności, stany i „nie”' },
   { id: 'czasownik-film2', lekcja: '12-13', title: 'Odmiana czasownika - osoba, liczba, czas, rodzaj' },
+  // Wszystko w jednym: 4 zadania bez sprawdzania - odpowiedzi rozlicza kolo fortuny po filmie.
+  { id: 'czasownik-film3', lekcja: '11-13', title: 'Czasownik w całości - 4 zadania + koło fortuny' },
   { id: 'opowiadanie-film1', lekcja: 'V.3', title: 'Opowiadanie - co to jest i jak je napisać' },
 ];
 

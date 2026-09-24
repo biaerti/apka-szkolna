@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Czasownik - jeden film, cztery zadania</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wspolne dla scen-zadan (bez scen-sprawdzen: odpowiedzi rozlicza kolo fortuny po filmie) */
+.zadanie { padding: 44px 90px; text-align: center; }
+.zadanie .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 46px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 8px 40px;
+}
+.zadanie .polecenie { margin-top: 26px; font-size: 42px; font-weight: 800; line-height: 1.45; }
+.zadanie .pisz { margin-top: 24px; font-size: 34px; font-weight: 800; color: #7a6a5c; }
+.zadanie .odliczanie { margin: 30px auto 0; width: 860px; }
+
+/* ===== 01: intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .tytul {
+  font-size: 100px; font-weight: 800; line-height: .95; text-align: center;
+  color: var(--roz); animation-delay: .5s;
+}
+#s01 .tytul small { display: block; font-size: 50px; color: var(--pomarancz); }
+#s01 .zapowiedz {
+  margin-top: 44px; font-family: 'Baloo 2'; font-size: 48px; font-weight: 800;
+  color: #fff; background: var(--pomarancz); padding: 12px 44px; border-radius: 999px;
+  animation-delay: 4.8s;
+}
+#s01 .zeszyt { margin-top: 30px; font-size: 40px; font-weight: 800; animation-delay: 7.5s; }
+#s01 .kolo {
+  margin-top: 24px; font-size: 38px; font-weight: 800; color: var(--roz);
+  animation-delay: 10.0s;
+}
+
+/* ===== 02: definicja ===== */
+#s02 { padding: 56px 80px; display: flex; flex-direction: column; justify-content: center; }
+.ramka {
+  border: 6px solid var(--pomarancz); border-radius: 30px; background: var(--bialy);
+  padding: 28px 40px; text-align: center;
+}
+#s02 .ramka { animation-delay: .8s; }
+#s02 .ramka .def { font-size: 44px; font-weight: 800; }
+#s02 .def b.pop-w { display: inline-block; color: var(--pomarancz); animation: pop .5s cubic-bezier(.2,1.4,.4,1) both 3.2s; }
+#s02 .def i.pop-w { display: inline-block; color: var(--roz); font-style: normal; font-weight: 800; animation: pop .5s cubic-bezier(.2,1.4,.4,1) both 4.0s; }
+#s02 .pytania { display: flex; gap: 46px; margin-top: 52px; }
+.dymek { flex: 1; border-radius: 30px; padding: 30px 36px; text-align: center; color: #fff; }
+.dymek .pyt { font-family: 'Baloo 2'; font-size: 48px; font-weight: 800; }
+.dymek .odp { margin-top: 14px; font-size: 38px; font-weight: 800; background: rgba(255,255,255,.92); border-radius: 18px; padding: 12px; }
+#s02 .dymek1 { background: var(--pomarancz); animation-delay: 7.6s; }
+#s02 .dymek1 .odp { color: var(--pomarancz); animation-delay: 8.9s; }
+#s02 .dymek2 { background: var(--roz); animation-delay: 11.6s; }
+#s02 .dymek2 .odp { color: var(--roz); animation-delay: 13.2s; }
+
+/* ===== 03: przyklad ===== */
+#s03 { padding: 40px 90px; text-align: center; }
+#s03 h2 { font-size: 54px; color: var(--pomarancz); animation-delay: .6s; }
+#s03 .przyk { display: flex; gap: 44px; margin-top: 36px; }
+#s03 .karta-zd {
+  flex: 1; background: var(--bialy); border: 5px solid #d9c9b2; border-radius: 26px;
+  padding: 26px 30px;
+}
+#s03 .karta-zd .zd { font-size: 40px; font-weight: 800; line-height: 1.4; }
+#s03 .karta-zd .em { font-size: 64px; display: block; margin-bottom: 8px; }
+#s03 .wyraz { display: inline-block; padding: 2px 12px; border-radius: 14px; }
+@keyframes podswietl-pomarancz { to { background: var(--pomarancz); color: #fff; } }
+@keyframes podswietl-roz { to { background: var(--roz); color: #fff; } }
+#s03 .k1 { animation-delay: 2.6s; }
+#s03 .k1 .pyt-mini { animation-delay: 4.6s; }
+#s03 .w-karmi { animation: podswietl-pomarancz .5s ease-out both 5.8s; }
+#s03 .k1 .etyk { background: var(--pomarancz); animation-delay: 6.6s; }
+#s03 .k2 { animation-delay: 8.4s; }
+#s03 .k2 .pyt-mini { animation-delay: 10.4s; }
+#s03 .w-spi { animation: podswietl-roz .5s ease-out both 11.6s; }
+#s03 .k2 .etyk { background: var(--roz); animation-delay: 12.4s; }
+.pyt-mini {
+  margin-top: 18px; display: inline-block; font-family: 'Baloo 2'; font-size: 34px;
+  font-weight: 800; color: #fff; background: var(--ciemny); border-radius: 999px; padding: 6px 26px;
+}
+.etyk {
+  margin-top: 16px; display: inline-block; font-size: 32px; font-weight: 800;
+  color: #fff; border-radius: 14px; padding: 6px 22px;
+}
+
+/* ===== 04: zadanie 1 (ABCD) ===== */
+#s04 .badge { animation-delay: .5s; }
+#s04 .polecenie { animation-delay: 2.2s; }
+#s04 .abcd { display: flex; gap: 30px; margin-top: 34px; justify-content: center; }
+#s04 .opcja {
+  width: 250px; background: var(--bialy); border: 4px solid #d9c9b2; border-radius: 22px;
+  padding: 20px; font-size: 40px; font-weight: 800;
+}
+#s04 .opcja b { display: block; font-family: 'Baloo 2'; font-size: 48px; color: var(--pomarancz); }
+#s04 .opcja:nth-child(1) { animation-delay: 4.4s; }
+#s04 .opcja:nth-child(2) { animation-delay: 5.6s; }
+#s04 .opcja:nth-child(3) { animation-delay: 6.6s; }
+#s04 .opcja:nth-child(4) { animation-delay: 7.7s; }
+#s04 .pisz { animation-delay: 9.8s; }
+#s04 .odliczanie-pasek { animation-delay: 13.5s; animation-duration: 20s; }
+
+/* ===== 05: nie ===== */
+#s05 { padding: 34px 90px; text-align: center; }
+#s05 .cicho {
+  display: inline-block; font-size: 34px; font-weight: 800; color: #7a6a5c;
+  animation-delay: .6s;
+}
+#s05 h2 { font-size: 48px; color: var(--ciemny); margin-top: 18px; animation-delay: 3.8s; }
+#s05 .scenka { display: flex; align-items: center; justify-content: center; margin-top: 26px; }
+#s05 .blok {
+  font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 26px;
+  padding: 20px 44px; font-size: 58px;
+}
+#s05 .blok-nie { background: var(--ciemny); animation-delay: 4.6s; }
+#s05 .blok-czas { background: var(--pomarancz); animation-delay: 4.6s; }
+#s05 .przerwa { width: 100px; text-align: center; font-size: 42px; font-weight: 800; color: var(--roz); animation-delay: 5.6s; }
+#s05 .przyklady { margin-top: 24px; font-size: 42px; font-weight: 800; line-height: 1.5; }
+#s05 .przyklady em { font-style: normal; color: var(--roz); border-bottom: 5px dotted var(--roz); }
+#s05 .p1 { animation-delay: 8.0s; }
+#s05 .p2 { animation-delay: 9.4s; }
+#s05 .stempel {
+  display: inline-block; margin-top: 22px; font-family: 'Baloo 2'; font-size: 46px;
+  font-weight: 800; color: var(--roz); border: 6px solid var(--roz); border-radius: 18px;
+  padding: 4px 32px; transform: rotate(-4deg); animation-delay: 10.4s;
+}
+
+/* ===== 06: zadanie 2 (nie + biegne) ===== */
+#s06 .badge { background: var(--ciemny); animation-delay: .5s; }
+#s06 .rownanie {
+  display: flex; align-items: center; justify-content: center; gap: 26px; margin-top: 56px;
+  font-family: 'Baloo 2'; font-size: 72px; font-weight: 800; animation-delay: 2.8s;
+}
+#s06 .rownanie .nie { color: #fff; background: var(--ciemny); border-radius: 22px; padding: 8px 34px; }
+#s06 .rownanie .czas { color: #fff; background: var(--pomarancz); border-radius: 22px; padding: 8px 34px; }
+#s06 .rownanie .znak { color: var(--roz); }
+#s06 .pisz { margin-top: 44px; animation-delay: 5.4s; }
+#s06 .odliczanie-pasek { animation-delay: 8.3s; animation-duration: 15s; }
+
+/* ===== 07: odmiana (osoby i liczby) ===== */
+#s07 { padding: 50px 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s07 h2 { font-size: 52px; color: var(--pomarancz); animation-delay: .5s; }
+#s07 .kolumny { display: flex; gap: 56px; margin-top: 38px; }
+#s07 .kolumna {
+  width: 480px; background: var(--bialy); border: 5px solid #d9c9b2; border-radius: 26px;
+  padding: 22px 30px;
+}
+#s07 .nag-kol {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 34px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 6px 26px; margin-bottom: 14px;
+}
+#s07 .kol-lp .nag-kol { background: var(--pomarancz); animation-delay: 4.4s; }
+#s07 .kol-lm .nag-kol { background: var(--roz); animation-delay: 9.9s; }
+#s07 .wiersz { font-size: 38px; font-weight: 800; padding: 8px 0; }
+#s07 .kol-lp .r1 { animation-delay: 5.6s; }
+#s07 .kol-lp .r2 { animation-delay: 6.5s; }
+#s07 .kol-lp .r3 { animation-delay: 7.4s; }
+#s07 .kol-lm .r1 { animation-delay: 10.6s; }
+#s07 .kol-lm .r2 { animation-delay: 11.4s; }
+#s07 .kol-lm .r3 { animation-delay: 12.2s; }
+#s07 .puenta { margin-top: 36px; font-size: 40px; font-weight: 800; text-align: center; animation-delay: 13.8s; }
+#s07 .puenta b { color: var(--roz); }
+
+/* ===== 08: zadanie 3 (gramy ABC) ===== */
+#s08 .badge { animation-delay: .5s; }
+#s08 .polecenie { animation-delay: 1.8s; }
+#s08 .abc { display: flex; flex-direction: column; gap: 18px; margin: 30px auto 0; width: 780px; }
+#s08 .opcja {
+  background: var(--bialy); border: 4px solid #d9c9b2; border-radius: 22px;
+  padding: 14px 30px; font-size: 36px; font-weight: 800; text-align: left; display: flex; gap: 20px;
+}
+#s08 .opcja b { font-family: 'Baloo 2'; font-size: 40px; color: var(--pomarancz); }
+#s08 .opcja:nth-child(1) { animation-delay: 4.2s; }
+#s08 .opcja:nth-child(2) { animation-delay: 6.8s; }
+#s08 .opcja:nth-child(3) { animation-delay: 9.6s; }
+#s08 .pisz { animation-delay: 12.2s; }
+#s08 .odliczanie-pasek { animation-delay: 15.4s; animation-duration: 20s; }
+
+/* ===== 09: czasy ===== */
+#s09 { padding: 44px 80px; display: flex; flex-direction: column; justify-content: center; }
+#s09 h2 { font-size: 50px; color: var(--pomarancz); text-align: center; animation-delay: .4s; }
+#s09 .os-czasu { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 34px; }
+#s09 .czas-box {
+  width: 300px; background: var(--bialy); border: 5px solid #d9c9b2; border-radius: 26px;
+  padding: 22px 18px; text-align: center;
+}
+#s09 .czas-box .em { font-size: 54px; display: block; }
+#s09 .czas-box .nazwa { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; color: var(--roz); margin-top: 6px; }
+#s09 .czas-box .przyklad { font-size: 34px; font-weight: 800; margin-top: 6px; }
+#s09 .cz1 { animation-delay: 3.6s; }
+#s09 .strzalka1 { font-size: 54px; font-weight: 800; color: var(--roz); animation-delay: 4.6s; }
+#s09 .cz2 { animation-delay: 6.2s; }
+#s09 .strzalka2 { font-size: 54px; font-weight: 800; color: var(--roz); animation-delay: 7.4s; }
+#s09 .cz3 { animation-delay: 9.4s; }
+#s09 .uwaga { margin-top: 40px; text-align: center; animation-delay: 12.6s; }
+#s09 .uwaga-tytul { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; color: var(--ciemny); }
+#s09 .formy { display: flex; justify-content: center; gap: 40px; margin-top: 18px; }
+#s09 .forma { font-size: 38px; font-weight: 800; background: var(--zolty); border-radius: 20px; padding: 14px 34px; }
+#s09 .f1 { animation-delay: 14.6s; }
+#s09 .f2 { animation-delay: 16.4s; }
+
+/* ===== 10: zadanie 4 (czytam -> czasy) ===== */
+#s10 .badge { animation-delay: .5s; }
+#s10 .polecenie { animation-delay: 2.2s; }
+#s10 .polecenie b { color: var(--pomarancz); }
+#s10 .pisz { animation-delay: 5.8s; }
+#s10 .odliczanie-pasek { animation-delay: 8.8s; animation-duration: 20s; }
+
+/* ===== 11: nieosobowe ===== */
+#s11 { padding: 60px 100px; text-align: center; }
+#s11 h2 { font-size: 52px; color: var(--pomarancz); animation-delay: .6s; }
+#s11 .karta-nieos {
+  margin: 40px auto 0; width: 940px; background: var(--zolty); border-radius: 26px;
+  padding: 28px 44px; animation-delay: .6s;
+}
+#s11 .nieos-wiersz { font-size: 40px; font-weight: 800; padding: 8px 0; }
+#s11 .nieos-wiersz b { color: var(--roz); }
+#s11 .w1 { animation-delay: 5.0s; }
+#s11 .w2 { animation-delay: 8.0s; }
+#s11 .puenta {
+  margin-top: 34px; display: inline-block; font-family: 'Baloo 2'; font-size: 42px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 10px 38px;
+  animation-delay: 11.2s;
+}
+
+/* ===== 12: final - plansza do kola (zostaje na ekranie) ===== */
+#s12 { padding: 30px 100px; }
+#s12 h2 { font-size: 58px; color: var(--roz); text-align: center; animation-delay: .6s; }
+#s12 .lista { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
+#s12 .zad {
+  display: flex; align-items: center; gap: 22px; background: var(--bialy);
+  border-radius: 20px; padding: 12px 28px; font-size: 33px; font-weight: 800;
+  border: 4px solid #d9c9b2;
+}
+#s12 .zad .nr {
+  font-family: 'Baloo 2'; font-size: 36px; color: #fff; background: var(--pomarancz);
+  border-radius: 12px; padding: 2px 16px;
+}
+#s12 .z1 { animation-delay: 3.4s; }
+#s12 .z2 { animation-delay: 4.2s; }
+#s12 .z3 { animation-delay: 5.0s; }
+#s12 .z4 { animation-delay: 5.8s; }
+#s12 .final {
+  margin-top: 22px; text-align: center; font-family: 'Baloo 2'; font-size: 40px;
+  font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px;
+  padding: 10px 28px; animation-delay: 9.4s;
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="tytul pop">WSZYSTKO<br><small>o</small>CZASOWNIKU</div>
+    <div class="zapowiedz pop">W tym filmie: 4 zadania!</div>
+    <div class="zeszyt pop">📓 Każdą odpowiedź zapisz w zeszycie</div>
+    <div class="kolo pop">🎡 Sprawdzimy je PO filmie - na kole fortuny!</div>
+  </section>
+
+  <section class="scena" data-id="02-definicja" id="s02">
+    <div class="ramka pop">
+      <div class="def">CZASOWNIK nazywa <b class="pop-w">CZYNNOŚCI</b> i <i class="pop-w">STANY</i></div>
+    </div>
+    <div class="pytania">
+      <div class="dymek dymek1 pop">
+        <div class="pyt">co robi?</div>
+        <div class="odp zjaw">czyta • skacze • słucha</div>
+      </div>
+      <div class="dymek dymek2 pop">
+        <div class="pyt">co się z nim dzieje?</div>
+        <div class="odp zjaw">śpi • rośnie • marzy</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="03-przyklad" id="s03">
+    <h2 class="wjazd-dol">Jak to działa w zdaniu?</h2>
+    <div class="przyk">
+      <div class="karta-zd k1 wjazd-lewo">
+        <div class="zd"><span class="em">🐹</span>Kuba rano <span class="wyraz w-karmi">karmi</span> chomika.</div>
+        <div><span class="pyt-mini pop">co robi Kuba?</span></div>
+        <div><span class="etyk pop">karmi = CZYNNOŚĆ</span></div>
+      </div>
+      <div class="karta-zd k2 wjazd-prawo">
+        <div class="zd"><span class="em">😴</span>Chomik <span class="wyraz w-spi">śpi</span> w trocinach.</div>
+        <div><span class="pyt-mini pop">co się z nim dzieje?</span></div>
+        <div><span class="etyk pop">śpi = STAN</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <div><span class="badge pop">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol">Które słowo to czasownik?</div>
+    <div class="abcd">
+      <div class="opcja pop"><b>A</b>wysoki</div>
+      <div class="opcja pop"><b>B</b>skacze</div>
+      <div class="opcja pop"><b>C</b>kot</div>
+      <div class="opcja pop"><b>D</b>wesoło</div>
+    </div>
+    <div class="pisz zjaw">Zapisz literę w zeszycie 📓 (sprawdzimy na kole!)</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="05-nie" id="s05">
+    <div><span class="cicho pop">🤫 Odpowiedź zostaje w zeszycie - lecimy dalej!</span></div>
+    <h2 class="wjazd-dol">Ważna zasada pisowni ✍️</h2>
+    <div class="scenka">
+      <div class="blok blok-nie wjazd-lewo">NIE</div>
+      <div class="przerwa pop">↔</div>
+      <div class="blok blok-czas wjazd-prawo">czasownik</div>
+    </div>
+    <div class="przyklady">
+      <div class="p1 zjaw">gram → <em>nie</em> gram</div>
+      <div class="p2 zjaw">czytam → <em>nie</em> czytam</div>
+    </div>
+    <div><span class="stempel pop">ZAWSZE ODDZIELNIE!</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="06-zadanie2+15" id="s06">
+    <div><span class="badge pop">ZADANIE 2 ⚡</span></div>
+    <div class="rownanie pop">
+      <span class="nie">nie</span><span class="znak">+</span><span class="czas">biegnę</span><span class="znak">=</span><span>❓</span>
+    </div>
+    <div class="pisz zjaw">Zapisz całość w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="07-odmiana" id="s07">
+    <h2 class="wjazd-dol">Odmiana: osoba i liczba</h2>
+    <div class="kolumny">
+      <div class="kolumna kol-lp">
+        <div class="nag-kol wjazd-lewo">liczba pojedyncza</div>
+        <div class="wiersz r1 wjazd-lewo">ja <b>robię</b></div>
+        <div class="wiersz r2 wjazd-lewo">ty <b>robisz</b></div>
+        <div class="wiersz r3 wjazd-lewo">on <b>robi</b></div>
+      </div>
+      <div class="kolumna kol-lm">
+        <div class="nag-kol wjazd-prawo">liczba mnoga</div>
+        <div class="wiersz r1 wjazd-prawo">my <b>robimy</b></div>
+        <div class="wiersz r2 wjazd-prawo">wy <b>robicie</b></div>
+        <div class="wiersz r3 wjazd-prawo">oni <b>robią</b></div>
+      </div>
+    </div>
+    <div class="puenta zjaw">Forma zdradza, <b>KTO</b> działa i <b>ILU</b> ich jest!</div>
+  </section>
+
+  <section class="scena zadanie" data-id="08-zadanie3+20" id="s08">
+    <div><span class="badge pop">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol">GRAMY - która to osoba i liczba?</div>
+    <div class="abc">
+      <div class="opcja pop"><b>A</b>pierwsza osoba liczby mnogiej</div>
+      <div class="opcja pop"><b>B</b>druga osoba liczby pojedynczej</div>
+      <div class="opcja pop"><b>C</b>trzecia osoba liczby mnogiej</div>
+    </div>
+    <div class="pisz zjaw">Zapisz literę 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="09-czasy" id="s09">
+    <h2 class="wjazd-dol">Trzy czasy</h2>
+    <div class="os-czasu">
+      <div class="czas-box cz1 wjazd-lewo"><span class="em">⏮️</span><div class="nazwa">PRZESZŁY</div><div class="przyklad">robiłem</div></div>
+      <div class="strzalka1 pop">→</div>
+      <div class="czas-box cz2 pop"><span class="em">▶️</span><div class="nazwa">TERAŹNIEJSZY</div><div class="przyklad">robię</div></div>
+      <div class="strzalka2 pop">→</div>
+      <div class="czas-box cz3 wjazd-prawo"><span class="em">⏭️</span><div class="nazwa">PRZYSZŁY</div><div class="przyklad">zrobię</div></div>
+    </div>
+    <div class="uwaga zjaw">
+      <div class="uwaga-tytul">Uwaga! Czas przyszły ma dwie formy:</div>
+      <div class="formy">
+        <div class="forma f1 pop"><b>prosta:</b> zrobię</div>
+        <div class="forma f2 pop"><b>złożona:</b> będę robić</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="10-zadanie4+20" id="s10">
+    <div><span class="badge pop">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol">CZYTAM →<br>czas <b>przeszły?</b> czas <b>przyszły?</b></div>
+    <div class="pisz zjaw">Zapisz obie formy 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="11-nieosobowe" id="s11">
+    <h2 class="wjazd-dol">Formy, które nie zdradzają, KTO działa</h2>
+    <div class="karta-nieos pop">
+      <div class="nieos-wiersz w1 zjaw">bezokolicznik: <b>robić, czytać</b></div>
+      <div class="nieos-wiersz w2 zjaw">końcówka -no/-to: <b>zrobiono, umyto</b></div>
+    </div>
+    <div><span class="puenta pop">Nie wiadomo KTO - wiadomo, że zrobione! ✅</span></div>
+  </section>
+
+  <section class="scena" data-id="12-final" id="s12">
+    <h2 class="pop">🎡 Koniec filmu - czas na koło fortuny!</h2>
+    <div class="lista">
+      <div class="zad z1 wjazd-lewo"><span class="nr">Z1</span><span>Które słowo to czasownik? (A, B, C czy D)</span></div>
+      <div class="zad z2 wjazd-lewo"><span class="nr">Z2</span><span>nie + biegnę = ?</span></div>
+      <div class="zad z3 wjazd-lewo"><span class="nr">Z3</span><span>GRAMY - osoba i liczba? (A, B czy C)</span></div>
+      <div class="zad z4 wjazd-lewo"><span class="nr">Z4</span><span>CZYTAM - czas przeszły i przyszły?</span></div>
+    </div>
+    <div class="final pop">Koło wybiera, kto odpowiada. Wiesz = ➕. Powodzenia!</div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film3-sciezka.mp3';</script>
+<script src="timeline-film3.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
