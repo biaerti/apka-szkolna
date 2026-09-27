@@ -29,12 +29,13 @@ describe('buildTextbook4', () => {
       // lektorem lub filmik, a notatka PRZED zadaniami. Zadania nowego formatu
       // moga byc screenami z podrecznika (obraz ze strona i kodem).
       const czytanka = lesson.slides.some((slide) => slide.kind === 'czytanka');
+      const filmik = lesson.slides.some((slide) => slide.kind === 'video');
       const screeny = lesson.slides.filter((slide) => slide.kind === 'image' && slide.code);
-      const nowyFormat = czytanka || screeny.length > 0;
+      const nowyFormat = czytanka || filmik || screeny.length > 0;
       expect(nowyFormat || lesson.slides.some((slide) => slide.kind === 'read')).toBe(true);
       // Pierwsze piec tematow ma 3-4 zadania, krotsze prezentacje podsumowujace - 2,
-      // lekcje z czytanka - 3 krotkie, lekcje ze screenami - same screeny.
-      const expectedTasks = screeny.length > 0 ? 0 : czytanka ? 3 : index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
+      // plan ramowy ma dwa slajdy rozmowy i dwa zadania, screeny nie sa taskami.
+      const expectedTasks = lesson.title.startsWith('15.') ? 4 : screeny.length > 0 || filmik ? 0 : czytanka ? 3 : index >= 5 ? 2 : lesson.title.startsWith('4.') ? 4 : 3;
       expect(lesson.slides.filter((slide) => slide.kind === 'task')).toHaveLength(expectedTasks);
       expect(lesson.slides.filter((slide) => slide.kind === 'task').every((slide) => Boolean(slide.answerExample))).toBe(true);
       // Zadnych slajdow zwiazanych z kartami A5 - Bartek moze ich nie drukowac.
@@ -93,6 +94,45 @@ describe('buildTextbook4', () => {
     // Kazdy screen zadania ma strone i kod, wiec dziala na nim kolo na lekcji.
     const screeny = lesson.slides.slice(7);
     expect(screeny.every((slide) => slide.kind === 'image' && typeof slide.page === 'number' && Boolean(slide.code))).toBe(true);
+  });
+
+  it('wypowiedzenia: film, nowe podobne zadania przez 60 sekund i graficzna notatka', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const lesson = bundle.lessons.find((l) => l.title === '14. Czy każda nasza wypowiedź jest zdaniem?')!;
+
+    expect(lesson.slides.map((slide) => slide.kind)).toEqual(['topic', 'recap', 'video', 'recap', 'note']);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'wypowiedzenia-film1' });
+    expect(lesson.slides[3]).toMatchObject({
+      kind: 'recap',
+      questionSetId: lesson.questionSetId,
+      questionCount: 4,
+      afterVideoPractice: true,
+    });
+    expect(lesson.slides[4]).toMatchObject({ kind: 'note', diagram: 'wypowiedzenia' });
+
+    const questions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
+    expect(questions).toHaveLength(4);
+    expect(questions.some((q) => q.text.includes('Nie otwierać okna'))).toBe(true);
+  });
+
+  it('plan ramowy: czytanka webowa, wspolne pytania, zadania 5-6 i graficzna notatka na koncu', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const lesson = bundle.lessons.find((l) => l.title === '15. Tworzymy plan ramowy')!;
+
+    expect(lesson.slides.map((slide) => slide.kind)).toEqual([
+      'topic', 'recap', 'czytanka', 'task', 'task', 'image', 'title', 'task', 'task', 'note',
+    ]);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'czytanka', czytankaId: 'historia-o-akceptacji' });
+    expect(lesson.slides[3]).toMatchObject({ kind: 'task', code: 'PYT. 1-3', studentAction: 'oral' });
+    expect(lesson.slides[4]).toMatchObject({ kind: 'task', code: 'PYT. 4-6', studentAction: 'oral' });
+    expect(lesson.slides[7]).toMatchObject({ kind: 'task', code: 'Z5', studentAction: 'write-answer' });
+    expect(lesson.slides[8]).toMatchObject({ kind: 'task', code: 'Z6', studentAction: 'oral' });
+    expect(lesson.slides[9]).toMatchObject({ kind: 'note', diagram: 'planRamowy' });
+
+    const questions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
+    expect(questions).toHaveLength(6);
+    expect(questions[0].text).toContain('pojęcie');
+    expect(questions[5].text).toContain('Miłosz');
   });
 
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {

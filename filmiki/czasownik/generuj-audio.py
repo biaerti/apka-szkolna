@@ -4,6 +4,7 @@ Uzycie:
   python filmiki/czasownik/generuj-audio.py film1        # sceny bez mp3
   python filmiki/czasownik/generuj-audio.py film1 --wszystko  # nadpisz wszystkie
   python filmiki/czasownik/generuj-audio.py film1 --tylko-timeline  # bez API
+  python filmiki/czasownik/generuj-audio.py film1 --katalog wypowiedzenia
 
 Teksty: narracja/filmN/NN-nazwa.txt -> audio/filmN/NN-nazwa.mp3.
 Nazwa moze konczyc sie "+P" (np. 05-zadanie1+20.txt): P sekund CISZY na
@@ -28,7 +29,15 @@ CISZA_START = 0.8   # sekundy ciszy przed pierwsza scena
 PRZERWA = 0.9       # przerwa miedzy scenami
 CISZA_KONIEC = 1.5  # wybrzmienie na koncu
 
-TU = Path(__file__).resolve().parent
+BAZA = Path(__file__).resolve().parent
+if "--katalog" in sys.argv:
+    katalog_index = sys.argv.index("--katalog")
+    try:
+        TU = BAZA.parent / sys.argv[katalog_index + 1]
+    except IndexError:
+        sys.exit("Po --katalog podaj nazwe folderu w filmiki/")
+else:
+    TU = BAZA
 ROOT = TU.parent.parent
 
 

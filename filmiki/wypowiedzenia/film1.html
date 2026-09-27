@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Zdanie i równoważnik zdania</title>
+<link rel="stylesheet" href="../czasownik/wspolne.css">
+<style>
+  .scena { padding: 44px 72px; }
+  h2 { font-size: 58px; line-height: 1.05; text-align: center; }
+  .roz { color: var(--roz); }
+  .pom { color: var(--pomarancz); }
+  .podkresl { border-bottom: 7px solid var(--roz); padding-bottom: 1px; }
+  .karta { background: #fff; border-radius: 22px; padding: 24px 30px; }
+  .etykieta { display: inline-block; border-radius: 999px; padding: 7px 24px; color: #fff; font-family: 'Baloo 2'; font-size: 29px; font-weight: 800; }
+  .zdanie { background: #15803d; }
+  .rownowaznik { background: #c2410c; }
+
+  #s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #s01 .tytul { max-width: 1050px; font-size: 88px; line-height: .98; color: var(--ciemny); animation-delay: .5s; }
+  #s01 .tytul strong { color: var(--roz); }
+  #s01 .podtytul { margin-top: 28px; font-size: 42px; font-weight: 800; color: var(--pomarancz); animation-delay: 3.4s; }
+  #s01 .zadania { margin-top: 24px; font-size: 32px; font-weight: 800; animation-delay: 5.6s; }
+
+  #s02 h2 { animation-delay: .4s; }
+  #s02 .czesci { display: flex; gap: 24px; justify-content: center; margin-top: 34px; }
+  #s02 .czesc { min-width: 255px; border-radius: 20px; padding: 20px; text-align: center; font-size: 30px; font-weight: 800; background: #fff; border: 4px solid #dbc9b2; }
+  #s02 .czesc strong { display: block; margin-top: 8px; font-size: 38px; }
+  #s02 .cz1 { animation-delay: 2.0s; }
+  #s02 .cz2 { animation-delay: 2.6s; border-color: var(--roz); background: #fff0f2; }
+  #s02 .cz3 { animation-delay: 3.2s; }
+  #s02 .odmiana { margin: 30px auto 0; max-width: 960px; border-radius: 18px; padding: 18px 26px; text-align: center; background: var(--ciemny); color: #fff; font-size: 34px; font-weight: 800; animation-delay: 6.5s; }
+
+  #s03 .osoby { display: flex; gap: 24px; justify-content: center; margin-top: 40px; }
+  #s03 .osoba { width: 310px; text-align: center; border-radius: 22px; padding: 24px 18px; background: #fff; border: 4px solid #dbc9b2; }
+  #s03 .osoba span { display: block; font-size: 31px; color: #76675d; }
+  #s03 .osoba b { display: block; margin-top: 8px; font-size: 47px; }
+  #s03 .o1 { animation-delay: 2.0s; }
+  #s03 .o2 { animation-delay: 3.0s; }
+  #s03 .o3 { animation-delay: 4.0s; }
+  #s03 .wniosek { margin-top: 34px; text-align: center; font-size: 39px; font-weight: 800; animation-delay: 7.0s; }
+
+  #s04 .drzewo { position: relative; margin: 28px auto 0; width: 1100px; height: 470px; }
+  #s04 .glowa { position: absolute; left: 325px; top: 0; width: 450px; text-align: center; border-radius: 18px; padding: 18px; background: var(--ciemny); color: #fff; font-size: 44px; font-weight: 800; animation-delay: 1.7s; }
+  #s04 svg { position: absolute; left: 0; top: 60px; width: 1100px; height: 180px; animation-delay: 3.8s; }
+  #s04 .galaz { position: absolute; top: 200px; width: 470px; min-height: 210px; text-align: center; }
+  #s04 .g1 { left: 0; animation-delay: 5.2s; }
+  #s04 .g2 { right: 0; animation-delay: 7.2s; }
+  #s04 .galaz h3 { font-family: 'Baloo 2'; font-size: 46px; }
+  #s04 .galaz p { margin-top: 12px; font-size: 31px; font-weight: 800; line-height: 1.25; }
+
+  #s05 .porownanie { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 34px; }
+  #s05 .przyklad { text-align: center; }
+  #s05 .p1 { animation-delay: 2.0s; }
+  #s05 .p2 { animation-delay: 5.7s; }
+  #s05 .tekst { margin-top: 16px; font-size: 42px; font-weight: 800; }
+  #s05 .dlaczego { margin-top: 15px; font-size: 29px; line-height: 1.3; color: #6f6157; }
+  #s05 .uwaga { margin-top: 30px; text-align: center; font-size: 35px; font-weight: 800; animation-delay: 9.0s; }
+
+  .zadanie { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .zadanie .badge { border-radius: 999px; padding: 8px 34px; background: var(--roz); color: #fff; font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; animation-delay: .4s; }
+  .zadanie .polecenie { max-width: 1120px; margin-top: 28px; font-size: 45px; font-weight: 800; line-height: 1.25; animation-delay: 1.7s; }
+  .zadanie .pisz { margin-top: 24px; font-size: 31px; font-weight: 800; color: #76675d; animation-delay: 5.0s; }
+  .zadanie .odliczanie { margin-top: 30px; width: 900px; }
+  #s06 .odliczanie-pasek { animation-delay: 9.2s; animation-duration: 15s; }
+  #s07 .odliczanie-pasek { animation-delay: 12.4s; animation-duration: 20s; }
+  #s09 .odliczanie-pasek { animation-delay: 8s; animation-duration: 15s; }
+  #s11 .odliczanie-pasek { animation-delay: 11s; animation-duration: 20s; }
+
+  #s07 .lista { margin-top: 22px; text-align: left; font-size: 37px; line-height: 1.5; font-weight: 800; }
+  #s07 .lista div:nth-child(1) { animation-delay: 3.3s; }
+  #s07 .lista div:nth-child(2) { animation-delay: 4.0s; }
+  #s07 .lista div:nth-child(3) { animation-delay: 4.7s; }
+
+  #s08 .znak { margin: 34px auto 0; max-width: 900px; text-align: center; font-size: 52px; font-weight: 800; animation-delay: 2.0s; }
+  #s08 .bezok { margin-top: 34px; text-align: center; font-size: 38px; font-weight: 800; animation-delay: 5.0s; }
+  #s08 .werdykt { margin: 28px auto 0; width: max-content; animation-delay: 8.5s; }
+
+  #s10 .zmiana { display: flex; align-items: center; justify-content: center; gap: 34px; margin-top: 55px; }
+  #s10 .blok { width: 430px; text-align: center; font-size: 39px; font-weight: 800; }
+  #s10 .b1 { animation-delay: 2.0s; }
+  #s10 .strzalka { font-size: 70px; color: var(--pomarancz); animation-delay: 4.2s; }
+  #s10 .b2 { animation-delay: 5.5s; }
+  #s10 .zasada { margin-top: 40px; text-align: center; font-size: 36px; font-weight: 800; animation-delay: 8.7s; }
+
+  #s12 { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #s12 h2 { font-size: 68px; color: var(--roz); animation-delay: .5s; }
+  #s12 .regula { margin-top: 28px; font-size: 43px; font-weight: 800; line-height: 1.35; animation-delay: 2.7s; }
+  #s12 .kolo { margin-top: 26px; border-radius: 18px; padding: 16px 28px; background: var(--pomarancz); color: #fff; font-size: 34px; font-weight: 800; animation-delay: 6.0s; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <section class="scena" data-id="01-intro" id="s01">
+    <h1 class="tytul pop">Czy każda wypowiedź jest <strong>zdaniem?</strong></h1>
+    <p class="podtytul wjazd-dol">Zdanie i równoważnik zdania</p>
+    <p class="zadania zjaw">Po drodze rozwiążesz 4 krótkie zadania.</p>
+  </section>
+
+  <section class="scena" data-id="02-powtorka" id="s02">
+    <h2 class="wjazd-dol">Najpierw szybka powtórka</h2>
+    <div class="czesci">
+      <div class="czesc cz1 pop">RZECZOWNIK<strong>dom</strong></div>
+      <div class="czesc cz2 pop">CZASOWNIK<strong>buduje</strong></div>
+      <div class="czesc cz3 pop">PRZYMIOTNIK<strong>wysoki</strong></div>
+    </div>
+    <div class="odmiana zjaw">Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.</div>
+  </section>
+
+  <section class="scena" data-id="03-forma-osobowa" id="s03">
+    <h2 class="wjazd-dol">Forma osobowa zdradza, <span class="roz">kto</span> działa</h2>
+    <div class="osoby">
+      <div class="osoba o1 pop"><span>ja</span><b>czytam</b></div>
+      <div class="osoba o2 pop"><span>ty</span><b>czytasz</b></div>
+      <div class="osoba o3 pop"><span>oni</span><b>czytają</b></div>
+    </div>
+    <p class="wniosek zjaw">Możesz określić osobę? To czasownik w formie osobowej.</p>
+  </section>
+
+  <section class="scena" data-id="04-dwa-rodzaje" id="s04">
+    <h2 class="wjazd-dol">Wypowiedzenia dzielimy na dwa rodzaje</h2>
+    <div class="drzewo">
+      <div class="glowa pop">WYPOWIEDZENIA</div>
+      <svg class="zjaw" viewBox="0 0 1100 180" aria-hidden="true"><path d="M550 0 V42 L235 155 M550 42 L865 155" fill="none" stroke="#F58220" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="galaz g1 pop karta"><h3 class="roz">ZDANIA</h3><p>mają czasownik<br>w formie osobowej</p></div>
+      <div class="galaz g2 pop karta"><h3 class="pom">RÓWNOWAŻNIKI ZDAŃ</h3><p>nie mają czasownika<br>w formie osobowej</p></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="05-przyklady" id="s05">
+    <h2 class="wjazd-dol">Porównaj dwa wypowiedzenia</h2>
+    <div class="porownanie">
+      <div class="przyklad p1 karta pop"><span class="etykieta zdanie">ZDANIE</span><div class="tekst">Kuba <span class="podkresl">zamyka</span> drzwi.</div><div class="dlaczego">„zamyka” - 3. osoba liczby pojedynczej</div></div>
+      <div class="przyklad p2 karta pop"><span class="etykieta rownowaznik">RÓWNOWAŻNIK</span><div class="tekst">Zamykanie drzwi.</div><div class="dlaczego">brak czasownika w formie osobowej</div></div>
+    </div>
+    <p class="uwaga zjaw">Pytanie i polecenie też mogą być zdaniami: „Idziesz?” „Zamknij drzwi!”</p>
+  </section>
+
+  <section class="scena zadanie" data-id="06-zadanie1+15" id="s06">
+    <span class="badge pop">ZADANIE 1</span>
+    <div class="polecenie wjazd-dol">„Wracamy ze spaceru.”<br>Wskaż czasownik. Określ osobę i liczbę.</div>
+    <div class="pisz zjaw">Zapisz krótką odpowiedź w zeszycie.</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena zadanie" data-id="07-zadanie2+20" id="s07">
+    <span class="badge pop">ZADANIE 2</span>
+    <div class="polecenie wjazd-dol">Zapisz przy każdym przykładzie: Z albo R.</div>
+    <div class="lista">
+      <div class="zjaw">1. Deszcz pada.</div>
+      <div class="zjaw">2. Silny deszcz.</div>
+      <div class="zjaw">3. Zamknij drzwi!</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="08-pulapka" id="s08">
+    <h2 class="wjazd-dol">Uwaga na bezokolicznik</h2>
+    <div class="znak karta pop">Nie dotykać szyby!</div>
+    <p class="bezok zjaw"><span class="podkresl">dotykać</span> odpowiada na pytanie „co robić?”, ale nie zdradza osoby.</p>
+    <div class="werdykt etykieta rownowaznik pop">TO RÓWNOWAŻNIK ZDANIA</div>
+  </section>
+
+  <section class="scena zadanie" data-id="09-zadanie3+15" id="s09">
+    <span class="badge pop">ZADANIE 3</span>
+    <div class="polecenie wjazd-dol">„Nie biegać po korytarzu!”<br>Zdanie czy równoważnik? Dlaczego?</div>
+    <div class="pisz zjaw">Zapisz odpowiedź i uzasadnienie.</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="10-zamiana" id="s10">
+    <h2 class="wjazd-dol">Jak zrobić zdanie z równoważnika?</h2>
+    <div class="zmiana">
+      <div class="blok b1 karta pop"><span class="etykieta rownowaznik">RÓWNOWAŻNIK</span><br><br>Alarm pożarowy.</div>
+      <div class="strzalka pop">→</div>
+      <div class="blok b2 karta pop"><span class="etykieta zdanie">ZDANIE</span><br><br><span class="podkresl">Włączył się</span> alarm pożarowy.</div>
+    </div>
+    <p class="zasada zjaw">Dodaj czasownik w formie osobowej i dopasuj sens wypowiedzenia.</p>
+  </section>
+
+  <section class="scena zadanie" data-id="11-zadanie4+20" id="s11">
+    <span class="badge pop">ZADANIE 4</span>
+    <div class="polecenie wjazd-dol">Zamień równoważnik „Porządek na ławce” w zdanie.<br>Podkreśl czasownik w formie osobowej.</div>
+    <div class="pisz zjaw">Możliwa jest więcej niż jedna dobra odpowiedź.</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="12-final" id="s12">
+    <h2 class="pop">Najważniejszy test</h2>
+    <p class="regula wjazd-dol">Jest czasownik w formie osobowej? <span class="roz">ZDANIE.</span><br>Nie ma? <span class="pom">RÓWNOWAŻNIK ZDANIA.</span></p>
+    <p class="kolo pop">Teraz 4 nowe, podobne przykłady i koło fortuny.</p>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="../czasownik/player.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+{
+  "sceny": [
+    {
+      "id": "01-intro",
+      "start": 0.8,
+      "dur": 9.091
+    },
+    {
+      "id": "02-powtorka",
+      "start": 10.791,
+      "dur": 11.389
+    },
+    {
+      "id": "03-forma-osobowa",
+      "start": 23.08,
+      "dur": 11.546
+    },
+    {
+      "id": "04-dwa-rodzaje",
+      "start": 35.526,
+      "dur": 16.509
+    },
+    {
+      "id": "05-przyklady",
+      "start": 52.936,
+      "dur": 18.913
+    },
+    {
+      "id": "06-zadanie1+15",
+      "start": 72.748,
+      "dur": 8.673,
+      "pauza": 15.0
+    },
+    {
+      "id": "07-zadanie2+20",
+      "start": 97.321,
+      "dur": 11.886,
+      "pauza": 20.0
+    },
+    {
+      "id": "08-pulapka",
+      "start": 130.107,
+      "dur": 11.389
+    },
+    {
+      "id": "09-zadanie3+15",
+      "start": 142.396,
+      "dur": 7.549,
+      "pauza": 15.0
+    },
+    {
+      "id": "10-zamiana",
+      "start": 165.845,
+      "dur": 12.748
+    },
+    {
+      "id": "11-zadanie4+20",
+      "start": 179.493,
+      "dur": 10.527,
+      "pauza": 20.0
+    },
+    {
+      "id": "12-final",
+      "start": 210.92,
+      "dur": 12.278
+    }
+  ],
+  "total": 224.698
+}

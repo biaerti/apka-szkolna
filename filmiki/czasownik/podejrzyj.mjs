@@ -2,13 +2,17 @@
 // Uzycie: node filmiki/czasownik/podejrzyj.mjs film1 5.0 20.1 40.0 ...
 import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const TU = dirname(fileURLToPath(import.meta.url));
+const BAZA = dirname(fileURLToPath(import.meta.url));
+const katalogIndex = process.argv.indexOf('--katalog');
+const TU = katalogIndex >= 0
+  ? join(BAZA, '..', process.argv[katalogIndex + 1] || '')
+  : BAZA;
 const ROOT = join(TU, '..', '..');
 const film = process.argv[2];
-const czasy = process.argv.slice(3).map(Number);
+const czasy = process.argv.slice(3).filter((arg, index, all) => arg !== '--katalog' && all[index - 1] !== '--katalog').map(Number);
 const PORT = 9334;
 
 const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', [
@@ -57,7 +61,7 @@ async function main() {
   for (const t of czasy) {
     await cdp('Runtime.evaluate', { expression: `window.__seek(${t * 1000})` });
     const shot = await cdp('Page.captureScreenshot', { format: 'png' });
-    const cel = join(ROOT, 'tmp', `${film}-${t.toFixed(1)}s.png`);
+    const cel = join(ROOT, 'tmp', `${basename(TU)}-${film}-${t.toFixed(1)}s.png`);
     writeFileSync(cel, Buffer.from(shot.data, 'base64'));
     console.log(cel);
   }

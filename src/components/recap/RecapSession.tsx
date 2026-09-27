@@ -49,6 +49,8 @@ export interface RecapSessionProps {
   questionCount?: number;
   /** Kolo zaraz po filmiku - bez stopera na ekranie pytan (patrz Slide recap.afterVideo). */
   afterVideo?: boolean;
+  /** Nowe, podobne zadania po filmie - 60 sekund pracy przed kolem. */
+  afterVideoPractice?: boolean;
 }
 
 export function RecapSession({
@@ -63,6 +65,7 @@ export function RecapSession({
   recapMode,
   questionCount,
   afterVideo,
+  afterVideoPractice,
 }: RecapSessionProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -250,6 +253,7 @@ export function RecapSession({
               }}
               onFinish={handleExit}
               afterVideo={afterVideo}
+              afterVideoPractice={afterVideoPractice}
             />
           ) : (
             <>

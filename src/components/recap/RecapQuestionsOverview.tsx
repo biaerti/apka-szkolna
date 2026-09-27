@@ -41,8 +41,13 @@ function IconButton({ label, onClick, danger, active, children }: { label: strin
 }
 
 /** Dluzsze pytania schodza nizej, zeby wszystkie zmiescily sie pod soba bez przewijania. */
-function overviewFontSize(text: string): string {
+function overviewFontSize(text: string, compact = false): string {
   const len = text.trim().length;
+  if (compact) {
+    if (len <= 70) return 'clamp(25px, 2.3vw, 38px)';
+    if (len <= 115) return 'clamp(22px, 2vw, 34px)';
+    return 'clamp(20px, 1.8vw, 30px)';
+  }
   if (len <= 45) return 'clamp(30px, 3.4vw, 64px)';
   if (len <= 90) return 'clamp(26px, 2.8vw, 52px)';
   return 'clamp(22px, 2.2vw, 40px)';
@@ -57,6 +62,7 @@ export function RecapQuestionsOverview({
   onAdd,
   onFinish,
   afterVideo = false,
+  afterVideoPractice = false,
 }: {
   questions: Question[];
   completedQuestionIds: Set<string>;
@@ -68,8 +74,10 @@ export function RecapQuestionsOverview({
   onFinish: () => void;
   /** Pytania z filmiku - juz zapisane, wiec stoper stoi na 00:00 i nie rusza sam. */
   afterVideo?: boolean;
+  /** Nowe przyklady po filmie: minuta na rozwiazanie, potem kolo. */
+  afterVideoPractice?: boolean;
 }) {
-  const [timerSec, setTimerSec] = useState(DEFAULT_THINKING_SECONDS);
+  const [timerSec, setTimerSec] = useState(afterVideoPractice ? 60 : DEFAULT_THINKING_SECONDS);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [questionDraft, setQuestionDraft] = useState('');
   const [answerDraft, setAnswerDraft] = useState('');
@@ -80,7 +88,7 @@ export function RecapQuestionsOverview({
 
   // Po filmiku stoper nie jest czasem na prace - pokazuje 00:00, dopoki
   // nauczyciel sam go nie wlaczy (klik w stoper albo "od nowa").
-  const [timerArmed, setTimerArmed] = useState(!afterVideo);
+  const [timerArmed, setTimerArmed] = useState(!afterVideo || afterVideoPractice);
 
   useEffect(() => {
     if (!timerArmed) return;
@@ -150,24 +158,29 @@ export function RecapQuestionsOverview({
   }
 
   const allCompleted = questions.length > 0 && questions.every((question) => completedQuestionIds.has(question.id));
+  const compactPractice = afterVideoPractice && questions.length >= 4;
 
   return (
     // pt-14: w prezentacji lewy gorny rog zajmuje zegar lekcji.
     <div className="flex min-h-0 flex-1 gap-6 overflow-hidden px-6 pb-5 pt-14">
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4">
+      <div className={clsx('flex min-h-0 min-w-0 flex-1 flex-col', compactPractice ? 'gap-2' : 'gap-4')}>
         <div className="shrink-0">
-          <h1 className="text-4xl font-bold text-white">
+          <h1 className={clsx('font-bold text-white', compactPractice ? 'text-3xl' : 'text-4xl')}>
             Odpowiedz na {LICZBY[questions.length] ?? questions.length} {pytaniaWord(questions.length)}
           </h1>
-          <p className="mt-1 text-xl text-gray-300">
-            {afterVideo ? 'Pytania z filmu - odpowiedzi macie już w zeszycie.' : 'Każdy zapisuje odpowiedzi. W tym czasie sprawdzamy obecność.'}
+          <p className={clsx('mt-1 text-gray-300', compactPractice ? 'text-lg' : 'text-xl')}>
+            {afterVideoPractice
+              ? 'Nowe przykłady podobne do zadań z filmu. Macie 60 sekund, potem odpowiedzi sprawdzi koło.'
+              : afterVideo
+                ? 'Pytania z filmu - odpowiedzi macie już w zeszycie.'
+                : 'Każdy zapisuje odpowiedzi. W tym czasie sprawdzamy obecność.'}
           </p>
         </div>
 
         {questions.length === 0 ? (
           <div className="flex flex-1 items-center justify-center text-3xl text-gray-400">Ten zestaw nie ma pytań.</div>
         ) : (
-          <ol className="flex min-h-0 flex-1 flex-col gap-3">
+          <ol className={clsx('flex min-h-0 flex-1 flex-col', compactPractice ? 'gap-2' : 'gap-3')}>
             {questions.map((question, index) => {
               const completed = completedQuestionIds.has(question.id);
               const editing = editingId === question.id;
@@ -175,7 +188,8 @@ export function RecapQuestionsOverview({
                 <li
                   key={question.id}
                   className={clsx(
-                    'flex min-h-0 flex-1 items-center gap-5 rounded-xl border px-5 py-3',
+                    'flex min-h-0 flex-1 items-center rounded-xl border',
+                    compactPractice ? 'gap-4 px-4 py-2' : 'gap-5 px-5 py-3',
                     completed ? 'border-emerald-800 bg-emerald-950/30' : 'border-gray-800 bg-gray-900',
                   )}
                 >
@@ -184,7 +198,7 @@ export function RecapQuestionsOverview({
                       'shrink-0 font-bold leading-none tabular-nums',
                       completed ? 'text-emerald-400' : 'text-accent-300',
                     )}
-                    style={{ fontSize: 'clamp(40px, 4vw, 76px)' }}
+                    style={{ fontSize: compactPractice ? 'clamp(34px, 3.5vw, 60px)' : 'clamp(40px, 4vw, 76px)' }}
                   >
                     {index + 1}
                   </span>
@@ -218,8 +232,8 @@ export function RecapQuestionsOverview({
                   ) : (
                     <div className="flex min-w-0 flex-1 flex-col justify-center overflow-hidden">
                       <p
-                        className={clsx('font-semibold leading-tight text-white', completed && 'line-through opacity-55')}
-                        style={{ fontSize: overviewFontSize(question.text) }}
+                        className={clsx('font-semibold text-white', compactPractice ? 'leading-[1.12]' : 'leading-tight', completed && 'line-through opacity-55')}
+                        style={{ fontSize: overviewFontSize(question.text, compactPractice) }}
                       >
                         {question.text}
                       </p>
@@ -300,7 +314,10 @@ export function RecapQuestionsOverview({
             onClick={startAdding}
             title="Dodaj pytanie"
             aria-label="Dodaj pytanie"
-            className="flex h-12 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-700 text-3xl font-bold text-gray-500 hover:border-accent-500 hover:text-accent-300"
+            className={clsx(
+              'flex shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-700 text-3xl font-bold text-gray-500 hover:border-accent-500 hover:text-accent-300',
+              compactPractice ? 'h-10' : 'h-12',
+            )}
           >
             +
           </button>

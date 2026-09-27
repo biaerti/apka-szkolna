@@ -5,10 +5,14 @@
 
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const TU = dirname(fileURLToPath(import.meta.url));
+const BAZA = dirname(fileURLToPath(import.meta.url));
+const katalogIndex = process.argv.indexOf('--katalog');
+const TU = katalogIndex >= 0
+  ? join(BAZA, '..', process.argv[katalogIndex + 1] || '')
+  : BAZA;
 const ROOT = join(TU, '..', '..');
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const PORT = 9333;
@@ -97,7 +101,7 @@ async function main() {
   chrome.kill();
 
   mkdirSync(join(ROOT, 'output', 'filmiki'), { recursive: true });
-  const mp4 = join(ROOT, 'output', 'filmiki', `czasownik-${film}.mp4`);
+  const mp4 = join(ROOT, 'output', 'filmiki', `${basename(TU)}-${film}.mp4`);
   execFileSync('ffmpeg', [
     '-y', '-loglevel', 'error',
     '-framerate', String(fps), '-i', join(framesDir, 'k%05d.jpg'),

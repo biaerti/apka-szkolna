@@ -22,6 +22,7 @@ export function RecapSlideView({
         demoVariant={mode === 'demo'}
         questionCount={slide.questionCount}
         afterVideo={slide.afterVideo}
+        afterVideoPractice={slide.afterVideoPractice}
         // 'po-lekcji' = stary tryb dla nieodswiezonych slajdow (patrz src/lib/recap.ts).
         recapMode={mode === 'powtorzeniowe' ? 'powtorzeniowe' : 'po-lekcji'}
       />

@@ -307,28 +307,26 @@ const TOPICS: Topic[] = [
     topic: 'Zdanie i równoważnik zdania',
     textbookPage: 43,
     notebookNote: [
-      '## Najważniejsze',
-      '- **Zdanie** zawiera czasownik w formie osobowej.',
-      '- **Równoważnik zdania** go nie ma.',
-      '- Równoważniki przydają się w planach i ogłoszeniach.', '',
-      '## Przykład',
-      '„**Pracujemy** w ogrodzie” - zdanie. „Praca w ogrodzie” - równoważnik zdania.',
+      '## Wypowiedzenia',
+      '**Wypowiedzenie**',
+      '- **zdanie** - ma czasownik w formie osobowej: „**Pracujemy** w ogrodzie”,',
+      '- **równoważnik zdania** - nie ma czasownika w formie osobowej: „Praca w ogrodzie”.',
     ].join('\n'),
     questions: [
-      { text: 'Co to jest wypowiedzenie?', answer: 'Słowo lub grupa słów, za pomocą których przekazujemy informację, pytanie, polecenie albo uczucie.' },
-      { text: 'Po czym rozpoznasz zdanie?', answer: 'Zawiera czasownik w formie osobowej.' },
-      { text: 'Czym różni się równoważnik zdania od zdania?', answer: 'Nie zawiera czasownika w formie osobowej.' },
-      { text: 'Czy wypowiedzenie „Nie wychylać się” jest zdaniem?', answer: 'Nie. Zawiera bezokolicznik, więc jest równoważnikiem zdania.' },
-      { text: 'Gdzie przydają się równoważniki zdań?', answer: 'Np. w planach, ogłoszeniach, nagłówkach i krótkich instrukcjach.' },
+      { text: 'W wypowiedzeniu „Jutro odwiedzimy bibliotekę” wskaż czasownik w formie osobowej. Określ osobę i liczbę.', answer: 'odwiedzimy - 1. osoba liczby mnogiej.' },
+      { text: 'Rozpoznaj: „Na boisku cisza” i „Drużyny czekają na gwizdek”. Które to zdanie, a które równoważnik?', answer: '„Na boisku cisza” - równoważnik zdania. „Drużyny czekają na gwizdek” - zdanie, bo zawiera osobową formę „czekają”.' },
+      { text: 'Czy wypowiedzenie „Nie otwierać okna!” jest zdaniem? Uzasadnij.', answer: 'Nie. To równoważnik zdania, ponieważ „otwierać” jest bezokolicznikiem, a nie osobową formą czasownika.' },
+      { text: 'Zamień równoważnik „Powrót ze szkoły” w zdanie. Wskaż czasownik w formie osobowej.', answer: 'Np. „Wrócę ze szkoły o piętnastej” - czasownik: wrócę.' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Czy każda nasza wypowiedź jest zdaniem?'),
       ...recap(previousSetId),
-      slideRead('Otwieramy podręcznik', 43, 45, 'Odróżniamy zdania od równoważników zdań, szukamy osobowych form czasownika i przekształcamy jedne wypowiedzenia w drugie.', 18 * 60),
-      slideText('Przypomnienie: osobowa forma czasownika', 'Zdanie rozpoznajesz po **czasowniku w formie osobowej**. W równoważniku takiej formy nie ma.\n\nWykorzystaj wiedzę z poprzedniego tematu: jeśli przy czasowniku możesz określić osobę, wypowiedzenie jest zdaniem. Bezokolicznik tego warunku nie spełnia.', 'rodzajeZdan'),
-      slideTask('Z1', 'Oznacz wypowiedzenia literą **Z** - zdanie albo **R** - równoważnik zdania. W zdaniach określ osobę czasownika:\n\n1. Spokój w ogrodzie.\n2. Poczekasz na mnie?\n3. Zrobiłem to!\n4. Gramatyka opanowana.\n5. Koniecznie to zapisz.\n6. Bałagan na biurku.', 7 * 60, 'rodzajeZdan', '1. R\n2. Z - poczekasz, 2. os.\n3. Z - zrobiłem, 1. os.\n4. R\n5. Z - zapisz, 2. os.\n6. R'),
-      slideTask('Z2', 'Napisz **czteropunktowy plan popołudnia** za pomocą równoważników zdań. Następnie wybierz dwa punkty i przekształć je w zdania: jedno w czasie przeszłym, drugie w przyszłym.\n\nW zdaniach podkreśl czasowniki i określ ich osobę.', 8 * 60, 'rodzajeZdan', 'Np. R: „Powrót ze szkoły”. Z: „Wróciłem ze szkoły o czternastej” - 1. os., czas przeszły. R: „Trening piłki nożnej”. Z: „Pójdę na trening o szesnastej” - 1. os., czas przyszły.'),
-      slideNote('Zdanie i równoważnik zdania', '- Zdanie ma czasownik w formie osobowej: Pracujemy w ogrodzie.\n- Równoważnik zdania go nie ma: Praca w ogrodzie.\n- Równoważniki przydają się w planach i ogłoszeniach.'),
+      slideVideo('wypowiedzenia-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4, afterVideoPractice: true }] : []),
+      {
+        ...slideNote('Zdanie i równoważnik zdania', '- Zdanie ma czasownik w formie osobowej: Pracujemy w ogrodzie.\n- Równoważnik zdania go nie ma: Praca w ogrodzie.', 4 * 60),
+        diagram: 'wypowiedzenia',
+      },
     ],
   },
   {
@@ -336,32 +334,48 @@ const TOPICS: Topic[] = [
     topic: 'Plan ramowy - najważniejsze wydarzenia po kolei',
     textbookPage: 46,
     notebookNote: [
-      '## Najważniejsze',
-      '- **Plan ramowy** to najważniejsze wydarzenia w punktach, bez szczegółów.',
-      '- Punkty układamy w **kolejności chronologicznej**.',
-      '- Zapis **jednolity**: same zdania albo same równoważniki zdań.', '',
-      '## Morał „Historii o akceptacji”',
-      'Każdy może się pomylić - nawet dorosły. Gdy zwracamy komuś uwagę, **liczy się forma i życzliwość**. Warto rozmawiać i tłumaczyć.',
+      '## Plan ramowy',
+      '- najważniejsze wydarzenia w punktach,',
+      '- kolejność chronologiczna,',
+      '- zapis za pomocą równoważników zdań.', '',
+      '**Równoważnik zdania** nie ma czasownika w formie osobowej.',
     ].join('\n'),
     questions: [
-      { text: 'Co to jest plan ramowy?', answer: 'Spisane w punktach najważniejsze wydarzenia opowieści, bez podawania szczegółów.' },
-      { text: 'W jakiej kolejności zapisujemy punkty planu ramowego?', answer: 'W kolejności chronologicznej - od pierwszego do ostatniego wydarzenia.' },
-      { text: 'Co znaczy, że plan ramowy ma być jednolity?', answer: 'Wszystkie punkty zapisujemy tak samo: albo zdaniami, albo równoważnikami zdań.' },
-      { text: 'Jak przekształcić równoważnik zdania w zdanie?', answer: 'Dodać czasownik w formie osobowej, np. „Odpowiedź Bartka” - „Bartek odpowiedział na pytanie”.' },
-      { text: 'Gdzie na co dzień przydaje się plan ramowy?', answer: 'Np. przy planie dnia albo liście rzeczy do zrobienia.' },
+      { text: 'Które pojęcie chciał wyjaśnić Bartek?', answer: 'Bartek chciał wyjaśnić pojęcie „akceptować”.' },
+      { text: 'Jaką definicję podał?', answer: 'Powiedział, że „akceptować” znaczy wypłacać pieniądze z bankomatu.' },
+      { text: 'Dlaczego klasa zaczęła się śmiać z Bartka?', answer: 'Bartek pomylił znaczenie słowa „akceptować” i nieświadomie powiedział coś zabawnego.' },
+      { text: 'Jakie uczucia wywołał u niego ten śmiech?', answer: 'Bartek poczuł się zawstydzony, upokorzony i zraniony.' },
+      { text: 'Jakie było stanowisko pani Temperówki w sprawie zachowania chłopca? Dlaczego?', answer: 'Uznała, że Bartek celowo rozśmiesza klasę i przeszkadza w lekcji, dlatego postanowiła wpisać mu uwagę.' },
+      { text: 'Co chciał osiągnąć Miłosz, gdy rozmawiał z panią Temperówką na temat Bartka?', answer: 'Chciał obronić Bartka, zatrzymać śmiech klasy i przekonać nauczycielkę, że kolega po prostu się pomylił.' },
     ],
     makeSlides: (previousSetId) => [
       slideTopic('Tworzymy plan ramowy'),
       ...recap(previousSetId),
-      // Lekcja z czytanka: omowienie ustne -> czytanka z lektorem -> ramka
-      // z podrecznika czytana razem -> notatka -> krotkie zadania.
+      // Czytanka z lektorem dziala wprost w prezentacji webowej. Po niej sa
+      // pytania omawiane wspolnie, teoria, zadania z podrecznika i notatka.
       slideCzytanka('historia-o-akceptacji'),
+      slideOralTask(
+        'PYT. 1-3',
+        'Odpowiadamy wspólnie:\n\n1. Które pojęcie chciał wyjaśnić Bartek?\n2. Jaką definicję podał?\n3. Dlaczego klasa zaczęła się z niego śmiać?',
+        '1. Pojęcie „akceptować”.\n2. Według Bartka: wypłacać pieniądze z bankomatu.\n3. Pomylił znaczenie słowa i nieświadomie powiedział coś zabawnego.',
+      ),
+      slideOralTask(
+        'PYT. 4-6',
+        'Odpowiadamy wspólnie:\n\n**4.** Jakie uczucia wywołał u Bartka śmiech klasy?\n\n**5.** Jakie było stanowisko pani Temperówki w sprawie zachowania chłopca? Dlaczego?\n\n**6.** Co chciał osiągnąć Miłosz?',
+        '4. Bartek poczuł się zawstydzony, upokorzony i zraniony.\n5. Nauczycielka uznała, że celowo przeszkadza i postanowiła wpisać mu uwagę.\n6. Miłosz chciał obronić kolegę i wyjaśnić, że Bartek po prostu się pomylił.',
+      ),
       slideImage('czytanki:plan-ramowy-ramka.webp'),
-      slideNote('Plan ramowy', '- Plan ramowy to najważniejsze wydarzenia w punktach, bez szczegółów.\n- Punkty układamy w kolejności chronologicznej.\n- Zapis jednolity: same zdania albo same równoważniki zdań.', 4 * 60),
       slideDoZadan(),
-      slideTask('Z1', 'Ułóż plan „Historii o akceptacji” we właściwej kolejności. Zapisz w zeszycie same numery.\n\n**A.** Śmiech klasy.\n**B.** Pytanie pani o słowo „akceptować”.\n**C.** Uwaga dla Bartka.\n**D.** Obrona Bartka przez Miłosza.', 4 * 60, undefined, '1. B - pytanie pani\n2. A - śmiech klasy\n3. C - uwaga dla Bartka\n4. D - obrona przez Miłosza'),
-      slideTask('Z2', 'Zamień równoważniki zdań w zdania. Dopisz **czasownik**.\n\nWzór: „Wyprowadzenie psa.” → „**Wyprowadzę** psa.”\n\n1. Sprzątanie biurka.\n2. Podlanie kwiatków.\n3. Odrobienie lekcji.', 4 * 60, undefined, '1. Posprzątam biurko.\n2. Podleję kwiatki.\n3. Odrobię lekcje.'),
-      slideTask('Z3', 'Napisz plan swojego dnia w **4 punktach**. Użyj samych równoważników zdań.\n\nNp. „1. Pobudka.”', 5 * 60, undefined, 'Np. 1. Pobudka. 2. Droga do szkoły. 3. Trening piłki. 4. Czytanie przed snem.'),
+      slideTask('Z5', 'Ułóż wydarzenia we właściwej kolejności. Zapisz w zeszycie same litery.\n\n- **A.** Wsparcie Miłosza przez rodziców i wyrażenie dumy z jego postawy.\n- **B.** Wyjaśnienie przez Bartka znaczenia słowa „akceptacja”.\n- **C.** Próba obrony Bartka przed panią Temperówką.\n- **D.** Decyzja o wpisaniu Bartkowi uwagi za rzekome przeszkadzanie.\n- **E.** Śmiech klasy.\n- **F.** Upór pani Temperówki.\n- **G.** Pytanie o znaczenie słowa „akceptować”.', 5 * 60, undefined, '1. G - pytanie o słowo „akceptować”\n2. B - wyjaśnienie Bartka\n3. E - śmiech klasy\n4. D - decyzja o uwadze\n5. C - próba obrony Bartka\n6. F - upór pani Temperówki\n7. A - wsparcie Miłosza przez rodziców'),
+      slideOralTask(
+        'Z6',
+        'Ustnie przekształć punkty planu z zadania 5 w **zdania**.\n\nDo każdego punktu dodaj czasownik w formie osobowej.\n\nWzór: „Wyjaśnienie Bartka.” → „Bartek **wyjaśnił**, co miał na myśli.”',
+        'Np. 1. Pani Temperówka zapytała o znaczenie słowa „akceptować”.\n2. Bartek wyjaśnił to pojęcie.\n3. Klasa zaczęła się śmiać.\n4. Nauczycielka postanowiła wpisać Bartkowi uwagę.\n5. Miłosz próbował obronić kolegę.\n6. Pani Temperówka nie zmieniła zdania.\n7. Rodzice wsparli Miłosza.',
+      ),
+      {
+        ...slideNote('Plan ramowy', '- Najważniejsze wydarzenia w punktach i po kolei.\n- Zapisujemy je równoważnikami zdań.\n- Równoważnik nie ma czasownika w formie osobowej.', 4 * 60),
+        diagram: 'planRamowy',
+      },
     ],
   },
   {
@@ -442,6 +456,9 @@ function slideRead(title: string, page: number, pageTo: number, body: string, ti
 function slideText(title: string, body: string, art?: SlideArt): Slide { return { id: newId(), kind: 'text', title, body, art }; }
 function slideTask(code: string, body: string, timerSec: number, art?: SlideArt, answerExample?: string): Slide {
   return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, studentAction: 'write-answer' };
+}
+function slideOralTask(code: string, body: string, answerExample: string): Slide {
+  return { id: newId(), kind: 'task', code, body, answerExample, studentAction: 'oral' };
 }
 function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */

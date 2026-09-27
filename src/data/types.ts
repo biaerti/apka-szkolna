@@ -356,7 +356,15 @@ export type Slide =
     }
   // Notatka do zeszytu - zamyka lekcje ("zapisujecie notatkę i jesteście wolni").
   // timerSec: stoper na przepisanie notatki (np. 4 min), startuje sam.
-  | { id: ID; kind: 'note'; title?: string; body: string; timerSec?: number }
+  | {
+      id: ID;
+      kind: 'note';
+      title?: string;
+      body: string;
+      timerSec?: number;
+      /** Graficzny schemat do przerysowania zamiast zwyklej listy punktow. */
+      diagram?: 'wypowiedzenia' | 'planRamowy';
+    }
   // slajd uruchamia kolo fortuny; variant 'demo' = pierwsze pokazanie kola w
   // lekcji zapoznawczej - dziala jak zwykla runda (bez naglowka "Przedstaw się"
   // i bez "dodatkowego pytania"), tryb intro/przedstawiania wynika z topicu
@@ -394,6 +402,11 @@ export type Slide =
        * przypomina pytania i od razu idzie do kola.
        */
       afterVideo?: boolean;
+      /**
+       * Nowe zadania o tej samej konstrukcji co w filmie. Ekran startuje z
+       * 60 sekundami na samodzielne rozwiazanie, a dopiero potem idzie do kola.
+       */
+      afterVideoPractice?: boolean;
     }
   // `title`/`body` opcjonalne: pozwalaja polaczyc zdjecie z krotkim tekstem na
   // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac
