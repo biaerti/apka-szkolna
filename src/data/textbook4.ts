@@ -327,6 +327,10 @@ const TOPICS: Topic[] = [
         ...slideNote('Zdanie i równoważnik zdania', '- Zdanie ma czasownik w formie osobowej: Pracujemy w ogrodzie.\n- Równoważnik zdania go nie ma: Praca w ogrodzie.', 4 * 60),
         diagram: 'wypowiedzenia',
       },
+      slideDoZadan('Otwórzcie podręczniki na stronie 45'),
+      slideTextbookTask('czytanki:wypowiedzenia-s45-zad2.webp', 45, 's.45 zad.2', 'Zadanie 2', 'textbook'),
+      slideTextbookTask('czytanki:wypowiedzenia-s45-zad3.webp', 45, 's.45 zad.3', 'Zadanie 3', 'oral', 'Ustnie'),
+      slideTextbookTask('czytanki:wypowiedzenia-s45-zad4.webp', 45, 's.45 zad.4', 'Zadanie 4', 'write-answer', 'Do zeszytu'),
     ],
   },
   {

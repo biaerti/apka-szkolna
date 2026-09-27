@@ -100,7 +100,9 @@ describe('buildTextbook4', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const lesson = bundle.lessons.find((l) => l.title === '14. Czy każda nasza wypowiedź jest zdaniem?')!;
 
-    expect(lesson.slides.map((slide) => slide.kind)).toEqual(['topic', 'recap', 'video', 'recap', 'note']);
+    expect(lesson.slides.map((slide) => slide.kind)).toEqual([
+      'topic', 'recap', 'video', 'recap', 'note', 'title', 'image', 'image', 'image',
+    ]);
     expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'wypowiedzenia-film1' });
     expect(lesson.slides[3]).toMatchObject({
       kind: 'recap',
@@ -109,6 +111,12 @@ describe('buildTextbook4', () => {
       afterVideoPractice: true,
     });
     expect(lesson.slides[4]).toMatchObject({ kind: 'note', diagram: 'wypowiedzenia' });
+    expect(lesson.slides[5]).toMatchObject({ kind: 'title', subtitle: 'Otwórzcie podręczniki na stronie 45' });
+    expect(lesson.slides.slice(6)).toEqual([
+      expect.objectContaining({ kind: 'image', page: 45, code: 's.45 zad.2', title: 'Zadanie 2', studentAction: 'textbook' }),
+      expect.objectContaining({ kind: 'image', page: 45, code: 's.45 zad.3', title: 'Zadanie 3', studentAction: 'oral', studentActionText: 'Ustnie' }),
+      expect.objectContaining({ kind: 'image', page: 45, code: 's.45 zad.4', title: 'Zadanie 4', studentAction: 'write-answer', studentActionText: 'Do zeszytu' }),
+    ]);
 
     const questions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
     expect(questions).toHaveLength(4);
