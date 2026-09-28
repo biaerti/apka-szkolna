@@ -1,0 +1,1 @@
+Teraz opowiadanie. To historia, w której wydarzenia dzieją się po kolei. Opowiada ją narrator. Narrator może brać udział w wydarzeniach i mówić o sobie: poszedłem, zobaczyłem. Może też stać z boku: Ola otworzyła drzwi i krzyknęła z radości. Postacie, o których opowiadamy, to bohaterowie. W Sztuce programowania bohaterem głównym jest Radek, a w Dziesiątym poziomie Jędrek.
