@@ -25,6 +25,33 @@ describe('buildTextbook5', () => {
     expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId)).toHaveLength(5);
   });
 
+  it('lekcja o Dziesiatym poziomie: definicje, czytanka, plan i zadania 5-9', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('7. Dziesiąty poziom'))!;
+    expect(lesson.topic).toBe('Pomaganie - dziesiąty poziom przyjaźni');
+    expect(lesson.textbookPage).toBe(31);
+    expect(lesson.slides.map((s) => s.kind)).toEqual([
+      'topic', 'recap', 'image', 'image', 'czytanka', 'task', 'note', 'image', 'image', 'image',
+    ]);
+    expect(lesson.slides[4]).toMatchObject({ kind: 'czytanka', czytankaId: 'dziesiaty-poziom' });
+
+    const plan = lesson.slides[5];
+    expect(plan).toMatchObject({
+      kind: 'task',
+      code: 'Z2',
+      page: 34,
+      exerciseNo: '2',
+      studentAction: 'write-answer',
+    });
+    expect(plan.kind === 'task' && plan.body).toContain('Plan wydarzeń');
+    expect(plan.kind === 'task' && plan.answerExample).toContain('Spotkanie Dominika');
+
+    expect(lesson.slides[lesson.slides.length - 1]).toMatchObject({
+      kind: 'image',
+      code: 's. 35 zad. 9',
+      studentAction: 'write-answer',
+    });
+  });
+
   it('kazda lekcja ma plan dla nauczyciela, temat na starcie i notatke', () => {
     for (const lesson of bundle.lessons) {
       expect(lesson.teacherPlan).toMatch(/^## /);

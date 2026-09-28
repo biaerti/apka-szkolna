@@ -176,6 +176,67 @@ const TOPICS: Topic[] = [
       slideTask('Z2', 'Dźwięczna czy bezdźwięczna? Przepisz wyrazy z właściwą literą. Sprawdzaj, zmieniając formę: chleb → chle**b**a.\n\n1. chle(b/p)\n2. grzy(b/p)\n3. słu(b/p)\n4. ogró(d/t)\n5. nó(ż/sz)\n6. ko(ż/sz)', 5 * 60, undefined, '1. chleb (chleba)\n2. grzyb (grzyby)\n3. słup (słupy)\n4. ogród (ogrody)\n5. nóż (noże)\n6. kosz (kosze)'),
     ],
   },
+  {
+    title: '7. Dziesiąty poziom - pomaganie i przyjaźń',
+    topic: 'Pomaganie - dziesiąty poziom przyjaźni',
+    textbookPage: 31,
+    teacherPlan: plan(
+      ['Co dziś', 'Czytamy opowiadanie Jody J. Little „Dziesiąty poziom” z podręcznika na s. 31-34. Nagranie ElevenLabs jest na slajdzie czytanki i podświetla kolejne słowa. Przed czytaniem przypominamy pojęcia „opowiadanie” i „bohater”. Po czytaniu uczniowie układają plan wydarzeń, zapisują go w zeszycie, a następnie wykonują zadania 5-9 ze s. 35.'],
+      ['Po lekcji uczeń', [
+        '- rozpoznaje opowiadanie i wskazuje bohaterów,',
+        '- układa plan wydarzeń w kolejności chronologicznej,',
+        '- odróżnia pytania otwarte od zamkniętych,',
+        '- wyjaśnia, czym jest wolontariat i dlaczego ludzie pomagają innym,',
+        '- uzasadnia własne zdanie na temat przyjaźni.',
+      ].join('\n')],
+      ['Przebieg (45 min)', [
+        '1. **Temat i przypomnienie pojęć** (4 min). Pokazujesz dwie ramki z podręcznika: opowiadanie i bohater.',
+        '2. **Czytanka „Dziesiąty poziom”** (8 min). Uczniowie śledzą tekst w podręczniku na s. 31-34, a lektor czyta z projektora.',
+        '3. **Zad. 2 - plan wydarzeń** (10 min). Najpierw wyjaśniasz zasadę, potem uczniowie układają plan. Odsłaniasz przykładową odpowiedź i zapisują uzgodnioną wersję do zeszytu.',
+        '4. **Zad. 5** (7 min). W parach układają po trzy pytania otwarte i zamknięte, następnie zadają je sobie nawzajem.',
+        '5. **Zad. 6-8** (9 min). Rozmowa kierowana. Odpowiedzi ustne, koło wybiera osoby do wypowiedzi.',
+        '6. **Zad. 9** (7 min). Samodzielna odpowiedź z uzasadnieniem do zeszytu.',
+      ].join('\n')],
+      ['Jak wyjaśnić plan wydarzeń', [
+        '- Plan wydarzeń zapisuje najważniejsze wydarzenia w takiej kolejności, w jakiej wystąpiły w tekście.',
+        '- Każdy punkt powinien być krótki i mieć podobną formę, najlepiej równoważnika zdania.',
+        '- Pomijamy drobne szczegóły. Zostawiamy tylko te zdarzenia, bez których nie da się opowiedzieć historii.',
+        '- Po ułożeniu planu sprawdzamy, czy na jego podstawie można odtworzyć treść opowiadania.',
+      ].join('\n')],
+      ['Odpowiedzi i wskazówki', 'W zad. 5 przypomnij, że pytanie zamknięte zwykle zaczyna się od „czy” i pozwala odpowiedzieć „tak” albo „nie”. W zad. 6-8 nie szukamy jednej wzorcowej odpowiedzi, ale pełnego zdania i przykładu. W zad. 9 uczeń powinien zająć stanowisko, podać argument i krótko go objaśnić.'],
+    ),
+    questions: [
+      { text: 'Dlaczego Jędrek pojechał z Dawidem rozwozić paczki?', answer: 'Mama poprosiła go, aby pomógł Dawidowi w dostarczaniu paczek żywnościowych na Boże Narodzenie.' },
+      { text: 'Czego Jędrek dowiedział się o osobach odbierających paczki?', answer: 'Nie wszystkie były bezdomne. Niektóre pracowały, ale zarabiały za mało, aby utrzymać rodzinę.' },
+      { text: 'Dlaczego Dominik stał w kolejce po paczkę?', answer: 'Jego tata od pewnego czasu nie miał pracy, więc rodzinie brakowało pieniędzy.' },
+      { text: 'Co Dominik zrobił po odebraniu paczki?', answer: 'Zgodził się pomóc Jędrkowi i Dawidowi rozwieźć pozostałe paczki, a potem zanieść jedną Michałowi.' },
+      { text: 'Jak zapisujemy dobry plan wydarzeń?', answer: 'Krótko, po kolei i w podobnej formie, uwzględniając tylko najważniejsze wydarzenia.' },
+    ],
+    makeSlides: (previousSetId) => [
+      slideTopic('Pomaganie - dziesiąty poziom przyjaźni'),
+      ...recap(previousSetId),
+      slideTextbookImage('czytanki:dziesiaty-poziom-opowiadanie.png', 34, 'Przypomnienie: opowiadanie'),
+      slideTextbookImage('czytanki:dziesiaty-poziom-bohater.png', 35, 'Przypomnienie: bohater'),
+      slideCzytanka('dziesiaty-poziom'),
+      {
+        id: newId(),
+        kind: 'task',
+        code: 'Z2',
+        title: 'Plan wydarzeń',
+        page: 34,
+        exerciseNo: '2',
+        body: '**Podręcznik s. 34, zad. 2**\n\n**Plan wydarzeń** zawiera najważniejsze zdarzenia zapisane po kolei. Każdy punkt powinien być krótki i mieć podobną formę.\n\nZapisz plan wydarzeń z opowiadania „Dziesiąty poziom”.',
+        timerSec: 8 * 60,
+        studentAction: 'write-answer',
+        studentActionText: 'Do zeszytu',
+        answerExample: '1. Prośba mamy o pomoc Dawidowi.\n2. Ładowanie i rozwożenie paczek.\n3. Spór o jedzenie zabrane przez Władka.\n4. Wydawanie żywności w świetlicy.\n5. Spotkanie Dominika i poznanie jego sytuacji.\n6. Wspólne zawiezienie paczek Michałowi.',
+      },
+      slideNote('Pomaganie - dziesiąty poziom przyjaźni', '**Plan wydarzeń „Dziesiątego poziomu”**\n1. Prośba mamy o pomoc Dawidowi.\n2. Ładowanie i rozwożenie paczek.\n3. Spór o jedzenie zabrane przez Władka.\n4. Wydawanie żywności w świetlicy.\n5. Spotkanie Dominika i poznanie jego sytuacji.\n6. Wspólne zawiezienie paczek Michałowi.'),
+      slideTextbookTask('czytanki:dziesiaty-poziom-zad5.png', 35, 's. 35 zad. 5', 'Pytania otwarte i zamknięte', 'oral', 'Ustnie w parze'),
+      slideTextbookTask('czytanki:dziesiaty-poziom-zad6-8.png', 35, 's. 35 zad. 6-8', 'Pomaganie i wolontariat', 'oral', 'Odpowiedzi ustne'),
+      slideTextbookTask('czytanki:dziesiaty-poziom-zad9.png', 35, 's. 35 zad. 9', 'Przyjaźń - własne zdanie', 'write-answer', 'Do zeszytu'),
+    ],
+  },
 ];
 
 export function buildTextbook5(grade: string, classIds: string[]): FreshMaterialsBundle {
@@ -237,6 +298,11 @@ function slideTask(code: string, body: string, timerSec: number, art?: SlideArt,
   return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, studentAction: 'write-answer' };
 }
 function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
+function slideCzytanka(czytankaId: string): Slide { return { id: newId(), kind: 'czytanka', czytankaId }; }
+/** Screen z podręcznika (ramka teorii) z numerem strony nad obrazem. */
+function slideTextbookImage(url: string, page: number, title: string): Slide {
+  return { id: newId(), kind: 'image', url, page, title, studentAction: 'look' };
+}
 /** Screen zadania z podrecznika - z kodem, wiec dziala na nim kolo na lekcji (K). */
 function slideTextbookTask(url: string, page: number, code: string, title: string, studentAction: StudentAction, studentActionText?: string): Slide {
   return { id: newId(), kind: 'image', url, page, code, title, studentAction, studentActionText };
