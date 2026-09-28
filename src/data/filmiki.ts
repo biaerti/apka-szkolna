@@ -26,6 +26,7 @@ export const FILMIKI: Filmik[] = [
   // Przypomnienie z s. 23 + miekkie/twarde, syczace/szumiace/ciszace, dzwieczne - 5 zadan pod kolo fortuny.
   { id: 'gloski-film1', lekcja: 'V.4', title: 'Głoski - miękkie, syczące, dźwięczne (5 zadań)' },
   { id: 'tryby-czasownika-film1', lekcja: 'V.13', title: 'Tryby czasownika - informacja, polecenie i przypuszczenie' },
+  { id: 'wikipedia-film1', lekcja: 'V.15', title: 'Wikipedia - czy można jej wierzyć? (3 zadania)' },
   // Podsumowanie s. 56 - caly dzial 1 kl. 5 w 10 min, 8 zadan ze sprawdzeniem po kazdym.
   { id: 'podsumowanie5-dzial1-film1', lekcja: 'V.16', title: 'Podsumowanie działu 1 - To wiem! To potrafię! (8 zadań)' },
 ];

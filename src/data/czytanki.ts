@@ -37,6 +37,8 @@ export const CZYTANKI: Czytanka[] = [
   { id: 'pax', lekcja: 'V.5', temat: 'Pax - przyjaźń oczami lisa', title: 'Pax', author: 'Sara Pennypacker', pages: '25-27' },
   { id: 'dziesiaty-poziom', lekcja: 'V.7', temat: 'Dziesiąty poziom - czym jest pomaganie?', title: 'Dziesiąty poziom', author: 'Jody J. Little', pages: '31-34' },
   { id: 'wielki-wybuch-k-kontra-k', lekcja: 'V.9', temat: 'Wielki wybuch, czyli K kontra K', title: 'Wielki wybuch, czyli K kontra K', author: 'Barbara Kosmowska, Grzegorz Kasdepke', pages: '36-39' },
+  // Wlasny tekst (nie z podrecznika) - prostsza wersja artykulu z s. 54.
+  { id: 'wikipedia', lekcja: 'V.15', temat: 'Wikipedia i sposoby komunikowania się', title: 'Wikipedia. Największa encyklopedia świata', pages: '54-55' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };

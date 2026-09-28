@@ -75,6 +75,20 @@ describe('buildTextbook5', () => {
     expect(lesson.slides[6]).toMatchObject({ kind: 'note', diagram: 'trybyCzasownika' });
   });
 
+  it('Wikipedia: czytanka, film, mapa s. 40-41, kolo z 6 pytaniami, notatka i zadanie domowe', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('15. Wikipedia'))!;
+    expect(lesson.textbookPage).toBe(54);
+    expect(lesson.slides.map((s) => s.kind)).toEqual([
+      'topic', 'recap', 'czytanka', 'video', 'task', 'image', 'task', 'recap', 'note', 'image',
+    ]);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'czytanka', czytankaId: 'wikipedia' });
+    expect(lesson.slides[3]).toMatchObject({ kind: 'video', videoId: 'wikipedia-film1' });
+    expect(lesson.slides[5]).toMatchObject({ kind: 'image', url: 'czytanki:komunikacja-s40-41.webp', page: 40 });
+    const own = lesson.slides[7];
+    expect(own.kind === 'recap' && own.questionSetId).toBe(lesson.questionSetId);
+    expect(own.kind === 'recap' && own.questionCount).toBe(6);
+  });
+
   it('kazda lekcja ma plan dla nauczyciela, temat na starcie i notatke', () => {
     for (const lesson of bundle.lessons) {
       expect(lesson.teacherPlan).toMatch(/^## /);
