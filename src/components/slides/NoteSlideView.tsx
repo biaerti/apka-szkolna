@@ -118,6 +118,91 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
     );
   }
 
+  if (slide.diagram === 'formyCzasownika') {
+    const formy = [
+      { title: 'BEZOKOLICZNIK', examples: 'czytać · zrobić', color: 'bg-amber-100 text-amber-950' },
+      { title: 'FORMY NA -NO, -TO', examples: 'czytano · zrobiono', color: 'bg-emerald-100 text-emerald-950' },
+      { title: 'NIEOSOBOWE Z „SIĘ”', examples: 'mówi się · planuje się', color: 'bg-rose-100 text-rose-950' },
+    ];
+    return (
+      <div className="flex h-full flex-col bg-amber-50 px-14 py-8 text-amber-950" style={RULED_LINES_STYLE}>
+        <h2 className="text-center text-5xl font-bold text-gray-950">FORMY CZASOWNIKA</h2>
+
+        <div className="mt-5 grid grid-cols-2 gap-8">
+          <div className="rounded-2xl bg-indigo-100 px-7 py-5 text-center text-indigo-950">
+            <h3 className="text-4xl font-bold">OSOBOWA</h3>
+            <p className="mt-2 text-3xl">wiadomo, kto działa</p>
+            <p className="mt-3 text-4xl font-bold"><span className="border-b-4 border-indigo-700">Uczniowie przygotowali</span> występ.</p>
+          </div>
+          <div className="rounded-2xl bg-orange-100 px-7 py-5 text-center text-orange-950">
+            <h3 className="text-4xl font-bold">NIEOSOBOWA</h3>
+            <p className="mt-2 text-3xl">forma nie wskazuje wykonawcy</p>
+            <p className="mt-3 text-4xl font-bold"><span className="border-b-4 border-orange-700">Przygotowano</span> występ.</p>
+          </div>
+        </div>
+
+        <svg className="mx-auto h-16 w-[78%] shrink-0 text-orange-600" viewBox="0 0 900 80" aria-hidden="true">
+          <path d="M720 0v20M90 20H810M90 20v54M450 20v54M810 20v54" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+
+        <div className="grid grid-cols-3 gap-6">
+          {formy.map((forma) => (
+            <div key={forma.title} className={`rounded-2xl px-5 py-4 text-center ${forma.color}`}>
+              <h4 className="text-3xl font-bold">{forma.title}</h4>
+              <p className="mt-2 text-3xl font-semibold">{forma.examples}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-4 text-center text-2xl font-semibold text-rose-900">
+          Uwaga: samo „się” nie wystarcza. „Ola się śmieje” ma wykonawcę.
+        </p>
+
+        <div className="mt-auto flex items-center justify-center gap-8 pt-4">
+          <p className="flex items-center gap-3 text-3xl font-semibold text-gray-600">
+            <ZeszytIcon className="h-10 w-10 text-amber-600" />
+            Przerysuj do zeszytu
+          </p>
+          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+        </div>
+      </div>
+    );
+  }
+
+  if (slide.diagram === 'trybyCzasownika') {
+    const tryby = [
+      { title: 'OZNAJMUJĄCY', purpose: 'fakt · informacja', example: 'Czytam książkę.', color: 'bg-sky-100 text-sky-950' },
+      { title: 'ROZKAZUJĄCY', purpose: 'polecenie · prośba', example: 'Przeczytaj książkę!', color: 'bg-orange-100 text-orange-950' },
+      { title: 'PRZYPUSZCZAJĄCY', purpose: 'możliwość · pragnienie', example: 'Przeczytałbym książkę.', color: 'bg-rose-100 text-rose-950' },
+    ];
+    return (
+      <div className="flex h-full flex-col bg-amber-50 px-14 py-9 text-amber-950" style={RULED_LINES_STYLE}>
+        <h2 className="text-center text-6xl font-bold text-gray-950">TRYBY CZASOWNIKA</h2>
+        <p className="mt-2 text-center text-3xl font-semibold text-gray-700">Ta sama czynność, inne nastawienie mówiącego</p>
+
+        <div className="mt-8 grid flex-1 grid-cols-3 gap-7">
+          {tryby.map((tryb) => (
+            <div key={tryb.title} className={`flex flex-col rounded-2xl px-6 py-7 text-center ${tryb.color}`}>
+              <h3 className="text-4xl font-bold">{tryb.title}</h3>
+              <p className="mt-3 text-3xl font-semibold">{tryb.purpose}</p>
+              <div className="my-5 h-1 rounded bg-current opacity-25" />
+              <p className="mt-auto text-4xl font-bold leading-tight">{tryb.example}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-4 text-center text-3xl font-bold text-rose-900">Przypuszczający rozpoznasz po cząstce -by-.</p>
+        <div className="mt-3 flex items-center justify-center gap-8">
+          <p className="flex items-center gap-3 text-3xl font-semibold text-gray-600">
+            <ZeszytIcon className="h-10 w-10 text-amber-600" />
+            Przerysuj do zeszytu
+          </p>
+          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+        </div>
+      </div>
+    );
+  }
+
   return (
       <div className="flex h-full flex-col bg-amber-50 px-20 py-12 text-amber-950" style={RULED_LINES_STYLE}>
       <h2 className="mb-6 text-6xl font-bold text-gray-900">{slide.title || 'Notatka do zeszytu'}</h2>

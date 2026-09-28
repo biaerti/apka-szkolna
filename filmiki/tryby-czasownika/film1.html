@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Tryby czasownika</title>
+<link rel="stylesheet" href="../czasownik/wspolne.css">
+<style>
+  .scena { padding: 44px 68px; }
+  h2 { font-size: 60px; line-height: 1.05; text-align: center; }
+  .karta { background: #fff; border-radius: 16px; padding: 24px 28px; }
+  .ozn { color: #0369a1; }
+  .roz { color: #c2410c; }
+  .prz { color: #be123c; }
+  .badge { display: inline-block; border-radius: 999px; padding: 7px 22px; color: #fff; font-family: 'Baloo 2'; font-size: 28px; font-weight: 800; }
+  .badge-ozn { background: #0369a1; }
+  .badge-roz { background: #c2410c; }
+  .badge-prz { background: #be123c; }
+
+  #s01, #s10 { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #s01 h1 { font-size: 94px; line-height: .95; color: var(--ciemny); animation-delay: .4s; }
+  #s01 h1 strong { color: var(--pomarancz); }
+  #s01 .trojka { display: flex; gap: 24px; margin-top: 36px; font-size: 31px; font-weight: 800; }
+  #s01 .trojka span:nth-child(1) { animation-delay: 2s; }
+  #s01 .trojka span:nth-child(2) { animation-delay: 3.2s; }
+  #s01 .trojka span:nth-child(3) { animation-delay: 4.4s; }
+
+  #s02 .pytanie { margin: 26px auto 0; max-width: 970px; text-align: center; font-size: 37px; line-height: 1.35; font-weight: 800; animation-delay: 1.8s; }
+  #s02 .tryby { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 36px; }
+  #s02 .tryb { text-align: center; font-size: 31px; font-weight: 800; }
+  #s02 .t1 { animation-delay: 5s; }
+  #s02 .t2 { animation-delay: 5.8s; }
+  #s02 .t3 { animation-delay: 6.6s; }
+
+  .definicja { margin: 30px auto 0; max-width: 1080px; text-align: center; font-size: 38px; line-height: 1.3; font-weight: 800; animation-delay: 1.8s; }
+  .przyklady { display: flex; justify-content: center; gap: 22px; margin-top: 38px; }
+  .przyklad { min-width: 290px; text-align: center; font-size: 32px; font-weight: 800; }
+  .p1 { animation-delay: 4.4s; }
+  .p2 { animation-delay: 5.2s; }
+  .p3 { animation-delay: 6s; }
+  .cecha { margin-top: 34px; text-align: center; font-size: 32px; font-weight: 800; color: #6b5d54; animation-delay: 8.2s; }
+
+  #s05 .by { display: flex; justify-content: center; gap: 24px; margin-top: 36px; }
+  #s05 .by span { border-radius: 16px; background: #ffe4e6; padding: 18px 24px; color: #881337; font-size: 35px; font-weight: 800; }
+  #s05 .by span:nth-child(1) { animation-delay: 4.6s; }
+  #s05 .by span:nth-child(2) { animation-delay: 5.4s; }
+  #s05 .by span:nth-child(3) { animation-delay: 6.2s; }
+
+  #s06 .porownanie { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 42px; }
+  #s06 .wiersz { text-align: center; }
+  #s06 .wiersz p { margin-top: 18px; font-size: 36px; font-weight: 800; }
+  #s06 .w1 { animation-delay: 2.1s; }
+  #s06 .w2 { animation-delay: 4.2s; }
+  #s06 .w3 { animation-delay: 6.3s; }
+  #s06 .intencja { margin-top: 34px; text-align: center; font-size: 34px; font-weight: 800; animation-delay: 8.7s; }
+
+  #s07 { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #s07 .nr { border-radius: 999px; background: var(--roz); padding: 8px 34px; color: #fff; font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; animation-delay: .3s; }
+  #s07 .polecenie { margin-top: 24px; max-width: 1100px; font-size: 39px; line-height: 1.35; font-weight: 800; animation-delay: 1.5s; }
+  #s07 .zdania { margin-top: 22px; text-align: left; font-size: 31px; line-height: 1.55; font-weight: 800; animation-delay: 4.6s; }
+  #s07 .odliczanie { margin-top: 25px; width: 900px; }
+  #s07 .odliczanie-pasek { animation-delay: 16.6s; animation-duration: 15s; }
+
+  #s08 .odpowiedzi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 44px; }
+  #s08 .odp { text-align: center; font-size: 31px; font-weight: 800; }
+  #s08 .odp b { display: block; margin-bottom: 14px; font-size: 36px; }
+  #s08 .o1 { animation-delay: 2.0s; }
+  #s08 .o2 { animation-delay: 3.8s; }
+  #s08 .o3 { animation-delay: 5.6s; }
+
+  #s09 .pulapka { margin: 42px auto 0; max-width: 930px; text-align: center; font-size: 47px; font-weight: 800; animation-delay: 1.8s; }
+  #s09 .werdykt { margin: 34px auto 0; width: max-content; animation-delay: 5.0s; }
+  #s09 .wyjasnienie { margin-top: 30px; text-align: center; font-size: 33px; font-weight: 800; animation-delay: 7.0s; }
+
+  #s10 h2 { color: var(--roz); animation-delay: .4s; }
+  #s10 .pytania { margin-top: 34px; text-align: left; font-size: 39px; line-height: 1.55; font-weight: 800; animation-delay: 2.2s; }
+  #s10 .dalej { margin-top: 28px; border-radius: 16px; background: var(--pomarancz); padding: 14px 28px; color: #fff; font-size: 31px; font-weight: 800; animation-delay: 7.2s; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <section class="scena" data-id="01-intro" id="s01">
+    <h1 class="pop">TRYBY<br><strong>CZASOWNIKA</strong></h1>
+    <div class="trojka">
+      <span class="karta pop">Jadę.</span>
+      <span class="karta pop">Jedź!</span>
+      <span class="karta pop">Pojechałbym.</span>
+    </div>
+  </section>
+
+  <section class="scena" data-id="02-co-to-tryb" id="s02">
+    <h2 class="wjazd-dol">Tryb pokazuje <span class="roz">intencję</span> mówiącego</h2>
+    <p class="pytanie zjaw">Informuję? Polecam lub proszę? A może przypuszczam albo marzę?</p>
+    <div class="tryby">
+      <div class="tryb t1 karta pop ozn">OZNAJMUJĄCY</div>
+      <div class="tryb t2 karta pop roz">ROZKAZUJĄCY</div>
+      <div class="tryb t3 karta pop prz">PRZYPUSZCZAJĄCY</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="03-oznajmujacy" id="s03">
+    <h2 class="wjazd-dol ozn">TRYB OZNAJMUJĄCY</h2>
+    <p class="definicja zjaw">Informuje o tym, co jest, było albo będzie rzeczywiste.</p>
+    <div class="przyklady">
+      <div class="przyklad p1 karta pop">Czytam książkę.</div>
+      <div class="przyklad p2 karta pop">Czytałem książkę.</div>
+      <div class="przyklad p3 karta pop">Będę czytać książkę.</div>
+    </div>
+    <p class="cecha zjaw">Możemy określić czas, osobę i liczbę.</p>
+  </section>
+
+  <section class="scena" data-id="04-rozkazujacy" id="s04">
+    <h2 class="wjazd-dol roz">TRYB ROZKAZUJĄCY</h2>
+    <p class="definicja zjaw">Wyraża polecenie, zakaz, prośbę, radę albo wskazówkę.</p>
+    <div class="przyklady">
+      <div class="przyklad p1 karta pop">Czytaj uważnie.</div>
+      <div class="przyklad p2 karta pop">Nie dotykaj szyby.</div>
+      <div class="przyklad p3 karta pop">Niech Ola przeczyta.</div>
+    </div>
+    <p class="cecha zjaw">Określamy osobę i liczbę, ale nie czas.</p>
+  </section>
+
+  <section class="scena" data-id="05-przypuszczajacy" id="s05">
+    <h2 class="wjazd-dol prz">TRYB PRZYPUSZCZAJĄCY</h2>
+    <p class="definicja zjaw">Wyraża możliwość, warunek, pragnienie albo życzenie.</p>
+    <div class="by">
+      <span class="pop">zrobił<b>by</b>m</span>
+      <span class="pop">poszła<b>by</b></span>
+      <span class="pop">przeczytali<b>by</b>śmy</span>
+    </div>
+    <p class="cecha zjaw">Cząstka <b>-by-</b> jest najlepszą podpowiedzią. Czasu nie określamy.</p>
+  </section>
+
+  <section class="scena" data-id="06-jedna-czynnosc" id="s06">
+    <h2 class="wjazd-dol">Jedna czynność, trzy intencje</h2>
+    <div class="porownanie">
+      <div class="wiersz w1 karta pop"><span class="badge badge-ozn">INFORMACJA</span><p>Jedziemy do miasta.</p></div>
+      <div class="wiersz w2 karta pop"><span class="badge badge-roz">ZACHĘTA</span><p>Jedźmy do miasta!</p></div>
+      <div class="wiersz w3 karta pop"><span class="badge badge-prz">MOŻLIWOŚĆ</span><p>Pojechalibyśmy do miasta.</p></div>
+    </div>
+    <p class="intencja zjaw">Tryb rozpoznajemy po zamiarze mówiącego.</p>
+  </section>
+
+  <section class="scena" data-id="07-zadanie+15" id="s07">
+    <span class="nr pop">KRÓTKI TEST</span>
+    <div class="polecenie wjazd-dol">Określ tryb każdego czasownika.</div>
+    <div class="zdania zjaw">
+      1. Jutro odwiedzimy muzeum.<br>
+      2. Odwiedźmy jutro muzeum.<br>
+      3. Odwiedzilibyśmy muzeum, gdyby było otwarte.
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <section class="scena" data-id="08-odpowiedz" id="s08">
+    <h2 class="wjazd-dol">Sprawdzamy</h2>
+    <div class="odpowiedzi">
+      <div class="odp o1 karta pop ozn"><b>odwiedzimy</b>oznajmujący<br>informacja</div>
+      <div class="odp o2 karta pop roz"><b>odwiedźmy</b>rozkazujący<br>zachęta</div>
+      <div class="odp o3 karta pop prz"><b>odwiedzilibyśmy</b>przypuszczający<br>warunek</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="09-pulapka" id="s09">
+    <h2 class="wjazd-dol">Uwaga na pułapkę</h2>
+    <div class="pulapka karta pop">Niech przyjaciele pojadą z nami.</div>
+    <div class="werdykt badge badge-roz pop">TRYB ROZKAZUJĄCY</div>
+    <p class="wyjasnienie zjaw">To życzenie lub zachęta skierowana do innych osób.</p>
+  </section>
+
+  <section class="scena" data-id="10-final" id="s10">
+    <h2 class="pop">Trzy pytania i gotowe</h2>
+    <div class="pytania wjazd-dol">
+      <span class="ozn">Informuję?</span> Oznajmujący.<br>
+      <span class="roz">Polecam, proszę lub radzę?</span> Rozkazujący.<br>
+      <span class="prz">Mówię o możliwości lub pragnieniu?</span> Przypuszczający.
+    </div>
+    <p class="dalej pop">Teraz zadania 2, 3 i 5 z podręcznika.</p>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="../czasownik/player.js"></script>
+</body>
+</html>

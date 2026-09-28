@@ -257,6 +257,7 @@ export type SlideArt =
   // Ilustracje przedmiotowe do powtorki klasy 4 (src/data/recap4.ts).
   | 'przypadki' // 7 przypadkow z pytaniami
   | 'czasownikOdmiana' // osoba, liczba, czas
+  | 'formyNieosobowe' // bezokolicznik, -no/-to i konstrukcje z sie
   | 'stopniowanie' // rowny, wyzszy, najwyzszy
   | 'liczebnik' // glowny (ile?) i porzadkowy (ktory z kolei?)
   | 'podmiotOrzeczenie' // kto? co? i co robi?
@@ -363,7 +364,7 @@ export type Slide =
       body: string;
       timerSec?: number;
       /** Graficzny schemat do przerysowania zamiast zwyklej listy punktow. */
-      diagram?: 'wypowiedzenia' | 'planRamowy';
+      diagram?: 'wypowiedzenia' | 'planRamowy' | 'formyCzasownika' | 'trybyCzasownika';
     }
   // slajd uruchamia kolo fortuny; variant 'demo' = pierwsze pokazanie kola w
   // lekcji zapoznawczej - dziala jak zwykla runda (bez naglowka "Przedstaw się"

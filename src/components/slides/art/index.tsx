@@ -54,6 +54,7 @@ import { Wiadomosc } from './Wiadomosc';
 import { Email } from './Email';
 import { Przypadki } from './Przypadki';
 import { CzasownikOdmiana } from './CzasownikOdmiana';
+import { FormyNieosobowe } from './FormyNieosobowe';
 import { Stopniowanie } from './Stopniowanie';
 import { Liczebnik } from './Liczebnik';
 import { PodmiotOrzeczenie } from './PodmiotOrzeczenie';
@@ -131,6 +132,7 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   // Ilustracje przedmiotowe do powtorki klasy 4.
   przypadki: Przypadki,
   czasownikOdmiana: CzasownikOdmiana,
+  formyNieosobowe: FormyNieosobowe,
   stopniowanie: Stopniowanie,
   liczebnik: Liczebnik,
   podmiotOrzeczenie: PodmiotOrzeczenie,

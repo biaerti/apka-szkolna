@@ -52,6 +52,29 @@ describe('buildTextbook5', () => {
     });
   });
 
+  it('nieosobowe formy: powtorka z filmu, nowe formy, zadania 1 i 3 oraz graficzna notatka', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('12. Kiedy stosować'))!;
+    expect(lesson.textbookPage).toBe(48);
+    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'video', 'text', 'image', 'image', 'note']);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'wypowiedzenia-film1' });
+    expect(lesson.slides[4]).toMatchObject({ kind: 'image', code: 's. 48 zad. 1', studentAction: 'write-answer' });
+    expect(lesson.slides[5]).toMatchObject({ kind: 'image', code: 's. 49 zad. 3', studentAction: 'write-answer' });
+    expect(lesson.slides[6]).toMatchObject({ kind: 'note', diagram: 'formyCzasownika' });
+  });
+
+  it('tryby czasownika: nowy film, zadania 2, 3 i 5 oraz graficzna notatka', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('13. Co wyrażamy'))!;
+    expect(lesson.textbookPage).toBe(50);
+    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'video', 'image', 'image', 'image', 'note']);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'tryby-czasownika-film1' });
+    expect(lesson.slides.slice(3, 6).map((s) => s.kind === 'image' && s.code)).toEqual([
+      's. 51 zad. 2',
+      's. 51 zad. 3',
+      's. 52 zad. 5',
+    ]);
+    expect(lesson.slides[6]).toMatchObject({ kind: 'note', diagram: 'trybyCzasownika' });
+  });
+
   it('kazda lekcja ma plan dla nauczyciela, temat na starcie i notatke', () => {
     for (const lesson of bundle.lessons) {
       expect(lesson.teacherPlan).toMatch(/^## /);

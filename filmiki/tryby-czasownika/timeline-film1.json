@@ -1,0 +1,56 @@
+{
+  "sceny": [
+    {
+      "id": "01-intro",
+      "start": 0.8,
+      "dur": 15.961
+    },
+    {
+      "id": "02-co-to-tryb",
+      "start": 17.661,
+      "dur": 18.129
+    },
+    {
+      "id": "03-oznajmujacy",
+      "start": 36.69,
+      "dur": 14.838
+    },
+    {
+      "id": "04-rozkazujacy",
+      "start": 52.427,
+      "dur": 16.588
+    },
+    {
+      "id": "05-przypuszczajacy",
+      "start": 69.915,
+      "dur": 19.879
+    },
+    {
+      "id": "06-jedna-czynnosc",
+      "start": 90.694,
+      "dur": 22.204
+    },
+    {
+      "id": "07-zadanie+15",
+      "start": 113.798,
+      "dur": 16.118,
+      "pauza": 15.0
+    },
+    {
+      "id": "08-odpowiedz",
+      "start": 145.816,
+      "dur": 16.039
+    },
+    {
+      "id": "09-pulapka",
+      "start": 162.755,
+      "dur": 16.588
+    },
+    {
+      "id": "10-final",
+      "start": 180.243,
+      "dur": 15.647
+    }
+  ],
+  "total": 197.39
+}

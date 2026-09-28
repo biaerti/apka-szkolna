@@ -237,6 +237,109 @@ const TOPICS: Topic[] = [
       slideTextbookTask('czytanki:dziesiaty-poziom-zad9.png', 35, 's. 35 zad. 9', 'Przyjaźń - własne zdanie', 'write-answer', 'Do zeszytu'),
     ],
   },
+  {
+    title: '12. Kiedy stosować nieosobowe formy czasownika?',
+    topic: 'Osobowe i nieosobowe formy czasownika',
+    textbookPage: 48,
+    teacherPlan: plan(
+      ['Co dziś', 'Najpierw świadomie wracamy do filmu z klasy 4 „Czy każda wypowiedź jest zdaniem?”. Uczniowie przypominają sobie, że zdanie ma czasownik w formie osobowej, a bezokolicznik nie wskazuje wykonawcy. Nowa treść dla klasy 5 to dwie kolejne formy nieosobowe: zakończone na **-no, -to** oraz konstrukcje z czasownikiem ze słowem **się**. Podręcznik s. 48-49.'],
+      ['Po lekcji uczeń', [
+        '- odróżnia formę osobową od nieosobowej,',
+        '- rozpoznaje bezokolicznik oraz formy zakończone na **-no, -to**,',
+        '- rozpoznaje konstrukcje nieosobowe z czasownikiem i słowem **się**,',
+        '- wybiera formę osobową, gdy wykonawca jest ważny, a nieosobową, gdy jest nieznany lub nieistotny.',
+      ].join('\n')],
+      ['Przebieg (45 min)', [
+        '1. **Temat + koło powtórzeniowe** (7 min) - pytania o „Dziesiąty poziom”.',
+        '2. **Film z klasy 4** (4 min) - szybka powtórka: forma osobowa, zdanie, równoważnik i bezokolicznik. Cztery odpowiedzi z filmu uczniowie zapisują bardzo krótko.',
+        '3. **Co nowego w klasie 5?** (6 min) - pokazujesz trzy gałęzie schematu: bezokolicznik, **-no/-to**, czasownik + **się**. Za każdym razem pytasz: „Czy wiemy, kto wykonał czynność?”.',
+        '4. **Podręcznik s. 48, zad. 1** (8 min) - uzupełniają przepis bezokolicznikami. Sprawdzenie kołem na lekcji.',
+        '5. **Podręcznik s. 49, zad. 3** (10 min) - zamieniają formy nieosobowe na osobowe, dobierając wykonawcę ze słownictwa.',
+        '6. **Graficzna notatka** (7 min) - przerysowują schemat trzech form nieosobowych i dopisują zasadę wyboru.',
+        '7. **Podsumowanie ustne** (3 min) - „Kiedy użyję formy osobowej, a kiedy nieosobowej?”.',
+      ].join('\n')],
+      ['Jak wyjaśnić', [
+        '- **Forma osobowa** wskazuje wykonawcę dzięki osobie i liczbie: „uczniowie przygotowali”.',
+        '- **Bezokolicznik** nazywa czynność, ale nie wskazuje osoby: „przygotować”, „czytać”.',
+        '- Formy na **-no, -to** mówią, że czynność wykonano w przeszłości, lecz nie podają sprawcy: „przygotowano”, „odkryto”.',
+        '- Konstrukcje typu „planuje się”, „mówi się”, „buduje się” również odsuwają wykonawcę na dalszy plan.',
+        '- Nie mówimy, że każda forma ze słowem „się” jest nieosobowa. W zdaniu „Ola się śmieje” forma „śmieje” wskazuje Olę. Liczy się to, czy da się ustalić wykonawcę.',
+      ].join('\n')],
+      ['Tablica', '**KTO WYKONUJE CZYNNOŚĆ?**\nWiadomo → forma osobowa: „Uczniowie przygotowali upominki”.\nNie wiadomo / nieważne → forma nieosobowa: „Przygotowano upominki”, „Planuje się remont”.\nNiżej trzy odnogi: bezokolicznik | -no, -to | czasownik + się.'],
+      ['Odpowiedzi', '**Zad. 1:** przygotować, ugotować, wsypać, dodać, wymieszać, przełożyć, odstawić.\n**Zad. 3:** np. Aktorzy przeprowadzili warsztaty teatralne. Uczniowie zaprosili rodziców na przedstawienie. Czytelnicy sprawdzili dostępność książki w katalogu. Turyści odkryli skarb w ruinach starego zamku.'],
+    ),
+    questions: [
+      { text: 'Po czym rozpoznasz, że czasownik ma formę osobową?', answer: 'Można określić osobę i liczbę wykonawcy, np. czytamy - 1. osoba liczby mnogiej.' },
+      { text: 'Czy bezokolicznik wskazuje wykonawcę czynności? Podaj przykład.', answer: 'Nie. Np. czytać, zrobić, biec.' },
+      { text: 'Co mówią formy zakończone na -no, -to?', answer: 'Że czynność wykonano w przeszłości, ale nie wiadomo albo nie jest ważne, kto ją wykonał.' },
+      { text: 'Zamień „Odkryto skarb” na zdanie z formą osobową.', answer: 'Np. Turyści odkryli skarb.' },
+      { text: 'Kiedy warto użyć formy nieosobowej?', answer: 'Gdy wykonawca jest nieznany, nieważny albo chcemy skupić uwagę na samej czynności.' },
+    ],
+    makeSlides: (previousSetId) => [
+      slideTopic('Osobowe i nieosobowe formy czasownika'),
+      ...recap(previousSetId),
+      slideVideo('wypowiedzenia-film1'),
+      slideText('Co nowego w klasie 5?', '**Formy nieosobowe nie wskazują wykonawcy:**\n\n- bezokolicznik: **czytać, zrobić**,\n- formy na **-no, -to**: **przeczytano, zrobiono**,\n- konstrukcje nieosobowe z **się**: **mówi się, planuje się**.\n\nUwaga: nie każde „się” tworzy konstrukcję nieosobową. „Ola się śmieje” ma wykonawcę.', 'formyNieosobowe'),
+      slideTextbookTask('czytanki:formy-nieosobowe-s48-zad1.png', 48, 's. 48 zad. 1', 'Przepis na sałatkę', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:formy-nieosobowe-s49-zad3.png', 49, 's. 49 zad. 3', 'Kto wykonał czynność?', 'write-answer', 'Do zeszytu'),
+      {
+        ...slideNote('Osobowe i nieosobowe formy czasownika', ''),
+        diagram: 'formyCzasownika',
+        timerSec: 7 * 60,
+      },
+    ],
+  },
+  {
+    title: '13. Co wyrażamy za pomocą trybów czasownika?',
+    topic: 'Tryby czasownika',
+    textbookPage: 50,
+    teacherPlan: plan(
+      ['Co dziś', 'Lekcja z nowym filmem o trzech trybach czasownika. Film pokazuje, że ta sama czynność może być informacją, poleceniem albo przypuszczeniem i pragnieniem. Po filmie uczniowie robią wybrane przez Ciebie zadania 2, 3 i 5 z podręcznika na s. 51-52.'],
+      ['Po lekcji uczeń', [
+        '- rozpoznaje tryb oznajmujący, rozkazujący i przypuszczający,',
+        '- wyjaśnia, co wyraża każdy z trybów,',
+        '- określa formę czasownika w trybie oznajmującym,',
+        '- przekształca informację w polecenie i tworzy zdania w trybie przypuszczającym.',
+      ].join('\n')],
+      ['Przebieg (45 min)', [
+        '1. **Temat + koło powtórzeniowe** (8 min) - pytania o formy osobowe i nieosobowe.',
+        '2. **Film „Tryby czasownika”** (5 min) - trzy tryby pokazane na jednej sytuacji. Przed filmem polecenie: „Zapisz nazwy trzech trybów i po jednym przykładzie”.',
+        '3. **Szybkie sprawdzenie po filmie** (4 min) - uczniowie podają swoje przykłady, a Ty układasz je w trzech kolumnach.',
+        '4. **Podręcznik s. 51, zad. 2** (7 min) - tryb oznajmujący i pełna analiza formy czasownika „czytać”.',
+        '5. **Podręcznik s. 51, zad. 3** (7 min) - przekształcenie zasad bezpieczeństwa w tryb rozkazujący.',
+        '6. **Podręcznik s. 52, zad. 5** (7 min) - dokończenie zdań w trybie przypuszczającym.',
+        '7. **Graficzna notatka** (7 min) - trzy drogi od tej samej czynności: fakt, polecenie, możliwość.',
+      ].join('\n')],
+      ['Jak wyjaśnić', [
+        '- **Oznajmujący** mówi, co dzieje się naprawdę, działo się albo będzie się działo: „czytam”, „czytałem”, „będę czytać”. Ma czas.',
+        '- **Rozkazujący** wyraża polecenie, zakaz, prośbę, radę lub wskazówkę: „czytaj”, „nie czytaj”, „niech przeczyta”. Czasu nie określamy.',
+        '- **Przypuszczający** mówi o możliwości, warunku, pragnieniu lub życzeniu: „czytałbym”, „gdyby przeczytała”. Rozpoznajemy go po cząstce **-by-**, która łączy się z końcówką osobową.',
+        '- Uwaga na sens: „Niech Ola przeczyta” jest trybem rozkazującym, choć brzmi łagodniej niż „Olu, przeczytaj”.',
+      ].join('\n')],
+      ['Tablica', 'Trzy kolumny i jedno słowo **czytać**:\nOZNAJMUJĄCY - czytam / czytałem / będę czytać - fakt\nROZKAZUJĄCY - czytaj / niech czyta - polecenie lub prośba\nPRZYPUSZCZAJĄCY - czytałbym / gdyby czytała - możliwość lub pragnienie'],
+      ['Odpowiedzi', '**Zad. 2:** wszystkie formy są w trybie oznajmującym. Tata czyta - 3 os., lp., czas teraźniejszy. Dzieci czytały - 3 os., lm., czas przeszły, rodzaj niemęskoosobowy. Lokatorzy czytali - 3 os., lm., czas przeszły, rodzaj męskoosobowy. Mama będzie czytała - 3 os., lp., czas przyszły, rodzaj żeński.\n**Zad. 3:** Nie trzymaj suszarki wilgotnymi rękami. Nie używaj jej podczas kąpieli. Stosuj ją wyłącznie zgodnie z przeznaczeniem. Po suszeniu zawsze wyjmij wtyczkę z gniazdka.\n**Zad. 5:** odpowiedzi własne, poprawne formy z -by-, np. surfowałbym, zbudowałbym szałas, polecieliby do szkoły.'],
+    ),
+    questions: [
+      { text: 'Jakie są trzy tryby czasownika?', answer: 'Oznajmujący, rozkazujący i przypuszczający.' },
+      { text: 'Co wyraża tryb oznajmujący?', answer: 'Informację o czynności lub stanie, które są, były albo będą rzeczywiste.' },
+      { text: 'Co może wyrażać tryb rozkazujący oprócz rozkazu?', answer: 'Zakaz, prośbę, radę albo wskazówkę.' },
+      { text: 'Po czym najłatwiej rozpoznać tryb przypuszczający?', answer: 'Po cząstce -by-, np. zrobiłbym, poszłaby, przeczytalibyśmy.' },
+      { text: 'Określ tryb w zdaniu „Niech przyjaciele pojadą z nami”.', answer: 'Tryb rozkazujący.' },
+    ],
+    makeSlides: (previousSetId) => [
+      slideTopic('Tryby czasownika'),
+      ...recap(previousSetId),
+      slideVideo('tryby-czasownika-film1'),
+      slideTextbookTask('czytanki:tryby-s51-zad2.png', 51, 's. 51 zad. 2', 'Tryb i forma czasownika', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:tryby-s51-zad3.png', 51, 's. 51 zad. 3', 'Zasady bezpiecznego używania suszarki', 'write-answer', 'Do zeszytu'),
+      slideTextbookTask('czytanki:tryby-s52-zad5.png', 52, 's. 52 zad. 5', 'Co by było, gdyby…', 'write-answer', 'Do zeszytu'),
+      {
+        ...slideNote('Tryby czasownika', ''),
+        diagram: 'trybyCzasownika',
+        timerSec: 7 * 60,
+      },
+    ],
+  },
 ];
 
 export function buildTextbook5(grade: string, classIds: string[]): FreshMaterialsBundle {
@@ -270,7 +373,7 @@ export const TEXTBOOK5_TOPIC_COUNT = TOPICS.length;
  * Tematy wycofane z materialu - automat odswiezania usuwa je z rocznika.
  * Omowienie "Sztuki programowania" weszlo do lekcji o dialogu. Lekcje 5-15
  * (pierwszy, hurtowy szkic dzialu) wycofane 2026-09-24 - Bartek robi dzial od
- * nowa, lekcja po lekcji.
+ * nowa, lekcja po lekcji. Tematy 12-13 zostaly juz odbudowane i wrocily wyzej.
  */
 export const RETIRED_TEXTBOOK5_TITLES = new Set<string>([
   '1. Sztuka programowania - omówienie',
@@ -281,8 +384,6 @@ export const RETIRED_TEXTBOOK5_TITLES = new Set<string>([
   '9. Wielki wybuch, czyli K kontra K',
   '10. Kultura w internecie',
   '11. Jak napisać e-mail?',
-  '12. Nieosobowe formy czasownika',
-  '13. Tryby czasownika',
   '14. Pisownia cząstki „by”',
   '15. W poszukiwaniu przyjaźni - powtórzenie',
 ]);
