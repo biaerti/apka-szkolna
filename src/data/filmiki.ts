@@ -27,7 +27,7 @@ export const FILMIKI: Filmik[] = [
   { id: 'gloski-film1', lekcja: 'V.4', title: 'Głoski - miękkie, syczące, dźwięczne (5 zadań)' },
   { id: 'tryby-czasownika-film1', lekcja: 'V.13', title: 'Tryby czasownika - informacja, polecenie i przypuszczenie' },
   // Podsumowanie s. 56 - caly dzial 1 kl. 5 w 10 min, 8 zadan ze sprawdzeniem po kazdym.
-  { id: 'podsumowanie5-dzial1-film1', lekcja: 'V.pods.', title: 'Podsumowanie działu 1 - To wiem! To potrafię! (8 zadań)' },
+  { id: 'podsumowanie5-dzial1-film1', lekcja: 'V.16', title: 'Podsumowanie działu 1 - To wiem! To potrafię! (8 zadań)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

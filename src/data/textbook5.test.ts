@@ -99,6 +99,16 @@ describe('buildTextbook5', () => {
     }
   });
 
+  it('podsumowanie dzialu: mapa s. 56, film, kolo z 6 pytaniami, dwa zadania i notatka', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('16. Podsumowanie'))!;
+    expect(lesson.textbookPage).toBe(56);
+    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'image', 'video', 'recap', 'task', 'task', 'note']);
+    expect(lesson.slides[3]).toMatchObject({ kind: 'video', videoId: 'podsumowanie5-dzial1-film1' });
+    const own = lesson.slides[4];
+    expect(own.kind === 'recap' && own.questionSetId).toBe(lesson.questionSetId);
+    expect(own.kind === 'recap' && own.questionCount).toBe(6);
+  });
+
   it('wycofane tematy nie wracaja w materiale', () => {
     for (const lesson of bundle.lessons) expect(RETIRED_TEXTBOOK5_TITLES.has(lesson.title)).toBe(false);
   });
