@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Przenośnia - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 16px 22px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 24px; justify-content: center; }
+.rzad > * { flex: 1; }
+.pom { color: var(--pomarancz); }
+.roz { color: var(--roz); }
+.nieb { color: var(--niebieski); }
+.ziel { color: var(--zielony); }
+.fiol { color: var(--fiolet); }
+.cytat { font-family: 'Baloo 2'; font-weight: 800; }
+.slowko { color: var(--niebieski); background: #e3eefc; border-radius: 10px; padding: 0 10px; }
+
+/* Etykieta czesci w lewym gornym rogu */
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--niebieski); }
+.c2 { background: var(--fiolet); }
+.c3 { background: var(--pomarancz); }
+.c4 { background: var(--roz); }
+
+/* Skreslenie slowka "jak": kreska rosnie od lewej */
+@keyframes skresl { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.skreslone { position: relative; display: inline-block; margin: 0 8px; }
+.skreslone::after {
+  content: ''; position: absolute; left: -6px; right: -6px; top: 50%; height: 8px; margin-top: -4px;
+  background: var(--roz); border-radius: 4px; transform-origin: left center;
+  animation: skresl .5s ease-out both; animation-delay: inherit;
+}
+
+/* Zadania: polecenie + pasek odliczania */
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 14px; font-size: 38px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 16px; font-size: 30px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 18px auto 0; width: 860px; }
+.kafle { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 24px auto 0; width: 1040px; text-align: left; }
+.kafel {
+  font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; background: var(--bialy);
+  border: 4px solid var(--ramka); border-radius: 20px; padding: 8px 22px;
+}
+.kafel b { color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; font-size: 32px; vertical-align: 4px; }
+.linia { font-size: 32px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.linia .fr { font-family: 'Baloo 2'; font-size: 36px; }
+.lista { display: flex; flex-direction: column; gap: 12px; margin: 20px auto 0; width: 1060px; }
+.etyk {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 0 16px; margin-left: 8px; vertical-align: 5px;
+}
+.e-por { background: var(--niebieski); }
+.e-prz { background: var(--fiolet); }
+.e-dos { background: var(--zielony); }
+.dlaczego { color: var(--szary); font-size: 27px; }
+.regula { margin-top: 18px; font-size: 30px; background: var(--ciemny); }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 150px; font-weight: 800; line-height: .95; color: var(--fiolet); margin-top: 8px; }
+#s01 .pod { font-family: 'Baloo 2'; font-size: 46px; font-weight: 800; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 30px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 28px; white-space: nowrap; }
+#s01 .grupy .chip:nth-child(1) { background: var(--niebieski); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(4) { background: var(--roz); }
+#s01 .zapowiedz { margin-top: 34px; font-size: 44px; font-weight: 800; }
+
+/* ===== 02 porownanie ===== */
+#s02 .slowka { margin-top: 18px; }
+#s02 .slowka .chip { font-size: 44px; background: var(--niebieski); padding: 4px 40px; }
+#s02 .lista { width: 900px; }
+#s02 .linia { font-family: 'Baloo 2'; font-size: 44px; text-align: center; padding: 4px 22px; }
+#s02 .regula { background: var(--niebieski); }
+
+/* ===== 03 przenosnia ===== */
+#s03 .przemiana { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 36px; }
+#s03 .przemiana .karta { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; padding: 16px 26px; white-space: nowrap; }
+#s03 .przemiana .po { border-color: var(--fiolet); color: var(--fiolet); font-size: 50px; }
+#s03 .strzalka { font-size: 60px; font-weight: 800; color: var(--szary); }
+#s03 .etykiety { display: flex; justify-content: center; gap: 330px; margin-top: 12px; }
+#s03 .etykiety .chip { font-size: 28px; }
+#s03 .znaczenie { display: flex; gap: 24px; justify-content: center; margin-top: 34px; }
+#s03 .znaczenie .linia { font-size: 34px; }
+#s03 .meta { margin-top: 26px; font-size: 36px; background: var(--fiolet); }
+
+/* ===== 04 przyklady ===== */
+#s04 .siatka { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 24px; }
+#s04 .karta { padding: 12px 16px; border-color: var(--fiolet); }
+#s04 .emo { font-size: 50px; line-height: 1.1; }
+#s04 .nazwa { font-size: 38px; color: var(--fiolet); }
+#s04 .opis { font-size: 26px; }
+#s04 .regula { background: var(--fiolet); font-size: 30px; }
+#s04 .siatka .regula-kom { display: flex; align-items: center; justify-content: center; }
+
+/* ===== 07 doslownie ===== */
+#s07 .test { margin-top: 10px; font-size: 34px; background: var(--pomarancz); }
+#s07 .pary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; margin: 22px auto 0; width: 1100px; }
+#s07 .karta { display: flex; align-items: center; gap: 16px; padding: 10px 20px; text-align: left; }
+#s07 .karta .emo { font-size: 50px; }
+#s07 .karta .nazwa { font-size: 36px; }
+#s07 .karta .opis { font-size: 24px; margin-top: 0; }
+#s07 .dos { border-color: var(--zielony); }
+#s07 .dos .nazwa { color: var(--zielony); }
+#s07 .prz { border-color: var(--fiolet); }
+#s07 .prz .nazwa { color: var(--fiolet); }
+#s07 .glowki { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 1100px; margin: 18px auto 0; }
+#s07 .glowki .chip { font-size: 28px; }
+
+/* ===== 09 odpowiedz 2 ===== */
+#s09 .pary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin: 22px auto 0; width: 1140px; text-align: left; }
+#s09 .linia { font-size: 26px; padding: 8px 18px; }
+#s09 .linia .fr { font-size: 34px; }
+#s09 .dos { border-color: var(--zielony); }
+#s09 .prz { border-color: var(--fiolet); }
+
+/* ===== 10 odczytaj ===== */
+#s10 .pytanie { margin-top: 10px; font-size: 38px; background: var(--pomarancz); }
+#s10 .tabela { display: flex; flex-direction: column; gap: 12px; margin: 20px auto 0; width: 1140px; }
+#s10 { padding-top: 40px; }
+#s10 .wiersz { display: grid; grid-template-columns: 210px 350px 56px 1fr; align-items: center; text-align: left; }
+#s10 .wiersz > div { font-size: 28px; font-weight: 800; white-space: nowrap; }
+#s10 .wiersz .rzecz { font-family: 'Baloo 2'; font-size: 34px; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; padding: 2px 14px; }
+#s10 .wiersz .cecha { color: var(--pomarancz); }
+#s10 .wiersz .str { color: var(--szary); font-size: 36px; text-align: center; margin: 0 10px; }
+#s10 .wiersz .wynik { text-align: left; background: #f1e8fb; border-radius: 18px; padding: 6px 14px; font-size: 26px; white-space: nowrap; }
+#s10 .wiersz .wynik b { color: var(--fiolet); font-family: 'Baloo 2'; font-size: 31px; }
+#s10 .nazwa-przen { margin-top: 20px; font-size: 34px; background: var(--fiolet); }
+
+/* ===== 11 zadanie 3 ===== */
+#s11 .rzad { margin-top: 26px; }
+#s11 .karta { border-color: var(--fiolet); }
+#s11 .karta .emo { font-size: 64px; }
+#s11 .karta .nazwa { color: var(--fiolet); font-size: 46px; }
+#s11 .podp { display: flex; gap: 16px; justify-content: center; margin-top: 22px; }
+#s11 .podp .chip { font-size: 28px; background: var(--pomarancz); }
+
+/* ===== 12 odpowiedz 3 ===== */
+#s12 .lista { width: 1100px; gap: 16px; }
+#s12 .linia { border-color: var(--fiolet); }
+
+/* ===== 13-15 tworzymy ===== */
+.przepis { display: flex; flex-direction: column; gap: 14px; margin: 24px auto 0; width: 1140px; }
+.przepis .wiersz { display: grid; grid-template-columns: 1.2fr 60px 1fr; align-items: center; }
+.przepis .karta { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; padding: 6px 16px; white-space: nowrap; }
+.przepis .po { border-color: var(--fiolet); color: var(--fiolet); }
+.przepis .str { font-size: 44px; font-weight: 800; color: var(--szary); }
+#s13 .kroki { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
+#s13 .kroki .chip { font-size: 28px; }
+#s13 .kroki .chip:nth-child(1) { background: var(--niebieski); }
+#s13 .kroki .chip:nth-child(2) { background: var(--roz); }
+#s13 .kroki .chip:nth-child(3) { background: var(--fiolet); }
+#s13 .poeci { margin-top: 16px; font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; color: var(--szary); }
+#s14 .lista { width: 900px; }
+#s14 .linia { font-family: 'Baloo 2'; font-size: 42px; text-align: center; padding: 6px 22px; }
+#s15 .uwaga { margin-top: 22px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 16 podsumowanie ===== */
+#s16 { padding-top: 26px; }
+#s16 h2.naglowek { font-size: 50px; }
+#s16 .rzad { margin-top: 18px; align-items: stretch; }
+#s16 .karta { padding: 12px 20px; }
+#s16 .por { border-color: var(--niebieski); }
+#s16 .por .nazwa { color: var(--niebieski); }
+#s16 .prz { border-color: var(--fiolet); }
+#s16 .prz .nazwa { color: var(--fiolet); }
+#s16 .przyk { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; margin-top: 6px; }
+#s16 .kroki { display: flex; flex-direction: column; gap: 10px; margin: 16px auto 0; width: 1000px; }
+#s16 .kroki .linia { font-size: 29px; padding: 6px 22px; }
+#s16 .brawo { margin-top: 12px; font-family: 'Baloo 2'; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="tytul pop" data-slowo="przenośnię">Przenośnia</div>
+    <div class="pod zjaw" data-slowo="wprost">czyli mówienie nie wprost 🌀</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="porównania">🔍 porównanie</span>
+      <span class="chip pop" data-slowo="rozpoznać">🖍️ rozpoznać</span>
+      <span class="chip pop" data-slowo="odczytać">🔎 odczytać</span>
+      <span class="chip pop" data-slowo="zrobić">🛠️ zrobić</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 porownanie ===== -->
+  <section class="scena" data-id="02-porownanie" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · PRZYPOMNIENIE</span>
+    <h2 class="naglowek wjazd-dol nieb" data-t="0">Porównanie 🔍</h2>
+    <div class="slowka"><span class="chip pop" data-slowo="jak">jak · niczym · jakby</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="szybki">szybki <span class="slowko">jak</span> wiatr 🌬️</div>
+      <div class="linia wjazd-lewo" data-slowo="biały">biały <span class="slowko">jak</span> śnieg ❄️</div>
+      <div class="linia wjazd-lewo" data-slowo="zimny">zimny <span class="slowko">niczym</span> lód 🧊</div>
+      <div class="linia wjazd-lewo" data-slowo="oczy">oczy świecą, <span class="slowko">jakby</span> były gwiazdami ✨</div>
+    </div>
+    <div><span class="chip regula pop" data-slowo="znak">jest słówko jak / niczym / jakby = PORÓWNANIE</span></div>
+  </section>
+
+  <!-- ===== 03 przenosnia ===== -->
+  <section class="scena" data-id="03-przenosnia" id="s03">
+    <span class="czesc c2 zjaw" data-t="0">2 · PRZENOŚNIA</span>
+    <h2 class="naglowek wjazd-dol fiol" data-t="0">Przenośnia 🌀</h2>
+    <div class="przemiana">
+      <div class="karta pre wjazd-lewo" data-slowo="weźmy">serce twarde <span class="skreslone slowko" data-slowo="wyrzućmy"><span>jak</span></span> kamień</div>
+      <div class="strzalka zjaw" data-slowo="sklejmy">➜</div>
+      <div class="karta po pop" data-slowo="kamienne">kamienne serce 🪨❤️</div>
+    </div>
+    <div class="etykiety">
+      <span class="chip pop" data-slowo="porównanie" style="background:var(--niebieski)">porównanie</span>
+      <span class="chip pop" data-slowo="przenośnia" style="background:var(--fiolet)">PRZENOŚNIA</span>
+    </div>
+    <div class="znaczenie">
+      <div class="linia wjazd-lewo" data-slowo="zrobione">❌ serce zrobione z kamienia</div>
+      <div class="linia wjazd-prawo" data-slowo="czuje">✅ ktoś, kto nic nie czuje</div>
+    </div>
+    <div><span class="chip meta pop" data-slowo="metaforą">przenośnia = metafora</span></div>
+  </section>
+
+  <!-- ===== 04 przyklady ===== -->
+  <section class="scena" data-id="04-przyklady" id="s04">
+    <span class="czesc c2">2 · PRZENOŚNIA</span>
+    <h2 class="naglowek wjazd-dol fiol" data-t="0">Przenośnie na co dzień</h2>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="złote">
+        <div class="emo">💛</div><div class="nazwa">złote serce</div>
+        <div class="opis zjaw" data-slowo="dobry">jest bardzo dobry dla innych</div>
+      </div>
+      <div class="karta pop" data-slowo="ostry">
+        <div class="emo">👅</div><div class="nazwa">ostry język</div>
+        <div class="opis zjaw" data-slowo="przykre">mówi przykre, złośliwe rzeczy</div>
+      </div>
+      <div class="karta pop" data-slowo="lodowate">
+        <div class="emo">🥶</div><div class="nazwa">lodowate spojrzenie</div>
+        <div class="opis zjaw" data-slowo="chłodno">patrzy chłodno, nieprzyjaźnie</div>
+      </div>
+      <div class="karta pop" data-slowo="morze">
+        <div class="emo">😭</div><div class="nazwa">morze łez</div>
+        <div class="opis zjaw" data-slowo="płakał">bardzo, bardzo dużo łez</div>
+      </div>
+      <div class="karta pop" data-slowo="las">
+        <div class="emo">🙋</div><div class="nazwa">las rąk</div>
+        <div class="opis zjaw" data-slowo="podniosło">mnóstwo podniesionych rąk</div>
+      </div>
+      <div class="regula-kom pop" data-slowo="żadne"><span class="chip regula">bez „jak”<br>nie dosłownie!</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+20" id="s05">
+    <span class="czesc c2">2 · PRZENOŚNIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ekranie">Porównanie czy przenośnia?</div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="sześć"><b>1</b>szybki jak strzała</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.25"><b>2</b>las rąk</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.5"><b>3</b>złote serce</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.75"><b>4</b>blady niczym ściana</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1"><b>5</b>morze łez</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1.25"><b>6</b>śpi jak suseł</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="przepisz">Zapisz w zeszycie: 1 - porównanie, 2 - … 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="szybki"><span class="fr">1. szybki <span class="slowko">jak</span> strzała</span><span class="etyk e-por">porównanie</span> <span class="dlaczego">- jest „jak”</span></div>
+      <div class="linia wjazd-lewo" data-slowo="las"><span class="fr">2. las rąk</span><span class="etyk e-prz">przenośnia</span> <span class="dlaczego">- w klasie nie rośnie las 🌲</span></div>
+      <div class="linia wjazd-lewo" data-slowo="złote"><span class="fr">3. złote serce</span><span class="etyk e-prz">przenośnia</span> <span class="dlaczego">- to dobry człowiek</span></div>
+      <div class="linia wjazd-lewo" data-slowo="blady"><span class="fr">4. blady <span class="slowko">niczym</span> ściana</span><span class="etyk e-por">porównanie</span> <span class="dlaczego">- jest „niczym”</span></div>
+      <div class="linia wjazd-lewo" data-slowo="morze"><span class="fr">5. morze łez</span><span class="etyk e-prz">przenośnia</span> <span class="dlaczego">- nie prawdziwe morze 🌊</span></div>
+      <div class="linia wjazd-lewo" data-slowo="śpi"><span class="fr">6. śpi <span class="slowko">jak</span> suseł</span><span class="etyk e-por">porównanie</span> <span class="dlaczego">- jest „jak”</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 doslownie czy w przenosni ===== -->
+  <section class="scena" data-id="07-doslownie" id="s07">
+    <span class="czesc c3 zjaw" data-t="0">3 · ROZPOZNAJ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Dosłownie czy w przenośni?</h2>
+    <div><span class="chip test pop" data-slowo="narysować">🖍️ TEST: spróbuj to narysować!</span></div>
+    <div class="pary">
+      <div class="karta dos pop" data-slowo="żaba"><div class="emo">🐸</div><div><div class="nazwa">zielona żaba</div><div class="opis">naprawdę jest zielona</div></div></div>
+      <div class="karta prz pop" data-slowo="głowie"><div class="emo">🌱</div><div><div class="nazwa">zielono w głowie</div><div class="opis zjaw" data-slowo="niepoważny">ktoś niepoważny, beztroski</div></div></div>
+      <div class="karta dos pop" data-slowo="nóż"><div class="emo">🔪</div><div><div class="nazwa">ostry nóż</div><div class="opis">naprawdę tnie</div></div></div>
+      <div class="karta prz pop" data-slowo="język"><div class="emo">👅</div><div><div class="nazwa">ostry język</div><div class="opis zjaw" data-slowo="rani">rani słowami</div></div></div>
+      <div class="karta dos pop" data-slowo="woda"><div class="emo">💧</div><div><div class="nazwa">zimna woda</div><div class="opis">naprawdę jest zimna</div></div></div>
+      <div class="karta prz pop" data-slowo="powitanie"><div class="emo">🥶</div><div><div class="nazwa">zimne powitanie</div><div class="opis zjaw" data-slowo="nieprzyjaźnie">ktoś przywitał się nieprzyjaźnie</div></div></div>
+    </div>
+    <div class="glowki">
+      <span class="chip pop" data-slowo="dosłowne" style="background:var(--zielony)">da się narysować = DOSŁOWNIE</span>
+      <span class="chip pop" data-slowo="bzdura" style="background:var(--fiolet)">wychodzi bzdura = PRZENOŚNIA</span>
+    </div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+20" id="s08">
+    <span class="czesc c3">3 · ROZPOZNAJ</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="znowu">Dosłownie czy w przenośni?</div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="sześć"><b>1</b>ciężka torba</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.25"><b>2</b>ciężki dzień</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.5"><b>3</b>kamienny mur</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.75"><b>4</b>kamienna twarz</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1"><b>5</b>gorąca herbata</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1.25"><b>6</b>gorące powitanie</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="zeszycie">Zapisz w zeszycie: 1 - dosłownie, 2 - … 🖍️📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="pary">
+      <div class="linia dos wjazd-lewo" data-slowo="torba"><span class="fr">1. ciężka torba</span><span class="etyk e-dos">dosłownie</span><br><span class="dlaczego">trudno ją podnieść 🎒</span></div>
+      <div class="linia prz wjazd-prawo" data-slowo="dzień"><span class="fr">2. ciężki dzień</span><span class="etyk e-prz">w przenośni</span><br><span class="dlaczego">męczący, pełen kłopotów</span></div>
+      <div class="linia dos wjazd-lewo" data-slowo="mur"><span class="fr">3. kamienny mur</span><span class="etyk e-dos">dosłownie</span><br><span class="dlaczego">zbudowany z kamieni 🧱</span></div>
+      <div class="linia prz wjazd-prawo" data-slowo="twarz"><span class="fr">4. kamienna twarz</span><span class="etyk e-prz">w przenośni</span><br><span class="dlaczego">nie pokazuje uczuć 😐</span></div>
+      <div class="linia dos wjazd-lewo" data-slowo="herbata"><span class="fr">5. gorąca herbata</span><span class="etyk e-dos">dosłownie</span><br><span class="dlaczego">można się oparzyć ☕</span></div>
+      <div class="linia prz wjazd-prawo" data-slowo="powitanie"><span class="fr">6. gorące powitanie</span><span class="etyk e-prz">w przenośni</span><br><span class="dlaczego">bardzo serdeczne 🤗</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 jak odczytac ===== -->
+  <section class="scena" data-id="10-odczytaj" id="s10">
+    <span class="czesc c4 zjaw" data-t="0">4 · ODCZYTAJ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co znaczy przenośnia? 🤔</h2>
+    <div><span class="chip pytanie pop" data-slowo="przedmiot">Zapytaj: JAKI jest ten przedmiot?</span></div>
+    <div class="tabela">
+      <div class="wiersz">
+        <div class="rzecz wjazd-lewo" data-slowo="kamień">🪨 kamień</div>
+        <div class="cecha zjaw" data-slowo="twardy"><span class="str">➜</span> twardy, nic nie czuje</div><div class="str zjaw" data-slowo="więc">➜</div>
+        <div class="wynik wjazd-prawo" data-slowo="kamienne"><b>kamienne serce</b> = ktoś nieczuły</div>
+      </div>
+      <div class="wiersz">
+        <div class="rzecz wjazd-lewo" data-slowo="lód">🧊 lód</div>
+        <div class="cecha zjaw" data-slowo="bardzo"><span class="str">➜</span> bardzo zimny</div><div class="str zjaw" data-slowo="więc">➜</div>
+        <div class="wynik wjazd-prawo" data-slowo="lodowate"><b>lodowate spojrzenie</b> = nieprzyjazne</div>
+      </div>
+      <div class="wiersz">
+        <div class="rzecz wjazd-lewo" data-slowo="złoto">🥇 złoto</div>
+        <div class="cecha zjaw" data-slowo="cenne"><span class="str">➜</span> cenne</div><div class="str zjaw" data-slowo="więc">➜</div>
+        <div class="wynik wjazd-prawo" data-slowo="złote"><b>złote serce</b> = ktoś bardzo dobry</div>
+      </div>
+      <div class="wiersz">
+        <div class="rzecz wjazd-lewo" data-slowo="morze">🌊 morze</div>
+        <div class="cecha zjaw" data-slowo="ogromne"><span class="str">➜</span> ogromne</div><div class="str zjaw" data-slowo="więc">➜</div>
+        <div class="wynik wjazd-prawo" data-slowo="morze"><b>morze łez</b> = ogrom łez</div>
+      </div>
+    </div>
+    <div><span class="chip nazwa-przen pop" data-slowo="przenosimy">PRZENOŚNIA = PRZENOSIMY znaczenie ➜</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+25" id="s11">
+    <span class="czesc c4">4 · ODCZYTAJ</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="znaczą">Co znaczą te przenośnie?</div>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="ręce"><div class="emo">🙌</div><div class="nazwa">złote ręce</div></div>
+      <div class="karta pop" data-slowo="burza"><div class="emo">👏</div><div class="nazwa">burza oklasków</div></div>
+      <div class="karta pop" data-slowo="żelazne"><div class="emo">💪</div><div class="nazwa">żelazne nerwy</div></div>
+    </div>
+    <div class="podp">
+      <span class="chip pop" data-slowo="złoto">jakie jest złoto?</span>
+      <span class="chip pop" data-slowo="burza">jaka jest burza?</span>
+      <span class="chip pop" data-slowo="żelazo">jakie jest żelazo?</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="start">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="ręce">🙌 <span class="fr fiol">złote ręce</span> - wszystko potrafi zrobić i naprawić<br><span class="dlaczego">bo złoto jest cenne</span></div>
+      <div class="linia wjazd-lewo" data-slowo="oklasków">👏 <span class="fr fiol">burza oklasków</span> - bardzo głośne, długie brawa<br><span class="dlaczego">bo burza jest głośna i gwałtowna</span></div>
+      <div class="linia wjazd-lewo" data-slowo="nerwy">💪 <span class="fr fiol">żelazne nerwy</span> - zachowuje spokój w trudnej sytuacji<br><span class="dlaczego">bo żelazo jest twarde i mocne</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 13 tworzymy ===== -->
+  <section class="scena" data-id="13-tworzymy" id="s13">
+    <span class="czesc c1 zjaw" data-t="0">5 · ZRÓB SAM</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Robimy przenośnię 🛠️</h2>
+    <div class="przepis">
+      <div class="wiersz">
+        <div class="karta wjazd-lewo" data-slowo="śnieg">śnieg jest <span class="skreslone slowko anim" data-slowo="wyrzucamy"><span>jak</span></span> biała pierzyna</div>
+        <div class="str zjaw" data-slowo="sklejamy">➜</div>
+        <div class="karta po pop" data-slowo="śniegu">biała pierzyna śniegu ❄️</div>
+      </div>
+      <div class="wiersz">
+        <div class="karta wjazd-lewo" data-slowo="chmury">chmury są <span class="skreslone slowko anim" data-slowo="wata"><span>jak</span></span> wata</div>
+        <div class="str zjaw" data-slowo="wychodzi">➜</div>
+        <div class="karta po pop" data-slowo="chmur">wata chmur ☁️</div>
+      </div>
+      <div class="wiersz">
+        <div class="karta wjazd-lewo" data-slowo="gwiazdy">gwiazdy świecą <span class="skreslone slowko anim" data-slowo="diamenty"><span>jak</span></span> diamenty</div>
+        <div class="str zjaw" data-slowo="wychodzi">➜</div>
+        <div class="karta po pop" data-slowo="gwiazd">diamenty gwiazd ✨</div>
+      </div>
+    </div>
+    <div class="kroki">
+      <span class="chip pop" data-slowo="najpierw">① porównanie z „jak”</span>
+      <span class="chip pop" data-slowo="wyrzucamy">② wyrzuć „jak”</span>
+      <span class="chip pop" data-slowo="łączymy">③ połącz wyrazy</span>
+    </div>
+    <div class="poeci zjaw" data-slowo="poeci">Tak pracują poeci ✒️</div>
+  </section>
+
+  <!-- ===== 14 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="14-zadanie4+25" id="s14">
+    <span class="czesc c1">5 · ZRÓB SAM</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamień">Zamień porównanie w przenośnię:</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="liście">🍂 Liście są jak złote monety.</div>
+      <div class="linia pop" data-slowo="rosa">💧 Rosa jest jak perły.</div>
+      <div class="linia pop" data-slowo="słońce">☀️ Słońce jest jak pomarańczowa piłka.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="start">Zapisz w zeszycie - bez „jak”! 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 15 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="15-odpowiedz4" id="s15">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="przepis">
+      <div class="wiersz">
+        <div class="karta" style="font-size:28px">liście są <span class="skreslone slowko anim" data-t="0.6"><span>jak</span></span> złote monety</div>
+        <div class="str">➜</div>
+        <div class="karta po pop" data-slowo="liści">złote monety liści 🍂</div>
+      </div>
+      <div class="wiersz">
+        <div class="karta" style="font-size:28px">rosa jest <span class="skreslone slowko anim" data-t="0.8"><span>jak</span></span> perły</div>
+        <div class="str">➜</div>
+        <div class="karta po pop" data-slowo="rosy">perły rosy 💧</div>
+      </div>
+      <div class="wiersz">
+        <div class="karta" style="font-size:28px">słońce jest <span class="skreslone slowko anim" data-t="1"><span>jak</span></span> pomarańczowa piłka</div>
+        <div class="str">➜</div>
+        <div class="karta po pop" data-slowo="słońca">pomarańczowa piłka słońca ☀️</div>
+      </div>
+    </div>
+    <div><span class="chip uwaga pop" data-slowo="inaczej">Inaczej? Też dobrze - byle bez „jak”! 👍</span></div>
+  </section>
+
+  <!-- ===== 16 podsumowanie ===== -->
+  <section class="scena" data-id="16-podsumowanie" id="s16">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="rzad">
+      <div class="karta por pop" data-slowo="porównanie">
+        <div class="nazwa">🔍 PORÓWNANIE</div>
+        <div class="opis">ma słówko <b class="nieb">jak · niczym · jakby</b></div>
+        <div class="przyk zjaw" data-slowo="szybki">szybki <span class="slowko">jak</span> wiatr</div>
+      </div>
+      <div class="karta prz pop" data-slowo="przenośnia">
+        <div class="nazwa">🌀 PRZENOŚNIA = METAFORA</div>
+        <div class="opis">bez „jak”, wyrazy znaczą coś nowego</div>
+        <div class="przyk zjaw" data-slowo="kamienne">kamienne serce · złote serce · morze łez</div>
+      </div>
+    </div>
+    <div class="kroki">
+      <div class="linia wjazd-lewo" data-slowo="rozpoznać">🖍️ <b>Rozpoznaj:</b> narysuj - wychodzi bzdura? To przenośnia.</div>
+      <div class="linia wjazd-lewo" data-slowo="odczytać">🔎 <b>Odczytaj:</b> jaki jest przedmiot? Przenieś cechę na człowieka.</div>
+      <div class="linia wjazd-lewo" data-slowo="zrobić">🛠️ <b>Zrób:</b> weź porównanie i wyrzuć „jak”.</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
