@@ -29,6 +29,8 @@ export const FILMIKI: Filmik[] = [
   { id: 'wikipedia-film1', lekcja: 'V.15', title: 'Wikipedia - czy można jej wierzyć? (3 zadania)' },
   // Podsumowanie s. 56 - caly dzial 1 kl. 5 w 10 min, 8 zadan ze sprawdzeniem po kazdym.
   { id: 'podsumowanie5-dzial1-film1', lekcja: 'V.16', title: 'Podsumowanie działu 1 - To wiem! To potrafię! (8 zadań)' },
+  // Dzial 2 kl. 5: filmik do kazdej lekcji, zadania ze sprawdzeniem + podsumowanie na koncu.
+  { id: 'przenosnia-film1', lekcja: 'V.17', title: 'Przenośnia - porównanie, przenośnia, jak ją odczytać (4 zadania)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

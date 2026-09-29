@@ -13,7 +13,7 @@
 // (wyciete skryptem tmp/dzial2/wytnij.py z rozkladowek od Bartka).
 
 import type { Slide, StudentAction } from './types';
-import { plan, recap, slideCzytanka, slideNote, slideText, slideTextbookImage, slideTextbookTask, slideTopic, type Topic } from './textbook5slides';
+import { plan, recap, slideCzytanka, slideNote, slideRecap, slideText, slideTextbookImage, slideTextbookTask, slideTopic, slideVideo, type Topic } from './textbook5slides';
 
 const DZIAL = 'Dział 2 - Uwaga, uczucia!';
 
@@ -75,11 +75,13 @@ export const DZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (6 min) - pytania z podsumowania działu 1.',
         '2. **Czytanka „Co to jest radość?”** (1 min) + **s. 61 zad. 3** ustnie (3 min): do czego porównano radość? Na tablicy: „mała JAK kropelka” - to porównanie.',
         '3. **Czytanka „Przenośnie”** (2 min).',
-        '4. **Ramka s. 63** (3 min) - czytacie razem. Na tablicy obok porównania: „kamienne serce” - bez „jak”, nie rozumiemy dosłownie.',
-        '5. **Notatka** (5 min).',
-        '6. Zadania są na slajdach w kolejności z podręcznika - wybierasz. Proponuję: **s. 62 zad. 1** ustnie (4 min), **s. 63 zad. 3** ustnie (3 min), **zad. 5** (4 min), **s. 64 zad. 8** - przenośnie do zdjęć (7 min).',
-        '7. Zapas: s. 61 zad. 8 (własne porównania), s. 63 zad. 2 (schemat), zad. 6.',
-        '8. **s. 64 zad. 9** - do domu: przygotowanie recytacji (szczegóły i wybór wiersza na lekcji 21).',
+        '4. **Ramka s. 63** (2 min) - czytacie razem.',
+        '5. **Film „Przenośnia”** (9 min) - porównanie, przenośnia, test rysowania, jak odczytać i jak zrobić przenośnię. 4 zadania do zeszytu, każde od razu sprawdzone.',
+        '6. **Koło z nowymi zadaniami** (5 min) - podobne do filmowych, ale inne przykłady.',
+        '7. **Notatka** (4 min).',
+        '8. Zadania z podręcznika w kolejności z książki - na ile starczy czasu: **s. 62 zad. 1** ustnie, **s. 64 zad. 8** - przenośnie do zdjęć.',
+        '9. Zapas: s. 61 zad. 8 (własne porównania), s. 63 zad. 2, 3, 5, 6.',
+        '10. **s. 64 zad. 9** - do domu: przygotowanie recytacji (szczegóły i wybór wiersza na lekcji 21).',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- **Porównanie** zestawia dwie rzeczy i mówi to wprost słowem „jak”, „niczym”, „jakby”: oczy jak gwiazdy.',
@@ -98,19 +100,23 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
     ),
     questions: [
-      { text: 'Czym różni się porównanie od przenośni?', answer: 'Porównanie ma słowo „jak”, „niczym”, „jakby”. Przenośnia go nie ma i nie rozumiemy jej dosłownie.' },
-      { text: 'Co znaczy, że ktoś ma „kamienne serce”?', answer: 'Jest nieczuły, nie współczuje innym.' },
-      { text: 'Porównanie czy przenośnia: „oczy jak gwiazdy”?', answer: 'Porównanie - jest słowo „jak”.' },
-      { text: 'Porównanie czy przenośnia: „morze łez”?', answer: 'Przenośnia - to bardzo dużo łez, nie prawdziwe morze.' },
+      { text: 'Porównanie czy przenośnia: „twardy jak skała”?', answer: 'Porównanie - jest słówko „jak”.' },
+      { text: 'Porównanie czy przenośnia: „deszcz pytań”?', answer: 'Przenośnia - bardzo dużo pytań, a nie prawdziwy deszcz.' },
+      { text: 'Dosłownie czy w przenośni: „słodki cukierek” i „słodki uśmiech”?', answer: 'Cukierek - dosłownie. Uśmiech - w przenośni: miły, uroczy.' },
+      { text: 'Co znaczy „stalowe spojrzenie”? Jaka jest stal?', answer: 'Stal jest twarda i zimna - to spojrzenie surowe, nieustępliwe.' },
+      { text: 'Zamień porównanie w przenośnię: „Trawa jest jak zielony dywan”.', answer: 'Zielony dywan trawy.' },
       { text: 'Kto to jest podmiot liryczny?', answer: 'Osoba, która mówi w wierszu.' },
     ],
-    makeSlides: (previousSetId) => [
+    // Kolo po filmie = nowe, podobne zadania (nie te z filmu - te sa juz sprawdzone).
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Przenośnia'),
       ...recap(previousSetId),
       slideCzytanka('co-to-jest-radosc'),
       zad('d2-s61-zad3', 61, '3', 'ustnie'),
       slideCzytanka('przenosnie'),
       ramka('d2-s63-ramka', 63, 'Przenośnia (metafora)'),
+      slideVideo('przenosnia-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : []),
       slideNote('Przenośnia', '1. Porównanie mówi wprost słowem jak, niczym: radość mała jak kropelka.\n2. Przenośnia (metafora) - wyrazy razem mają nowe znaczenie, nie rozumiemy ich dosłownie: kamienne serce, ostry język.\n**„Przenośnie”, R. Pisarski**\n- Kto mówi? Ktoś, kto dziwi się językowi (podmiot liryczny).\n- O czym? Skąd się biorą przenośnie - bo trafiają w sedno.'),
       ...poKolei(
         zad('d2-s61-zad8', 61, '8', 'zeszyt'),
