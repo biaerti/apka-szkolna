@@ -41,6 +41,20 @@ function ramka(plik: string, page: number, title: string): Slide {
   return slideTextbookImage(`czytanki:${plik}.webp`, page, title);
 }
 
+/** Zadania z podrecznika zawsze w kolejnosci z ksiazki: strona, potem numer zadania. */
+function poKolei(...slides: Slide[]): Slide[] {
+  const klucz = (s: Slide): [number, number] => {
+    if (s.kind !== 'image') return [0, 0];
+    const nr = /zad\. (\d+)/.exec(s.code ?? '');
+    return [s.page ?? 0, nr ? Number(nr[1]) : 0];
+  };
+  return [...slides].sort((a, b) => {
+    const [pa, na] = klucz(a);
+    const [pb, nb] = klucz(b);
+    return pa - pb || na - nb;
+  });
+}
+
 const FILM_POZNIEJ = 'Film do tej lekcji jeszcze nie powstał - dopóki go nie ma, uczysz z ramki na ekranie i tablicy.';
 
 export const DZIAL2_TOPICS: Topic[] = [
@@ -63,10 +77,9 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Czytanka „Przenośnie”** (2 min).',
         '4. **Ramka s. 63** (3 min) - czytacie razem. Na tablicy obok porównania: „kamienne serce” - bez „jak”, nie rozumiemy dosłownie.',
         '5. **Notatka** (5 min).',
-        '6. **s. 62 zad. 1** ustnie (4 min) - co znaczą przenośnie z dwuwersowych zwrotek.',
-        '7. **s. 63 zad. 3** ustnie (3 min) i **zad. 5** (4 min) - dosłownie czy w przenośni.',
-        '8. **s. 64 zad. 8** (7 min) - przenośnie do zdjęć. Koło losuje, kto czyta.',
-        '9. Zapas: s. 63 zad. 2 (schemat), zad. 6, s. 61 zad. 8 (własne porównania).',
+        '6. Zadania są na slajdach w kolejności z podręcznika - wybierasz. Proponuję: **s. 62 zad. 1** ustnie (4 min), **s. 63 zad. 3** ustnie (3 min), **zad. 5** (4 min), **s. 64 zad. 8** - przenośnie do zdjęć (7 min).',
+        '7. Zapas: s. 61 zad. 8 (własne porównania), s. 63 zad. 2 (schemat), zad. 6.',
+        '8. **s. 64 zad. 9** - do domu: przygotowanie recytacji (szczegóły i wybór wiersza na lekcji 21).',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- **Porównanie** zestawia dwie rzeczy i mówi to wprost słowem „jak”, „niczym”, „jakby”: oczy jak gwiazdy.',
@@ -99,13 +112,16 @@ export const DZIAL2_TOPICS: Topic[] = [
       slideCzytanka('przenosnie'),
       ramka('d2-s63-ramka', 63, 'Przenośnia (metafora)'),
       slideNote('Przenośnia', '1. Porównanie mówi wprost słowem jak, niczym: radość mała jak kropelka.\n2. Przenośnia (metafora) - wyrazy razem mają nowe znaczenie, nie rozumiemy ich dosłownie: kamienne serce, ostry język.\n**„Przenośnie”, R. Pisarski**\n- Kto mówi? Ktoś, kto dziwi się językowi (podmiot liryczny).\n- O czym? Skąd się biorą przenośnie - bo trafiają w sedno.'),
-      zad('d2-s62-zad1', 62, '1', 'ustnie'),
-      zad('d2-s63-zad3', 63, '3', 'ustnie'),
-      zad('d2-s63-zad5', 63, '5', 'zeszyt'),
-      zad('d2-s64-zad8', 64, '8', 'zeszyt'),
-      zad('d2-s63-zad2', 63, '2', 'zeszyt'),
-      zad('d2-s63-zad6', 63, '6', 'zeszyt'),
-      zad('d2-s61-zad8', 61, '8', 'zeszyt'),
+      ...poKolei(
+        zad('d2-s61-zad8', 61, '8', 'zeszyt'),
+        zad('d2-s62-zad1', 62, '1', 'ustnie'),
+        zad('d2-s63-zad2', 63, '2', 'zeszyt'),
+        zad('d2-s63-zad3', 63, '3', 'ustnie'),
+        zad('d2-s63-zad5', 63, '5', 'zeszyt'),
+        zad('d2-s63-zad6', 63, '6', 'zeszyt'),
+        zad('d2-s64-zad8', 64, '8', 'zeszyt'),
+        zad('d2-s64-zad9', 64, '9', 'dom'),
+      ),
     ],
   },
   {
@@ -173,8 +189,8 @@ export const DZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (7 min) - frazeologizmy.',
         '2. **s. 74 zad. 1** ustnie (3 min) - mama czy mamusia? Kiedy mówimy które?',
         '3. **Ramka s. 74** (4 min) + **notatka** (5 min).',
-        '4. **s. 74 zad. 2** (8 min) - tabela brzuch, but, pies. Dopisz jeszcze dom i nos.',
-        '5. **s. 65 zad. 7** (8 min) - uczucia od najsłabszego do najsilniejszego.',
+        '4. **s. 65 zad. 7** (8 min) - uczucia od najsłabszego do najsilniejszego.',
+        '5. **s. 74 zad. 2** (8 min) - tabela brzuch, but, pies. Dopisz jeszcze dom i nos.',
         '6. **s. 74 zad. 3** - do domu: opis lubianej osoby ze zdrobnieniami.',
       ].join('\n')],
       ['Jak wyjaśnić', [
@@ -201,9 +217,11 @@ export const DZIAL2_TOPICS: Topic[] = [
       zad('d2-s74-zad1', 74, '1', 'ustnie'),
       ramka('d2-s74-ramka', 74, 'Wyrazy neutralne i nacechowane emocjonalnie'),
       slideNote('Zdrobnienia i zgrubienia', '1. Wyraz neutralny tylko nazywa: pies, nos.\n2. Wyraz nacechowany emocjonalnie wyraża uczucia:\n- zdrobnienie - coś małego albo czule: piesek, nosek,\n- zgrubienie - coś dużego, żartem albo pogardliwie: psisko, nochal.\n3. Uczucia mają siłę: niepokój - strach - groza.'),
-      zad('d2-s74-zad2', 74, '2', 'zeszyt'),
-      zad('d2-s65-zad7', 65, '7', 'zeszyt'),
-      zad('d2-s74-zad3', 74, '3', 'dom'),
+      ...poKolei(
+        zad('d2-s65-zad7', 65, '7', 'zeszyt'),
+        zad('d2-s74-zad2', 74, '2', 'zeszyt'),
+        zad('d2-s74-zad3', 74, '3', 'dom'),
+      ),
     ],
   },
   {
@@ -226,8 +244,8 @@ export const DZIAL2_TOPICS: Topic[] = [
         '4. **s. 83 zad. 5** (3 min) - złość, zdenerwowanie, wściekłość.',
         '5. **Ramka „Wśród ludzi”** (5 min) - czytają na zmianę. Na koniec pytanie z ramki: jakie są wasze sposoby?',
         '6. **Notatka** - karta wiersza + sposoby na złość (6 min).',
-        '7. **s. 83 zad. 8** ustnie (4 min).',
-        '8. Zapas: **zad. 6** - przeczytaj zwrotkę tak, żeby było słychać złość, a potem spokój (wstęp do recytacji).',
+        '7. Zapas: **zad. 6** - przeczytaj zwrotkę tak, żeby było słychać złość, a potem spokój (wstęp do recytacji).',
+        '8. **s. 83 zad. 8** ustnie (4 min).',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **zad. 1** Zaciska pięści, trzaska drzwiami, wychodzi bez słowa, jest zjeżony, warczy.',
@@ -254,8 +272,8 @@ export const DZIAL2_TOPICS: Topic[] = [
       zad('d2-s83-zad5', 83, '5', 'zeszyt'),
       ramka('d2-s83-wsrod-ludzi', 83, 'Wśród ludzi - co robić ze złością?'),
       slideNote('Co robić ze złością?', '**„Lwy”, H. Januszewska**\n- Kto mówi? Chłopiec, który jest zły (podmiot liryczny).\n- O czym? W wyobraźni idzie ze lwami, aż złość mija. Mama też bywa zła.\n- Nastrój: od złości do spokoju.\n**Sposoby na złość:** powiedz, co cię złości; rusz się; weź oddech i policz do 10; przeproś, jeśli kogoś zraniłeś.'),
-      zad('d2-s83-zad8', 83, '8', 'ustnie'),
       zad('d2-s83-zad6', 83, '6', 'ustnie'),
+      zad('d2-s83-zad8', 83, '8', 'ustnie'),
     ],
   },
   {
@@ -298,7 +316,6 @@ export const DZIAL2_TOPICS: Topic[] = [
       zad('d2-s92-zad3', 92, '3', 'ustnie'),
       zad('d2-s92-zad4', 92, '4', 'ustnie'),
       slideText('Recytacja na ocenę', 'Naucz się na pamięć jednego wiersza:\n\n- **„Lwy”** Hanny Januszewskiej (s. 81-82) albo\n- **„Przenośnie”** Romana Pisarskiego (s. 61-62).\n\nOceniam: znajomość tekstu, wyraźną wymowę, pauzy i tempo, nastrój w głosie, postawę.\n\nZaliczamy na początku lekcji, po kilka osób.'),
-      zad('d2-s64-zad9', 64, '9', 'dom'),
     ],
   },
   {
@@ -414,9 +431,7 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Ramki s. 84 i 85** (6 min) - każdą regułę sprawdzasz pytaniem przypadku.',
         '4. **Plansza s. 86-87** (3 min) - czytacie rymowanki z ramek po bokach.',
         '5. **Notatka** (5 min).',
-        '6. **s. 84 zad. 1** (4 min), **s. 85 zad. 3** (4 min), **zad. 4** (3 min).',
-        '7. **s. 86 zad. 1** - frazeologizmy z planszy (7 min).',
-        '8. Zapas: s. 84 zad. 2, s. 86 zad. 2, s. 87 zad. 3.',
+        '6. Zadania po kolei z podręcznika: **s. 84 zad. 1** (4 min), zad. 2 (zapas), **s. 85 zad. 3** (4 min), **zad. 4** (3 min), **s. 86 zad. 1** - frazeologizmy z planszy (7 min), s. 86 zad. 2 i s. 87 zad. 3 (zapas).',
       ].join('\n')],
       ['Jak wyjaśnić', 'Nie słychać, więc trzeba zapytać: **widzę kogo? co?** - ę (mamę, tęczę); **z kim? z czym?** - ą (z mamą, łyżką). Czasownik: **ja** - ę (robię), **oni** - ą (robią). Rymowanka z planszy: „Z kim? Z dziewczyną. Czym? Łyżką. W narzędniku stawiam ą”.'],
       ['Odpowiedzi', [
@@ -445,13 +460,15 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s85-ramka', 85, 'Kiedy piszemy ą?'),
       ramka('d2-s86-87-plansza', 86, 'Plansza - rymowanki i frazeologizmy'),
       slideNote('Ę i ą na końcu wyrazu', '**-ę:** widzę kogo? co? - mamę, tęczę; małe istoty - kocię, źrebię; ja - piszę, zrobię.\n**-ą:** z kim? z czym? - z mamą, łyżką; oni - piszą, zrobią.\n**Wyjątki:** wiem, jem, umiem, rozumiem.'),
-      zad('d2-s84-zad1', 84, '1', 'zeszyt'),
-      zad('d2-s85-zad3', 85, '3', 'zeszyt'),
-      zad('d2-s85-zad4', 85, '4', 'zeszyt'),
-      zad('d2-s86-zad1', 86, '1', 'zeszyt'),
-      zad('d2-s84-zad2', 84, '2', 'zeszyt'),
-      zad('d2-s86-zad2', 86, '2', 'zeszyt'),
-      zad('d2-s87-zad3', 87, '3', 'zeszyt'),
+      ...poKolei(
+        zad('d2-s84-zad1', 84, '1', 'zeszyt'),
+        zad('d2-s84-zad2', 84, '2', 'zeszyt'),
+        zad('d2-s85-zad3', 85, '3', 'zeszyt'),
+        zad('d2-s85-zad4', 85, '4', 'zeszyt'),
+        zad('d2-s86-zad1', 86, '1', 'zeszyt'),
+        zad('d2-s86-zad2', 86, '2', 'zeszyt'),
+        zad('d2-s87-zad3', 87, '3', 'zeszyt'),
+      ),
     ],
   },
   {
@@ -521,9 +538,9 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Wzór s. 67** (4 min) - pokazujesz strzałki: kto? co? kiedy? gdzie? dlaczego? jak? opinia.',
         '4. **Notatka** (5 min).',
         '5. **s. 67 zad. 1** (8 min) - czytacie tekst, odpowiedzi ustnie z koła.',
-        '6. **s. 68 zad. 4** (5 min) - co zbędne na wycieczce do Łańcuta.',
-        '7. **s. 68 zad. 5** (8 min) - plan wycieczki do Krakowa ze zdjęć.',
-        '8. Zapas: **s. 68 zad. 3** - wyrazy bliskoznaczne do iść, oglądać, opowiadać.',
+        '6. **s. 68 zad. 3** (4 min) - wyrazy bliskoznaczne do iść, oglądać, opowiadać.',
+        '7. **s. 68 zad. 4** (5 min) - co zbędne na wycieczce do Łańcuta.',
+        '8. **s. 68 zad. 5** (8 min) - plan wycieczki do Krakowa ze zdjęć.',
       ].join('\n')],
       ['Jak wyjaśnić', 'Sprawozdanie to opowiadanie „na serio”: tylko prawdziwe fakty, po kolei, bez fantazji i bez dialogów. Opinia jest dopiero w zakończeniu - jedno, dwa zdania.'],
       ['Odpowiedzi', [
@@ -546,10 +563,12 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s66-ramka', 66, 'Jak napisać sprawozdanie?'),
       ramka('d2-s67-wzor', 67, 'Wzór sprawozdania'),
       slideNote('Sprawozdanie', '1. Sprawozdanie - krótka, rzeczowa relacja z wydarzenia, w którym brałem udział.\n2. Wstęp: kto? co? kiedy? gdzie? dlaczego?\n3. Rozwinięcie: jak przebiegało - po kolei (najpierw, następnie, na koniec).\n4. Zakończenie: krótka opinia.\n5. Tylko fakty, czas przeszły, tytuł.'),
-      zad('d2-s67-zad1', 67, '1', 'ustnie'),
-      zad('d2-s68-zad4', 68, '4', 'zeszyt'),
-      zad('d2-s68-zad5', 68, '5', 'zeszyt'),
-      zad('d2-s68-zad3', 68, '3', 'zeszyt'),
+      ...poKolei(
+        zad('d2-s67-zad1', 67, '1', 'ustnie'),
+        zad('d2-s68-zad3', 68, '3', 'zeszyt'),
+        zad('d2-s68-zad4', 68, '4', 'zeszyt'),
+        zad('d2-s68-zad5', 68, '5', 'zeszyt'),
+      ),
     ],
   },
   {

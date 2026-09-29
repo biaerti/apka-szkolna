@@ -85,18 +85,41 @@ function splitIntoBlocks(input: string): string[][] {
 }
 
 /**
- * Zamienia jednorodny ciag linii listy na blok listy. Zwraca undefined, gdy
- * linie nie sa (wszystkie) pozycjami tego samego rodzaju.
+ * Dzieli blok (bez pustych linii) na kawalki: kolejne pozycje listy tego samego
+ * rodzaju tworza liste, a zwykle linie miedzy nimi - akapit (sasiednie zwykle
+ * linie sklejaja sie spacja). Dzieki temu notatka "Temat / 1. 2. / tytul /
+ * - a - b" nie zlewa sie w jeden akapit, gdy po liscie idzie dalszy tekst.
  */
-function listBlock(lines: string[]): MdListBlock | undefined {
-  if (lines.length === 0) return undefined;
-  if (lines.every((l) => UNORDERED_RE.test(l))) {
-    return { type: 'list', ordered: false, items: lines.map((l) => parseInline(l.replace(UNORDERED_RE, '$1'))) };
+function segmentBlock(lines: string[]): MdBlock[] {
+  const result: MdBlock[] = [];
+  let plain: string[] = [];
+  let list: MdListBlock | undefined;
+  const flushPlain = () => {
+    if (plain.length > 0) result.push({ type: 'paragraph', inline: parseInline(plain.join(' ')) });
+    plain = [];
+  };
+  const flushList = () => {
+    if (list) result.push(list);
+    list = undefined;
+  };
+  for (const line of lines) {
+    const unordered = UNORDERED_RE.exec(line);
+    const ordered = unordered ? null : ORDERED_RE.exec(line);
+    const item = unordered ?? ordered;
+    if (!item) {
+      flushList();
+      plain.push(line);
+      continue;
+    }
+    flushPlain();
+    const isOrdered = !unordered;
+    if (list && list.ordered !== isOrdered) flushList();
+    if (!list) list = { type: 'list', ordered: isOrdered, items: [] };
+    list.items.push(parseInline(item[1]));
   }
-  if (lines.every((l) => ORDERED_RE.test(l))) {
-    return { type: 'list', ordered: true, items: lines.map((l) => parseInline(l.replace(ORDERED_RE, '$1'))) };
-  }
-  return undefined;
+  flushPlain();
+  flushList();
+  return result;
 }
 
 /** Parsuje tekst markdown-lite na drzewo blokow (akapity / listy). */
@@ -117,27 +140,7 @@ export function parseMarkdownLite(input: string): MdBlock[] {
       continue;
     }
 
-    const caly = listBlock(trimmedLines);
-    if (caly) {
-      result.push(caly);
-      continue;
-    }
-
-    // Zapowiedz listy w tej samej linijce co lista ("Zapamietaj:" i pod spodem
-    // punkty) to najczestszy zapis w slajdach - bez tego caly blok slepial sie
-    // w jeden akapit i punkty znikaly. Wiodace linie to akapit, reszta lista.
-    const pierwszaPozycja = trimmedLines.findIndex((l) => UNORDERED_RE.test(l) || ORDERED_RE.test(l));
-    const ogon = pierwszaPozycja > 0 ? listBlock(trimmedLines.slice(pierwszaPozycja)) : undefined;
-    if (ogon) {
-      result.push({ type: 'paragraph', inline: parseInline(trimmedLines.slice(0, pierwszaPozycja).join(' ')) });
-      result.push(ogon);
-      continue;
-    }
-
-    result.push({
-      type: 'paragraph',
-      inline: parseInline(trimmedLines.join(' ')),
-    });
+    result.push(...segmentBlock(trimmedLines));
   }
 
   return result;

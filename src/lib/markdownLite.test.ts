@@ -104,10 +104,16 @@ describe('parseMarkdownLite', () => {
     expect(result[1]).toMatchObject({ type: 'list', ordered: true });
   });
 
-  it('zostawia akapit, gdy punkty listy sa roznego rodzaju', () => {
+  it('rozdziela liste punktowana i numerowana w jednym bloku', () => {
     const result = parseMarkdownLite('Wstep:\n- a\n1. b');
-    expect(result).toHaveLength(1);
-    expect(result[0].type).toBe('paragraph');
+    expect(result.map((b) => b.type)).toEqual(['paragraph', 'list', 'list']);
+  });
+
+  it('tekst po liscie to nowy akapit, a nie doklejka do listy', () => {
+    const result = parseMarkdownLite('**Temat:** X\n1. raz\n2. dwa\n**Tytul**\n- a\n- b');
+    expect(result.map((b) => b.type)).toEqual(['paragraph', 'list', 'paragraph', 'list']);
+    expect(result[1]).toMatchObject({ type: 'list', ordered: true });
+    expect(result[3]).toMatchObject({ type: 'list', ordered: false });
   });
 
   it('ignoruje wielokrotne puste linie', () => {

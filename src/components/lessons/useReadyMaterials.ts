@@ -16,6 +16,7 @@ import { buildRecap4 } from '../../data/recap4';
 import { buildIntroLesson } from '../../data/intro';
 import { buildTextbook4, RETIRED_TEXTBOOK4_TITLES, TEXTBOOK4_TOPIC_COUNT } from '../../data/textbook4';
 import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from '../../data/textbook5';
+import { keepManualStudentActions } from '../../lib/slideStudentAction';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import {
   classifyMatch,
@@ -376,7 +377,8 @@ export function useReadyMaterials(grade: string, classIds: string[], gradeLesson
         sourceVersion: codeVersion(match.newLesson, match.newQuestions, freshBundle),
         questionSetId: effectiveSetId,
         reviewQuestionSetId: effectiveReviewSetId,
-        slides: mappedSlides,
+        // Plakietki przestawione recznie w prezentacji (Do zeszytu / Ustnie) zostaja.
+        slides: keepManualStudentActions(mappedSlides, match.oldLesson.slides),
         // progress, order, grade, plannedDate - celowo pominiete w patchu.
       });
 

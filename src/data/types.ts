@@ -296,6 +296,8 @@ export type Slide =
       studentAction?: StudentAction;
       /** Opcjonalny wlasny tekst zamiast domyslnej etykiety akcji. */
       studentActionText?: string;
+      /** Nauczyciel zmienil plakietke w prezentacji - odswiezenie z kodu jej nie nadpisze. */
+      studentActionManual?: boolean;
     } // markdown-lite: akapity, listy
   // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + krotka wersja
   // tematu do zeszytu (celowo krotsza niz `registerTopic` w dzienniku Vulcan -
@@ -339,6 +341,8 @@ export type Slide =
       zeszyt?: boolean;
       studentAction?: StudentAction;
       studentActionText?: string;
+      /** Nauczyciel zmienil plakietke w prezentacji - odswiezenie z kodu jej nie nadpisze. */
+      studentActionManual?: boolean;
     }
   // Praca z tekstem: strona i czas calego bloku podrecznikowego musza byc
   // widoczne od razu, duzymi cyframi. To nie jest czas samego czytania - obejmuje
@@ -426,6 +430,8 @@ export type Slide =
       code?: string;
       studentAction?: StudentAction;
       studentActionText?: string;
+      /** Nauczyciel zmienil plakietke w prezentacji - odswiezenie z kodu jej nie nadpisze. */
+      studentActionManual?: boolean;
     }
   // Filmik lekcyjny z rejestru src/data/filmiki.ts (mp4 w prywatnym buckecie).
   | { id: ID; kind: 'video'; videoId: string; title?: string }

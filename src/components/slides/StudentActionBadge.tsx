@@ -1,6 +1,15 @@
 import clsx from 'clsx';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import type { StudentAction } from '../../data/types';
+import { STUDENT_ACTION_OPTIONS } from '../../lib/slideStudentAction';
 import { ZeszytIcon } from './ZeszytBadge';
+
+/**
+ * Prezentacja podaje tu funkcje zmieniajaca plakietke biezacego slajdu - wtedy
+ * plakietka jest klikalna i rozwija liste (Do zeszytu / Ustnie / ...). Poza
+ * prezentacja (podglad, edytor) kontekstu nie ma i plakietka jest zwykla.
+ */
+export const StudentActionEditContext = createContext<((action: StudentAction, text: string) => void) | null>(null);
 
 const ACTION_COPY: Record<StudentAction, { label: string; detail: string }> = {
   copy: { label: 'Przepisz', detail: 'Przepisz treść slajdu' },
@@ -37,7 +46,7 @@ function BookIcon() {
   );
 }
 
-export function StudentActionBadge({ action, text }: { action: StudentAction; text?: string }) {
+function BadgeFace({ action, text }: { action: StudentAction; text?: string }) {
   const copy = ACTION_COPY[action];
   const notebook = action === 'copy' || action === 'write-answer';
   return (
@@ -54,6 +63,52 @@ export function StudentActionBadge({ action, text }: { action: StudentAction; te
         <span className="block text-2xl font-bold uppercase leading-tight tracking-wide">{text?.trim() || copy.label}</span>
         <span className="block text-lg leading-tight opacity-80">{copy.detail}</span>
       </span>
+    </div>
+  );
+}
+
+export function StudentActionBadge({ action, text }: { action: StudentAction; text?: string }) {
+  const onChange = useContext(StudentActionEditContext);
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [open]);
+
+  if (!onChange) return <BadgeFace action={action} text={text} />;
+
+  // Klik nie moze przejsc do prezentacji (klik w slajd = nastepny/poprzedni slajd).
+  return (
+    <div ref={rootRef} className="relative z-30" onClick={(e) => e.stopPropagation()}>
+      <button type="button" title="Zmień: do zeszytu / ustnie / ..." onClick={() => setOpen((v) => !v)} className="block rounded-xl hover:brightness-125">
+        <BadgeFace action={action} text={text} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-xl">
+          {STUDENT_ACTION_OPTIONS.map((opt) => (
+            <button
+              key={opt.action}
+              type="button"
+              onClick={() => {
+                onChange(opt.action, opt.text);
+                setOpen(false);
+              }}
+              className={clsx(
+                'block w-full px-5 py-3 text-left text-2xl hover:bg-gray-800',
+                opt.action === action ? 'font-bold text-white' : 'text-gray-300',
+              )}
+            >
+              {opt.text}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

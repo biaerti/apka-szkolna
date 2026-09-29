@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { SlideView, supportsWritePane } from '../components/slides/SlideView';
+import { StudentActionEditContext } from '../components/slides/StudentActionBadge';
+import { withStudentAction } from '../lib/slideStudentAction';
 import { AnnotationLayer } from '../components/slides/AnnotationLayer';
 import { AnnotationToolbar } from '../components/slides/AnnotationToolbar';
 import { PresentationBoard } from '../components/slides/PresentationBoard';
@@ -22,7 +24,7 @@ import { classLessonCode } from '../lib/lessonCode';
 import { PresentationTimer } from '../components/lessons/PresentationTimer';
 import { LessonStartTimer } from '../components/recap/LessonStartTimer';
 import { resolveRecapMode } from '../lib/recap';
-import type { Slide } from '../data/types';
+import type { Slide, StudentAction } from '../data/types';
 
 type PresentationStep =
   | { kind: 'preparation'; id: string }
@@ -63,6 +65,7 @@ export function LessonPresent() {
   const lessons = useStore((s) => s.lessons);
   const classes = useStore((s) => s.classes);
   const setLessonProgress = useStore((s) => s.setLessonProgress);
+  const updateLesson = useStore((s) => s.updateLesson);
   const lesson = lessons.find((l) => l.id === id);
 
   const classId = classIdParam ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
@@ -106,6 +109,11 @@ export function LessonPresent() {
 
   const currentStep = presentation.steps[index];
   const currentSlide = currentStep?.kind === 'slide' ? currentStep.slide : undefined;
+  // Klik w plakietke "Do zeszytu / Ustnie" przestawia ja na tym slajdzie na stale.
+  const changeStudentAction = lesson && currentSlide
+    ? (action: StudentAction, text: string) =>
+        updateLesson(lesson.id, { slides: lesson.slides.map((s) => (s.id === currentSlide.id ? withStudentAction(s, action, text) : s)) })
+    : null;
   // Kolo na lekcji: slajd zadania albo screen zadania z podrecznika (obraz z kodem).
   const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : currentSlide?.kind === 'image' ? (currentSlide.code ?? '') : '';
   // Rysowanie po slajdzie - stan trzyma prezentacja, wiec kreski przezywaja
@@ -233,16 +241,18 @@ export function LessonPresent() {
         ) : isPreparation ? (
           <LessonStartTimer onContinue={() => goTo(index + 1)} />
         ) : currentSlide ? (
-          <SlideView
-            slide={currentSlide}
-            classId={classId}
-            lessonCode={lessonCode}
-            lessonTopic={lesson.registerTopic || lesson.title}
-            textbookPage={presentation.textbookPage}
-            onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
-            overlay={<AnnotationLayer ann={ann} />}
-            writePane={writePaneOn}
-          />
+          <StudentActionEditContext.Provider value={changeStudentAction}>
+            <SlideView
+              slide={currentSlide}
+              classId={classId}
+              lessonCode={lessonCode}
+              lessonTopic={lesson.registerTopic || lesson.title}
+              textbookPage={presentation.textbookPage}
+              onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
+              overlay={<AnnotationLayer ann={ann} />}
+              writePane={writePaneOn}
+            />
+          </StudentActionEditContext.Provider>
         ) : null}
       </div>
 
