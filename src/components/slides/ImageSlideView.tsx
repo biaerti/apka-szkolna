@@ -61,9 +61,11 @@ export function ImageSlideView({ slide }: { slide: ImageSlide }) {
           </div>
           {slide.studentAction && <StudentActionBadge action={slide.studentAction} text={slide.studentActionText} />}
         </div>
-        {/* Do lewej: pionowa ramka zostawia z prawej miejsce na pisanie po slajdzie. */}
-        <div className="flex min-h-0 flex-1 items-start justify-start">
-          <SlideImg slide={slide} className="max-h-full max-w-full rounded-lg object-contain" />
+        {/* Screen wypelnia wolne miejsce (male, jednolinijkowe zadania tez maja byc
+            czytelne z ostatniej lawki), przyklejony do lewego gornego rogu - pionowa
+            ramka zostawia z prawej miejsce na pisanie po slajdzie. */}
+        <div className="min-h-0 flex-1">
+          <SlideImg slide={slide} className="h-full w-full object-contain object-left-top" />
         </div>
       </div>
     );

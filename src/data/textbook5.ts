@@ -8,26 +8,16 @@
 // "Plan" na liscie lekcji): co czytamy, o czym powiedziec, jak wyjasnic, co
 // narysowac na tablicy. Nagrania czytanek sa w src/data/czytanki.ts (V.2...).
 
-import type { Lesson, Question, QuestionSet, Slide, SlideArt, StudentAction } from './types';
+import type { Lesson, Question, QuestionSet } from './types';
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
+import { DZIAL2_TOPICS } from './textbook5dzial2';
+import {
+  plan, recap, slideCzytanka, slideNote, slideRead, slideRecap, slideTask, slideText, slideTextbookImage,
+  slideTextbookTask, slideTopic, slideVideo, type Topic,
+} from './textbook5slides';
 
-interface Topic {
-  title: string;
-  topic: string;
-  textbookPage: number;
-  teacherPlan: string;
-  questions: Array<{ text: string; answer: string }>;
-  /** ownQuestionSetId - zestaw pytan tej lekcji (kolo po filmie z jej wlasnymi pytaniami). */
-  makeSlides: (previousQuestionSetId?: string, ownQuestionSetId?: string) => Slide[];
-}
-
-const DZIAL = 'W poszukiwaniu przyjaźni';
-
-/** Sekcje planu: "## Naglowek" + tresc, oddzielone pusta linia (markdown-lite). */
-function plan(...sections: Array<[string, string]>): string {
-  return sections.map(([heading, body]) => `## ${heading}\n\n${body}`).join('\n\n');
-}
+const DZIAL = 'Dział 1 - W poszukiwaniu przyjaźni';
 
 const TOPICS: Topic[] = [
   {
@@ -467,11 +457,13 @@ const TOPICS: Topic[] = [
   },
 ];
 
+const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? DZIAL })), ...DZIAL2_TOPICS];
+
 export function buildTextbook5(grade: string, classIds: string[]): FreshMaterialsBundle {
   if (grade.toUpperCase() !== 'V') throw new Error('Materiał jest przygotowany dla klasy V.');
-  const questionSets: QuestionSet[] = TOPICS.map((topic) => ({ id: newId(), name: topic.title, topic: topic.title, classIds, createdAt: new Date().toISOString() }));
+  const questionSets: QuestionSet[] = ALL_TOPICS.map((topic) => ({ id: newId(), name: topic.title, topic: topic.title, classIds, createdAt: new Date().toISOString() }));
   const questions: Question[] = [];
-  const lessons: Array<Omit<Lesson, 'id' | 'order'>> = TOPICS.map((topic, index) => {
+  const lessons: Array<Omit<Lesson, 'id' | 'order'>> = ALL_TOPICS.map((topic, index) => {
     const setId = questionSets[index].id;
     topic.questions.forEach((question, order) => questions.push({ id: newId(), setId, ...question, order }));
     return {
@@ -484,7 +476,7 @@ export function buildTextbook5(grade: string, classIds: string[]): FreshMaterial
       teacherPlan: topic.teacherPlan,
       questionSetId: setId,
       reviewQuestionSetId: setId,
-      dzial: DZIAL,
+      dzial: topic.dzial,
       progress: {},
       slides: topic.makeSlides(questionSets[index - 1]?.id, setId),
     };
@@ -492,7 +484,7 @@ export function buildTextbook5(grade: string, classIds: string[]): FreshMaterial
   return { lessons, questionSets, questions };
 }
 
-export const TEXTBOOK5_TOPIC_COUNT = TOPICS.length;
+export const TEXTBOOK5_TOPIC_COUNT = ALL_TOPICS.length;
 
 /**
  * Tematy wycofane z materialu - automat odswiezania usuwa je z rocznika.
@@ -512,30 +504,3 @@ export const RETIRED_TEXTBOOK5_TITLES = new Set<string>([
   '14. Pisownia cząstki „by”',
   '15. W poszukiwaniu przyjaźni - powtórzenie',
 ]);
-
-function slideTopic(topic: string): Slide {
-  return { id: newId(), kind: 'topic', topic, variant: 'write' };
-}
-function slideRead(title: string, page: number, pageTo: number, body: string, timerSec: number): Slide {
-  return { id: newId(), kind: 'read', title, source: 'Podręcznik', page, pageTo, body, timerSec };
-}
-function slideText(title: string, body: string, art?: SlideArt): Slide { return { id: newId(), kind: 'text', title, body, art }; }
-function slideTask(code: string, body: string, timerSec: number, art?: SlideArt, answerExample?: string): Slide {
-  return { id: newId(), kind: 'task', code, body, timerSec, art, answerExample, studentAction: 'write-answer' };
-}
-function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
-function slideCzytanka(czytankaId: string): Slide { return { id: newId(), kind: 'czytanka', czytankaId }; }
-/** Screen z podręcznika (ramka teorii) z numerem strony nad obrazem. */
-function slideTextbookImage(url: string, page: number, title: string): Slide {
-  return { id: newId(), kind: 'image', url, page, title, studentAction: 'look' };
-}
-/** Screen zadania z podrecznika - z kodem, wiec dziala na nim kolo na lekcji (K). */
-function slideTextbookTask(url: string, page: number, code: string, title: string, studentAction: StudentAction, studentActionText?: string): Slide {
-  return { id: newId(), kind: 'image', url, page, code, title, studentAction, studentActionText };
-}
-function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 'recap', questionSetId, mode: 'powtorzeniowe' }; }
-/** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
-function slideNote(temat: string, body: string): Slide {
-  return { id: newId(), kind: 'note', title: 'Notatka do zeszytu', body: `**Temat:** ${temat}\n${body}` };
-}
-function recap(questionSetId?: string): Slide[] { return questionSetId ? [slideRecap(questionSetId)] : []; }

@@ -39,6 +39,11 @@ export const CZYTANKI: Czytanka[] = [
   { id: 'wielki-wybuch-k-kontra-k', lekcja: 'V.9', temat: 'Wielki wybuch, czyli K kontra K', title: 'Wielki wybuch, czyli K kontra K', author: 'Barbara Kosmowska, Grzegorz Kasdepke', pages: '36-39' },
   // Wlasny tekst (nie z podrecznika) - prostsza wersja artykulu z s. 54.
   { id: 'wikipedia', lekcja: 'V.15', temat: 'Wikipedia i sposoby komunikowania się', title: 'Wikipedia. Największa encyklopedia świata', pages: '54-55' },
+  // Klasa 5, dzial 2 "Uwaga, uczucia!" (src/data/textbook5dzial2.ts).
+  { id: 'co-to-jest-radosc', lekcja: 'V.17', temat: 'Przenośnia', title: 'Co to jest radość?', author: 'Joanna Kulmowa', pages: '60' },
+  { id: 'przenosnie', lekcja: 'V.17', temat: 'Przenośnia', title: 'Przenośnie', author: 'Roman Pisarski', pages: '61-62' },
+  { id: 'co-to-znaczy', lekcja: 'V.18', temat: 'Związki frazeologiczne', title: 'Co to znaczy...', author: 'Grzegorz Kasdepke', pages: '64-65' },
+  { id: 'lwy', lekcja: 'V.20', temat: 'Co robić ze złością?', title: 'Lwy', author: 'Hanna Januszewska', pages: '81-82' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };

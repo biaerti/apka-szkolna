@@ -61,8 +61,8 @@ const MATERIAL_DEFINITIONS: MaterialDefinition[] = [
   },
   {
     key: 'textbook5',
-    label: 'Klasa 5 - W poszukiwaniu przyjaźni',
-    description: `Doda ${TEXTBOOK5_TOPIC_COUNT} lekcji działu „W poszukiwaniu przyjaźni”: prezentacje, notatki do zeszytu, pytania do koła i plan lekcji dla nauczyciela.`,
+    label: 'Klasa 5 - działy 1-2',
+    description: `Doda ${TEXTBOOK5_TOPIC_COUNT} lekcji działów „W poszukiwaniu przyjaźni” i „Uwaga, uczucia!”: prezentacje, notatki do zeszytu, pytania do koła i plan lekcji dla nauczyciela.`,
     build: buildTextbook5,
   },
   {

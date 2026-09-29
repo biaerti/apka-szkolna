@@ -123,6 +123,37 @@ describe('buildTextbook5', () => {
     expect(own.kind === 'recap' && own.questionCount).toBe(6);
   });
 
+  it('dzial 2 idzie po dziale 1 jako osobna grupa na liscie lekcji', () => {
+    const dzialy = [...new Set(bundle.lessons.map((l) => l.dzial))];
+    expect(dzialy).toEqual(['Dział 1 - W poszukiwaniu przyjaźni', 'Dział 2 - Uwaga, uczucia!']);
+    const pierwsza = bundle.lessons.findIndex((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
+    expect(bundle.lessons[pierwsza].title).toBe('17. Przenośnia - słowa nie wprost');
+    expect(bundle.lessons.slice(pierwsza).every((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!')).toBe(true);
+  });
+
+  it('dzial 2: kazdy screen zadania to jedno zadanie z numerem strony i kodem dla kola', () => {
+    const dzial2 = bundle.lessons.filter((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
+    expect(dzial2).toHaveLength(13);
+    for (const lesson of dzial2) {
+      for (const slide of lesson.slides) {
+        if (slide.kind !== 'image') continue;
+        expect(slide.url).toMatch(/^czytanki:d2-s\d{2}/);
+        expect(slide.page).toBeGreaterThanOrEqual(60);
+        if (slide.code) {
+          expect(slide.code).toMatch(/^s\. \d+ (zad\. \d+|rozgrzewka)$/);
+          expect(slide.url).toContain(`-s${slide.page}`);
+        }
+      }
+    }
+  });
+
+  it('dzial 2: tylko dwie lekcje z czytanym wierszem, reszta bez dlugich tekstow', () => {
+    const czytanki = bundle.lessons.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka').map((s) => s.kind === 'czytanka' && s.czytankaId));
+    expect(czytanki).toEqual(expect.arrayContaining(['co-to-jest-radosc', 'przenosnie', 'co-to-znaczy', 'lwy']));
+    const lwy = bundle.lessons.find((l) => l.title.startsWith('20.'))!;
+    expect(lwy.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'czytanka', 'image', 'image', 'image', 'image', 'image', 'note', 'image', 'image']);
+  });
+
   it('wycofane tematy nie wracaja w materiale', () => {
     for (const lesson of bundle.lessons) expect(RETIRED_TEXTBOOK5_TITLES.has(lesson.title)).toBe(false);
   });
