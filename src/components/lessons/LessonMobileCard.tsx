@@ -22,7 +22,6 @@ interface Props {
   onAddSlot: (slot: LessonSlot) => void;
   onRemoveSlot: (slotId: string) => void;
   onSetStatus: (status: LessonProgress['status']) => void;
-  onShowPlan: () => void;
   onShowFilm: () => void;
 }
 
@@ -71,7 +70,6 @@ export function LessonMobileCard(p: Props) {
           {Object.entries(STATUS_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select>
         <div className="flex justify-end gap-1">
-          {p.lesson.teacherPlan && <Button size="sm" variant="ghost" onClick={p.onShowPlan}>Plan</Button>}
           {lessonFilmIds(p.lesson).length > 0 && <Button size="sm" variant="ghost" onClick={p.onShowFilm}>Film</Button>}
           <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${p.lesson.id}/pokaz/${p.classId}?${query}`)}>Pokaż</Button>
           <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${p.lesson.id}/edytuj?${query}`)}>Edytuj</Button>

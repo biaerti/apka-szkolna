@@ -17,7 +17,6 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { Table, TBody, TH, THead, TR } from '../components/ui/Table';
 import { LessonRow } from '../components/lessons/LessonRow';
 import { LessonRegisterModal } from '../components/lessons/LessonRegisterModal';
-import { LessonPlanModal } from '../components/lessons/LessonPlanModal';
 import { LessonFilmModal } from '../components/lessons/LessonFilmModal';
 import { LessonQuestionsModal } from '../components/lessons/LessonQuestionsModal';
 import { NewLessonModal } from '../components/lessons/NewLessonModal';
@@ -30,10 +29,28 @@ import { duplicateSlide } from '../components/lessons/slideDefaults';
 import { newId } from '../data/id';
 import { useLessonDrag } from '../components/lessons/useLessonDrag';
 import { backfillLessonCodes, classLessonCode } from '../lib/lessonCode';
-import { lessonMaterialType } from '../lib/lessonMaterial';
+import { lessonSections, pickLessonSection } from '../lib/lessonMaterial';
 import { MaterialTabs } from '../components/lessons/MaterialTabs';
 import { useNow } from '../components/timetable/useNow';
 import { LessonMobileCard } from '../components/lessons/LessonMobileCard';
+
+const SECTION_KEY = 'lekcje-dzial:';
+
+function readStoredSection(grade: string): string | null {
+  try {
+    return localStorage.getItem(SECTION_KEY + grade);
+  } catch {
+    return null;
+  }
+}
+
+function storeSection(grade: string, key: string) {
+  try {
+    localStorage.setItem(SECTION_KEY + grade, key);
+  } catch {
+    // Tryb prywatny moze blokowac zapis - zakladka dziala, tylko sie nie zapamieta.
+  }
+}
 
 export function Lessons() {
   const navigate = useNavigate();
@@ -67,23 +84,12 @@ export function Lessons() {
   const classNames = gradeClasses.map((c) => c.name).join(', ');
   const gradeLessons = useMemo(() => lessonsOfGrade(lessons, grade), [lessons, grade]);
   const requestedType = params.get('typ');
-  const hasTextbookLessons = gradeLessons.some((lesson) => lessonMaterialType(lesson) === 'textbook');
-  const materialType: LessonMaterialType = requestedType === 'review' || requestedType === 'textbook'
-    ? requestedType
-    : hasTextbookLessons
-      ? 'textbook'
-      : 'review';
-  const visibleLessons = useMemo(
-    () => gradeLessons.filter((lesson) => lessonMaterialType(lesson) === materialType),
-    [gradeLessons, materialType],
-  );
-  const materialCounts = useMemo(
-    () => ({
-      textbook: gradeLessons.filter((lesson) => lessonMaterialType(lesson) === 'textbook').length,
-      review: gradeLessons.filter((lesson) => lessonMaterialType(lesson) === 'review').length,
-    }),
-    [gradeLessons],
-  );
+  // Zakladki: Powtorzeniowe | Dzial 1 | Dzial 2. Wybrany dzial pamietamy per
+  // rocznik w przegladarce, zeby po zamknieciu apki wrocic na ten sam dzial.
+  const sections = useMemo(() => lessonSections(gradeLessons), [gradeLessons]);
+  const activeSection = pickLessonSection(sections, requestedType, readStoredSection(grade));
+  const materialType: LessonMaterialType = activeSection?.type ?? (requestedType === 'review' ? 'review' : 'textbook');
+  const visibleLessons = useMemo(() => activeSection?.lessons ?? [], [activeSection]);
   const otherGrades = allGrades(classes).filter((g) => g !== grade);
   const now = useNow(30_000);
   const slotOptions = useMemo(
@@ -117,8 +123,6 @@ export function Lessons() {
   const [questionsLessonId, setQuestionsLessonId] = useState<string | null>(null);
   const registerLesson = gradeLessons.find((l) => l.id === registerLessonId) ?? null;
   const questionsLesson = gradeLessons.find((l) => l.id === questionsLessonId) ?? null;
-  const [planLessonId, setPlanLessonId] = useState<string | null>(null);
-  const planLesson = gradeLessons.find((l) => l.id === planLessonId) ?? null;
   const [filmLessonId, setFilmLessonId] = useState<string | null>(null);
   const filmLesson = gradeLessons.find((l) => l.id === filmLessonId) ?? null;
 
@@ -157,8 +161,11 @@ export function Lessons() {
     setParams({ klasa: id, typ: materialType }, { replace: true });
   }
 
-  function selectMaterial(type: LessonMaterialType) {
-    setParams({ klasa: classId, typ: type }, { replace: true });
+  function selectSection(key: string) {
+    const section = sections.find((item) => item.key === key);
+    if (!section) return;
+    storeSection(grade, key);
+    setParams({ klasa: classId, typ: section.type }, { replace: true });
   }
 
   function questionCountFor(lesson: Lesson): number | null {
@@ -271,7 +278,7 @@ export function Lessons() {
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <MaterialTabs active={materialType} counts={materialCounts} onSelect={selectMaterial} />
+        {sections.length > 1 && <MaterialTabs sections={sections} activeKey={activeSection?.key ?? ''} onSelect={selectSection} />}
         {visibleLessons.length > 0 && materialType !== 'textbook' && (
           <p className="mb-4 text-xs text-gray-500">
             <span className="font-semibold tabular-nums text-gray-700">
@@ -322,7 +329,6 @@ export function Lessons() {
               onAddSlot={(slot) => addSlot(lesson, slot)}
               onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
               onSetStatus={(status) => setStatus(lesson, status)}
-              onShowPlan={() => setPlanLessonId(lesson.id)}
               onShowFilm={() => setFilmLessonId(lesson.id)}
             />
           ))}
@@ -347,9 +353,9 @@ export function Lessons() {
           <TBody>
             {visibleLessons.map((lesson, idx) => (
               <Fragment key={lesson.id}>
-                {/* Naglowek dzialu nad pierwsza lekcja danej grupy (np. "Powtorka 1-3") -
+                {/* Naglowek grupy powtorek (np. "Powtorka 1-3"); dzialy podrecznika maja wlasne zakladki,
                     lekcje bez dzialu (wlasne, tematyczne) nie dostaja naglowka. */}
-                {lesson.dzial && lesson.dzial !== visibleLessons[idx - 1]?.dzial && (
+                {materialType === 'review' && lesson.dzial && lesson.dzial !== visibleLessons[idx - 1]?.dzial && (
                   <TR className="bg-gray-50/70">
                     <td colSpan={6} className="border-t border-gray-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
                       {lesson.dzial}
@@ -380,7 +386,6 @@ export function Lessons() {
                   onAddSlot={(slot) => addSlot(lesson, slot)}
                   onRemoveSlot={(slotId) => removeSlot(lesson, slotId)}
                   onShowRegister={() => setRegisterLessonId(lesson.id)}
-                  onShowPlan={() => setPlanLessonId(lesson.id)}
                   onShowFilm={() => setFilmLessonId(lesson.id)}
                   onShowQuestions={() => setQuestionsLessonId(lesson.id)}
                   onAddQuestions={() => handleAddQuestions(lesson)}
@@ -397,8 +402,6 @@ export function Lessons() {
       )}
 
       <NewLessonModal open={newOpen} onClose={() => setNewOpen(false)} classNames={classNames} onCreate={handleCreate} initialType={materialType} />
-
-      {planLesson && <LessonPlanModal lesson={planLesson} onClose={() => setPlanLessonId(null)} />}
 
       {filmLesson && <LessonFilmModal lesson={filmLesson} onClose={() => setFilmLessonId(null)} />}
 
