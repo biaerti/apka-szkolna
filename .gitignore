@@ -14,3 +14,6 @@ filmiki/*/audio/
 
 # filmiki mp4 - w dev z public/, w produkcji z bucketu Supabase "filmiki"
 public/filmiki/
+
+# profil Chrome z zalogowanym NEON-em (screeny podrecznika) - sesja Bartka, nigdy do repo
+tmp/chrome-neon/
