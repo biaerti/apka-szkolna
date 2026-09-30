@@ -6,7 +6,9 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+import { DYZURY } from '../../data/dyzury';
 import { useStore } from '../../data/store';
+import { dutyAfter } from '../../lib/dyzury';
 import {
   currentOrNextEntry,
   entriesForDay,
@@ -54,6 +56,7 @@ export function TodayTimetableBar() {
       {entries.map((e, i) => {
         const cls = e.classId ? classById.get(e.classId) : undefined;
         const isHighlighted = highlighted?.id === e.id;
+        const duty = dutyAfter(DYZURY, weekday, e.period);
         return (
           <span key={e.id} className="flex items-center gap-2">
             {i > 0 && <span className="text-gray-300">·</span>}
@@ -87,6 +90,14 @@ export function TodayTimetableBar() {
                 >
                   Sala
                 </Link>
+              )}
+              {duty && (
+                <span
+                  className="rounded border border-amber-300 bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-800"
+                  title={`Po tej lekcji dyżur: ${duty.place}`}
+                >
+                  + dyżur
+                </span>
               )}
             </span>
           </span>

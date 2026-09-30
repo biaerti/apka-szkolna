@@ -3,10 +3,14 @@
 // przerwie kiedy zaczyna sie nastepna. Poza planem sama godzina. Dyskretny:
 // ciemne polprzezroczyste tlo, nie przechwytuje klikniec (slajdy przewija
 // sie klikiem w polowy ekranu). Ostatnie 5 min bursztynowe, ostatnia minuta
-// czerwona - nauczyciel widzi katem oka, ze czas konczyc.
+// czerwona - nauczyciel widzi katem oka, ze czas konczyc. Pod spodem
+// przypomnienie o dyzurze (src/data/dyzury.ts): "po lekcji: dyżur" w trakcie
+// lekcji, "dyżur teraz" na przerwie.
 
 import clsx from 'clsx';
+import { DYZURY } from '../../data/dyzury';
 import { useStore } from '../../data/store';
+import { dutyStatus } from '../../lib/dyzury';
 import { formatHm, formatRemaining, periodStatus } from '../../lib/timetable';
 import { useNow } from '../timetable/useNow';
 
@@ -27,6 +31,7 @@ export function PresentClock({ position = 'top-right' }: PresentClockProps) {
   const periods = useStore((s) => s.periods);
   const now = useNow(1000);
   const status = periodStatus(periods, now);
+  const duty = dutyStatus(DYZURY, periods, now);
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   let detail = '';
@@ -49,6 +54,11 @@ export function PresentClock({ position = 'top-right' }: PresentClockProps) {
     >
       <div className="text-3xl font-semibold tabular-nums tracking-[-0.02em] text-gray-100">{time}</div>
       {detail && <div className={clsx('text-sm tabular-nums', tone)}>{detail}</div>}
+      {duty.kind !== 'none' && (
+        <div className="mt-0.5 text-sm font-semibold text-amber-300">
+          {duty.kind === 'after-lesson' ? 'po lekcji: dyżur' : 'dyżur teraz'} · {duty.duty.place}
+        </div>
+      )}
     </div>
   );
 }
