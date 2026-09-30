@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Co robić ze złością? - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --lew: #D98A1F; --zlosc: #D6453D; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 16px 22px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 24px; justify-content: center; }
+.rzad > * { flex: 1; }
+.zl { color: var(--zlosc); }
+.ziel { color: var(--zielony); }
+.lewk { color: var(--lew); }
+
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--szary); }
+.c2 { background: var(--lew); }
+.c3 { background: var(--zielony); }
+.c4 { background: var(--niebieski); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 14px; font-size: 38px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 16px; font-size: 30px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 18px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 12px; margin: 20px auto 0; width: 1080px; }
+.dlaczego { color: var(--szary); font-size: 25px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 8px; vertical-align: 4px; }
+.e-ok { background: var(--zielony); } .e-zle { background: var(--zlosc); }
+.dobra { border-color: var(--zielony); } .zla { border-color: var(--zlosc); }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .lew { font-size: 120px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 100px; font-weight: 800; line-height: 1; color: var(--zlosc); }
+#s01 .wiersz { margin-top: 12px; font-size: 32px; background: var(--lew); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 28px; white-space: nowrap; }
+#s01 .grupy .chip:nth-child(1) { background: var(--zlosc); }
+#s01 .grupy .chip:nth-child(2) { background: var(--lew); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 26px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 normalna ===== */
+#s02 .rzad { margin-top: 26px; }
+#s02 .karta .emo { font-size: 60px; }
+#s02 .powody { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
+#s02 .powody .chip { font-size: 28px; background: var(--szary); }
+#s02 .problem { margin-top: 22px; font-size: 32px; background: var(--zlosc); }
+
+/* ===== 03 cialo ===== */
+#s03 .rzad { margin-top: 24px; align-items: stretch; }
+#s03 .karta { text-align: left; }
+#s03 .karta .nazwa { text-align: center; margin-bottom: 10px; }
+#s03 .karta .poz { font-size: 32px; font-weight: 800; padding: 6px 0; }
+#s03 .k1 { border-color: var(--zlosc); } #s03 .k1 .nazwa { color: var(--zlosc); }
+#s03 .k2 { border-color: var(--lew); } #s03 .k2 .nazwa { color: var(--lew); }
+#s03 .wczesnie { margin-top: 22px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 04 lwy ===== */
+#s04 .przemiana { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; }
+#s04 .przemiana .karta { font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; padding: 10px 26px; }
+#s04 .przemiana .po { border-color: var(--lew); color: var(--lew); font-size: 42px; }
+#s04 .str { font-size: 44px; font-weight: 800; color: var(--szary); }
+#s04 .cechy { display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 22px; }
+#s04 .cechy .chip { font-size: 32px; background: var(--lew); }
+#s04 .cechy .rowne { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: var(--zlosc); }
+#s04 .dzien { display: flex; gap: 16px; justify-content: center; align-items: center; margin-top: 30px; }
+#s04 .dzien .linia { font-size: 30px; text-align: center; }
+#s04 .dzien .str { font-size: 36px; }
+
+/* ===== 05-06 zadanie 1 ===== */
+#s05 .lista { width: 1000px; }
+#s05 .linia { font-size: 36px; text-align: center; }
+#s06 .cechy { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px; }
+#s06 .cechy .chip { font-size: 32px; background: var(--lew); }
+#s06 .lista { width: 1000px; }
+
+/* ===== 07 sposoby ===== */
+#s07 .rzad { margin-top: 20px; align-items: stretch; }
+#s07 .karta { text-align: left; padding: 10px 20px; }
+#s07 .karta .nazwa { text-align: center; }
+#s07 .karta .poz { font-size: 28px; font-weight: 800; padding: 4px 0; }
+#s07 .dobre { flex: 1.3; border-color: var(--zielony); } #s07 .dobre .nazwa { color: var(--zielony); }
+#s07 .zle { border-color: var(--zlosc); } #s07 .zle .nazwa { color: var(--zlosc); }
+#s07 .zle .poz { color: var(--szary); }
+#s07 .gorzej { margin-top: 16px; font-size: 28px; background: var(--zlosc); }
+
+/* ===== 08 zadanie 2 ===== */
+.kafle { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; margin: 22px auto 0; width: 1100px; text-align: left; }
+.kafel { font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 20px; padding: 6px 20px; }
+.kafel b { color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; font-size: 30px; vertical-align: 3px; }
+#s09 .lista { width: 1140px; gap: 9px; }
+#s09 .linia { font-size: 26px; padding: 5px 18px; }
+#s09 .linia .fr { font-family: 'Baloo 2'; font-size: 31px; }
+
+/* ===== 10 zdanie od ja ===== */
+#s10 .pary { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 20px auto 0; width: 1140px; }
+#s10 .linia { font-family: 'Baloo 2'; font-size: 32px; }
+#s10 .linia small { display: block; font-family: 'Nunito'; font-size: 24px; color: var(--szary); }
+#s10 .przepis { margin-top: 22px; font-size: 32px; background: var(--niebieski); }
+
+/* ===== 11-12 zadanie 3 ===== */
+#s11 .lista { width: 1000px; }
+#s11 .linia { font-family: 'Baloo 2'; font-size: 40px; text-align: center; }
+#s12 .pary { display: flex; flex-direction: column; gap: 14px; margin: 20px auto 0; width: 1140px; }
+#s12 .para { display: grid; grid-template-columns: 1fr 50px 1.35fr; align-items: center; }
+#s12 .linia { font-size: 28px; }
+#s12 .str { font-size: 40px; font-weight: 800; color: var(--szary); }
+#s12 .check { display: flex; gap: 12px; justify-content: center; margin-top: 22px; }
+#s12 .check .chip { font-size: 28px; background: var(--zielony); }
+
+/* ===== 13-14 zadanie 4 ===== */
+#s13 .scenka { margin: 22px auto 0; width: 1000px; border-color: var(--lew); }
+#s13 .scenka .nazwa { font-size: 38px; }
+#s13 .lista { width: 1000px; }
+#s13 .linia { font-size: 32px; }
+#s14 .lista .linia { font-size: 30px; }
+#s14 .ok { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
+#s14 .ok .chip { font-size: 25px; white-space: nowrap; background: var(--zielony); }
+
+/* ===== 15 podsumowanie ===== */
+#s15 { padding-top: 34px; }
+#s15 .siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin: 18px auto 0; width: 1140px; }
+#s15 .linia { font-size: 29px; }
+#s15 .ja { margin-top: 18px; font-size: 34px; background: var(--niebieski); }
+#s15 .brawo { margin-top: 16px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="lew pop" data-t="0.3">🦁</div>
+    <div><span class="chip wiersz pop" data-slowo="lwy">H. Januszewska, „Lwy”</span></div>
+    <div class="tytul pop" data-slowo="złości">Co robić ze złością?</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="skąd">🔥 skąd wiemy, że to złość</span>
+      <span class="chip pop" data-slowo="poetka">🦁 czemu lwy</span>
+      <span class="chip pop" data-slowo="skrzywdzić">✅ co z nią zrobić</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 zlosc jest normalna ===== -->
+  <section class="scena" data-id="02-normalna" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · CZYM JEST ZŁOŚĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Złość to normalne uczucie 🙂</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="każdy"><div class="emo">👧👨‍🏫👵</div><div class="nazwa">czuje ją każdy</div></div>
+      <div class="karta pop" data-slowo="mama"><div class="emo">👩🦁</div><div class="nazwa">mama z wiersza też</div></div>
+      <div class="karta pop" data-slowo="mówi"><div class="emo">⚠️</div><div class="nazwa">mówi: coś jest nie tak</div></div>
+    </div>
+    <div class="powody">
+      <span class="chip pop" data-slowo="zabrał">ktoś zabrał coś bez pytania</span>
+      <span class="chip pop" data-slowo="niesprawiedliwy">ktoś był niesprawiedliwy</span>
+      <span class="chip pop" data-slowo="wyszło">coś nie wyszło</span>
+    </div>
+    <div><span class="chip problem pop" data-slowo="rządzi">kłopot: gdy złość rządzi nami, a nie my nią</span></div>
+  </section>
+
+  <!-- ===== 03 cialo ===== -->
+  <section class="scena" data-id="03-cialo" id="s03">
+    <span class="czesc c1">1 · CZYM JEST ZŁOŚĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Po czym poznać złość? 🔥</h2>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="ciało">
+        <div class="nazwa">CIAŁO</div>
+        <div class="poz zjaw" data-slowo="pięści">✊ pięści się zaciskają</div>
+        <div class="poz zjaw" data-slowo="twarz">🥵 gorąca, czerwona twarz</div>
+        <div class="poz zjaw" data-slowo="oddech">💨 szybki oddech, serce wali</div>
+      </div>
+      <div class="karta k2 pop" data-slowo="zachowanie">
+        <div class="nazwa">ZACHOWANIE</div>
+        <div class="poz zjaw" data-slowo="zjeżony">😾 zjeżony, warczy</div>
+        <div class="poz zjaw" data-slowo="trzasnął">🚪 trzaska drzwiami</div>
+        <div class="poz zjaw" data-slowo="wyszedł">🚶 wychodzi bez słowa</div>
+      </div>
+    </div>
+    <div><span class="chip wczesnie pop" data-slowo="wcześnie">zauważysz wcześnie ➜ łatwiej zatrzymasz</span></div>
+  </section>
+
+  <!-- ===== 04 lwy ===== -->
+  <section class="scena" data-id="04-lwy" id="s04">
+    <span class="czesc c2 zjaw" data-t="0">2 · LWY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--lew)">Dlaczego lwy? 🦁</h2>
+    <div class="przemiana">
+      <div class="karta wjazd-lewo" data-slowo="wprost">wprost: „chłopiec był zły”</div>
+      <div class="str zjaw" data-slowo="pokazuje">➜</div>
+      <div class="karta po pop" data-slowo="pokazuje">przenośnia: LWY 🦁</div>
+    </div>
+    <div class="cechy">
+      <span class="chip pop" data-slowo="groźne">groźne</span>
+      <span class="chip pop" data-slowo="silne">silne</span>
+      <span class="chip pop" data-slowo="drapieżne">drapieżne</span>
+      <span class="chip pop" data-slowo="ryczą">ryczą</span>
+      <span class="rowne pop" data-slowo="właśnie">= ZŁOŚĆ 😠</span>
+    </div>
+    <div class="dzien">
+      <div class="linia wjazd-lewo" data-slowo="dzień">☀️ cały dzień<br>ze lwami</div>
+      <div class="str zjaw" data-slowo="wieczorem">➜</div>
+      <div class="linia wjazd-lewo" data-slowo="wieczorem">🌇 wieczorem<br>lwy odchodzą</div>
+      <div class="str zjaw" data-slowo="mija">➜</div>
+      <div class="linia wjazd-lewo" data-slowo="mija" style="border-color:var(--zielony)">😌 złość mija<br><small class="dlaczego">czas + ruch</small></div>
+    </div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+20" id="s05">
+    <span class="czesc c2">2 · LWY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cechy"><span class="nr">1</span>Dwie cechy lwa 🦁, które pasują do złości 😠</div>
+      <div class="linia pop" data-slowo="dokończ"><span class="nr">2</span>Dokończ: Lwy odchodzą wieczorem, bo…</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="start">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="cechy">
+      <span class="chip pop" data-slowo="groźny">groźny</span>
+      <span class="chip pop" data-slowo="silny">silny</span>
+      <span class="chip pop" data-slowo="drapieżny">drapieżny</span>
+      <span class="chip pop" data-slowo="ryczy">ryczy</span>
+      <span class="chip pop" data-slowo="zatrzymać">trudno go zatrzymać</span>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="groźna">😠 Złość też bywa groźna i silna - gdy nas złapie, trudno ją powstrzymać.</div>
+      <div class="linia wjazd-lewo" data-slowo="minęła">🌇 Lwy odchodzą wieczorem, bo <b class="ziel">złość chłopca minęła</b> - uspokoił się.</div>
+    </div>
+  </section>
+
+  <!-- ===== 07 sposoby ===== -->
+  <section class="scena" data-id="07-sposoby" id="s07">
+    <span class="czesc c3 zjaw" data-t="0">3 · CO ROBIĆ?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Gdy przychodzą lwy…</h2>
+    <div class="rzad">
+      <div class="karta dobre pop" data-slowo="dobre">
+        <div class="nazwa">✅ DOBRE SPOSOBY</div>
+        <div class="poz zjaw" data-slowo="oddechów">💨 kilka głębokich oddechów</div>
+        <div class="poz zjaw" data-slowo="policz">🔟 policz powoli do dziesięciu</div>
+        <div class="poz zjaw" data-slowo="rusz">🏃 rusz się: biegaj, skacz, rower</div>
+        <div class="poz zjaw" data-slowo="odejdź">🛋️ odejdź w spokojne miejsce</div>
+        <div class="poz zjaw" data-slowo="powiedz">💬 powiedz, co cię złości</div>
+        <div class="poz zjaw" data-slowo="przeproś">🤝 przeproś, jeśli kogoś zraniłeś</div>
+      </div>
+      <div class="karta zle pop" data-slowo="złe">
+        <div class="nazwa">❌ ZŁE SPOSOBY</div>
+        <div class="poz zjaw" data-slowo="krzyk">📢 krzyk</div>
+        <div class="poz zjaw" data-slowo="bicie">👊 bicie</div>
+        <div class="poz zjaw" data-slowo="niszczenie">💥 niszczenie rzeczy</div>
+        <div class="poz zjaw" data-slowo="obrażanie">😤 obrażanie się na dni</div>
+      </div>
+    </div>
+    <div><span class="chip gorzej pop" data-slowo="gorzej">po złych sposobach robi się jeszcze gorzej</span></div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+20" id="s08">
+    <span class="czesc c3">3 · CO ROBIĆ?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ekranie">Dobry czy zły sposób na złość?</div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="sześć"><b>1</b>trzasnąć drzwiami</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.25"><b>2</b>policzyć do dziesięciu</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.5"><b>3</b>uderzyć brata</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.75"><b>4</b>pobiegać po podwórku</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1"><b>5</b>„Jestem zły, bo…”</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1.25"><b>6</b>obrazić się na tydzień</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="zeszycie">Zapisz: 1 - dobry / zły, 2 - … 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia zla wjazd-lewo" data-slowo="trzasnąć"><span class="fr">1. trzasnąć drzwiami</span><span class="etyk e-zle">zły</span> <span class="dlaczego">- wszyscy się wystraszą</span></div>
+      <div class="linia dobra wjazd-lewo" data-slowo="policzyć"><span class="fr">2. policzyć do dziesięciu</span><span class="etyk e-ok">dobry</span> <span class="dlaczego">- chwila, żeby lwy się uspokoiły</span></div>
+      <div class="linia zla wjazd-lewo" data-slowo="uderzyć"><span class="fr">3. uderzyć brata</span><span class="etyk e-zle">zły</span> <span class="dlaczego">- krzywdzi drugą osobę</span></div>
+      <div class="linia dobra wjazd-lewo" data-slowo="pobiegać"><span class="fr">4. pobiegać po podwórku</span><span class="etyk e-ok">dobry</span> <span class="dlaczego">- ruch wypala złość</span></div>
+      <div class="linia dobra wjazd-lewo" data-slowo="powiedzieć"><span class="fr">5. „Jestem zły, bo…”</span><span class="etyk e-ok">dobry</span> <span class="dlaczego">- nazywasz uczucie i powód</span></div>
+      <div class="linia zla wjazd-lewo" data-slowo="obrazić"><span class="fr">6. obrazić się na tydzień</span><span class="etyk e-zle">zły</span> <span class="dlaczego">- nic się nie wyjaśni</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 zdanie od ja ===== -->
+  <section class="scena" data-id="10-ja" id="s10">
+    <span class="czesc c4 zjaw" data-t="0">4 · JAK MÓWIĆ O ZŁOŚCI</span>
+    <h2 class="naglowek wjazd-dol nieb" data-t="0" style="color:var(--niebieski)">Zdanie od „ja” 💬</h2>
+    <div class="pary">
+      <div class="linia zla wjazd-lewo" data-slowo="zawsze">❌ „Ty zawsze zabierasz moje rzeczy!”<small class="zjaw" data-slowo="kłótnia">atak ➜ druga osoba się broni ➜ kłótnia</small></div>
+      <div class="linia dobra wjazd-prawo" data-slowo="ładowarkę">✅ „Jestem zły, bo wziąłeś moją ładowarkę bez pytania.”<small class="zjaw" data-slowo="dlaczego">co czuję i dlaczego - nikogo nie obraża</small></div>
+      <div class="linia zla wjazd-lewo" data-slowo="okropny">❌ „Jesteś okropny!”</div>
+      <div class="linia dobra wjazd-prawo" data-slowo="przykro">✅ „Jest mi przykro, kiedy się ze mnie śmiejesz.”</div>
+    </div>
+    <div><span class="chip przepis pop" data-slowo="przepis">przepis: JA czuję… BO… + co się stało</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+25" id="s11">
+    <span class="czesc c4">4 · JAK MÓWIĆ O ZŁOŚCI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamień">Zamień atak na zdanie od „ja”</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="nigdy">❌ „Ty nigdy mnie nie słuchasz!”</div>
+      <div class="linia pop" data-slowo="zepsułaś">❌ „Zepsułaś mi rysunek, jesteś okropna!”</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="zapisz">Zapisz nowe zdania w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="pary">
+      <div class="para">
+        <div class="linia zla">„Ty nigdy mnie nie słuchasz!”</div><div class="str">➜</div>
+        <div class="linia dobra pop" data-slowo="przykro">„Jest mi przykro, kiedy mówię, a ty mnie nie słuchasz.”</div>
+      </div>
+      <div class="para">
+        <div class="linia zla">„Zepsułaś mi rysunek, jesteś okropna!”</div><div class="str">➜</div>
+        <div class="linia dobra pop" data-slowo="zniszczony">„Jestem zła, bo mój rysunek jest zniszczony, a bardzo się starałam.”</div>
+      </div>
+    </div>
+    <div class="check">
+      <span class="chip pop" data-slowo="ważne">✓ ja</span>
+      <span class="chip pop" data-slowo="uczucie">✓ uczucie</span>
+      <span class="chip pop" data-slowo="powód">✓ powód</span>
+      <span class="chip pop" data-slowo="wyzwiska" style="background:var(--zlosc)">✗ wyzwiska</span>
+    </div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+25" id="s13">
+    <span class="czesc c4">4 · JAK MÓWIĆ O ZŁOŚCI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="karta scenka pop" data-slowo="planszówkę"><div class="nazwa">🎲 Kolega oszukuje w planszówce i wygrywa… <span class="zjaw" data-slowo="lwy">🦁🦁</span></div></div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="podaj"><span class="nr">1</span>Dwa dobre sposoby, co zrobisz</div>
+      <div class="linia pop" data-slowo="jedno"><span class="nr">2</span>Jedno zdanie od „ja”, które mu powiesz</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="start">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia dobra wjazd-lewo" data-slowo="oddechy">💨 3 głębokie oddechy i liczę do dziesięciu</div>
+      <div class="linia dobra wjazd-lewo" data-slowo="pionek">💬 „Jestem zły, bo przesunąłeś pionek, kiedy nie patrzyłem. Chcę grać uczciwie.”</div>
+      <div class="linia dobra wjazd-lewo" data-slowo="stołu">🚶 odchodzę na chwilę od stołu i wracam, gdy ochłonę</div>
+    </div>
+    <div class="ok">
+      <span class="chip pop" data-slowo="inne">✍️ twoje pomysły mogą być inne</span>
+      <span class="chip pop" data-slowo="skrzywdzić">✓ nikogo nie krzywdzę</span>
+      <span class="chip pop" data-slowo="chodzi">✓ mówię, o co chodzi</span>
+    </div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="siatka">
+      <div class="linia pop" data-slowo="normalne">🙂 Złość to <b>normalne uczucie</b> - czuje ją każdy.</div>
+      <div class="linia pop" data-slowo="ciele">✊ Ciało ostrzega: pięści, gorąca twarz, szybki oddech.</div>
+      <div class="linia pop" data-slowo="przenośnia" style="border-color:var(--lew)">🦁 Lwy = złość chłopca. To <b>przenośnia</b>.</div>
+      <div class="linia pop" data-slowo="odchodzą" style="border-color:var(--lew)">🌇 Lwy odchodzą = złość mija.</div>
+      <div class="linia dobra pop" data-slowo="dobre">✅ oddech · 10 · ruch · spokojne miejsce</div>
+      <div class="linia dobra pop" data-slowo="rozmowa">✅ rozmowa · przeprosiny</div>
+    </div>
+    <div><span class="chip ja pop" data-slowo="zdaniem">💬 „Jestem zły, bo…”</span></div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

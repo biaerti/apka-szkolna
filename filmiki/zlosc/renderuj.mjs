@@ -1,7 +1,7 @@
 // Renderuje filmik do mp4: headless Chrome + CDP (bez zaleznosci, node 22)
 // klatka po klatce przez window.__seek(t), potem ffmpeg skleja z audio.
 //
-// Uzycie: node filmiki/przenosnia/renderuj.mjs film1 [--fps 25]
+// Uzycie: node filmiki/zlosc/renderuj.mjs film1 [--fps 25]
 
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
@@ -11,7 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const TU = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(TU, '..', '..');
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const PORT = 9333;
+const PORT = 9335;
 
 const film = process.argv[2];
 if (!film) { console.error('Podaj film, np. film1'); process.exit(1); }
@@ -21,13 +21,13 @@ const timeline = JSON.parse(readFileSync(join(TU, `timeline-${film}.json`), 'utf
 const total = timeline.total;
 const frames = Math.ceil(total * fps);
 // klatki na D: - dysk C: bywa pelny, a to ~350 MB na film
-const framesDir = join(ROOT, 'tmp', `klatki-${film}`);
+const framesDir = join(ROOT, 'tmp', `klatki-zlosc-${film}`);
 rmSync(framesDir, { recursive: true, force: true });
 mkdirSync(framesDir, { recursive: true });
 
 const chrome = spawn(CHROME, [
   '--headless=new', `--remote-debugging-port=${PORT}`,
-  `--user-data-dir=${join(ROOT, 'tmp', 'chrome-render-przenosnia')}`,
+  `--user-data-dir=${join(ROOT, 'tmp', 'chrome-render-zlosc')}`,
   '--window-size=1280,720', '--hide-scrollbars', '--force-device-scale-factor=1',
   '--disable-gpu', 'about:blank',
 ], { stdio: 'ignore' });
@@ -97,7 +97,7 @@ async function main() {
   chrome.kill();
 
   mkdirSync(join(ROOT, 'output', 'filmiki'), { recursive: true });
-  const mp4 = join(ROOT, 'output', 'filmiki', `przenosnia-${film}.mp4`);
+  const mp4 = join(ROOT, 'output', 'filmiki', `zlosc-${film}.mp4`);
   execFileSync('ffmpeg', [
     '-y', '-loglevel', 'error',
     '-framerate', String(fps), '-i', join(framesDir, 'k%05d.jpg'),

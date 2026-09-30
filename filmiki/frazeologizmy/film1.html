@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Związki frazeologiczne - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --mieta: #1FA58A; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 16px 22px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 56px; line-height: 1.1; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 24px; justify-content: center; }
+.rzad > * { flex: 1; }
+.pom { color: var(--pomarancz); }
+.roz { color: var(--roz); }
+.nieb { color: var(--niebieski); }
+.ziel { color: var(--zielony); }
+.mie { color: var(--mieta); }
+.fiol { color: var(--fiolet); }
+
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--mieta); }
+.c2 { background: var(--roz); }
+.c3 { background: var(--fiolet); }
+.c4 { background: var(--pomarancz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 14px; font-size: 38px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 16px; font-size: 30px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 18px auto 0; width: 860px; }
+.linia { font-size: 32px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.linia .fr { font-family: 'Baloo 2'; font-size: 36px; color: var(--mieta); }
+.lista { display: flex; flex-direction: column; gap: 12px; margin: 20px auto 0; width: 1080px; }
+.dlaczego { color: var(--szary); font-size: 26px; }
+.regula { margin-top: 18px; font-size: 30px; background: var(--mieta); }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.lit { background: var(--niebieski); }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 112px; font-weight: 800; line-height: .95; color: var(--mieta); margin-top: 10px; }
+#s01 .mieta { margin-top: 20px; font-size: 40px; background: var(--roz); }
+#s01 .grupy { margin-top: 26px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 28px; white-space: nowrap; }
+#s01 .grupy .chip:nth-child(1) { background: var(--mieta); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--pomarancz); }
+#s01 .zapowiedz { margin-top: 30px; font-size: 44px; font-weight: 800; }
+
+/* ===== 02 mieta ===== */
+#s02 .rzad { margin-top: 24px; }
+#s02 .bart { border-color: var(--pomarancz); }
+#s02 .napr { border-color: var(--mieta); }
+#s02 .definicja { margin: 26px auto 0; width: 1000px; border-color: var(--mieta); }
+#s02 .definicja .nazwa { color: var(--mieta); }
+#s02 .definicja .opis { color: var(--ciemny); font-size: 32px; }
+
+/* ===== 03 stale ===== */
+#s03 .tabela { display: flex; flex-direction: column; gap: 14px; margin: 24px auto 0; width: 1100px; }
+#s03 .wiersz { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+#s03 .dobrze { border-color: var(--zielony); }
+#s03 .zle { display: flex; align-items: center; border-color: var(--roz); color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 5px; }
+#s03 .linia { font-family: 'Baloo 2'; font-size: 38px; }
+#s03 .linia small { font-family: 'Nunito'; font-size: 24px; color: var(--szary); text-decoration: none; display: inline-block; }
+
+/* ===== 04 przyklady, 07 serce ===== */
+.siatka { display: grid; gap: 18px; margin-top: 26px; }
+.siatka .karta { border-color: var(--mieta); padding: 12px 16px; }
+.siatka .nazwa { color: var(--mieta); font-size: 38px; }
+#s04 .siatka { grid-template-columns: repeat(3, 1fr); margin-top: 40px; }
+#s04 .karta { min-height: 290px; }
+#s07 .siatka { grid-template-columns: repeat(6, 1fr); }
+#s07 .siatka .karta { grid-column: span 2; border-color: var(--roz); }
+#s07 .siatka .karta:nth-child(4) { grid-column: 2 / span 2; }
+#s07 .siatka .nazwa { color: var(--roz); font-size: 36px; }
+
+/* ===== 05 zadanie 1 ===== */
+#s05 .dwie { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 22px auto 0; width: 1120px; text-align: left; }
+#s05 .kol { display: flex; flex-direction: column; gap: 12px; }
+#s05 .linia { font-size: 30px; }
+#s05 .lewa .linia { font-family: 'Baloo 2'; font-size: 34px; color: var(--mieta); }
+#s06 .linia b.para { font-family: 'Baloo 2'; font-size: 34px; color: #fff; background: var(--zielony); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+
+/* ===== 08 zadanie 2 ===== */
+#s08 .lista .linia { font-size: 30px; }
+#s08 .bank { margin: 20px auto 0; width: 1000px; border-color: var(--roz); border-style: dashed; padding: 10px 18px; }
+#s08 .bank span { display: inline-block; font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: var(--roz); margin: 0 14px; }
+#s09 .linia b.wstaw { color: var(--roz); font-family: 'Baloo 2'; font-size: 36px; }
+
+/* ===== 10 uczucia ===== */
+#s10 .siatka { grid-template-columns: repeat(4, 1fr); margin-top: 30px; }
+#s10 .karta { min-height: 280px; padding: 14px 12px; }
+#s10 .emo { font-size: 70px; }
+#s10 .nazwa { font-size: 38px; }
+#s10 .k1 { border-color: var(--fiolet); } #s10 .k1 .nazwa { color: var(--fiolet); }
+#s10 .k2 { border-color: var(--roz); } #s10 .k2 .nazwa { color: var(--roz); }
+#s10 .k3 { border-color: var(--pomarancz); } #s10 .k3 .nazwa { color: var(--pomarancz); }
+#s10 .k4 { border-color: var(--zielony); } #s10 .k4 .nazwa { color: var(--zielony); }
+#s10 .fraz { font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; margin-top: 10px; line-height: 1.2; }
+#s10 .regula { margin-top: 26px; }
+
+/* ===== 11-12 zadanie 3 ===== */
+#s11 .opcje, #s12 .opcje { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
+#s11 .opcje .chip { font-size: 30px; }
+.o1 { background: var(--fiolet) !important; } .o2 { background: var(--roz) !important; }
+.o3 { background: var(--pomarancz) !important; } .o4 { background: var(--zielony) !important; }
+#s11 .linia, #s12 .linia { font-size: 30px; }
+#s12 .linia .chip { font-size: 24px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+
+/* ===== 13 doslownie ===== */
+#s13 .scenki { display: flex; flex-direction: column; gap: 20px; margin: 26px auto 0; width: 1100px; }
+#s13 .scenka { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; }
+#s13 .karta { font-size: 30px; font-weight: 800; padding: 12px 18px; }
+#s13 .mowi { border-color: var(--mieta); font-family: 'Baloo 2'; font-size: 34px; }
+#s13 .smiech { border-color: var(--pomarancz); }
+#s13 .str { font-size: 44px; font-weight: 800; color: var(--szary); }
+#s13 .koniec { display: flex; gap: 18px; justify-content: center; margin-top: 26px; }
+#s13 .koniec .chip { font-size: 30px; }
+
+/* ===== 14-15 zadanie 4 ===== */
+#s14 .bank { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 22px auto 0; width: 1100px; }
+#s14 .bank .chip { font-size: 28px; background: var(--mieta); }
+#s15 .lista .linia { font-size: 32px; }
+#s15 .lista .linia b { color: var(--mieta); }
+#s15 .uwagi { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
+#s15 .uwagi .chip { font-size: 27px; background: var(--zielony); }
+
+/* ===== 16 podsumowanie ===== */
+#s16 { padding-top: 30px; }
+#s16 h2.naglowek { font-size: 52px; }
+#s16 .def { margin: 14px auto 0; width: 1100px; border-color: var(--mieta); padding: 12px 20px; }
+#s16 .def .nazwa { color: var(--mieta); }
+#s16 .def .opis { color: var(--ciemny); }
+#s16 .def .przyk { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; color: var(--mieta); margin-top: 4px; }
+#s16 .zasady { display: flex; gap: 18px; justify-content: center; margin-top: 16px; }
+#s16 .zasady .chip { font-size: 30px; background: var(--roz); }
+#s16 .uczucia { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px auto 0; width: 1140px; }
+#s16 .uczucia .linia { font-size: 24px; text-align: center; padding: 8px 10px; }
+#s16 .uczucia .linia b { display: block; font-family: 'Baloo 2'; font-size: 28px; }
+#s16 .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="tytul pop" data-slowo="frazeologiczne">Związki<br>frazeologiczne</div>
+    <div><span class="chip mieta pop" data-slowo="herbatę">🌿 czuć miętę? To nie o herbacie!</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="skąd">🌱 skąd się biorą</span>
+      <span class="chip pop" data-slowo="zmieniać">🔒 czemu ich nie zmieniamy</span>
+      <span class="chip pop" data-slowo="uczuciach">❤️ uczucia</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 mieta ===== -->
+  <section class="scena" data-id="02-mieta" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">„Czuć miętę” 🌿</h2>
+    <div class="rzad">
+      <div class="karta bart pop" data-slowo="dosłownie">
+        <div class="emo">👃🌿</div>
+        <div class="nazwa pom">Bartuś myśli…</div>
+        <div class="opis zjaw" data-slowo="wąchać">wącha dłoń Igi, czy pachnie miętą</div>
+      </div>
+      <div class="karta napr pop" data-slowo="podkochiwać">
+        <div class="emo">💘</div>
+        <div class="nazwa mie">A naprawdę…</div>
+        <div class="opis">podkochiwać się w kimś</div>
+      </div>
+    </div>
+    <div class="karta definicja pop" data-slowo="frazeologizm">
+      <div class="nazwa">ZWIĄZEK FRAZEOLOGICZNY = FRAZEOLOGIZM</div>
+      <div class="opis zjaw" data-slowo="stałe">stałe połączenie wyrazów</div>
+      <div class="opis zjaw" data-slowo="razem">razem znaczą coś innego niż każdy wyraz osobno</div>
+    </div>
+  </section>
+
+  <!-- ===== 03 stale ===== -->
+  <section class="scena" data-id="03-stale" id="s03">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Nie wymieniamy wyrazów! 🔒</h2>
+    <div class="tabela">
+      <div class="wiersz">
+        <div class="linia dobrze wjazd-lewo" data-slowo="miętę">✅ czuć miętę</div>
+        <div class="linia zle wjazd-prawo" data-slowo="bazylię">czuć bazylię</div>
+      </div>
+      <div class="wiersz">
+        <div class="linia dobrze wjazd-lewo" data-slowo="muchy">✅ mieć muchy w nosie <small>= być obrażonym</small></div>
+        <div class="linia zle wjazd-prawo" data-slowo="komary">mieć komary w nosie</div>
+      </div>
+      <div class="wiersz">
+        <div class="linia dobrze wjazd-lewo" data-slowo="masłem">✅ bułka z masłem <small>= coś łatwego</small></div>
+        <div class="linia zle wjazd-prawo" data-slowo="dżemem">bułka z dżemem</div>
+      </div>
+    </div>
+    <div><span class="chip regula pop" data-slowo="utrwaliła">frazeologizm = przenośnia, która się utrwaliła</span></div>
+  </section>
+
+  <!-- ===== 04 przyklady ===== -->
+  <section class="scena" data-id="04-przyklady" id="s04">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Frazeologizmy na co dzień</h2>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="zębami">
+        <div class="emo">🤐</div><div class="nazwa">trzymać język za zębami</div>
+        <div class="opis zjaw" data-slowo="tajemnicy">nie zdradzić tajemnicy</div>
+      </div>
+      <div class="karta pop" data-slowo="wiatr">
+        <div class="emo">💨</div><div class="nazwa">rzucać słowa na wiatr</div>
+        <div class="opis zjaw" data-slowo="obiecywać">obiecywać i nie dotrzymywać</div>
+      </div>
+      <div class="karta pop" data-slowo="chmurach">
+        <div class="emo">☁️</div><div class="nazwa">mieć głowę w chmurach</div>
+        <div class="opis zjaw" data-slowo="marzyć">marzyć, nie uważać</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+20" id="s05">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="połącz">Połącz frazeologizm ze znaczeniem</div>
+    <div class="dwie">
+      <div class="kol lewa">
+        <div class="linia pop" data-slowo="lewej"><span class="nr">1</span>bułka z masłem</div>
+        <div class="linia pop" data-slowo="lewej" data-po="0.25"><span class="nr">2</span>mieć muchy w nosie</div>
+        <div class="linia pop" data-slowo="lewej" data-po="0.5"><span class="nr">3</span>trzymać język za zębami</div>
+        <div class="linia pop" data-slowo="lewej" data-po="0.75"><span class="nr">4</span>rzucać słowa na wiatr</div>
+      </div>
+      <div class="kol">
+        <div class="linia pop" data-slowo="prawej"><span class="nr lit">A</span>obiecywać i nie dotrzymywać</div>
+        <div class="linia pop" data-slowo="prawej" data-po="0.25"><span class="nr lit">B</span>być obrażonym</div>
+        <div class="linia pop" data-slowo="prawej" data-po="0.5"><span class="nr lit">C</span>coś bardzo łatwego</div>
+        <div class="linia pop" data-slowo="prawej" data-po="0.75"><span class="nr lit">D</span>nie zdradzić tajemnicy</div>
+      </div>
+    </div>
+    <div class="pisz zjaw" data-slowo="zapisz">Zapisz w zeszycie pary: 1 - ?, 2 - ?, … 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="bułka"><b class="para">1 - C</b><span class="fr">bułka z masłem</span> = coś bardzo łatwego<br><span class="dlaczego">🍞 bułkę z masłem zje każdy, bez trudu</span></div>
+      <div class="linia wjazd-lewo" data-slowo="muchy"><b class="para">2 - B</b><span class="fr">muchy w nosie</span> = być obrażonym<br><span class="dlaczego">😤 kręci nosem i się dąsa</span></div>
+      <div class="linia wjazd-lewo" data-slowo="trzymać"><b class="para">3 - D</b><span class="fr">język za zębami</span> = nie zdradzić tajemnicy<br><span class="dlaczego">🤐 schowany język nic nie powie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="rzucać"><b class="para">4 - A</b><span class="fr">słowa na wiatr</span> = obiecywać i nie dotrzymywać<br><span class="dlaczego">💨 wiatr porywa słowa i nic z nich nie zostaje</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 serce ===== -->
+  <section class="scena" data-id="07-serce" id="s07">
+    <span class="czesc c2 zjaw" data-t="0">2 · UCZUCIA</span>
+    <h2 class="naglowek wjazd-dol roz" data-t="0" style="color:var(--roz)">Frazeologizmy o sercu ❤️</h2>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="podbić"><div class="nazwa">podbić czyjeś serce</div><div class="opis">zdobyć miłość, sympatię 😍</div></div>
+      <div class="karta pop" data-slowo="złamać"><div class="nazwa">złamać komuś serce</div><div class="opis">bardzo zranić, zawieść 💔</div></div>
+      <div class="karta pop" data-slowo="wziąć"><div class="nazwa">wziąć sobie do serca</div><div class="opis">bardzo się przejąć 😟</div></div>
+      <div class="karta pop" data-slowo="dłoni"><div class="nazwa">mieć serce na dłoni</div><div class="opis">być dobrym, chętnie pomagać 🤲</div></div>
+      <div class="karta pop" data-slowo="bez"><div class="nazwa">ktoś bez serca</div><div class="opis">okrutny, nie współczuje 🥶</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+20" id="s08">
+    <span class="czesc c2">2 · UCZUCIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="uzupełnij">Uzupełnij zdania frazeologizmami o sercu</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzy"><span class="nr">1</span>Kasia bardzo przejęła się uwagą pani. Wzięła ją sobie <span class="luka"></span>.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.3"><span class="nr">2</span>Nowy kolega od razu <span class="luka"></span> całej klasy.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.6"><span class="nr">3</span>Babcia zawsze pomaga sąsiadom. Ma <span class="luka"></span>.</div>
+    </div>
+    <div class="karta bank pop" data-slowo="ramki"><span>do serca</span>·<span>podbił serca</span>·<span>serce na dłoni</span>·<span>złamane serce</span></div>
+    <div class="pisz zjaw" data-slowo="całe">Zapisz w zeszycie całe zdania 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="wzięła">1. Kasia bardzo przejęła się uwagą pani. Wzięła ją sobie <b class="wstaw">do serca</b>.<br><span class="dlaczego">przejąć się = wziąć coś do serca</span></div>
+      <div class="linia wjazd-lewo" data-slowo="podbił">2. Nowy kolega od razu <b class="wstaw">podbił serca</b> całej klasy.<br><span class="dlaczego">wszyscy go polubili</span></div>
+      <div class="linia wjazd-lewo" data-slowo="babcia">3. Babcia zawsze pomaga sąsiadom. Ma <b class="wstaw">serce na dłoni</b>.<br><span class="dlaczego">kto chętnie pomaga, ma serce na dłoni</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 uczucia ===== -->
+  <section class="scena" data-id="10-uczucia" id="s10">
+    <span class="czesc c2">2 · UCZUCIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Uczucia we frazeologizmach</h2>
+    <div class="siatka">
+      <div class="karta k1 pop" data-slowo="strach"><div class="emo">😱</div><div class="nazwa">STRACH</div><div class="fraz zjaw" data-slowo="włosy">włosy stanęły mu dęba</div></div>
+      <div class="karta k2 pop" data-slowo="wstyd"><div class="emo">😳</div><div class="nazwa">WSTYD</div><div class="fraz zjaw" data-slowo="zapaść">chciał się zapaść pod ziemię</div></div>
+      <div class="karta k3 pop" data-slowo="złość"><div class="emo">😡</div><div class="nazwa">ZŁOŚĆ</div><div class="fraz zjaw" data-slowo="gotuje">wszystko się w nim gotuje</div></div>
+      <div class="karta k4 pop" data-slowo="radość"><div class="emo">🥳</div><div class="nazwa">RADOŚĆ</div><div class="fraz zjaw" data-slowo="siódmym">być w siódmym niebie</div></div>
+    </div>
+    <div><span class="chip regula pop" data-slowo="mocniej">frazeologizm pokazuje uczucie mocniej i ciekawiej</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+20" id="s11">
+    <span class="czesc c2">2 · UCZUCIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="jakie">Jakie uczucie opisuje frazeologizm?</div>
+    <div class="opcje">
+      <span class="chip o1 pop" data-slowo="strach">😱 strach</span>
+      <span class="chip o2 pop" data-slowo="wstyd">😳 wstyd</span>
+      <span class="chip o3 pop" data-slowo="złość">😡 złość</span>
+      <span class="chip o4 pop" data-slowo="radość">🥳 radość</span>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Na widok cienia w piwnicy włosy stanęły mu dęba.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>Gdy wygrała konkurs, była w siódmym niebie.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>Po tej wpadce chciał zapaść się pod ziemię.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>Brat znowu zabrał mu ładowarkę - wszystko się w nim gotowało.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="cienia">1. Na widok cienia w piwnicy <b>włosy stanęły mu dęba</b>. <span class="chip o1">😱 strach</span></div>
+      <div class="linia wjazd-lewo" data-slowo="konkurs">2. Gdy wygrała konkurs, była <b>w siódmym niebie</b>. <span class="chip o4">🥳 radość</span></div>
+      <div class="linia wjazd-lewo" data-slowo="wpadce">3. Po tej wpadce chciał <b>zapaść się pod ziemię</b>. <span class="chip o2">😳 wstyd</span></div>
+      <div class="linia wjazd-lewo" data-slowo="ładowarkę">4. Brat zabrał mu ładowarkę - <b>wszystko się w nim gotowało</b>. <span class="chip o3">😡 złość</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 13 doslownie ===== -->
+  <section class="scena" data-id="13-doslownie" id="s13">
+    <span class="czesc c3 zjaw" data-t="0">3 · NIE DOSŁOWNIE</span>
+    <h2 class="naglowek wjazd-dol fiol" data-t="0" style="color:var(--fiolet)">Nie rozumiemy dosłownie! 😂</h2>
+    <div class="scenki">
+      <div class="scenka">
+        <div class="karta mowi wjazd-lewo" data-slowo="mama">👩 „Ten sprawdzian to bułka z masłem!”</div>
+        <div class="str zjaw" data-slowo="zagląda">➜</div>
+        <div class="karta smiech pop" data-slowo="plecaka">🎒 ktoś szuka bułki w plecaku</div>
+      </div>
+      <div class="scenka">
+        <div class="karta mowi wjazd-lewo" data-slowo="tata">👨 „Masz głowę w chmurach!”</div>
+        <div class="str zjaw" data-slowo="patrzy">➜</div>
+        <div class="karta smiech pop" data-slowo="niebo">🔭 ktoś szuka głowy na niebie</div>
+      </div>
+    </div>
+    <div class="koniec">
+      <span class="chip pop" data-slowo="żarty" style="background:var(--pomarancz)">😄 dosłownie = żart</span>
+      <span class="chip pop" data-slowo="prawdziwe" style="background:var(--zielony)">✅ na lekcji = prawdziwe znaczenie</span>
+    </div>
+  </section>
+
+  <!-- ===== 14 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="14-zadanie4+25" id="s14">
+    <span class="czesc c4">4 · UŻYJ SAM</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wybierz">Wybierz 2 frazeologizmy i ułóż z każdym zdanie</div>
+    <div class="bank">
+      <span class="chip pop" data-slowo="filmu">bułka z masłem</span>
+      <span class="chip pop" data-slowo="filmu" data-po="0.15">muchy w nosie</span>
+      <span class="chip pop" data-slowo="filmu" data-po="0.3">język za zębami</span>
+      <span class="chip pop" data-slowo="filmu" data-po="0.45">słowa na wiatr</span>
+      <span class="chip pop" data-slowo="filmu" data-po="0.6">głowa w chmurach</span>
+      <span class="chip pop" data-slowo="filmu" data-po="0.75">serce na dłoni</span>
+      <span class="chip pop" data-slowo="filmu" data-po="0.9">siódme niebo</span>
+      <span class="chip pop" data-slowo="filmu" data-po="1.05">włosy dęba</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="pokazuje">Zdanie ma pokazać, że rozumiesz znaczenie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 15 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="15-odpowiedz4" id="s15">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="ola">💬 Ola obiecała, że przyjdzie, ale nie przyszła. Znowu <b>rzuciła słowa na wiatr</b>.</div>
+      <div class="linia wjazd-lewo" data-slowo="kuba">💬 Kuba ma dziś <b>muchy w nosie</b>, bo przegrał mecz.</div>
+      <div class="linia wjazd-lewo" data-slowo="matematyki">💬 Zadanie z matematyki było <b>bułką z masłem</b>.</div>
+    </div>
+    <div class="uwagi">
+      <span class="chip pop" data-slowo="inne">✍️ twoje zdania mogą być inne</span>
+      <span class="chip pop" data-slowo="pasował">✅ pasuje do sytuacji</span>
+      <span class="chip pop" data-slowo="zmieniać">🔒 bez zmieniania słów</span>
+    </div>
+  </section>
+
+  <!-- ===== 16 podsumowanie ===== -->
+  <section class="scena" data-id="16-podsumowanie" id="s16">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="karta def pop" data-slowo="związek">
+      <div class="nazwa">ZWIĄZEK FRAZEOLOGICZNY</div>
+      <div class="opis zjaw" data-slowo="stałe">stałe połączenie wyrazów - razem znaczą coś innego niż osobno</div>
+      <div class="przyk zjaw" data-slowo="miętę">czuć miętę · muchy w nosie · bułka z masłem</div>
+    </div>
+    <div class="zasady">
+      <span class="chip pop" data-slowo="zmieniamy">🔒 nie zmieniam wyrazów</span>
+      <span class="chip pop" data-slowo="dosłownie">🚫 nie rozumiem dosłownie</span>
+    </div>
+    <div class="uczucia">
+      <div class="linia pop" data-slowo="strachu"><b class="fiol">😱 strach</b>włosy stają dęba</div>
+      <div class="linia pop" data-slowo="wstydu"><b class="roz">😳 wstyd</b>zapaść się pod ziemię</div>
+      <div class="linia pop" data-slowo="złości"><b class="pom">😡 złość</b>gotujemy się</div>
+      <div class="linia pop" data-slowo="radości"><b class="ziel">🥳 radość</b>siódme niebo</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

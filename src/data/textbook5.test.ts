@@ -151,7 +151,7 @@ describe('buildTextbook5', () => {
     const czytanki = bundle.lessons.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka').map((s) => s.kind === 'czytanka' && s.czytankaId));
     expect(czytanki).toEqual(expect.arrayContaining(['co-to-jest-radosc', 'przenosnie', 'co-to-znaczy', 'lwy']));
     const lwy = bundle.lessons.find((l) => l.title.startsWith('20.'))!;
-    expect(lwy.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'czytanka', 'image', 'image', 'image', 'image', 'image', 'note', 'image', 'image']);
+    expect(lwy.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'czytanka', 'video', 'recap', 'note', 'image', 'image', 'image', 'image', 'image', 'image', 'image']);
   });
 
   it('wycofane tematy nie wracaja w materiale', () => {

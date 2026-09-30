@@ -31,6 +31,10 @@ export const FILMIKI: Filmik[] = [
   { id: 'podsumowanie5-dzial1-film1', lekcja: 'V.16', title: 'Podsumowanie działu 1 - To wiem! To potrafię! (8 zadań)' },
   // Dzial 2 kl. 5: filmik do kazdej lekcji, zadania ze sprawdzeniem + podsumowanie na koncu.
   { id: 'przenosnia-film1', lekcja: 'V.17', title: 'Przenośnia - porównanie, przenośnia, jak ją odczytać (4 zadania)' },
+  { id: 'frazeologizmy-film1', lekcja: 'V.18', title: 'Związki frazeologiczne - czuć miętę, serce, uczucia (4 zadania)' },
+  { id: 'zdrobnienia-film1', lekcja: 'V.19', title: 'Zdrobnienia i zgrubienia, siła uczuć (4 zadania)' },
+  { id: 'zlosc-film1', lekcja: 'V.20', title: '„Lwy” - co robić ze złością? (4 zadania)' },
+  { id: 'recytacja-film1', lekcja: 'V.21', title: 'Jak recytować? (2 zadania na głos)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

@@ -1,0 +1,1 @@
+Zadanie pierwsze. Utwórz zdrobnienia od pięciu wyrazów: stół, ręka, but, kwiat, ptak. Zapisz je w zeszycie. Start!

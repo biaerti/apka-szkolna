@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Zdrobnienia i zgrubienia - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --czule: #E0679A; --grube: #8B5A2B; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 16px 22px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 24px; justify-content: center; }
+.rzad > * { flex: 1; }
+.cz { color: var(--czule); }
+.gr { color: var(--grube); }
+.neu { color: var(--szary); }
+.konc { color: var(--roz); text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 6px; }
+
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--szary); }
+.c2 { background: var(--czule); }
+.c3 { background: var(--grube); }
+.c4 { background: var(--fiolet); }
+.c5 { background: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 14px; font-size: 38px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 16px; font-size: 30px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 18px auto 0; width: 860px; }
+.linia { font-size: 32px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 12px; margin: 20px auto 0; width: 1080px; }
+.dlaczego { color: var(--szary); font-size: 26px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.kafle { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; margin-top: 26px; }
+.kafel {
+  display: inline-flex; align-items: center; justify-content: center; height: 90px; padding: 0 30px;
+  border-radius: 20px; font-family: 'Baloo 2'; font-size: 54px; font-weight: 800;
+  background: var(--bialy); border: 4px solid var(--ramka);
+}
+
+/* Tabelka zdrobnienie | neutralny | zgrubienie */
+.tab { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px 16px; margin: 20px auto 0; width: 1100px; }
+.tab .gl { font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: #fff; border-radius: 16px; padding: 4px; }
+.tab .gl.cz { background: var(--czule); } .tab .gl.neu { background: var(--szary); } .tab .gl.gr { background: var(--grube); }
+.tab .kom { white-space: nowrap; font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; padding: 2px 10px; min-height: 70px; }
+.tab .kom.pusta { border-style: dashed; color: var(--ramka); }
+.tab .kom.cz { border-color: var(--czule); } .tab .kom.gr { border-color: var(--grube); }
+
+/* Termometr sily uczuc */
+.skala { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: end; }
+.stopien { white-space: nowrap; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 16px; padding: 6px 10px; }
+.s1 { font-size: 30px; opacity: .7; } .s2 { font-size: 36px; opacity: .85; } .s3 { font-size: 44px; }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .kafle { margin-top: 18px; }
+#s01 .k1 { border-color: var(--szary); } #s01 .k2 { border-color: var(--czule); color: var(--czule); } #s01 .k3 { border-color: var(--grube); color: var(--grube); }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 84px; font-weight: 800; line-height: 1; color: var(--pomarancz); margin-top: 26px; }
+#s01 .pod { font-size: 36px; font-weight: 800; color: var(--szary); }
+#s01 .sila { margin-top: 18px; font-size: 30px; background: var(--fiolet); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 neutralne ===== */
+#s02 .trzy { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-top: 24px; }
+#s02 .kol { display: flex; flex-direction: column; gap: 10px; }
+#s02 .kol.n { order: 2; } #s02 .kol.z { order: 1; } #s02 .kol.g { order: 3; }
+#s02 .kol .gl { font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: #fff; border-radius: 16px; padding: 4px; }
+#s02 .kol .w { font-family: 'Baloo 2'; font-size: 42px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; }
+#s02 .z .gl { background: var(--czule); } #s02 .z .w { border-color: var(--czule); color: var(--czule); }
+#s02 .n .gl { background: var(--szary); }
+#s02 .g .gl { background: var(--grube); } #s02 .g .w { border-color: var(--grube); color: var(--grube); }
+#s02 .wniosek { margin-top: 22px; font-size: 30px; background: var(--fiolet); }
+
+/* ===== 03 zdrobnienia, 06 zgrubienia ===== */
+.def { margin: 14px auto 0; width: 900px; padding: 8px 20px; }
+.def .opis { color: var(--ciemny); font-size: 32px; margin: 0; }
+.szereg { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 900px; }
+.szereg .linia { font-family: 'Baloo 2'; font-size: 40px; text-align: center; padding: 2px 20px; }
+.szereg .linia .str { color: var(--szary); margin: 0 12px; }
+#s03 .def { border-color: var(--czule); }
+#s03 .szereg .linia { border-color: var(--czule); }
+#s03 .kiedy { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s03 .kiedy .chip { font-size: 28px; background: var(--czule); }
+#s06 .def { border-color: var(--grube); }
+#s06 .szereg .linia { border-color: var(--grube); }
+#s06 .dol { display: flex; gap: 18px; justify-content: center; align-items: center; margin-top: 16px; }
+#s06 .dol .chip { font-size: 28px; background: var(--grube); }
+#s06 .dymek { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; background: var(--bialy); border: 4px solid var(--roz); border-radius: 22px; padding: 4px 20px; }
+
+/* ===== 05 odpowiedz 1 ===== */
+#s05 .szereg .linia { border-color: var(--czule); }
+#s05 .zmiany { display: flex; gap: 16px; justify-content: center; margin-top: 16px; }
+#s05 .zmiany .chip { font-size: 30px; background: var(--fiolet); }
+#s05 .zmiany b { color: var(--zolty); }
+
+/* ===== 08 odpowiedz 2 ===== */
+#s08 .wnioski { display: flex; gap: 16px; justify-content: center; margin-top: 20px; }
+#s08 .wnioski .chip { font-size: 28px; }
+
+/* ===== 09 wybor ===== */
+#s09 .pary { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 22px auto 0; width: 1120px; }
+#s09 .linia { font-size: 32px; text-align: center; }
+#s09 .linia small { display: block; font-size: 24px; color: var(--szary); }
+#s09 .l-cz { border-color: var(--czule); } #s09 .l-cz b { color: var(--czule); }
+#s09 .l-gr { border-color: var(--grube); } #s09 .l-gr b { color: var(--grube); }
+
+/* ===== 10-11 zadanie 3 ===== */
+#s10 .opcje, #s11 .opcje { display: flex; gap: 16px; justify-content: center; margin-top: 16px; }
+.o-cz { background: var(--czule) !important; } .o-gr { background: var(--grube) !important; }
+#s10 .opcje .chip { font-size: 30px; }
+#s11 .linia .chip { font-size: 24px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+#s11 .linia b { color: var(--roz); }
+
+/* ===== 12 sila ===== */
+#s12 .termometr { display: flex; flex-direction: column; gap: 16px; margin: 22px auto 0; width: 1000px; }
+#s12 .r1 .stopien { background: var(--fiolet); }
+#s12 .r2 .stopien { background: var(--zielony); }
+#s12 .r3 .stopien { background: var(--niebieski); }
+#s12 .strzalka { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
+#s12 .wybieraj { margin-top: 14px; font-size: 30px; background: var(--roz); }
+
+/* ===== 13-14 zadanie 4 ===== */
+#s13 .lista .linia { font-family: 'Baloo 2'; font-size: 44px; text-align: center; }
+#s14 .termometr { display: flex; flex-direction: column; gap: 10px; margin: 20px auto 0; width: 1000px; }
+#s14 .r1 .stopien { background: var(--roz); }
+#s14 .r2 .stopien { background: var(--fiolet); }
+#s14 .s3 { font-size: 38px; }
+#s14 .opis-r { font-size: 26px; font-weight: 800; color: var(--szary); margin-bottom: 8px; }
+
+/* ===== 15 podsumowanie ===== */
+#s15 { padding-top: 34px; }
+#s15 .rzad { margin-top: 18px; align-items: stretch; }
+#s15 .karta { padding: 12px 16px; }
+#s15 .k-n { border-color: var(--szary); } #s15 .k-z { border-color: var(--czule); } #s15 .k-g { border-color: var(--grube); }
+#s15 .przyk { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; margin-top: 4px; }
+#s15 .reszta { display: flex; gap: 16px; justify-content: center; margin-top: 20px; }
+#s15 .reszta .chip { font-size: 30px; }
+#s15 .brawo { margin-top: 20px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="kafle">
+      <span class="kafel k1 pop" data-slowo="pies">🐕 pies</span>
+      <span class="kafel k2 pop" data-slowo="piesek">🐶 piesek</span>
+      <span class="kafel k3 pop" data-slowo="psisko">🐺 psisko</span>
+    </div>
+    <div class="tytul pop" data-slowo="zdrobnienia">Zdrobnienia i zgrubienia</div>
+    <div class="pod zjaw" data-slowo="emocjonalnie">wyrazy nacechowane emocjonalnie</div>
+    <div><span class="chip sila pop" data-slowo="siłę">🌡️ + siła uczuć</span></div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 neutralne ===== -->
+  <section class="scena" data-id="02-neutralne" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · NEUTRALNE I NACECHOWANE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Jedno zwierzę, trzy słowa</h2>
+    <div class="trzy">
+      <div class="kol n">
+        <div class="gl pop" data-slowo="neutralnych">😐 tylko nazywa</div>
+        <div class="w zjaw" data-slowo="pies">pies</div>
+        <div class="w zjaw" data-slowo="dom">dom</div>
+        <div class="w zjaw" data-slowo="nos">nos</div>
+        <div class="w zjaw" data-slowo="ręka">ręka</div>
+      </div>
+      <div class="kol z">
+        <div class="gl pop" data-slowo="piesek">🥰 czule</div>
+        <div class="w zjaw" data-slowo="piesek">piesek</div>
+        <div class="w zjaw" data-slowo="domek">domek</div>
+        <div class="w zjaw" data-slowo="nosek">nosek</div>
+        <div class="w zjaw" data-slowo="rączka">rączka</div>
+      </div>
+      <div class="kol g">
+        <div class="gl pop" data-slowo="psisko">😠 wielkie, niechętnie</div>
+        <div class="w zjaw" data-slowo="psisko">psisko</div>
+        <div class="w zjaw" data-slowo="domisko">domisko</div>
+        <div class="w zjaw" data-slowo="nochal">nochal</div>
+        <div class="w zjaw" data-slowo="łapsko">łapsko</div>
+      </div>
+    </div>
+    <div><span class="chip wniosek pop" data-slowo="niosą">nacechowane emocjonalnie = niosą uczucia mówiącego</span></div>
+  </section>
+
+  <!-- ===== 03 zdrobnienia ===== -->
+  <section class="scena" data-id="03-zdrobnienia" id="s03">
+    <span class="czesc c2 zjaw" data-t="0">2 · ZDROBNIENIA</span>
+    <h2 class="naglowek wjazd-dol cz" data-t="0" style="color:var(--czule)">Zdrobnienia 🥰</h2>
+    <div class="karta def pop" data-slowo="małe"><div class="opis">coś <span class="cz">małego</span> albo mówimy <span class="cz">czule</span></div></div>
+    <div class="szereg">
+      <div class="linia wjazd-lewo" data-slowo="kot">kot <span class="str">➜</span> kot<span class="konc">ek</span> <span class="str">➜</span> kot<span class="konc">eczek</span></div>
+      <div class="linia wjazd-lewo" data-slowo="mama">mama <span class="str">➜</span> mam<span class="konc">usia</span></div>
+      <div class="linia wjazd-lewo" data-slowo="dom">dom <span class="str">➜</span> dom<span class="konc">ek</span></div>
+      <div class="linia wjazd-lewo" data-slowo="książka">książka <span class="str">➜</span> książ<span class="konc">eczka</span></div>
+      <div class="linia wjazd-lewo" data-slowo="słońce">słońce <span class="str">➜</span> słon<span class="konc">eczko</span></div>
+    </div>
+    <div class="kiedy">
+      <span class="chip pop" data-slowo="dzieci">👶 do małych dzieci</span>
+      <span class="chip pop" data-slowo="bliskich">❤️ do bliskich</span>
+      <span class="chip pop" data-slowo="zwierząt">🐾 do zwierząt</span>
+    </div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c2">2 · ZDROBNIENIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="utwórz">Utwórz zdrobnienia 🥰</div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="stół">stół</span>
+      <span class="kafel pop" data-slowo="ręka">ręka</span>
+      <span class="kafel pop" data-slowo="but">but</span>
+      <span class="kafel pop" data-slowo="kwiat">kwiat</span>
+      <span class="kafel pop" data-slowo="ptak">ptak</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="zapisz">Zapisz w zeszycie: stół - … 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="szereg">
+      <div class="linia wjazd-lewo" data-slowo="stolik">stół <span class="str">➜</span> <span class="cz">stolik</span></div>
+      <div class="linia wjazd-lewo" data-slowo="rączka">ręka <span class="str">➜</span> <span class="cz">rączka</span></div>
+      <div class="linia wjazd-lewo" data-slowo="bucik">but <span class="str">➜</span> <span class="cz">bucik</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kwiatek">kwiat <span class="str">➜</span> <span class="cz">kwiatek</span></div>
+      <div class="linia wjazd-lewo" data-slowo="ptaszek">ptak <span class="str">➜</span> <span class="cz">ptaszek</span></div>
+    </div>
+    <div class="zmiany">
+      <span class="chip pop" data-slowo="środku">st<b>ó</b>ł ➜ st<b>o</b>lik · r<b>ę</b>ka ➜ r<b>ą</b>czka</span>
+      <span class="chip pop" data-slowo="kwiatuszek" style="background:var(--zielony)">kwiatuszek, ptaszyna - też dobrze ✓</span>
+    </div>
+  </section>
+
+  <!-- ===== 06 zgrubienia ===== -->
+  <section class="scena" data-id="06-zgrubienia" id="s06">
+    <span class="czesc c3 zjaw" data-t="0">3 · ZGRUBIENIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--grube)">Zgrubienia 😠</h2>
+    <div class="karta def pop" data-slowo="duże"><div class="opis">coś <span class="gr">dużego</span> · <span class="gr">niechęć</span>, złość · albo <span class="gr">żart</span></div></div>
+    <div class="szereg">
+      <div class="linia wjazd-lewo" data-slowo="psisko">pies <span class="str">➜</span> ps<span class="konc">isko</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kocur">kot <span class="str">➜</span> koc<span class="konc">ur</span></div>
+      <div class="linia wjazd-lewo" data-slowo="nochal">nos <span class="str">➜</span> noch<span class="konc">al</span> · nos<span class="konc">isko</span></div>
+      <div class="linia wjazd-lewo" data-slowo="buciór">but <span class="str">➜</span> buc<span class="konc">iór</span></div>
+      <div class="linia wjazd-lewo" data-slowo="domisko">dom <span class="str">➜</span> dom<span class="konc">isko</span></div>
+    </div>
+    <div class="dol">
+      <span class="chip pop" data-slowo="żartobliwe">😄 czasem żartem</span>
+      <span class="dymek pop" data-slowo="buciory">👩 „Zabierz te buciory!” 😤</span>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+25" id="s07">
+    <span class="czesc c3">3 · ZGRUBIENIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="przerysuj">Przerysuj tabelkę i uzupełnij</div>
+    <div class="tab">
+      <div class="gl cz pop" data-slowo="lewej">🥰 zdrobnienie</div>
+      <div class="gl neu pop" data-slowo="neutralne">😐 neutralny</div>
+      <div class="gl gr pop" data-slowo="prawej">😠 zgrubienie</div>
+      <div class="kom pusta zjaw" data-slowo="nos">?</div><div class="kom pop" data-slowo="nos">nos</div><div class="kom pusta zjaw" data-slowo="nos">?</div>
+      <div class="kom pusta zjaw" data-slowo="kot">?</div><div class="kom pop" data-slowo="kot">kot</div><div class="kom pusta zjaw" data-slowo="kot">?</div>
+      <div class="kom pusta zjaw" data-slowo="dom">?</div><div class="kom pop" data-slowo="dom">dom</div><div class="kom pusta zjaw" data-slowo="dom">?</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="tab">
+      <div class="gl cz">🥰 zdrobnienie</div><div class="gl neu">😐 neutralny</div><div class="gl gr">😠 zgrubienie</div>
+      <div class="kom cz pop" data-slowo="nosek">nosek</div><div class="kom">nos</div><div class="kom gr pop" data-slowo="nochal">nochal / nosisko</div>
+      <div class="kom cz pop" data-slowo="kotek">kotek</div><div class="kom">kot</div><div class="kom gr pop" data-slowo="kocur">kocur / kocisko</div>
+      <div class="kom cz pop" data-slowo="domek">domek</div><div class="kom">dom</div><div class="kom gr pop" data-slowo="domisko">domisko</div>
+    </div>
+    <div class="wnioski">
+      <span class="chip pop" data-slowo="czułe" style="background:var(--czule)">⬅️ małe i czułe</span>
+      <span class="chip pop" data-slowo="niechętne" style="background:var(--grube)">duże albo niechętne ➡️</span>
+    </div>
+  </section>
+
+  <!-- ===== 09 wybor slowa ===== -->
+  <section class="scena" data-id="09-wybor" id="s09">
+    <span class="czesc c4 zjaw" data-t="0">4 · SŁOWO ZDRADZA UCZUCIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Słowo zdradza uczucia 🕵️</h2>
+    <div class="pary">
+      <div class="linia l-cz wjazd-lewo" data-slowo="piesek">Na podwórku biega <b>piesek</b>. 🥰<small class="zjaw" data-slowo="lubi">mówiący go lubi</small></div>
+      <div class="linia l-gr wjazd-prawo" data-slowo="psisko">Na podwórku biega <b>psisko</b>. 😨<small class="zjaw" data-slowo="groźny">wielki, chyba groźny</small></div>
+      <div class="linia l-cz wjazd-lewo" data-slowo="mamusia">moja <b>mamusia</b> 🥰<small>czule</small></div>
+      <div class="linia wjazd-prawo" data-slowo="zwyczajnie">moja mama 🙂<small>zwyczajnie</small></div>
+      <div class="linia l-cz wjazd-lewo" data-slowo="kotek">Jaki śliczny <b>kotek</b>! 😍<small>zachwyt</small></div>
+      <div class="linia l-gr wjazd-prawo" data-slowo="kocur">Znowu ten <b>kocur</b>! 😤<small>kot przeszkadza</small></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+20" id="s10">
+    <span class="czesc c4">4 · SŁOWO ZDRADZA UCZUCIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wypisz">Wypisz wyraz nacechowany i jego uczucie</div>
+    <div class="opcje">
+      <span class="chip o-cz pop" data-slowo="czułość">🥰 czułość</span>
+      <span class="chip o-gr pop" data-slowo="niechęć">😠 niechęć</span>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Mamusiu, przytul mnie!</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>Zabierz stąd te buciory!</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>Jaki śliczny kotek!</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>Przy furtce warczy wielkie psisko.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="mamusiu">1. <b>Mamusiu</b>, przytul mnie! <span class="chip o-cz">zdrobnienie · czułość</span></div>
+      <div class="linia wjazd-lewo" data-slowo="buciory">2. Zabierz stąd te <b>buciory</b>! <span class="chip o-gr">zgrubienie · niechęć</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kotek">3. Jaki śliczny <b>kotek</b>! <span class="chip o-cz">zdrobnienie · czułość</span></div>
+      <div class="linia wjazd-lewo" data-slowo="psisko">4. Przy furtce warczy wielkie <b>psisko</b>. <span class="chip o-gr">zgrubienie · niechęć, strach</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 12 sila uczuc ===== -->
+  <section class="scena" data-id="12-sila" id="s12">
+    <span class="czesc c5 zjaw" data-t="0">5 · SIŁA UCZUĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Uczucia mają siłę 🌡️</h2>
+    <div class="termometr">
+      <div class="skala r1">
+        <div class="stopien s1 wjazd-lewo" data-slowo="niepokój">niepokój</div>
+        <div class="stopien s2 wjazd-lewo" data-slowo="strach">strach</div>
+        <div class="stopien s3 wjazd-lewo" data-slowo="groza">GROZA 😱</div>
+      </div>
+      <div class="skala r2">
+        <div class="stopien s1 wjazd-lewo" data-slowo="zadowolenie">zadowolenie</div>
+        <div class="stopien s2 wjazd-lewo" data-slowo="radość">radość</div>
+        <div class="stopien s3 wjazd-lewo" data-slowo="euforia">EUFORIA 🤩</div>
+      </div>
+      <div class="skala r3">
+        <div class="stopien s1 wjazd-lewo" data-slowo="przygnębienie">przygnębienie</div>
+        <div class="stopien s2 wjazd-lewo" data-slowo="żal">żal</div>
+        <div class="stopien s3 wjazd-lewo" data-slowo="rozpacz">ROZPACZ 😭</div>
+      </div>
+    </div>
+    <div class="strzalka zjaw" data-slowo="niepokój">słabe ➜ ➜ ➜ najsilniejsze</div>
+    <div><span class="chip wybieraj pop" data-slowo="wybierajmy">wybieraj słowo o dobrej sile!</span></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+20" id="s13">
+    <span class="czesc c5">5 · SIŁA UCZUĆ</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ułóż">Ułóż od najsłabszego do najsilniejszego 🌡️</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pierwsza"><span class="nr">1</span>wściekłość · irytacja · złość</div>
+      <div class="linia pop" data-slowo="druga"><span class="nr">2</span>przerażenie · obawa · strach</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="zapisz">Zapisz w zeszycie po kolei 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="termometr">
+      <div class="skala r1">
+        <div class="stopien s1 wjazd-lewo" data-slowo="irytacja">irytacja</div>
+        <div class="stopien s2 wjazd-lewo" data-slowo="złość">złość</div>
+        <div class="stopien s3 wjazd-lewo" data-slowo="wściekłość">WŚCIEKŁOŚĆ 🤬</div>
+      </div>
+      <div class="opis-r zjaw" data-slowo="lekkie">irytacja = lekkie zdenerwowanie · wściekłość = trudno nad nią zapanować</div>
+      <div class="skala r2">
+        <div class="stopien s1 wjazd-lewo" data-slowo="obawa">obawa</div>
+        <div class="stopien s2 wjazd-lewo" data-slowo="strach">strach</div>
+        <div class="stopien s3 wjazd-lewo" data-slowo="przerażenie">PRZERAŻENIE 😱</div>
+      </div>
+      <div class="opis-r zjaw" data-slowo="lęk">obawa = mały lęk · przerażenie = strach najsilniejszy</div>
+    </div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="rzad">
+      <div class="karta k-n pop" data-slowo="neutralny"><div class="nazwa neu">😐 NEUTRALNY</div><div class="opis">tylko nazywa</div><div class="przyk">pies</div></div>
+      <div class="karta k-z pop" data-slowo="zdrobnienie"><div class="nazwa cz">🥰 ZDROBNIENIE</div><div class="opis">małe, bliskie, czułe</div><div class="przyk cz zjaw" data-slowo="piesek">piesek · kotek · mamusia</div></div>
+      <div class="karta k-g pop" data-slowo="zgrubienie"><div class="nazwa gr">😠 ZGRUBIENIE</div><div class="opis">duże, niechęć, żart</div><div class="przyk gr zjaw" data-slowo="psisko">psisko · kocur · buciory</div></div>
+    </div>
+    <div class="reszta">
+      <span class="chip pop" data-slowo="zdradza" style="background:var(--fiolet)">🕵️ słowo zdradza, co czujesz</span>
+      <span class="chip pop" data-slowo="niepokój" style="background:var(--roz)">🌡️ niepokój ➜ strach ➜ groza</span>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

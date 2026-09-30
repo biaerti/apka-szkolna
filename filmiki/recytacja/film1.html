@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Jak recytować? - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --scena: #C2448B; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color: var(--scena); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--scena); } .c2 { background: var(--niebieski); } .c3 { background: var(--zielony); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .pisz { margin-top: 16px; font-size: 32px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 18px auto 0; width: 860px; }
+.linia { font-size: 32px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 12px; margin: 20px auto 0; width: 1000px; }
+.znak { font-family: 'Baloo 2'; color: var(--roz); font-size: 42px; display: inline-block; min-width: 70px; text-align: center; }
+.pauza { color: var(--roz); font-weight: 800; }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .mik { font-size: 110px; line-height: 1.1; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; line-height: 1; color: var(--scena); }
+#s01 .grupy { margin-top: 24px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--scena); }
+#s01 .grupy .chip:nth-child(2) { background: var(--niebieski); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 28px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 co to ===== */
+#s02 .def { margin: 24px auto 0; width: 1000px; border-color: var(--scena); }
+#s02 .def .nazwa { color: var(--scena); }
+#s02 .nie { display: flex; gap: 18px; justify-content: center; margin-top: 24px; }
+#s02 .nie .chip { font-size: 32px; background: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+#s02 .emocje { display: flex; gap: 16px; justify-content: center; margin-top: 26px; }
+#s02 .emocje .chip { font-size: 32px; background: var(--scena); }
+
+/* ===== 03 kroki ===== */
+#s03 .kroki { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px; }
+#s03 .karta { border-color: var(--scena); min-height: 300px; }
+#s03 .nr { font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: #fff; background: var(--scena); border-radius: 999px; display: inline-block; padding: 0 18px; }
+#s03 .nazwa { margin-top: 8px; font-size: 34px; }
+
+/* ===== 04 glos ===== */
+#s04 .uklad { display: flex; gap: 26px; margin-top: 18px; text-align: left; }
+#s04 .reguly { flex: 1.1; display: flex; flex-direction: column; gap: 10px; }
+#s04 .reguly .linia { font-size: 29px; padding: 4px 18px; border-color: var(--niebieski); }
+#s04 .przyklad { flex: 1; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+#s04 .przyklad .linia { font-family: 'Baloo 2'; font-size: 34px; text-align: center; }
+#s04 .przyklad .chip { font-size: 28px; background: var(--niebieski); text-align: center; }
+
+/* ===== 05-06 zadanie 1 ===== */
+#s05 .zdanie { margin-top: 26px; font-family: 'Baloo 2'; font-size: 64px; font-weight: 800; color: var(--scena); }
+#s05 .emocje, #s06 .emocje { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+#s05 .karta .emo { font-size: 64px; }
+#s06 .karta { text-align: center; }
+#s06 .karta .opis { color: var(--ciemny); }
+#s06 .zdanie { margin-top: 12px; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: var(--scena); }
+
+/* ===== 07-08 zadanie 2 ===== */
+.wiersz { display: inline-block; text-align: left; margin-top: 22px; padding: 14px 44px; }
+.wiersz div { font-family: 'Baloo 2'; font-size: 46px; font-weight: 700; line-height: 1.35; }
+#s08 .wiersz div { display: flex; align-items: center; gap: 20px; }
+#s08 .wiersz .chip { font-family: 'Nunito'; font-size: 24px; padding: 2px 16px; background: var(--niebieski); }
+#s08 .napiecie { margin-top: 18px; font-size: 30px; background: var(--scena); }
+
+/* ===== 09 postawa ===== */
+#s09 .lista { width: 1000px; }
+#s09 .linia { border-color: var(--zielony); }
+#s09 .kazdy { margin-top: 18px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 10 podsumowanie ===== */
+#s10 .rzad { margin-top: 26px; align-items: stretch; }
+#s10 .karta .nazwa { font-size: 36px; }
+#s10 .karta .opis { color: var(--ciemny); font-size: 28px; line-height: 1.5; }
+#s10 .k1 { border-color: var(--scena); } #s10 .k1 .nazwa { color: var(--scena); }
+#s10 .k2 { border-color: var(--niebieski); } #s10 .k2 .nazwa { color: var(--niebieski); }
+#s10 .k3 { border-color: var(--zielony); } #s10 .k3 .nazwa { color: var(--zielony); }
+#s10 .brawo { margin-top: 28px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="mik pop" data-t="0.3">🎤</div>
+    <div class="tytul pop" data-slowo="pamięć">Jak recytować?</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="przygotować">📖 przygotowanie</span>
+      <span class="chip pop" data-slowo="głosu">🗣️ głos</span>
+      <span class="chip pop" data-slowo="stanąć">🧍 postawa</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="dwa">🗣️ 2 zadania - tym razem na głos!</div>
+  </section>
+
+  <!-- ===== 02 co to ===== -->
+  <section class="scena" data-id="02-co-to" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · RECYTACJA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co to jest recytacja? 🎤</h2>
+    <div class="karta def pop" data-slowo="pamięci">
+      <div class="nazwa">wiersz z pamięci</div>
+      <div class="opis zjaw" data-slowo="nastrój">+ głosem oddaję jego nastrój</div>
+    </div>
+    <div class="nie">
+      <span class="chip pop" data-slowo="wyścig">🏎️ wyścig</span>
+      <span class="chip pop" data-slowo="robot">🤖 mówienie jak robot</span>
+    </div>
+    <div class="emocje">
+      <span class="chip pop" data-slowo="złość">😠 złość</span>
+      <span class="chip pop" data-slowo="radość">😄 radość</span>
+      <span class="chip pop" data-slowo="smutek">😢 smutek</span>
+      <span class="chip pop" data-slowo="zdziwienie">😲 zdziwienie</span>
+    </div>
+  </section>
+
+  <!-- ===== 03 kroki ===== -->
+  <section class="scena" data-id="03-kroki" id="s03">
+    <span class="czesc c1">1 · RECYTACJA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Przygotowanie w 4 krokach</h2>
+    <div class="kroki">
+      <div class="karta pop" data-slowo="pierwszy"><span class="nr">1</span><div class="emo">📖</div><div class="nazwa">zrozum</div><div class="opis">kto mówi?<br>jaki nastrój?</div></div>
+      <div class="karta pop" data-slowo="drugi"><span class="nr">2</span><div class="emo">✏️</div><div class="nazwa">zaznacz</div><div class="opis">pauzy <span class="pauza">|</span><br>ważne słowa <u>podkreśl</u></div></div>
+      <div class="karta pop" data-slowo="trzeci"><span class="nr">3</span><div class="emo">🧩</div><div class="nazwa">po kawałku</div><div class="opis">zwrotka<br>po zwrotce</div></div>
+      <div class="karta pop" data-slowo="czwarty"><span class="nr">4</span><div class="emo">🪞</div><div class="nazwa">na głos</div><div class="opis">przed lustrem<br>albo rodziną</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 04 glos ===== -->
+  <section class="scena" data-id="04-glos" id="s04">
+    <span class="czesc c2 zjaw" data-t="0">2 · GŁOS</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Głos 🎵</h2>
+    <div class="uklad">
+      <div class="reguly">
+        <div class="linia wjazd-lewo" data-slowo="przecinku"><span class="znak">,</span> krótka pauza</div>
+        <div class="linia wjazd-lewo" data-slowo="kropce"><span class="znak">.</span> dłuższa pauza</div>
+        <div class="linia wjazd-lewo" data-slowo="pytanie"><span class="znak">?</span> głos w górę ↗</div>
+        <div class="linia wjazd-lewo" data-slowo="ważne"><span class="znak">!!</span> ważne słowo mocniej</div>
+        <div class="linia wjazd-lewo" data-slowo="tempo"><span class="znak">⏱</span> akcja 🏃 / spokój 🐢</div>
+      </div>
+      <div class="przyklad">
+        <div class="linia pop" data-slowo="jutro">„Jutro jedziemy nad morze!” 😄</div>
+        <div class="linia pop" data-slowo="jutro">„Jutro jedziemy nad morze.” 😢</div>
+        <span class="chip pop" data-slowo="wiadomość">te same słowa - inna wiadomość</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+15" id="s05">
+    <span class="czesc c2">2 · GŁOS</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 🗣️</span></div>
+    <div class="zdanie pop" data-slowo="jutro">„Jutro idziemy do lasu.”</div>
+    <div class="emocje">
+      <div class="karta pop" data-slowo="radośnie"><div class="emo">😄</div><div class="nazwa">radośnie</div></div>
+      <div class="karta pop" data-slowo="smutno"><div class="emo">😢</div><div class="nazwa">smutno</div></div>
+      <div class="karta pop" data-slowo="złością"><div class="emo">😠</div><div class="nazwa">ze złością</div></div>
+      <div class="karta pop" data-slowo="strachem"><div class="emo">😨</div><div class="nazwa">ze strachem</div></div>
+    </div>
+    <div class="pisz zjaw" data-slowo="start">🗣️ Razem, na głos!</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <div><span class="badge pop" data-t="0">SŁYSZELIŚCIE? ✅</span></div>
+    <div class="zdanie">„Jutro idziemy do lasu.”</div>
+    <div class="emocje">
+      <div class="karta pop" data-slowo="radośnie"><div class="emo">😄</div><div class="opis">głos wyżej<br>szybciej<br>z uśmiechem</div></div>
+      <div class="karta pop" data-slowo="smutno"><div class="emo">😢</div><div class="opis">ciszej<br>wolniej<br>głos opada</div></div>
+      <div class="karta pop" data-slowo="złością"><div class="emo">😠</div><div class="opis">mocno<br>krótko<br>twardo</div></div>
+      <div class="karta pop" data-slowo="strachem"><div class="emo">😨</div><div class="opis">cicho<br>z przerwami<br>głos drży</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+15" id="s07">
+    <span class="czesc c2">2 · GŁOS</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 🗣️</span></div>
+    <div class="karta wiersz pop" data-slowo="cztery">
+      <div>Szedłem przez las, <span class="pauza">|</span></div>
+      <div>a wiatr wiał mocno. <span class="pauza">||</span></div>
+      <div>Nagle - trzask! <span class="pauza">||</span></div>
+      <div>Kto tam jest? ↗</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="kreski">🗣️ pauza przy <span class="pauza">|</span> · głos w górę przy ?</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">POSŁUCHAJ ✅</span></div>
+    <div class="karta wiersz">
+      <div class="zjaw" data-slowo="szedłem">Szedłem przez las, <span class="chip pop" data-slowo="krótka">krótka pauza</span></div>
+      <div class="zjaw" data-slowo="wiatr">a wiatr wiał mocno. <span class="chip pop" data-slowo="dłuższa">dłuższa pauza</span></div>
+      <div class="zjaw" data-slowo="nagle">Nagle - trzask! <span class="chip pop" data-slowo="szybko">mocno i szybko</span></div>
+      <div class="zjaw" data-slowo="kto">Kto tam jest? <span class="chip pop" data-slowo="ciszej">↗ w górę, ciszej</span></div>
+    </div>
+    <div><span class="chip napiecie pop" data-slowo="napięcie">pauzy budują napięcie 😮</span></div>
+  </section>
+
+  <!-- ===== 09 postawa ===== -->
+  <section class="scena" data-id="09-postawa" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · POSTAWA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Przed klasą 🧍</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="prosto">🧍 prosto, obie nogi na ziemi, ręce spokojnie</div>
+      <div class="linia wjazd-lewo" data-slowo="tytuł">📢 na początku tytuł i autor</div>
+      <div class="linia wjazd-lewo" data-slowo="oddech">💨 oddech - nie spiesz się</div>
+      <div class="linia wjazd-lewo" data-slowo="patrz">👀 wzrok na słuchaczy albo nad ich głowami</div>
+      <div class="linia wjazd-lewo" data-slowo="zapomnisz">😅 zapomniałeś? oddech i zwrotka od nowa</div>
+    </div>
+    <div><span class="chip kazdy pop" data-slowo="każdemu">to się zdarza każdemu 👍</span></div>
+  </section>
+
+  <!-- ===== 10 podsumowanie ===== -->
+  <section class="scena" data-id="10-podsumowanie" id="s10">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="przygotowanie"><div class="nazwa">📖 PRZYGOTOWANIE</div><div class="opis">zrozum<br>zaznacz pauzy<br>po kawałku<br>ćwicz na głos</div></div>
+      <div class="karta k2 pop" data-slowo="głos"><div class="nazwa">🗣️ GŁOS</div><div class="opis">pauza , .<br>pytanie ↗<br>ważne mocniej<br>tempo do nastroju</div></div>
+      <div class="karta k3 pop" data-slowo="postawa"><div class="nazwa">🧍 POSTAWA</div><div class="opis">prosto<br>tytuł i autor<br>oddech<br>wzrok na słuchaczy</div></div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! Ćwicz swój wiersz 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
