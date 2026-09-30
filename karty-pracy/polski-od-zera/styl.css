@@ -1,0 +1,177 @@
+@page { size: 148mm 210mm; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; }
+body {
+  font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; line-height: 1.3; color: #111;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+p { margin: 1.2mm 0; }
+i { font-style: normal; color: #1f4e8c; }
+.ru { color: #555; font-weight: 400; }
+.small { font-size: 8.5pt; }
+b .ru, .ru b { color: inherit; }
+.ru b { color: #222; font-weight: 700; }
+
+.page {
+  width: 148mm; height: 210mm; padding: 9mm 10mm 12mm; position: relative; overflow: hidden;
+  break-after: page; counter-increment: pg;
+}
+.page::after {
+  content: counter(pg); position: absolute; bottom: 5mm; left: 0; right: 0; text-align: center;
+  font-size: 8pt; color: #777;
+}
+.cover::after, .diploma::after { content: none; }
+
+/* naglowek tematu */
+.lh { display: flex; gap: 3mm; align-items: center; margin-bottom: 2.5mm; padding-bottom: 2mm; border-bottom: 0.6mm solid #1f4e8c; }
+.lnum { flex: none; width: 12mm; height: 12mm; border-radius: 50%; background: #1f4e8c; color: #fff; font-size: 17pt; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.lt { font-size: 15pt; font-weight: 700; line-height: 1.1; }
+.lr { font-size: 10pt; color: #555; }
+.sec { font-weight: 700; font-size: 10.5pt; color: #1f4e8c; margin: 2.5mm 0 1.5mm; }
+
+/* slowka */
+.vocab { display: grid; gap: 1.2mm 2.5mm; margin: 1.5mm 0; }
+.c1 { grid-template-columns: 1fr; }
+.c2 { grid-template-columns: 1fr 1fr; }
+.c3 { grid-template-columns: 1fr 1fr 1fr; }
+.v { display: flex; gap: 2mm; align-items: center; border: 0.3mm solid #cfd6e0; border-radius: 1.5mm; padding: 0.8mm 1.5mm; break-inside: avoid; }
+.c1 .v .w br { display: none; }
+.c1 .v .w .ru::before { content: " - "; }
+.em { font-family: "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; font-size: 13pt; line-height: 1; flex: none; width: 7mm; text-align: center; }
+.em.big { font-size: 22pt; width: auto; }
+.v b { font-size: 10pt; }
+.v i { font-style: normal; color: #1f4e8c; font-size: 8pt; }
+.v .ru { font-size: 8.5pt; }
+.demo { display: inline-flex; margin: 1.5mm 0; }
+
+/* zadania */
+.task { margin: 3mm 0 2mm; }
+.th { display: flex; align-items: flex-start; gap: 1.8mm; margin-bottom: 1.8mm; }
+.th .n { flex: none; width: 5.5mm; height: 5.5mm; border-radius: 50%; border: 0.4mm solid #1f4e8c; color: #1f4e8c; font-weight: 700; font-size: 8.5pt; display: flex; align-items: center; justify-content: center; margin-top: 0.2mm; }
+.th .ru { font-size: 9pt; }
+.bl { display: inline-block; border-bottom: 0.3mm solid #333; height: 1.2em; vertical-align: -0.3em; }
+.gap { display: inline-block; width: 6mm; height: 6mm; border: 0.3mm solid #333; border-radius: 1mm; vertical-align: middle; margin: 0 0.5mm; }
+.fillrow { margin: 2.2mm 0; }
+.fillrow .em { display: inline-block; }
+.fill2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 4mm; }
+.lines { margin: 1mm 0; }
+.lines div { height: 8mm; border-bottom: 0.3mm solid #999; }
+.box { border: 0.4mm solid #1f4e8c; border-radius: 2mm; padding: 1.8mm 3mm; margin: 2.5mm 0; background: #eef3fa; }
+.bt { font-weight: 700; color: #1f4e8c; margin-bottom: 1mm; }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm; margin: 1.5mm 0; }
+
+.match { display: grid; grid-template-columns: 1fr 4mm 16mm 4mm 1fr; row-gap: 2.2mm; align-items: center; }
+.match .ml { text-align: right; font-weight: 600; }
+.match .dot { width: 2.4mm; height: 2.4mm; border-radius: 50%; background: #222; justify-self: center; }
+.match .mr { color: #333; }
+.match.big .ml, .match.big .mr { font-size: 13pt; }
+.match.big { row-gap: 1.4mm; grid-template-columns: 1fr 4mm 30mm 4mm 1fr; }
+
+.words2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2mm 4mm; font-size: 11pt; }
+.pool { border: 0.3mm dashed #888; border-radius: 1.5mm; padding: 1.5mm 2.5mm; margin: 1mm 0 2mm; line-height: 1.6; }
+.pool.big { font-size: 12pt; line-height: 1.9; }
+.odd div { margin: 1.5mm 0; font-size: 10.5pt; }
+.gaps { font-size: 13pt; line-height: 2; }
+.translit { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1mm; font-size: 9.5pt; margin-bottom: 1mm; }
+.scramble div { margin: 2.2mm 0; display: flex; gap: 3mm; align-items: flex-end; }
+.sw { flex: 1; font-style: italic; }
+.dialog div { margin: 2.4mm 0; }
+
+.abc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2mm; margin: 1.5mm 0; }
+.abc div { border: 0.3mm solid #cfd6e0; border-radius: 1.5mm; padding: 1mm 2mm; display: flex; justify-content: space-between; align-items: baseline; }
+.abc b { font-size: 12pt; }
+.abc span { color: #1f4e8c; font-size: 9pt; }
+.snd { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+.snd td { border-bottom: 0.25mm solid #d5dbe4; padding: 0.9mm 1.5mm; }
+.snd td:first-child { font-size: 11pt; width: 20mm; }
+.snd td:nth-child(2) { color: #1f4e8c; }
+.rules { margin: 1mm 0 0; padding-left: 5mm; }
+.rules li, .steps li { margin: 1mm 0; }
+.steps { padding-left: 5mm; }
+
+.nums { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1mm 2mm; }
+.nums div { border: 0.3mm solid #cfd6e0; border-radius: 1.5mm; padding: 0.6mm 1.5mm; display: flex; gap: 1.5mm; align-items: baseline; flex-wrap: wrap; }
+.nn { font-weight: 700; color: #1f4e8c; width: 6mm; }
+.nums i { font-style: normal; color: #1f4e8c; font-size: 7.5pt; }
+.grades { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5mm 3mm; font-size: 9pt; }
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; }
+.swatches div { text-align: center; font-size: 9pt; }
+.sq { display: block; width: 14mm; height: 14mm; border: 0.4mm solid #333; border-radius: 1mm; margin: 0 auto 1mm; }
+.count div, .math div { margin: 2.2mm 0; }
+.count .em { width: auto; font-size: 12pt; margin-right: 2mm; }
+
+.pics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm 2mm; text-align: center; }
+.pics div { display: flex; flex-direction: column; align-items: center; gap: 2mm; }
+.choice .ch { display: flex; justify-content: space-between; gap: 3mm; margin: 1.8mm 0; padding-bottom: 1.8mm; border-bottom: 0.25mm dotted #aaa; }
+.opts { display: flex; flex-direction: column; gap: 1mm; flex: none; width: 34mm; }
+.cb { display: inline-block; width: 3.8mm; height: 3.8mm; border: 0.35mm solid #333; border-radius: 0.8mm; margin-right: 1.8mm; vertical-align: -0.6mm; flex: none; }
+.frame { border: 0.4mm solid #999; border-radius: 2mm; }
+
+.say { border: 0.5mm dashed #1f4e8c; border-radius: 2mm; padding: 2mm 3mm; margin: 3mm 0 2mm; }
+.say .st, .umiem .st { font-weight: 700; color: #1f4e8c; margin-bottom: 1mm; }
+.say .sp { font-size: 11pt; font-weight: 600; }
+.umiem { margin-top: 2mm; }
+.umiem .u { display: flex; align-items: flex-start; margin: 1mm 0; font-size: 9.5pt; }
+
+.cmd { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3mm 3mm; margin: 2mm 0; }
+.cmd div { border-bottom: 0.25mm solid #d5dbe4; padding: 0.8mm 0; display: flex; justify-content: space-between; gap: 2mm; }
+.cmd b { font-size: 10.5pt; }
+.prog { width: 100%; border-collapse: collapse; font-size: 9pt; }
+.prog th, .prog td { border: 0.3mm solid #999; padding: 1.4mm 1.5mm; text-align: left; }
+.prog td { height: 9mm; }
+.prog th:nth-child(2), .prog th:nth-child(3) { width: 26mm; font-size: 8pt; }
+
+.plan { width: 100%; border-collapse: collapse; font-size: 9pt; }
+.plan th, .plan td { border: 0.3mm solid #999; padding: 1mm; text-align: center; }
+.plan td { height: 11mm; }
+.plan td:first-child { width: 6mm; font-weight: 700; }
+.sort { width: 100%; border-collapse: collapse; }
+.sort th { border: 0.3mm solid #999; padding: 1.2mm; }
+.sort td { border: 0.3mm solid #999; height: 20mm; width: 50%; }
+.order div { margin: 2mm 0; font-size: 10.5pt; }
+.conj { border-collapse: collapse; font-size: 9.5pt; margin: 1mm 0; }
+.conj td { padding: 0.5mm 2mm 0.5mm 0; }
+
+.bodywrap { display: flex; gap: 3mm; align-items: center; }
+.body { width: 62mm; flex: none; }
+.bodylist div { margin: 2.6mm 0; }
+.cats { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 4mm; margin: 2mm 0; }
+.cats div { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 9pt; }
+.cats svg { width: 34mm; }
+.cats.small { grid-template-columns: repeat(4, 1fr); }
+.cats.small svg { width: 26mm; }
+.cats.small div { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1mm; }
+.kot-mini svg { width: 12mm; vertical-align: middle; }
+
+.fp { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+.fp th { text-align: left; font-size: 8.5pt; border-bottom: 0.4mm solid #1f4e8c; padding: 1mm; }
+.fp td { border-bottom: 0.25mm solid #d5dbe4; padding: 1.1mm 1mm; }
+.score { margin: 2mm 0; border: 0.4mm solid #333; border-radius: 2mm; padding: 2mm 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2mm 3mm; font-size: 9pt; }
+.score > div { white-space: nowrap; }
+.scorebox { display: inline-block; width: 12mm; height: 8mm; border: 0.4mm solid #333; vertical-align: middle; }
+.key { font-size: 8.8pt; }
+.key h4 { margin: 2.5mm 0 0.5mm; color: #1f4e8c; font-size: 9.5pt; }
+.key p { margin: 0; line-height: 1.45; }
+
+/* okladka */
+.cover { display: flex; flex-direction: column; justify-content: space-between; padding: 14mm 12mm; }
+.cover-letters { font-size: 26pt; font-weight: 700; color: #c9d6ea; letter-spacing: 2mm; text-align: center; }
+.cover-main { text-align: center; }
+.cover-t { font-size: 34pt; font-weight: 800; line-height: 1.05; color: #1f4e8c; }
+.cover-r { font-size: 15pt; color: #555; margin-top: 3mm; }
+.cover-part { display: inline-block; margin-top: 9mm; padding: 2mm 6mm; border: 0.6mm solid #1f4e8c; border-radius: 10mm; font-size: 13pt; font-weight: 700; }
+.cover-l { margin-top: 3mm; font-size: 11pt; color: #444; }
+.cover-fields { font-size: 11pt; }
+.cover-line { border-bottom: 0.4mm solid #333; height: 11mm; margin-bottom: 5mm; }
+.cover-line.short { width: 40mm; }
+
+/* dyplom */
+.diploma { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2mm double #1f4e8c; }
+.dip-star { font-size: 40pt; color: #1f4e8c; }
+.dip-t { font-size: 36pt; font-weight: 800; color: #1f4e8c; }
+.dip-r { font-size: 14pt; margin-bottom: 8mm; }
+.dip-line { border-bottom: 0.4mm solid #333; width: 95mm; height: 12mm; margin: 2mm auto 4mm; }
+.dip-line.short { width: 48mm; }
+.dip-b { font-size: 16pt; color: #1f4e8c; }
+.diploma p { font-size: 12pt; }
+.dip-sign { display: flex; gap: 8mm; margin-top: 12mm; font-size: 9pt; }
