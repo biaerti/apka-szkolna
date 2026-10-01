@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Wyrazy potoczne - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 4px; }
+.e-k { background: var(--pomarancz); } .e-d { background: var(--niebieski); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.skr { text-decoration: line-through; text-decoration-thickness: 4px; text-decoration-color: var(--roz); color: var(--szary); }
+.ok { color: var(--zielony); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 24px; margin-left: 8px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 28px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--niebieski); }
+#s01 .grupy .chip:nth-child(4) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .rzad { margin-top: 26px; }
+#s02 .kto { font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 22px; display: inline-block; }
+#s02 .dymek { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.2; margin-top: 12px; }
+#s02 .k-k { border-color: var(--pomarancz); } #s02 .k-k .kto { background: var(--pomarancz); }
+#s02 .k-d { border-color: var(--niebieski); } #s02 .k-d .kto { background: var(--niebieski); }
+#s02 .styl { display: flex; gap: 20px; justify-content: center; margin-top: 26px; }
+#s02 .styl .chip { font-size: 34px; }
+#s02 .styl .chip:nth-child(1) { background: var(--pomarancz); }
+#s02 .styl .chip:nth-child(2) { background: var(--niebieski); }
+
+/* ===== 03 ===== */
+#s03 .def { margin: 16px auto 0; width: 900px; border-color: var(--pomarancz); }
+#s03 .def .nazwa { color: var(--pomarancz); font-size: 40px; }
+#s03 .slowa { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 22px auto 0; width: 1100px; }
+#s03 .slowa .chip { font-size: 38px; background: var(--pomarancz); }
+#s03 .uwaga { margin-top: 22px; font-size: 30px; background: var(--zielony); }
+#s03 .pasuje { margin-top: 12px; font-size: 30px; background: var(--niebieski); }
+
+/* ===== 06 ===== */
+#s06 .siatka { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px auto 0; width: 1100px; }
+#s06 .para { font-family: 'Baloo 2'; font-size: 31px; white-space: nowrap; font-weight: 800; padding: 8px 14px; border-color: var(--fiolet); }
+#s06 .para .pot { color: var(--pomarancz); }
+#s06 .para .ofi { color: var(--niebieski); }
+#s06 .ogarn { margin: 18px auto 0; width: 1000px; border-color: var(--fiolet); }
+#s06 .ogarn .nazwa { font-size: 36px; }
+#s06 .przyk { display: flex; gap: 14px; justify-content: center; margin-top: 12px; }
+#s06 .przyk .chip { font-size: 26px; background: var(--fiolet); }
+
+/* ===== 07-08 ===== */
+#s07 .linia, #s08 .linia { font-size: 32px; }
+#s08 .linia { font-size: 29px; }
+#s08 .styl { margin-top: 18px; font-size: 32px; background: var(--fiolet); }
+
+/* ===== 09 ===== */
+#s09 .ubrania { display: flex; gap: 20px; justify-content: center; margin-top: 16px; }
+#s09 .ubrania .chip { font-size: 32px; background: var(--niebieski); }
+#s09 .rzad { margin-top: 20px; }
+#s09 .karta { text-align: left; }
+#s09 .karta .nazwa { font-size: 38px; }
+#s09 .karta .opis { font-size: 32px; }
+#s09 .tak { border-color: var(--zielony); } #s09 .tak .nazwa { color: var(--zielony); }
+#s09 .nie { border-color: var(--roz); } #s09 .nie .nazwa { color: var(--roz); }
+#s09 .zakaz { margin-top: 20px; font-size: 38px; background: var(--roz); padding: 6px 40px; }
+
+/* ===== 10-11 ===== */
+#s10 .wyp { margin: 16px auto 0; width: 1040px; text-align: left; font-size: 34px; font-weight: 800; line-height: 1.45; border-color: var(--niebieski); }
+#s10 .wyp .podpis { font-family: 'Baloo 2'; color: var(--niebieski); font-size: 26px; }
+#s11 .linia { font-size: 34px; }
+#s11 .brawo { margin-top: 18px; font-size: 32px; background: var(--zielony); }
+
+/* ===== 12 slownik ===== */
+#s12 .alf { margin-top: 12px; font-size: 30px; background: var(--zielony); }
+#s12 .haslo { margin: 22px auto 0; width: 1080px; text-align: left; border-color: var(--zielony); font-size: 40px; font-weight: 800; line-height: 1.4; padding: 18px 30px; }
+#s12 .haslo b { font-family: 'Baloo 2'; font-size: 48px; }
+#s12 .haslo .skrot { color: var(--pomarancz); font-style: italic; }
+#s12 .haslo .def { color: var(--niebieski); }
+#s12 .haslo .prz { color: var(--szary); font-style: italic; }
+#s12 .czesci { display: flex; gap: 12px; justify-content: center; margin-top: 18px; }
+#s12 .czesci .chip { font-size: 28px; }
+#s12 .czesci .chip:nth-child(1) { background: var(--ciemny); }
+#s12 .czesci .chip:nth-child(2) { background: var(--pomarancz); }
+#s12 .czesci .chip:nth-child(3) { background: var(--niebieski); }
+#s12 .czesci .chip:nth-child(4) { background: var(--szary); }
+#s12 .luz { margin-top: 18px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 13-14 ===== */
+.alfabet { margin: 14px auto 0; font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; letter-spacing: 4px; color: var(--szary); }
+#s13 .slowa, #s14 .slowa { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
+#s13 .slowa .chip, #s14 .slowa .chip { font-size: 42px; background: var(--zielony); padding: 6px 30px; }
+#s14 .slowa .chip { font-size: 36px; padding: 6px 20px; white-space: nowrap; }
+#s14 .slowa .nrk { display: inline-block; background: #fff; color: var(--zielony); border-radius: 999px; padding: 0 12px; margin-right: 10px; font-size: 30px; vertical-align: 4px; }
+#s13 .wsk { margin-top: 22px; font-size: 32px; background: var(--fiolet); }
+#s14 .lista { width: 900px; }
+#s14 .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; }
+#s14 .linia u { text-decoration-color: var(--roz); text-decoration-thickness: 5px; text-underline-offset: 6px; }
+
+/* ===== 15 ===== */
+#s15 .lista { width: 1120px; gap: 10px; }
+#s15 .linia { font-size: 31px; padding: 7px 22px; }
+#s15 .brawo { margin-top: 14px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="przerwie">🗣️ ⚽ 📱</div>
+    <div class="tytul pop" data-slowo="potoczne">Wyrazy potoczne</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="co">😎 co to jest?</span>
+      <span class="chip pop" data-slowo="wolno">🎩 poważni bracia</span>
+      <span class="chip pop" data-slowo="lepiej">👕 kiedy wolno?</span>
+      <span class="chip pop" data-slowo="słownika">📖 słownik</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 dwie sytuacje ===== -->
+  <section class="scena" data-id="02-dwie-sytuacje" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Kuba chce wyjść na boisko ⚽</h2>
+    <div class="rzad">
+      <div class="karta k-k pop" data-slowo="siema"><span class="kto">🧒 do kolegi</span><div class="dymek">„Siema! Idziesz na boisko? Będzie czadowo!”</div></div>
+      <div class="karta k-d pop" data-slowo="dyrektor"><span class="kto">👩‍💼 do pani dyrektor</span><div class="dymek">„Dzień dobry! Czy możemy wyjść na boisko?”</div></div>
+    </div>
+    <div class="styl">
+      <span class="chip pop" data-slowo="swobodnie">😎 swobodnie, na luzie</span>
+      <span class="chip pop" data-slowo="oficjalnie">🎩 grzecznie, oficjalnie</span>
+    </div>
+  </section>
+
+  <!-- ===== 03 co to ===== -->
+  <section class="scena" data-id="03-co-to" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Wyrazy potoczne 😎</h2>
+    <div class="karta def pop" data-slowo="luzie"><div class="nazwa">słowa, których używamy na luzie</div><div class="opis">do kolegów, rodzeństwa, przyjaciół · w wiadomościach na telefonie</div></div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="siema">siema</span>
+      <span class="chip pop" data-slowo="nara">nara</span>
+      <span class="chip pop" data-slowo="kasa">kasa</span>
+      <span class="chip pop" data-slowo="ziomek">ziomek</span>
+      <span class="chip pop" data-slowo="ściema">ściema</span>
+      <span class="chip pop" data-slowo="ogarniać">ogarniać</span>
+      <span class="chip pop" data-slowo="czadowo">czadowo</span>
+    </div>
+    <div><span class="chip uwaga pop" data-slowo="brzydkie">✅ nie są brzydkie ani zakazane - są swobodne</span></div>
+    <div><span class="chip pasuje pop" data-slowo="pasują">👨‍👩‍👧 pasują do rozmowy z bliskimi, nie do oficjalnej 🎩</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · CO TO JEST</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="kogo">Do kogo? 🧒 do kolegi czy 👩‍💼 do pani dyrektor?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć"><span class="nr">1</span>„Nara, widzimy się jutro!”</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.25"><span class="nr">2</span>„Do widzenia, do zobaczenia jutro.”</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.5"><span class="nr">3</span>„Przepraszam, nie zrozumiałem polecenia.”</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.75"><span class="nr">4</span>„Sorki, nie ogarniam tego zadania.”</div>
+      <div class="linia pop" data-slowo="pięć" data-po="1"><span class="nr">5</span>„Ale ściema!”</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="nara">1. „<span class="hl">Nara</span>, widzimy się jutro!”<span class="etyk e-k">do kolegi</span></div>
+      <div class="linia wjazd-lewo" data-slowo="widzenia">2. „Do widzenia, do zobaczenia jutro.”<span class="etyk e-d">do pani</span><span class="dlaczego">grzecznie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="przepraszam">3. „Przepraszam, nie zrozumiałem polecenia.”<span class="etyk e-d">do pani</span></div>
+      <div class="linia wjazd-lewo" data-slowo="sorki">4. „<span class="hl">Sorki</span>, nie <span class="hl">ogarniam</span> tego zadania.”<span class="etyk e-k">do kolegi</span></div>
+      <div class="linia wjazd-lewo" data-slowo="ściema">5. „Ale <span class="hl">ściema</span>!”<span class="etyk e-k">do kolegi</span><span class="dlaczego">ściema = kłamstwo, oszustwo</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 06 bracia ===== -->
+  <section class="scena" data-id="06-bracia" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · POWAŻNI BRACIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">😎 potoczny ➜ 🎩 oficjalny</h2>
+    <div class="siatka">
+      <div class="karta para pop" data-slowo="kasa"><span class="pot">kasa</span> ➜ <span class="ofi">pieniądze</span></div>
+      <div class="karta para pop" data-slowo="wcinać"><span class="pot">wcinać</span> ➜ <span class="ofi">jeść</span></div>
+      <div class="karta para pop" data-slowo="kimać"><span class="pot">kimać</span> ➜ <span class="ofi">spać</span></div>
+      <div class="karta para pop" data-slowo="ziomek"><span class="pot">ziomek</span> ➜ <span class="ofi">kolega</span></div>
+      <div class="karta para pop" data-slowo="wkurzony"><span class="pot">wkurzony</span> ➜ <span class="ofi">zdenerwowany</span></div>
+      <div class="karta para pop" data-slowo="czadowo"><span class="pot">czadowo</span> ➜ <span class="ofi">wspaniale</span></div>
+    </div>
+    <div class="karta ogarn pop" data-slowo="ogarniać"><div class="nazwa"><span style="color:var(--pomarancz)">ogarniać</span> ➜ <span style="color:var(--niebieski)">rozumieć</span> albo <span style="color:var(--niebieski)">sprzątać</span></div></div>
+    <div class="przyk">
+      <span class="chip pop" data-slowo="zadania">„nie ogarniam zadania” = nie rozumiem</span>
+      <span class="chip pop" data-slowo="ogarnij">„ogarnij pokój” = posprzątaj</span>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+25" id="s07">
+    <span class="czesc c2">2 · POWAŻNI BRACIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamień">Zamień wyraz potoczny na oficjalny</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Zgubiłem całą <span class="hl">kasę</span>.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>Mój brat <span class="hl">wcina</span> już trzecią kanapkę.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>Nie <span class="hl">ogarniam</span> tej mapy.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>Babcia była <span class="hl">wkurzona</span> na kota.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="przepisz">przepisz do zeszytu 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="zgubiłem">1. Zgubiłem <span class="skr">całą kasę</span> ➜ <span class="ok">wszystkie pieniądze</span>.</div>
+      <div class="linia wjazd-lewo" data-slowo="brat">2. Mój brat <span class="skr">wcina</span> ➜ <span class="ok">je</span> już trzecią kanapkę.</div>
+      <div class="linia wjazd-lewo" data-slowo="mapy">3. Nie <span class="skr">ogarniam</span> ➜ <span class="ok">rozumiem</span> tej mapy.</div>
+      <div class="linia wjazd-lewo" data-slowo="babcia">4. Babcia była <span class="skr">wkurzona</span> ➜ <span class="ok">zdenerwowana</span> na kota.</div>
+    </div>
+    <div><span class="chip styl pop" data-slowo="styl">sens ten sam, zmienia się styl: 😎 ➜ 🎩</span></div>
+  </section>
+
+  <!-- ===== 09 kiedy ===== -->
+  <section class="scena" data-id="09-kiedy" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · KIEDY WOLNO?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Słowa są jak ubrania 👕</h2>
+    <div class="ubrania">
+      <span class="chip pop" data-slowo="dres">🏃 dres na boisko</span>
+      <span class="chip pop" data-slowo="akademię">🤵 elegancko na akademię</span>
+    </div>
+    <div class="rzad">
+      <div class="karta tak pop" data-slowo="kolegami"><div class="nazwa">✅ wolno</div><div class="opis">koledzy, rodzeństwo, przerwa, wiadomość do przyjaciela</div></div>
+      <div class="karta nie pop" data-slowo="unikamy"><div class="nazwa">🚫 unikamy</div><div class="opis">odpowiedź przy tablicy, nauczyciel, dyrektor, obcy dorosły (sklep, biblioteka)</div></div>
+    </div>
+    <div><span class="chip zakaz pop" data-slowo="wypracowaniu">⛔ w wypracowaniu - zakazane!</span></div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+25" id="s10">
+    <span class="czesc c3">3 · KIEDY WOLNO?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="znajdź">Znajdź 4 wyrazy potoczne i popraw je</div>
+    <div class="karta wyp pop" data-slowo="wypracowanie"><div class="podpis">📝 Wypracowanie Oli: Wycieczka do zoo</div>W sobotę pojechaliśmy na wycieczkę do zoo. Było mega! Najbardziej spodobały mi się małpy, bo cały czas się wygłupiały. Potem wcinaliśmy lody, a tata wydał na nie całą kasę. W drodze powrotnej wszyscy w autobusie kimali.</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="mega"><span class="nr">1</span>Było <span class="skr">mega</span> ➜ <span class="ok">wspaniale / bardzo ciekawie</span>!</div>
+      <div class="linia wjazd-lewo" data-slowo="wcinaliśmy"><span class="nr">2</span><span class="skr">wcinaliśmy</span> ➜ <span class="ok">jedliśmy</span> lody</div>
+      <div class="linia wjazd-lewo" data-slowo="kasa"><span class="nr">3</span>wydał <span class="skr">całą kasę</span> ➜ <span class="ok">wszystkie pieniądze</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kimali"><span class="nr">4</span>wszyscy <span class="skr">kimali</span> ➜ <span class="ok">spali</span></div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="poważnie">🎩 teraz brzmi poważnie - jak w wypracowaniu!</span></div>
+  </section>
+
+  <!-- ===== 12 slownik ===== -->
+  <section class="scena" data-id="12-slownik" id="s12">
+    <span class="czesc c4 zjaw" data-t="0">4 · SŁOWNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Hasło w słowniku 📖</h2>
+    <div><span class="chip alf pop" data-slowo="alfabetycznej">🔤 kolejność alfabetyczna: a, b, c, d...</span></div>
+    <div class="karta haslo pop" data-slowo="kimać"><b>kimać</b> <span class="skrot">pot.</span> <span class="def">«spać, drzemać»</span>: <span class="prz">Dziadek kima przed telewizorem.</span></div>
+    <div class="czesci">
+      <span class="chip pop" data-slowo="słowo">1 · słowo</span>
+      <span class="chip pop" data-slowo="skrót">2 · pot. = wyraz potoczny</span>
+      <span class="chip pop" data-slowo="wyjaśnienie">3 · wyjaśnienie</span>
+      <span class="chip pop" data-slowo="przykład">4 · przykład</span>
+    </div>
+    <div><span class="chip luz pop" data-slowo="luz">pot. ➜ słowo na luz, nie do wypracowania 😎</span></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+20" id="s13">
+    <span class="czesc c4">4 · SŁOWNIK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ułóż">Ułóż alfabetycznie, jak w słowniku</div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="pięć">wcinać</span>
+      <span class="chip pop" data-slowo="pięć" data-po="0.2">kimać</span>
+      <span class="chip pop" data-slowo="pięć" data-po="0.4">ściema</span>
+      <span class="chip pop" data-slowo="pięć" data-po="0.6">kasa</span>
+      <span class="chip pop" data-slowo="pięć" data-po="0.8">ogarniać</span>
+    </div>
+    <div class="alfabet zjaw" data-slowo="słowniku">a ą b c ć d e ę f g h i j k l ł m n ń o ó p r s ś t u w y z ź ż</div>
+    <div><span class="chip wsk pop" data-slowo="drugą">ta sama pierwsza litera? ➜ patrz na drugą 👀</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="kasa"><span class="nrk">1</span>kasa</span>
+      <span class="chip pop" data-slowo="kimać"><span class="nrk">2</span>kimać</span>
+      <span class="chip pop" data-slowo="ogarniać"><span class="nrk">3</span>ogarniać</span>
+      <span class="chip pop" data-slowo="ściema"><span class="nrk">4</span>ściema</span>
+      <span class="chip pop" data-slowo="wcinać"><span class="nrk">5</span>wcinać</span>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="drugą">k<u>a</u>sa przed k<u>i</u>mać, bo a jest przed i</div>
+      <div class="linia wjazd-lewo" data-slowo="ściema"><u>ś</u>ciema przed <u>w</u>cinać, bo ś jest przed w</div>
+    </div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="swobodne">😎 wyrazy potoczne = słowa na luzie: kasa, ziomek, ściema, ogarniać, czadowo</div>
+      <div class="linia pop" data-slowo="używamy">✅ koledzy, rodzina, wiadomości do przyjaciół</div>
+      <div class="linia pop" data-slowo="nauczycielem">🚫 nauczyciel, dyrektor, obcy dorosły · ⛔ nigdy w wypracowaniu</div>
+      <div class="linia pop" data-slowo="brata">🎩 kasa ➜ pieniądze · wcinać ➜ jeść · kimać ➜ spać</div>
+      <div class="linia pop" data-slowo="słowniku">📖 w słowniku: skrót pot. · słowa w kolejności alfabetycznej</div>
+      <div class="linia pop" data-slowo="ubranie">👕 słowa dobieramy jak ubranie - do sytuacji</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

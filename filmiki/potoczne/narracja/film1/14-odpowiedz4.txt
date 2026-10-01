@@ -1,0 +1,1 @@
+Sprawdzamy. Kolejność jest taka: kasa, kimać, ogarniać, ściema, wcinać. Kasa i kimać zaczynają się tą samą literą. Patrzymy więc na drugą literę. Druga litera słowa kasa jest w alfabecie wcześniej niż druga litera słowa kimać. Dlatego kasa stoi pierwsza. A ściema stoi przed wcinać, bo jej pierwsza litera jest w alfabecie wcześniej.

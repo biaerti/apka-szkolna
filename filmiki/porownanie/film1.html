@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Porównanie - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 25px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 120px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .rzad { margin-top: 22px; }
+#s02 .zd { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.2; }
+#s02 .k1 { border-color: var(--szary); } #s02 .k2 { border-color: var(--pomarancz); }
+#s02 .def { margin: 22px auto 0; width: 1000px; border-color: var(--pomarancz); }
+#s02 .def .nazwa { color: var(--pomarancz); font-size: 36px; }
+#s02 .obaj { margin-top: 18px; font-size: 32px; background: var(--niebieski); }
+
+/* ===== 03 ===== */
+#s03 .slowka { display: flex; gap: 14px; justify-content: center; margin-top: 14px; }
+#s03 .slowka .chip { font-size: 40px; background: var(--pomarancz); padding: 4px 34px; }
+#s03 .lista { width: 1000px; gap: 8px; margin-top: 14px; }
+#s03 .linia { font-size: 29px; padding: 6px 20px; }
+#s03 .trzy { display: flex; gap: 12px; justify-content: center; margin-top: 16px; align-items: stretch; }
+#s03 .trzy .karta { padding: 6px 18px; }
+#s03 .trzy .nazwa { font-size: 32px; }
+#s03 .trzy .opis { font-size: 22px; margin-top: 0; }
+#s03 .t1 { border-color: var(--niebieski); } #s03 .t1 .nazwa { color: var(--niebieski); }
+#s03 .t2 { border-color: var(--pomarancz); } #s03 .t2 .nazwa { color: var(--pomarancz); }
+#s03 .t3 { border-color: var(--zielony); } #s03 .t3 .nazwa { color: var(--zielony); }
+
+/* ===== 04-05 ===== */
+#s04 .lista, #s05 .lista { gap: 8px; margin-top: 12px; }
+#s04 .linia { font-size: 28px; padding: 5px 20px; }
+#s04 .wsk { margin-top: 10px; font-size: 26px; background: var(--roz); }
+#s05 .linia { font-size: 27px; padding: 6px 20px; }
+#s05 .samo { margin-top: 14px; font-size: 32px; background: var(--roz); }
+
+/* ===== 06 ===== */
+#s06 .rzad { margin-top: 26px; }
+#s06 .karta { border-color: var(--fiolet); }
+#s06 .karta .emo { font-size: 70px; line-height: 1.1; }
+#s06 .karta .nazwa { color: var(--fiolet); font-size: 38px; }
+#s06 .gdzie { margin-top: 26px; font-size: 32px; background: var(--fiolet); }
+
+/* ===== 07-08 ===== */
+#s07 .lista, #s08 .lista { width: 900px; }
+#s07 .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; padding: 4px 20px; }
+#s08 .linia { font-size: 29px; padding: 6px 20px; }
+#s08 .linia b { font-family: 'Baloo 2'; color: var(--fiolet); font-size: 34px; }
+#s08 .wsk { background: var(--fiolet); font-size: 28px; }
+
+/* ===== 09 ===== */
+#s09 .po { display: flex; gap: 16px; justify-content: center; margin-top: 12px; }
+#s09 .po .chip { font-size: 30px; background: var(--niebieski); }
+#s09 .rzad { margin-top: 20px; align-items: stretch; }
+#s09 .karta { text-align: left; }
+#s09 .karta .nazwa { font-size: 36px; }
+#s09 .karta .opis { font-size: 34px; color: var(--ciemny); line-height: 1.45; }
+#s09 .k1 { border-color: var(--szary); } #s09 .k1 .nazwa { color: var(--szary); }
+#s09 .k2 { border-color: var(--niebieski); flex: 1.5; } #s09 .k2 .nazwa { color: var(--niebieski); }
+
+/* ===== 10-11 ===== */
+#s10 .burek { margin: 18px auto 0; width: 900px; text-align: left; border-color: var(--niebieski); }
+#s10 .burek .linia { border: 0; padding: 4px 0; font-size: 38px; }
+#s10 .slowka, #s11 .check { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+#s10 .slowka .chip { font-size: 30px; background: var(--niebieski); }
+#s11 .linia { font-size: 33px; }
+#s11 .check .chip { font-size: 27px; background: var(--zielony); }
+#s11 .zgadza { margin-top: 14px; font-size: 28px; background: var(--niebieski); }
+
+/* ===== 12 ===== */
+#s12 .kroki { display: flex; gap: 14px; margin-top: 20px; align-items: stretch; }
+#s12 .kroki .karta { flex: 1; border-color: var(--zielony); }
+#s12 .kroki .nazwa { color: var(--zielony); font-size: 32px; }
+#s12 .kroki .opis { font-size: 36px; color: var(--ciemny); }
+#s12 .wynik { margin: 20px auto 0; width: 1100px; font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; border-color: var(--zielony); background: #eefaf1; }
+#s12 .zask { margin-top: 16px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 13-14 ===== */
+#s13 .linia, #s14 .linia { font-size: 33px; }
+#s13 .wsk { background: var(--zielony); }
+#s14 .wsk { background: var(--zielony); }
+
+/* ===== 15 ===== */
+#s15 .lista { width: 1120px; gap: 9px; }
+#s15 .linia { font-size: 29px; padding: 6px 22px; }
+#s15 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="obrazek">🐆 🎨 🧠</div>
+    <div class="tytul pop" data-slowo="porównaniem">Porównanie</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="rozpoznać">🔎 jak rozpoznać?</span>
+      <span class="chip pop" data-slowo="zna">🐺 znane porównania</span>
+      <span class="chip pop" data-slowo="tworzyć">✍️ własne porównania</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 co to ===== -->
+  <section class="scena" data-id="02-co-to" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Które zdanie widzisz w głowie? 🧠</h2>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="pierwsze"><div class="zd">„Mój brat biega szybko.”</div></div>
+      <div class="karta k2 pop" data-slowo="drugie"><div class="zd">„Mój brat biega szybko <span class="hl">jak gepard</span>.” 🐆</div></div>
+    </div>
+    <div class="karta def pop" data-slowo="zestawia"><div class="nazwa">porównanie zestawia dwie rzeczy i pokazuje, w czym są podobne</div></div>
+    <div><span class="chip obaj pop" data-slowo="obaj">🧒 brat + 🐆 gepard ➜ obaj są szybcy</span></div>
+  </section>
+
+  <!-- ===== 03 slowa ===== -->
+  <section class="scena" data-id="03-slowa" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · JAK ROZPOZNAĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Słówka porównania 🔗</h2>
+    <div class="slowka">
+      <span class="chip pop" data-slowo="najczęściej" data-po="0.6">jak</span>
+      <span class="chip pop" data-slowo="jakby">jakby</span>
+      <span class="chip pop" data-slowo="niczym">niczym</span>
+      <span class="chip pop" data-slowo="niby">niby</span>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="ręce">🧊 Ręce miał zimne <span class="hl">jak</span> lód.</div>
+      <div class="linia wjazd-lewo" data-slowo="kangurek">🦘 Kangurek skakał, <span class="hl">jakby</span> miał sprężyny w nogach.</div>
+      <div class="linia wjazd-lewo" data-slowo="chmura">☁️ Chmura wisiała na niebie <span class="hl">niczym</span> wata cukrowa.</div>
+    </div>
+    <div class="trzy">
+      <div class="karta t1 pop" data-slowo="opisujemy"><div class="nazwa">ręce zimne</div><div class="opis">1 · co opisujemy</div></div>
+      <div class="karta t2 pop" data-slowo="słówko"><div class="nazwa">jak</div><div class="opis">2 · słówko</div></div>
+      <div class="karta t3 pop" data-slowo="porównujemy"><div class="nazwa">lód</div><div class="opis">3 · do czego porównujemy</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · JAK ROZPOZNAĆ</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wypisz">W których zdaniach jest porównanie? Wypisz numery.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sześć"><span class="nr">1</span>Plecak był ciężki jak kamień.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.2"><span class="nr">2</span>Jak się nazywa twój pies?</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.4"><span class="nr">3</span>Babcia piecze pyszne ciasto.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.6"><span class="nr">4</span>W klasie było cicho jak w bibliotece.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.8"><span class="nr">5</span>Mój młodszy brat jest uparty.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="1"><span class="nr">6</span>Śnieg leżał na polu niby gruba kołdra.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pułapka">⚠️ jedno zdanie to pułapka!</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="plecak"><span class="ok">✓ 1.</span> Plecak był ciężki <span class="hl">jak</span> kamień. <span class="dlaczego">plecak i kamień - ciężkie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="klasie"><span class="ok">✓ 4.</span> W klasie było cicho <span class="hl">jak</span> w bibliotece. <span class="dlaczego">tu i tu cisza</span></div>
+      <div class="linia wjazd-lewo" data-slowo="śnieg"><span class="ok">✓ 6.</span> Śnieg leżał na polu <span class="hl">niby</span> gruba kołdra. <span class="dlaczego">oba przykrywają</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pułapka"><span class="zle">✗ 2.</span> <span class="hl">Jak</span> się nazywa twój pies? <span class="dlaczego">to pytanie - nic z niczym nie porównujemy</span></div>
+    </div>
+    <div><span class="chip samo pop" data-slowo="samo">⚠️ samo „jak” to jeszcze nie porównanie - muszą być dwie podobne rzeczy</span></div>
+  </section>
+
+  <!-- ===== 06 utarte ===== -->
+  <section class="scena" data-id="06-utarte" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · ZNANE PORÓWNANIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Porównania, które zna każdy 🐾</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="głodny"><div class="emo">🐺</div><div class="nazwa">głodny jak wilk</div><div class="opis">wilk zawsze szuka jedzenia</div></div>
+      <div class="karta pop" data-slowo="zdrowy"><div class="emo">🐟</div><div class="nazwa">zdrowy jak ryba</div><div class="opis">rześka, pełna ruchu</div></div>
+      <div class="karta pop" data-slowo="wierny"><div class="emo">🐕</div><div class="nazwa">wierny jak pies</div><div class="opis">nie opuszcza swojego pana</div></div>
+    </div>
+    <div><span class="chip gdzie pop" data-slowo="rozmowie">💬 w rozmowie · 📚 w opowiadaniach · 🧚 w bajkach</span></div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+20" id="s07">
+    <span class="czesc c2">2 · ZNANE PORÓWNANIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dokończ">Dokończ znane porównania</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć">chytry jak . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.2">powolny jak . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.4">czerwony jak . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.6">silny jak . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.8">śpi jak . . . . . .</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="chytry">🦊 chytry jak <b>lis</b> <span class="dlaczego">w bajkach zawsze kogoś przechytrzy</span></div>
+      <div class="linia wjazd-lewo" data-slowo="powolny">🐢 powolny jak <b>żółw / ślimak</b> <span class="dlaczego">ledwo się ruszają</span></div>
+      <div class="linia wjazd-lewo" data-slowo="czerwony">🦞 czerwony jak <b>burak / rak</b></div>
+      <div class="linia wjazd-lewo" data-slowo="silny">🐴 silny jak <b>koń / niedźwiedź</b></div>
+      <div class="linia wjazd-lewo" data-slowo="suseł">😴 śpi jak <b>suseł</b> <span class="dlaczego">przesypia całą zimę</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="cechę">inne słowo? ✓ dobre, jeśli ta rzecz naprawdę ma tę cechę</span></div>
+  </section>
+
+  <!-- ===== 09 po co ===== -->
+  <section class="scena" data-id="09-po-co" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · PO CO?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Opis kota 🐈</h2>
+    <div class="po">
+      <span class="chip pop" data-slowo="ciekawszy">😮 ciekawszy opis</span>
+      <span class="chip pop" data-slowo="wyobrazić">🧠 łatwiej sobie wyobrazić</span>
+    </div>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="bez"><div class="nazwa">😴 bez porównań</div><div class="opis">Mój kot jest duży. Ma miękkie futro. Jego oczy są zielone.</div></div>
+      <div class="karta k2 pop" data-slowo="teraz"><div class="nazwa">🤩 z porównaniami</div><div class="opis">Mój kot jest duży <span class="hl">jak poduszka na kanapie</span>. Futro ma miękkie <span class="hl">niczym puszysty koc</span>. Oczy świecą mu <span class="hl">jak dwie zielone latarki</span>.</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+25" id="s10">
+    <span class="czesc c3">3 · PO CO?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ulepsz">Ulepsz opis psa Burka 🐕 - dopisz porównania</div>
+    <div class="karta burek pop" data-slowo="burka">
+      <div class="linia"><span class="nr">1</span>Burek jest wielki . . . . . . . . .</div>
+      <div class="linia"><span class="nr">2</span>Szczeka głośno . . . . . . . . .</div>
+      <div class="linia"><span class="nr">3</span>Biega szybko . . . . . . . . .</div>
+    </div>
+    <div class="slowka">
+      <span class="chip pop" data-slowo="porównanie">jak</span>
+      <span class="chip pop" data-slowo="porównanie" data-po="0.15">jakby</span>
+      <span class="chip pop" data-slowo="porównanie" data-po="0.3">niczym</span>
+      <span class="chip pop" data-slowo="porównanie" data-po="0.45">niby</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="wielki">1. Burek jest wielki <span class="hl">jak szafa</span>.</div>
+      <div class="linia wjazd-lewo" data-slowo="szczeka">2. Szczeka głośno <span class="hl">niczym syrena strażacka</span>. 🚒</div>
+      <div class="linia wjazd-lewo" data-slowo="biega">3. Biega szybko <span class="hl">jak strzała</span>. 🏹</div>
+    </div>
+    <div class="check">
+      <span class="chip pop" data-slowo="słówko">✓ jest słówko: jak, jakby, niczym, niby</span>
+      <span class="chip pop" data-slowo="cechę">✓ ta rzecz naprawdę ma tę cechę</span>
+    </div>
+    <div><span class="chip zgadza pop" data-slowo="szafa">szafa - wielka · syrena - głośna · strzała - szybka 👍</span></div>
+  </section>
+
+  <!-- ===== 12 wlasne ===== -->
+  <section class="scena" data-id="12-wlasne" id="s12">
+    <span class="czesc c4 zjaw" data-t="0">4 · TWOJE PORÓWNANIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Porównanie w 3 krokach 🪜</h2>
+    <div class="kroki">
+      <div class="karta pop" data-slowo="pierwszy"><div class="nazwa">1 · wybierz cechę</div><div class="opis">ciężki</div></div>
+      <div class="karta pop" data-slowo="drugi"><div class="nazwa">2 · co jest bardzo ciężkie?</div><div class="opis">🐘 słoń · 🪨 kamień · 🧳 walizka</div></div>
+      <div class="karta pop" data-slowo="trzeci"><div class="nazwa">3 · połącz słówkiem</div><div class="opis">jak</div></div>
+    </div>
+    <div class="karta wynik pop" data-slowo="plecak">🎒 Mój plecak w poniedziałek jest ciężki <span class="hl">jak walizka na wakacje</span>.</div>
+    <div><span class="chip zask pop" data-slowo="zaskakujące">✨ im bardziej zaskakujące, tym ciekawszy tekst</span></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+25" id="s13">
+    <span class="czesc c4">4 · TWOJE PORÓWNANIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wymyśl">Wymyśl własne porównania</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzech"><span class="nr">1</span>🏫 Szkolny korytarz na przerwie jest głośny . . . . . .</div>
+      <div class="linia pop" data-slowo="trzech" data-po="0.25"><span class="nr">2</span>🛏️ Moje łóżko w sobotę rano jest . . . . . .</div>
+      <div class="linia pop" data-slowo="trzech" data-po="0.5"><span class="nr">3</span>🌧️ Deszcz stuka w okno . . . . . .</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pamiętaj">cecha ➜ coś, co ją ma ➜ słówko</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="korytarz">🏫 Korytarz na przerwie jest głośny <span class="hl">jak stadion podczas meczu</span>.</div>
+      <div class="linia wjazd-lewo" data-slowo="łóżko">🛏️ Moje łóżko w sobotę rano jest ciepłe <span class="hl">niczym gniazdko</span>.</div>
+      <div class="linia wjazd-lewo" data-slowo="deszcz">🌧️ Deszcz stuka w okno, <span class="hl">jakby ktoś bębnił palcami</span>.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="każde">✓ cecha · słówko · rzecz, która ma tę cechę</span></div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="zestawia">🔗 porównanie zestawia dwie rzeczy i pokazuje, w czym są podobne</div>
+      <div class="linia pop" data-slowo="rozpoznasz">🔎 słówka: jak · jakby · niczym · niby</div>
+      <div class="linia pop" data-slowo="uwaga">⚠️ samo „jak” to za mało - muszą być dwie podobne rzeczy</div>
+      <div class="linia pop" data-slowo="trzy">🧩 co opisujemy + słówko + do czego porównujemy</div>
+      <div class="linia pop" data-slowo="zna">🐺 głodny jak wilk · 🦊 chytry jak lis · 😴 śpi jak suseł</div>
+      <div class="linia pop" data-slowo="wymyślić">✍️ własne: cecha ➜ coś, co ją ma ➜ jak</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

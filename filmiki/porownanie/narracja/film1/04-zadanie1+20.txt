@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest sześć zdań. Wypisz numery tych, w których jest porównanie. Uwaga, jedno zdanie to pułapka! Start!

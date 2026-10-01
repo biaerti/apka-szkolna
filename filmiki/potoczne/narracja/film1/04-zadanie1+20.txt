@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest pięć zdań. Przy każdym napisz, do kogo ktoś to powiedział: do kolegi czy do pani dyrektor. Start!

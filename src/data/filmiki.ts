@@ -43,6 +43,9 @@ export const FILMIKI: Filmik[] = [
   { id: 'dwukropek-film1', lekcja: 'V.27', title: 'Dwukropek i piszemy sprawozdanie (4 zadania)' },
   { id: 'reklama-film1', lekcja: 'V.28', title: 'Tekst reklamowy - słowa, sztuczki, prawda (4 zadania)' },
   { id: 'podsumowanie5-dzial2-film1', lekcja: 'V.29', title: 'Podsumowanie działu 2 - To wiem! To potrafię! (5 zadań)' },
+  // Klasa 4, rozdzial II "Pośród słów i znaczeń" - plan: docs/klasa4-rozdzial2-posrod-slow.md
+  { id: 'potoczne-film1', lekcja: 'II.1', title: 'Wyrazy potoczne - kiedy wolno, a kiedy nie (4 zadania)' },
+  { id: 'porownanie-film1', lekcja: 'II.2', title: 'Porównanie - jak, jakby, niczym, niby (4 zadania)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

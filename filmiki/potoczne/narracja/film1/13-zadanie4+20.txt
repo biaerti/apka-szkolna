@@ -1,0 +1,1 @@
+Zadanie czwarte. Ułóż pięć wyrazów potocznych w kolejności alfabetycznej, tak jak w słowniku. Uwaga, dwa wyrazy zaczynają się tą samą literą. Wtedy patrzymy na drugą literę. Start!
