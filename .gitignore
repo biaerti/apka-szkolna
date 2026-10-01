@@ -17,3 +17,6 @@ public/filmiki/
 
 # profil Chrome z zalogowanym NEON-em (screeny podrecznika) - sesja Bartka, nigdy do repo
 tmp/chrome-neon/
+
+# Pule pytan do sprawdzianow - nie do publicznego repo (uczniowie)
+materialy/*/sprawdzian-pula.mjs

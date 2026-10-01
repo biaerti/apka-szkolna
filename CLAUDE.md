@@ -37,3 +37,10 @@ Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recyt
 
 ## Handoff
 Stan bieżącej pracy jest w `session-logs/` (`/handoff`, `/pickup`).
+
+## Powtórka i sprawdzian po dziale
+Po filmach do całego działu robimy dwa PDF-y (wzór: `materialy/klasa5-dzial2/`).
+- **Zeszyt powtórzeniowy** (`tresc.mjs` → `node materialy/zeszyt.mjs <folder>`): okładka ze spisem, potem każdy temat na osobnej stronie: „Przypomnij sobie” (krótko, w punktach) + **te same zadania co w filmikach** z rozwiązaniem i „dlaczego”. PDF ląduje w `public/materialy/` - po pushu link dla uczniów: `https://szkola.klippi.pl/materialy/<plik>.pdf`. Bartek wrzuca go w VULCANIE jako nieobowiązkowe zadanie domowe („powtórz przed sprawdzianem”) - nic nie drukujemy.
+- **Sprawdzian** (`sprawdzian-pula.mjs` → `node materialy/sprawdzian.mjs <folder>`): pula zadań podobnych do zeszytu, generator losuje grupy A-D (ziarno = nazwa grupy, więc wynik jest powtarzalny) + klucz. Typy zadań: `wybor`, `lista`, `jeden`. **Pula i PDF-y sprawdzianu nie idą do repo** (repo jest publiczne): pula jest w `.gitignore`, PDF-y w `output/materialy/`.
+- Wspólny druk HTML → PDF: `materialy/pdf.mjs` (headless Chrome). Znaczniki w treści: `**pogrubienie**`, `==zaznaczenie==`, `__podkreślenie__`, `~~skreślenie~~`.
+- Podgląd stron: pymupdf → PNG, obejrzeć przed wysłaniem.
