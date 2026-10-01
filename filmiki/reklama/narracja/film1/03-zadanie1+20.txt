@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie są cztery krótkie teksty. Przy każdym napisz: reklama albo informacja. Start!

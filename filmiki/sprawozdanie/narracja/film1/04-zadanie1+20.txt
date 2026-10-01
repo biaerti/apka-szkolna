@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie są cztery zdania. Przy każdym napisz: sprawozdanie albo opowiadanie. Zastanów się, czy to prawdziwy fakt, czy fantazja. Start!

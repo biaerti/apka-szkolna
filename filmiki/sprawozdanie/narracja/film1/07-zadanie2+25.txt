@@ -1,0 +1,1 @@
+Zadanie drugie. Na ekranie jest sześć zdań ze sprawozdania z wizyty w teatrze. Do której części pasuje każde z nich: wstęp, rozwinięcie czy zakończenie? Zapisz numery w trzech grupach. Start!

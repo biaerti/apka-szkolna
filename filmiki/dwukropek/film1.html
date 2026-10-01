@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Dwukropek i sprawozdanie - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --dk: #C2410C; --sp: #1B6E8F; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color: var(--dk); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--dk); } .c2 { background: var(--sp); }
+.dk { color: var(--roz); font-weight: 800; font-size: 1.25em; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 14px; margin-left: 10px; vertical-align: 4px; background: var(--dk); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1120px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.rada { margin-top: 18px; font-size: 30px; background: var(--dk); }
+.str { font-size: 40px; font-weight: 800; color: var(--szary); text-align: center; }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .znak { font-family: 'Baloo 2'; font-size: 200px; font-weight: 800; line-height: .8; color: var(--roz); }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; line-height: 1; color: var(--dk); }
+#s01 .plus { margin-top: 16px; font-size: 34px; background: var(--sp); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 04 cytat ===== */
+#s04 .zamiana { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; margin: 18px auto 0; width: 1140px; }
+#s04 .zamiana .linia { font-size: 28px; }
+
+/* ===== 03 dialog ===== */
+#s03 .dialog { font-family: 'Baloo 2'; font-size: 32px; line-height: 1.4; border-color: var(--fiolet); }
+
+/* ===== 08 ===== */
+#s08 .lista .linia { font-size: 28px; }
+
+/* ===== 09 przepis ===== */
+#s09 .lista { width: 1000px; }
+#s09 .linia b { color: var(--sp); }
+#s09 .przyk { margin-top: 16px; font-size: 30px; border-color: var(--roz); }
+
+/* ===== 10 przyklad ===== */
+#s10 .tekst { margin: 12px auto 0; width: 1140px; text-align: left; padding: 12px 22px; border-color: var(--sp); }
+#s10 .tekst h3 { font-family: 'Baloo 2'; font-size: 36px; color: var(--sp); text-align: center; }
+#s10 .tekst p { font-size: 25px; font-weight: 700; line-height: 1.4; margin-top: 8px; }
+#s10 .tekst p .etyk { margin: 0 10px 0 0; vertical-align: 2px; }
+
+/* ===== 11-12 ===== */
+#s11 .info { margin: 16px auto 0; width: 1000px; text-align: left; border-color: var(--sp); }
+#s11 .info div { font-size: 30px; font-weight: 800; padding: 3px 0; }
+#s11 .info b { color: var(--sp); display: inline-block; width: 160px; }
+#s12 .zdanie { margin: 16px auto 0; width: 1100px; font-size: 30px; border-color: var(--zielony); }
+#s12 .pyt { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+#s12 .pyt .chip { font-size: 25px; background: var(--sp); }
+
+/* ===== 13-14 ===== */
+#s13 .linia, #s14 .linia { font-size: 34px; }
+
+/* ===== 15 ===== */
+#s15 .lista { width: 1080px; }
+#s15 .linia { font-size: 28px; padding: 6px 20px; }
+#s15 .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="znak pop" data-slowo="kropki">:</div>
+    <div class="tytul pop" data-slowo="dwukropek">Dwukropek</div>
+    <div><span class="chip plus pop" data-slowo="sprawozdanie">+ piszemy sprawozdanie 📝</span></div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 wyliczenie ===== -->
+  <section class="scena" data-id="02-wyliczenie" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · DWUKROPEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">1. Przed wyliczeniem 📋</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="plecaka">Do plecaka zapakowałem<span class="dk">:</span> książki, zeszyty i piórnik.</div>
+      <div class="linia wjazd-lewo" data-slowo="wycieczce">Na wycieczce zwiedziliśmy trzy miejsca<span class="dk">:</span> zamek, muzeum i rynek.</div>
+      <div class="linia wjazd-lewo" data-slowo="ogrodzie">W ogrodzie rosną kwiaty<span class="dk">:</span> róże, tulipany i bratki.</div>
+    </div>
+    <div><span class="chip rada pop" data-slowo="lista">dwukropek = uwaga, teraz będzie lista!</span></div>
+  </section>
+
+  <!-- ===== 03 wypowiedz ===== -->
+  <section class="scena" data-id="03-wypowiedz" id="s03">
+    <span class="czesc c1">1 · DWUKROPEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">2. Przed czyimiś słowami 💬</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="mama">Mama zawołała<span class="dk">:</span> - Obiad gotowy!</div>
+      <div class="linia wjazd-lewo" data-slowo="pani">Pani zapytała<span class="dk">:</span> - Kto zna odpowiedź?</div>
+      <div class="linia dialog wjazd-lewo" data-slowo="dialogu">Tata spojrzał na zegarek i powiedział<span class="dk">:</span><br>- Spóźnimy się!<br><span style="font-size:22px;color:var(--szary)">w dialogu: nowa linijka i myślnik</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 04 cytat ===== -->
+  <section class="scena" data-id="04-cytat" id="s04">
+    <span class="czesc c1">1 · DWUKROPEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">3. Przed cytatem „ ”</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="trener">Trener powiedział<span class="dk">:</span> „Nigdy się nie poddawajcie”.</div>
+    </div>
+    <div class="zamiana">
+      <div class="linia wjazd-lewo" data-slowo="ola">Ola powiedziała, że <b>jest</b> zmęczona.</div>
+      <div class="str zjaw" data-slowo="zamieniamy">➜</div>
+      <div class="linia pop" data-slowo="zamieniamy">Ola powiedziała<span class="dk">:</span> „<b>Jestem</b> zmęczona”.</div>
+    </div>
+    <div><span class="chip rada pop" data-slowo="osoba">zmienia się osoba: ona jest ➜ ja jestem</span></div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+20" id="s05">
+    <span class="czesc c1">1 · DWUKROPEK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="brakuje">Gdzie brakuje dwukropka?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="czterech"><span class="nr">1</span>Na urodziny zaprosiłam trzy koleżanki Zosię, Martę i Julię.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.25"><span class="nr">2</span>Tata krzyknął - Uwaga, schody!</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.5"><span class="nr">3</span>W sklepie kupiliśmy chleb, mleko i jajka.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.75"><span class="nr">4</span>Babcia zawsze powtarza „Kto rano wstaje, temu Pan Bóg daje”.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="urodziny">1. Na urodziny zaprosiłam trzy koleżanki<span class="dk">:</span> Zosię, Martę i Julię.<span class="etyk">wyliczenie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="tata">2. Tata krzyknął<span class="dk">:</span> - Uwaga, schody!<span class="etyk" style="background:var(--fiolet)">słowa</span></div>
+      <div class="linia wjazd-lewo" data-slowo="sklepie">3. W sklepie kupiliśmy<span class="dk">:</span> chleb, mleko i jajka.<span class="etyk">wyliczenie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="babcia">4. Babcia zawsze powtarza<span class="dk">:</span> „Kto rano wstaje, temu Pan Bóg daje”.<span class="etyk" style="background:var(--sp)">cytat</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+20" id="s07">
+    <span class="czesc c1">1 · DWUKROPEK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamień">Zamień na dwukropek i cytat „ ”</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="dwa"><span class="nr">1</span>Kuba powiedział, że zapomniał zeszytu.</div>
+      <div class="linia pop" data-slowo="dwa" data-po="0.3"><span class="nr">2</span>Pani oznajmiła, że jutro będzie kartkówka.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="osoby">⚠️ pamiętaj o zmianie osoby</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="kuba">1. Kuba powiedział<span class="dk">:</span> „<b>Zapomniałem</b> zeszytu”.</div>
+      <div class="linia wjazd-lewo" data-slowo="oznajmiła">2. Pani oznajmiła<span class="dk">:</span> „Jutro będzie kartkówka”.</div>
+    </div>
+    <div><span class="chip rada pop" data-slowo="zmieniliśmy">on zapomniał ➜ ja zapomniałem</span></div>
+  </section>
+
+  <!-- ===== 09 przepis na sprawozdanie ===== -->
+  <section class="scena" data-id="09-sprawozdanie" id="s09">
+    <span class="czesc c2 zjaw" data-t="0">2 · SPRAWOZDANIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--sp)">Przepis na sprawozdanie 📝</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="tytuł">🏷️ <b>tytuł</b></div>
+      <div class="linia wjazd-lewo" data-slowo="wstęp">1️⃣ <b>wstęp</b>: kto? co? kiedy? gdzie? dlaczego?</div>
+      <div class="linia wjazd-lewo" data-slowo="rozwinięcie">2️⃣ <b>rozwinięcie</b>: najpierw, następnie, na koniec</div>
+      <div class="linia wjazd-lewo" data-slowo="zakończenie">3️⃣ <b>zakończenie</b>: krótka opinia</div>
+      <div class="linia przyk pop" data-slowo="konkurencje">Odbyły się trzy konkurencje<span class="dk">:</span> bieg, skok w dal i przeciąganie liny.</div>
+    </div>
+  </section>
+
+  <!-- ===== 10 przyklad ===== -->
+  <section class="scena" data-id="10-przyklad" id="s10">
+    <span class="czesc c2">2 · SPRAWOZDANIE</span>
+    <div class="karta tekst">
+      <h3 class="pop" data-slowo="sportu">Dzień Sportu 🏅</h3>
+      <p class="zjaw" data-slowo="piątek"><span class="etyk" style="background:var(--sp)">wstęp</span>W piątek 20 maja na boisku naszej szkoły odbył się Dzień Sportu, bo świętowaliśmy Dzień Dziecka.</p>
+      <p class="zjaw" data-slowo="najpierw"><span class="etyk" style="background:var(--pomarancz)">rozwinięcie</span>Najpierw wszyscy zrobili rozgrzewkę. Następnie odbyły się trzy konkurencje<span class="dk">:</span> bieg, skok w dal i przeciąganie liny. Na koniec dyrektor wręczył medale.</p>
+      <p class="zjaw" data-slowo="udany"><span class="etyk" style="background:var(--zielony)">zakończenie</span>To był bardzo udany dzień, a najbardziej podobało mi się przeciąganie liny.</p>
+    </div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+25" id="s11">
+    <span class="czesc c2">2 · SPRAWOZDANIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wstęp">Napisz wstęp sprawozdania 🎄</div>
+    <div class="karta info pop" data-slowo="informacje">
+      <div><b>kto?</b> samorząd uczniowski</div>
+      <div><b>co?</b> kiermasz świąteczny</div>
+      <div><b>kiedy?</b> środa, 10 grudnia</div>
+      <div><b>gdzie?</b> korytarz szkoły</div>
+      <div><b>dlaczego?</b> zbiórka dla schroniska 🐶</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="jedno">1-2 zdania w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">PRZYKŁAD ✅</span></div>
+    <div class="linia zdanie pop" data-slowo="przykład">W środę 10 grudnia na korytarzu naszej szkoły samorząd uczniowski zorganizował kiermasz świąteczny, bo zbieraliśmy pieniądze dla schroniska.</div>
+    <div class="pyt">
+      <span class="chip pop" data-slowo="samorząd">kto ✓</span>
+      <span class="chip pop" data-slowo="kiermasz">co ✓</span>
+      <span class="chip pop" data-slowo="grudnia">kiedy ✓</span>
+      <span class="chip pop" data-slowo="korytarzu">gdzie ✓</span>
+      <span class="chip pop" data-slowo="schroniska">dlaczego ✓</span>
+      <span class="chip pop" data-slowo="inaczej" style="background:var(--zielony)">twoje zdanie może brzmieć inaczej</span>
+    </div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+20" id="s13">
+    <span class="czesc c2">2 · SPRAWOZDANIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dokończ">Dokończ - z dwukropkiem i wyliczeniem</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="stoiskach">Na stoiskach można było kupić …</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">PRZYKŁAD ✅</span></div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pierniki">Na stoiskach można było kupić<span class="dk">:</span> pierniki, ozdoby choinkowe i kartki świąteczne.</div>
+    </div>
+    <div><span class="chip rada pop" data-slowo="ważne">dwukropek po „kupić” · lista z przecinkami · „i” przed ostatnią</span></div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="wyliczeniem"><span class="dk">:</span> przed wyliczeniem: kupiliśmy<span class="dk">:</span> chleb, mleko i jajka</div>
+      <div class="linia pop" data-slowo="słowami"><span class="dk">:</span> przed czyimiś słowami: Mama zawołała<span class="dk">:</span></div>
+      <div class="linia pop" data-slowo="cytatem"><span class="dk">:</span> przed cytatem: Trener powiedział<span class="dk">:</span> „…”</div>
+      <div class="linia pop" data-slowo="osobę">🔄 z „że” na cytat ➜ zmieniam osobę</div>
+      <div class="linia pop" data-slowo="sprawozdaniu">📝 sprawozdanie: tytuł · wstęp · rozwinięcie · zakończenie</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

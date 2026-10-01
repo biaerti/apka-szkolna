@@ -1,0 +1,1 @@
+Zadanie drugie. Przeczytaj reklamę chrupek i wypisz wszystkie słowa, które nas namawiają. Postaraj się znaleźć co najmniej pięć. Start!

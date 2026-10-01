@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Tekst reklamowy - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --rk: #D9480F; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--rk); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 26px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.karta .emo { font-size: 50px; line-height: 1.1; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--rk); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 4px; }
+.e-r { background: var(--rk); } .e-i { background: var(--niebieski); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 25px; }
+.reklama { margin: 18px auto 0; width: 1000px; font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; line-height: 1.3; border-color: var(--rk); background: #fff4e6; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 104px; font-weight: 800; line-height: 1; color: var(--rk); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 28px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--rk); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--niebieski); }
+#s01 .grupy .chip:nth-child(4) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .def { margin: 16px auto 0; width: 900px; border-color: var(--rk); }
+#s02 .def .nazwa { color: var(--rk); }
+#s02 .lat { display: flex; gap: 16px; justify-content: center; margin-top: 16px; }
+#s02 .lat .chip { font-size: 30px; background: var(--rk); }
+#s02 .rzad { margin-top: 20px; }
+#s02 .k-i { border-color: var(--niebieski); } #s02 .k-i .nazwa { color: var(--niebieski); }
+#s02 .k-r { border-color: var(--rk); } #s02 .k-r .nazwa { color: var(--rk); }
+#s02 .cyt { font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; margin-top: 8px; }
+
+/* ===== 05 slowa ===== */
+#s05 .slowa { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 20px auto 0; width: 1100px; }
+#s05 .slowa .chip { font-size: 36px; background: var(--rk); padding: 6px 26px; }
+#s05 .wolacz { margin-top: 20px; font-size: 32px; background: var(--fiolet); }
+#s05 .obiet { margin-top: 14px; font-size: 30px; background: var(--niebieski); }
+
+/* ===== 07 ===== */
+#s07 .slowa { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+#s07 .slowa .chip { font-size: 30px; background: var(--rk); }
+#s07 .lista { width: 900px; }
+#s07 .linia { font-size: 28px; padding: 5px 20px; }
+
+/* ===== 08 sztuczki ===== */
+#s08 .siatka { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 24px; }
+#s08 .karta { padding: 12px 10px; border-color: var(--fiolet); }
+#s08 .karta .nazwa { font-size: 28px; color: var(--fiolet); }
+#s08 .haslo { margin-top: 26px; font-size: 40px; background: var(--fiolet); padding: 8px 40px; }
+
+/* ===== 09 prawda ===== */
+#s09 .lista { width: 900px; }
+#s09 .linia { font-size: 32px; }
+#s09 .mysl { margin-top: 20px; font-size: 34px; background: var(--zielony); }
+#s09 .cel { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s09 .cel .chip { font-size: 30px; background: var(--niebieski); }
+
+/* ===== 10-11 ===== */
+#s11 .lista .linia { font-size: 27px; }
+#s11 .lista b { color: var(--rk); }
+
+/* ===== 12-13 ===== */
+#s12 .temat { margin: 20px auto 0; width: 900px; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; border-color: var(--zielony); }
+#s12 .check, #s13 .check { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s12 .check .chip, #s13 .check .chip { font-size: 28px; background: var(--zielony); }
+#s13 .lista .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; border-color: var(--zielony); }
+
+/* ===== 14 ===== */
+#s14 .lista { width: 1080px; }
+#s14 .linia { font-size: 28px; padding: 6px 20px; }
+#s14 .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="emo pop" data-slowo="telewizji">📺📱🛒</div>
+    <div class="tytul pop" data-slowo="reklamy">Tekst reklamowy</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="rozpoznawać">🔎 rozpoznać</span>
+      <span class="chip pop" data-slowo="sztuczkami">🎩 sztuczki</span>
+      <span class="chip pop" data-slowo="prawdę">🤥 czy mówi prawdę?</span>
+      <span class="chip pop" data-slowo="hasło">✍️ własne hasło</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 co to ===== -->
+  <section class="scena" data-id="02-co-to" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co to jest reklama? 📢</h2>
+    <div class="karta def pop" data-slowo="namówić"><div class="nazwa">namawia, żeby coś kupić albo z czegoś skorzystać</div></div>
+    <div class="lat">
+      <span class="chip pop" data-slowo="łaciny">łac. reclamo = wołać, krzyczeć</span>
+      <span class="chip pop" data-slowo="woła">„Kup mnie!” 🗣️</span>
+    </div>
+    <div class="rzad">
+      <div class="karta k-i pop" data-slowo="informacja"><div class="nazwa">📰 INFORMACJA - fakty</div><div class="cyt">„Sklep jest czynny od 8.00 do 20.00.”</div></div>
+      <div class="karta k-r pop" data-slowo="zachwala"><div class="nazwa">📢 REKLAMA - zachwala</div><div class="cyt">„Najlepszy sklep w mieście! Zapraszamy!”</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="03-zadanie1+20" id="s03">
+    <span class="czesc c1">1 · CO TO JEST</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="napisz">Reklama czy informacja?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>„Nowy sok Słoneczko - zdrowie w każdej kropli! Kup teraz!”</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>„Sklep jest czynny od 8.00 do 20.00.”</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>„Tylko dziś drugi plecak GRATIS!”</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>„Biblioteka szkolna jest na pierwszym piętrze.”</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 04 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="sok">1. Nowy sok Słoneczko - zdrowie w każdej kropli! Kup teraz!<span class="etyk e-r">reklama</span></div>
+      <div class="linia wjazd-lewo" data-slowo="sklep">2. Sklep jest czynny od 8.00 do 20.00.<span class="etyk e-i">informacja</span></div>
+      <div class="linia wjazd-lewo" data-slowo="plecak">3. Tylko dziś drugi plecak GRATIS!<span class="etyk e-r">reklama</span> <span class="dlaczego">obietnica, pośpiech</span></div>
+      <div class="linia wjazd-lewo" data-slowo="biblioteka">4. Biblioteka szkolna jest na pierwszym piętrze.<span class="etyk e-i">informacja</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 05 slowa ===== -->
+  <section class="scena" data-id="05-slowa" id="s05">
+    <span class="czesc c2 zjaw" data-t="0">2 · JAK JĄ ROZPOZNAĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Słowa z reklam 🔎</h2>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="nowość">nowość!</span>
+      <span class="chip pop" data-slowo="promocja">promocja</span>
+      <span class="chip pop" data-slowo="gratis">gratis</span>
+      <span class="chip pop" data-slowo="najlepszy">najlepszy</span>
+      <span class="chip pop" data-slowo="super">super</span>
+      <span class="chip pop" data-slowo="tylko">tylko teraz!</span>
+      <span class="chip pop" data-slowo="taniej">taniej</span>
+      <span class="chip pop" data-slowo="więcej">więcej</span>
+    </div>
+    <div><span class="chip wolacz pop" data-slowo="kup">👉 kup! spróbuj! sprawdź! nie przegap!</span></div>
+    <div><span class="chip obiet pop" data-slowo="obiecuje">obiecuje: szczęśliwszy, zdrowszy, szybszy ✨</span></div>
+  </section>
+
+  <!-- ===== 06 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="06-zadanie2+20" id="s06">
+    <span class="czesc c2">2 · JAK JĄ ROZPOZNAĆ</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wypisz">Wypisz słowa, które namawiają</div>
+    <div class="karta reklama pop" data-slowo="chrupek">🚀 NOWOŚĆ! Super Chrupki Kosmos - najlepsze chrupki na świecie! Tylko teraz dwie paczki w cenie jednej! Spróbuj, a pokochasz!</div>
+    <div class="pisz zjaw" data-slowo="pięć">co najmniej 5 słów 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 07 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="07-odpowiedz2" id="s07">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="nowość">nowość!</span>
+      <span class="chip pop" data-slowo="najlepsze">najlepsze</span>
+      <span class="chip pop" data-slowo="tylko">tylko teraz!</span>
+      <span class="chip pop" data-slowo="cenie">dwie w cenie jednej!</span>
+      <span class="chip pop" data-slowo="spróbuj">spróbuj!</span>
+      <span class="chip pop" data-slowo="pokochasz">pokochasz!</span>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="ciekawi">nowość ➜ mamy być ciekawi 🤔</div>
+      <div class="linia wjazd-lewo" data-slowo="uwierzyli">najlepsze ➜ mamy uwierzyć 🏆</div>
+      <div class="linia wjazd-lewo" data-slowo="pospieszyli">tylko teraz ➜ mamy się spieszyć ⏰</div>
+      <div class="linia wjazd-lewo" data-slowo="prosto">spróbuj ➜ mówi prosto do nas 👉</div>
+    </div>
+  </section>
+
+  <!-- ===== 08 sztuczki ===== -->
+  <section class="scena" data-id="08-sztuczki" id="s08">
+    <span class="czesc c2">2 · JAK JĄ ROZPOZNAĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Sztuczki reklamy 🎩</h2>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="kolorów"><div class="emo">🎨</div><div class="nazwa">jaskrawe kolory</div></div>
+      <div class="karta pop" data-slowo="uśmiechniętych"><div class="emo">😁</div><div class="nazwa">uśmiechnięci ludzie</div></div>
+      <div class="karta pop" data-slowo="sportowiec"><div class="emo">⭐</div><div class="nazwa">znani ludzie</div></div>
+      <div class="karta pop" data-slowo="piosenkę"><div class="emo">🎵</div><div class="nazwa">piosenka</div></div>
+      <div class="karta pop" data-slowo="rymuje"><div class="emo">🔁</div><div class="nazwa">rym w haśle</div></div>
+    </div>
+    <div><span class="chip haslo pop" data-slowo="mleko">„Mleko pij, zdrowo żyj!” 🥛</span></div>
+  </section>
+
+  <!-- ===== 09 prawda ===== -->
+  <section class="scena" data-id="09-prawda" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · CZY TO PRAWDA?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Reklama a prawda 🤥</h2>
+    <div class="cel">
+      <span class="chip pop" data-slowo="piękniejszy">świat piękniejszy niż naprawdę</span>
+      <span class="chip pop" data-slowo="sprzedaż">cel: sprzedaż 💰</span>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="buty">👟 buty z reklamy ≠ wygrany każdy wyścig</div>
+      <div class="linia wjazd-lewo" data-slowo="szampon">🧴 szampon ≠ zostaniesz gwiazdą</div>
+    </div>
+    <div><span class="chip mysl pop" data-slowo="mądry">🧠 najpierw myśl i sprawdzaj, potem kupuj</span></div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+20" id="s10">
+    <span class="czesc c3">3 · CZY TO PRAWDA?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="obiecuje">Co obiecuje? Jak jest naprawdę?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="dwie">👟 „Buty Rakieta - z nimi wygrasz każdy wyścig!”</div>
+      <div class="linia pop" data-slowo="dwie" data-po="0.3">🎒 „Plecak Geniusz - z nim zawsze dostaniesz szóstkę!”</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="rakieta">👟 Buty Rakieta - obiecuje: <b>zwycięstwo</b></div>
+      <div class="linia wjazd-lewo" data-slowo="trenować">naprawdę: trzeba trenować, buty mogą być najwyżej wygodne</div>
+      <div class="linia wjazd-lewo" data-slowo="geniusz">🎒 Plecak Geniusz - obiecuje: <b>dobre oceny</b></div>
+      <div class="linia wjazd-lewo" data-slowo="nauki">naprawdę: oceny zależą od nauki, nie od plecaka</div>
+    </div>
+  </section>
+
+  <!-- ===== 12 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="12-zadanie4+25" id="s12">
+    <span class="czesc c4">4 · TWOJE HASŁO</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wymyśl">Wymyśl hasło reklamowe</div>
+    <div class="karta temat pop" data-slowo="owoców">🍎🍌🍐 owoce na drugie śniadanie</div>
+    <div class="check">
+      <span class="chip pop" data-slowo="krótkie">krótkie</span>
+      <span class="chip pop" data-slowo="wykrzyknikiem">z wykrzyknikiem !</span>
+      <span class="chip pop" data-slowo="rymem">najlepiej z rymem 🔁</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 13 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="13-odpowiedz4" id="s13">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="jabłko">🍎 „Jabłko chrup, będziesz zdrów jak dąb!”</div>
+      <div class="linia wjazd-lewo" data-slowo="owoc">🎒 „Owoc w plecaku, siła w dzieciaku!”</div>
+      <div class="linia wjazd-lewo" data-slowo="banan">🍌 „Banan, gruszka, śliwka - zdrowa przerwa, dobra chwilka!”</div>
+    </div>
+    <div class="check">
+      <span class="chip pop" data-slowo="krótkie">✓ krótkie</span>
+      <span class="chip pop" data-slowo="odbiorcy">✓ mówi do odbiorcy</span>
+      <span class="chip pop" data-slowo="zapamiętać">✓ łatwo zapamiętać</span>
+    </div>
+  </section>
+
+  <!-- ===== 14 podsumowanie ===== -->
+  <section class="scena" data-id="14-podsumowanie" id="s14">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="namawia">📢 tekst reklamowy namawia do kupna</div>
+      <div class="linia pop" data-slowo="wołać">🏛️ reclamo = wołać, krzyczeć</div>
+      <div class="linia pop" data-slowo="rozpoznajesz">🔎 nowość, promocja, gratis, najlepszy, tylko teraz · ! · „kup, spróbuj”</div>
+      <div class="linia pop" data-slowo="kolorami">🎩 kolory, obrazki, znani ludzie, rymowane hasło</div>
+      <div class="linia pop" data-slowo="piękniejszy">🤥 świat piękniejszy niż naprawdę - najpierw myśl, potem kupuj</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Zadanie trzecie. Na ekranie są informacje o szkolnym kiermaszu. Napisz z nich wstęp sprawozdania. Jedno, dwa zdania, które odpowiadają na pytania: kto? co? kiedy? gdzie? dlaczego? Start!

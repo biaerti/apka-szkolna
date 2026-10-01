@@ -39,6 +39,9 @@ export const FILMIKI: Filmik[] = [
   { id: 'nietypowe-film1', lekcja: 'V.23', title: 'Nietypowa odmiana - muzeum, jedne drzwi (4 zadania)' },
   { id: 'ogonki-film1', lekcja: 'V.24', title: 'Ę i ą na końcu wyrazu (3 zadania)' },
   { id: 'temat-film1', lekcja: 'V.25', title: 'Temat i końcówka, trik na ó (3 zadania)' },
+  { id: 'sprawozdanie-film1', lekcja: 'V.26', title: 'Sprawozdanie - części, fakty, słowa porządkujące (4 zadania)' },
+  { id: 'dwukropek-film1', lekcja: 'V.27', title: 'Dwukropek i piszemy sprawozdanie (4 zadania)' },
+  { id: 'reklama-film1', lekcja: 'V.28', title: 'Tekst reklamowy - słowa, sztuczki, prawda (4 zadania)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

@@ -55,8 +55,6 @@ function poKolei(...slides: Slide[]): Slide[] {
   });
 }
 
-const FILM_POZNIEJ = 'Film do tej lekcji jeszcze nie powstał - dopóki go nie ma, uczysz z ramki na ekranie i tablicy.';
-
 export const DZIAL2_TOPICS: Topic[] = [
   {
     title: '17. Przenośnia - słowa nie wprost',
@@ -564,7 +562,7 @@ export const DZIAL2_TOPICS: Topic[] = [
     topic: 'Sprawozdanie',
     textbookPage: 66,
     teacherPlan: plan(
-      ['Co dziś', `Nowa forma wypowiedzi (s. 66-68). Czym jest sprawozdanie, z czego się składa, przydatne słowa, wzór z Centrum Nauki Kopernik. Ćwiczymy na tekście o Sandomierzu i planie wycieczki do Krakowa. Pisanie całego sprawozdania - na następnej lekcji. ${FILM_POZNIEJ}`],
+      ['Co dziś', `Nowa forma wypowiedzi (s. 66-68). Czym jest sprawozdanie, z czego się składa, przydatne słowa, wzór z Centrum Nauki Kopernik. Ćwiczymy na tekście o Sandomierzu i planie wycieczki do Krakowa. Pisanie całego sprawozdania - na następnej lekcji.`],
       ['Po lekcji uczeń', [
         '- wie, czym sprawozdanie różni się od opowiadania,',
         '- zna trzy części sprawozdania i pytania wstępu,',
@@ -573,13 +571,11 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (7 min).',
-        '2. **Ramka s. 66** (5 min) - definicja, jak pisać, przydatne słowa.',
-        '3. **Wzór s. 67** (4 min) - pokazujesz strzałki: kto? co? kiedy? gdzie? dlaczego? jak? opinia.',
-        '4. **Notatka** (5 min).',
-        '5. **s. 67 zad. 1** (8 min) - czytacie tekst, odpowiedzi ustnie z koła.',
-        '6. **s. 68 zad. 3** (4 min) - wyrazy bliskoznaczne do iść, oglądać, opowiadać.',
-        '7. **s. 68 zad. 4** (5 min) - co zbędne na wycieczce do Łańcuta.',
-        '8. **s. 68 zad. 5** (8 min) - plan wycieczki do Krakowa ze zdjęć.',
+        '2. **Ramka s. 66 i wzór s. 67** (3 min) - rzut oka na strzałki: kto? co? kiedy? gdzie? dlaczego?',
+        '3. **Film „Sprawozdanie”** (7 min) - sprawozdanie a opowiadanie, trzy części, zbędne szczegóły, słowa porządkujące. 4 zadania do zeszytu, każde od razu sprawdzone.',
+        '4. **Koło z nowymi zadaniami** (5 min).',
+        '5. **Notatka** (4 min).',
+        '6. Zadania z podręcznika na ile starczy czasu: **s. 67 zad. 1** (Sandomierz, ustnie), **s. 68 zad. 3**, **zad. 4**, **zad. 5** (plan wycieczki do Krakowa).',
       ].join('\n')],
       ['Jak wyjaśnić', 'Sprawozdanie to opowiadanie „na serio”: tylko prawdziwe fakty, po kolei, bez fantazji i bez dialogów. Opinia jest dopiero w zakończeniu - jedno, dwa zdania.'],
       ['Odpowiedzi', [
@@ -590,17 +586,20 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
     ),
     questions: [
-      { text: 'Co to jest sprawozdanie?', answer: 'Krótka, rzeczowa relacja z wydarzenia, w którym się uczestniczyło.' },
+      { text: 'Co to jest sprawozdanie?', answer: 'Krótka, rzeczowa relacja z prawdziwego wydarzenia, w którym się uczestniczyło.' },
+      { text: 'Sprawozdanie czy opowiadanie: „Rano autokar zawiózł nas do Torunia.”?', answer: 'Sprawozdanie - prawdziwy fakt.' },
+      { text: 'Do której części pasuje: „Bardzo polecam to muzeum.”?', answer: 'Do zakończenia - to opinia.' },
+      { text: 'Czy w sprawozdaniu z meczu napiszesz, co było na obiad? Dlaczego?', answer: 'Nie - to zbędny szczegół, nie dotyczy meczu.' },
+      { text: 'Czym zastąpisz „poszliśmy” w sprawozdaniu?', answer: 'Np. udaliśmy się, wyruszyliśmy, dotarliśmy.' },
       { text: 'Na jakie pytania odpowiada wstęp sprawozdania?', answer: 'Kto? Co? Kiedy? Gdzie? Dlaczego?' },
-      { text: 'Podaj trzy wyrazy, które pokazują kolejność zdarzeń.', answer: 'Np. najpierw, następnie, potem, później, na koniec.' },
-      { text: 'Czym sprawozdanie różni się od opowiadania?', answer: 'Opisuje tylko prawdziwe fakty, rzeczowo, bez fantazji i dialogów.' },
-      { text: 'Co piszemy w zakończeniu sprawozdania?', answer: 'Krótką opinię o wydarzeniu.' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Sprawozdanie'),
       ...recap(previousSetId),
       ramka('d2-s66-ramka', 66, 'Jak napisać sprawozdanie?'),
       ramka('d2-s67-wzor', 67, 'Wzór sprawozdania'),
+      slideVideo('sprawozdanie-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : []),
       slideNote('Sprawozdanie', '1. Sprawozdanie - krótka, rzeczowa relacja z wydarzenia, w którym brałem udział.\n2. Wstęp: kto? co? kiedy? gdzie? dlaczego?\n3. Rozwinięcie: jak przebiegało - po kolei (najpierw, następnie, na koniec).\n4. Zakończenie: krótka opinia.\n5. Tylko fakty, czas przeszły, tytuł.'),
       ...poKolei(
         zad('d2-s67-zad1', 67, '1', 'ustnie'),
@@ -616,7 +615,7 @@ export const DZIAL2_TOPICS: Topic[] = [
     topic: 'Dwukropek. Piszemy sprawozdanie',
     textbookPage: 69,
     teacherPlan: plan(
-      ['Co dziś', `Dwie części. Najpierw dwukropek (s. 69): dialog, wyliczenie, cytat - przyda się od razu w sprawozdaniu, bo tam często coś wyliczamy. Potem każdy pisze w klasie sprawozdanie z ostatniego wydarzenia klasowego (s. 68 zad. 6). ${FILM_POZNIEJ}`],
+      ['Co dziś', `Dwie części. Najpierw dwukropek (s. 69): dialog, wyliczenie, cytat - przyda się od razu w sprawozdaniu, bo tam często coś wyliczamy. Potem każdy pisze w klasie sprawozdanie z ostatniego wydarzenia klasowego (s. 68 zad. 6).`],
       ['Po lekcji uczeń', [
         '- stawia dwukropek przed dialogiem, wyliczeniem i cytatem,',
         '- zamienia mowę zależną na cytat z dwukropkiem i cudzysłowem,',
@@ -624,9 +623,9 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (6 min) - sprawozdanie.',
-        '2. **Na rozgrzewkę s. 69** (3 min).',
-        '3. **Ramka s. 69** (3 min) + **notatka** (4 min).',
-        '4. **s. 69 zad. 1** (5 min) i **zad. 2** (4 min).',
+        '2. **Film „Dwukropek i sprawozdanie”** (7 min) - dwukropek przed wyliczeniem, słowami i cytatem, zamiana „że” na cytat, przepis na sprawozdanie i przykład „Dzień Sportu”. 4 zadania do zeszytu, każde od razu sprawdzone.',
+        '3. **Koło z nowymi zadaniami** (4 min) + **notatka** (3 min).',
+        '4. **s. 69 zad. 1 i 2** - jeśli zostanie czas (zapas).',
         '5. **s. 68 zad. 6** (20 min) - sprawozdanie. Na tablicy wypisz razem z klasą wydarzenia, z których można pisać (wycieczka, apel, zawody). Kto nie skończy - kończy w domu.',
       ].join('\n')],
       ['Odpowiedzi', [
@@ -636,14 +635,17 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
     ),
     questions: [
-      { text: 'W jakich trzech sytuacjach stawiamy dwukropek?', answer: 'Przed dialogiem, przed wyliczeniem i przed cytatem.' },
-      { text: 'Gdzie postawisz dwukropek: „Na wycieczkę pojechały trzy klasy 5a, 5b i 5c”?', answer: 'Po „trzy klasy”: pojechały trzy klasy: 5a, 5b i 5c.' },
-      { text: 'Przekształć z dwukropkiem: Ola powiedziała, że jest zmęczona.', answer: 'Ola powiedziała: „Jestem zmęczona”.' },
+      { text: 'W jakich trzech sytuacjach stawiamy dwukropek?', answer: 'Przed wyliczeniem, przed czyimiś słowami i przed cytatem.' },
+      { text: 'Gdzie postawisz dwukropek: „W klasie mamy trzy rybki Nemo, Dory i Bąbel”?', answer: 'Po „trzy rybki”: mamy trzy rybki: Nemo, Dory i Bąbel.' },
+      { text: 'Przekształć z dwukropkiem: Adam powiedział, że jest głodny.', answer: 'Adam powiedział: „Jestem głodny”.' },
       { text: 'Co zapisujemy w cudzysłowie po dwukropku?', answer: 'Cudze słowa - cytat.' },
+      { text: 'Podaj wstęp sprawozdania z apelu - na jakie pytania musi odpowiedzieć?', answer: 'Kto? Co? Kiedy? Gdzie? Dlaczego?' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Dwukropek. Sprawozdanie'),
       ...recap(previousSetId),
+      slideVideo('dwukropek-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4 }] : []),
       rozgrzewka('d2-s69-rozgrzewka', 69, 'ustnie'),
       ramka('d2-s69-ramka', 69, 'Kiedy stawiamy dwukropek?'),
       slideNote('Dwukropek', 'Dwukropek stawiam:\n1. przed dialogiem: Nagle ktoś krzyknął:\n2. przed wyliczeniem: Zwiedziliśmy trzy miejsca: Wawel, Rynek i Barbakan.\n3. przed cytatem: Krasicki powiedział: „Umiej być przyjacielem”.'),
@@ -658,7 +660,7 @@ export const DZIAL2_TOPICS: Topic[] = [
     topic: 'Tekst reklamowy',
     textbookPage: 94,
     teacherPlan: plan(
-      ['Co dziś', `Tekst reklamowy (s. 94-95) bez eseju Etinga ze s. 93-94 - jest za trudny, a z lekcji wystarczy ramka i zadania. Jak rozpoznać reklamę, po co jest, jak działa (hasło, kolory, obietnice). Na koniec każdy wymyśla hasło reklamowe. ${FILM_POZNIEJ}`],
+      ['Co dziś', `Tekst reklamowy (s. 94-95) bez eseju Etinga ze s. 93-94 - jest za trudny, a z lekcji wystarczy ramka i zadania. Jak rozpoznać reklamę, po co jest, jak działa (hasło, kolory, obietnice). Na koniec każdy wymyśla hasło reklamowe.`],
       ['Po lekcji uczeń', [
         '- rozpoznaje tekst reklamowy i odróżnia go od informacyjnego,',
         '- wskazuje w reklamie hasło i słowa, które namawiają,',
@@ -667,12 +669,12 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (6 min) - dwukropek.',
-        '2. **Ramka s. 94** (3 min). Dodaj: reklama z łaciny „reclamo” = wołać, krzyczeć.',
-        '3. **Notatka** (5 min).',
-        '4. **s. 95 zad. 7** ustnie (5 min) - które zdania to hasła reklamowe.',
-        '5. **s. 95 zad. 9** (8 min) - reklama pasty: hasło, kolory, obrazki, wyróżnienia.',
-        '6. **s. 95 zad. 5** ustnie (4 min) - świat z reklam a prawdziwy.',
-        '7. **s. 95 zad. 10** (12 min) - hasło + szkic plakatu. W parach albo sam. Kilka osób prezentuje.',
+        '2. **Ramka s. 94** (2 min) - rzut oka.',
+        '3. **Film „Tekst reklamowy”** (6 min) - reklama a informacja, słowa z reklam, sztuczki, reklama a prawda, własne hasło. 4 zadania do zeszytu, każde od razu sprawdzone.',
+        '4. **Koło z nowymi zadaniami** (5 min) + **notatka** (4 min).',
+        '5. **s. 95 zad. 9** (6 min) - reklama pasty: hasło, kolory, obrazki, wyróżnienia.',
+        '6. **s. 95 zad. 10** (12 min) - hasło + szkic plakatu. W parach albo sam. Kilka osób prezentuje.',
+        '7. Zapas: **s. 95 zad. 7** i **zad. 5** ustnie.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **zad. 7** Hasła: „Oto superskuteczne tabletki...” i „Wyjątkowa oferta! Kup zmywarkę...”. Poznajemy po zachwalaniu, wykrzyknikach, zwrocie do odbiorcy, obietnicy i słowach typu gratis.',
@@ -682,15 +684,18 @@ export const DZIAL2_TOPICS: Topic[] = [
     ),
     questions: [
       { text: 'Co to jest tekst reklamowy?', answer: 'Tekst, który ma nakłonić do kupienia produktu albo skorzystania z usługi.' },
-      { text: 'Podaj trzy słowa, które często pojawiają się w reklamach.', answer: 'Np. nowość, promocja, gratis, taniej, więcej, niższa cena.' },
-      { text: 'Czym różni się tekst reklamowy od informacyjnego?', answer: 'Informacyjny podaje fakty, reklamowy namawia i zachwala.' },
-      { text: 'Skąd pochodzi słowo „reklama”?', answer: 'Z łaciny: reclamo - wołać, krzyczeć.' },
-      { text: 'Dlaczego nie warto wierzyć każdej reklamie?', answer: 'Bo pokazuje świat piękniejszy niż naprawdę - jej celem jest sprzedaż.' },
+      { text: 'Reklama czy informacja: „Basen jest zamknięty w poniedziałki.”?', answer: 'Informacja - sam fakt.' },
+      { text: 'Reklama czy informacja: „Super promocja! Druga pizza za złotówkę!”?', answer: 'Reklama - zachwala, obiecuje, wykrzyknik.' },
+      { text: 'Podaj trzy słowa, które często pojawiają się w reklamach.', answer: 'Np. nowość, promocja, gratis, najlepszy, tylko teraz.' },
+      { text: 'Co naprawdę obiecuje reklama: „Z tym zeszytem zawsze odrobisz lekcje!”?', answer: 'Nic prawdziwego - lekcje odrabia się nauką, nie zeszytem.' },
+      { text: 'Dlaczego hasła reklamowe często się rymują?', answer: 'Bo łatwo je zapamiętać.' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Tekst reklamowy'),
       ...recap(previousSetId),
       ramka('d2-s94-ramka', 94, 'Tekst reklamowy'),
+      slideVideo('reklama-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : []),
       slideNote('Tekst reklamowy', '1. Tekst reklamowy namawia do kupna albo skorzystania z usługi (reclamo = wołać, krzyczeć).\n2. Rozpoznaję go po haśle i słowach: nowość, promocja, gratis, taniej, więcej; po wykrzyknikach i zwrotach do mnie.\n3. Reklama pokazuje świat piękniejszy niż naprawdę - najpierw sprawdzam, potem kupuję.'),
       zad('d2-s95-zad7', 95, '7', 'ustnie'),
       zad('d2-s95-zad9', 95, '9', 'zeszyt'),
