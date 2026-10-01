@@ -5,6 +5,7 @@ import type { Lesson, Question, QuestionSet, Slide, SlideArt, StudentAction } fr
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
 import { ROZDZIAL2_TOPICS } from './textbook4rozdzial2';
+import { plan } from './textbook5slides';
 
 interface Topic {
   title: string;
@@ -392,32 +393,53 @@ const TOPICS: Topic[] = [
     ],
   },
   {
+    // Podsumowanie rozdzialu jak lekcja 29 w rozdziale II: film ze wszystkiego,
+    // kolo z nowymi pytaniami, notatka. Tekst ze s. 50-52 (basn) pomijamy -
+    // dzial ma juz swoje czytanki. Do domu zeszyt PDF, potem sprawdzian A-D.
     title: '16. Co już wiesz? Co umiesz?',
-    topic: 'Powtórzenie działu I - o emocjach, relacjach i uczeniu się',
+    topic: 'Poznajemy siebie i innych - podsumowanie',
     textbookPage: 50,
+    teacherPlan: plan(
+      ['Co dziś', 'Podsumowanie rozdziału I przed sprawdzianem. Film powtarza wszystkie pojęcia działu: świat przedstawiony i osobę mówiącą, notatkę, głoski i sylaby, epitet, czasownik, zdanie i równoważnik, plan ramowy. Baśń „Książę, który chciał być żabą” (s. 50-52) pomijamy.'],
+      ['Przebieg (45 min)', [
+        '1. **Temat + koło powtórzeniowe** (5 min) - plan ramowy.',
+        '2. **Film „Podsumowanie rozdziału I”** (10 min, 5 zadań do zeszytu).',
+        '3. **Koło z nowymi pytaniami** (10 min).',
+        '4. **Notatka** (5 min).',
+        '5. Do domu: zeszyt powtórzeniowy PDF (link w VULCANIE): https://szkola.klippi.pl/materialy/klasa4-rozdzial1-powtorka.pdf',
+        '6. Następna lekcja: sprawdzian (grupy A-D, `node materialy/sprawdzian.mjs klasa4-rozdzial1`).',
+      ].join('\n')],
+    ),
     notebookNote: [
-      '## Najważniejsze',
+      '## Tekst',
       '- **Świat przedstawiony**: czas, miejsce, bohaterowie, wydarzenia.',
-      '- **Epitet** określa: jedwabna chusteczka.',
-      '- **Zdanie** ma czasownik w formie osobowej, **równoważnik** - nie.', '',
-      '## Morał baśni o księciu',
-      'Książę jako żaba poznał osobę, która polubiła go za to, jaki jest. **Nie udawaj innych i nie wstydź się tego, kim jesteś.**',
+      '- W opowiadaniu mówi **narrator** (bohater albo obserwator), w wierszu **podmiot liryczny**. **Autor** napisał tekst.', '',
+      '## Notatki i wyrazy',
+      '- Notatkę dobieramy do celu: **punkty**, **tabela**, **mapa myśli**.',
+      '- **Literę** widzimy, **głoskę** słyszymy (sz, cz, ch - dwie litery, jedna głoska). W każdej sylabie jest samogłoska.', '',
+      '## Język',
+      '- **Epitet** określa rzeczownik: jaki? jaka? jakie? - ciemny las.',
+      '- **Czasownik** nazywa czynności i stany, odmienia się przez osoby, liczby, czasy i rodzaje. **„Nie”** z czasownikami piszemy osobno.',
+      '- **Zdanie** ma czasownik w formie osobowej, **równoważnik zdania** nie ma.',
+      '- **Plan ramowy**: najważniejsze wydarzenia, po kolei, w tej samej formie (równoważniki zdań).',
     ].join('\n'),
+    // Kolo po filmie (podsumowanie4-dzial1-film1): nowe pytania, inne niz w filmie.
     questions: [
-      { text: 'Co składa się na świat przedstawiony utworu?', answer: 'Czas i miejsce wydarzeń, bohaterowie oraz wydarzenia.' },
-      { text: 'Po czym poznasz, że wypowiedzenie jest zdaniem?', answer: 'Zawiera czasownik w formie osobowej.' },
-      { text: 'Co to jest epitet? Podaj przykład.', answer: 'Wyraz określający, np. „jedwabna chusteczka”.' },
-      { text: 'Dlaczego książę chciał być żabą?', answer: 'Chciał znaczyć tak mało jak ona - sprawdzić, czy ktoś doceni go za to, kim jest, a nie za tytuł i majątek.' },
-      { text: 'Jaką radę dała księciu dziewczyna?', answer: 'Nie udawać kogoś innego i nie uważać się za lepszego, ale też nie wstydzić się tego, kim się jest.' },
+      { text: 'Wskaż czas, miejsce i bohatera: „W poniedziałek Ola spotkała w parku jeża”.', answer: 'Czas - poniedziałek, miejsce - park, bohaterka - Ola (i jeż).' },
+      { text: 'Kto mówi: „Weszliśmy do starego zamku”?', answer: 'Narrator-bohater - mówi o sobie (weszliśmy).' },
+      { text: 'Jaką notatkę wybierzesz do porównania kota i psa?', answer: 'Tabelę - porównujemy dwie rzeczy według tych samych cech.' },
+      { text: 'Ile liter i ile głosek ma wyraz „szczur”?', answer: '7 liter, 5 głosek (sz, cz to po jednej głosce).' },
+      { text: 'Wskaż epitety: „Mały, szary kot spał na miękkiej poduszce”.', answer: 'mały, szary (kot), miękkiej (poduszce).' },
+      { text: 'Określ osobę, liczbę, czas i rodzaj: „pobiegł”.', answer: '3. osoba, liczba pojedyncza, czas przeszły, rodzaj męski.' },
+      { text: 'Zdanie czy równoważnik: „Nie dotykać eksponatów!”?', answer: 'Równoważnik - dotykać to bezokolicznik, nie forma osobowa.' },
+      { text: 'Zamień na punkt planu: „Kuba wygrał konkurs”.', answer: 'np. Wygrana Kuby w konkursie / Zwycięstwo Kuby w konkursie.' },
     ],
-    makeSlides: (previousSetId) => [
-      slideTopic('Co już wiesz? Co umiesz?'),
+    makeSlides: (previousSetId, ownSetId) => [
+      slideTopic('Poznajemy siebie i innych - podsumowanie'),
       ...recap(previousSetId),
-      slideRead('Otwieramy podręcznik', 50, 53, 'Czytamy baśń „Książę, który chciał być żabą” i powtarzamy wiadomości z całego działu: świat przedstawiony, epitety, czasownik oraz zdania i równoważniki zdań.', 24 * 60),
-      slideText('Powtórka działu: mapa pojęć', 'Za Tobą cały dział. Sprawdź, czy pamiętasz: **świat przedstawiony** i **narratora**, **epitet**, **głoski, litery i sylaby**, **czasownik** i jego formy oraz **zdanie i równoważnik zdania**.\n\nJeśli któreś pojęcie ucieka, zajrzyj do mapy na s. 50 - to ściąga z całego rozdziału.', 'swiatPrzedstawiony'),
-      slideTask('Z1', 'Przeczytaj wypowiedzenia z baśni i spoza niej:\n\n1. „Dość tego!”\n2. „Nie zamierzam się żenić!”\n3. „Twoje życzenie jest dla mnie rozkazem!”\n4. „Spokój w stawie.”\n\nOznacz je literami **Z** - zdanie albo **R** - równoważnik. W zdaniach wskaż czasownik w formie osobowej i określ jego osobę, liczbę i czas.', 8 * 60, undefined, '1. R\n2. Z - nie zamierzam: 1. os., lp., czas teraźniejszy\n3. Z - jest: 3. os., lp., czas teraźniejszy\n4. R'),
-      slideTask('Z2', 'Czarownik zamienił Cię w zwierzę (albo w moba z gry). Napisz **4 zdania** jako narrator-bohater o tym, czego się nauczyłeś w nowej postaci.\n\nUżyj dwóch epitetów i jednego czasownika z przeczeniem **nie**. Ostatnie zdanie zacznij od **„Zrozumiałem, że...”**.', 8 * 60, 'narrator', 'Np. „Czarownik zamienił mnie w małego, szarego wilka. Biegałem po ciemnym lesie i nikt mnie nie poznawał. Nauczyłem się patrzeć na świat z dołu. Zrozumiałem, że jestem wart tyle samo w każdej postaci.”'),
-      slideNote('Powtórzenie działu I', '- Świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia.\n- Epitet określa: jedwabna chusteczka.\n- Zdanie ma czasownik w formie osobowej, równoważnik - nie.\n- Nie udawaj innych i nie wstydź się tego, kim jesteś.'),
+      slideVideo('podsumowanie4-dzial1-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 6 }] : []),
+      slideNote('Poznajemy siebie i innych - podsumowanie', '**TEKST:** świat przedstawiony - czas, miejsce, bohaterowie, wydarzenia. Opowiadanie - narrator (bohater / obserwator), wiersz - podmiot liryczny.\n**NOTATKI I WYRAZY:** punkty, tabela, mapa myśli. Literę widzimy, głoskę słyszymy; w każdej sylabie samogłoska.\n**JĘZYK:** epitet określa rzeczownik. Czasownik: osoba, liczba, czas, rodzaj; „nie” osobno. Zdanie ma czasownik w formie osobowej, równoważnik nie.\n**PLAN RAMOWY:** najważniejsze wydarzenia, po kolei, w tej samej formie.'),
     ],
   },
 ];

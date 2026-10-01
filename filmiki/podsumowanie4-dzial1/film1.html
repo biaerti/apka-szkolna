@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Podsumowanie rozdziału I - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 18px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); }
+.c4 { background: var(--zielony); } .c5 { background: var(--roz); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 10px; font-size: 34px; font-weight: 800; line-height: 1.3; }
+.zadanie .odliczanie { margin: 12px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 7px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 16px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 24px; margin-left: 8px; }
+.wsk { margin-top: 14px; font-size: 28px; }
+.pod { font-size: 26px; font-weight: 800; color: var(--szary); margin-top: 10px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 96px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .tytul span { font-size: 64px; color: var(--ciemny); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; width: 1100px; }
+#s01 .grupy .chip { font-size: 27px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--niebieski); }
+#s01 .grupy .chip:nth-child(4) { background: var(--zielony); }
+#s01 .grupy .chip:nth-child(5) { background: var(--roz); }
+#s01 .zapowiedz { margin-top: 22px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 swiat ===== */
+#s02 .pyt { margin-top: 18px; }
+#s02 .pyt .karta { border-color: var(--pomarancz); }
+#s02 .pyt .emo { font-size: 50px; line-height: 1.1; }
+#s02 .pyt .nazwa { color: var(--pomarancz); }
+#s02 .przyklad { margin: 20px auto 0; width: 1080px; text-align: left; border-color: var(--szary); font-size: 30px; font-weight: 800; line-height: 1.5; }
+#s02 .t1 { background: #ffe9c7; border-radius: 6px; padding: 0 4px; }
+
+/* ===== 03 kto mowi ===== */
+#s03 .rzad { margin-top: 16px; align-items: stretch; }
+#s03 .autor { margin: 12px auto 0; width: 900px; border-color: var(--szary); }
+#s03 .k1 { border-color: var(--pomarancz); } #s03 .k1 .nazwa { color: var(--pomarancz); }
+#s03 .k2 { border-color: var(--niebieski); } #s03 .k2 .nazwa { color: var(--niebieski); }
+#s03 .k3 { border-color: var(--fiolet); } #s03 .k3 .nazwa { color: var(--fiolet); }
+#s03 .przyk { font-size: 28px; font-weight: 800; margin-top: 8px; }
+#s03 .gdzie { font-size: 22px; font-weight: 800; color: #fff; display: inline-block; border-radius: 999px; padding: 0 14px; margin-bottom: 6px; }
+
+/* ===== 04-05 ===== */
+#s04 .lista, #s05 .lista { width: 1060px; gap: 10px; }
+#s04 .linia { font-size: 28px; line-height: 1.35; }
+#s04 .wiersz { font-style: italic; }
+#s04 .opcje { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+#s04 .opcje .chip { font-size: 24px; background: var(--pomarancz); }
+#s05 .linia { font-size: 27px; }
+
+/* ===== 06 notatki ===== */
+#s06 .zas { margin-top: 12px; font-size: 30px; background: var(--fiolet); }
+#s06 .rzad { margin-top: 20px; align-items: stretch; }
+#s06 .karta { border-color: var(--fiolet); }
+#s06 .karta .emo { font-size: 54px; line-height: 1.1; }
+#s06 .karta .nazwa { color: var(--fiolet); }
+#s06 .przyk { margin-top: 18px; font-size: 28px; background: var(--niebieski); }
+
+/* ===== 07 gloski ===== */
+#s07 .rzad { margin-top: 14px; }
+#s07 .k1 { border-color: var(--fiolet); } #s07 .k1 .nazwa { color: var(--fiolet); }
+#s07 .k2 { border-color: var(--niebieski); } #s07 .k2 .nazwa { color: var(--niebieski); }
+#s07 .pary { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+#s07 .pary .chip { font-size: 32px; background: var(--fiolet); padding: 2px 24px; }
+#s07 .lista { width: 1000px; gap: 8px; margin-top: 14px; }
+#s07 .linia { font-size: 29px; padding: 5px 20px; }
+
+/* ===== 08-09 ===== */
+#s08 .rzad { margin-top: 16px; align-items: stretch; }
+#s08 .karta { border-color: var(--fiolet); }
+#s08 .karta .nazwa { color: var(--fiolet); font-size: 30px; }
+#s08 .wyraz { font-family: 'Baloo 2'; font-size: 64px; font-weight: 800; line-height: 1.1; }
+#s08 .karta .opis { color: var(--ciemny); font-size: 28px; }
+#s09 .linia { font-size: 29px; }
+
+/* ===== 10 epitet ===== */
+#s10 .def { margin: 14px auto 0; width: 1000px; border-color: var(--niebieski); }
+#s10 .def .nazwa { color: var(--niebieski); }
+#s10 .rzad { margin-top: 18px; }
+#s10 .karta .nazwa { font-size: 40px; }
+#s10 .k1 { border-color: var(--szary); } #s10 .k2 { border-color: var(--niebieski); }
+#s10 .lista { width: 900px; gap: 8px; margin-top: 16px; }
+#s10 .linia { font-size: 30px; padding: 5px 20px; }
+#s10 .zam { margin-top: 12px; font-size: 26px; background: var(--niebieski); }
+
+/* ===== 11-12 ===== */
+#s11 .zdanie { margin: 26px auto 0; width: 1000px; border-color: var(--niebieski); font-family: 'Baloo 2'; font-size: 52px; font-weight: 800; }
+#s11 .rz { text-decoration: underline; text-decoration-color: var(--niebieski); text-underline-offset: 8px; }
+#s11 .wsk { background: var(--niebieski); margin-top: 22px; }
+#s12 .zdanie { margin: 20px auto 0; width: 1100px; border-color: var(--zielony); font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.3; }
+#s12 .wsk { background: var(--zielony); }
+
+/* ===== 13-14 czasownik ===== */
+#s13 .rzad { margin-top: 12px; }
+#s13 .rzad .karta { border-color: var(--zielony); padding: 8px 16px; }
+#s13 .rzad .nazwa { color: var(--zielony); font-size: 30px; }
+#s13 .lista { width: 1000px; gap: 8px; margin-top: 14px; }
+#s13 .linia { font-size: 28px; padding: 5px 20px; }
+#s13 .linia b { color: var(--zielony); font-family: 'Baloo 2'; }
+#s13 .nie { margin-top: 12px; font-size: 28px; background: var(--roz); }
+#s14 .rzad { margin-top: 24px; align-items: stretch; }
+#s14 .karta { border-color: var(--zielony); }
+#s14 .karta .nazwa { color: var(--zielony); }
+#s14 .karta .opis { font-size: 34px; color: var(--ciemny); }
+#s14 .kto { margin-top: 24px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 15-16 ===== */
+#s15 .rzad { margin-top: 20px; align-items: stretch; }
+#s15 .karta { border-color: var(--zielony); }
+#s15 .karta .nazwa { color: var(--zielony); font-size: 30px; }
+#s15 .wyraz { font-family: 'Baloo 2'; font-size: 56px; font-weight: 800; line-height: 1.1; margin-top: 8px; }
+#s15 .karta .opis { color: var(--ciemny); }
+#s16 .linia { font-size: 29px; }
+
+/* ===== 17-18 ===== */
+#s17 .rzad { margin-top: 18px; align-items: stretch; }
+#s17 .zd { border-color: var(--niebieski); } #s17 .zd .nazwa { color: var(--niebieski); }
+#s17 .rw { border-color: var(--pomarancz); } #s17 .rw .nazwa { color: var(--pomarancz); }
+#s17 .przyk { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; margin-top: 8px; }
+#s17 .pulapka { margin-top: 20px; font-size: 30px; background: var(--roz); }
+#s18 .def { margin: 14px auto 0; width: 1060px; border-color: var(--roz); }
+#s18 .def .nazwa { color: var(--roz); }
+#s18 .cechy { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+#s18 .cechy .chip { font-size: 27px; background: var(--roz); }
+#s18 .zamiana { margin: 20px auto 0; width: 900px; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; border-color: var(--roz); }
+
+/* ===== 19-20 ===== */
+#s19 .rzad { margin-top: 12px; align-items: stretch; }
+#s19 .karta { text-align: left; padding: 10px 18px; }
+#s19 .karta .nazwa { font-size: 28px; margin-bottom: 6px; }
+#s19 .pkt { font-size: 26px; font-weight: 800; line-height: 1.5; }
+#s19 .ka { border-color: var(--niebieski); } #s19 .ka .nazwa { color: var(--niebieski); }
+#s19 .kb { border-color: var(--roz); } #s19 .kb .nazwa { color: var(--roz); }
+#s20 .lista { width: 1120px; gap: 7px; margin-top: 12px; }
+#s20 .linia { font-size: 25px; padding: 4px 18px; }
+#s20 .plan { border-color: var(--roz); }
+
+/* ===== 21 ===== */
+#s21 .lista { width: 1140px; gap: 7px; margin-top: 12px; }
+#s21 .linia { font-size: 25px; padding: 4px 20px; }
+#s21 .brawo { margin-top: 10px; font-size: 34px; background: var(--roz); padding: 4px 40px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział I</div>
+    <div class="emo pop" data-slowo="kończymy">🧠 ✏️ 🏆</div>
+    <div class="tytul pop" data-slowo="rozdział">Poznajemy siebie<br><span>i innych</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="mówi">📖 kto mówi w tekście?</span>
+      <span class="chip pop" data-slowo="notatki">📝 notatki i głoski</span>
+      <span class="chip pop" data-slowo="epitet">🎨 epitet</span>
+      <span class="chip pop" data-slowo="czasownik">🏃 czasownik</span>
+      <span class="chip pop" data-slowo="równoważnik">📋 zdanie i plan ramowy</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="pięć">✏️ 5 zadań · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 swiat ===== -->
+  <section class="scena" data-id="02-swiat" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · TEKST</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Świat przedstawiony 🌍</h2>
+    <div class="rzad pyt">
+      <div class="karta pop" data-slowo="kiedy"><div class="emo">🕐</div><div class="nazwa">kiedy?</div><div class="opis">czas</div></div>
+      <div class="karta pop" data-slowo="gdzie"><div class="emo">📍</div><div class="nazwa">gdzie?</div><div class="opis">miejsce</div></div>
+      <div class="karta pop" data-slowo="kto"><div class="emo">🧒</div><div class="nazwa">kto?</div><div class="opis">bohaterowie</div></div>
+      <div class="karta pop" data-slowo="stało"><div class="emo">⚡</div><div class="nazwa">co się stało?</div><div class="opis">wydarzenia</div></div>
+    </div>
+    <div class="karta przyklad pop" data-slowo="sobotę">🎣 W <span class="hl">sobotę rano</span> <span class="hl">Kuba</span> pojechał <span class="hl">z tatą</span> <span class="hl">nad jezioro</span> i <span class="hl">złowił pierwszą rybę</span>.</div>
+    <div class="pod pop" data-slowo="wydarzenie">czas · bohaterowie · miejsce · wydarzenie</div>
+  </section>
+
+  <!-- ===== 03 kto mowi ===== -->
+  <section class="scena" data-id="03-kto-mowi" id="s03">
+    <span class="czesc c1">1 · TEKST</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Kto mówi? 🗣️</h2>
+    <div class="karta autor pop" data-slowo="autor"><div class="nazwa">✍️ autor = prawdziwy człowiek, który napisał tekst</div></div>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="bohater"><span class="gdzie c1">opowiadanie</span><div class="nazwa">narrator-bohater</div><div class="przyk">wszedłem, zobaczyłam, uciekliśmy</div></div>
+      <div class="karta k2 pop" data-slowo="obserwator"><span class="gdzie c3">opowiadanie</span><div class="nazwa">narrator-obserwator</div><div class="przyk">Kuba wszedł, Ola zobaczyła</div></div>
+      <div class="karta k3 pop" data-slowo="wierszu"><span class="gdzie c2">wiersz</span><div class="nazwa">podmiot liryczny</div><div class="przyk">czuję, marzę, jestem</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · TEKST</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zapisz">Kto mówi w każdym fragmencie?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzy"><span class="nr">1</span>Otworzyłam szafę i zobaczyłam małego kotka.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.25"><span class="nr">2</span>Tomek przez całą przerwę szukał zgubionej piłki.</div>
+      <div class="linia wiersz pop" data-slowo="trzy" data-po="0.5"><span class="nr">3</span>Siedzę przy oknie,<br>liczę krople deszczu,<br>czekam na słońce.</div>
+    </div>
+    <div class="opcje">
+      <span class="chip pop" data-slowo="bohater">narrator-bohater</span>
+      <span class="chip pop" data-slowo="obserwator">narrator-obserwator</span>
+      <span class="chip pop" data-slowo="liryczny">podmiot liryczny</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="pierwszym"><span class="ok">1.</span> <b>narrator-bohater</b> <span class="dlaczego">„<span class="hl">otworzyłam</span>, <span class="hl">zobaczyłam</span>” - bierze udział</span></div>
+      <div class="linia wjazd-lewo" data-slowo="drugim"><span class="ok">2.</span> <b>narrator-obserwator</b> <span class="dlaczego">opowiada o Tomku, nie o sobie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="trzeci"><span class="ok">3.</span> <b>podmiot liryczny</b> <span class="dlaczego">to wiersz - ma wersy</span></div>
+    </div>
+    <div><span class="chip wsk c1 pop" data-slowo="pamiętajcie">📖 opowiadanie ➜ narrator · ✒️ wiersz ➜ podmiot liryczny</span></div>
+  </section>
+
+  <!-- ===== 06 notatki ===== -->
+  <section class="scena" data-id="06-notatki" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · NOTATKI I WYRAZY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Dobra notatka 📝</h2>
+    <div><span class="chip zas pop" data-slowo="krótka">krótko · konkretnie · czytelnie</span></div>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="punkty"><div class="emo">📌</div><div class="nazwa">punkty</div><div class="opis">rzeczy, kroki</div></div>
+      <div class="karta pop" data-slowo="tabela"><div class="emo">📊</div><div class="nazwa">tabela</div><div class="opis">porównanie</div></div>
+      <div class="karta pop" data-slowo="mapa"><div class="emo">🕸️</div><div class="nazwa">mapa myśli</div><div class="opis">skojarzenia od hasła</div></div>
+    </div>
+    <div><span class="chip przyk pop" data-slowo="wycieczkę">🎒 rzeczy na wycieczkę ➜ punkty · 🎮 dwie gry ➜ tabela</span></div>
+  </section>
+
+  <!-- ===== 07 gloski ===== -->
+  <section class="scena" data-id="07-gloski" id="s07">
+    <span class="czesc c2">2 · NOTATKI I WYRAZY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Litera, głoska, sylaba 🔤</h2>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="literę"><div class="nazwa">👀 litera</div><div class="opis">widzimy i piszemy</div></div>
+      <div class="karta k2 pop" data-slowo="głoskę"><div class="nazwa">👂 głoska</div><div class="opis">słyszymy i wymawiamy</div></div>
+    </div>
+    <div class="pary">
+      <span class="chip pop" data-slowo="pary">sz</span>
+      <span class="chip pop" data-slowo="pary" data-po="0.1">cz</span>
+      <span class="chip pop" data-slowo="pary" data-po="0.2">rz</span>
+      <span class="chip pop" data-slowo="pary" data-po="0.3">ch</span>
+      <span class="chip pop" data-slowo="pary" data-po="0.4">dz</span>
+      <span class="chip pop" data-slowo="pary" data-po="0.5">dż</span>
+      <span class="chip pop" data-slowo="pary" data-po="0.6">dź</span>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="chleb">🍞 <span class="hl">ch</span>leb - 5 liter, 4 głoski</div>
+      <div class="linia pop" data-slowo="szkoła">🏫 szko-ła - 2 sylaby · 📿 ko-ra-lik - 3 sylaby <span class="dlaczego">w każdej sylabie samogłoska</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+20" id="s08">
+    <span class="czesc c2">2 · NOTATKI I WYRAZY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="części">Dwie części</div>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="policz"><div class="nazwa">A · policz litery, głoski i sylaby</div><div class="wyraz">czapka 🧢</div></div>
+      <div class="karta pop" data-slowo="notatkę"><div class="nazwa">B · jaką notatkę wybierzesz?</div><div class="opis">🎬 porównanie dwóch filmów</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="czapka">A. <span class="hl">cz</span>apka - <b>6 liter</b>, <b>5 głosek</b> <span class="dlaczego">cz = jedna głoska</span></div>
+      <div class="linia wjazd-lewo" data-slowo="sylaby">A. czap-ka - <b>2 sylaby</b></div>
+      <div class="linia wjazd-lewo" data-slowo="tabela">B. <b>tabela</b> <span class="dlaczego">te same cechy obu filmów: czas trwania, bohaterowie...</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 epitet ===== -->
+  <section class="scena" data-id="10-epitet" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · EPITET</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Epitet 🎨</h2>
+    <div class="karta def pop" data-slowo="określa"><div class="nazwa">określa rzeczownik · jaki? jaka? jakie?</div></div>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="las"><div class="nazwa">🌲 las</div></div>
+      <div class="karta k2 pop" data-slowo="gęsty"><div class="nazwa">🌲🌲🌲 <span class="hl">ciemny, gęsty</span> las</div></div>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="wesoły">☀️ <span class="hl">wesoły, słoneczny</span> dzień</div>
+      <div class="linia pop" data-slowo="ponury">🌧️ <span class="hl">zimny, ponury</span> wieczór</div>
+    </div>
+    <div><span class="chip zam pop" data-slowo="fajny">✗ fajny, super ➜ ✓ słowa dokładne</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+20" id="s11">
+    <span class="czesc c3">3 · EPITET</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="przepisz">Dopisz do każdego rzeczownika jeden epitet</div>
+    <div class="karta zdanie pop" data-slowo="ekranu">… <span class="rz">pies</span> szczekał na … <span class="rz">kota</span> pod … <span class="rz">drzewem</span>.</div>
+    <div><span class="chip wsk pop" data-slowo="epitet">🐕 🐈 🌳 jaki? jaka? jakie?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">PRZYKŁAD ✅</span></div>
+    <div class="karta zdanie pop" data-slowo="mały"><span class="hl">Mały, kudłaty</span> pies szczekał na <span class="hl">rudego</span> kota pod <span class="hl">starym</span> drzewem.</div>
+    <div><span class="chip wsk pop" data-slowo="inne">✓ inne epitety też dobre, jeśli określają rzeczownik</span></div>
+  </section>
+
+  <!-- ===== 13 czasownik ===== -->
+  <section class="scena" data-id="13-czasownik" id="s13">
+    <span class="czesc c4 zjaw" data-t="0">4 · CZASOWNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Czasownik 🏃</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="biegnie"><div class="nazwa">czynność: biegnie</div><div class="opis">co robi?</div></div>
+      <div class="karta pop" data-slowo="śpi"><div class="nazwa">stan: śpi</div><div class="opis">co się z nim dzieje?</div></div>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="osoby"><b>osoba:</b> ja piszę, ty piszesz</div>
+      <div class="linia pop" data-slowo="liczby"><b>liczba:</b> piszę, piszemy</div>
+      <div class="linia pop" data-slowo="czasy"><b>czas:</b> pisałem · piszę · będę pisać</div>
+      <div class="linia pop" data-slowo="rodzaje"><b>rodzaj</b> (w czasie przeszłym): pisał, pisała, pisało</div>
+    </div>
+    <div><span class="chip nie pop" data-slowo="osobno">„nie” z czasownikami osobno: nie wiem, nie lubię</span></div>
+  </section>
+
+  <!-- ===== 14 nieosobowe ===== -->
+  <section class="scena" data-id="14-nieosobowe" id="s14">
+    <span class="czesc c4">4 · CZASOWNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Formy nieosobowe 🔍</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="bezokolicznik"><div class="nazwa">bezokolicznik</div><div class="opis">co robić? co zrobić?<br>pisać, czytać, zjeść</div></div>
+      <div class="karta pop" data-slowo="zrobiono"><div class="nazwa">formy na -no, -to</div><div class="opis">zrobiono, napisano</div></div>
+    </div>
+    <div><span class="chip kto pop" data-slowo="wiemy">❓ nie wiemy, kto wykonuje czynność</span></div>
+  </section>
+
+  <!-- ===== 15 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="15-zadanie4+20" id="s15">
+    <span class="czesc c4">4 · CZASOWNIK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="zobaczyłam"><div class="nazwa">A · osoba, liczba, czas, rodzaj</div><div class="wyraz">zobaczyłam</div></div>
+      <div class="karta pop" data-slowo="dopisz"><div class="nazwa">B · dopisz „nie”</div><div class="wyraz">… rozumiem</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 16 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="16-odpowiedz4" id="s16">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="pierwsza"><b>1. osoba</b> <span class="dlaczego">ja zobaczyłam</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pojedyncza"><b>liczba pojedyncza</b> <span class="dlaczego">jedna osoba</span></div>
+      <div class="linia wjazd-lewo" data-slowo="przeszły"><b>czas przeszły</b> <span class="dlaczego">już się stało</span></div>
+      <div class="linia wjazd-lewo" data-slowo="żeński"><b>rodzaj żeński</b> <span class="dlaczego">chłopiec: zobaczyłem</span></div>
+      <div class="linia wjazd-lewo" data-slowo="rozumiem"><span class="hl">nie rozumiem</span> - osobno <span class="dlaczego">to czasownik</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 17 wypowiedzenia ===== -->
+  <section class="scena" data-id="17-wypowiedzenia" id="s17">
+    <span class="czesc c5 zjaw" data-t="0">5 · ZDANIE I PLAN</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--roz)">Wypowiedzenia 💬</h2>
+    <div class="rzad">
+      <div class="karta zd pop" data-slowo="osobowej"><div class="nazwa">ZDANIE</div><div class="opis">ma czasownik w formie osobowej</div><div class="przyk pop" data-slowo="czyta">Kuba <span class="hl">czyta</span> książkę.</div></div>
+      <div class="karta rw pop" data-slowo="równoważnik"><div class="nazwa">RÓWNOWAŻNIK ZDANIA</div><div class="opis">nie ma czasownika w formie osobowej</div><div class="przyk pop" data-slowo="czytanie">Czytanie książki.</div></div>
+    </div>
+    <div><span class="chip pulapka pop" data-slowo="hałasować">⚠️ Nie hałasować! ➜ bezokolicznik ➜ równoważnik</span></div>
+  </section>
+
+  <!-- ===== 18 plan ===== -->
+  <section class="scena" data-id="18-plan" id="s18">
+    <span class="czesc c5">5 · ZDANIE I PLAN</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--roz)">Plan ramowy 📋</h2>
+    <div class="karta def pop" data-slowo="najważniejsze"><div class="nazwa">najważniejsze wydarzenia, w punktach i po kolei</div></div>
+    <div class="cechy">
+      <span class="chip pop" data-slowo="szczegółów">🚫 bez szczegółów</span>
+      <span class="chip pop" data-slowo="formę">📏 ta sama forma</span>
+      <span class="chip pop" data-slowo="równoważniki">🔁 równoważniki zdań</span>
+    </div>
+    <div class="karta zamiana pop" data-slowo="klucz">Ola <span class="hl">znalazła</span> klucz. ➜ <span class="hl">Znalezienie</span> klucza.</div>
+  </section>
+
+  <!-- ===== 19 zadanie 5 ===== -->
+  <section class="scena zadanie" data-id="19-zadanie5+25" id="s19">
+    <span class="czesc c5">5 · ZDANIE I PLAN</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 5 ✏️</span></div>
+    <div class="rzad">
+      <div class="karta ka pop" data-slowo="najpierw">
+        <div class="nazwa">A · zdanie czy równoważnik?</div>
+        <div class="pkt">1. Burza nad miastem.</div>
+        <div class="pkt">2. Dzieci schowały się pod wiatą.</div>
+        <div class="pkt">3. Nie wychodzić na deszcz!</div>
+      </div>
+      <div class="karta kb pop" data-slowo="pikniku">
+        <div class="nazwa">B · zamień na punkty planu 🧺</div>
+        <div class="pkt">1. Rodzina pojechała na piknik.</div>
+        <div class="pkt">2. Nagle zaczęło padać.</div>
+        <div class="pkt">3. Wszyscy wrócili do domu.</div>
+      </div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 20 odpowiedz 5 ===== -->
+  <section class="scena odp" data-id="20-odpowiedz5" id="s20">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="burza">A1. Burza nad miastem. - <b>równoważnik</b> <span class="dlaczego">brak czasownika</span></div>
+      <div class="linia wjazd-lewo" data-slowo="dzieci">A2. Dzieci <span class="hl">schowały się</span> pod wiatą. - <b>zdanie</b> <span class="dlaczego">forma osobowa</span></div>
+      <div class="linia wjazd-lewo" data-slowo="wychodzić">A3. Nie wychodzić na deszcz! - <b>równoważnik</b> <span class="dlaczego">bezokolicznik</span></div>
+      <div class="linia plan wjazd-lewo" data-slowo="wyjazd">B. 1. Wyjazd na piknik. 2. Nagły deszcz. 3. Powrót do domu.</div>
+    </div>
+    <div><span class="chip wsk c5 pop" data-slowo="kolei">✓ same równoważniki · ✓ po kolei</span></div>
+  </section>
+
+  <!-- ===== 21 zapamietaj ===== -->
+  <section class="scena" data-id="21-zapamietaj" id="s21">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="świat">🌍 świat przedstawiony: czas, miejsce, bohaterowie, wydarzenia</div>
+      <div class="linia pop" data-slowo="narrator">🗣️ opowiadanie: narrator (bohater / obserwator) · wiersz: podmiot liryczny</div>
+      <div class="linia pop" data-slowo="notatkę">📝 notatka do celu: punkty · tabela · mapa myśli</div>
+      <div class="linia pop" data-slowo="literę">🔤 literę widzimy, głoskę słyszymy, w sylabie jest samogłoska</div>
+      <div class="linia pop" data-slowo="epitet">🎨 epitet określa rzeczownik i maluje obraz</div>
+      <div class="linia pop" data-slowo="czasownik">🏃 czasownik: osoba, liczba, czas, rodzaj · „nie” osobno</div>
+      <div class="linia pop" data-slowo="zdanie">💬 zdanie ma czasownik w formie osobowej, równoważnik nie</div>
+      <div class="linia pop" data-slowo="plan">📋 plan ramowy: najważniejsze wydarzenia, po kolei, ta sama forma</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="potrafię">To wiem, to potrafię! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

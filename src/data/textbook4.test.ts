@@ -151,6 +151,18 @@ describe('buildTextbook4', () => {
     expect(questions.some((q) => q.text.includes('Wrócić do domu'))).toBe(true);
   });
 
+  it('podsumowanie rozdzialu I: film ze wszystkiego, kolo z nowymi pytaniami i notatka', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const lesson = bundle.lessons.find((l) => l.title === '16. Co już wiesz? Co umiesz?')!;
+
+    expect(lesson.slides.map((slide) => slide.kind)).toEqual(['topic', 'recap', 'video', 'recap', 'note']);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'podsumowanie4-dzial1-film1' });
+    expect(filmikById('podsumowanie4-dzial1-film1')).toBeTruthy();
+    expect(lesson.slides[3]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId, questionCount: 6 });
+    expect(lesson.teacherPlan).toContain('klasa4-rozdzial1-powtorka.pdf');
+    expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId)).toHaveLength(8);
+  });
+
   it('rozdzial II: film i kolo w kazdej lekcji, notatka, potem screeny zadan po kolei', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const r2 = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_2);
