@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildTextbook4, TEXTBOOK4_TOPIC_COUNT } from './textbook4';
+import { ROZDZIAL_2 } from './textbook4rozdzial2';
+import { filmikById } from './filmiki';
 import { estimateTextHeight, fitFontSize } from '../components/slides/fitText';
 
 describe('buildTextbook4', () => {
@@ -8,13 +10,15 @@ describe('buildTextbook4', () => {
     expect(bundle.lessons).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
     expect(bundle.lessons[0]).toMatchObject({ title: '1-2. Krok po kroku tworzymy pierwszą wspólną opowieść', textbookPage: 12 });
     expect(bundle.lessons.find((l) => l.title.startsWith('5-6.'))).toMatchObject({ textbookPage: 22 });
-    const pages = bundle.lessons.map((l) => l.textbookPage ?? 0);
+    const pages = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2).map((l) => l.textbookPage ?? 0);
     expect([...pages].sort((a, b) => a - b)).toEqual(pages);
   });
 
   it('kazda lekcja zaczyna sie zapisaniem tematu i konczy notatka do zeszytu', () => {
     const bundle = buildTextbook4('IV', ['4a']);
-    expect(bundle.lessons.slice(5).map((lesson) => lesson.title)).toEqual([
+    // Rozdzial II ma wlasny format (klasa 5) - osobny test nizej.
+    const rozdzial1 = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2);
+    expect(rozdzial1.slice(5).map((lesson) => lesson.title)).toEqual([
       '8. Dlaczego warto być sobą?',
       '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
       '11-13. Czas na czasownik',
@@ -22,7 +26,7 @@ describe('buildTextbook4', () => {
       '15. Tworzymy plan ramowy',
       '16. Co już wiesz? Co umiesz?',
     ]);
-    for (const [index, lesson] of bundle.lessons.entries()) {
+    for (const [index, lesson] of rozdzial1.entries()) {
       expect(lesson.exercisePage).toBeUndefined();
       expect(lesson.slides[0]).toMatchObject({ kind: 'topic', variant: 'write' });
       // Formaty: dawny (slajd read, notatka na koniec) albo nowy - czytanka z
@@ -69,7 +73,7 @@ describe('buildTextbook4', () => {
   it('kazdy temat ma notatke A5 i pytania do kola z odpowiedziami', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     expect(bundle.questionSets).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
-    for (const lesson of bundle.lessons) {
+    for (const lesson of bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2)) {
       expect(lesson.notebookNote).toBeTruthy();
     }
     for (const lesson of bundle.lessons) {
@@ -141,6 +145,33 @@ describe('buildTextbook4', () => {
     expect(questions).toHaveLength(6);
     expect(questions[0].text).toContain('pojęcie');
     expect(questions[5].text).toContain('Miłosz');
+  });
+
+  it('rozdzial II: film i kolo w kazdej lekcji, notatka, potem screeny zadan po kolei', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const r2 = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_2);
+    expect(r2).toHaveLength(12);
+    expect(r2[0].title.startsWith('18.')).toBe(true);
+    const filmy = r2.map((l) => l.slides.find((s) => s.kind === 'video'));
+    expect(filmy.every((s) => s?.kind === 'video' && Boolean(filmikById(s.videoId)))).toBe(true);
+    for (const lesson of r2) {
+      expect(lesson.slides[0]).toMatchObject({ kind: 'topic', variant: 'write' });
+      expect(lesson.teacherPlan).toBeTruthy();
+      const kinds = lesson.slides.map((s) => s.kind);
+      const video = kinds.indexOf('video');
+      // Zaraz po filmie kolo z pytaniami tej lekcji.
+      expect(lesson.slides[video + 1]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId, questionCount: 5 });
+      const note = lesson.slides.find((s) => s.kind === 'note');
+      expect(note?.kind === 'note' ? note.body : '').toMatch(/^\*\*Temat:\*\* /);
+      // Screeny z buckeru i zadania po notatce w kolejnosci z ksiazki.
+      const poNotatce = lesson.slides.slice(kinds.indexOf('note') + 1);
+      expect(poNotatce.every((s) => s.kind === 'image' && s.url.startsWith('czytanki:r2-s'))).toBe(true);
+      const klucze = poNotatce.map((s) => (s.kind === 'image' ? s.page ?? 0 : 0));
+      expect([...klucze].sort((a, b) => a - b)).toEqual(klucze);
+      expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(5);
+    }
+    // Dwie czytanki na rozdzial (Bartek: max 2 teksty).
+    expect(r2.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(2);
   });
 
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {

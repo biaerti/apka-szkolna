@@ -44,8 +44,18 @@ export const FILMIKI: Filmik[] = [
   { id: 'reklama-film1', lekcja: 'V.28', title: 'Tekst reklamowy - słowa, sztuczki, prawda (4 zadania)' },
   { id: 'podsumowanie5-dzial2-film1', lekcja: 'V.29', title: 'Podsumowanie działu 2 - To wiem! To potrafię! (5 zadań)' },
   // Klasa 4, rozdzial II "Pośród słów i znaczeń" - plan: docs/klasa4-rozdzial2-posrod-slow.md
-  { id: 'potoczne-film1', lekcja: 'II.1', title: 'Wyrazy potoczne - kiedy wolno, a kiedy nie (4 zadania)' },
-  { id: 'porownanie-film1', lekcja: 'II.2', title: 'Porównanie - jak, jakby, niczym, niby (4 zadania)' },
+  { id: 'potoczne-film1', lekcja: '18', title: 'Wyrazy potoczne - kiedy wolno, a kiedy nie (4 zadania)' },
+  { id: 'porownanie-film1', lekcja: '19', title: 'Porównanie - jak, jakby, niczym, niby (4 zadania)' },
+  { id: 'synonimy-film1', lekcja: '20', title: 'Synonimy i antonimy (4 zadania)' },
+  { id: 'list-film1', lekcja: '21', title: 'Jak się pisze list? (4 zadania)' },
+  { id: 'rzeczownik4-film1', lekcja: '22', title: 'Rzeczownik - co nazywa, liczba i rodzaj (4 zadania)' },
+  { id: 'przypadki-film1', lekcja: '23', title: 'Przypadki - drużyna siedmiu pomocników (4 zadania)' },
+  { id: 'przypadki-mnoga-film1', lekcja: '24', title: 'Przypadki w liczbie mnogiej (4 zadania)' },
+  { id: 'opinia-film1', lekcja: '25', title: 'Opinia i argument (4 zadania)' },
+  { id: 'asertywnosc-film1', lekcja: '26', title: 'Asertywność - jak grzecznie powiedzieć NIE (4 zadania)' },
+  { id: 'wielka-litera-film1', lekcja: '27', title: 'Wielka czy mała litera? (4 zadania)' },
+  { id: 'nie-rzeczownik-film1', lekcja: '28', title: 'Nie z rzeczownikami (4 zadania)' },
+  { id: 'podsumowanie4-dzial2-film1', lekcja: '29', title: 'Podsumowanie rozdziału II - Pośród słów i znaczeń' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

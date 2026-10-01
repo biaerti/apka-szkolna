@@ -4,9 +4,14 @@
 import type { Lesson, Question, QuestionSet, Slide, SlideArt, StudentAction } from './types';
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
+import { ROZDZIAL2_TOPICS } from './textbook4rozdzial2';
 
 interface Topic {
   title: string;
+  /** Naglowek grupy na liscie lekcji - domyslnie rozdzial I. */
+  dzial?: string;
+  /** Plan dla nauczyciela (rozdzial II, jak w klasie 5). */
+  teacherPlan?: string;
   topic: string;
   textbookPage: number;
   notebookNote?: string;
@@ -413,19 +418,22 @@ const TOPICS: Topic[] = [
   },
 ];
 
+// Rozdzial II ma wlasny plik (textbook4rozdzial2.ts) w formacie klasy 5.
+const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? ROZDZIAL_1 })), ...ROZDZIAL2_TOPICS];
+
 export function buildTextbook4(grade: string, classIds: string[]): FreshMaterialsBundle {
   if (grade.toUpperCase() !== 'IV') throw new Error('Podręcznik jest przygotowany dla klasy IV.');
-  const questionSets: QuestionSet[] = TOPICS.map((topic) => ({ id: newId(), name: topic.title, topic: topic.title, classIds, createdAt: new Date().toISOString() }));
+  const questionSets: QuestionSet[] = ALL_TOPICS.map((topic) => ({ id: newId(), name: topic.title, topic: topic.title, classIds, createdAt: new Date().toISOString() }));
   const questions: Question[] = [];
-  const lessons: Array<Omit<Lesson, 'id' | 'order'>> = TOPICS.map((topic, index) => {
+  const lessons: Array<Omit<Lesson, 'id' | 'order'>> = ALL_TOPICS.map((topic, index) => {
     const setId = questionSets[index].id;
     topic.questions.forEach((question, order) => questions.push({ id: newId(), setId, ...question, order }));
-    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: ROZDZIAL_1, progress: {}, slides: sameTopicInNote(topic.makeSlides(questionSets[index - 1]?.id, setId)) };
+    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: topic.dzial, teacherPlan: topic.teacherPlan, progress: {}, slides: sameTopicInNote(topic.makeSlides(questionSets[index - 1]?.id, setId)) };
   });
   return { lessons, questionSets, questions };
 }
 
-export const TEXTBOOK4_TOPIC_COUNT = TOPICS.length;
+export const TEXTBOOK4_TOPIC_COUNT = ALL_TOPICS.length;
 
 /**
  * Tematy z dawnego, zbyt szerokiego pakietu usuwane przy jego odswiezeniu.

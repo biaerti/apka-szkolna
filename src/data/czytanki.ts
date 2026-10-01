@@ -44,6 +44,9 @@ export const CZYTANKI: Czytanka[] = [
   { id: 'przenosnie', lekcja: 'V.17', temat: 'Przenośnia', title: 'Przenośnie', author: 'Roman Pisarski', pages: '61-62' },
   { id: 'co-to-znaczy', lekcja: 'V.18', temat: 'Związki frazeologiczne', title: 'Co to znaczy...', author: 'Grzegorz Kasdepke', pages: '64-65' },
   { id: 'lwy', lekcja: 'V.20', temat: 'Co robić ze złością?', title: 'Lwy', author: 'Hanna Januszewska', pages: '81-82' },
+  // Klasa 4, rozdzial II "Pośród słów i znaczeń" (src/data/textbook4rozdzial2.ts).
+  { id: 'dynastia-miziolkow', lekcja: '18', temat: 'Wyrazy potoczne', title: 'Dynastia Miziołków (fragmenty)', author: 'Joanna Olech', pages: '56-57' },
+  { id: 'kurs-fotografii', lekcja: '25', temat: 'Opinia i argument', title: 'Kurs fotografii, czyli o tym, co to jest przekonywanie', author: 'Michał Rusinek, Aneta Załazińska', pages: '76-78' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };
