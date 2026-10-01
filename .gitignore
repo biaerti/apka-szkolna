@@ -20,3 +20,4 @@ tmp/chrome-neon/
 
 # Pule pytan do sprawdzianow - nie do publicznego repo (uczniowie)
 materialy/*/sprawdzian-pula.mjs
+tmp/chrome-gwo/
