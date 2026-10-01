@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Temat i końcówka - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --tm: #2F7D5B; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--tm); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--tm); } .c2 { background: var(--fiolet); } .c3 { background: var(--roz); }
+.t { color: var(--tm); }
+.k { color: var(--roz); }
+.kr { color: #aaa; font-weight: 400; margin: 0 2px; }
+.zero { color: var(--roz); font-size: .8em; }
+.ob { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 38px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 14px; font-size: 30px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 16px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1000px; }
+.kafle { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 20px; }
+.kafel { display: inline-flex; align-items: center; height: 84px; padding: 0 26px; border-radius: 18px; font-family: 'Baloo 2'; font-size: 50px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); }
+.luka { display: inline-block; min-width: 40px; border-bottom: 5px dashed var(--roz); margin: 0 3px; }
+.dlaczego { color: var(--szary); font-size: 25px; }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .para { display: flex; gap: 40px; margin-top: 14px; }
+#s01 .para .kafel { font-size: 70px; height: 110px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 96px; font-weight: 800; line-height: 1; color: var(--tm); margin-top: 22px; }
+#s01 .trik { margin-top: 16px; font-size: 30px; background: var(--roz); }
+#s01 .zapowiedz { margin-top: 22px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 temat ===== */
+#s02 .roza .kafel { font-size: 46px; height: 76px; }
+#s02 .etyk { display: flex; gap: 20px; justify-content: center; margin-top: 16px; }
+#s02 .etyk .chip { font-size: 30px; }
+#s02 .wiecej { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 900px; }
+#s02 .wiecej .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; padding: 2px 20px; }
+
+/* ===== 03 zerowa ===== */
+#s03 .duzy { margin-top: 18px; font-family: 'Baloo 2'; font-size: 96px; font-weight: 800; }
+#s03 .naz { font-size: 34px; background: var(--roz); }
+#s03 .porown { margin-top: 18px; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; }
+
+/* ===== 06 obocznosci ===== */
+#s06 .pary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin: 22px auto 0; width: 1000px; }
+#s06 .linia { font-family: 'Baloo 2'; font-size: 40px; text-align: center; }
+#s06 .linia small { display: block; font-family: 'Nunito'; font-size: 24px; color: var(--szary); }
+#s06 .naz { margin-top: 20px; font-size: 32px; background: var(--fiolet); }
+
+/* ===== 07 o z kreska ===== */
+#s07 .brzmi { margin-top: 6px; font-size: 32px; background: var(--szary); }
+#s07 .regula { margin-top: 12px; font-size: 32px; background: var(--roz); }
+#s07 .pary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 16px; margin: 16px auto 0; width: 1100px; }
+#s07 .linia { font-family: 'Baloo 2'; font-size: 34px; text-align: center; padding: 3px 12px; border-color: var(--roz); }
+#s07 .u { border-color: var(--niebieski); }
+#s07 .uchip { margin-top: 12px; font-size: 28px; background: var(--niebieski); }
+
+/* ===== 09, 11 odpowiedzi ===== */
+#s09 .lista .linia, #s11 .lista .linia { font-family: 'Baloo 2'; font-size: 34px; padding: 3px 22px; }
+#s09 .naz { margin-top: 14px; font-size: 28px; background: var(--fiolet); }
+
+/* ===== 12 podsumowanie ===== */
+#s12 .lista { width: 1060px; }
+#s12 .lista .linia { font-size: 29px; }
+#s12 .brawo { margin-top: 18px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="para">
+      <span class="kafel pop" data-slowo="stół">st<span class="k">ó</span>ł 🪑</span>
+      <span class="kafel pop" data-slowo="but">b<span class="k">u</span>t 👟</span>
+    </div>
+    <div class="tytul pop" data-slowo="temat">Temat i końcówka</div>
+    <div><span class="chip trik pop" data-slowo="błędów">✨ trik na ó</span></div>
+    <div class="zapowiedz pop" data-slowo="trzy">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 temat ===== -->
+  <section class="scena" data-id="02-temat" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · TEMAT I KOŃCÓWKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co zostaje, a co się zmienia?</h2>
+    <div class="kafle roza">
+      <span class="kafel pop" data-slowo="róża"><span class="t">róż</span><span class="k">a</span></span>
+      <span class="kafel pop" data-slowo="róży"><span class="t">róż</span><span class="k">y</span></span>
+      <span class="kafel pop" data-slowo="różą"><span class="t">róż</span><span class="k">ą</span></span>
+      <span class="kafel pop" data-slowo="różę"><span class="t">róż</span><span class="k">ę</span></span>
+      <span class="kafel pop" data-slowo="różo"><span class="t">róż</span><span class="k">o</span></span>
+    </div>
+    <div class="etyk">
+      <span class="chip pop" data-slowo="temat" style="background:var(--tm)">TEMAT = zostaje</span>
+      <span class="chip pop" data-slowo="końcówka" style="background:var(--roz)">KOŃCÓWKA = zmienia się</span>
+    </div>
+    <div class="wiecej">
+      <div class="linia wjazd-lewo" data-slowo="mama"><span class="t">mam</span><span class="k">a</span> · <span class="t">mam</span><span class="k">y</span> · <span class="t">mam</span><span class="k">ą</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kwiat"><span class="t">kwiat</span> · <span class="t">kwiat</span><span class="k">u</span> · <span class="t">kwiat</span><span class="k">em</span></div>
+      <div class="linia wjazd-lewo" data-slowo="dom"><span class="t">dom</span> · <span class="t">dom</span><span class="k">u</span> · <span class="t">dom</span><span class="k">em</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 koncowka zerowa ===== -->
+  <section class="scena" data-id="03-zerowa" id="s03">
+    <span class="czesc c1">1 · TEMAT I KOŃCÓWKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Końcówka zerowa</h2>
+    <div class="duzy pop" data-slowo="kwiat"><span class="t">kwiat</span><span class="kr">|</span><span class="zero zjaw" data-slowo="zerową">ø</span></div>
+    <div><span class="chip naz pop" data-slowo="zerową">po temacie nic nie ma = końcówka zerowa ø</span></div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="dom"><span class="t">dom</span><span class="kr">|</span><span class="zero">ø</span></span>
+      <span class="kafel pop" data-slowo="brat"><span class="t">brat</span><span class="kr">|</span><span class="zero">ø</span></span>
+      <span class="kafel pop" data-slowo="stół"><span class="t">stół</span><span class="kr">|</span><span class="zero">ø</span></span>
+      <span class="kafel pop" data-slowo="kot"><span class="t">kot</span><span class="kr">|</span><span class="zero">ø</span></span>
+    </div>
+    <div class="porown zjaw" data-slowo="porównajcie"><span class="t">kwiat</span><span class="kr">|</span><span class="zero">ø</span> &nbsp;↔&nbsp; <span class="t">kwiat</span><span class="kr">|</span><span class="k">em</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · TEMAT I KOŃCÓWKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="oddziel">Oddziel temat od końcówki: temat <span class="kr">|</span> końcówka</div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="sześć">kotem</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.2">książki</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.4">okno</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.6">lasu</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="0.8">brat</span>
+      <span class="kafel pop" data-slowo="sześć" data-po="1">szkołą</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="zerowej">brak końcówki? narysuj ø</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="kotem"><span class="t">kot</span><span class="kr">|</span><span class="k">em</span></span>
+      <span class="kafel pop" data-slowo="książki"><span class="t">książk</span><span class="kr">|</span><span class="k">i</span></span>
+      <span class="kafel pop" data-slowo="okno"><span class="t">okn</span><span class="kr">|</span><span class="k">o</span></span>
+      <span class="kafel pop" data-slowo="lasu"><span class="t">las</span><span class="kr">|</span><span class="k">u</span></span>
+      <span class="kafel pop" data-slowo="brat"><span class="t">brat</span><span class="kr">|</span><span class="zero">ø</span></span>
+      <span class="kafel pop" data-slowo="szkołą"><span class="t">szkoł</span><span class="kr">|</span><span class="k">ą</span></span>
+    </div>
+    <div style="margin-top:22px"><span class="chip pop" data-slowo="sprawdzić" style="font-size:30px;background:var(--tm)">jak sprawdzić? odmień słowo - co się nie zmienia, to temat</span></div>
+  </section>
+
+  <!-- ===== 06 obocznosci ===== -->
+  <section class="scena" data-id="06-obocznosci" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · OBOCZNOŚĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Temat też się zmienia</h2>
+    <div class="pary">
+      <div class="linia pop" data-slowo="stół">st<span class="ob">ó</span>ł - st<span class="ob">o</span>łu<small>ó : o</small></div>
+      <div class="linia pop" data-slowo="ręka">rę<span class="ob">k</span>a - rę<span class="ob">c</span>e<small>k : c</small></div>
+      <div class="linia pop" data-slowo="noga">no<span class="ob">g</span>a - no<span class="ob">dz</span>e<small>g : dz</small></div>
+      <div class="linia pop" data-slowo="mucha">mu<span class="ob">ch</span>a - mu<span class="ob">sz</span>e<small>ch : sz</small></div>
+    </div>
+    <div><span class="chip naz pop" data-slowo="oboczność">OBOCZNOŚĆ = wymiana głosek w temacie</span></div>
+  </section>
+
+  <!-- ===== 07 o z kreska ===== -->
+  <section class="scena" data-id="07-o-kreska" id="s07">
+    <span class="czesc c3 zjaw" data-t="0">3 · TRIK NA Ó</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--roz)">ó czy u? 🤔</h2>
+    <div><span class="chip brzmi pop" data-slowo="brzmi">👂 ó brzmi tak samo jak u</span></div>
+    <div><span class="chip regula pop" data-slowo="jeśli">w innej formie słychać o ➜ piszę ó</span></div>
+    <div class="pary">
+      <div class="linia pop" data-slowo="stoły">st<span class="k">ó</span>ł, bo st<span class="t">o</span>ły</div>
+      <div class="linia pop" data-slowo="wozy">w<span class="k">ó</span>z, bo w<span class="t">o</span>zy</div>
+      <div class="linia pop" data-slowo="lody">l<span class="k">ó</span>d, bo l<span class="t">o</span>dy</div>
+      <div class="linia pop" data-slowo="ogrody">ogr<span class="k">ó</span>d, bo ogr<span class="t">o</span>dy</div>
+      <div class="linia pop" data-slowo="rogi">r<span class="k">ó</span>g, bo r<span class="t">o</span>gi</div>
+      <div class="linia pop" data-slowo="mrozy">mr<span class="k">ó</span>z, bo mr<span class="t">o</span>zy</div>
+      <div class="linia u pop" data-slowo="buty">b<span class="nieb" style="color:var(--niebieski)">u</span>t, bo b<span style="color:var(--niebieski)">u</span>ty</div>
+      <div class="linia u pop" data-slowo="druty">dr<span style="color:var(--niebieski)">u</span>t, bo dr<span style="color:var(--niebieski)">u</span>ty</div>
+    </div>
+    <div><span class="chip uchip pop" data-slowo="dalej">dalej słychać u ➜ piszę u</span></div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+25" id="s08">
+    <span class="czesc c3">3 · TRIK NA Ó</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="uzasadnij">Uzasadnij pisownię ó</div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="pięciu">n<span class="k">ó</span>ż</span>
+      <span class="kafel pop" data-slowo="pięciu" data-po="0.2">s<span class="k">ó</span>l</span>
+      <span class="kafel pop" data-slowo="pięciu" data-po="0.4">d<span class="k">ó</span>ł</span>
+      <span class="kafel pop" data-slowo="pięciu" data-po="0.6">gł<span class="k">ó</span>wka</span>
+      <span class="kafel pop" data-slowo="pięciu" data-po="0.8">n<span class="k">ó</span>żka</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="napisz">nóż, bo … (forma, w której słychać o)</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="noże">n<span class="k">ó</span>ż, bo n<span class="t">o</span>że</div>
+      <div class="linia wjazd-lewo" data-slowo="solony">s<span class="k">ó</span>l, bo s<span class="t">o</span>lony, s<span class="t">o</span>lić</div>
+      <div class="linia wjazd-lewo" data-slowo="doły">d<span class="k">ó</span>ł, bo d<span class="t">o</span>ły</div>
+      <div class="linia wjazd-lewo" data-slowo="głowa">gł<span class="k">ó</span>wka, bo gł<span class="t">o</span>wa</div>
+      <div class="linia wjazd-lewo" data-slowo="noga">n<span class="k">ó</span>żka, bo n<span class="t">o</span>ga</div>
+    </div>
+    <div><span class="chip naz pop" data-slowo="oboczność">ó : o - oboczność pomaga w ortografii</span></div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+20" id="s10">
+    <span class="czesc c3">3 · TRIK NA Ó</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="brakuje">u czy ó? Zmień formę i sprawdź!</div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="sześciu">r<span class="luka"></span>g</span>
+      <span class="kafel pop" data-slowo="sześciu" data-po="0.2">kr<span class="luka"></span>l</span>
+      <span class="kafel pop" data-slowo="sześciu" data-po="0.4">st<span class="luka"></span>ł</span>
+      <span class="kafel pop" data-slowo="sześciu" data-po="0.6">b<span class="luka"></span>t</span>
+      <span class="kafel pop" data-slowo="sześciu" data-po="0.8">dr<span class="luka"></span>t</span>
+      <span class="kafel pop" data-slowo="sześciu" data-po="1">d<span class="luka"></span>ł</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="udowadnia">zapisz z formą, która to udowadnia 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="rogi">r<span class="k">ó</span>g, bo r<span class="t">o</span>gi</div>
+      <div class="linia wjazd-lewo" data-slowo="królowa">kr<span class="k">ó</span>l, bo kr<span class="t">o</span>lowa</div>
+      <div class="linia wjazd-lewo" data-slowo="stoły">st<span class="k">ó</span>ł, bo st<span class="t">o</span>ły</div>
+      <div class="linia wjazd-lewo" data-slowo="buty">b<span style="color:var(--niebieski)">u</span>t, bo b<span style="color:var(--niebieski)">u</span>ty <span class="dlaczego">dalej u</span></div>
+      <div class="linia wjazd-lewo" data-slowo="druty">dr<span style="color:var(--niebieski)">u</span>t, bo dr<span style="color:var(--niebieski)">u</span>ty <span class="dlaczego">dalej u</span></div>
+      <div class="linia wjazd-lewo" data-slowo="doły">d<span class="k">ó</span>ł, bo d<span class="t">o</span>ły</div>
+    </div>
+  </section>
+
+  <!-- ===== 12 podsumowanie ===== -->
+  <section class="scena" data-id="12-podsumowanie" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="temat">🌱 <b class="t">temat</b> zostaje: <span class="t">róż</span>a, <span class="t">róż</span>ą</div>
+      <div class="linia pop" data-slowo="końcówka">🔄 <b class="k">końcówka</b> się zmienia</div>
+      <div class="linia pop" data-slowo="zerowa">ø końcówka zerowa: kwiat, dom</div>
+      <div class="linia pop" data-slowo="oboczność">↔️ oboczność: st<span class="ob">ó</span>ł - st<span class="ob">o</span>łu, rę<span class="ob">k</span>a - rę<span class="ob">c</span>e</div>
+      <div class="linia pop" data-slowo="trik">✨ słychać o w innej formie ➜ piszę <b class="k">ó</b>: stół, bo stoły</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

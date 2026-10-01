@@ -1,0 +1,1 @@
+Sprawdzamy. Popatrzcie na ekran. Kotem: temat kot, a reszta to końcówka. Książki i okno: końcówką jest tylko ostatnia litera. Lasu: temat las, potem końcówka. Brat: cały wyraz to temat, końcówka zerowa. Szkołą: końcówką jest a z ogonkiem. Jak to sprawdzić? Odmień słowo i zobacz, która część się nie zmienia.

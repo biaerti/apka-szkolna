@@ -35,6 +35,10 @@ export const FILMIKI: Filmik[] = [
   { id: 'zdrobnienia-film1', lekcja: 'V.19', title: 'Zdrobnienia i zgrubienia, siła uczuć (4 zadania)' },
   { id: 'zlosc-film1', lekcja: 'V.20', title: '„Lwy” - co robić ze złością? (4 zadania)' },
   { id: 'recytacja-film1', lekcja: 'V.21', title: 'Jak recytować? (2 zadania na głos)' },
+  { id: 'rzeczownik-film1', lekcja: 'V.22', title: 'Rzeczownik - rodzaj, przypadki, własne i pospolite (4 zadania)' },
+  { id: 'nietypowe-film1', lekcja: 'V.23', title: 'Nietypowa odmiana - muzeum, jedne drzwi (4 zadania)' },
+  { id: 'ogonki-film1', lekcja: 'V.24', title: 'Ę i ą na końcu wyrazu (3 zadania)' },
+  { id: 'temat-film1', lekcja: 'V.25', title: 'Temat i końcówka, trik na ó (3 zadania)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

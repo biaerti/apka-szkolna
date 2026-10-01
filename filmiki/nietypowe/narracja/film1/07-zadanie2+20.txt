@@ -1,0 +1,1 @@
+Zadanie drugie. Na ekranie jest osiem rzeczowników. Podziel je na dwie grupy: tylko liczba pojedyncza i tylko liczba mnoga. Zapisz w zeszycie w dwóch kolumnach. Start!

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Nietypowa odmiana rzeczowników - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --nt: #B5562B; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--nt); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--nt); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.zle { color: var(--roz); text-decoration: line-through; text-decoration-thickness: 4px; }
+.dobrze { color: var(--zielony); }
+.konc { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 38px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 14px; font-size: 30px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 16px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1080px; }
+.dlaczego { color: var(--szary); font-size: 25px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 4px; }
+.e-ok { background: var(--zielony); } .e-zle { background: var(--roz); }
+.kafle { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 20px; }
+.kafel { display: inline-flex; align-items: center; height: 76px; padding: 0 24px; border-radius: 18px; font-family: 'Baloo 2'; font-size: 42px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wst { color: var(--roz); font-family: 'Baloo 2'; }
+
+/* ===== 01 intro ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 100px; font-weight: 800; line-height: 1; color: var(--nt); margin-top: 12px; }
+#s01 .pod { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 24px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--nt); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--niebieski); }
+#s01 .zapowiedz { margin-top: 28px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02-03 muzeum ===== */
+#s02 .nazwy { display: flex; gap: 12px; justify-content: center; margin-top: 12px; }
+#s02 .nazwy .chip { font-size: 28px; background: var(--nt); }
+#s02 .stwierdz { margin-top: 14px; font-size: 32px; font-weight: 800; }
+#s02 .formy { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px auto 0; width: 1100px; }
+#s02 .formy .linia { font-size: 27px; text-align: center; padding: 5px 10px; }
+#s02 .formy b { color: var(--nt); }
+#s02 .blad { display: flex; gap: 16px; justify-content: center; margin-top: 16px; }
+#s02 .blad .linia { font-family: 'Baloo 2'; font-size: 34px; }
+#s03 .rzad { margin-top: 20px; align-items: stretch; }
+#s03 .karta { text-align: left; }
+#s03 .karta .nazwa { text-align: center; }
+#s03 .karta .poz { font-size: 30px; font-weight: 800; padding: 3px 0; }
+#s03 .lp { border-color: var(--szary); } #s03 .lm { border-color: var(--nt); } #s03 .lm .nazwa { color: var(--nt); }
+#s03 .zap { margin-top: 18px; font-size: 30px; background: var(--nt); }
+
+/* ===== 06-08 jedna liczba ===== */
+.dwie { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 18px; align-items: stretch; }
+.dwie .karta .nazwa { font-size: 36px; }
+.dwie .elem { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
+.dwie .elem span { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; background: var(--krem); border-radius: 14px; padding: 2px 14px; }
+.k-lp { border-color: var(--fiolet); } .k-lp .nazwa { color: var(--fiolet); }
+.k-lm { border-color: var(--niebieski); } .k-lm .nazwa { color: var(--niebieski); }
+#s06 .uwagi, #s08 .uwagi { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
+#s06 .uwagi .chip, #s08 .uwagi .chip { font-size: 28px; }
+
+/* ===== 09 ile ===== */
+#s09 .lista .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; }
+
+/* ===== 12-14 dopelniacz ===== */
+#s12 .rada { margin-top: 20px; font-size: 30px; background: var(--zielony); }
+#s14 .lista .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; }
+
+/* ===== 15 podsumowanie ===== */
+#s15 .rzad { margin-top: 24px; align-items: stretch; }
+#s15 .karta .opis { color: var(--ciemny); font-size: 28px; line-height: 1.45; }
+#s15 .k1 { border-color: var(--nt); } #s15 .k1 .nazwa { color: var(--nt); }
+#s15 .k2 { border-color: var(--fiolet); } #s15 .k2 .nazwa { color: var(--fiolet); }
+#s15 .k3 { border-color: var(--niebieski); } #s15 .k3 .nazwa { color: var(--niebieski); }
+#s15 .brawo { margin-top: 26px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 5 · Dział 2 · Uwaga, uczucia!</div>
+    <div class="tytul pop" data-slowo="dziwnie">Nietypowa odmiana</div>
+    <div class="pod zjaw" data-slowo="dziwaków">rzeczowniki-dziwaki 🤪</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="zmieniają">🏛️ muzeum</span>
+      <span class="chip pop" data-slowo="liczbę">1️⃣ tylko jedna liczba</span>
+      <span class="chip pop" data-slowo="jeden">🚪 jedne drzwi</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 muzeum ===== -->
+  <section class="scena" data-id="02-muzeum" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · MUZEUM</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Muzeum 🏛️</h2>
+    <div class="nazwy">
+      <span class="chip pop" data-slowo="akwarium">akwarium</span>
+      <span class="chip pop" data-slowo="liceum">liceum</span>
+      <span class="chip pop" data-slowo="centrum">centrum</span>
+      <span class="chip pop" data-slowo="planetarium">planetarium</span>
+    </div>
+    <div class="stwierdz zjaw" data-slowo="ogóle">w liczbie pojedynczej <span class="konc">NIE odmieniają się</span></div>
+    <div class="formy">
+      <div class="linia pop" data-slowo="posłuchajcie" data-po="0.6">to <b>muzeum</b></div>
+      <div class="linia pop" data-slowo="nie">nie ma <b>muzeum</b></div>
+      <div class="linia pop" data-slowo="przyglądam">przyglądam się <b>muzeum</b></div>
+      <div class="linia pop" data-slowo="widzę">widzę <b>muzeum</b></div>
+      <div class="linia pop" data-slowo="zachwycam">zachwycam się <b>muzeum</b></div>
+      <div class="linia pop" data-slowo="mówię">mówię o <b>muzeum</b></div>
+    </div>
+    <div class="blad">
+      <div class="linia pop" data-slowo="błąd"><span class="zle">w muzeumie</span> ➜ <span class="dobrze">w muzeum</span></div>
+      <div class="linia pop" data-slowo="akwariumu"><span class="zle">do akwariumu</span> ➜ <span class="dobrze">do akwarium</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 liczba mnoga ===== -->
+  <section class="scena" data-id="03-mnoga" id="s03">
+    <span class="czesc c1">1 · MUZEUM</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">A w liczbie mnogiej? ✅</h2>
+    <div class="rzad">
+      <div class="karta lp pop" data-t="0.3">
+        <div class="nazwa">liczba pojedyncza</div>
+        <div class="poz">to muzeum</div><div class="poz">nie ma muzeum</div><div class="poz">przyglądam się muzeum</div>
+        <div class="poz">widzę muzeum</div><div class="poz">zachwycam się muzeum</div><div class="poz">mówię o muzeum</div>
+      </div>
+      <div class="karta lm pop" data-slowo="mnogiej">
+        <div class="nazwa">liczba mnoga</div>
+        <div class="poz zjaw" data-slowo="muzea">to muze<span class="konc">a</span></div>
+        <div class="poz zjaw" data-slowo="muzeów">nie ma muze<span class="konc">ów</span></div>
+        <div class="poz zjaw" data-slowo="muzeom">przyglądam się muze<span class="konc">om</span></div>
+        <div class="poz zjaw" data-slowo="widzę">widzę muze<span class="konc">a</span></div>
+        <div class="poz zjaw" data-slowo="zachwycam">zachwycam się muze<span class="konc">ami</span></div>
+        <div class="poz zjaw" data-slowo="mówię">mówię o muze<span class="konc">ach</span></div>
+      </div>
+    </div>
+    <div><span class="chip zap pop" data-slowo="akwaria">tak samo: akwaria, akwariów, w akwariach</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · MUZEUM</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="błędne">Które zdania są błędne? Popraw je.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć"><span class="nr">1</span>Byliśmy w muzeumie.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.25"><span class="nr">2</span>Poszliśmy do akwarium.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.5"><span class="nr">3</span>Mieszkam blisko centrumu.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.75"><span class="nr">4</span>W mieście są trzy muzea.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="1"><span class="nr">5</span>Zwiedziliśmy pięć muzeów.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="muzeumie">1. Byliśmy <span class="zle">w muzeumie</span> ➜ <span class="dobrze">w muzeum</span><span class="etyk e-zle">błąd</span></div>
+      <div class="linia wjazd-lewo" data-slowo="akwarium">2. Poszliśmy do akwarium.<span class="etyk e-ok">dobrze</span></div>
+      <div class="linia wjazd-lewo" data-slowo="centrumu">3. Mieszkam blisko <span class="zle">centrumu</span> ➜ <span class="dobrze">centrum</span><span class="etyk e-zle">błąd</span></div>
+      <div class="linia wjazd-lewo" data-slowo="trzy">4. W mieście są trzy muzea.<span class="etyk e-ok">dobrze</span> <span class="dlaczego">liczba mnoga</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pięć">5. Zwiedziliśmy pięć muzeów.<span class="etyk e-ok">dobrze</span> <span class="dlaczego">liczba mnoga</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 06 tylko jedna liczba ===== -->
+  <section class="scena" data-id="06-liczba" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · TYLKO JEDNA LICZBA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Tylko jedna liczba</h2>
+    <div class="dwie">
+      <div class="karta k-lp pop" data-slowo="pojedynczą">
+        <div class="nazwa">tylko liczba pojedyncza</div>
+        <div class="elem"><span class="zjaw" data-slowo="powietrze">powietrze</span><span class="zjaw" data-slowo="odzież">odzież</span><span class="zjaw" data-slowo="młodzież">młodzież</span><span class="zjaw" data-slowo="zazdrość">zazdrość</span><span class="zjaw" data-slowo="ludzkość">ludzkość</span></div>
+      </div>
+      <div class="karta k-lm pop" data-slowo="mnogą">
+        <div class="nazwa">tylko liczba mnoga</div>
+        <div class="elem"><span class="zjaw" data-slowo="drzwi">drzwi</span><span class="zjaw" data-slowo="sanie">sanie</span><span class="zjaw" data-slowo="nożyczki">nożyczki</span><span class="zjaw" data-slowo="okulary">okulary</span><span class="zjaw" data-slowo="spodnie">spodnie</span><span class="zjaw" data-slowo="wakacje">wakacje</span><span class="zjaw" data-slowo="imieniny">imieniny</span></div>
+      </div>
+    </div>
+    <div class="uwagi">
+      <span class="chip pop" data-slowo="powietrza" style="background:var(--roz)">❌ dwa powietrza</span>
+      <span class="chip pop" data-slowo="jedne" style="background:var(--niebieski)">🚪 jedne drzwi = jedna rzecz, a liczba mnoga</span>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+20" id="s07">
+    <span class="czesc c2">2 · TYLKO JEDNA LICZBA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="podziel">Tylko pojedyncza czy tylko mnoga?</div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="osiem">powietrze</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.15">nożyczki</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.3">odzież</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.45">wakacje</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.6">sanie</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.75">młodzież</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="0.9">okulary</span>
+      <span class="kafel pop" data-slowo="osiem" data-po="1.05">zazdrość</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="kolumnach">Dwie kolumny w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="dwie">
+      <div class="karta k-lp pop" data-slowo="pojedyncza">
+        <div class="nazwa">tylko pojedyncza</div>
+        <div class="elem"><span>powietrze</span><span>odzież</span><span>młodzież</span><span>zazdrość</span></div>
+      </div>
+      <div class="karta k-lm pop" data-slowo="mnoga">
+        <div class="nazwa">tylko mnoga</div>
+        <div class="elem"><span>nożyczki</span><span>wakacje</span><span>sanie</span><span>okulary</span></div>
+      </div>
+    </div>
+    <div class="uwagi">
+      <span class="chip pop" data-slowo="nożyczka" style="background:var(--roz)">❌ jedna nożyczka?</span>
+      <span class="chip pop" data-slowo="zazdrości" style="background:var(--roz)">❌ dwie zazdrości?</span>
+      <span class="chip pop" data-slowo="poznajesz" style="background:var(--zielony)">brzmi dziwnie = dziwak 🤪</span>
+    </div>
+  </section>
+
+  <!-- ===== 09 ile ===== -->
+  <section class="scena" data-id="09-ile" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · JAK LICZYĆ?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Jedne drzwi, dwoje drzwi 🚪🚪</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="jeden"><span class="zle">jeden drzwi</span> ➜ <span class="dobrze">jedne drzwi</span></div>
+      <div class="linia wjazd-lewo" data-slowo="nożyczki">jedne nożyczki · jedne okulary</div>
+      <div class="linia wjazd-lewo" data-slowo="dwoje">dwoje drzwi · troje nożyczek · czworo sań</div>
+      <div class="linia wjazd-lewo" data-slowo="para">para spodni · dwie pary okularów · trzy pary nożyczek</div>
+    </div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+20" id="s10">
+    <span class="czesc c3">3 · JAK LICZYĆ?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="uzupełnij">Uzupełnij: jedne · dwoje · troje · pary</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Kupiłam <span class="luka"></span> nożyczki. <span class="dlaczego">(1)</span></div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>W klasie jest <span class="luka"></span> drzwi. <span class="dlaczego">(2)</span></div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>Tata ma trzy <span class="luka"></span> spodni.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>Zgubiłem <span class="luka"></span> okulary. <span class="dlaczego">(1)</span></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="kupiłam">1. Kupiłam <b class="wst">jedne</b> nożyczki. <span class="dlaczego">jedna rzecz, rzeczownik w lm</span></div>
+      <div class="linia wjazd-lewo" data-slowo="klasie">2. W klasie jest <b class="wst">dwoje</b> drzwi. <span class="dlaczego">dwoje, a nie dwa</span></div>
+      <div class="linia wjazd-lewo" data-slowo="tata">3. Tata ma trzy <b class="wst">pary</b> spodni. <span class="dlaczego">liczymy parami</span></div>
+      <div class="linia wjazd-lewo" data-slowo="zgubiłem">4. Zgubiłem <b class="wst">jedne</b> okulary.</div>
+    </div>
+  </section>
+
+  <!-- ===== 12 dopelniacz ===== -->
+  <section class="scena" data-id="12-dopelniacz" id="s12">
+    <span class="czesc c4 zjaw" data-t="0">4 · PUŁAPKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Nie ma… czego? 🤔</h2>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="nożyczek">nożyczek</span>
+      <span class="kafel pop" data-slowo="spodni">spodni</span>
+      <span class="kafel pop" data-slowo="sań">sań</span>
+      <span class="kafel pop" data-slowo="drzwi">drzwi</span>
+      <span class="kafel pop" data-slowo="wakacji">wakacji</span>
+    </div>
+    <div><span class="chip rada pop" data-slowo="znaleźć">sprawdzian: „Nie mogę znaleźć…” ➜ nożyczek, spodni</span></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+20" id="s13">
+    <span class="czesc c4">4 · PUŁAPKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dokończ">Dokończ: „Nie ma …”</div>
+    <div class="kafle">
+      <span class="kafel pop" data-slowo="czterech">sanie</span>
+      <span class="kafel pop" data-slowo="czterech" data-po="0.25">skrzypce</span>
+      <span class="kafel pop" data-slowo="czterech" data-po="0.5">imieniny</span>
+      <span class="kafel pop" data-slowo="czterech" data-po="0.75">spodnie</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="start">Zapisz w zeszycie 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="sań">sanie ➜ nie ma <b class="wst">sań</b></div>
+      <div class="linia wjazd-lewo" data-slowo="skrzypiec">skrzypce ➜ nie ma <b class="wst">skrzypiec</b></div>
+      <div class="linia wjazd-lewo" data-slowo="imienin">imieniny ➜ nie ma <b class="wst">imienin</b></div>
+      <div class="linia wjazd-lewo" data-slowo="spodni">spodnie ➜ nie ma <b class="wst">spodni</b></div>
+    </div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="muzeum"><div class="nazwa">🏛️ MUZEUM</div><div class="opis">lp: zawsze <b>muzeum</b><br>(w muzeum, nie „w muzeumie”)<br>lm: muzea, muzeów</div></div>
+      <div class="karta k2 pop" data-slowo="niektóre"><div class="nazwa">1️⃣ JEDNA LICZBA</div><div class="opis">tylko lp: powietrze, odzież<br>tylko lm: drzwi, nożyczki, okulary</div></div>
+      <div class="karta k3 pop" data-slowo="liczymy"><div class="nazwa">🚪 LICZENIE</div><div class="opis">jedne drzwi<br>dwoje drzwi<br>para spodni</div></div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
