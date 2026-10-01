@@ -12,6 +12,7 @@ Apka nauczyciela polskiego (Bartek, SP 97): lekcje jako prezentacje na projektor
 - Każdy dział ma swoje `dzial: 'Dział N - nazwa'`. Na liście lekcji to osobna zakładka (Powtórzeniowe | Dział 1 | Dział 2...).
 - Zasady Bartka: podręcznik to pomoc, nie rama. Max 2 lekcje z czytanym tekstem na dział, reszta to język i pisanie. Zadania z podręcznika tylko sensowne, **po kolei** (strona, numer), jedno zadanie = jeden screen = jeden slajd. Screeny tylko renderem z NEON-a/multibooka, nigdy wycinki ze zrzutów ekranu. Bez własnych zadań Z1/Z2 na slajdach.
 - Nowy dział: najpierw mapa stron i plan w `docs/klasaN-dzialM-*.md`, potem lekcje.
+- **Notatka do zeszytu tylko z wiedzy** (reguły, pojęcia, sposoby). Z omawianego tekstu nie robimy notatki (żadnych kart wiersza, planów wydarzeń, „kto mówi / o czym”) - przy lekcji tylko z tekstem w notatce jest sam temat.
 
 ## Filmik do każdej lekcji
 Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recytacja/`. Styl zaakceptowany przez Bartka - nie zmieniaj go.

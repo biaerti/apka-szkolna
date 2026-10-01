@@ -60,7 +60,7 @@ const TOPICS: Topic[] = [
       slideTask('Z2', 'Radek dzwoni do Matyldy. Ktoś zgubił wszystkie myślniki i znaki - przepisz rozmowę poprawnie:\n\nCześć tu Radek powiedział niepewnie co z Koksem\nUciekł odpowiedziała Matylda Jacek jest w szpitalu\nJak mogę pomóc zapytał Radek', 6 * 60, 'dialog', '– Cześć, tu Radek – powiedział niepewnie. – Co z Koksem?\n– Uciekł – odpowiedziała Matylda. – Jacek jest w szpitalu.\n– Jak mogę pomóc? – zapytał Radek.'),
       slideTask('Z3', 'Zamiast „powiedział” autor używa ciekawszych czasowników. Połącz je ze znaczeniem:\n\n1. mruknął  2. zaoponował  3. żachnął się  4. roześmiał się  5. zdenerwował się\n\na) sprzeciwił się\nb) powiedział cicho i niewyraźnie\nc) powiedział ze złością\nd) lekko się oburzył\ne) powiedział ze śmiechem', 5 * 60, 'dialog', '1 - b, 2 - a, 3 - d, 4 - e, 5 - c'),
       slideTask('Z4', 'W parach: cofnijmy czas. Na boisku Radek tym razem **staje w obronie** Jacka.\n\nNapiszcie 4 wypowiedzi (Jacek, Modry, Radek). Przy każdej dodajcie słowa narratora i użyjcie **dwóch czasowników z Z3**.', 7 * 60, 'dialog', '– Mógłbym z wami zagrać? – spytał Jacek.\n– Spadaj! – mruknął Modry.\n– Czemu? Jacek dobrze gra – zaoponował Radek.\n– Dobra, niech zagra – żachnął się Modry.'),
-      slideNote('Jak zapisać dialog?', '- Każda wypowiedź od nowej linijki i od myślnika.\n- Słowa narratora po myślniku, małą literą.\n- ? i ! zostają przy bohaterze, kropka po słowach narratora.\n- Radek nie obronił Jacka, ale naprawił błąd - odnalazł Koksa.'),
+      slideNote('Jak zapisać dialog?', '- Każda wypowiedź od nowej linijki i od myślnika.\n- Słowa narratora po myślniku, małą literą.\n- ? i ! zostają przy bohaterze, kropka po słowach narratora.'),
     ],
   },
   {
@@ -221,7 +221,8 @@ const TOPICS: Topic[] = [
         studentActionText: 'Do zeszytu',
         answerExample: '1. Prośba mamy o pomoc Dawidowi.\n2. Ładowanie i rozwożenie paczek.\n3. Spór o jedzenie zabrane przez Władka.\n4. Wydawanie żywności w świetlicy.\n5. Spotkanie Dominika i poznanie jego sytuacji.\n6. Wspólne zawiezienie paczek Michałowi.',
       },
-      slideNote('Pomaganie - dziesiąty poziom przyjaźni', '**Plan wydarzeń „Dziesiątego poziomu”**\n1. Prośba mamy o pomoc Dawidowi.\n2. Ładowanie i rozwożenie paczek.\n3. Spór o jedzenie zabrane przez Władka.\n4. Wydawanie żywności w świetlicy.\n5. Spotkanie Dominika i poznanie jego sytuacji.\n6. Wspólne zawiezienie paczek Michałowi.'),
+      // Lekcja z tekstem - bez notatki z treści tekstu (Bartek, 2026-10-01), w zeszycie tylko temat.
+      slideNote('Pomaganie - dziesiąty poziom przyjaźni', ''),
       slideTextbookTask('czytanki:dziesiaty-poziom-zad5.png', 35, 's. 35 zad. 5', 'Pytania otwarte i zamknięte', 'oral', 'Ustnie w parze'),
       slideTextbookTask('czytanki:dziesiaty-poziom-zad6-8.png', 35, 's. 35 zad. 6-8', 'Pomaganie i wolontariat', 'oral', 'Odpowiedzi ustne'),
       slideTextbookTask('czytanki:dziesiaty-poziom-zad9.png', 35, 's. 35 zad. 9', 'Przyjaźń - własne zdanie', 'write-answer', 'Do zeszytu'),
