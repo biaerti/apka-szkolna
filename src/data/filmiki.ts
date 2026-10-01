@@ -42,6 +42,7 @@ export const FILMIKI: Filmik[] = [
   { id: 'sprawozdanie-film1', lekcja: 'V.26', title: 'Sprawozdanie - części, fakty, słowa porządkujące (4 zadania)' },
   { id: 'dwukropek-film1', lekcja: 'V.27', title: 'Dwukropek i piszemy sprawozdanie (4 zadania)' },
   { id: 'reklama-film1', lekcja: 'V.28', title: 'Tekst reklamowy - słowa, sztuczki, prawda (4 zadania)' },
+  { id: 'podsumowanie5-dzial2-film1', lekcja: 'V.29', title: 'Podsumowanie działu 2 - To wiem! To potrafię! (5 zadań)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

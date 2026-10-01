@@ -709,7 +709,7 @@ export const DZIAL2_TOPICS: Topic[] = [
     topic: 'Uwaga, uczucia! - podsumowanie działu',
     textbookPage: 96,
     teacherPlan: plan(
-      ['Co dziś', 'Podsumowanie na mapie ze s. 96 i test ze s. 97-98: wywiad „Zarażeni emocjami” o filmie „W głowie się nie mieści” - dzieci go znają. Zadania z s. 98 sprawdzają prawie cały dział naraz. Film podsumowujący (jak w dziale 1) jeszcze nie powstał - gdy będzie, wchodzi po mapie.'],
+      ['Co dziś', 'Podsumowanie na mapie ze s. 96 i test ze s. 97-98: wywiad „Zarażeni emocjami” o filmie „W głowie się nie mieści” - dzieci go znają. Zadania z s. 98 sprawdzają prawie cały dział naraz. Film podsumowujący wchodzi zaraz po mapie.'],
       ['Po lekcji uczeń', [
         '- rozpoznaje przenośnię, zdrobnienie i zgrubienie,',
         '- odmienia rzeczowniki, także te o nietypowej odmianie,',
@@ -720,10 +720,11 @@ export const DZIAL2_TOPICS: Topic[] = [
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (6 min) - tekst reklamowy.',
         '2. **Mapa s. 96** (2 min).',
-        '3. **Tekst s. 97-98** (6 min) - czytasz albo czytają na zmianę.',
-        '4. **Zadania s. 98** (25 min) - po kolei, koło losuje. Zad. 1, 2, 3, 5, 7 szybko ustnie; 4, 8, 9, 10 w zeszycie.',
-        '5. **Notatka** (5 min).',
-        '6. **Zad. 11** - sprawozdanie z wyjścia do kina, do domu (albo dla chętnych).',
+        '3. **Film „To wiem! To potrafię!”** (7 min) - cały dział w czterech częściach, 5 zadań ze sprawdzeniem.',
+        '4. **Koło** (5 min) - pytania z całego działu.',
+        '5. **Tekst s. 97-98** (5 min) i **zadania s. 98** (15 min) - po kolei, koło losuje. Zad. 1, 2, 3, 5, 7 szybko ustnie; 4, 8, 9, 10 w zeszycie (co nie zdążysz - zapas).',
+        '6. **Notatka** (4 min).',
+        '7. **Zad. 11** - sprawozdanie z wyjścia do kina, do domu (albo dla chętnych).',
       ].join('\n')],
       ['Odpowiedzi s. 98', [
         '- **zad. 1** A.',
@@ -745,10 +746,12 @@ export const DZIAL2_TOPICS: Topic[] = [
       { text: 'Podaj rzeczownik, który ma tylko liczbę mnogą.', answer: 'Np. drzwi, nożyczki, spodnie, wakacje.' },
       { text: 'Na jakie pytania odpowiada wstęp sprawozdania?', answer: 'Kto? Co? Kiedy? Gdzie? Dlaczego?' },
     ],
-    makeSlides: (previousSetId) => [
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Uwaga, uczucia! - podsumowanie'),
       ...recap(previousSetId),
       ramka('d2-s96-mapa', 96, 'Mapa działu - to wszystko dziś powtórzymy'),
+      slideVideo('podsumowanie5-dzial2-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 6 }] : []),
       ramka('d2-s97-tekst', 97, 'Zarażeni emocjami'),
       ramka('d2-s98-tekst', 98, 'Zarażeni emocjami - dokończenie'),
       zad('d2-s98-zad1', 98, '1', 'ustnie'),
