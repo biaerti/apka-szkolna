@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest sześć zdań. Przy każdym numerze napisz w zeszycie: fakt albo opinia. Pamiętaj: fakt można sprawdzić. Start!

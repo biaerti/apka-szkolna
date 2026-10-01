@@ -1,0 +1,1 @@
+Jak sprawdzać swój tekst? Bądźcie detektywami wielkich liter. Krok pierwszy: znajdź w tekście imiona, nazwy miejsc, planet i świąt. Krok drugi: zapytaj, czy to jedna, konkretna rzecz. Krok trzeci: sprawdź pierwszą literę. A uwaga, błąd może być w dwie strony! Ktoś może napisać nazwę własną małą literą, ale może też napisać zwykłe słowo wielką.

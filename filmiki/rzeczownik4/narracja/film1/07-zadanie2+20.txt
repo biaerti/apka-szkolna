@@ -1,0 +1,1 @@
+Zadanie drugie. Zmień liczbę rzeczowników. Jeśli wyraz jest w liczbie pojedynczej, zapisz go w mnogiej. Jeśli jest w mnogiej, zapisz go w pojedynczej. Start!

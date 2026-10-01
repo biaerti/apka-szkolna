@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest pięć nazw pospolitych. Do każdej dopisz jedną nazwę własną. Pamiętaj o wielkiej literze! Start!

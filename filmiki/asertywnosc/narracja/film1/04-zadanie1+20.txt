@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie są trzy scenki. Przy każdej są trzy odpowiedzi. Która z nich jest asertywna? Zapisz numer scenki i literę odpowiedzi. Start!

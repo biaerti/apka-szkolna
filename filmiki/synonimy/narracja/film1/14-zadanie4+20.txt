@@ -1,0 +1,1 @@
+Zadanie czwarte. Przy każdej parze napisz, czy to synonimy, czy antonimy. Skrót masz na ekranie. Pamiętaj o teście ze zdaniem. Start!

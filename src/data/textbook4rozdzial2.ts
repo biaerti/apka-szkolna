@@ -230,9 +230,9 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
     ),
     questions: [
-      { text: 'Podaj synonim słowa „smutny”.', answer: 'np. przygnębiony, markotny, zmartwiony.' },
-      { text: 'Podaj antonim słowa „otwarty”.', answer: 'zamknięty' },
-      { text: 'Synonimy czy antonimy: „szybki - prędki”?', answer: 'Synonimy - znaczą prawie to samo.' },
+      { text: 'Podaj synonim słowa „duży”.', answer: 'np. wielki, ogromny, olbrzymi.' },
+      { text: 'Podaj antonim słowa „ciężki”.', answer: 'lekki' },
+      { text: 'Synonimy czy antonimy: „krzyczeć - wrzeszczeć”?', answer: 'Synonimy - znaczą prawie to samo.' },
       { text: 'Synonimy czy antonimy: „wejście - wyjście”?', answer: 'Antonimy - znaczą coś przeciwnego.' },
       { text: 'Po co nam synonimy w wypracowaniu?', answer: 'Żeby unikać powtórzeń i wzbogacić tekst.' },
       { text: 'Podaj antonim do „krzesło”. Da się?', answer: 'Nie da się - nie każdy wyraz ma antonim.' },
@@ -491,8 +491,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
     ),
     questions: [
-      { text: 'Fakt czy opinia: „Kraków leży nad Wisłą”?', answer: 'Fakt - można to sprawdzić.' },
-      { text: 'Fakt czy opinia: „Kraków to najpiękniejsze miasto”?', answer: 'Opinia - czyjeś zdanie.' },
+      { text: 'Fakt czy opinia: „Rok ma dwanaście miesięcy”?', answer: 'Fakt - można to sprawdzić.' },
+      { text: 'Fakt czy opinia: „Lipiec to najlepszy miesiąc w roku”?', answer: 'Opinia - czyjeś zdanie.' },
       { text: 'Podaj zwrot, którym zaczniesz swoją opinię.', answer: 'np. Moim zdaniem..., Uważam, że..., Sądzę, że...' },
       { text: 'Czy „bo tak” to argument?', answer: 'Nie. Argument to prawdziwy powód, który wyjaśnia zdanie.' },
       { text: 'Podaj argument: „Warto jeść warzywa, ponieważ...”', answer: 'np. mają witaminy i dzięki nim jesteśmy zdrowsi.' },
@@ -601,7 +601,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       { text: 'Podaj nazwę własną do nazwy pospolitej „góry”.', answer: 'np. Tatry, Karpaty, Bieszczady.' },
       { text: 'Dlaczego „Burek” piszemy wielką literą?', answer: 'To imię konkretnego psa - nazwa własna.' },
       { text: 'Wielką czy małą: (w/W)ielkanoc?', answer: 'Wielkanoc - nazwa święta.' },
-      { text: 'Ziemia czy ziemia: „Posadziłem kwiatek w (z/Z)iemi”?', answer: 'ziemi - chodzi o glebę, nie o planetę.' },
+      { text: 'Wielką czy małą: (m/M)ars?', answer: 'Mars - nazwa planety.' },
     ],
     makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Pisownia rzeczowników wielką i małą literą'),
@@ -649,10 +649,10 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     questions: [
       { text: 'Razem czy osobno: (nie)szczęście?', answer: 'nieszczęście - razem, to rzeczownik.' },
       { text: 'Razem czy osobno: (nie)rozumiem?', answer: 'nie rozumiem - osobno, to czasownik.' },
-      { text: 'Dodaj „nie” do rzeczownika „uwaga”.', answer: 'nieuwaga' },
+      { text: 'Dodaj „nie” do rzeczownika „chęć”.', answer: 'niechęć' },
       { text: 'Jak sprawdzisz, czy wyraz to rzeczownik?', answer: 'Zadaję pytanie kto? co? - jeśli pasuje, to rzeczownik.' },
       { text: 'Popraw błąd: „Na boisku był straszny nie porządek”.', answer: 'nieporządek - razem.' },
-      { text: 'Ułóż zdanie z rzeczownikiem „niepogoda”.', answer: 'np. Przez niepogodę wycieczka się nie odbyła.' },
+      { text: 'Ułóż zdanie z rzeczownikiem „niepokój”.', answer: 'np. Przed sprawdzianem czułem niepokój.' },
     ],
     makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Pisownia nie z rzeczownikami'),

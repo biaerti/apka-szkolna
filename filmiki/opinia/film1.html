@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Opinia i argument - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 4px; }
+.e-f { background: var(--niebieski); } .e-o { background: var(--pomarancz); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.skr { text-decoration: line-through; text-decoration-thickness: 4px; text-decoration-color: var(--roz); }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 24px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .rzad { margin-top: 40px; align-items: flex-start; }
+#s02 .kol { display: flex; flex-direction: column; gap: 22px; align-items: center; }
+#s02 .zd { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; line-height: 1.2; }
+#s02 .kol .karta { width: 100%; }
+#s02 .ko .karta { border-color: var(--pomarancz); }
+#s02 .kf .karta { border-color: var(--niebieski); }
+#s02 .chip { font-size: 32px; }
+#s02 .ko .chip { background: var(--pomarancz); }
+#s02 .kf .chip { background: var(--niebieski); }
+#s02 .def .nazwa { font-size: 42px; }
+#s02 .def .opis { font-size: 32px; }
+#s02 .ko .def { background: #fff3e6; } #s02 .ko .def .nazwa { color: var(--pomarancz); }
+#s02 .kf .def { background: #eaf2fd; } #s02 .kf .def .nazwa { color: var(--niebieski); }
+
+/* ===== 03 ===== */
+#s03 .zwroty { display: flex; gap: 12px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+#s03 .zwroty .chip { font-size: 36px; background: var(--pomarancz); padding: 4px 28px; }
+#s03 .lista { width: 1060px; margin-top: 22px; }
+#s03 .linia { font-size: 33px; }
+#s03 .zgoda { margin-top: 22px; font-size: 32px; background: var(--niebieski); }
+
+/* ===== 04-05 ===== */
+#s04 .lista { gap: 8px; margin-top: 12px; width: 900px; }
+#s04 .linia { font-size: 31px; padding: 5px 20px; }
+#s04 .wsk { margin-top: 12px; font-size: 28px; background: var(--niebieski); }
+#s05 .lista { gap: 8px; margin-top: 12px; }
+#s05 .linia { font-size: 28px; padding: 5px 20px; }
+#s05 .zdradza { margin-top: 12px; font-size: 27px; background: var(--pomarancz); }
+
+/* ===== 06 ===== */
+#s06 .wzor { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 18px; }
+#s06 .wzor .karta { padding: 8px 26px; }
+#s06 .wzor .nazwa { font-size: 38px; }
+#s06 .w1 { border-color: var(--pomarancz); } #s06 .w1 .nazwa { color: var(--pomarancz); }
+#s06 .w2 { border-color: var(--fiolet); } #s06 .w2 .nazwa { color: var(--fiolet); }
+#s06 .w3 { border-color: var(--zielony); } #s06 .w3 .nazwa { color: var(--zielony); }
+#s06 .plus { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; color: var(--szary); }
+#s06 .lista { width: 1060px; margin-top: 24px; gap: 12px; }
+#s06 .linia { font-size: 33px; padding: 6px 20px; }
+#s06 .botak { display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 22px; }
+#s06 .botak .chip { font-size: 34px; background: var(--roz); }
+#s06 .botak .chip.jasny { background: #f6d6db; color: var(--ciemny); }
+
+/* ===== 07-08 ===== */
+#s07 .op { margin: 14px auto 0; width: 1000px; border-color: var(--fiolet); }
+#s07 .op .nazwa { font-size: 36px; }
+#s07 .lista { width: 1000px; margin-top: 14px; }
+#s07 .linia { font-size: 32px; padding: 6px 22px; }
+#s08 .lista { width: 1140px; margin-top: 40px; gap: 18px; }
+#s08 .linia { font-size: 33px; padding: 12px 22px; }
+#s08 .dlaczego { font-size: 27px; }
+#s08 .wsk { background: var(--fiolet); font-size: 36px; margin-top: 40px; }
+
+/* ===== 09 ===== */
+#s09 .rzad { margin: 22px auto 0; width: 900px; }
+#s09 .rzad .karta { padding: 6px 18px; }
+#s09 .rzad .nazwa { font-size: 38px; }
+#s09 .z1 { border-color: var(--roz); } #s09 .z1 .nazwa { color: var(--roz); }
+#s09 .z2 { border-color: var(--zielony); } #s09 .z2 .nazwa { color: var(--zielony); }
+#s09 .siatka { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 20px auto 0; width: 1000px; }
+#s09 .siatka .linia { font-size: 31px; padding: 6px 20px; border-color: var(--niebieski); }
+#s09 .koniec { display: flex; gap: 14px; justify-content: center; margin-top: 20px; }
+#s09 .koniec .chip { font-size: 34px; }
+#s09 .zgoda { background: var(--zielony); }
+#s09 .placz { background: var(--niebieski); }
+
+/* ===== 10-11 ===== */
+#s10 .op { margin: 16px auto 0; width: 1000px; border-color: var(--niebieski); }
+#s10 .op .nazwa { font-size: 38px; }
+#s10 .lista { width: 1000px; }
+#s10 .linia { font-size: 34px; }
+#s10 .wsk { background: var(--niebieski); }
+#s11 .op { margin: 14px auto 0; width: 1000px; border-color: var(--niebieski); padding: 8px 20px; }
+#s11 .op .nazwa { font-size: 32px; }
+#s11 .lista { width: 1000px; gap: 9px; margin-top: 12px; }
+#s11 .linia { font-size: 31px; padding: 6px 22px; }
+#s11 .wsk { background: var(--niebieski); margin-top: 14px; }
+
+/* ===== 12 ===== */
+#s12 .def { margin: 16px auto 0; width: 960px; border-color: var(--zielony); background: #eefaf1; padding: 8px 20px; }
+#s12 .def .nazwa { color: var(--zielony); font-size: 36px; }
+#s12 .rzad { margin-top: 16px; align-items: stretch; }
+#s12 .rzad .karta { text-align: left; }
+#s12 .rzad .nazwa { font-size: 24px; color: var(--szary); }
+#s12 .rzad .opis { font-size: 31px; color: var(--ciemny); margin-top: 2px; }
+#s12 .k1 { border-color: var(--niebieski); } #s12 .k2 { border-color: var(--roz); }
+#s12 .srodek { display: flex; gap: 14px; justify-content: center; margin-top: 14px; }
+#s12 .srodek .chip { font-size: 28px; background: var(--fiolet); }
+#s12 .odpo { margin: 14px auto 0; width: 1000px; border-color: var(--zielony); padding: 8px 20px; }
+#s12 .odpo .opis { font-size: 31px; color: var(--ciemny); margin: 0; }
+
+/* ===== 13-14 ===== */
+#s13 .sytuacja { margin: 16px auto 0; width: 900px; border-color: var(--zielony); }
+#s13 .sytuacja .nazwa { font-size: 42px; }
+#s13 .lista { width: 1000px; }
+#s13 .linia { font-size: 34px; }
+#s14 .lista { width: 1100px; gap: 18px; margin-top: 28px; }
+#s14 .linia { font-size: 33px; padding: 10px 24px; line-height: 1.35; }
+#s14 .linia .mama { color: var(--roz); }
+#s14 .linia .ty { color: var(--zielony); }
+#s14 .wsk { background: var(--zielony); margin-top: 30px; font-size: 34px; }
+
+/* ===== 15 ===== */
+#s15 .lista { width: 1120px; gap: 8px; margin-top: 12px; }
+#s15 .linia { font-size: 30px; padding: 5px 24px; }
+#s15 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="myślimy">💬 🤔 💡</div>
+    <div class="tytul pop" data-slowo="przekonywać">Opinia i argument</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="fakt">🔎 fakt czy opinia?</span>
+      <span class="chip pop" data-slowo="argument">💡 argument</span>
+      <span class="chip pop" data-slowo="kontrargument">⚖️ kontrargument</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 fakt i opinia ===== -->
+  <section class="scena" data-id="02-fakt-opinia" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Fakt czy opinia? 🤔</h2>
+    <div class="rzad">
+      <div class="kol ko">
+        <div class="karta pop" data-slowo="pizza"><div class="zd">🍕 „Pizza jest najlepszym jedzeniem na świecie.”</div></div>
+        <span class="chip pop" data-slowo="pierogi">🥟 a ktoś woli pierogi!</span>
+        <div class="karta def pop" data-slowo="opinia"><div class="nazwa">OPINIA = moje zdanie</div><div class="opis">ktoś inny może mieć inne</div></div>
+      </div>
+      <div class="kol kf">
+        <div class="karta pop" data-slowo="pochodzi"><div class="zd">🗺️ „Pizza pochodzi z Włoch.”</div></div>
+        <span class="chip pop" data-slowo="sprawdzić">📚 🔎 można sprawdzić</span>
+        <div class="karta def pop" data-slowo="fakt"><div class="nazwa">FAKT = da się sprawdzić</div><div class="opis">taki sam dla wszystkich</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 zwroty ===== -->
+  <section class="scena" data-id="03-zwroty" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · FAKT I OPINIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Tak mówimy swoją opinię 💬</h2>
+    <div class="zwroty">
+      <span class="chip pop" data-slowo="moim">moim zdaniem</span>
+      <span class="chip pop" data-slowo="uważam">uważam, że</span>
+      <span class="chip pop" data-slowo="sądzę">sądzę, że</span>
+      <span class="chip pop" data-slowo="myślę">myślę, że</span>
+      <span class="chip pop" data-slowo="według">według mnie</span>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="lato">☀️ <span class="hl">Moim zdaniem</span> lato jest lepsze od zimy.</div>
+      <div class="linia wjazd-lewo" data-slowo="wycieczek">🚌 <span class="hl">Uważam, że</span> w szkole powinno być więcej wycieczek.</div>
+      <div class="linia wjazd-lewo" data-slowo="koty">🐈 <span class="hl">Sądzę, że</span> koty są sprytniejsze od psów.</div>
+    </div>
+    <div><span class="chip zgoda pop" data-slowo="zgadzać">👂 to moje zdanie - nie musisz się z nim zgadzać</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · FAKT I OPINIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ekranie">Przy każdym numerze napisz: fakt albo opinia</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sześć"><span class="nr">1</span>Tydzień ma siedem dni.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.2"><span class="nr">2</span>Matematyka to najnudniejszy przedmiot.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.4"><span class="nr">3</span>Pająk ma osiem nóg.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.6"><span class="nr">4</span>Zima jest piękniejsza od lata.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.8"><span class="nr">5</span>Wisła płynie przez Kraków.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="1"><span class="nr">6</span>Koty są mądrzejsze od psów.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="sprawdzić">🔎 fakt można sprawdzić</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="tydzień">1. Tydzień ma siedem dni. <span class="etyk e-f">FAKT</span> <span class="dlaczego">📅 kalendarz to potwierdzi</span></div>
+      <div class="linia wjazd-lewo" data-slowo="matematyka">2. Matematyka to <span class="hl">najnudniejszy</span> przedmiot. <span class="etyk e-o">OPINIA</span> <span class="dlaczego">niektórzy ją kochają</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pająk">3. Pająk ma osiem nóg. <span class="etyk e-f">FAKT</span> <span class="dlaczego">🕷️ można policzyć</span></div>
+      <div class="linia wjazd-lewo" data-slowo="zima">4. Zima jest <span class="hl">piękniejsza</span> od lata. <span class="etyk e-o">OPINIA</span> <span class="dlaczego">ktoś woli lato</span></div>
+      <div class="linia wjazd-lewo" data-slowo="wisła">5. Wisła płynie przez Kraków. <span class="etyk e-f">FAKT</span> <span class="dlaczego">🗺️ widać na mapie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="koty">6. Koty są <span class="hl">mądrzejsze</span> od psów. <span class="etyk e-o">OPINIA</span> <span class="dlaczego">🐕 psiarze się nie zgodzą</span></div>
+    </div>
+    <div><span class="chip zdradza pop" data-slowo="zdradzają">🕵️ najnudniejszy · piękniejsza · mądrzejsze ➜ takie słowa często zdradzają opinię</span></div>
+  </section>
+
+  <!-- ===== 06 argument ===== -->
+  <section class="scena" data-id="06-argument" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · ARGUMENT</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Argument = powód 💡</h2>
+    <div class="wzor">
+      <div class="karta w1 pop" data-slowo="wzór" data-po="0.4"><div class="nazwa">opinia</div></div>
+      <span class="plus pop" data-slowo="ponieważ">+</span>
+      <div class="karta w2 pop" data-slowo="ponieważ"><div class="nazwa">ponieważ / bo</div></div>
+      <span class="plus pop" data-slowo="końcu">+</span>
+      <div class="karta w3 pop" data-slowo="końcu"><div class="nazwa">powód</div></div>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="sport">⚽ Warto uprawiać sport, <span class="hl">ponieważ</span> jesteśmy wtedy zdrowsi.</div>
+      <div class="linia wjazd-lewo" data-slowo="rodzeństwo">👫 Warto mieć rodzeństwo, <span class="hl">bo</span> zawsze jest się z kim bawić.</div>
+    </div>
+    <div class="botak">
+      <span class="chip pop" data-slowo="odpowiedzią">❌ „<span class="skr">bo tak</span>” to nie argument!</span>
+    </div>
+    <div class="botak">
+      <span class="chip jasny pop" data-slowo="chcę">❌ <span class="skr">bo ja chcę</span></span>
+      <span class="chip jasny pop" data-slowo="wszyscy">❌ <span class="skr">bo wszyscy tak mają</span></span>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+20" id="s07">
+    <span class="czesc c2">2 · ARGUMENT</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="karta op pop" data-slowo="akwarium"><div class="nazwa">🐠 Warto mieć w klasie akwarium z rybkami...</div></div>
+    <div class="polecenie wjazd-dol" data-slowo="który">Który powód jest argumentem? Zapisz numer.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzech"><span class="nr">1</span>... bo tak.</div>
+      <div class="linia pop" data-slowo="trzech" data-po="0.25"><span class="nr">2</span>... bo w innej klasie też jest akwarium.</div>
+      <div class="linia pop" data-slowo="trzech" data-po="0.5"><span class="nr">3</span>... ponieważ uczymy się dbać o zwierzęta.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="trzeci"><span class="ok">✓ 3.</span> ponieważ uczymy się dbać o zwierzęta <span class="dlaczego">wyjaśnia, dlaczego</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pierwszy"><span class="zle">✗ 1.</span> bo tak <span class="dlaczego">niczego nie tłumaczy</span></div>
+      <div class="linia wjazd-lewo" data-slowo="drugi"><span class="zle">✗ 2.</span> bo w innej klasie też jest <span class="dlaczego">ktoś ma ≠ my potrzebujemy</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="odpowiada">💡 dobry argument odpowiada na pytanie: DLACZEGO?</span></div>
+  </section>
+
+  <!-- ===== 09 Zosia ===== -->
+  <section class="scena" data-id="09-zosia" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · ZOSIA PRZEKONUJE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Jak Zosia przekonała rodziców? 📷</h2>
+    <div class="rzad">
+      <div class="karta z1 pop" data-slowo="płakała"><div class="nazwa">😭 <span class="skr">płacz i tupanie</span></div></div>
+      <div class="karta z2 pop" data-slowo="argumenty"><div class="nazwa">💡 argumenty</div></div>
+    </div>
+    <div class="siatka">
+      <div class="linia pop" data-slowo="sobotę">📅 kurs w sobotę, a nie w czasie szkoły</div>
+      <div class="linia pop" data-slowo="kieszonkowe">💰 jej kieszonkowe + babcia dołoży</div>
+      <div class="linia pop" data-slowo="koleżanką">🚗 z koleżanką - jej rodzice zawiozą</div>
+      <div class="linia pop" data-slowo="talent">🎨 pani od plastyki: ma talent!</div>
+    </div>
+    <div class="koniec">
+      <span class="chip zgoda pop" data-slowo="zgodzili">✅ rodzice się zgodzili!</span>
+      <span class="chip placz pop" data-slowo="płacz">😭 nie przekonuje · 💡 przekonuje</span>
+    </div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+25" id="s10">
+    <span class="czesc c3">3 · ZOSIA PRZEKONUJE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dokończ">Dokończ opinię. Podaj dwa różne argumenty.</div>
+    <div class="karta op pop" data-slowo="czytać"><div class="nazwa">📖 🌙 Warto czytać książki przed snem, ponieważ...</div></div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="dwa"><span class="nr">1</span>. . . . . . . . . . . . . . . . . . . .</div>
+      <div class="linia pop" data-slowo="dwa" data-po="0.25"><span class="nr">2</span>. . . . . . . . . . . . . . . . . . . .</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="karta op pop" data-t="0.3"><div class="nazwa">📖 🌙 Warto czytać książki przed snem, ponieważ...</div></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="zasnąć">😴 ... łatwiej potem zasnąć.</div>
+      <div class="linia wjazd-lewo" data-slowo="słowa">🔤 ... poznajemy nowe słowa i lepiej piszemy.</div>
+      <div class="linia wjazd-lewo" data-slowo="wyobraźnia">🌈 ... wyobraźnia pracuje i mamy ciekawsze sny.</div>
+      <div class="linia wjazd-lewo" data-slowo="telefonu">📵 ... odpoczywamy od telefonu i telewizora.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="dlaczego">✓ każdy argument odpowiada na pytanie: dlaczego?</span></div>
+  </section>
+
+  <!-- ===== 12 kontrargument ===== -->
+  <section class="scena" data-id="12-kontrargument" id="s12">
+    <span class="czesc c4 zjaw" data-t="0">4 · KONTRARGUMENT</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Druga strona też ma argumenty ⚖️</h2>
+    <div class="karta def pop" data-slowo="kontrargument"><div class="nazwa">kontrargument = argument drugiej strony</div></div>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="uważam"><div class="nazwa">🧒 argument</div><div class="opis">W 4 klasie warto mieć telefon, bo można zadzwonić do rodziców. 📱</div></div>
+      <div class="karta k2 pop" data-slowo="rozprasza"><div class="nazwa">👩 kontrargument</div><div class="opis">Ale telefon rozprasza na lekcjach. 😵</div></div>
+    </div>
+    <div class="srodek">
+      <span class="chip pop" data-slowo="obie">⚖️ obie strony mają trochę racji</span>
+      <span class="chip pop" data-slowo="słuchamy">👂 słuchamy spokojnie i odpowiadamy</span>
+    </div>
+    <div class="karta odpo pop" data-slowo="wyłączony"><div class="opis">💬 Telefon będzie wyłączony w plecaku aż do końca lekcji.</div></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+25" id="s13">
+    <span class="czesc c4">4 · KONTRARGUMENT</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="karta sytuacja pop" data-slowo="psa"><div class="nazwa">🐶 Chcesz mieć psa. Mama mówi: „Nie”.</div></div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="argument"><span class="nr">1</span>👩 argument mamy: . . . . . . . . . . . .</div>
+      <div class="linia pop" data-slowo="odpowiesz"><span class="nr">2</span>🧒 twoja odpowiedź: . . . . . . . . . . . .</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="spacer"><span class="mama">👩 Kto będzie wychodził z psem?</span><br><span class="ty">🧒 Ja, rano i po szkole. Zrobię grafik spacerów.</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kosztuje"><span class="mama">👩 Pies kosztuje dużo pieniędzy.</span><br><span class="ty">🧒 Dołożę z kieszonkowego na karmę.</span></div>
+      <div class="linia wjazd-lewo" data-slowo="wakacji"><span class="mama">👩 Nikt nie zostanie z psem w wakacje.</span><br><span class="ty">🧒 Dziadek kocha psy i chętnie się nim zajmie.</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="rozwiązuje">✓ nie kłócisz się - rozwiązujesz kłopot mamy</span></div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sprawdzić">🔎 <b>fakt</b> - można sprawdzić, jest taki sam dla wszystkich</div>
+      <div class="linia pop" data-slowo="zdanie">💬 <b>opinia</b> - moje zdanie, ktoś może myśleć inaczej</div>
+      <div class="linia pop" data-slowo="zwrotów">🗣️ moim zdaniem · uważam, że · sądzę, że</div>
+      <div class="linia pop" data-slowo="powód">💡 <b>argument</b> = powód: opinia + ponieważ + powód</div>
+      <div class="linia pop" data-slowo="wyjaśnia">❌ „bo tak” to nie argument - niczego nie wyjaśnia</div>
+      <div class="linia pop" data-slowo="płacz">😭 płacz nie przekonuje, argumenty tak</div>
+      <div class="linia pop" data-slowo="kontrargument">⚖️ <b>kontrargument</b> - słuchamy spokojnie i odpowiadamy</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Zadanie pierwsze. Ola napisała list do cioci, ale się spieszyła. Przeczytaj list i wypisz trzy części, których w nim brakuje. Start!

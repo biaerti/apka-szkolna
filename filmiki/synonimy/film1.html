@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Synonimy i antonimy - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .pisz { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 25px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px auto 0; width: 1100px; }
+.zl { color: var(--roz); text-decoration: line-through; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 104px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--niebieski); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .tekst { margin: 26px auto 0; width: 1100px; text-align: left; font-size: 36px; font-weight: 800; line-height: 1.6; border-color: var(--szary); }
+#s02 .tekst .hl { background: #ffd0d6; }
+#s02 .chipy { display: flex; gap: 14px; justify-content: center; margin-top: 30px; }
+#s02 .chipy .chip { font-size: 30px; white-space: nowrap; padding: 6px 22px; background: var(--roz); }
+#s02 .chipy .chip.dobry { background: var(--zielony); }
+
+/* ===== 03 ===== */
+#s03 .def { margin: 16px auto 0; width: 1000px; border-color: var(--pomarancz); }
+#s03 .def .nazwa { color: var(--pomarancz); font-size: 34px; }
+#s03 .siatka { grid-template-columns: 1fr; width: 860px; gap: 12px; margin-top: 16px; }
+#s03 .siatka .karta { border-color: var(--pomarancz); padding: 6px 18px; }
+#s03 .siatka .nazwa { font-size: 34px; }
+#s03 .slownik { margin-top: 18px; font-size: 30px; background: var(--pomarancz); }
+
+/* ===== 04 ===== */
+#s04 .rzad { margin-top: 18px; }
+#s04 .rzad .karta { border-color: var(--pomarancz); }
+#s04 .rzad .emo { font-size: 60px; line-height: 1.1; }
+#s04 .rzad .nazwa { color: var(--pomarancz); font-size: 38px; }
+#s04 .lista { width: 900px; margin-top: 16px; }
+#s04 .linia { font-size: 32px; }
+#s04 .pasuje { margin-top: 16px; font-size: 30px; background: var(--pomarancz); }
+
+/* ===== 05-06 ===== */
+#s05 .kolumny { display: flex; gap: 60px; justify-content: center; margin-top: 18px; }
+#s05 .kol { display: flex; flex-direction: column; gap: 10px; width: 400px; }
+#s05 .linia { font-family: 'Baloo 2'; font-size: 36px; padding: 2px 20px; }
+#s05 .kol2 .nr { background: var(--niebieski); }
+#s06 .lista { gap: 16px; margin-top: 30px; }
+#s06 .linia { font-size: 33px; padding: 10px 24px; }
+#s06 .dlaczego { font-size: 28px; }
+#s06 .linia b { font-family: 'Baloo 2'; color: var(--pomarancz); font-size: 38px; }
+
+/* ===== 07 ===== */
+#s07 .siatka { gap: 12px 20px; margin-top: 22px; }
+#s07 .linia { font-size: 33px; text-align: center; }
+#s07 .linia b { color: var(--fiolet); }
+#s07 .wiecej { margin-top: 20px; font-size: 32px; background: var(--fiolet); }
+
+/* ===== 08-09 ===== */
+#s08 .lista, #s09 .lista { gap: 9px; margin-top: 14px; }
+#s08 .linia { font-size: 31px; padding: 6px 22px; }
+#s08 .linia .hl { background: #ffd0d6; }
+#s08 .podp { display: flex; gap: 12px; justify-content: center; margin-top: 14px; }
+#s08 .podp .chip { font-size: 27px; background: var(--fiolet); }
+#s09 .lista { gap: 16px; margin-top: 30px; }
+#s09 .linia { font-size: 33px; padding: 10px 22px; }
+#s09 .dlaczego { font-size: 27px; }
+#s09 .linia b { font-family: 'Baloo 2'; color: var(--fiolet); font-size: 33px; }
+#s09 .wsk { background: var(--fiolet); font-size: 32px; margin-top: 28px; }
+
+/* ===== 10 ===== */
+#s10 .def { margin: 12px auto 0; width: 900px; border-color: var(--niebieski); padding: 8px 20px; }
+#s10 .def .nazwa { color: var(--niebieski); font-size: 32px; }
+#s10 .pary { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 22px auto 0; width: 1140px; }
+#s10 .para { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; background: var(--bialy); border: 4px solid var(--niebieski); border-radius: 18px; padding: 2px 18px; }
+#s10 .przyklad { margin: 22px auto 0; width: 900px; text-align: center; font-size: 34px; }
+#s10 .uwaga { margin-top: 22px; font-size: 32px; background: var(--roz); }
+
+/* ===== 11-12 ===== */
+#s11 .siatka, #s12 .siatka { width: 980px; }
+#s11 .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; padding: 4px 20px; }
+#s11 .linia.srodek { grid-column: 1 / span 2; width: 480px; margin: 0 auto; }
+#s12 .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; padding: 2px 20px; }
+#s12 .linia.srodek { grid-column: 1 / span 2; width: 480px; margin: 0 auto; }
+#s12 .linia b { color: var(--niebieski); }
+#s12 .test { margin: 16px auto 0; width: 980px; font-size: 31px; text-align: center; border-color: var(--niebieski); }
+#s12 .wsk { background: var(--niebieski); font-size: 28px; }
+
+/* ===== 13 ===== */
+#s13 .rzad { margin-top: 30px; }
+#s13 .karta { padding: 22px 20px; }
+#s13 .karta .nazwa { font-size: 38px; }
+#s13 .karta .opis { color: var(--ciemny); font-size: 42px; line-height: 1.4; margin: 10px 0; }
+#s13 .k1 { border-color: var(--pomarancz); } #s13 .k1 .nazwa { color: var(--pomarancz); }
+#s13 .k2 { border-color: var(--niebieski); } #s13 .k2 .nazwa { color: var(--niebieski); }
+#s13 .wynik { margin-top: 10px; font-size: 32px; }
+#s13 .k1 .wynik { background: var(--pomarancz); } #s13 .k2 .wynik { background: var(--niebieski); }
+#s13 .chipy { display: flex; gap: 16px; justify-content: center; margin-top: 40px; }
+#s13 .chipy .chip { font-size: 33px; white-space: nowrap; background: var(--zielony); }
+
+/* ===== 14-15 ===== */
+#s14 .siatka { gap: 16px; margin-top: 26px; }
+#s14 .linia { font-family: 'Baloo 2'; font-size: 42px; padding: 4px 20px; }
+#s14 .wsk { margin-top: 24px; font-size: 34px; }
+#s14 .wsk { background: var(--zielony); }
+#s15 .siatka { gap: 16px; margin-top: 26px; }
+#s15 .linia { font-size: 36px; padding: 8px 20px; white-space: nowrap; }
+#s15 .dlaczego { font-size: 24px; }
+#s15 .linia b { font-family: 'Baloo 2'; font-size: 40px; }
+#s15 .wsk { margin-top: 26px; font-size: 34px; }
+#s15 .s { color: var(--pomarancz); } #s15 .a { color: var(--niebieski); }
+#s15 .wsk { background: var(--zielony); }
+
+/* ===== 16 ===== */
+#s16 .lista { width: 1120px; gap: 9px; }
+#s16 .linia { font-size: 29px; padding: 6px 22px; }
+#s16 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="ważne">🤝 ⚖️ 🧠</div>
+    <div class="tytul pop" data-slowo="synonimy">Synonimy i antonimy</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="prawie">🤝 prawie to samo</span>
+      <span class="chip pop" data-slowo="przeciwnym">⚖️ przeciwieństwa</span>
+      <span class="chip pop" data-slowo="odróżnić">🔎 jak odróżnić?</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 problem ===== -->
+  <section class="scena" data-id="02-problem" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Opowiadanie Kasi 📝</h2>
+    <div class="karta tekst pop" data-slowo="sobotę">
+      W sobotę byłam na <span class="hl">ładnej</span> wycieczce. Pogoda była <span class="hl">ładna</span>.
+      Pojechaliśmy do <span class="hl">ładnego</span> lasu. Zobaczyłam tam <span class="hl">ładnego</span> jelenia.
+      Zrobiłam mu <span class="hl">ładne</span> zdjęcie. Na obiad zjedliśmy <span class="hl">ładną</span> zupę.
+      To był bardzo <span class="hl">ładny</span> dzień.
+    </div>
+    <div class="chipy">
+      <span class="chip pop" data-slowo="siedem">🔁 „ładny” × 7 = nuda 😴</span>
+      <span class="chip pop" data-slowo="zupa">🍲 ładna zupa? ➜ pyszna!</span>
+      <span class="chip dobry pop" data-slowo="pomogą">🦸 pomogą synonimy</span>
+    </div>
+  </section>
+
+  <!-- ===== 03 synonimy ===== -->
+  <section class="scena" data-id="03-synonimy" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · SYNONIMY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Synonimy = wyrazy bliskoznaczne 🤝</h2>
+    <div class="karta def pop" data-slowo="wstawić"><div class="nazwa">znaczą prawie to samo - można wstawić jeden za drugi</div></div>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="duży"><div class="nazwa">📏 duży · wielki · ogromny</div></div>
+      <div class="karta pop" data-slowo="iść"><div class="nazwa">🚶 iść · maszerować · kroczyć · wędrować</div></div>
+      <div class="karta pop" data-slowo="wesoły"><div class="nazwa">😄 wesoły · radosny · uśmiechnięty</div></div>
+      <div class="karta pop" data-slowo="dom"><div class="nazwa">🏠 dom · budynek · chata</div></div>
+    </div>
+    <div><span class="chip slownik pop" data-slowo="słowniku">📖 słownik wyrazów bliskoznacznych</span></div>
+  </section>
+
+  <!-- ===== 04 odcienie ===== -->
+  <section class="scena" data-id="04-odcienie" id="s04">
+    <span class="czesc c1 zjaw" data-t="0">1 · SYNONIMY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Prawie to samo, ale nie dokładnie 👀</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="zerkać"><div class="emo">😏</div><div class="nazwa">zerkać</div><div class="opis">szybko, ukradkiem</div></div>
+      <div class="karta pop" data-slowo="przyglądać"><div class="emo">🧐</div><div class="nazwa">przyglądać się</div><div class="opis">uważnie i długo</div></div>
+      <div class="karta pop" data-slowo="gapić"><div class="emo">😮</div><div class="nazwa">gapić się</div><div class="opis">z otwartą buzią</div></div>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="przygląda"><span class="ok">✓</span> Mama <span class="hl">przygląda się</span> obrazowi. 🖼️</div>
+      <div class="linia wjazd-lewo" data-slowo="gapi"><span class="zle">?!</span> Mama <span class="hl">gapi się</span> na obraz. 😮</div>
+    </div>
+    <div><span class="chip pasuje pop" data-slowo="pasuje">🔎 sprawdź, czy synonim pasuje do zdania</span></div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+20" id="s05">
+    <span class="czesc c1">1 · SYNONIMY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="kolumny">Połącz w pary wyrazy bliskoznaczne</div>
+    <div class="kolumny">
+      <div class="kol">
+        <div class="linia pop" data-slowo="połącz"><span class="nr">1</span>smutny</div>
+        <div class="linia pop" data-slowo="połącz" data-po="0.15"><span class="nr">2</span>szybki</div>
+        <div class="linia pop" data-slowo="połącz" data-po="0.3"><span class="nr">3</span>bać się</div>
+        <div class="linia pop" data-slowo="połącz" data-po="0.45"><span class="nr">4</span>zmęczony</div>
+        <div class="linia pop" data-slowo="połącz" data-po="0.6"><span class="nr">5</span>auto</div>
+      </div>
+      <div class="kol kol2">
+        <div class="linia pop" data-slowo="pary"><span class="nr">A</span>samochód</div>
+        <div class="linia pop" data-slowo="pary" data-po="0.15"><span class="nr">B</span>prędki</div>
+        <div class="linia pop" data-slowo="pary" data-po="0.3"><span class="nr">C</span>wyczerpany</div>
+        <div class="linia pop" data-slowo="pary" data-po="0.45"><span class="nr">D</span>markotny</div>
+        <div class="linia pop" data-slowo="pary" data-po="0.6"><span class="nr">E</span>lękać się</div>
+      </div>
+    </div>
+    <div class="pisz pop" data-slowo="zapisz">📓 zapisz np. 1 - ?</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="smutny"><span class="ok">1 - D</span> <b>smutny = markotny</b> <span class="dlaczego">ktoś nie ma humoru</span></div>
+      <div class="linia wjazd-lewo" data-slowo="szybki"><span class="ok">2 - B</span> <b>szybki = prędki</b> <span class="dlaczego">w krótkim czasie</span></div>
+      <div class="linia wjazd-lewo" data-slowo="bać"><span class="ok">3 - E</span> <b>bać się = lękać się</b> <span class="dlaczego">dwa słowa na strach</span></div>
+      <div class="linia wjazd-lewo" data-slowo="zmęczony"><span class="ok">4 - C</span> <b>zmęczony = wyczerpany</b> <span class="dlaczego">ktoś nie ma już siły</span></div>
+      <div class="linia wjazd-lewo" data-slowo="auto"><span class="ok">5 - A</span> <b>auto = samochód</b> <span class="dlaczego">ta sama rzecz 🚗</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 powtorzenia ===== -->
+  <section class="scena" data-id="07-powtorzenia" id="s07">
+    <span class="czesc c2 zjaw" data-t="0">2 · PO CO?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Kasia poprawia opowiadanie ✨</h2>
+    <div class="siatka">
+      <div class="linia pop" data-slowo="wspaniałej"><span class="zl">ładna</span> ➜ <b>wspaniała</b> wycieczka</div>
+      <div class="linia pop" data-slowo="słoneczna"><span class="zl">ładna</span> ➜ <b>słoneczna</b> pogoda</div>
+      <div class="linia pop" data-slowo="pięknego"><span class="zl">ładny</span> ➜ <b>piękny</b> las</div>
+      <div class="linia pop" data-slowo="dostojnego"><span class="zl">ładny</span> ➜ <b>dostojny</b> jeleń</div>
+      <div class="linia pop" data-slowo="udane"><span class="zl">ładne</span> ➜ <b>udane</b> zdjęcie</div>
+      <div class="linia pop" data-slowo="pyszną"><span class="zl">ładna</span> ➜ <b>pyszna</b> zupa</div>
+    </div>
+    <div class="linia pop" data-slowo="cudowny" style="width:540px;margin:12px auto 0;font-size:33px;text-align:center"><span class="zl">ładny</span> ➜ <b style="color:var(--fiolet)">cudowny</b> dzień</div>
+    <div><span class="chip wiecej pop" data-slowo="więcej">💡 każde słowo mówi coś więcej</span></div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+25" id="s08">
+    <span class="czesc c2">2 · PO CO?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamień">Zamień „powiedział” na lepsze synonimy</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="rozmowie"><span class="nr">1</span>- Gdzie jest mój plecak? - <span class="hl">powiedział</span> Tomek.</div>
+      <div class="linia pop" data-slowo="rozmowie" data-po="0.25"><span class="nr">2</span>- Pod ławką - <span class="hl">powiedziała</span> Ola.</div>
+      <div class="linia pop" data-slowo="rozmowie" data-po="0.5"><span class="nr">3</span>- Uwaga, pies! - <span class="hl">powiedział</span> tata.</div>
+      <div class="linia pop" data-slowo="rozmowie" data-po="0.75"><span class="nr">4</span>- Śpij już, kochanie - <span class="hl">powiedziała</span> mama.</div>
+    </div>
+    <div class="podp">
+      <span class="chip pop" data-slowo="pyta">❓ pyta?</span>
+      <span class="chip pop" data-slowo="odpowiada">💬 odpowiada?</span>
+      <span class="chip pop" data-slowo="krzyczy">📢 krzyczy?</span>
+      <span class="chip pop" data-slowo="cicho">🤫 mówi cicho?</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="zapytał">1. - Gdzie jest mój plecak? - <b>zapytał</b> Tomek. <span class="dlaczego">jest znak zapytania</span></div>
+      <div class="linia wjazd-lewo" data-slowo="odpowiedziała">2. - Pod ławką - <b>odpowiedziała</b> Ola. <span class="dlaczego">daje odpowiedź</span></div>
+      <div class="linia wjazd-lewo" data-slowo="krzyknął">3. - Uwaga, pies! - <b>krzyknął</b> tata. <span class="dlaczego">ostrzega, jest wykrzyknik</span></div>
+      <div class="linia wjazd-lewo" data-slowo="szepnęła">4. - Śpij już, kochanie - <b>szepnęła</b> mama. <span class="dlaczego">przy śpiącym cicho</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="więcej">💡 synonim mówi więcej o tym, JAK ktoś mówi</span></div>
+  </section>
+
+  <!-- ===== 10 antonimy ===== -->
+  <section class="scena" data-id="10-antonimy" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · ANTONIMY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Antonimy = przeciwieństwa ⚖️</h2>
+    <div class="karta def pop" data-slowo="przeciwnym"><div class="nazwa">wyrazy o przeciwnym znaczeniu - dwa końce huśtawki</div></div>
+    <div class="pary">
+      <span class="para pop" data-slowo="zimny">🧊 zimny ↔ gorący 🔥</span>
+      <span class="para pop" data-slowo="dzień">☀️ dzień ↔ noc 🌙</span>
+      <span class="para pop" data-slowo="wejść">🚪 wejść ↔ wyjść</span>
+      <span class="para pop" data-slowo="smutny">😢 smutny ↔ wesoły 😄</span>
+      <span class="para pop" data-slowo="szybko">🐇 szybko ↔ wolno 🐢</span>
+    </div>
+    <div class="linia przyklad pop" data-slowo="rano">Rano było <span class="hl">zimno</span>, a w południe <span class="hl">gorąco</span>.</div>
+    <div><span class="chip uwaga pop" data-slowo="każdy">⚠️ nie każdy wyraz ma antonim: stół? niebieski? rower? 🤷</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+20" id="s11">
+    <span class="czesc c3">3 · ANTONIMY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dopisz">Dopisz antonimy - wyrazy o przeciwnym znaczeniu</div>
+    <div class="siatka">
+      <div class="linia pop" data-slowo="ekranu">wysoki ↔ . . . . . .</div>
+      <div class="linia pop" data-slowo="ekranu" data-po="0.2">otwierać ↔ . . . . . .</div>
+      <div class="linia pop" data-slowo="ekranu" data-po="0.4">cichy ↔ . . . . . .</div>
+      <div class="linia pop" data-slowo="ekranu" data-po="0.6">początek ↔ . . . . . .</div>
+      <div class="linia srodek pop" data-slowo="ekranu" data-po="0.8">pełny ↔ . . . . . .</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="siatka">
+      <div class="linia pop" data-slowo="wysoki">wysoki ↔ <b>niski</b></div>
+      <div class="linia pop" data-slowo="otwierać">otwierać ↔ <b>zamykać</b></div>
+      <div class="linia pop" data-slowo="cichy">cichy ↔ <b>głośny</b></div>
+      <div class="linia pop" data-slowo="początek">początek ↔ <b>koniec</b></div>
+      <div class="linia srodek pop" data-slowo="pełny">pełny ↔ <b>pusty</b></div>
+    </div>
+    <div class="karta test pop" data-slowo="butelka">🍼 Butelka jest <span class="hl">pełna</span>. ↔ Butelka jest <span class="hl">pusta</span>.</div>
+    <div><span class="chip wsk pop" data-slowo="odwróciło">🔄 znaczenie odwróciło się = dobry antonim</span></div>
+  </section>
+
+  <!-- ===== 13 test ===== -->
+  <section class="scena" data-id="13-test" id="s13">
+    <span class="czesc c4 zjaw" data-t="0">4 · SYNONIM CZY ANTONIM?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Test ze zdaniem 🧪</h2>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="bystry">
+        <div class="nazwa">🐕 to samo zdanie</div>
+        <div class="opis">Mój pies jest <span class="hl">mądry</span>.<br>Mój pies jest <span class="hl">bystry</span>.</div>
+        <span class="chip wynik pop" data-slowo="synonimy">prawie to samo = SYNONIMY</span>
+      </div>
+      <div class="karta k2 pop" data-slowo="głupi">
+        <div class="nazwa">🐕 to samo zdanie</div>
+        <div class="opis">Mój pies jest <span class="hl">mądry</span>.<br>Mój pies jest <span class="hl">głupi</span>.</div>
+        <span class="chip wynik pop" data-slowo="antonimy">odwrotnie = ANTONIMY</span>
+      </div>
+    </div>
+    <div class="chipy">
+      <span class="chip pop" data-slowo="kolega">🤝 synonim - kolega obok</span>
+      <span class="chip pop" data-slowo="przeciwnik">🥊 antonim - przeciwnik naprzeciwko</span>
+    </div>
+  </section>
+
+  <!-- ===== 14 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="14-zadanie4+20" id="s14">
+    <span class="czesc c4">4 · SYNONIM CZY ANTONIM?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="parze">Synonimy czy antonimy? Napisz <span class="hl">S</span> albo <span class="hl">A</span>.</div>
+    <div class="siatka">
+      <div class="linia pop" data-slowo="parze" data-po="0.5"><span class="nr">1</span>mądry - inteligentny</div>
+      <div class="linia pop" data-slowo="parze" data-po="0.7"><span class="nr">2</span>ciepło - zimno</div>
+      <div class="linia pop" data-slowo="parze" data-po="0.9"><span class="nr">3</span>biec - pędzić</div>
+      <div class="linia pop" data-slowo="parze" data-po="1.1"><span class="nr">4</span>kupić - sprzedać</div>
+      <div class="linia pop" data-slowo="parze" data-po="1.3"><span class="nr">5</span>piękny - śliczny</div>
+      <div class="linia pop" data-slowo="parze" data-po="1.5"><span class="nr">6</span>stary - młody</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="skrót">S = synonimy 🤝 · A = antonimy ⚖️</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 15 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="15-odpowiedz4" id="s15">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="siatka">
+      <div class="linia wjazd-lewo" data-slowo="mądry">1. mądry - inteligentny <b class="s">S</b></div>
+      <div class="linia wjazd-lewo" data-slowo="ciepło">2. ciepło - zimno <b class="a">A</b></div>
+      <div class="linia wjazd-lewo" data-slowo="biec">3. biec - pędzić <b class="s">S</b></div>
+      <div class="linia wjazd-lewo" data-slowo="kupić">4. kupić - sprzedać <b class="a">A</b> <span class="dlaczego">płaci ↔ dostaje</span></div>
+      <div class="linia wjazd-lewo" data-slowo="piękny">5. piękny - śliczny <b class="s">S</b></div>
+      <div class="linia wjazd-lewo" data-slowo="stary">6. stary - młody <b class="a">A</b></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="mistrzami">6 / 6 = mistrzowie słów 🏆</span></div>
+  </section>
+
+  <!-- ===== 16 podsumowanie ===== -->
+  <section class="scena" data-id="16-podsumowanie" id="s16">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="bliskoznaczne">🤝 synonimy - wyrazy bliskoznaczne: duży · wielki · ogromny</div>
+      <div class="linia pop" data-slowo="odcień">👀 każdy ma trochę inny odcień - sprawdź, czy pasuje do zdania</div>
+      <div class="linia pop" data-slowo="powtarzać">🔁 synonimy ratują tekst przed powtórzeniami</div>
+      <div class="linia pop" data-slowo="przeciwnym">⚖️ antonimy - przeciwne znaczenie: dzień ↔ noc · pełny ↔ pusty</div>
+      <div class="linia pop" data-slowo="każdy">🤷 nie każdy wyraz ma antonim</div>
+      <div class="linia pop" data-slowo="wstaw">🧪 test: wstaw do zdania - to samo = synonim, odwrotnie = antonim</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

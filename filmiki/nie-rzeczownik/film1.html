@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Nie z rzeczownikami - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+.n { color: var(--roz); }
+.przerwa { display: inline-block; width: 26px; height: 30px; border-bottom: 4px dashed var(--niebieski); margin: 0 4px; vertical-align: -2px; }
+.luka { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 25px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 112px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .tytul span { color: var(--roz); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .rzad { margin-top: 40px; align-items: stretch; }
+#s02 .karta { padding: 24px 20px; }
+#s02 .karta .nazwa { font-size: 44px; }
+#s02 .kc { border-color: var(--niebieski); } #s02 .kc .nazwa { color: var(--niebieski); }
+#s02 .kr { border-color: var(--pomarancz); } #s02 .kr .nazwa { color: var(--pomarancz); }
+#s02 .przyk { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
+#s02 .przyk .chip { font-size: 34px; background: var(--niebieski); }
+#s02 .wielkie { font-family: 'Baloo 2'; font-size: 76px; font-weight: 800; line-height: 1.1; margin-top: 14px; }
+#s02 .kc .wielkie { color: var(--niebieski); } #s02 .kr .wielkie { color: var(--pomarancz); }
+#s02 .pyt { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; color: var(--szary); line-height: 1.1; margin-top: 10px; }
+#s02 .odstep { margin-top: 12px; font-size: 28px; color: var(--szary); font-weight: 800; }
+#s02 .jeden { margin-top: 10px; font-size: 30px; background: var(--pomarancz); }
+
+/* ===== 03 ===== */
+#s03 .siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 22px; margin: 30px auto 0; width: 1140px; }
+#s03 .para { white-space: nowrap; font-family: 'Baloo 2'; font-size: 46px; font-weight: 800; background: var(--bialy); border: 5px solid var(--ramka); border-radius: 22px; padding: 6px 18px; }
+#s03 .para .z { color: var(--szary); font-size: 34px; }
+#s03 .para .s { color: var(--pomarancz); }
+#s03 .klej { margin-top: 34px; font-size: 32px; background: var(--pomarancz); }
+
+/* ===== 04-05 ===== */
+#s04 .lista { width: 760px; gap: 7px; margin-top: 10px; }
+#s04 .linia { font-family: 'Baloo 2'; font-size: 36px; line-height: 1.3; text-align: center; padding: 0 20px; }
+#s04 .wsk { margin-top: 10px; font-size: 26px; background: var(--pomarancz); }
+#s05 .lista { width: 1000px; }
+#s05 .linia { font-size: 34px; padding: 5px 22px; }
+#s05 .linia b { font-family: 'Baloo 2'; font-size: 38px; color: var(--pomarancz); }
+#s05 .wsk { background: var(--pomarancz); }
+
+/* ===== 06 ===== */
+#s06 .rzad { margin-top: 22px; }
+#s06 .karta .nazwa { font-size: 40px; }
+#s06 .kr { border-color: var(--pomarancz); } #s06 .kr .nazwa { color: var(--pomarancz); }
+#s06 .kc { border-color: var(--niebieski); } #s06 .kc .nazwa { color: var(--niebieski); }
+#s06 .karta .opis { font-size: 32px; color: var(--ciemny); }
+#s06 .zd { margin: 20px auto 0; width: 1080px; display: flex; gap: 16px; align-items: stretch; }
+#s06 .zd .karta { flex: 1; border-color: var(--fiolet); text-align: left; }
+#s06 .zd .nazwa { font-size: 40px; color: var(--ciemny); }
+#s06 .zd .opis { font-size: 30px; }
+#s06 .tag { display: block; margin-top: 4px; }
+
+/* ===== 07-08 ===== */
+#s07 .lista { gap: 6px; margin-top: 10px; width: 980px; }
+#s07 .linia { font-size: 30px; padding: 3px 22px; }
+#s07 .wsk { margin-top: 8px; background: var(--fiolet); font-size: 28px; }
+#s08 .lista { gap: 8px; margin-top: 12px; }
+#s08 .linia { font-size: 29px; padding: 5px 20px; }
+#s08 .wsk { margin-top: 12px; background: var(--fiolet); font-size: 28px; }
+
+/* ===== 09 ===== */
+#s09 .rzad { margin-top: 40px; }
+#s09 .karta { padding: 24px 20px; }
+#s09 .karta { border-color: var(--niebieski); }
+#s09 .karta .emo { font-size: 100px; line-height: 1.1; }
+#s09 .karta .nazwa { color: var(--niebieski); font-size: 54px; }
+#s09 .karta .opis { font-size: 40px; }
+#s09 .karta .opis s { color: var(--roz); }
+#s09 .gdzie { margin-top: 40px; font-size: 32px; background: var(--niebieski); }
+
+/* ===== 10-11 ===== */
+#s10 .lista, #s11 .lista { width: 1060px; }
+#s10 .linia { font-size: 32px; }
+#s11 .linia { font-size: 30px; }
+#s11 .linia b { font-family: 'Baloo 2'; font-size: 36px; color: var(--niebieski); }
+#s11 .wsk { background: var(--niebieski); font-size: 28px; }
+
+/* ===== 12 ===== */
+#s12 .zd { margin: 16px auto 0; width: 1080px; border-color: var(--zielony); text-align: left; padding: 10px 24px; }
+#s12 .zd .nazwa { font-size: 38px; }
+#s12 .tagi { display: flex; gap: 12px; margin-top: 8px; }
+#s12 .tagi .chip { font-size: 25px; }
+#s12 .tagi .os { background: var(--niebieski); }
+#s12 .tagi .ra { background: var(--pomarancz); }
+#s12 .kroki { margin-top: 18px; font-size: 32px; background: var(--zielony); }
+
+/* ===== 13-14 ===== */
+#s13 .ogl { margin: 14px auto 0; width: 1100px; border-color: var(--zielony); text-align: left; padding: 10px 26px; }
+#s13 .ogl .tyt { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; color: var(--zielony); text-align: center; }
+#s13 .ogl .l { font-size: 29px; font-weight: 800; line-height: 1.5; }
+#s13 .ogl .podp { font-size: 24px; font-weight: 800; color: var(--szary); text-align: right; }
+#s13 .wsk { margin-top: 12px; background: var(--zielony); font-size: 28px; }
+#s14 .linia { font-size: 32px; padding: 10px 22px; }
+#s14 .lista { gap: 14px; margin-top: 26px; }
+#s14 .linia b { font-family: 'Baloo 2'; font-size: 34px; color: var(--zielony); }
+#s14 .wsk { background: var(--zielony); font-size: 27px; }
+
+/* ===== 15 ===== */
+#s15 .lista { width: 1120px; gap: 9px; }
+#s15 .linia { font-size: 32px; padding: 8px 22px; }
+#s15 .lista { margin-top: 24px; gap: 12px; }
+#s15 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="kłopotu">🤔 ✏️ 🐻</div>
+    <div class="tytul pop" data-slowo="słówko"><span>nie</span> z rzeczownikami</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="osobno">✍️ razem czy osobno?</span>
+      <span class="chip pop" data-slowo="odróżnić">🔎 kto? co? czy co robi?</span>
+      <span class="chip pop" data-slowo="istnieją">🐻 słowa bez pary</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 czasowniki ===== -->
+  <section class="scena" data-id="02-czasowniki" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Razem czy osobno? ✍️</h2>
+    <div class="rzad">
+      <div class="karta kc pop" data-slowo="czasownikami">
+        <div class="nazwa">nie + czasownik</div>
+        <div class="przyk">
+          <span class="chip pop" data-slowo="lubię">nie<span class="przerwa"></span>lubię</span>
+          <span class="chip pop" data-slowo="wiem">nie<span class="przerwa"></span>wiem</span>
+          <span class="chip pop" data-slowo="śpię">nie<span class="przerwa"></span>śpię</span>
+          <span class="chip pop" data-slowo="biegam">nie<span class="przerwa"></span>biegam</span>
+        </div>
+        <div class="odstep pop" data-slowo="odstęp">↔️ między nimi zawsze odstęp</div>
+        <div class="wielkie pop" data-slowo="odstęp" data-po="0.4">OSOBNO</div>
+      </div>
+      <div class="karta kr pop" data-slowo="rzeczownikami">
+        <div class="nazwa">nie + rzeczownik</div>
+        <div class="pyt pop" data-slowo="tutaj">?</div>
+        <div><span class="chip jeden pop" data-slowo="odwrotnie">🔄 odwrotnie!</span></div>
+        <div class="wielkie pop" data-slowo="razem">RAZEM</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 razem ===== -->
+  <section class="scena" data-id="03-razem" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · Z RZECZOWNIKAMI RAZEM</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">nie + rzeczownik = jeden wyraz 🧩</h2>
+    <div class="siatka">
+      <div class="para pop" data-slowo="niepogoda"><span class="z">🌧️ pogoda ➜</span> <span class="n">nie</span><span class="s">pogoda</span></div>
+      <div class="para pop" data-slowo="nieprawda"><span class="z">🤥 prawda ➜</span> <span class="n">nie</span><span class="s">prawda</span></div>
+      <div class="para pop" data-slowo="niepokój"><span class="z">😟 pokój ➜</span> <span class="n">nie</span><span class="s">pokój</span></div>
+      <div class="para pop" data-slowo="nieporządek"><span class="z">🧦 porządek ➜</span> <span class="n">nie</span><span class="s">porządek</span></div>
+    </div>
+    <div><span class="chip klej pop" data-slowo="przykleja">🧲 nie przykleja się ➜ powstaje nowy wyraz, dalej rzeczownik</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · Z RZECZOWNIKAMI RAZEM</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dodaj">Dodaj <span class="n">nie</span> i zapisz nowy wyraz</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć"><span class="n">nie</span> + cierpliwość ➜ . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.2"><span class="n">nie</span> + uwaga ➜ . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.4"><span class="n">nie</span> + posłuszeństwo ➜ . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.6"><span class="n">nie</span> + ład ➜ . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.8"><span class="n">nie</span> + ostrożność ➜ . . . . . .</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pamiętaj">⚠️ razem czy osobno?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="niecierpliwość">cierpliwość ➜ <b><span class="n">nie</span>cierpliwość</b></div>
+      <div class="linia wjazd-lewo" data-slowo="nieuwaga">uwaga ➜ <b><span class="n">nie</span>uwaga</b></div>
+      <div class="linia wjazd-lewo" data-slowo="nieposłuszeństwo">posłuszeństwo ➜ <b><span class="n">nie</span>posłuszeństwo</b></div>
+      <div class="linia wjazd-lewo" data-slowo="nieład">ład ➜ <b><span class="n">nie</span>ład</b></div>
+      <div class="linia wjazd-lewo" data-slowo="nieostrożność">ostrożność ➜ <b><span class="n">nie</span>ostrożność</b></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="dlaczego">💡 to rzeczowniki ➜ <span class="n" style="color:#fff">nie</span> piszemy razem</span></div>
+  </section>
+
+  <!-- ===== 06 pytania ===== -->
+  <section class="scena" data-id="06-pytania" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · RZECZOWNIK CZY CZASOWNIK?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Zadaj pytanie! ❓</h2>
+    <div class="rzad">
+      <div class="karta kr pop" data-slowo="rzeczownik"><div class="nazwa">kto? co?</div><div class="opis">rzeczownik ➜ <b style="color:var(--pomarancz)">RAZEM</b></div></div>
+      <div class="karta kc pop" data-slowo="czasownik"><div class="nazwa">co robi?</div><div class="opis">czasownik ➜ <b style="color:var(--niebieski)">OSOBNO</b></div></div>
+    </div>
+    <div class="zd">
+      <div class="karta pop" data-slowo="zdanie">
+        <div class="nazwa">„Nie lubię <span class="n">nie</span>pogody.”</div>
+        <span class="opis tag pop" data-slowo="pierwszy">lubię - co robię? ➜ osobno</span>
+        <span class="opis tag pop" data-slowo="drugi">pogoda - co to jest? ➜ razem</span>
+      </div>
+      <div class="karta pop" data-slowo="jeszcze">
+        <div class="nazwa">„Nie mów <span class="n">nie</span>prawdy.”</div>
+        <span class="opis tag pop" data-slowo="czasownik">mów - czasownik ➜ osobno</span>
+        <span class="opis tag pop" data-slowo="nieprawda">prawda - rzeczownik ➜ razem</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+20" id="s07">
+    <span class="czesc c2">2 · RZECZOWNIK CZY CZASOWNIK?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zdecydować">Razem czy osobno? Zapisz poprawnie.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sześć"><span class="nr">1</span>Ciasne buty to prawdziwa <span class="luka">(nie)</span>wygoda.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.2"><span class="nr">2</span>Tomek <span class="luka">(nie)</span>śpi.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.4"><span class="nr">3</span>Za <span class="luka">(nie)</span>grzeczność Kuba przeprosił.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.6"><span class="nr">4</span>Kasia <span class="luka">(nie)</span>lubi szpinaku.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.8"><span class="nr">5</span>Pani zauważyła moją <span class="luka">(nie)</span>obecność.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="1"><span class="nr">6</span>Babcia <span class="luka">(nie)</span>pije kawy.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pytanie">❓ kto? co? czy co robi?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="buty"><span class="ok">1.</span> Ciasne buty to prawdziwa <span class="hl">niewygoda</span>. <span class="dlaczego">co? ➜ razem</span></div>
+      <div class="linia wjazd-lewo" data-slowo="tomek"><span class="ok">2.</span> Tomek <span class="hl">nie śpi</span>. <span class="dlaczego">co robi? ➜ osobno</span></div>
+      <div class="linia wjazd-lewo" data-slowo="niegrzeczność"><span class="ok">3.</span> Za <span class="hl">niegrzeczność</span> Kuba przeprosił. <span class="dlaczego">co? ➜ razem</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kasia"><span class="ok">4.</span> Kasia <span class="hl">nie lubi</span> szpinaku. <span class="dlaczego">co robi? ➜ osobno</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pani"><span class="ok">5.</span> Pani zauważyła moją <span class="hl">nieobecność</span>. <span class="dlaczego">co? ➜ razem</span></div>
+      <div class="linia wjazd-lewo" data-slowo="babcia"><span class="ok">6.</span> Babcia <span class="hl">nie pije</span> kawy. <span class="dlaczego">co robi? ➜ osobno</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="trzy">3 × razem · 3 × osobno · pytanie zawsze podpowie 💡</span></div>
+  </section>
+
+  <!-- ===== 09 ciekawostka ===== -->
+  <section class="scena" data-id="09-ciekawostka" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · CIEKAWOSTKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Bez <span class="n">nie</span> - nie istnieją! 🤯</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="niedźwiedź"><div class="emo">🐻</div><div class="nazwa">niedźwiedź</div><div class="opis pop" data-slowo="zostaje"><s>dźwiedź</s> ✗</div></div>
+      <div class="karta pop" data-slowo="nienawiść"><div class="emo">😡</div><div class="nazwa">nienawiść</div><div class="opis pop" data-slowo="mówi"><s>nawiść</s> ✗</div></div>
+      <div class="karta pop" data-slowo="niezdara"><div class="emo">🤕</div><div class="nazwa">niezdara</div><div class="opis pop" data-slowo="istnieje"><s>zdara</s> ✗</div></div>
+    </div>
+    <div><span class="chip gdzie pop" data-slowo="rzeczowniki">💡 to też rzeczowniki ➜ piszemy razem</span></div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+20" id="s10">
+    <span class="czesc c3">3 · CIEKAWOSTKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="odgadnij">Zagadki! Odgadnij rzeczownik z <span class="n">nie</span> i zapisz go 🧩</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>👶 Maleńkie dziecko, które jeszcze nie chodzi i nie mówi.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>📅 Dzień tygodnia po sobocie.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>😠 Ktoś, kto jest twoim wrogiem, a nie przyjacielem.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>🌧️ Leje, wieje i jest zimno. Mamy . . .</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="niemowlę">1. 👶 <b>niemowlę</b> <span class="dlaczego">bez nie - nie istnieje</span></div>
+      <div class="linia wjazd-lewo" data-slowo="niedziela">2. 📅 <b>niedziela</b> <span class="dlaczego">bez nie - nie istnieje</span></div>
+      <div class="linia wjazd-lewo" data-slowo="nieprzyjaciel">3. 😠 <b>nieprzyjaciel</b> <span class="dlaczego">przyjaciel ➜ nieprzyjaciel</span></div>
+      <div class="linia wjazd-lewo" data-slowo="niepogodę">4. 🌧️ <b>niepogoda</b> <span class="dlaczego">pogoda ➜ niepogoda</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="rzeczowniki">kto? co? ➜ rzeczownik ➜ zawsze razem 💡</span></div>
+  </section>
+
+  <!-- ===== 12 sprawdz ===== -->
+  <section class="scena" data-id="12-sprawdz" id="s12">
+    <span class="czesc c4 zjaw" data-t="0">4 · SPRAWDZAJ PO KOLEI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Dwa wyrazy w jednym zdaniu 🔍</h2>
+    <div class="karta zd pop" data-slowo="posłuchajcie">
+      <div class="nazwa">🏃 „<span class="hl">Nie biegaj</span> po schodach, bo to <span class="hl">niebezpieczeństwo</span>.”</div>
+      <div class="tagi">
+        <span class="chip os pop" data-slowo="robisz">biegaj - co robisz? ➜ osobno</span>
+        <span class="chip ra pop" data-slowo="rzeczownik">niebezpieczeństwo - co? ➜ razem</span>
+      </div>
+    </div>
+    <div class="karta zd pop" data-slowo="jedno">
+      <div class="nazwa">🧥 „<span class="hl">Nie zostawiaj</span> <span class="hl">nieporządku</span> w szatni.”</div>
+      <div class="tagi">
+        <span class="chip os pop" data-slowo="robisz">zostawiaj - co robisz? ➜ osobno</span>
+        <span class="chip ra pop" data-slowo="nieporządek">nieporządek - co? ➜ razem</span>
+      </div>
+    </div>
+    <div><span class="chip kroki pop" data-slowo="kroki">1 · pytanie ➜ 2 · decyzja ✅</span></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+25" id="s13">
+    <span class="czesc c4">4 · SPRAWDZAJ PO KOLEI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ogłoszenie">Znajdź 3 błędy w ogłoszeniu i zapisz poprawnie</div>
+    <div class="karta ogl pop" data-slowo="błędy">
+      <div class="tyt">📢 UWAGA, KLASY CZWARTE!</div>
+      <div class="l">Z powodu ulewy wycieczka nie odbędzie się w piątek.</div>
+      <div class="l">Przepraszamy za nie porządek w szatni.</div>
+      <div class="l">Nie zapomnijcie butów na zmianę.</div>
+      <div class="l">Nie punktualność to zły zwyczaj, więc nie spóźniajcie się.</div>
+      <div class="l">Na mokrych schodach grozi wam nie bezpieczeństwo, więc nie biegajcie!</div>
+      <div class="podp">woźny, pan Henryk</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="uwaga">⚠️ 3 błędy · reszta jest dobrze!</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="pierwszy"><span class="zle">✗</span> nie porządek ➜ <b>nieporządek</b> <span class="dlaczego">co? ➜ rzeczownik</span></div>
+      <div class="linia wjazd-lewo" data-slowo="drugi"><span class="zle">✗</span> Nie punktualność ➜ <b>Niepunktualność</b> <span class="dlaczego">co? ➜ rzeczownik</span></div>
+      <div class="linia wjazd-lewo" data-slowo="trzeci"><span class="zle">✗</span> nie bezpieczeństwo ➜ <b>niebezpieczeństwo</b> <span class="dlaczego">co? ➜ rzeczownik</span></div>
+      <div class="linia wjazd-lewo" data-slowo="reszta"><span class="ok">✓</span> nie odbędzie · nie zapomnijcie · nie spóźniajcie · nie biegajcie</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="czasowniki">co robicie? ➜ czasowniki ➜ osobno 👍</span></div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="czasownikami">🏃 nie + czasownik ➜ <b style="color:var(--niebieski)">OSOBNO</b>: nie lubię · nie śpię · nie biegaj</div>
+      <div class="linia pop" data-slowo="rzeczownikami">🌧️ nie + rzeczownik ➜ <b style="color:var(--pomarancz)">RAZEM</b>: niepogoda · nieprawda · niepokój</div>
+      <div class="linia pop" data-slowo="kto">❓ kto? co? ➜ rzeczownik ➜ razem</div>
+      <div class="linia pop" data-slowo="robi">❓ co robi? ➜ czasownik ➜ osobno</div>
+      <div class="linia pop" data-slowo="istnieją">🐻 niedźwiedź · niezdara · niemowlę · niedziela - bez <span class="n">nie</span> nie istnieją</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Zadanie czwarte. Ten list jest napisany bez akapitów. Zdania mają numery. Wypisz numery zdań, od których powinien zaczynać się nowy akapit. Pierwszego zdania nie licz. Start!

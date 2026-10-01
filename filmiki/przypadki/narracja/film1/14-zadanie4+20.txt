@@ -1,0 +1,1 @@
+Zadanie czwarte. Zawołaj poprawnie te osoby. Zapisz każde imię w wołaczu i dodaj wykrzyknik. Start!

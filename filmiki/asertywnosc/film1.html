@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Asertywność - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; }
+.e-u { background: var(--szary); } .e-ag { background: var(--roz); } .e-as { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 24px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+.prosi { color: var(--roz); }
+.ty { color: var(--zielony); }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .pod { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; color: var(--ciemny); margin-top: 4px; }
+#s01 .grupy { margin-top: 20px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--niebieski); }
+#s01 .zapowiedz { margin-top: 22px; font-size: 40px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .prosba { margin: 24px auto 0; width: 1140px; border-color: var(--pomarancz); }
+#s02 .prosba .nazwa { font-size: 38px; }
+#s02 .rzad { margin-top: 36px; align-items: stretch; }
+#s02 .rzad .karta { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+#s02 .rzad .nazwa { font-size: 37px; }
+#s02 .rzad .karta { min-height: 320px; }
+#s02 .rzad .etyk { font-size: 30px; padding: 2px 22px; align-self: center; }
+#s02 .r1 { border-color: var(--szary); } #s02 .r2 { border-color: var(--roz); } #s02 .r3 { border-color: var(--zielony); }
+
+/* ===== 03 ===== */
+#s03 .def { margin: 22px auto 0; width: 1000px; border-color: var(--pomarancz); background: #fff3e6; padding: 10px 20px; }
+#s03 .def .nazwa { color: var(--pomarancz); font-size: 42px; }
+#s03 .nie { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
+#s03 .nie .chip { font-size: 33px; background: var(--pomarancz); }
+#s03 .rzad { margin-top: 26px; align-items: stretch; }
+#s03 .rzad .karta { padding: 10px 16px; }
+#s03 .rzad .nazwa { font-size: 38px; }
+#s03 .rzad .opis { font-size: 30px; }
+#s03 .t1 { border-color: var(--szary); } #s03 .t1 .nazwa { color: var(--szary); }
+#s03 .t2 { border-color: var(--roz); } #s03 .t2 .nazwa { color: var(--roz); }
+#s03 .t3 { border-color: var(--zielony); background: #eefaf1; } #s03 .t3 .nazwa { color: var(--zielony); }
+#s03 .oczy { margin-top: 26px; font-size: 33px; background: var(--zielony); }
+
+/* ===== 04-05 ===== */
+#s04 .polecenie { margin-top: 8px; font-size: 32px; }
+#s04 .sceny { display: flex; gap: 14px; margin-top: 12px; align-items: stretch; }
+#s04 .sceny .karta { flex: 1; padding: 10px 12px; text-align: left; border-color: var(--pomarancz); }
+#s04 .sceny .nazwa { font-size: 27px; line-height: 1.2; text-align: center; margin-bottom: 8px; }
+#s04 .od { font-size: 25px; font-weight: 800; line-height: 1.25; padding: 5px 4px; border-top: 2px dashed var(--ramka); }
+#s04 .od b { font-family: 'Baloo 2'; color: var(--pomarancz); font-size: 27px; margin-right: 4px; }
+#s05 .lista { gap: 20px; margin-top: 34px; width: 1120px; }
+#s05 .linia { font-size: 31px; padding: 12px 22px; }
+#s05 .linia b { font-family: 'Baloo 2'; color: var(--zielony); }
+#s05 .pozost { margin-top: 36px; font-size: 32px; background: var(--roz); }
+
+/* ===== 06 ===== */
+#s06 .wzor { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
+#s06 .wzor .karta { padding: 8px 28px; }
+#s06 .wzor .nazwa { font-size: 40px; }
+#s06 .wzor .opis { font-size: 24px; margin-top: 0; }
+#s06 .w1 { border-color: var(--roz); } #s06 .w1 .nazwa { color: var(--roz); }
+#s06 .w2 { border-color: var(--fiolet); } #s06 .w2 .nazwa { color: var(--fiolet); }
+#s06 .w3 { border-color: var(--zielony); } #s06 .w3 .nazwa { color: var(--zielony); }
+#s06 .lista { width: 1120px; gap: 12px; margin-top: 20px; }
+#s06 .linia { font-size: 29px; line-height: 1.35; }
+#s06 .widzicie { margin-top: 18px; font-size: 30px; background: var(--fiolet); }
+
+/* ===== 07-08 ===== */
+#s07 .lista, #s08 .lista { width: 1100px; }
+#s07 .linia { font-size: 33px; }
+#s07 .wsk { background: var(--fiolet); font-size: 34px; margin-top: 20px; }
+#s08 .lista { gap: 16px; margin-top: 24px; }
+#s08 .linia { font-size: 30px; line-height: 1.4; padding: 10px 22px; }
+#s08 .wsk { background: var(--fiolet); margin-top: 24px; font-size: 32px; }
+
+/* ===== 09 ===== */
+#s09 .alarm { margin: 14px auto 0; width: 1000px; border-color: var(--roz); background: #fdecef; padding: 10px 20px; }
+#s09 .alarm .nazwa { font-size: 32px; }
+#s09 .kroki { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+#s09 .kroki .chip { font-size: 30px; background: var(--niebieski); }
+#s09 .kroki .chip.duze { background: var(--roz); font-size: 40px; padding: 0 30px; }
+#s09 .tlum { margin-top: 16px; font-size: 30px; background: var(--niebieski); }
+#s09 .grupa { margin: 20px auto 0; width: 1000px; border-color: var(--niebieski); padding: 10px 20px; }
+#s09 .grupa .nazwa { font-size: 31px; }
+
+/* ===== 10-11 ===== */
+#s10 .sytuacja { margin: 16px auto 0; width: 1000px; border-color: var(--niebieski); }
+#s10 .sytuacja .nazwa { font-size: 36px; }
+#s10 .lista { width: 1000px; }
+#s10 .linia { font-size: 34px; }
+#s11 .kol { display: flex; gap: 18px; margin-top: 18px; align-items: stretch; }
+#s11 .kol .karta { flex: 1; text-align: left; padding: 10px 18px; }
+#s11 .kol .nazwa { font-size: 30px; margin-bottom: 6px; }
+#s11 .k1 { border-color: var(--roz); } #s11 .k1 .nazwa { color: var(--roz); }
+#s11 .k2 { border-color: var(--zielony); } #s11 .k2 .nazwa { color: var(--zielony); }
+#s11 .wyp { font-size: 29px; font-weight: 800; line-height: 1.3; padding: 6px 0; }
+#s11 .dol { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 18px; }
+#s11 .dol .chip { font-size: 30px; }
+#s11 .spok { background: var(--zielony); }
+#s11 .nauc { background: var(--niebieski); }
+
+/* ===== 12 ===== */
+#s12 .lista { width: 1060px; gap: 14px; margin-top: 22px; }
+#s12 .linia { font-size: 31px; border-color: var(--zielony); line-height: 1.35; }
+#s12 .linia b { font-family: 'Baloo 2'; color: var(--zielony); font-size: 33px; }
+#s12 .wstyd { margin-top: 22px; font-size: 32px; background: var(--zielony); }
+
+/* ===== 13-14 ===== */
+#s13 .lista { width: 1000px; margin-top: 14px; }
+#s13 .linia { font-size: 33px; }
+#s13 .zasady { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+#s13 .zasady .chip { font-size: 28px; background: var(--zielony); }
+#s14 .lista { width: 1140px; gap: 20px; margin-top: 30px; }
+#s14 .linia { font-size: 30px; line-height: 1.4; padding: 10px 22px; }
+#s14 .wsk { background: var(--zielony); margin-top: 32px; font-size: 34px; }
+
+/* ===== 15 ===== */
+#s15 .lista { width: 1120px; gap: 8px; margin-top: 12px; }
+#s15 .linia { font-size: 30px; padding: 5px 24px; }
+#s15 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="przydatnego">🙅 💬 🤝</div>
+    <div class="tytul pop" data-slowo="asertywność">Asertywność</div>
+    <div class="pod pop" data-slowo="asertywność" data-po="0.4">czyli jak grzecznie powiedzieć NIE</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="odmawiać">🙅 jak odmawiać</span>
+      <span class="chip pop" data-slowo="kłótni">😌 bez kłótni</span>
+      <span class="chip pop" data-slowo="chroni">🛡️ kiedy chroni</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 🗣️ ostatnie na głos!</div>
+  </section>
+
+  <!-- ===== 02 trzy reakcje ===== -->
+  <section class="scena" data-id="02-trzy-reakcje" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Co możesz zrobić? 🤔</h2>
+    <div class="karta prosba pop" data-slowo="pożycz"><div class="nazwa">🎮 Kolega: „Pożycz mi twoją nową grę na cały tydzień!”</div></div>
+    <div class="rzad">
+      <div class="karta r1 pop" data-slowo="pierwsza"><div class="nazwa">😔 „No dobra, bierz...”</div><span class="etyk e-u pop" data-slowo="uległa">ULEGŁA</span></div>
+      <div class="karta r2 pop" data-slowo="druga"><div class="nazwa">😡 „Spadaj, nigdy w życiu!”</div><span class="etyk e-ag pop" data-slowo="agresywna">AGRESYWNA</span></div>
+      <div class="karta r3 pop" data-slowo="trzecia"><div class="nazwa">😌 „Nie, sam jeszcze w nią nie grałem. Ale możesz przyjść w sobotę i zagramy razem.”</div><span class="etyk e-as pop" data-slowo="asertywna">ASERTYWNA</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 co to ===== -->
+  <section class="scena" data-id="03-co-to" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Asertywność 💪</h2>
+    <div class="karta def pop" data-slowo="umiejętność"><div class="nazwa">mówić NIE spokojnie i z szacunkiem</div></div>
+    <div class="nie">
+      <span class="chip pop" data-slowo="krzyczy">🔇 nie krzyczy</span>
+      <span class="chip pop" data-slowo="obraża">🙊 nie obraża</span>
+      <span class="chip pop" data-slowo="wszystko">🙅 nie zgadza się na wszystko</span>
+    </div>
+    <div class="rzad">
+      <div class="karta t1 pop" data-slowo="uległy"><div class="nazwa">😔 uległy</div><div class="opis">myśli tylko o innych</div></div>
+      <div class="karta t2 pop" data-slowo="agresywny"><div class="nazwa">😡 agresywny</div><div class="opis">myśli tylko o sobie</div></div>
+      <div class="karta t3 pop" data-slowo="asertywny"><div class="nazwa">😌 asertywny</div><div class="opis">szanuje siebie i innych</div></div>
+    </div>
+    <div><span class="chip oczy pop" data-slowo="oczy">🗣️ mówi spokojnie · 👀 patrzy w oczy</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="która">Która odpowiedź jest asertywna? Zapisz: scenka + litera.</div>
+    <div class="sceny">
+      <div class="karta pop" data-slowo="trzy">
+        <div class="nazwa">1 · 🚌 Kolega chce usiąść na twoim miejscu przy oknie.</div>
+        <div class="od"><b>a)</b> „No dobra, siadaj...”</div>
+        <div class="od"><b>b)</b> „Wynocha, to moje!”</div>
+        <div class="od"><b>c)</b> „Nie, siedzę tu pierwszy. Ale w drodze powrotnej możemy się zamienić.”</div>
+      </div>
+      <div class="karta pop" data-slowo="trzy" data-po="0.3">
+        <div class="nazwa">2 · 🌶️ „Nie bądź nudny, zjedz ostrą papryczkę na wyzwanie!”</div>
+        <div class="od"><b>a)</b> „Nie mam ochoty na to wyzwanie.”</div>
+        <div class="od"><b>b)</b> „Sama jesteś nudna!”</div>
+        <div class="od"><b>c)</b> „No dobra, zjem...”</div>
+      </div>
+      <div class="karta pop" data-slowo="trzy" data-po="0.6">
+        <div class="nazwa">3 · 🍬 Starszy kuzyn: „Oddawaj mi swoje cukierki!”</div>
+        <div class="od"><b>a)</b> „Masz, bierz wszystkie.”</div>
+        <div class="od"><b>b)</b> „To moje cukierki. Mogę ci dać jednego.”</div>
+        <div class="od"><b>c)</b> „Zabieraj łapy, głupku!”</div>
+      </div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="pierwszej">🚌 <b>1 ➜ c)</b> „Nie, siedzę tu pierwszy. Ale...” <span class="dlaczego">nie + powód + propozycja</span></div>
+      <div class="linia wjazd-lewo" data-slowo="drugiej">🌶️ <b>2 ➜ a)</b> „Nie mam ochoty na to wyzwanie.” <span class="dlaczego">nie trzeba robić głupot</span></div>
+      <div class="linia wjazd-lewo" data-slowo="trzeciej">🍬 <b>3 ➜ b)</b> „To moje cukierki. Mogę ci dać jednego.” <span class="dlaczego">spokojnie i uczciwie</span></div>
+    </div>
+    <div><span class="chip pozost pop" data-slowo="pozostałe">pozostałe: 😔 zgoda na wszystko albo 😡 krzyk i wyzwiska</span></div>
+  </section>
+
+  <!-- ===== 06 wzor ===== -->
+  <section class="scena" data-id="06-wzor" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · WZÓR ODMOWY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Jak odmówić? 🗝️</h2>
+    <div class="wzor">
+      <div class="karta w1 pop" data-slowo="najpierw"><div class="nazwa">🙅 Nie,</div><div class="opis">odmawiasz</div></div>
+      <div class="karta w2 pop" data-slowo="dlaczego"><div class="nazwa">💬 bo...</div><div class="opis">mówisz dlaczego</div></div>
+      <div class="karta w3 pop" data-slowo="proponujesz"><div class="nazwa">🤝 Ale mogę...</div><div class="opis">proponujesz coś innego</div></div>
+    </div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="siostra"><span class="prosi">👧 „Posprzątaj za mnie pokój!”</span><br><span class="ty">🧒 „<span class="hl">Nie, bo</span> mam swój pokój do sprzątania. <span class="hl">Ale mogę</span> ci pomóc złożyć ubrania.”</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kanapkę"><span class="prosi">👦 „Daj mi całą swoją kanapkę!”</span><br><span class="ty">🧒 „<span class="hl">Nie, bo</span> sam jestem głodny. <span class="hl">Ale mogę</span> się z tobą podzielić.”</span></div>
+    </div>
+    <div><span class="chip widzicie pop" data-slowo="widzicie">✓ nie + powód + propozycja</span></div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+25" id="s07">
+    <span class="czesc c2">2 · WZÓR ODMOWY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="odmów">Odmów asertywnie</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="dwóch"><span class="nr">1</span>📱 Kolega chce grać na twoim telefonie całą przerwę.</div>
+      <div class="linia pop" data-slowo="dwóch" data-po="0.3"><span class="nr">2</span>⚽ Koleżanka: „Przejdźmy przez płot do sąsiada po piłkę!”</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="wzoru">🙅 Nie, bo... 🤝 Ale mogę...</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="telefonie"><span class="prosi">📱 gra na twoim telefonie całą przerwę</span><br><span class="ty">„<span class="hl">Nie, bo</span> kończy mi się bateria, a muszę zadzwonić do mamy. <span class="hl">Ale mogę</span> ci pokazać tę grę po lekcjach.”</span></div>
+      <div class="linia wjazd-lewo" data-slowo="płot"><span class="prosi">⚽ przez płot do sąsiada po piłkę</span><br><span class="ty">„<span class="hl">Nie, bo</span> to cudzy ogród i można spaść. <span class="hl">Ale mogę</span> pójść z tobą do sąsiada i poprosić o piłkę.”</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="ważne">✓ nie + powód + spokojny ton</span></div>
+  </section>
+
+  <!-- ===== 09 chroni ===== -->
+  <section class="scena" data-id="09-chroni" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · KIEDY CHRONI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Asertywność chroni 🛡️</h2>
+    <div class="karta alarm pop" data-slowo="obcy"><div class="nazwa">⚠️ Obcy dorosły: 🚗 „podwiozę cię” · 🍬 „masz cukierka” · 🐶 „pokażę ci pieska”</div></div>
+    <div class="kroki">
+      <span class="chip duze pop" data-slowo="głośno">NIE!</span>
+      <span class="chip pop" data-slowo="wsiadasz">🚫 nie wsiadasz, nie idziesz</span>
+      <span class="chip pop" data-slowo="odchodzisz">🏃 odchodzisz</span>
+    </div>
+    <div><span class="chip tlum pop" data-slowo="zaufanemu">👨‍👩‍👧 od razu mówisz rodzicom albo nauczycielowi</span></div>
+    <div><span class="chip tlum pop" data-slowo="tłumaczyć">obcemu nie musisz niczego tłumaczyć</span></div>
+    <div class="karta grupa pop" data-slowo="grupa"><div class="nazwa">😂 Grupa śmieje się z kogoś? Nie musisz się śmiać razem z innymi.</div></div>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+20" id="s10">
+    <span class="czesc c3">3 · KIEDY CHRONI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="karta sytuacja pop" data-slowo="nowa"><div class="nazwa">🧑‍🎒 W klasie jest nowa osoba. Kilku kolegów się z niej śmieje. 😂</div></div>
+    <div class="polecenie wjazd-dol" data-slowo="napisz">Co powiesz?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="kolegom"><span class="nr">1</span>do kolegów: . . . . . . . . . . . . . .</div>
+      <div class="linia pop" data-slowo="osobie"><span class="nr">2</span>do nowej osoby: . . . . . . . . . . . .</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="kol">
+      <div class="karta k1 pop" data-slowo="kolegów"><div class="nazwa">do kolegów 😂</div>
+        <div class="wyp wjazd-lewo" data-slowo="przestańcie">„Przestańcie, to wcale nie jest śmieszne.”</div>
+        <div class="wyp wjazd-lewo" data-slowo="pomóżmy">„Ona jest nowa, lepiej jej pomóżmy.”</div>
+      </div>
+      <div class="karta k2 pop" data-slowo="osoby"><div class="nazwa">do nowej osoby 🙂</div>
+        <div class="wyp wjazd-lewo" data-slowo="chodź">„Chodź z nami na przerwę!”</div>
+        <div class="wyp wjazd-lewo" data-slowo="stołówka">„Pokażę ci, gdzie jest stołówka.”</div>
+      </div>
+    </div>
+    <div class="dol">
+      <span class="chip spok pop" data-slowo="spokojnie">😌 spokojnie, bez krzyku i bez wyzwisk</span>
+      <span class="chip nauc pop" data-slowo="nauczyciela">nie przestają? ➜ 👩‍🏫 nauczyciel. To nie skarżenie, to pomoc!</span>
+    </div>
+  </section>
+
+  <!-- ===== 12 wiecej ===== -->
+  <section class="scena" data-id="12-wiecej" id="s12">
+    <span class="czesc c4 zjaw" data-t="0">4 · NIE TYLKO „NIE”</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Asertywność to też... ✨</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="poprosić"><b>🙋 prośba o swoje</b><br>„Czy możesz oddać mi książkę, którą pożyczyłeś?”</div>
+      <div class="linia pop" data-slowo="szczerą"><b>💬 szczera opinia</b><br>„Twój rysunek ma piękne kolory, ale konia trudno poznać.”</div>
+      <div class="linia pop" data-slowo="pochwalić"><b>🌟 pochwała</b><br>„Świetnie ci poszło!” ➜ „Dziękuję!”</div>
+    </div>
+    <div><span class="chip wstyd pop" data-slowo="wstydu">bez wstydu i bez tłumaczenia się 😊</span></div>
+  </section>
+
+  <!-- ===== 13 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="13-zadanie4+25" id="s13">
+    <span class="czesc c4">4 · NIE TYLKO „NIE”</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 🗣️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="parach">Na głos, w parach! 👫</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="prośbę"><span class="nr">1</span>✏️ „Daj mi swoją gumkę na zawsze!”</div>
+      <div class="linia pop" data-slowo="prośbę" data-po="0.3"><span class="nr">2</span>📓 „Chodź, wyrwiemy kartkę z zeszytu kolegi!”</div>
+      <div class="linia pop" data-slowo="prośbę" data-po="0.6"><span class="nr">3</span>🧍 „Oddaj mi swoje miejsce w kolejce!”</div>
+    </div>
+    <div class="zasady">
+      <span class="chip pop" data-slowo="wzoru">🙅 Nie, bo... 🤝 Ale mogę...</span>
+      <span class="chip pop" data-slowo="zamieniacie">🔄 zamiana</span>
+      <span class="chip pop" data-slowo="oczy">😌 spokojnie · 👀 w oczy</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 14 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="gumkę"><span class="prosi">✏️ „Daj mi swoją gumkę na zawsze!”</span><br><span class="ty">„Nie, bo jest mi potrzebna. Ale mogę ci ją pożyczyć na tę lekcję.”</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kartkę"><span class="prosi">📓 „Chodź, wyrwiemy kartkę z zeszytu kolegi!”</span><br><span class="ty">„Nie, bo to jego zeszyt. Ale mogę ci dać kartkę ze swojego.”</span></div>
+      <div class="linia wjazd-lewo" data-slowo="kolejce"><span class="prosi">🧍 „Oddaj mi swoje miejsce w kolejce!”</span><br><span class="ty">„Nie, bo czekam tu od dawna. Ale mogę ci przypilnować miejsca za mną.”</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="spokojnie">😌 spokojnie i bez krzyku = brawo!</span></div>
+  </section>
+
+  <!-- ===== 15 podsumowanie ===== -->
+  <section class="scena" data-id="15-podsumowanie" id="s15">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="uległy">😔 <b>uległy</b> - zgadza się na wszystko, choć nie chce</div>
+      <div class="linia pop" data-slowo="agresywny">😡 <b>agresywny</b> - krzyczy i obraża</div>
+      <div class="linia pop" data-slowo="asertywny">😌 <b>asertywny</b> - mówi NIE spokojnie i z szacunkiem</div>
+      <div class="linia pop" data-slowo="wzór">🗝️ Nie, bo... Ale mogę...</div>
+      <div class="linia pop" data-slowo="obcemu">🛡️ obcy dorosły: NIE ➜ odchodzę ➜ mówię zaufanemu dorosłemu</div>
+      <div class="linia pop" data-slowo="śmieje">😂 nie muszę się śmiać razem z innymi</div>
+      <div class="linia pop" data-slowo="prośba">✨ też: prośba o swoje · szczera opinia · „dziękuję” za pochwałę</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

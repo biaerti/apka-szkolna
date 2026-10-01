@@ -1,0 +1,1 @@
+Zadanie pierwsze. Odmień rzeczownik lis przez wszystkie siedem przypadków. Przy każdym napisz nazwę przypadku i pomocnika, tak jak zrobiliśmy to z żabą. Start!

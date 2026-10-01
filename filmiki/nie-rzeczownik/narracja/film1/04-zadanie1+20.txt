@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest pięć rzeczowników. Dodaj do każdego słówko nie i zapisz nowy wyraz w zeszycie. Pamiętaj, jak go zapisać! Start!

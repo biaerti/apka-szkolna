@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Wielka czy mała litera? - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+.skr { text-decoration: line-through; text-decoration-thickness: 4px; color: var(--roz); }
+.wl { color: var(--roz); font-size: 1.15em; }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 25px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 110px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .tytul .duza { color: var(--roz); }
+#s01 .podtytul { font-family: 'Baloo 2'; font-size: 52px; font-weight: 800; line-height: 1.1; color: var(--fiolet); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--niebieski); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .zdanie { margin: 18px auto 0; width: 1140px; font-family: 'Baloo 2'; font-size: 44px; white-space: nowrap; padding: 14px 10px; font-weight: 800; border-color: var(--pomarancz); }
+#s02 .rzad { margin-top: 20px; align-items: stretch; }
+#s02 .k1 { border-color: var(--szary); } #s02 .k1 .nazwa { color: var(--szary); }
+#s02 .k2 { border-color: var(--roz); } #s02 .k2 .nazwa { color: var(--roz); }
+#s02 .karta .nazwa { font-size: 44px; }
+#s02 .karta .opis { font-size: 30px; color: var(--ciemny); }
+#s02 .wsk { font-size: 30px; background: var(--niebieski); }
+
+/* ===== 03 ===== */
+#s03 .pary { display: grid; grid-template-columns: 1fr 70px 1fr; gap: 8px 0; width: 900px; margin: 16px auto 0; align-items: center; }
+#s03 .pary .gl { font-family: 'Baloo 2'; font-size: 26px; font-weight: 800; color: #fff; border-radius: 14px; padding: 2px 10px; }
+#s03 .pary .gl.p { background: var(--szary); } #s03 .pary .gl.w { background: var(--roz); }
+#s03 .pary .pos, #s03 .pary .wlas { background: var(--bialy); border: 4px solid var(--ramka); border-radius: 16px; font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; padding: 0 16px; line-height: 1.35; }
+#s03 .pary .wlas { border-color: var(--roz); }
+#s03 .pary .str { font-size: 34px; }
+#s03 .test { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s03 .test .chip { font-size: 28px; background: var(--pomarancz); }
+#s03 .test .chip + .chip { background: var(--roz); }
+
+/* ===== 04-05 ===== */
+#s04 .lista { width: 700px; gap: 8px; margin-top: 12px; }
+#s04 .linia { font-family: 'Baloo 2'; font-size: 36px; padding: 0 26px; }
+#s04 .wsk { margin-top: 10px; font-size: 28px; }
+#s04 .wsk { background: var(--roz); }
+#s05 .lista { gap: 10px; margin-top: 16px; }
+#s05 .linia { font-size: 32px; padding: 6px 22px; }
+#s05 .linia b { font-family: 'Baloo 2'; color: var(--roz); }
+#s05 .uwagi { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s05 .uwagi .chip { font-size: 27px; background: var(--pomarancz); }
+#s05 .uwagi .chip + .chip { background: var(--roz); }
+
+/* ===== 06-07 ===== */
+#s06 .siatka, #s07 .siatka { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 18px; }
+#s06 .siatka .karta { width: 370px; border-color: var(--fiolet); padding: 26px 8px; }
+#s06 .siatka { margin-top: 34px; gap: 22px 14px; }
+#s06 .wsk { margin-top: 34px !important; }
+#s06 .karta .opis { white-space: nowrap; font-size: 28px !important; }
+#s06 .karta .nazwa { font-size: 30px !important; }
+#s07 .siatka .karta { width: 360px; border-color: var(--fiolet); padding: 14px 12px; }
+#s06 .karta .nazwa, #s07 .karta .nazwa { color: var(--fiolet); font-size: 32px; }
+#s06 .karta .opis, #s07 .karta .opis { color: var(--ciemny); font-family: 'Baloo 2'; font-size: 32px; margin-top: 0; }
+#s07 .karta .emo { font-size: 56px; line-height: 1.1; }
+#s06 .wsk { margin-top: 18px; background: var(--szary); }
+#s07 .wsk { margin-top: 18px; background: var(--fiolet); }
+#s07 .wsk2 { margin-top: 12px; font-size: 30px; background: var(--pomarancz); }
+
+/* ===== 08-09 ===== */
+#s08 .tekst, #s09 .tekst { margin: 18px auto 0; width: 1100px; text-align: left; font-size: 42px; font-weight: 800; line-height: 1.6; border-color: var(--niebieski); }
+#s09 .tekst { font-size: 37px; line-height: 1.5; margin-top: 14px; }
+#s09 .powody { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
+#s09 .powody .chip { font-size: 29px; background: var(--roz); }
+#s09 .wsk { margin-top: 14px; font-size: 27px; background: var(--szary); }
+
+/* ===== 10 ===== */
+#s10 .pulapki { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; width: 1120px; margin: 16px auto 0; }
+#s10 .karta { text-align: left; padding: 10px 20px; }
+#s10 .karta .nazwa { font-size: 38px; }
+#s10 .karta .opis { font-size: 29px; margin-top: 0; }
+#s10 .w { border-color: var(--roz); } #s10 .w .nazwa { color: var(--roz); }
+#s10 .m { border-color: var(--zielony); } #s10 .m .nazwa { color: var(--zielony); }
+#s10 .wsk { margin-top: 14px; font-size: 28px; background: var(--niebieski); }
+
+/* ===== 11-12 ===== */
+#s11 .lista, #s12 .lista { width: 1060px; }
+#s11 .linia { font-size: 36px; padding: 8px 24px; }
+#s11 .wyb { font-family: 'Baloo 2'; color: #fff; background: var(--niebieski); border-radius: 10px; padding: 0 10px; }
+#s12 .lista { gap: 14px; margin-top: 22px; }
+#s12 .linia { font-size: 34px; padding: 10px 22px; }
+#s12 .dlaczego { font-size: 28px; }
+#s12 .wsk { margin-top: 16px; font-size: 30px; background: var(--niebieski); }
+
+/* ===== 13 ===== */
+#s13 .kroki { display: flex; gap: 14px; margin-top: 22px; align-items: stretch; }
+#s13 .kroki .karta { flex: 1; border-color: var(--zielony); }
+#s13 .kroki .nazwa { color: var(--zielony); font-size: 34px; }
+#s13 .kroki .opis { font-size: 33px; color: var(--ciemny); }
+#s13 .dwie { margin: 22px auto 0; width: 1000px; border-color: var(--roz); }
+#s13 .dwie .nazwa { color: var(--roz); font-size: 34px; }
+#s13 .dwie .opis { font-family: 'Baloo 2'; font-size: 36px; color: var(--ciemny); }
+
+/* ===== 14-15 ===== */
+#s14 .kartka { margin: 14px auto 0; width: 1000px; text-align: left; border-color: var(--zielony); background: #fffdf5; padding: 12px 28px; }
+#s14 .kartka p { font-size: 33px; font-weight: 800; line-height: 1.5; }
+#s14 .kartka .podpis { text-align: right; font-family: 'Baloo 2'; }
+#s14 .wsk { margin-top: 10px; font-size: 27px; background: var(--roz); }
+#s15 .lista { gap: 12px; margin-top: 22px; }
+#s15 .linia { font-size: 35px; padding: 7px 22px; }
+#s15 .dlaczego { font-size: 28px; }
+#s15 .wsk { margin-top: 14px; font-size: 30px; background: var(--zielony); }
+
+/* ===== 16 ===== */
+#s16 .lista { width: 1120px; gap: 9px; }
+#s16 .linia { font-size: 29px; padding: 6px 22px; }
+#s16 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział II · Pośród słów i znaczeń</div>
+    <div class="emo pop" data-slowo="zagadkę">🔠 🔡 🐶 🏙️</div>
+    <div class="tytul pop" data-slowo="wielkiej"><span class="duza">W</span>ielka czy <span style="color:var(--zielony)">m</span>ała?</div>
+    <div class="podtytul pop" data-slowo="pospolita">nazwy własne i pospolite</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="własnej">🏷️ własna czy pospolita?</span>
+      <span class="chip pop" data-slowo="grupy">📚 grupy nazw</span>
+      <span class="chip pop" data-slowo="pułapek">🪤 pułapki</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 co to ===== -->
+  <section class="scena" data-id="02-co-to" id="s02">
+    <h2 class="naglowek wjazd-dol" data-t="0">Dlaczego wielka litera? 🤔</h2>
+    <div class="karta zdanie pop" data-slowo="zdanie">Mój pies <span class="hl"><span class="wl">B</span>urek</span> mieszka w <span class="hl"><span class="wl">K</span>rakowie</span> nad <span class="hl"><span class="wl">W</span>isłą</span>.</div>
+    <div class="rzad">
+      <div class="karta k1 pop" data-slowo="pasuje"><div class="nazwa">🐕 pies</div><div class="opis">każdy pies na świecie<br>➜ nazwa <b>pospolita</b> ➜ mała litera</div></div>
+      <div class="karta k2 pop" data-slowo="imię"><div class="nazwa">🐶 Burek</div><div class="opis">jeden, konkretny pies<br>➜ nazwa <b>własna</b> ➜ wielka litera</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="kraków">🏙️ Kraków · 🌊 Wisła ➜ też nazwy własne</span></div>
+  </section>
+
+  <!-- ===== 03 pary ===== -->
+  <section class="scena" data-id="03-pary" id="s03">
+    <span class="czesc c1 zjaw" data-t="0">1 · WŁASNE I POSPOLITE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Grupa ➜ jedna, konkretna rzecz</h2>
+    <div class="pary">
+      <div class="gl p zjaw" data-t="0">nazwa pospolita (mała)</div><div></div><div class="gl w zjaw" data-t="0">nazwa własna (wielka)</div>
+      <div class="pos pop" data-slowo="rzeka">🌊 rzeka</div><div class="str pop" data-slowo="odra">➜</div><div class="wlas pop" data-slowo="odra">Odra, Warta</div>
+      <div class="pos pop" data-slowo="miasto">🏙️ miasto</div><div class="str pop" data-slowo="gdańsk">➜</div><div class="wlas pop" data-slowo="gdańsk">Gdańsk, Poznań</div>
+      <div class="pos pop" data-slowo="kot">🐈 kot</div><div class="str pop" data-slowo="mruczek">➜</div><div class="wlas pop" data-slowo="mruczek">Mruczek</div>
+      <div class="pos pop" data-slowo="dziewczynka">👧 dziewczynka</div><div class="str pop" data-slowo="zosia">➜</div><div class="wlas pop" data-slowo="zosia">Zosia</div>
+      <div class="pos pop" data-slowo="góry">⛰️ góry</div><div class="str pop" data-slowo="tatry">➜</div><div class="wlas pop" data-slowo="tatry">Tatry</div>
+    </div>
+    <div class="test">
+      <span class="chip pop" data-slowo="zapytaj">❓ cała grupa czy jedna, konkretna rzecz?</span>
+      <span class="chip pop" data-slowo="grupa">grupa ➜ mała · jedna ➜ wielka</span>
+    </div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · WŁASNE I POSPOLITE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dopisz">Do każdej nazwy pospolitej dopisz nazwę własną</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć">⛰️ góry ➜ . . . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.2">🪐 planeta ➜ . . . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.4">🐈 kot ➜ . . . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.6">🗺️ państwo ➜ . . . . . . . .</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.8">🎉 święto ➜ . . . . . . . .</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pamiętaj">pamiętaj o wielkiej literze!</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="góry">⛰️ góry ➜ <b>Tatry</b>, <b>Karkonosze</b>, <b>Bieszczady</b></div>
+      <div class="linia wjazd-lewo" data-slowo="planeta">🪐 planeta ➜ <b>Mars</b>, <b>Jowisz</b>, <b>Saturn</b></div>
+      <div class="linia wjazd-lewo" data-slowo="kot">🐈 kot ➜ <b>Filemon</b>, <b>Puszek</b></div>
+      <div class="linia wjazd-lewo" data-slowo="państwo">🗺️ państwo ➜ <b>Polska</b>, <b>Niemcy</b>, <b>Francja</b></div>
+      <div class="linia wjazd-lewo" data-slowo="święto">🎉 święto ➜ <b>Wielkanoc</b>, <b>Boże Narodzenie</b></div>
+    </div>
+    <div class="uwagi">
+      <span class="chip pop" data-slowo="każda">każda nazywa jedną, konkretną rzecz</span>
+      <span class="chip pop" data-slowo="oba"><span>B</span>oże <span>N</span>arodzenie ➜ oba słowa wielką!</span>
+    </div>
+  </section>
+
+  <!-- ===== 06 ludzie i miejsca ===== -->
+  <section class="scena" data-id="06-ludzie-miejsca" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · GRUPY NAZW WŁASNYCH</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Piszemy wielką literą ✍️</h2>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="imiona"><div class="nazwa">👤 imiona i nazwiska</div><div class="opis">Anna Nowak, Jan Kowalski</div></div>
+      <div class="karta pop" data-slowo="zwierząt"><div class="nazwa">🐾 imiona zwierząt</div><div class="opis">Reksio, Filemon, Pysio</div></div>
+      <div class="karta pop" data-slowo="miasta"><div class="nazwa">🏘️ miasta i wsie</div><div class="opis">Sopot, Lublin</div></div>
+      <div class="karta pop" data-slowo="państwa"><div class="nazwa">🗺️ państwa</div><div class="opis">Hiszpania, Czechy</div></div>
+      <div class="karta pop" data-slowo="rzeki"><div class="nazwa">🌊 rzeki</div><div class="opis">Nil, Dunajec</div></div>
+      <div class="karta pop" data-slowo="góry"><div class="nazwa">⛰️ góry</div><div class="opis">Alpy, Sudety</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="zauważcie">ale: miasto, pies, rzeka ➜ mała litera</span></div>
+  </section>
+
+  <!-- ===== 07 kosmos i swieta ===== -->
+  <section class="scena" data-id="07-kosmos-swieta" id="s07">
+    <span class="czesc c2 zjaw" data-t="0">2 · GRUPY NAZW WŁASNYCH</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Piszemy wielką literą ✍️</h2>
+    <div class="siatka">
+      <div class="karta pop" data-slowo="kontynentów"><div class="emo">🌍</div><div class="nazwa">kontynenty</div><div class="opis">Europa, Afryka, Azja</div></div>
+      <div class="karta pop" data-slowo="planet"><div class="emo">🪐</div><div class="nazwa">planety</div><div class="opis">Wenus, Mars, Neptun</div></div>
+      <div class="karta pop" data-slowo="świąt"><div class="emo">🎉</div><div class="nazwa">święta</div><div class="opis">Wielkanoc, Nowy Rok, Dzień Dziecka</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="każde">w nazwach świąt często każde słowo wielką: <span>N</span>owy <span>R</span>ok</span></div>
+    <div><span class="chip wsk2 pop" data-slowo="pierwsze">✏️ pierwsze słowo w zdaniu ➜ zawsze wielką</span></div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+25" id="s08">
+    <span class="czesc c2">2 · GRUPY NAZW WŁASNYCH</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="drugie">Wypisz słowa, które powinny zaczynać się wielką literą</div>
+    <div class="karta tekst pop" data-slowo="tekście">W sobotę ola pojechała z tatą do gdańska. Wzięła ze sobą psa reksia. Z okna pociągu widziała rzekę wisłę, a wieczorem jasną planetę wenus.</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="karta tekst zjaw" data-t="0">W sobotę <span class="hl pop" data-slowo="ola"><span class="wl">O</span>la</span> pojechała z tatą do <span class="hl pop" data-slowo="gdańska"><span class="wl">G</span>dańska</span>. Wzięła ze sobą psa <span class="hl pop" data-slowo="reksia"><span class="wl">R</span>eksia</span>. Z okna pociągu widziała rzekę <span class="hl pop" data-slowo="wisłę"><span class="wl">W</span>isłę</span>, a wieczorem jasną planetę <span class="hl pop" data-slowo="wenus"><span class="wl">W</span>enus</span>.</div>
+    <div class="powody">
+      <span class="chip pop" data-slowo="dziewczynki">Ola - imię</span>
+      <span class="chip pop" data-slowo="miasta">Gdańsk - miasto</span>
+      <span class="chip pop" data-slowo="psa">Reksio - imię psa</span>
+      <span class="chip pop" data-slowo="rzeki">Wisła - rzeka</span>
+      <span class="chip pop" data-slowo="planety">Wenus - planeta</span>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pospolite">tata · pies · rzeka · planeta ➜ mała litera, bo to nazwy pospolite</span></div>
+  </section>
+
+  <!-- ===== 10 pulapki ===== -->
+  <section class="scena" data-id="10-pulapki" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · PUŁAPKI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">To samo słowo - dwa znaczenia 🪤</h2>
+    <div class="pulapki">
+      <div class="karta w pop" data-slowo="planeta"><div class="nazwa">🌍 Ziemia - planeta</div><div class="opis">Ziemia krąży wokół Słońca.</div></div>
+      <div class="karta m pop" data-slowo="gleba"><div class="nazwa">🌱 ziemia - gleba</div><div class="opis">Posadziłem fasolkę w ziemi.</div></div>
+      <div class="karta w pop" data-slowo="dziewczynki"><div class="nazwa">👧 Róża - imię</div><div class="opis">Róża idzie do szkoły.</div></div>
+      <div class="karta m pop" data-slowo="kwiat"><div class="nazwa">🌹 róża - kwiat</div><div class="opis">W wazonie stoi róża.</div></div>
+      <div class="karta w pop" data-slowo="kota"><div class="nazwa">🐈 Pirat - imię kota</div><div class="opis">Pirat śpi na kanapie.</div></div>
+      <div class="karta m pop" data-slowo="rozbójnik"><div class="nazwa">🏴‍☠️ pirat - rozbójnik</div><div class="opis">Pirat płynie statkiem po skarb.</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="sprawdzaj">🔎 zawsze sprawdzaj, o co chodzi w zdaniu</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+20" id="s11">
+    <span class="czesc c3">3 · PUŁAPKI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="trzecie">Wielką czy małą? Zapisz numer i poprawne słowo.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="każdym"><span class="nr">1</span>Kret kopie korytarze w <span class="wyb">Z / z</span>iemi.</div>
+      <div class="linia pop" data-slowo="każdym" data-po="0.25"><span class="nr">2</span>Astronauta oglądał <span class="wyb">Z / z</span>iemię z kosmosu.</div>
+      <div class="linia pop" data-slowo="każdym" data-po="0.5"><span class="nr">3</span>W ogrodzie zakwitła czerwona <span class="wyb">R / r</span>óża.</div>
+      <div class="linia pop" data-slowo="każdym" data-po="0.75"><span class="nr">4</span>Moją najlepszą koleżanką jest <span class="wyb">R / r</span>óża.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="kret">1. Kret kopie korytarze w <span class="hl">ziemi</span>. <span class="dlaczego">mała - gleba</span></div>
+      <div class="linia wjazd-lewo" data-slowo="astronauta">2. Astronauta oglądał <span class="hl">Ziemię</span> z kosmosu. <span class="dlaczego">wielka - planeta</span></div>
+      <div class="linia wjazd-lewo" data-slowo="ogrodzie">3. W ogrodzie zakwitła czerwona <span class="hl">róża</span>. <span class="dlaczego">mała - kwiat</span></div>
+      <div class="linia wjazd-lewo" data-slowo="koleżanką">4. Moją najlepszą koleżanką jest <span class="hl">Róża</span>. <span class="dlaczego">wielka - imię</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="myślimy">🧠 najpierw myślimy, potem piszemy</span></div>
+  </section>
+
+  <!-- ===== 13 detektyw ===== -->
+  <section class="scena" data-id="13-detektyw" id="s13">
+    <span class="czesc c4 zjaw" data-t="0">4 · DETEKTYW</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Detektyw wielkich liter 🕵️</h2>
+    <div class="kroki">
+      <div class="karta pop" data-slowo="pierwszy"><div class="nazwa">1 · znajdź</div><div class="opis">imiona, nazwy miejsc, planet i świąt</div></div>
+      <div class="karta pop" data-slowo="drugi"><div class="nazwa">2 · zapytaj</div><div class="opis">czy to jedna, konkretna rzecz?</div></div>
+      <div class="karta pop" data-slowo="trzeci"><div class="nazwa">3 · sprawdź</div><div class="opis">pierwszą literę</div></div>
+    </div>
+    <div class="karta dwie pop" data-slowo="strony"><div class="nazwa">⚠️ błąd bywa w dwie strony</div><div class="opis"><span class="skr">burek</span> ➜ Burek · <span class="skr">Pies</span> ➜ pies</div></div>
+  </section>
+
+  <!-- ===== 14 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="14-zadanie4+25" id="s14">
+    <span class="czesc c4">4 · DETEKTYW</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="czwarte">Znajdź 5 błędów i przepisz zdania poprawnie</div>
+    <div class="karta kartka pop" data-slowo="pocztówkę">
+      <p>🏖️ Cześć, Kuba!</p>
+      <p>Jestem z rodzicami w sopocie. Codziennie biegam po Plaży z psem fafikiem. Wieczorem przez lunetę widziałam planetę saturn. Tata mówi, że w przyszłym roku pojedziemy do włoch.</p>
+      <p class="podpis">Ola</p>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="uwaga">⚠️ błędy są w dwie strony!</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 15 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="15-odpowiedz4" id="s15">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="pierwsze">1. w <span class="skr">sopocie</span> <span class="ok">Sopocie</span> <span class="dlaczego">nazwa miasta</span></div>
+      <div class="linia wjazd-lewo" data-slowo="drugie">2. po <span class="skr">Plaży</span> <span class="ok">plaży</span> <span class="dlaczego">nazwa pospolita - plaż jest dużo</span></div>
+      <div class="linia wjazd-lewo" data-slowo="trzecie">3. z psem <span class="skr">fafikiem</span> <span class="ok">Fafikiem</span> <span class="dlaczego">imię psa</span></div>
+      <div class="linia wjazd-lewo" data-slowo="czwarte">4. planetę <span class="skr">saturn</span> <span class="ok">Saturn</span> <span class="dlaczego">nazwa planety</span></div>
+      <div class="linia wjazd-lewo" data-slowo="piąte">5. do <span class="skr">włoch</span> <span class="ok">Włoch</span> <span class="dlaczego">nazwa państwa</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="detektywami">🕵️ 5 z 5? Jesteś detektywem wielkich liter!</span></div>
+  </section>
+
+  <!-- ===== 16 podsumowanie ===== -->
+  <section class="scena" data-id="16-podsumowanie" id="s16">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pospolita">🔡 nazwa pospolita = cała grupa: pies, miasto, rzeka ➜ mała litera</div>
+      <div class="linia pop" data-slowo="własna">🔠 nazwa własna = jedna, konkretna rzecz: Burek, Kraków ➜ wielka litera</div>
+      <div class="linia pop" data-slowo="imiona">👤 imiona i nazwiska · 🐾 imiona zwierząt · 🏙️ miasta · 🗺️ państwa</div>
+      <div class="linia pop" data-slowo="rzek">🌊 rzeki · ⛰️ góry · 🌍 kontynenty · 🪐 planety · 🎉 święta</div>
+      <div class="linia pop" data-slowo="ziemia">🌍 Ziemia - planeta · 🌱 ziemia - gleba</div>
+      <div class="linia pop" data-slowo="kwiat">👧 Róża - imię · 🌹 róża - kwiat</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

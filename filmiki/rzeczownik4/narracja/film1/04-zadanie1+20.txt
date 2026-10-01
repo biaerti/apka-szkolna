@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest siedem rzeczowników. Przy każdym napisz, co nazywa: osobę, zwierzę, rzecz, roślinę, zjawisko, miejsce czy pojęcie. Start!

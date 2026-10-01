@@ -1,0 +1,1 @@
+Zadanie drugie. Na ekranie jest sześć zdań. W każdym trzeba zdecydować: piszemy razem czy osobno? Najpierw zadaj pytanie. Kto? co? albo co robi? Potem zapisz poprawnie. Start!
