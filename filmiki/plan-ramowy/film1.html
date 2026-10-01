@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Plan ramowy - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; }
+
+.scena { padding: 50px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 20px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 28px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.35; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 20px; justify-content: center; }
+.rzad > * { flex: 1; }
+.czesc {
+  position: absolute; top: 16px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px;
+}
+.c1 { background: var(--pomarancz); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ok { color: var(--zielony); }
+.zle { color: var(--roz); }
+.przekreslone { text-decoration: line-through; color: #fff; opacity: 0.85; }
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 44px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie { margin-top: 12px; font-size: 36px; font-weight: 800; line-height: 1.3; }
+.zadanie .odliczanie { margin: 14px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 10px; margin: 18px auto 0; width: 1100px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.dlaczego { color: var(--szary); font-size: 25px; margin-left: 8px; }
+.wsk { margin-top: 16px; font-size: 30px; }
+.strzalka { color: var(--niebieski); margin: 0 10px; }
+
+/* ===== 01 ===== */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 34px; font-weight: 800; color: var(--szary); }
+#s01 .emo { font-size: 84px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 120px; font-weight: 800; line-height: 1; color: var(--pomarancz); }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 14px; }
+#s01 .grupy .chip { font-size: 30px; }
+#s01 .grupy .chip:nth-child(1) { background: var(--pomarancz); }
+#s01 .grupy .chip:nth-child(2) { background: var(--fiolet); }
+#s01 .grupy .chip:nth-child(3) { background: var(--zielony); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 42px; font-weight: 800; }
+
+/* ===== 02 ===== */
+#s02 .film { margin-top: 18px; font-size: 34px; font-weight: 800; color: var(--szary); }
+#s02 .def { margin: 18px auto 0; width: 1060px; border-color: var(--pomarancz); }
+#s02 .def .nazwa { color: var(--pomarancz); font-size: 38px; }
+#s02 .chrono { margin-top: 16px; font-size: 30px; background: var(--niebieski); }
+#s02 .rzad { margin-top: 18px; width: 1060px; margin-left: auto; margin-right: auto; }
+#s02 .rzad .karta { border-color: var(--fiolet); }
+#s02 .rzad .emo { font-size: 54px; line-height: 1.1; }
+#s02 .rzad .nazwa { font-size: 30px; color: var(--fiolet); }
+
+/* ===== 03 ===== */
+#s03 .rzad { margin-top: 14px; align-items: stretch; }
+#s03 .historia { text-align: left; border-color: var(--szary); flex: 1.15; }
+#s03 .historia p { font-size: 25px; font-weight: 800; line-height: 1.4; }
+#s03 .szczegol { background: #ffd6dc; border-radius: 6px; padding: 0 4px; }
+#s03 .plan { text-align: left; border-color: var(--pomarancz); }
+#s03 .plan .nazwa { color: var(--pomarancz); }
+#s03 .plan .pkt { font-size: 29px; font-weight: 800; line-height: 1.45; }
+#s03 .bez { margin-top: 16px; font-size: 28px; background: var(--roz); }
+
+/* ===== 04-05 ===== */
+#s04 .lista, #s05 .lista { gap: 8px; margin-top: 12px; width: 960px; }
+#s04 .lista { gap: 6px; margin-top: 8px; }
+#s04 .linia { font-size: 25px; padding: 2px 20px; }
+#s04 .polecenie, #s08 .polecenie { font-size: 32px; margin-top: 6px; }
+#s04 .wsk { margin-top: 8px; font-size: 24px; background: var(--roz); padding: 2px 24px; }
+#s04 .odliczanie, #s08 .odliczanie { margin-top: 8px; }
+#s05 .linia { font-size: 27px; padding: 5px 20px; }
+#s05 .test { margin-top: 12px; font-size: 30px; background: var(--niebieski); }
+
+/* ===== 06 ===== */
+#s06 .rzad { margin-top: 20px; align-items: stretch; }
+#s06 .zd { border-color: var(--niebieski); } #s06 .zd .nazwa { color: var(--niebieski); }
+#s06 .rw { border-color: var(--pomarancz); } #s06 .rw .nazwa { color: var(--pomarancz); }
+#s06 .przyk { font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; margin-top: 10px; }
+#s06 .osoby { display: flex; gap: 12px; justify-content: center; margin-top: 18px; }
+#s06 .osoby .chip { font-size: 32px; background: var(--niebieski); }
+#s06 .nie { margin-top: 16px; font-size: 28px; background: var(--pomarancz); }
+
+/* ===== 07 ===== */
+#s07 .bezok { display: flex; gap: 12px; justify-content: center; margin-top: 12px; }
+#s07 .bezok .chip { font-size: 32px; background: var(--fiolet); }
+#s07 .rzad { margin-top: 18px; align-items: stretch; }
+#s07 .rw { border-color: var(--pomarancz); } #s07 .rw .nazwa { color: var(--pomarancz); }
+#s07 .zd { border-color: var(--niebieski); } #s07 .zd .nazwa { color: var(--niebieski); }
+#s07 .przyk { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; }
+#s07 .lista { width: 1000px; gap: 8px; margin-top: 18px; }
+#s07 .linia { font-size: 30px; padding: 6px 20px; }
+
+/* ===== 08-09 ===== */
+#s08 .lista, #s09 .lista { gap: 8px; margin-top: 12px; width: 1000px; }
+#s08 .lista { gap: 6px; margin-top: 8px; }
+#s08 .linia { font-size: 27px; padding: 3px 20px; }
+#s08 .skroty { display: flex; gap: 14px; justify-content: center; margin-top: 8px; }
+#s08 .skroty .chip { font-size: 28px; }
+#s08 .skroty .z { background: var(--niebieski); } #s08 .skroty .r { background: var(--pomarancz); }
+#s09 .linia { font-size: 27px; padding: 5px 20px; }
+#s09 .lit { display: inline-block; font-family: 'Baloo 2'; color: #fff; border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+#s09 .lit.z { background: var(--niebieski); } #s09 .lit.r { background: var(--pomarancz); }
+
+/* ===== 10 ===== */
+#s10 .lista { width: 1060px; gap: 9px; margin-top: 14px; }
+#s10 .linia { font-size: 31px; padding: 6px 22px; display: flex; justify-content: space-between; }
+#s10 .linia .p { color: var(--pomarancz); }
+#s10 .kazda { margin-top: 16px; font-size: 28px; background: var(--niebieski); }
+
+/* ===== 11-12 ===== */
+#s11 .lista, #s12 .lista { width: 1000px; }
+#s11 .linia, #s12 .linia { font-size: 33px; }
+#s12 .wsk { background: var(--zielony); font-size: 28px; }
+
+/* ===== 13 ===== */
+#s13 .rzad { margin-top: 16px; align-items: stretch; }
+#s13 .karta { text-align: left; }
+#s13 .zly { border-color: var(--roz); } #s13 .zly .nazwa { color: var(--roz); }
+#s13 .dobry { border-color: var(--zielony); } #s13 .dobry .nazwa { color: var(--zielony); }
+#s13 .pkt { font-size: 30px; font-weight: 800; line-height: 1.5; }
+#s13 .jedna { margin-top: 6px; font-size: 30px; background: var(--niebieski); }
+#s13 .gdzie { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+#s13 .gdzie .chip { font-size: 27px; background: var(--fiolet); }
+
+/* ===== 14-15 ===== */
+#s14 .kapturek { font-size: 92px; line-height: 1.1; margin-top: 10px; }
+#s14 .lista { width: 860px; gap: 8px; }
+#s14 .linia { font-size: 30px; padding: 6px 20px; }
+#s14 .check, #s15 .check { display: flex; gap: 12px; justify-content: center; margin-top: 14px; }
+#s14 .check .chip, #s15 .check .chip { font-size: 26px; background: var(--zielony); }
+#s15 .lista { width: 980px; gap: 8px; margin-top: 14px; }
+#s15 .linia { font-size: 31px; padding: 5px 20px; }
+
+/* ===== 16 ===== */
+#s16 .lista { width: 1120px; gap: 9px; }
+#s16 .linia { font-size: 29px; padding: 6px 22px; }
+#s16 .brawo { margin-top: 12px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział I · Poznajemy siebie i innych</div>
+    <div class="emo pop" data-slowo="tworzyć">🦴 📋 🔢</div>
+    <div class="tytul pop" data-slowo="ramowy">Plan ramowy</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="wybieramy">⭐ które wydarzenia?</span>
+      <span class="chip pop" data-slowo="zapisujemy">✍️ jak zapisać punkty?</span>
+      <span class="chip pop" data-slowo="równoważnik">🔁 równoważnik zdania</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="cztery">✏️ 4 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 co to ===== -->
+  <section class="scena" data-id="02-co-to" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Jak opowiedzieć film koledze? 🎬</h2>
+    <div class="film pop" data-slowo="sekundy">❌ każda sekunda · ✅ to, co najważniejsze, po kolei</div>
+    <div class="karta def pop" data-slowo="najważniejsze" data-po="0.1"><div class="nazwa">plan ramowy = najważniejsze wydarzenia zapisane w punktach, od początku do końca</div></div>
+    <div><span class="chip chrono pop" data-slowo="chronologiczną">🕐 kolejność chronologiczna = po kolei, tak jak się działo</span></div>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="szkielet"><div class="emo">🦴</div><div class="nazwa">jak szkielet</div><div class="opis">trzyma całość w kształcie</div></div>
+      <div class="karta pop" data-slowo="szczegółów"><div class="emo">🚫🎨</div><div class="nazwa">bez szczegółów</div><div class="opis">co się wydarzyło i kiedy</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 przyklad ===== -->
+  <section class="scena" data-id="03-przyklad" id="s03">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Ola i Burek 🐕</h2>
+    <div class="rzad">
+      <div class="karta historia pop" data-slowo="historii">
+        <p>Rano Ola wyszła z psem Burkiem na spacer. <span class="szczegol">Świeciło słońce, a Ola miała nową, żółtą kurtkę.</span> W parku Burek zobaczył wiewiórkę i uciekł. Ola szukała go przez godzinę. W końcu znalazła Burka <span class="szczegol">pod ławką przy fontannie</span>. Razem wrócili do domu.</p>
+      </div>
+      <div class="karta plan">
+        <div class="nazwa pop" data-slowo="najważniejsze">📋 plan ramowy</div>
+        <div class="pkt pop" data-slowo="wyjście">1. Wyjście na spacer.</div>
+        <div class="pkt pop" data-slowo="ucieczka">2. Ucieczka psa.</div>
+        <div class="pkt pop" data-slowo="poszukiwania">3. Poszukiwania.</div>
+        <div class="pkt pop" data-slowo="odnalezienie">4. Odnalezienie Burka.</div>
+        <div class="pkt pop" data-slowo="powrót">5. Powrót do domu.</div>
+      </div>
+    </div>
+    <div><span class="chip bez pop" data-slowo="szczegóły">☀️ 🧥 słońce, żółta kurtka = szczegóły ➜ nie wpisujemy</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+20" id="s04">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wypisz">🎂 Urodziny Kuby. Wypisz numery najważniejszych wydarzeń.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="siedem"><span class="nr">1</span>Zaproszenie przyjaciół na urodziny.</div>
+      <div class="linia pop" data-slowo="siedem" data-po="0.2"><span class="nr">2</span>Niebieskie balony pod sufitem.</div>
+      <div class="linia pop" data-slowo="siedem" data-po="0.4"><span class="nr">3</span>Przyjście gości.</div>
+      <div class="linia pop" data-slowo="siedem" data-po="0.6"><span class="nr">4</span>Kolorowe serwetki na stole.</div>
+      <div class="linia pop" data-slowo="siedem" data-po="0.8"><span class="nr">5</span>Rozpakowanie prezentów.</div>
+      <div class="linia pop" data-slowo="siedem" data-po="1"><span class="nr">6</span>Wspólna zabawa w podchody.</div>
+      <div class="linia pop" data-slowo="siedem" data-po="1.2"><span class="nr">7</span>Pożegnanie gości.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="szczegóły">⚠️ szczegóły pomiń!</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="zaproszenie"><span class="ok">✓ 1.</span> Zaproszenie przyjaciół na urodziny.</div>
+      <div class="linia wjazd-lewo" data-slowo="przyjście"><span class="ok">✓ 3.</span> Przyjście gości.</div>
+      <div class="linia wjazd-lewo" data-slowo="rozpakowanie"><span class="ok">✓ 5.</span> Rozpakowanie prezentów.</div>
+      <div class="linia wjazd-lewo" data-slowo="zabawa"><span class="ok">✓ 6.</span> Wspólna zabawa w podchody.</div>
+      <div class="linia wjazd-lewo" data-slowo="pożegnanie"><span class="ok">✓ 7.</span> Pożegnanie gości.</div>
+      <div class="linia wjazd-lewo" data-slowo="balony"><span class="zle">✗ 2. i 4.</span> balony, serwetki <span class="dlaczego">to wygląd - nic się nie dzieje</span></div>
+    </div>
+    <div><span class="chip test pop" data-slowo="test">🔎 test: wydarzenie ➜ do planu · wygląd ➜ zostawiamy</span></div>
+  </section>
+
+  <!-- ===== 06 rownowaznik ===== -->
+  <section class="scena" data-id="06-rownowaznik" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · PRZYPOMNIENIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Wypowiedzenie 💬</h2>
+    <div class="rzad">
+      <div class="karta zd pop" data-slowo="zdaniem"><div class="nazwa">ZDANIE</div><div class="opis">ma czasownik w formie osobowej</div><div class="przyk pop" data-slowo="szuka">Ola <span class="hl">szuka</span> psa.</div></div>
+      <div class="karta rw pop" data-slowo="równoważnik"><div class="nazwa">RÓWNOWAŻNIK ZDANIA</div><div class="opis">nie ma czasownika w formie osobowej</div><div class="przyk pop" data-slowo="psa">Szukanie psa.</div></div>
+    </div>
+    <div class="osoby">
+      <span class="chip pop" data-slowo="ola">Ola szuka</span>
+      <span class="chip pop" data-slowo="ja">ja szukam</span>
+      <span class="chip pop" data-slowo="my">my szukamy</span>
+    </div>
+    <div><span class="chip nie pop" data-slowo="przeszkadza">❓ szukanie psa - kto szuka? nie wiadomo, w planie to nie przeszkadza</span></div>
+  </section>
+
+  <!-- ===== 07 nieosobowe ===== -->
+  <section class="scena" data-id="07-nieosobowe" id="s07">
+    <span class="czesc c2">2 · PRZYPOMNIENIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Forma nieosobowa: bezokolicznik 🔍</h2>
+    <div class="bezok">
+      <span class="chip pop" data-slowo="wyjść">wyjść</span>
+      <span class="chip pop" data-slowo="kupić">kupić</span>
+      <span class="chip pop" data-slowo="posprzątać">posprzątać</span>
+    </div>
+    <div class="rzad">
+      <div class="karta rw pop" data-slowo="chleb"><div class="przyk">Kupić chleb.</div><div class="nazwa">równoważnik</div><div class="opis">kto ma kupić? nie wiadomo</div></div>
+      <div class="karta zd pop" data-slowo="kupiłem"><div class="przyk"><span class="hl">Kupiłem</span> chleb.</div><div class="nazwa">zdanie</div><div class="opis">kupiłem - ja</div></div>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="wyszła">Ola <span class="hl">wyszła</span> <span class="strzalka">➜</span> <b>wyjście Oli</b></div>
+      <div class="linia pop" data-slowo="uciekł">pies <span class="hl">uciekł</span> <span class="strzalka">➜</span> <b>ucieczka psa</b></div>
+    </div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+20" id="s08">
+    <span class="czesc c2">2 · PRZYPOMNIENIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zapisz">Zdanie czy równoważnik zdania? 🚌</div>
+    <div class="skroty">
+      <span class="chip z pop" data-slowo="skróty">Z = zdanie</span>
+      <span class="chip r pop" data-slowo="skróty" data-po="0.2">R = równoważnik zdania</span>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="ekranie"><span class="nr">1</span>Wyjazd na wycieczkę.</div>
+      <div class="linia pop" data-slowo="ekranie" data-po="0.2"><span class="nr">2</span>Autobus zatrzymał się w lesie.</div>
+      <div class="linia pop" data-slowo="ekranie" data-po="0.4"><span class="nr">3</span>Zbieranie grzybów.</div>
+      <div class="linia pop" data-slowo="ekranie" data-po="0.6"><span class="nr">4</span>Szukać drogi do autobusu.</div>
+      <div class="linia pop" data-slowo="ekranie" data-po="0.8"><span class="nr">5</span>Dzieci zgubiły mapę.</div>
+      <div class="linia pop" data-slowo="ekranie" data-po="1"><span class="nr">6</span>Powrót do szkoły.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="autobus"><span class="lit z">Z</span>2. Autobus <span class="hl">zatrzymał się</span> w lesie. <span class="dlaczego">kto? autobus</span></div>
+      <div class="linia wjazd-lewo" data-slowo="dzieci"><span class="lit z">Z</span>5. Dzieci <span class="hl">zgubiły</span> mapę. <span class="dlaczego">kto? dzieci</span></div>
+      <div class="linia wjazd-lewo" data-slowo="pozostałe"><span class="lit r">R</span>1. Wyjazd · 3. Zbieranie · 6. Powrót <span class="dlaczego">rzeczowniki</span></div>
+      <div class="linia wjazd-lewo" data-slowo="szukać"><span class="lit r">R</span>4. Szukać drogi do autobusu. <span class="dlaczego">bezokolicznik - forma nieosobowa</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 zamiana ===== -->
+  <section class="scena" data-id="10-zamiana" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · ZE ZDANIA PUNKT PLANU</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Czasownik ➜ rzeczownik 🔁</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="tomek"><span>Tomek <span class="hl">znalazł</span> klucz.</span><span class="p">➜ Znalezienie klucza.</span></div>
+      <div class="linia pop" data-slowo="mama"><span>Mama <span class="hl">upiekła</span> ciasto.</span><span class="p">➜ Upieczenie ciasta.</span></div>
+      <div class="linia pop" data-slowo="drużyna"><span>Drużyna <span class="hl">wygrała</span> mecz.</span><span class="p">➜ Wygrana drużyny.</span></div>
+      <div class="linia pop" data-slowo="babcia"><span>Babcia <span class="hl">przyjechała</span> w odwiedziny.</span><span class="p">➜ Przyjazd babci.</span></div>
+    </div>
+    <div><span class="chip kazda pop" data-slowo="każda">✓ kilka wersji jest dobrych - byle bez czasownika w formie osobowej</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+25" id="s11">
+    <span class="czesc c3">3 · ZE ZDANIA PUNKT PLANU</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zamień">Zamień zdania na punkty planu (równoważniki) 🐈🚒</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Kot wszedł na drzewo.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.25"><span class="nr">2</span>Strażacy przyjechali na sygnale.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.5"><span class="nr">3</span>Strażak zdjął kota z gałęzi.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.75"><span class="nr">4</span>Dzieci podziękowały strażakom.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="wejście">1. Wejście kota na drzewo.</div>
+      <div class="linia wjazd-lewo" data-slowo="przyjazd">2. Przyjazd strażaków.</div>
+      <div class="linia wjazd-lewo" data-slowo="zdjęcie">3. Zdjęcie kota z gałęzi.</div>
+      <div class="linia wjazd-lewo" data-slowo="podziękowanie">4. Podziękowanie dla strażaków.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="ratowanie">✓ „ratowanie kota” też dobrze · ✗ <span class="przekreslone">wszedł, przyjechali, zdjął</span></span></div>
+  </section>
+
+  <!-- ===== 13 jednolity ===== -->
+  <section class="scena" data-id="13-jednolity" id="s13">
+    <span class="czesc c4 zjaw" data-t="0">4 · JEDNA FORMA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Wszystkie punkty tak samo 📏</h2>
+    <div><span class="chip jedna pop" data-slowo="albo">same zdania ALBO same równoważniki - nie mieszamy</span></div>
+    <div class="rzad">
+      <div class="karta zly pop" data-slowo="spójrzcie">
+        <div class="nazwa">✗ pomieszany plan</div>
+        <div class="pkt">1. Wyjście z domu.</div>
+        <div class="pkt">2. <span class="hl">Ola zgubiła psa.</span></div>
+        <div class="pkt">3. Poszukiwania w parku.</div>
+      </div>
+      <div class="karta dobry pop" data-slowo="poprawiamy">
+        <div class="nazwa">✓ poprawiony plan</div>
+        <div class="pkt">1. Wyjście z domu.</div>
+        <div class="pkt">2. <span class="hl">Zgubienie psa.</span></div>
+        <div class="pkt">3. Poszukiwania w parku.</div>
+      </div>
+    </div>
+    <div class="gdzie">
+      <span class="chip pop" data-slowo="opowiadanie">✍️ własne opowiadanie</span>
+      <span class="chip pop" data-slowo="książkę">📚 przeczytana książka</span>
+      <span class="chip pop" data-slowo="dzień">🗓️ plan dnia</span>
+    </div>
+  </section>
+
+  <!-- ===== 14 zadanie 4 ===== -->
+  <section class="scena zadanie" data-id="14-zadanie4+25" id="s14">
+    <span class="czesc c4">4 · JEDNA FORMA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 4 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ułóż">Ułóż plan ramowy bajki o Czerwonym Kapturku</div>
+    <div class="kapturek pop" data-slowo="kapturku">👧🧺 🌲🐺 👵 🪓</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięciu"><span class="nr">1-5</span>pięć punktów</div>
+    </div>
+    <div class="check">
+      <span class="chip pop" data-slowo="najważniejsze">⭐ najważniejsze wydarzenia</span>
+      <span class="chip pop" data-slowo="kolei">🔢 po kolei</span>
+      <span class="chip pop" data-slowo="równoważnikami">🔁 równoważniki zdań</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 15 odpowiedz 4 ===== -->
+  <section class="scena odp" data-id="15-odpowiedz4" id="s15">
+    <div><span class="badge pop" data-t="0">PRZYKŁAD ✅</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="wyprawa">1. Wyprawa Czerwonego Kapturka do babci.</div>
+      <div class="linia wjazd-lewo" data-slowo="spotkanie">2. Spotkanie z wilkiem w lesie.</div>
+      <div class="linia wjazd-lewo" data-slowo="podstęp">3. Podstęp wilka w domu babci.</div>
+      <div class="linia wjazd-lewo" data-slowo="połknięcie">4. Połknięcie babci i Kapturka.</div>
+      <div class="linia wjazd-lewo" data-slowo="uratowanie">5. Uratowanie ich przez myśliwego.</div>
+    </div>
+    <div class="check">
+      <span class="chip pop" data-slowo="najważniejsze">✓ najważniejsze</span>
+      <span class="chip pop" data-slowo="kolei">✓ po kolei</span>
+      <span class="chip pop" data-slowo="równoważnikiem">✓ równoważniki</span>
+    </div>
+  </section>
+
+  <!-- ===== 16 podsumowanie ===== -->
+  <section class="scena" data-id="16-podsumowanie" id="s16">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="opowieści">📋 plan ramowy = najważniejsze wydarzenia w punktach</div>
+      <div class="linia pop" data-slowo="szczegółów">🚫 bez szczegółów: wyglądu, kolorów, drobiazgów</div>
+      <div class="linia pop" data-slowo="chronologiczna">🔢 po kolei - kolejność chronologiczna</div>
+      <div class="linia pop" data-slowo="osobowej">🔁 równoważnik zdania: bez czasownika w formie osobowej</div>
+      <div class="linia pop" data-slowo="bezokolicznik">🔍 bezokolicznik (forma nieosobowa) może być w równoważniku</div>
+      <div class="linia pop" data-slowo="znalezienie">✍️ znalazł ➜ znalezienie · wszystkie punkty w tej samej formie</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

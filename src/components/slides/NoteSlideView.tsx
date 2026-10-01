@@ -83,7 +83,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
         <h2 className="text-center text-6xl font-bold text-gray-950">PLAN RAMOWY</h2>
 
         <div className="mt-7 flex items-center justify-center gap-5" aria-label="Najważniejsze wydarzenia ułożone chronologicznie">
-          {['1. Pytanie pani', '2. Śmiech klasy', '3. Obrona kolegi'].map((item, index) => (
+          {['1. Wyjście z psem', '2. Ucieczka psa', '3. Powrót do domu'].map((item, index) => (
             <div key={item} className="contents">
               {index > 0 ? (
                 <svg viewBox="0 0 64 36" className="h-9 w-16 shrink-0 text-sky-700" aria-hidden="true">
@@ -104,7 +104,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             <p className="text-4xl font-bold">RÓWNOWAŻNIKI ZDAŃ</p>
             <p className="mt-2 text-3xl">bez czasownika w formie osobowej</p>
           </div>
-          <p className="text-right text-3xl font-semibold">Pytanie pani.<br />Śmiech klasy.</p>
+          <p className="text-right text-3xl font-semibold">Ucieczka psa.<br />Znalezienie klucza.</p>
         </div>
 
         <div className="mt-auto flex items-center justify-center gap-8 pt-4">

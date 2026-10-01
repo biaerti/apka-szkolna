@@ -344,24 +344,27 @@ const TOPICS: Topic[] = [
     textbookPage: 46,
     notebookNote: [
       '## Plan ramowy',
-      '- najważniejsze wydarzenia w punktach,',
-      '- kolejność chronologiczna,',
-      '- zapis za pomocą równoważników zdań.', '',
-      '**Równoważnik zdania** nie ma czasownika w formie osobowej.',
+      '- **najważniejsze wydarzenia** zapisane w punktach, **bez szczegółów**,',
+      '- wydarzenia **po kolei**, od początku do końca (kolejność chronologiczna),',
+      '- wszystkie punkty w **tej samej formie**, najczęściej **równoważniki zdań**.', '',
+      '## Równoważnik zdania',
+      'Nie ma czasownika w formie osobowej: „Znalezienie klucza”. Może mieć bezokolicznik (formę nieosobową): „Kupić chleb”.',
+      'Zdanie ma czasownik w formie osobowej: „Tomek **znalazł** klucz”.',
     ].join('\n'),
+    // Kolo po filmie (plan-ramowy-film1): nowe, podobne zadania - inne niz w filmie.
     questions: [
-      { text: 'Które pojęcie chciał wyjaśnić Bartek?', answer: 'Bartek chciał wyjaśnić pojęcie „akceptować”.' },
-      { text: 'Jaką definicję podał?', answer: 'Powiedział, że „akceptować” znaczy wypłacać pieniądze z bankomatu.' },
-      { text: 'Dlaczego klasa zaczęła się śmiać z Bartka?', answer: 'Bartek pomylił znaczenie słowa „akceptować” i nieświadomie powiedział coś zabawnego.' },
-      { text: 'Jakie uczucia wywołał u niego ten śmiech?', answer: 'Bartek poczuł się zawstydzony, upokorzony i zraniony.' },
-      { text: 'Jakie było stanowisko pani Temperówki w sprawie zachowania chłopca? Dlaczego?', answer: 'Uznała, że Bartek celowo rozśmiesza klasę i przeszkadza w lekcji, dlatego postanowiła wpisać mu uwagę.' },
-      { text: 'Co chciał osiągnąć Miłosz, gdy rozmawiał z panią Temperówką na temat Bartka?', answer: 'Chciał obronić Bartka, zatrzymać śmiech klasy i przekonać nauczycielkę, że kolega po prostu się pomylił.' },
+      { text: 'Plan: 1. Wyjście do kina. 2. Duży kubek popcornu. 3. Oglądanie filmu. 4. Powrót do domu. Który punkt nie pasuje do planu ramowego? Dlaczego?', answer: '2. Duży kubek popcornu - to szczegół (wygląd), a nie wydarzenie.' },
+      { text: '„Rozpoczęcie meczu” i „Piłkarze wybiegli na boisko”. Które to zdanie, a które równoważnik zdania?', answer: '„Rozpoczęcie meczu” - równoważnik zdania. „Piłkarze wybiegli na boisko” - zdanie, bo ma czasownik w formie osobowej: wybiegli.' },
+      { text: 'Czy „Wrócić do domu przed obiadem” to zdanie? Uzasadnij.', answer: 'Nie, to równoważnik zdania. „Wrócić” to bezokolicznik - forma nieosobowa, nie wiemy, kto ma wrócić.' },
+      { text: 'Zamień na punkty planu: „Janek zgubił plecak”. „Woźna oddała mu zgubę”.', answer: 'Np. Zgubienie plecaka. Oddanie zguby przez woźną.' },
+      { text: 'Popraw plan: 1. Przyjazd na obóz. 2. Harcerze rozbili namioty. 3. Wieczorne ognisko.', answer: 'Punkt 2 jest zdaniem, a reszta to równoważniki. Poprawka: Rozbicie namiotów.' },
     ],
-    makeSlides: (previousSetId) => [
+    // Czytanka -> rozmowa o tekscie -> filmik (plan ramowy + przypomnienie
+    // rownowaznika i formy nieosobowej) -> kolo z nowymi zadaniami -> notatka
+    // -> zadania 5-6 z podrecznika jako zapas.
+    makeSlides: (previousSetId, ownSetId) => [
       slideTopic('Tworzymy plan ramowy'),
       ...recap(previousSetId),
-      // Czytanka z lektorem dziala wprost w prezentacji webowej. Po niej sa
-      // pytania omawiane wspolnie, teoria, zadania z podrecznika i notatka.
       slideCzytanka('historia-o-akceptacji'),
       slideOralTask(
         'PYT. 1-3',
@@ -373,18 +376,19 @@ const TOPICS: Topic[] = [
         'Odpowiadamy wspólnie:\n\n**4.** Jakie uczucia wywołał u Bartka śmiech klasy?\n\n**5.** Jakie było stanowisko pani Temperówki w sprawie zachowania chłopca? Dlaczego?\n\n**6.** Co chciał osiągnąć Miłosz?',
         '4. Bartek poczuł się zawstydzony, upokorzony i zraniony.\n5. Nauczycielka uznała, że celowo przeszkadza i postanowiła wpisać mu uwagę.\n6. Miłosz chciał obronić kolegę i wyjaśnić, że Bartek po prostu się pomylił.',
       ),
-      slideImage('czytanki:plan-ramowy-ramka.webp'),
-      slideDoZadan(),
+      slideVideo('plan-ramowy-film1'),
+      ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5, afterVideoPractice: true }] : []),
+      {
+        ...slideNote('Plan ramowy', '- Najważniejsze wydarzenia w punktach, bez szczegółów.\n- Po kolei - od początku do końca.\n- Wszystkie punkty w tej samej formie, najczęściej równoważniki zdań.\n- Równoważnik nie ma czasownika w formie osobowej.', 4 * 60),
+        diagram: 'planRamowy',
+      },
+      slideDoZadan('Otwórzcie podręczniki na stronie 49'),
       slideTask('Z5', 'Ułóż wydarzenia we właściwej kolejności. Zapisz w zeszycie same litery.\n\n- **A.** Wsparcie Miłosza przez rodziców i wyrażenie dumy z jego postawy.\n- **B.** Wyjaśnienie przez Bartka znaczenia słowa „akceptacja”.\n- **C.** Próba obrony Bartka przed panią Temperówką.\n- **D.** Decyzja o wpisaniu Bartkowi uwagi za rzekome przeszkadzanie.\n- **E.** Śmiech klasy.\n- **F.** Upór pani Temperówki.\n- **G.** Pytanie o znaczenie słowa „akceptować”.', 5 * 60, undefined, '1. G - pytanie o słowo „akceptować”\n2. B - wyjaśnienie Bartka\n3. E - śmiech klasy\n4. D - decyzja o uwadze\n5. C - próba obrony Bartka\n6. F - upór pani Temperówki\n7. A - wsparcie Miłosza przez rodziców'),
       slideOralTask(
         'Z6',
         'Ustnie przekształć punkty planu z zadania 5 w **zdania**.\n\nDo każdego punktu dodaj czasownik w formie osobowej.\n\nWzór: „Wyjaśnienie Bartka.” → „Bartek **wyjaśnił**, co miał na myśli.”',
         'Np. 1. Pani Temperówka zapytała o znaczenie słowa „akceptować”.\n2. Bartek wyjaśnił to pojęcie.\n3. Klasa zaczęła się śmiać.\n4. Nauczycielka postanowiła wpisać Bartkowi uwagę.\n5. Miłosz próbował obronić kolegę.\n6. Pani Temperówka nie zmieniła zdania.\n7. Rodzice wsparli Miłosza.',
       ),
-      {
-        ...slideNote('Plan ramowy', '- Najważniejsze wydarzenia w punktach i po kolei.\n- Zapisujemy je równoważnikami zdań.\n- Równoważnik nie ma czasownika w formie osobowej.', 4 * 60),
-        diagram: 'planRamowy',
-      },
     ],
   },
   {
@@ -476,7 +480,6 @@ function slideRecap(questionSetId: string): Slide { return { id: newId(), kind: 
 /** Notatka zamykajaca lekcje: "Temat: <krotka nazwa>" + kilka linijek do przepisania. */
 function slideVideo(videoId: string): Slide { return { id: newId(), kind: 'video', videoId }; }
 function slideCzytanka(czytankaId: string): Slide { return { id: newId(), kind: 'czytanka', czytankaId }; }
-function slideImage(url: string): Slide { return { id: newId(), kind: 'image', url }; }
 /** Screen z podrecznika (ramka teorii) z numerem strony nad obrazem. */
 function slideTextbookImage(url: string, page: number, title: string): Slide {
   return { id: newId(), kind: 'image', url, page, title, studentAction: 'look' };

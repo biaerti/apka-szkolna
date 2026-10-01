@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest siedem punktów z historii o urodzinach Kuby. Wypisz numery tych, które są najważniejszymi wydarzeniami. Szczegóły pomiń. Start!

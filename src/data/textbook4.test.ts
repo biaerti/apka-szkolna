@@ -127,24 +127,28 @@ describe('buildTextbook4', () => {
     expect(questions.some((q) => q.text.includes('Nie otwierać okna'))).toBe(true);
   });
 
-  it('plan ramowy: czytanka webowa, wspolne pytania, zadania 5-6 i graficzna notatka na koncu', () => {
+  it('plan ramowy: czytanka, rozmowa, filmik, kolo z nowymi zadaniami, notatka i zadania 5-6', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const lesson = bundle.lessons.find((l) => l.title === '15. Tworzymy plan ramowy')!;
 
     expect(lesson.slides.map((slide) => slide.kind)).toEqual([
-      'topic', 'recap', 'czytanka', 'task', 'task', 'image', 'title', 'task', 'task', 'note',
+      'topic', 'recap', 'czytanka', 'task', 'task', 'video', 'recap', 'note', 'title', 'task', 'task',
     ]);
     expect(lesson.slides[2]).toMatchObject({ kind: 'czytanka', czytankaId: 'historia-o-akceptacji' });
     expect(lesson.slides[3]).toMatchObject({ kind: 'task', code: 'PYT. 1-3', studentAction: 'oral' });
     expect(lesson.slides[4]).toMatchObject({ kind: 'task', code: 'PYT. 4-6', studentAction: 'oral' });
-    expect(lesson.slides[7]).toMatchObject({ kind: 'task', code: 'Z5', studentAction: 'write-answer' });
-    expect(lesson.slides[8]).toMatchObject({ kind: 'task', code: 'Z6', studentAction: 'oral' });
-    expect(lesson.slides[9]).toMatchObject({ kind: 'note', diagram: 'planRamowy' });
+    expect(lesson.slides[5]).toMatchObject({ kind: 'video', videoId: 'plan-ramowy-film1' });
+    expect(filmikById('plan-ramowy-film1')).toBeTruthy();
+    expect(lesson.slides[6]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId, questionCount: 5 });
+    expect(lesson.slides[7]).toMatchObject({ kind: 'note', diagram: 'planRamowy' });
+    expect(lesson.slides[9]).toMatchObject({ kind: 'task', code: 'Z5', studentAction: 'write-answer' });
+    expect(lesson.slides[10]).toMatchObject({ kind: 'task', code: 'Z6', studentAction: 'oral' });
 
+    // Notatka tylko z wiedzy - bez tresci czytanki.
+    expect(lesson.notebookNote).not.toMatch(/Bartek|Temperówk|Miłosz/);
     const questions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
-    expect(questions).toHaveLength(6);
-    expect(questions[0].text).toContain('pojęcie');
-    expect(questions[5].text).toContain('Miłosz');
+    expect(questions).toHaveLength(5);
+    expect(questions.some((q) => q.text.includes('Wrócić do domu'))).toBe(true);
   });
 
   it('rozdzial II: film i kolo w kazdej lekcji, notatka, potem screeny zadan po kolei', () => {

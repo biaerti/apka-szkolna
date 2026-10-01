@@ -22,6 +22,7 @@ export const FILMIKI: Filmik[] = [
   // Wszystko w jednym: 4 zadania bez sprawdzania - odpowiedzi rozlicza kolo fortuny po filmie.
   { id: 'czasownik-film3', lekcja: '11-13', title: 'Czasownik w całości - 4 zadania + koło fortuny' },
   { id: 'wypowiedzenia-film1', lekcja: '14', title: 'Zdanie i równoważnik zdania - 4 zadania' },
+  { id: 'plan-ramowy-film1', lekcja: '15', title: 'Plan ramowy - najważniejsze wydarzenia po kolei (4 zadania)' },
   { id: 'opowiadanie-film1', lekcja: 'V.3', title: 'Opowiadanie - co to jest i jak je napisać' },
   // Przypomnienie z s. 23 + miekkie/twarde, syczace/szumiace/ciszace, dzwieczne - 5 zadan pod kolo fortuny.
   { id: 'gloski-film1', lekcja: 'V.4', title: 'Głoski - miękkie, syczące, dźwięczne (5 zadań)' },
