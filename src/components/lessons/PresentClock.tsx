@@ -5,13 +5,14 @@
 // sie klikiem w polowy ekranu). Ostatnie 5 min bursztynowe, ostatnia minuta
 // czerwona - nauczyciel widzi katem oka, ze czas konczyc. Pod spodem
 // przypomnienie o dyzurze (src/data/dyzury.ts): "po lekcji: dyżur" w trakcie
-// lekcji, "dyżur teraz" na przerwie.
+// lekcji, "dyżur teraz" na przerwie. Do tego sala z planu: "po lekcji: sala 35",
+// gdy nastepna lekcja jest gdzie indziej, a na przerwie sala najblizszej lekcji.
 
 import clsx from 'clsx';
 import { dyzuryNa } from '../../data/dyzury';
 import { useStore } from '../../data/store';
 import { dutyStatus } from '../../lib/dyzury';
-import { formatHm, formatRemaining, periodStatus } from '../../lib/timetable';
+import { formatHm, formatRemaining, nextRoom, periodStatus } from '../../lib/timetable';
 import { useNow } from '../timetable/useNow';
 
 const WARN_SEC = 5 * 60;
@@ -29,9 +30,11 @@ export interface PresentClockProps {
 
 export function PresentClock({ position = 'top-right' }: PresentClockProps) {
   const periods = useStore((s) => s.periods);
+  const timetable = useStore((s) => s.timetable);
   const now = useNow(1000);
   const status = periodStatus(periods, now);
   const duty = dutyStatus(dyzuryNa(now), periods, now);
+  const room = nextRoom(timetable, periods, now);
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   let detail = '';
@@ -57,6 +60,11 @@ export function PresentClock({ position = 'top-right' }: PresentClockProps) {
       {duty.kind !== 'none' && (
         <div className="mt-0.5 text-sm font-semibold text-amber-300">
           {duty.kind === 'after-lesson' ? 'po lekcji: dyżur' : 'dyżur teraz'} · {duty.duty.place}
+        </div>
+      )}
+      {room && (
+        <div className={clsx('mt-0.5 text-sm font-semibold', room.kind === 'after-lesson' ? 'text-sky-300' : 'text-gray-300')}>
+          {room.kind === 'after-lesson' ? 'po lekcji: sala' : 'następna lekcja: sala'} {room.room}
         </div>
       )}
     </div>

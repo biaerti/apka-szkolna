@@ -162,3 +162,24 @@ export function currentOrNextEntry(
     return start !== undefined && start > nowMin;
   });
 }
+
+/**
+ * Do ktorej sali isc - dla zegara prezentacji. W trakcie lekcji: sala
+ * nastepnej dzisiejszej lekcji, ale tylko gdy jest inna niz obecna
+ * ('after-lesson'). Poza lekcja (przerwa, okienko, przed lekcjami): sala
+ * najblizszej lekcji ('next').
+ */
+export function nextRoom(
+  timetable: TimetableEntry[],
+  periods: LessonPeriod[],
+  now: Date,
+): { kind: 'after-lesson' | 'next'; room: string } | undefined {
+  const current = currentEntry(timetable, periods, now);
+  if (current) {
+    const next = entriesForDay(timetable, current.weekday).find((e) => e.period > current.period);
+    if (next?.room && next.room !== current.room) return { kind: 'after-lesson', room: next.room };
+    return undefined;
+  }
+  const next = currentOrNextEntry(timetable, periods, now);
+  return next?.room ? { kind: 'next', room: next.room } : undefined;
+}

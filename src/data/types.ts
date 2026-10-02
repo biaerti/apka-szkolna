@@ -468,6 +468,10 @@ export interface Settings {
    * Domyslnie 100.
    */
   slideFontPercent: number;
+  /** Telefonowy widok Sala: ostrzezenia tylko z dzisiaj (domyslnie false). */
+  salaWarningsResetDaily?: boolean;
+  /** Telefonowy widok Sala: porzadek listy uczniow (domyslnie lastName). */
+  salaStudentSort?: 'lastName' | 'firstName';
   /**
    * Roczne spisy lektur ustalone przez nauczyciela. Pole jest opcjonalne,
    * zeby starsze backupy i wiersze ustawien dzialaly bez migracji danych.

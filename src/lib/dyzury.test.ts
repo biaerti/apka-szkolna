@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { dyzuryNa } from '../data/dyzury';
 import { DEFAULT_PERIODS } from '../data/timetableSeed';
 import { dutyStatus } from './dyzury';
+import { nextRoom } from './timetable';
+import type { TimetableEntry } from '../data/types';
 
 // 2026-10-01 to czwartek, 2026-10-02 piatek.
 const at = (day: number, h: number, m: number) => new Date(2026, 9, day, h, m);
@@ -31,5 +33,26 @@ describe('grafik 1.2 od 2026-10-05', () => {
   it('w czwartek 8.10 po 1. lekcji juz bez dyzuru, po 2. pietro', () => {
     expect(dyzuryNa(at(8, 8, 0)).some((d) => d.weekday === 4 && d.afterPeriod === 1)).toBe(false);
     expect(dyzuryNa(at(8, 8, 0)).find((d) => d.weekday === 4 && d.afterPeriod === 2)?.place).toBe('Pawilon 3, piętro');
+  });
+});
+
+describe('nextRoom', () => {
+  // Wtorek 2026-10-06: 1-2 sala 31, 4 sala 35, 5 sala 30.
+  const tt: TimetableEntry[] = [
+    { id: 'a', weekday: 2, period: 1, classId: 'k', room: '31' },
+    { id: 'b', weekday: 2, period: 2, classId: 'k', room: '31' },
+    { id: 'c', weekday: 2, period: 4, classId: 'k', room: '35' },
+    { id: 'd', weekday: 2, period: 5, classId: 'k', room: '30' },
+  ];
+  it('na lekcji w tej samej sali co nastepna - nic', () => {
+    expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 8, 30))).toBeUndefined();
+  });
+  it('na lekcji przed zmiana sali - zapowiedz', () => {
+    expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 9, 0))).toEqual({ kind: 'after-lesson', room: '35' });
+    expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 11, 0))).toEqual({ kind: 'after-lesson', room: '30' });
+  });
+  it('w okienku i na przerwie - sala najblizszej lekcji', () => {
+    expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 10, 0))).toEqual({ kind: 'next', room: '35' });
+    expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 11, 22))).toEqual({ kind: 'next', room: '30' });
   });
 });
