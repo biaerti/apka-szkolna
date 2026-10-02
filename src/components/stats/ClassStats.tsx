@@ -1,71 +1,61 @@
-// Bilans miesiaca dla jednej klasy: wybor miesiaca, tabela uczniow i eksport CSV.
-// Siedzi w widoku klasy (/klasy/:id), bo nauczyciel chcial miec statystyki tam,
-// gdzie uczniowie - osobnej zakladki "Statystyki" juz nie ma.
+// Bilans klasy (/klasy/:id, zakladka "Bilans"): suma plusow, kropek, plomb i uwag
+// od poczatku, bez podzialu na miesiace. Kto ma komplet plusow, ma podswietlony
+// przycisk "Rozlicz" - zapisuje piatke i zabiera 3 plusy (src/lib/stats.ts).
+// Lista zdarzen ucznia (klik w nazwisko) ma daty i filtr po miesiacach.
 
 import { useMemo, useState } from 'react';
 import { useStore } from '../../data/store';
 import { Select } from '../ui/Select';
 import { Button } from '../ui/Button';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
-import { aggregateMonth, findLatestEventId, toCsv, type EditableResult } from '../../lib/stats';
+import { classBalance, findLatestEventId, toCsv, type EditableResult } from '../../lib/stats';
 import { monthKey } from '../../lib/week';
 import { StatsTable, type SortKey } from './StatsTable';
-import type { Student } from '../../data/types';
+import type { RecapEvent, Student } from '../../data/types';
 
 /** Etykieta miesiaca po polsku, np. "wrzesień 2026" z klucza "2026-09". */
 function monthLabel(key: string): string {
   const [year, month] = key.split('-').map(Number);
   if (!year || !month) return key;
-  const name = new Date(year, month - 1, 1).toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' });
-  return name;
+  return new Date(year, month - 1, 1).toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' });
 }
 
 export function ClassStats({ classId, students }: { classId: string; students: Student[] }) {
   const recapEvents = useStore((s) => s.recapEvents);
+  const settings = useStore((s) => s.settings);
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
-  const resetBalance = useStore((s) => s.resetBalance);
-  const settings = useStore((s) => s.settings);
 
   const studentIds = useMemo(() => new Set(students.map((st) => st.id)), [students]);
 
-  // Miesiace, dla ktorych cokolwiek zapisano, plus zawsze biezacy.
+  // Miesiace, w ktorych cos zapisano - tylko do filtra listy zdarzen ucznia.
   const months = useMemo(() => {
     const set = new Set<string>();
-    set.add(monthKey(new Date()));
-    for (const e of recapEvents) {
-      if (studentIds.has(e.studentId)) set.add(monthKey(new Date(e.at)));
-    }
+    for (const e of recapEvents) if (studentIds.has(e.studentId)) set.add(monthKey(new Date(e.at)));
     return [...set].sort().reverse();
   }, [recapEvents, studentIds]);
-
-  const [month, setMonth] = useState(months[0] ?? monthKey(new Date()));
-  const activeMonth = months.includes(month) ? month : months[0] ?? monthKey(new Date());
+  const [eventMonth, setEventMonth] = useState<string>('');
 
   const [sortKey, setSortKey] = useState<SortKey>('number');
   const [sortDir, setSortDir] = useState<1 | -1>(1);
-  const [resetClassOpen, setResetClassOpen] = useState(false);
-
-  const eventsToResetCount = useMemo(
-    () => recapEvents.filter((e) => e.classId === classId && monthKey(new Date(e.at)) === activeMonth).length,
-    [recapEvents, classId, activeMonth],
-  );
+  // Ostatnie "Rozlicz" w tej sesji - do szybkiego cofniecia pomylki.
+  const [lastSettled, setLastSettled] = useState<{ eventId: string; studentId: string } | null>(null);
 
   const rows = useMemo(() => {
-    const base = aggregateMonth(recapEvents, students, activeMonth, settings);
+    const base = classBalance(recapEvents, students, settings);
     return [...base].sort((a, b) => {
       const av = a[sortKey];
       const bv = b[sortKey];
       if (typeof av === 'string' && typeof bv === 'string') return av.localeCompare(bv, 'pl') * sortDir;
       return ((av as number) - (bv as number)) * sortDir;
     });
-  }, [recapEvents, students, activeMonth, settings, sortKey, sortDir]);
+  }, [recapEvents, students, settings, sortKey, sortDir]);
 
   function toggleSort(key: SortKey) {
     if (sortKey === key) setSortDir((d) => (d === 1 ? -1 : 1));
     else {
       setSortKey(key);
-      setSortDir(1);
+      // Liczby od najwiekszej - "kto ma najwiecej plusow" to najczestsze pytanie.
+      setSortDir(key === 'number' || key === 'lastName' ? 1 : -1);
     }
   }
 
@@ -74,7 +64,7 @@ export function ClassStats({ classId, students }: { classId: string; students: S
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `bilans-${activeMonth}.csv`;
+    a.download = `bilans-${monthKey(new Date())}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -83,53 +73,43 @@ export function ClassStats({ classId, students }: { classId: string; students: S
 
   const eventsForStudent = (studentId: string) =>
     recapEvents
-      .filter((e) => e.studentId === studentId && monthKey(new Date(e.at)) === activeMonth)
+      .filter((e) => e.studentId === studentId && (!eventMonth || monthKey(new Date(e.at)) === eventMonth))
       .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
 
-  /**
-   * Reczna korekta bilansu (kontrolki +/- w tabeli): "+" dodaje zdarzenie bez
-   * questionSetId (to reczna korekta nauczyciela, nie odpowiedz na pytanie), "-"
-   * kasuje najnowsze zdarzenie tego typu z BIEZACO WYBRANEGO miesiaca - dziala
-   * wiec tylko dopoki nauczyciel przeglada activeMonth, tak jak reszta bilansu.
-   */
+  /** "+" dodaje zdarzenie (reczna korekta), "-" kasuje najnowsze tego typu (pasy: z tego miesiaca). */
   function handleAdjust(studentId: string, result: EditableResult, delta: 1 | -1) {
     if (delta === 1) {
       addRecapEvent({ studentId, classId, result });
       return;
     }
-    const id = findLatestEventId(recapEvents, studentId, result, activeMonth);
+    const types: RecapEvent['result'][] = result === 'plomba' ? ['plomba', 'hint_plomba'] : [result];
+    const id = findLatestEventId(recapEvents, studentId, types, result === 'pass' ? monthKey(new Date()) : undefined);
     if (id) removeRecapEvent(id);
+  }
+
+  function handleSettle(studentId: string, result: 'piatka' | 'jedynka') {
+    const event = addRecapEvent({ studentId, classId, result });
+    setLastSettled({ eventId: event.id, studentId });
+  }
+
+  function handleUndoSettle() {
+    if (!lastSettled) return;
+    removeRecapEvent(lastSettled.eventId);
+    setLastSettled(null);
   }
 
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Miesiąc</label>
-          <Select className="w-56" value={activeMonth} onChange={(e) => setMonth(e.target.value)}>
-            {months.map((m) => (
-              <option key={m} value={m}>
-                {monthLabel(m)}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="secondary" onClick={handleExportCsv}>
-            Eksport CSV
-          </Button>
-          <Button variant="danger" onClick={() => setResetClassOpen(true)} disabled={eventsToResetCount === 0}>
-            Wyzeruj bilans
-          </Button>
-        </div>
+        <p className="max-w-3xl text-sm text-gray-500">
+          Plusy i plomby sumują się od początku roku. Kto ma {settings.plusesForFive} plusy, ma przycisk „Rozlicz” -
+          kliknięcie zabiera {settings.plusesForFive} plusy, a Ty wpisujesz piątkę do dziennika. Kliknij nazwisko, żeby
+          zobaczyć listę z datami.
+        </p>
+        <Button variant="secondary" onClick={handleExportCsv}>
+          Eksport CSV
+        </Button>
       </div>
-
-      <p className="text-sm text-gray-500">
-        Pasy, uwagi i bilans liczą się pełnymi miesiącami i zerują 1. dnia miesiąca. "+" dodaje zdarzenie, "-" kasuje
-        najnowsze tego typu w wybranym miesiącu. Kliknij nazwisko, żeby zobaczyć pojedyncze zdarzenia.
-        „Piątki” to piątki wystawione w tym miesiącu, a „Plusy razem” to plusy, które jeszcze nie zamieniły się w
-        piątkę - razem z tymi z poprzednich miesięcy.
-      </p>
 
       <StatsTable
         rows={rows}
@@ -138,21 +118,23 @@ export function ClassStats({ classId, students }: { classId: string; students: S
         onToggleSort={toggleSort}
         eventsForStudent={eventsForStudent}
         onRemoveEvent={removeRecapEvent}
-        monthLabel={monthLabel(activeMonth)}
-        onResetStudent={(studentId) => resetBalance(classId, activeMonth, studentId)}
         onAdjust={handleAdjust}
-      />
-
-      <ConfirmDialog
-        open={resetClassOpen}
-        title="Wyzeruj bilans klasy"
-        message={`Usunięte zostaną wszystkie plusy, kropki, plomby, pasy i uwagi całej klasy zapisane w ${monthLabel(activeMonth)} (${eventsToResetCount} ${eventsToResetCount === 1 ? 'zdarzenie' : 'zdarzeń'}). Poprzednie miesiące zostają bez zmian. Tej operacji nie da się cofnąć.`}
-        confirmLabel="Wyzeruj"
-        onCancel={() => setResetClassOpen(false)}
-        onConfirm={() => {
-          resetBalance(classId, activeMonth);
-          setResetClassOpen(false);
-        }}
+        onSettle={handleSettle}
+        undoSettleFor={lastSettled?.studentId ?? null}
+        onUndoSettle={handleUndoSettle}
+        eventFilter={
+          <label className="flex items-center gap-2 text-xs text-gray-500">
+            Pokaż:
+            <Select className="h-7 w-44 py-0 text-xs" value={eventMonth} onChange={(e) => setEventMonth(e.target.value)}>
+              <option value="">wszystkie miesiące</option>
+              {months.map((m) => (
+                <option key={m} value={m}>
+                  {monthLabel(m)}
+                </option>
+              ))}
+            </Select>
+          </label>
+        }
       />
     </div>
   );

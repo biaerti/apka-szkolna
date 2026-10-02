@@ -1,9 +1,9 @@
-// Agregacja statystyk miesiecznych per uczen, eksport do CSV oraz zestawienie
-// "do rozliczenia" (nierozliczone plomby -> jedynka, plusy -> piatka; rozliczamy
-// pelnymi miesiacami kalendarzowymi, patrz src/data/zasady.ts).
+// Bilans klasy bez podzialu na miesiace (Bartek 2026-10-02: "najprosciej jak
+// sie da"): plusy i plomby sumuja sie od poczatku, a przycisk "Rozlicz" zapisuje
+// piatke (zabiera 3 plusy) albo jedynke (zabiera 3 plomby) - nauczyciel wpisuje
+// wtedy ocene do dziennika. Do tego eksport CSV.
 
 import type { ID, RecapEvent, Settings, Student } from '../data/types';
-import { monthBalance } from './recap';
 import { monthKey as toMonthKey } from './week';
 
 export interface StudentStatsRow {
@@ -11,36 +11,32 @@ export interface StudentStatsRow {
   firstName: string;
   lastName: string;
   number: number;
+  /** Plusy jeszcze nie zamienione na piatke. */
   plus: number;
   kropka: number;
+  /** Plomby (tez za podpowiadanie) jeszcze nie zamienione na jedynke. */
   plomba: number;
+  /** Pasy w biezacym miesiacu - limit pasow jest miesieczny. */
   pass: number;
-  hint: number;
   uwaga: number;
-  /** plomba + hint - laczna liczba plomb w miesiacu (do wyliczenia bilansu). */
-  plombyTotal: number;
-  bilans: number;
-  /** Piatki wystawione (zapisane) w tym miesiacu. */
-  piatki: number;
-  /** Plusy jeszcze nie zamienione na piatke na koniec miesiaca - z poprzednich miesiecy tez. */
-  plusyRazem: number;
+  /** Ile piatek / jedynek mozna teraz rozliczyc. */
+  doPiatki: number;
+  doJedynki: number;
 }
 
 /**
  * Nierozliczone plusy i plomby ucznia, liczone po kolei w czasie: plus dodaje 1,
  * piatka zabiera `perFive` plusow (ale nie schodzi ponizej zera - piatka
  * wystawiona "na wyrost" nie zjada przyszlych plusow), tak samo plomby i jedynka.
- * `untilMonth` ("RRRR-MM") = licz tylko do konca tego miesiaca.
  */
 export function unsettledBalance(
   events: RecapEvent[],
   studentId: string,
   perFive: number,
   perOne: number,
-  untilMonth?: string,
 ): { plusy: number; plomby: number } {
   const own = events
-    .filter((e) => e.studentId === studentId && (!untilMonth || toMonthKey(new Date(e.at)) <= untilMonth))
+    .filter((e) => e.studentId === studentId)
     .sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
   let plusy = 0;
   let plomby = 0;
@@ -53,61 +49,56 @@ export function unsettledBalance(
   return { plusy, plomby };
 }
 
-/** Agreguje zdarzenia recapu per uczen danej klasy w danym miesiacu ("RRRR-MM"). */
-export function aggregateMonth(
+/** Bilans klasy: wiersz na ucznia, posortowany po numerze z dziennika. */
+export function classBalance(
   events: RecapEvent[],
   students: Student[],
-  monthKey: string,
-  thresholds: Pick<Settings, 'plusesForFive' | 'plombyForOne'> = { plusesForFive: 3, plombyForOne: 3 },
+  settings: Pick<Settings, 'plusesForFive' | 'plombyForOne'>,
+  now: Date = new Date(),
 ): StudentStatsRow[] {
-  const perFive = Math.max(1, thresholds.plusesForFive);
-  const perOne = Math.max(1, thresholds.plombyForOne);
+  const perFive = Math.max(1, settings.plusesForFive);
+  const perOne = Math.max(1, settings.plombyForOne);
+  const thisMonth = toMonthKey(now);
   return students
     .map((student) => {
-      const piatki = events.filter(
-        (e) => e.studentId === student.id && e.result === 'piatka' && toMonthKey(new Date(e.at)) === monthKey,
-      ).length;
-      const { plus, kropka, plomba, pass, hint, uwaga, plombyTotal } = monthBalance(events, student.id, monthKey);
+      const own = events.filter((e) => e.studentId === student.id);
+      const count = (result: RecapEvent['result']) => own.filter((e) => e.result === result).length;
+      const { plusy, plomby } = unsettledBalance(own, student.id, perFive, perOne);
       return {
         studentId: student.id,
         firstName: student.firstName,
         lastName: student.lastName,
         number: student.number,
-        plus,
-        kropka,
-        plomba,
-        pass,
-        hint,
-        uwaga,
-        plombyTotal,
-        bilans: plus - plombyTotal,
-        piatki,
-        plusyRazem: unsettledBalance(events, student.id, perFive, perOne, monthKey).plusy,
+        plus: plusy,
+        kropka: count('kropka'),
+        plomba: plomby,
+        pass: own.filter((e) => e.result === 'pass' && toMonthKey(new Date(e.at)) === thisMonth).length,
+        uwaga: count('uwaga'),
+        doPiatki: Math.floor(plusy / perFive),
+        doJedynki: Math.floor(plomby / perOne),
       };
     })
     .sort((a, b) => a.number - b.number);
 }
 
 /** Typy zdarzen, ktore nauczyciel moze recznie skorygowac w bilansie (przyciski +/-). */
-export type EditableResult = 'plus' | 'kropka' | 'plomba' | 'hint_plomba' | 'pass' | 'uwaga';
+export type EditableResult = 'plus' | 'kropka' | 'plomba' | 'pass' | 'uwaga';
 
 /**
- * Id NAJNOWSZEGO zdarzenia danego typu ucznia w danym miesiacu ("RRRR-MM") - albo
- * undefined, gdy takiego zdarzenia w tym miesiacu nie ma. Uzywane do przycisku "-"
- * w recznej edycji bilansu (StatsTable): cofamy zawsze ostatnio dodane zdarzenie,
- * a nie losowe/najstarsze, zeby korekta odpowiadala temu, co nauczyciel widzial
- * na ekranie przed chwila.
+ * Id NAJNOWSZEGO zdarzenia ucznia sposrod `results` - albo undefined. Uzywane
+ * do przycisku "-": cofamy zawsze ostatnio dodane zdarzenie. `monthKey`
+ * ("RRRR-MM") zaweza do miesiaca (pasy liczone sa miesiecznie).
  */
 export function findLatestEventId(
   events: RecapEvent[],
   studentId: string,
-  result: EditableResult,
-  monthKey: string,
+  results: RecapEvent['result'][],
+  monthKey?: string,
 ): ID | undefined {
   let latest: RecapEvent | undefined;
   for (const e of events) {
-    if (e.studentId !== studentId || e.result !== result) continue;
-    if (toMonthKey(new Date(e.at)) !== monthKey) continue;
+    if (e.studentId !== studentId || !results.includes(e.result)) continue;
+    if (monthKey && toMonthKey(new Date(e.at)) !== monthKey) continue;
     if (!latest || new Date(e.at).getTime() > new Date(latest.at).getTime()) latest = e;
   }
   return latest?.id;
@@ -121,61 +112,16 @@ function csvEscape(value: string | number): string {
   return str;
 }
 
-/** Zamienia wiersze statystyk na tekst CSV (nagłowek + dane, separator przecinek). */
+/** Zamienia wiersze bilansu na tekst CSV (nagłowek + dane, separator przecinek). */
 export function toCsv(rows: StudentStatsRow[]): string {
-  const header = ['Nr', 'Nazwisko', 'Imię', 'Plusy', 'Kropki', 'Plomby', 'Podpowiedzi', 'Pasy', 'Uwagi', 'Bilans'];
+  const header = ['Nr', 'Nazwisko', 'Imię', 'Plusy', 'Kropki', 'Plomby', 'Pasy (ten miesiąc)', 'Uwagi'];
   const lines = [header.join(',')];
   for (const row of rows) {
     lines.push(
-      [row.number, row.lastName, row.firstName, row.plus, row.kropka, row.plomba, row.hint, row.pass, row.uwaga, row.bilans]
+      [row.number, row.lastName, row.firstName, row.plus, row.kropka, row.plomba, row.pass, row.uwaga]
         .map(csvEscape)
         .join(','),
     );
   }
   return lines.join('\n');
-}
-
-export interface SettlementRow {
-  student: Student;
-  /** Plusy zebrane od poczatku, pomniejszone o te zamienione juz na piatki. */
-  plusy: number;
-  /** Ile piatek wychodzi z `plusy` teraz. */
-  piatki: number;
-  /** Reszta plusow po wystawieniu piatek - przechodzi dalej. */
-  plusyReszta: number;
-  /** To samo dla plomb ("minusow") i jedynek. */
-  plomby: number;
-  jedynki: number;
-  plombyReszta: number;
-}
-
-/**
- * Rozliczenie "na dzis": liczy WSZYSTKIE plusy i plomby ucznia, bez podzialu na
- * miesiace - rozliczenie wypada wtedy, kiedy nauczyciel je zapisze (np. 2.
- * pazdziernika, z plusami z tego dnia). Kazda zapisana piatka zjada
- * `plusesForFive` plusow, kazda jedynka `plombyForOne` plomb, reszta przechodzi
- * dalej. Zdarzenia `piatka`/`jedynka` zapisuje przycisk w Settlements.tsx.
- */
-export function settlementRows(events: RecapEvent[], students: Student[], settings: Settings): SettlementRow[] {
-  const perFive = Math.max(1, settings.plusesForFive);
-  const perOne = Math.max(1, settings.plombyForOne);
-  return students
-    .map((student) => {
-      const { plusy, plomby } = unsettledBalance(events, student.id, perFive, perOne);
-      return {
-        student,
-        plusy,
-        piatki: Math.floor(plusy / perFive),
-        plusyReszta: plusy % perFive,
-        plomby,
-        jedynki: Math.floor(plomby / perOne),
-        plombyReszta: plomby % perOne,
-      };
-    })
-    .sort((a, b) => a.student.number - b.student.number);
-}
-
-/** Notka zdarzen zapisanych jednym "Zapisz rozliczenie", np. "Rozliczenie 2.10.2026". */
-export function settlementNote(date: Date): string {
-  return `Rozliczenie ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 }

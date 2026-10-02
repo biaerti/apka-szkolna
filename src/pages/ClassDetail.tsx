@@ -9,22 +9,18 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { StudentFormModal, type StudentFormValue } from '../components/students/StudentFormModal';
 import { ImportStudentsModal } from '../components/students/ImportStudentsModal';
 import { ClassStats } from '../components/stats/ClassStats';
-import { Settlements } from '../components/stats/Settlements';
 import type { Student } from '../data/types';
 
 /**
- * Widok klasy laczy trzy rzeczy, ktore wczesniej byly rozrzucone po aplikacji:
- * liste uczniow, ich bilans miesiaca (dawna zakladka "Statystyki") i zakladke
- * "Do rozliczenia" - uczniow z kompletem plomb (jedynka) albo plusow (piatka),
- * czekajacych na ocene na koniec miesiaca (patrz src/data/zasady.ts). Nauczyciel
- * chcial jedno miejsce - klasa - zamiast dublujacych sie ekranow.
+ * Widok klasy: lista uczniow i ich bilans (suma plusow od poczatku, przycisk
+ * "Rozlicz" przy komplecie - src/components/stats/ClassStats.tsx). Dawna
+ * zakladka "Do rozliczenia" i podzial na miesiace usuniete (Bartek 2026-10-02).
  */
-type ClassTab = 'uczniowie' | 'bilans' | 'rozliczenia';
+type ClassTab = 'uczniowie' | 'bilans';
 
 const TAB_LABELS: Record<ClassTab, string> = {
   uczniowie: 'Uczniowie',
-  bilans: 'Bilans miesiąca',
-  rozliczenia: 'Do rozliczenia',
+  bilans: 'Bilans',
 };
 
 export function ClassDetail() {
@@ -146,7 +142,6 @@ export function ClassDetail() {
       </div>
 
       {tab === 'bilans' && id && <ClassStats classId={id} students={classStudents} />}
-      {tab === 'rozliczenia' && id && <Settlements classId={id} />}
 
       {tab === 'uczniowie' && (
       <>

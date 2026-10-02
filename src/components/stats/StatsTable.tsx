@@ -1,53 +1,39 @@
-// Tabela statystyk miesiecznych ucznia (sortowanie, rozwijanie zdarzen z mozliwoscia
-// usuniecia). Wydzielona z Statistics.tsx, zeby utrzymac limit dlugosci komponentu.
+// Tabela bilansu klasy: sumy od poczatku, przyciski +/- (reczna korekta),
+// "Rozlicz" przy komplecie plusow/plomb i rozwijana lista zdarzen z datami.
 
-import { Fragment, useState } from 'react';
+import { Fragment, useState, type ReactNode } from 'react';
 import { EmptyState } from '../ui/EmptyState';
 import { Table, THead, TBody, TR, TH, TD } from '../ui/Table';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
-import { Menu } from '../ui/Menu';
-import { MoreIcon } from '../ui/icons';
 import type { RecapEvent } from '../../data/types';
 import type { EditableResult, StudentStatsRow } from '../../lib/stats';
 
-export type SortKey = keyof Pick<
-  StudentStatsRow,
-  'number' | 'lastName' | 'plus' | 'kropka' | 'plomba' | 'hint' | 'pass' | 'uwaga' | 'bilans' | 'piatki' | 'plusyRazem'
->;
+export type SortKey = keyof Pick<StudentStatsRow, 'number' | 'lastName' | 'plus' | 'kropka' | 'plomba' | 'pass' | 'uwaga'>;
 
 const RESULT_LABEL: Record<string, string> = {
   plus: 'Plus',
   kropka: 'Kropka',
   plomba: 'Plomba',
   pass: 'Pas',
-  hint_plomba: 'Podpowiedź (plomba)',
+  hint_plomba: 'Plomba (podpowiadanie)',
   uwaga: 'Uwaga',
+  ostrzezenie: 'Ostrzeżenie',
   // 'rozliczenie' juz nie jest tworzone przez UI (stary system zadan naprawczych),
   // ale historyczne zdarzenia tego typu wciaz siedza w Supabase i musza sie wyswietlic.
   rozliczenie: 'Rozliczenie zadań',
-  jedynka: 'Jedynka',
-  piatka: 'Piątka',
+  jedynka: 'Jedynka (rozliczone plomby)',
+  piatka: 'Piątka (rozliczone plusy)',
 };
 
-/**
- * Reczna edycja bilansu - kontrolki +/- sa widoczne ZAWSZE (decyzja nauczyciela:
- * "cyk 1 dodaje, 1 odejmuje", bez przelacznika trybu). "+" dodaje zdarzenie
- * danego typu (bez questionSetId - to reczna korekta, nie odpowiedz na pytanie),
- * "-" kasuje NAJNOWSZE zdarzenie tego typu w biezacym miesiacu (findLatestEventId
- * w src/lib/stats.ts). Edytowalne wszystkie kolumny zdarzen, z podpowiedziami
- * wlacznie; tylko bilans (wyliczany) zostaje do odczytu.
- */
+const RESULT_CLASS: Record<string, string> = {
+  plus: 'text-green-700',
+  piatka: 'font-semibold text-green-800',
+  plomba: 'text-red-700',
+  hint_plomba: 'text-red-700',
+  jedynka: 'font-semibold text-red-800',
+};
 
-/** Mala para przyciskow +/- przy liczbie - tryb recznej edycji bilansu. */
-function EditCell({
-  value,
-  onAdd,
-  onRemove,
-}: {
-  value: number;
-  onAdd: () => void;
-  onRemove: () => void;
-}) {
+/** Mala para przyciskow +/- przy liczbie. */
+function EditCell({ value, onAdd, onRemove, strong }: { value: number; onAdd: () => void; onRemove: () => void; strong?: boolean }) {
   return (
     <div className="flex items-center justify-center gap-1">
       <button
@@ -59,7 +45,7 @@ function EditCell({
       >
         −
       </button>
-      <span className="w-4 text-center tabular-nums">{value}</span>
+      <span className={`w-6 text-center tabular-nums ${strong ? 'text-base font-bold' : ''}`}>{value}</span>
       <button
         type="button"
         onClick={onAdd}
@@ -79,9 +65,11 @@ export function StatsTable({
   onToggleSort,
   eventsForStudent,
   onRemoveEvent,
-  monthLabel,
-  onResetStudent,
   onAdjust,
+  onSettle,
+  undoSettleFor,
+  onUndoSettle,
+  eventFilter,
 }: {
   rows: StudentStatsRow[];
   sortKey: SortKey;
@@ -89,22 +77,20 @@ export function StatsTable({
   onToggleSort: (key: SortKey) => void;
   eventsForStudent: (studentId: string) => RecapEvent[];
   onRemoveEvent: (id: string) => void;
-  /** Etykieta biezacego miesiaca (np. "wrzesień 2026") do tresci potwierdzenia resetu. */
-  monthLabel: string;
-  /** "Wyzeruj bilans ucznia" - kasuje zdarzenia tego ucznia z biezacego miesiaca. */
-  onResetStudent: (studentId: string) => void;
-  /** "+" dodaje zdarzenie danego typu uczniowi, "-" kasuje najnowsze zdarzenie tego typu w miesiacu. */
   onAdjust: (studentId: string, result: EditableResult, delta: 1 | -1) => void;
+  onSettle: (studentId: string, result: 'piatka' | 'jedynka') => void;
+  /** Uczen, przy ktorym pokazac "cofnij" po ostatnim rozliczeniu. */
+  undoSettleFor: string | null;
+  onUndoSettle: () => void;
+  /** Filtr miesiaca nad lista zdarzen ucznia. */
+  eventFilter: ReactNode;
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [pendingReset, setPendingReset] = useState<StudentStatsRow | null>(null);
 
   if (rows.length === 0) {
     return <EmptyState title="Brak uczniów" description="Ta klasa nie ma jeszcze uczniów." />;
   }
 
-  // Aktywna kolumna sortowania dostaje strzalke kierunku - inaczej nauczyciel
-  // nie widzi, po czym tabela jest posortowana.
   function headerButton(key: SortKey, label: string) {
     const active = sortKey === key;
     return (
@@ -118,147 +104,115 @@ export function StatsTable({
     );
   }
 
+  const toggle = (id: string) => setExpandedId((cur) => (cur === id ? null : id));
+
   return (
-    <>
     <Table>
       <THead>
         <TR>
           <TH>{headerButton('number', 'Nr')}</TH>
           <TH>{headerButton('lastName', 'Uczeń')}</TH>
-          <TH>{headerButton('plus', 'Plusy')}</TH>
-          <TH>{headerButton('kropka', 'Kropki')}</TH>
-          <TH>{headerButton('plomba', 'Plomby')}</TH>
-          <TH>{headerButton('hint', 'Podpowiedzi')}</TH>
-          <TH>{headerButton('pass', 'Pasy')}</TH>
-          <TH>{headerButton('uwaga', 'Uwagi')}</TH>
-          <TH>{headerButton('bilans', 'Bilans')}</TH>
-          <TH>{headerButton('piatki', 'Piątki')}</TH>
-          <TH>{headerButton('plusyRazem', 'Plusy razem')}</TH>
-          <TH className="w-10">
-            <span className="sr-only">Akcje</span>
-          </TH>
+          <TH className="text-center">{headerButton('plus', 'Plusy')}</TH>
+          <TH className="text-center">Rozlicz</TH>
+          <TH className="text-center">{headerButton('kropka', 'Kropki')}</TH>
+          <TH className="text-center">{headerButton('plomba', 'Plomby')}</TH>
+          <TH className="text-center">{headerButton('pass', 'Pasy (ten mies.)')}</TH>
+          <TH className="text-center">{headerButton('uwaga', 'Uwagi')}</TH>
         </TR>
       </THead>
       <TBody>
-        {rows.map((row) => (
-          <Fragment key={row.studentId}>
-            <TR className="hover:bg-gray-50">
-              <TD>
-                <button
-                  type="button"
-                  className="block w-full text-left"
-                  onClick={() => setExpandedId((id) => (id === row.studentId ? null : row.studentId))}
-                >
-                  {row.number}
-                </button>
-              </TD>
-              <TD className="font-medium text-gray-900">
-                <button
-                  type="button"
-                  className="block w-full text-left"
-                  onClick={() => setExpandedId((id) => (id === row.studentId ? null : row.studentId))}
-                >
-                  {row.lastName} {row.firstName}
-                </button>
-              </TD>
-              {(['plus', 'kropka', 'plomba'] as const).map((key) => (
-                <TD key={key}>
+        {rows.map((row) => {
+          const events = expandedId === row.studentId ? eventsForStudent(row.studentId) : [];
+          return (
+            <Fragment key={row.studentId}>
+              <TR className={row.doPiatki > 0 ? 'bg-green-50 hover:bg-green-100/60' : 'hover:bg-gray-50'}>
+                <TD>
+                  <button type="button" className="block w-full text-left" onClick={() => toggle(row.studentId)}>
+                    {row.number}
+                  </button>
+                </TD>
+                <TD className="font-medium text-gray-900">
+                  <button type="button" className="block w-full text-left" onClick={() => toggle(row.studentId)}>
+                    {row.lastName} {row.firstName}
+                  </button>
+                </TD>
+                <TD>
                   <EditCell
-                    value={row[key]}
-                    onAdd={() => onAdjust(row.studentId, key, 1)}
-                    onRemove={() => onAdjust(row.studentId, key, -1)}
+                    strong
+                    value={row.plus}
+                    onAdd={() => onAdjust(row.studentId, 'plus', 1)}
+                    onRemove={() => onAdjust(row.studentId, 'plus', -1)}
                   />
                 </TD>
-              ))}
-              {/* Kolumna "Podpowiedzi" liczy zdarzenia hint_plomba - klucz wiersza to `hint`. */}
-              <TD>
-                <EditCell
-                  value={row.hint}
-                  onAdd={() => onAdjust(row.studentId, 'hint_plomba', 1)}
-                  onRemove={() => onAdjust(row.studentId, 'hint_plomba', -1)}
-                />
-              </TD>
-              {(['pass', 'uwaga'] as const).map((key) => (
-                <TD key={key}>
-                  <EditCell
-                    value={row[key]}
-                    onAdd={() => onAdjust(row.studentId, key, 1)}
-                    onRemove={() => onAdjust(row.studentId, key, -1)}
-                  />
-                </TD>
-              ))}
-              <TD className="font-semibold">{row.bilans}</TD>
-              <TD className="text-center font-semibold text-green-700">{row.piatki || ''}</TD>
-              <TD className="text-center text-base font-bold">{row.plusyRazem}</TD>
-              <TD className="text-right">
-                <Menu
-                  items={[
-                    {
-                      label: 'Wyzeruj bilans ucznia',
-                      danger: true,
-                      onSelect: () => setPendingReset(row),
-                    },
-                  ]}
-                  renderTrigger={(props) => (
-                    <button
-                      type="button"
-                      {...props}
-                      aria-label={`Więcej akcji: ${row.firstName} ${row.lastName}`}
-                      title="Więcej"
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
-                    >
-                      <MoreIcon />
-                    </button>
-                  )}
-                />
-              </TD>
-            </TR>
-            {expandedId === row.studentId && (
-              <TR>
-                <td colSpan={10} className="bg-gray-50 px-4 py-2">
-                  <div className="space-y-1 py-1">
-                    {eventsForStudent(row.studentId).length === 0 ? (
-                      <p className="text-xs text-gray-500">Brak zdarzeń w tym miesiącu.</p>
-                    ) : (
-                      eventsForStudent(row.studentId).map((e) => (
-                        <div key={e.id} className="flex items-center justify-between text-xs text-gray-600">
-                          <span>
-                            {new Date(e.at).toLocaleString('pl-PL')} - {RESULT_LABEL[e.result] ?? e.result}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => onRemoveEvent(e.id)}
-                            className="text-red-600 hover:underline"
-                          >
-                            usuń
-                          </button>
-                        </div>
-                      ))
+                <TD className="text-center">
+                  <div className="flex flex-wrap items-center justify-center gap-1.5">
+                    {row.doPiatki > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => onSettle(row.studentId, 'piatka')}
+                        className="rounded-md bg-green-600 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-green-700"
+                      >
+                        Rozlicz piątkę
+                      </button>
+                    )}
+                    {row.doJedynki > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => onSettle(row.studentId, 'jedynka')}
+                        className="rounded-md bg-red-600 px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-red-700"
+                      >
+                        Rozlicz jedynkę
+                      </button>
+                    )}
+                    {undoSettleFor === row.studentId && (
+                      <button type="button" onClick={onUndoSettle} className="text-xs text-gray-500 underline hover:text-gray-800">
+                        cofnij
+                      </button>
                     )}
                   </div>
-                </td>
+                </TD>
+                {(['kropka', 'plomba', 'pass', 'uwaga'] as const).map((key) => (
+                  <TD key={key}>
+                    <EditCell
+                      value={row[key]}
+                      onAdd={() => onAdjust(row.studentId, key, 1)}
+                      onRemove={() => onAdjust(row.studentId, key, -1)}
+                    />
+                  </TD>
+                ))}
               </TR>
-            )}
-          </Fragment>
-        ))}
+              {expandedId === row.studentId && (
+                <TR>
+                  <td colSpan={8} className="bg-gray-50 px-4 py-2">
+                    <div className="mb-2">{eventFilter}</div>
+                    <div className="space-y-1 pb-1">
+                      {events.length === 0 ? (
+                        <p className="text-xs text-gray-500">Brak zdarzeń.</p>
+                      ) : (
+                        events.map((e) => (
+                          <div key={e.id} className="flex items-center justify-between gap-3 text-xs text-gray-600">
+                            <span>
+                              {new Date(e.at).toLocaleDateString('pl-PL')}{' '}
+                              <span className="text-gray-400">
+                                {new Date(e.at).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}
+                              </span>{' '}
+                              - <span className={RESULT_CLASS[e.result] ?? ''}>{RESULT_LABEL[e.result] ?? e.result}</span>
+                              {e.note ? <span className="text-gray-400"> ({e.note})</span> : null}
+                            </span>
+                            <button type="button" onClick={() => onRemoveEvent(e.id)} className="text-red-600 hover:underline">
+                              usuń
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </td>
+                </TR>
+              )}
+            </Fragment>
+          );
+        })}
       </TBody>
     </Table>
-
-    <ConfirmDialog
-      open={!!pendingReset}
-      title="Wyzeruj bilans ucznia"
-      message={
-        pendingReset
-          ? `Usunięte zostaną wszystkie plusy, kropki, plomby, pasy i uwagi ${pendingReset.firstName} ${pendingReset.lastName} zapisane w ${monthLabel}. Tej operacji nie da się cofnąć.`
-          : ''
-      }
-      confirmLabel="Wyzeruj"
-      onCancel={() => setPendingReset(null)}
-      onConfirm={() => {
-        if (pendingReset) onResetStudent(pendingReset.studentId);
-        setPendingReset(null);
-      }}
-    />
-    </>
   );
 }
