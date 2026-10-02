@@ -5,7 +5,7 @@
 // Spacja = czytaj / pauza (faza capture, przed klawiszami prezentacji), klik
 // w slowo = czytaj od tego miejsca. Strzalki dalej zmieniaja slajdy.
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import type { Slide } from '../../data/types';
 import { czytankaById, czytankaUrl, wczytajSynchro, type AkapitCzytanki } from '../../data/czytanki';
 import { useSlideFontScale } from './useSlideFontScale';
@@ -120,6 +120,19 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     void audio.play();
   }
 
+  // Klik albo przeciagniecie po pasku: przewija nagranie, nie zmienia grania/pauzy.
+  function przewinPaskiem(e: PointerEvent<HTMLDivElement>) {
+    const audio = audioRef.current;
+    if (!audio || !Number.isFinite(audio.duration) || !audio.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ulamek = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const t = ulamek * audio.duration;
+    audio.currentTime = t;
+    setIdx(indeksSlowa(starty, t));
+    if (paskRef.current) paskRef.current.style.width = `${ulamek * 100}%`;
+    if (czasRef.current) czasRef.current.textContent = czas(t);
+  }
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key !== ' ' && e.code !== 'Space') return;
@@ -214,8 +227,21 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
               <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6" fill="currentColor"><path d="M7 4.5v15l12-7.5z" /></svg>
             )}
           </button>
-          <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-800">
-            <div ref={paskRef} className="h-full w-0 rounded-full bg-accent-400" />
+          <div
+            className="flex h-8 flex-1 cursor-pointer touch-none items-center"
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              e.currentTarget.setPointerCapture(e.pointerId);
+              przewinPaskiem(e);
+            }}
+            onPointerMove={(e) => {
+              if (e.currentTarget.hasPointerCapture(e.pointerId)) przewinPaskiem(e);
+            }}
+          >
+            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-800">
+              <div ref={paskRef} className="h-full w-0 rounded-full bg-accent-400" />
+            </div>
           </div>
           <span ref={czasRef} className="w-16 text-right text-xl tabular-nums text-gray-400">0:00</span>
           <span className="text-xl text-gray-500">Spacja: czytaj / pauza</span>
