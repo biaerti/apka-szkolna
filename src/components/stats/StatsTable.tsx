@@ -12,7 +12,7 @@ import type { EditableResult, StudentStatsRow } from '../../lib/stats';
 
 export type SortKey = keyof Pick<
   StudentStatsRow,
-  'number' | 'lastName' | 'plus' | 'kropka' | 'plomba' | 'hint' | 'pass' | 'uwaga' | 'bilans'
+  'number' | 'lastName' | 'plusIn' | 'plus' | 'kropka' | 'plomba' | 'hint' | 'pass' | 'uwaga' | 'bilans'
 >;
 
 const RESULT_LABEL: Record<string, string> = {
@@ -125,6 +125,7 @@ export function StatsTable({
         <TR>
           <TH>{headerButton('number', 'Nr')}</TH>
           <TH>{headerButton('lastName', 'Uczeń')}</TH>
+          <TH>{headerButton('plusIn', 'Z poprz.')}</TH>
           <TH>{headerButton('plus', 'Plusy')}</TH>
           <TH>{headerButton('kropka', 'Kropki')}</TH>
           <TH>{headerButton('plomba', 'Plomby')}</TH>
@@ -158,6 +159,15 @@ export function StatsTable({
                 >
                   {row.lastName} {row.firstName}
                 </button>
+              </TD>
+              {/* Przeniesione z poprzednich miesiecy - do odczytu (wynikaja ze zdarzen tamtych miesiecy). */}
+              <TD className="text-center tabular-nums text-gray-500">
+                {row.plusIn > 0 ? `${row.plusIn} ${row.plusIn === 1 ? 'plus' : row.plusIn < 5 ? 'plusy' : 'plusów'}` : '-'}
+                {row.plombyIn > 0 && (
+                  <span className="block text-xs text-red-600">
+                    {row.plombyIn} {row.plombyIn === 1 ? 'plomba' : row.plombyIn < 5 ? 'plomby' : 'plomb'}
+                  </span>
+                )}
               </TD>
               {(['plus', 'kropka', 'plomba'] as const).map((key) => (
                 <TD key={key}>
