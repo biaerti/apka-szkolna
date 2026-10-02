@@ -7,7 +7,7 @@
 // losowania. Kolo rysuje `entries`, losowanie bierze z `pool`.
 //
 // "Kto juz byl" ma DWA zrodla, celowo zlozone razem:
-// 1. zapisane zdarzenia z dzisiaj dla tej klasy (answeredOnDay) - dzieki temu
+// 1. zapisane zdarzenia biezacego obiegu kola (wheelCycle - do wyczerpania) - dzieki temu
 //    pamiec jest wspolna z kolem na lekcji i z plywajacym panelem, przezywa
 //    przeladowanie strony i dziala miedzy oknami (useTodayEventsPull);
 // 2. licznik w sesji (`localUsed`) - potrzebny dla trybu BEZ OCEN, w ktorym
@@ -19,8 +19,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useStore } from '../../data/store';
 import type { Student } from '../../data/types';
-import { todayKey } from '../../lib/grade';
-import { answeredOnDay, buildRoundEntries, drawableEntries, plannedDraws, type PoolEntry } from '../../lib/recap';
+import { buildRoundEntries, drawableEntries, plannedDraws, type PoolEntry } from '../../lib/recap';
+import { wheelCycle } from '../../lib/wheelCycle';
 
 export function usePool(students: Student[], classId: string) {
   const recapEvents = useStore((s) => s.recapEvents);
@@ -32,8 +32,8 @@ export function usePool(students: Student[], classId: string) {
   const [drawsCompleted, setDrawsCompleted] = useState(0);
 
   const answeredToday = useMemo(
-    () => answeredOnDay(recapEvents, classId, todayKey(), resetAt ?? undefined),
-    [recapEvents, classId, resetAt],
+    () => wheelCycle(recapEvents, classId, students, new Date(), resetAt ?? undefined).answered,
+    [recapEvents, classId, students, resetAt],
   );
 
   const usedCount = useMemo(() => {

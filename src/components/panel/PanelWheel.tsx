@@ -7,6 +7,7 @@
 
 import { resultSymbol } from '../../lib/resultSymbol';
 import { Wheel } from '../recap/Wheel';
+import { WheelCycleNotice } from '../recap/WheelCycleNotice';
 import type { TaskWheelState } from '../lessons/useTaskWheel';
 
 export interface PanelWheelProps {
@@ -29,6 +30,7 @@ export function PanelWheel({ wheel, adnotacja, onObecnosc }: PanelWheelProps) {
 
   return (
     <>
+      <WheelCycleNotice classId={wheel.classStudents[0]?.classId ?? ''} />
       <div className="flex min-h-0 flex-1 items-center justify-center px-2 py-1">
         <Wheel
           entries={wheel.entries}
@@ -46,7 +48,7 @@ export function PanelWheel({ wheel, adnotacja, onObecnosc }: PanelWheelProps) {
         {pulaPusta ? (
           <>
             <p className="text-center text-xs text-gray-400">
-              {klasaPusta ? 'Ta klasa nie ma jeszcze uczniów' : 'Wszyscy obecni już dziś odpowiadali'}
+              {klasaPusta ? 'Ta klasa nie ma jeszcze uczniów' : 'Na kole zostali tylko nieobecni'}
             </p>
             {!klasaPusta && !wheel.allowRepeats && (
               <button

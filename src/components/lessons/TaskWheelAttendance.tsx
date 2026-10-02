@@ -36,7 +36,7 @@ export function TaskWheelAttendance({ students, absentSet, usedFor, onTogglePres
             <span className="tabular-nums text-gray-400">{st.number}.</span>
             <span>{st.lastName}</span>
             {answered && !absent && (
-              <span className="h-2 w-2 rounded-full bg-red-500" title="już dziś odpowiadał/a" aria-label="już dziś odpowiadał/a" />
+              <span className="h-2 w-2 rounded-full bg-red-500" title="już był/a w tym obiegu koła" aria-label="już był/a w tym obiegu koła" />
             )}
           </button>
         );

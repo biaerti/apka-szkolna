@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { resultSymbol } from '../../lib/resultSymbol';
 import { Wheel } from '../recap/Wheel';
+import { WheelCycleNotice } from '../recap/WheelCycleNotice';
 import { TaskWheelAttendance } from './TaskWheelAttendance';
 import type { TaskWheelState } from './useTaskWheel';
 
@@ -75,6 +76,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
         </button>
       </div>
 
+      <WheelCycleNotice classId={wheel.classStudents[0]?.classId ?? ''} />
       <div ref={wheelAreaRef} className="flex min-h-0 flex-1 items-center justify-center px-2 py-2">
         <Wheel
           entries={wheel.entries}
@@ -91,7 +93,7 @@ export function TaskWheelDrawer({ wheel, taskCode, onClose }: TaskWheelDrawerPro
       <div className="flex shrink-0 flex-col items-center gap-1 px-3">
         {poolEmpty ? (
           <>
-            <p className="text-center text-sm text-gray-400">Wszyscy obecni już dziś odpowiadali</p>
+            <p className="text-center text-sm text-gray-400">Na kole zostali tylko nieobecni</p>
             {!wheel.allowRepeats && (
               <button
                 type="button"

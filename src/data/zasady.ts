@@ -46,6 +46,8 @@ export const RULE_SECTIONS: RuleSection[] = [
       'Uwagi za zachowanie można dostać zawsze, niezależnie od tego, które koło akurat kręcimy.',
       'Na kole na lekcji losujemy jedną osobę do każdego zadania. Na kole powtórzeniowym jest tyle pytań, ile było zadań - zwykle od 3 do 5.',
       'Na początku może być stresująco. To normalne. Po kilku lekcjach się przyzwyczaicie i będzie dobrze.',
+      // Od 5.10.2026 kolo pamieta do wyczerpania (src/lib/wheelCycle.ts).
+      'Kto już był wylosowany, nie wraca na koło - także w kolejne dni - dopóki nie odpowie cała klasa. Wtedy koło się zeruje i losujemy wszystkich od nowa.',
     ],
   },
   {

@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { SeatingPicker } from './SeatingPicker';
 import { SequentialPicker } from './SequentialPicker';
 import { Wheel } from './Wheel';
+import { WheelCycleNotice } from './WheelCycleNotice';
 import type { PickMode, RecapSessionState } from './useRecapSession';
 
 // Szybka zmiana widoku wprost nad kolem - to samo, co "wybór ucznia" w pasku,
@@ -54,6 +55,7 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
       className="relative flex min-h-0 flex-col items-center justify-center gap-2 border-r border-gray-800 px-2 py-2"
       style={{ width: '50%' }}
     >
+      <WheelCycleNotice classId={session.classId} />
       <div className="absolute right-2 top-2 z-10 flex rounded-lg border border-gray-700 bg-gray-950/80 p-0.5 text-sm">
         {VIEWS.map((view) => (
           <button
@@ -110,7 +112,7 @@ export function RecapWheelPanel({ session }: RecapWheelPanelProps) {
 
       {roundOver ? (
         <div className="flex shrink-0 flex-col items-center gap-1">
-          <p className="text-base text-gray-400">Wszyscy obecni uczniowie już odpowiadali.</p>
+          <p className="text-base text-gray-400">Na kole zostali tylko nieobecni.</p>
           <button
             type="button"
             onClick={session.startNewRound}

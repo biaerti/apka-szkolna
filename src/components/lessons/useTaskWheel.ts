@@ -18,9 +18,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useStore } from '../../data/store';
 import { useTodayEventsPull } from '../../data/remote/useTodayEventsPull';
-import { todayKey } from '../../lib/grade';
 import {
-  answeredOnDay,
   buildRoundEntries,
   drawableEntries,
   lessonWheelNote,
@@ -28,6 +26,7 @@ import {
   type LessonWheelResult,
   type PoolEntry,
 } from '../../lib/recap';
+import { wheelCycle } from '../../lib/wheelCycle';
 import { useAttendance } from '../recap/useAttendance';
 
 export interface UseTaskWheelArgs {
@@ -70,8 +69,8 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
   const [resetAt, setResetAt] = useState<string | null>(null);
 
   const answered = useMemo(
-    () => answeredOnDay(recapEvents, classId, todayKey(), resetAt ?? undefined),
-    [recapEvents, classId, resetAt],
+    () => wheelCycle(recapEvents, classId, classStudents, new Date(), resetAt ?? undefined).answered,
+    [recapEvents, classId, classStudents, resetAt],
   );
   const usedFor = useCallback((studentId: string) => answered.get(studentId) ?? 0, [answered]);
 
