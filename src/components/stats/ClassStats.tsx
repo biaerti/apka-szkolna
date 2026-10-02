@@ -25,7 +25,6 @@ export function ClassStats({ classId, students }: { classId: string; students: S
   const addRecapEvent = useStore((s) => s.addRecapEvent);
   const removeRecapEvent = useStore((s) => s.removeRecapEvent);
   const resetBalance = useStore((s) => s.resetBalance);
-  const settings = useStore((s) => s.settings);
 
   const studentIds = useMemo(() => new Set(students.map((st) => st.id)), [students]);
 
@@ -52,14 +51,14 @@ export function ClassStats({ classId, students }: { classId: string; students: S
   );
 
   const rows = useMemo(() => {
-    const base = aggregateMonth(recapEvents, students, activeMonth, settings);
+    const base = aggregateMonth(recapEvents, students, activeMonth);
     return [...base].sort((a, b) => {
       const av = a[sortKey];
       const bv = b[sortKey];
       if (typeof av === 'string' && typeof bv === 'string') return av.localeCompare(bv, 'pl') * sortDir;
       return ((av as number) - (bv as number)) * sortDir;
     });
-  }, [recapEvents, students, activeMonth, settings, sortKey, sortDir]);
+  }, [recapEvents, students, activeMonth, sortKey, sortDir]);
 
   function toggleSort(key: SortKey) {
     if (sortKey === key) setSortDir((d) => (d === 1 ? -1 : 1));
@@ -125,8 +124,7 @@ export function ClassStats({ classId, students }: { classId: string; students: S
       </div>
 
       <p className="text-sm text-gray-500">
-        Pasy i uwagi liczą się pełnymi miesiącami. Plusy i plomby, które nie dały jeszcze piątki ani jedynki,
-        przechodzą na następny miesiąc (kolumna „Z poprz.”) i liczą się do bilansu. "+" dodaje zdarzenie, "-" kasuje
+        Pasy, uwagi i bilans liczą się pełnymi miesiącami i zerują 1. dnia miesiąca. "+" dodaje zdarzenie, "-" kasuje
         najnowsze tego typu w wybranym miesiącu. Kliknij nazwisko, żeby zobaczyć pojedyncze zdarzenia.
       </p>
 

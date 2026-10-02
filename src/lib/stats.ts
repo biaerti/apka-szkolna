@@ -19,52 +19,14 @@ export interface StudentStatsRow {
   uwaga: number;
   /** plomba + hint - laczna liczba plomb w miesiacu (do wyliczenia bilansu). */
   plombyTotal: number;
-  /** Nierozliczone plusy przeniesione z poprzednich miesiecy (bez tych zamienionych na piatki). */
-  plusIn: number;
-  /** To samo dla plomb (bez zamienionych na jedynki). */
-  plombyIn: number;
-  /** Plusy minus plomby nierozliczone na koniec miesiaca - z przeniesionymi, bez rozliczonych. */
   bilans: number;
 }
 
-/**
- * Nierozliczone plusy i plomby ucznia ze zdarzen spelniajacych `keep`: kazda
- * zapisana piatka zjada `perFive` plusow, kazda jedynka `perOne` plomb.
- */
-function unsettled(events: RecapEvent[], keep: (e: RecapEvent) => boolean, perFive: number, perOne: number) {
-  let plus = 0;
-  let piatka = 0;
-  let plomba = 0;
-  let jedynka = 0;
-  for (const e of events) {
-    if (!keep(e)) continue;
-    if (e.result === 'plus') plus++;
-    else if (e.result === 'piatka') piatka++;
-    else if (e.result === 'plomba' || e.result === 'hint_plomba') plomba++;
-    else if (e.result === 'jedynka') jedynka++;
-  }
-  return { plusy: Math.max(0, plus - piatka * perFive), plomby: Math.max(0, plomba - jedynka * perOne) };
-}
-
-/**
- * Agreguje zdarzenia recapu per uczen danej klasy w danym miesiacu ("RRRR-MM").
- * Plusy i plomby nierozliczone w poprzednich miesiacach przechodza dalej
- * (`plusIn`, `plombyIn`) i wchodza do bilansu.
- */
-export function aggregateMonth(
-  events: RecapEvent[],
-  students: Student[],
-  monthKey: string,
-  thresholds: Pick<Settings, 'plusesForFive' | 'plombyForOne'> = { plusesForFive: 3, plombyForOne: 3 },
-): StudentStatsRow[] {
-  const perFive = Math.max(1, thresholds.plusesForFive);
-  const perOne = Math.max(1, thresholds.plombyForOne);
+/** Agreguje zdarzenia recapu per uczen danej klasy w danym miesiacu ("RRRR-MM"). */
+export function aggregateMonth(events: RecapEvent[], students: Student[], monthKey: string): StudentStatsRow[] {
   return students
     .map((student) => {
-      const own = events.filter((e) => e.studentId === student.id);
-      const { plus, kropka, plomba, pass, hint, uwaga, plombyTotal } = monthBalance(own, student.id, monthKey);
-      const before = unsettled(own, (e) => toMonthKey(new Date(e.at)) < monthKey, perFive, perOne);
-      const atEnd = unsettled(own, (e) => toMonthKey(new Date(e.at)) <= monthKey, perFive, perOne);
+      const { plus, kropka, plomba, pass, hint, uwaga, plombyTotal } = monthBalance(events, student.id, monthKey);
       return {
         studentId: student.id,
         firstName: student.firstName,
@@ -77,9 +39,7 @@ export function aggregateMonth(
         hint,
         uwaga,
         plombyTotal,
-        plusIn: before.plusy,
-        plombyIn: before.plomby,
-        bilans: atEnd.plusy - atEnd.plomby,
+        bilans: plus - plombyTotal,
       };
     })
     .sort((a, b) => a.number - b.number);
@@ -120,11 +80,11 @@ function csvEscape(value: string | number): string {
 
 /** Zamienia wiersze statystyk na tekst CSV (nagłowek + dane, separator przecinek). */
 export function toCsv(rows: StudentStatsRow[]): string {
-  const header = ['Nr', 'Nazwisko', 'Imię', 'Z poprz. plusy', 'Plusy', 'Kropki', 'Plomby', 'Podpowiedzi', 'Pasy', 'Uwagi', 'Bilans'];
+  const header = ['Nr', 'Nazwisko', 'Imię', 'Plusy', 'Kropki', 'Plomby', 'Podpowiedzi', 'Pasy', 'Uwagi', 'Bilans'];
   const lines = [header.join(',')];
   for (const row of rows) {
     lines.push(
-      [row.number, row.lastName, row.firstName, row.plusIn, row.plus, row.kropka, row.plomba, row.hint, row.pass, row.uwaga, row.bilans]
+      [row.number, row.lastName, row.firstName, row.plus, row.kropka, row.plomba, row.hint, row.pass, row.uwaga, row.bilans]
         .map(csvEscape)
         .join(','),
     );

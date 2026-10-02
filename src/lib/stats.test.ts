@@ -102,8 +102,8 @@ describe('toCsv', () => {
     );
     const csv = toCsv(rows);
     const lines = csv.split('\n');
-    expect(lines[0]).toBe('Nr,Nazwisko,Imię,Z poprz. plusy,Plusy,Kropki,Plomby,Podpowiedzi,Pasy,Uwagi,Bilans');
-    expect(lines[1]).toBe('3,Kowal-Nowak,Ola,0,1,0,0,0,0,0,1');
+    expect(lines[0]).toBe('Nr,Nazwisko,Imię,Plusy,Kropki,Plomby,Podpowiedzi,Pasy,Uwagi,Bilans');
+    expect(lines[1]).toBe('3,Kowal-Nowak,Ola,1,0,0,0,0,0,1');
     expect(csv.toLowerCase()).not.toContain('minus');
   });
 
@@ -111,27 +111,6 @@ describe('toCsv', () => {
     const rows = aggregateMonth([], [student({ lastName: 'Kowal,ski' })], '2026-09');
     const csv = toCsv(rows);
     expect(csv).toContain('"Kowal,ski"');
-  });
-});
-
-describe('aggregateMonth - przeniesienia', () => {
-  it('nierozliczone plusy i plomby z wrzesnia przechodza na pazdziernik i licza sie do bilansu', () => {
-    const events: RecapEvent[] = [
-      ev({ result: 'plus', at: new Date(2026, 8, 3).toISOString() }),
-      ev({ result: 'plomba', at: new Date(2026, 8, 4).toISOString() }),
-      ev({ result: 'plus', at: new Date(2026, 9, 2).toISOString() }),
-    ];
-    const [row] = aggregateMonth(events, [student({})], '2026-10');
-    expect(row).toMatchObject({ plusIn: 1, plombyIn: 1, plus: 1, bilans: 1 });
-  });
-
-  it('zapisana piatka zjada plusy w bilansie', () => {
-    const events: RecapEvent[] = [
-      ...[1, 2, 3, 4].map((d) => ev({ result: 'plus', at: new Date(2026, 8, d).toISOString() })),
-      ev({ result: 'piatka', at: new Date(2026, 9, 2).toISOString() }),
-    ];
-    const [row] = aggregateMonth(events, [student({})], '2026-10');
-    expect(row).toMatchObject({ plusIn: 4, plus: 0, bilans: 1 });
   });
 });
 
