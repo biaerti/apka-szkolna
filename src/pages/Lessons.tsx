@@ -23,6 +23,7 @@ import { NewLessonModal } from '../components/lessons/NewLessonModal';
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
 import { ClassTabs } from '../components/lessons/ClassTabs';
 import { CurrentLessonBar } from '../components/lessons/CurrentLessonBar';
+import { DzialMaterialsBar } from '../components/lessons/DzialMaterialsBar';
 import { ReadyMaterialsMenu } from '../components/lessons/ReadyMaterialsMenu';
 import { useReadyMaterials } from '../components/lessons/useReadyMaterials';
 import { duplicateSlide } from '../components/lessons/slideDefaults';
@@ -290,6 +291,8 @@ export function Lessons() {
       </div>
 
       <CurrentLessonBar classId={classId} classes={classes} lessons={visibleLessons} currentLessonId={currentLessonId} />
+
+      {materialType === 'textbook' && <DzialMaterialsBar grade={grade} dzial={activeSection?.lessons[0]?.dzial} />}
 
       {visibleLessons.length === 0 ? (
         <EmptyState
