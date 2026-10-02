@@ -115,52 +115,47 @@ describe('toCsv', () => {
 });
 
 describe('settlementRows', () => {
-  const sep = (d: number) => new Date(2026, 8, d).toISOString();
-  const oct = (d: number) => new Date(2026, 9, d).toISOString();
+  const at = (m: number, d: number) => new Date(2026, m, d).toISOString();
 
-  it('3 plusy to piatka, reszta przechodzi na nastepny miesiac', () => {
-    const events: RecapEvent[] = [1, 2, 3, 4].map((d) => ev({ result: 'plus', at: sep(d) }));
-    const [row] = settlementRows(events, [student({})], settings(), '2026-09');
-    expect(row).toMatchObject({ plusyIn: 0, plusyMonth: 4, piatki: 1, plusyOut: 1 });
+  it('liczy plusy z kilku miesiecy razem: 3 plusy to piatka, reszta zostaje', () => {
+    const events: RecapEvent[] = [
+      ev({ result: 'plus', at: at(8, 1) }),
+      ev({ result: 'plus', at: at(8, 20) }),
+      ev({ result: 'plus', at: at(8, 30) }),
+      ev({ result: 'plus', at: at(9, 2) }),
+    ];
+    const [row] = settlementRows(events, [student({})], settings());
+    expect(row).toMatchObject({ plusy: 4, piatki: 1, plusyReszta: 1 });
   });
 
-  it('przeniesione plusy dolicza do kolejnego miesiaca', () => {
+  it('zapisana piatka zjada 3 plusy, reszta przechodzi', () => {
     const events: RecapEvent[] = [
-      ev({ result: 'plus', at: sep(1) }),
-      ev({ result: 'plus', at: sep(2) }),
-      ev({ result: 'plus', at: oct(1) }),
+      ...[1, 2, 3, 4, 5].map((d) => ev({ result: 'plus', at: at(8, d) })),
+      ev({ result: 'piatka', at: at(9, 2) }),
+      ev({ result: 'plus', at: at(9, 5) }),
     ];
-    const [row] = settlementRows(events, [student({})], settings(), '2026-10');
-    expect(row).toMatchObject({ plusyIn: 2, plusyMonth: 1, piatki: 1, plusyOut: 0 });
+    const [row] = settlementRows(events, [student({})], settings());
+    expect(row).toMatchObject({ plusy: 3, piatki: 1, plusyReszta: 0 });
   });
 
-  it('plomby (tez za podpowiadanie) daja jedynke i tez przechodza', () => {
+  it('plomby (tez za podpowiadanie) daja jedynke, jedynka zjada komplet', () => {
     const events: RecapEvent[] = [
-      ev({ result: 'plomba', at: sep(1) }),
-      ev({ result: 'hint_plomba', at: sep(2) }),
+      ev({ result: 'plomba' }),
+      ev({ result: 'hint_plomba' }),
+      ev({ result: 'plomba' }),
+      ev({ result: 'plomba' }),
     ];
-    const [sepRow] = settlementRows(events, [student({})], settings(), '2026-09');
-    expect(sepRow).toMatchObject({ plombyMonth: 2, jedynki: 0, plombyOut: 2 });
-    const [octRow] = settlementRows(events, [student({})], settings(), '2026-10');
-    expect(octRow).toMatchObject({ plombyIn: 2, plombyMonth: 0, jedynki: 0, plombyOut: 2 });
-  });
-
-  it('przenosi przez miesiac bez zdarzen i przez nowy rok', () => {
-    const events: RecapEvent[] = [
-      ev({ result: 'plus', at: new Date(2026, 10, 3).toISOString() }),
-      ev({ result: 'plus', at: new Date(2027, 0, 5).toISOString() }),
-    ];
-    const [row] = settlementRows(events, [student({})], settings(), '2027-01');
-    expect(row).toMatchObject({ plusyIn: 1, plusyMonth: 1, piatki: 0, plusyOut: 2 });
+    expect(settlementRows(events, [student({})], settings())[0]).toMatchObject({ plomby: 4, jedynki: 1, plombyReszta: 1 });
+    const after = [...events, ev({ result: 'jedynka' })];
+    expect(settlementRows(after, [student({})], settings())[0]).toMatchObject({ plomby: 1, jedynki: 0 });
   });
 
   it('respektuje progi z ustawien i sortuje po numerze', () => {
-    const events: RecapEvent[] = [ev({ studentId: 's2', result: 'plus', at: sep(1) }), ev({ studentId: 's2', result: 'plus', at: sep(2) })];
+    const events: RecapEvent[] = [ev({ studentId: 's2', result: 'plus' }), ev({ studentId: 's2', result: 'plus' })];
     const rows = settlementRows(
       events,
       [student({ id: 's2', number: 2 }), student({ id: 's1', number: 1 })],
       settings({ plusesForFive: 2 }),
-      '2026-09',
     );
     expect(rows.map((r) => r.student.id)).toEqual(['s1', 's2']);
     expect(rows[1].piatki).toBe(1);

@@ -94,79 +94,57 @@ export function toCsv(rows: StudentStatsRow[]): string {
 
 export interface SettlementRow {
   student: Student;
-  /** Plusy przeniesione z poprzednich miesiecy (reszta, ktora nie dala piatki). */
-  plusyIn: number;
-  /** Plusy zdobyte w rozliczanym miesiacu. */
-  plusyMonth: number;
-  /** Ile piatek wychodzi z (plusyIn + plusyMonth). */
+  /** Plusy zebrane od poczatku, pomniejszone o te zamienione juz na piatki. */
+  plusy: number;
+  /** Ile piatek wychodzi z `plusy` teraz. */
   piatki: number;
-  /** Reszta plusow, ktora przechodzi na nastepny miesiac. */
-  plusyOut: number;
-  /** To samo dla plomb ("minusow"): przeniesione, z miesiaca, jedynki, reszta. */
-  plombyIn: number;
-  plombyMonth: number;
+  /** Reszta plusow po wystawieniu piatek - przechodzi dalej. */
+  plusyReszta: number;
+  /** To samo dla plomb ("minusow") i jedynek. */
+  plomby: number;
   jedynki: number;
-  plombyOut: number;
-}
-
-/** Klucz nastepnego miesiaca: "2026-12" -> "2027-01". */
-export function nextMonthKey(key: string): string {
-  const [y, m] = key.split('-').map(Number);
-  return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`;
+  plombyReszta: number;
 }
 
 /**
- * Rozliczenie miesiaca ("RRRR-MM"): kazde pelne `plusesForFive` plusow to piatka,
- * kazde pelne `plombyForOne` plomb to jedynka, a reszta przechodzi na nastepny
- * miesiac. Liczone od pierwszego miesiaca z jakimkolwiek zdarzeniem ucznia, wiec
- * przeniesienia lancuchuja sie same (wrzesien -> pazdziernik -> listopad...).
- * Nic nie zapisuje - ocene nauczyciel wpisuje w dzienniku sam.
+ * Rozliczenie "na dzis": liczy WSZYSTKIE plusy i plomby ucznia, bez podzialu na
+ * miesiace - rozliczenie wypada wtedy, kiedy nauczyciel je zapisze (np. 2.
+ * pazdziernika, z plusami z tego dnia). Kazda zapisana piatka zjada
+ * `plusesForFive` plusow, kazda jedynka `plombyForOne` plomb, reszta przechodzi
+ * dalej. Zdarzenia `piatka`/`jedynka` zapisuje przycisk w Settlements.tsx.
  */
-export function settlementRows(
-  events: RecapEvent[],
-  students: Student[],
-  settings: Settings,
-  monthKey: string,
-): SettlementRow[] {
+export function settlementRows(events: RecapEvent[], students: Student[], settings: Settings): SettlementRow[] {
   const perFive = Math.max(1, settings.plusesForFive);
   const perOne = Math.max(1, settings.plombyForOne);
   return students
     .map((student) => {
-      const own = events.filter((e) => e.studentId === student.id);
-      const months = own.map((e) => toMonthKey(new Date(e.at))).sort();
-      let plusCarry = 0;
-      let plombaCarry = 0;
-      let row: SettlementRow = {
-        student,
-        plusyIn: 0,
-        plusyMonth: 0,
-        piatki: 0,
-        plusyOut: 0,
-        plombyIn: 0,
-        plombyMonth: 0,
-        jedynki: 0,
-        plombyOut: 0,
-      };
-      if (months.length === 0 || months[0] > monthKey) return row;
-      for (let m = months[0]; m <= monthKey; m = nextMonthKey(m)) {
-        const bal = monthBalance(own, student.id, m);
-        const plusTotal = plusCarry + bal.plus;
-        const plombaTotal = plombaCarry + bal.plombyTotal;
-        row = {
-          student,
-          plusyIn: plusCarry,
-          plusyMonth: bal.plus,
-          piatki: Math.floor(plusTotal / perFive),
-          plusyOut: plusTotal % perFive,
-          plombyIn: plombaCarry,
-          plombyMonth: bal.plombyTotal,
-          jedynki: Math.floor(plombaTotal / perOne),
-          plombyOut: plombaTotal % perOne,
-        };
-        plusCarry = row.plusyOut;
-        plombaCarry = row.plombyOut;
+      let plus = 0;
+      let piatka = 0;
+      let plomba = 0;
+      let jedynka = 0;
+      for (const e of events) {
+        if (e.studentId !== student.id) continue;
+        if (e.result === 'plus') plus++;
+        else if (e.result === 'piatka') piatka++;
+        else if (e.result === 'plomba' || e.result === 'hint_plomba') plomba++;
+        else if (e.result === 'jedynka') jedynka++;
       }
-      return row;
+      const plusy = Math.max(0, plus - piatka * perFive);
+      const plomby = Math.max(0, plomba - jedynka * perOne);
+      return {
+        student,
+        plusy,
+        piatki: Math.floor(plusy / perFive),
+        plusyReszta: plusy % perFive,
+        plomby,
+        jedynki: Math.floor(plomby / perOne),
+        plombyReszta: plomby % perOne,
+      };
     })
     .sort((a, b) => a.student.number - b.student.number);
+}
+
+/** Notka zdarzen zapisanych jednym "Zapisz rozliczenie", np. "Rozliczenie 2.10.2026". */
+export function settlementNote(date: Date): string {
+  return `Rozliczenie ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 }
