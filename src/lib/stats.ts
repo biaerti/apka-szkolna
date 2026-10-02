@@ -3,7 +3,7 @@
 // pelnymi miesiacami kalendarzowymi, patrz src/data/zasady.ts).
 
 import type { ID, RecapEvent, Settings, Student } from '../data/types';
-import { monthBalance, outstandingPlomby, outstandingPlusy } from './recap';
+import { monthBalance } from './recap';
 import { monthKey as toMonthKey } from './week';
 
 export interface StudentStatsRow {
@@ -94,36 +94,79 @@ export function toCsv(rows: StudentStatsRow[]): string {
 
 export interface SettlementRow {
   student: Student;
-  /** Nierozliczone plomby (outstandingPlomby().count) - zebrane po ostatniej jedynce. */
-  plomby: number;
-  /** Nierozliczone plusy (outstandingPlusy().count) - zebrane po ostatniej piatce. */
-  plusy: number;
-  /** Uczen ma komplet plomb (>= settings.plombyForOne) - mozna wystawic jedynke. */
-  earnedOne: boolean;
-  /** Uczen ma komplet plusow (>= settings.plusesForFive) - mozna wystawic piatke. */
-  earnedFive: boolean;
+  /** Plusy przeniesione z poprzednich miesiecy (reszta, ktora nie dala piatki). */
+  plusyIn: number;
+  /** Plusy zdobyte w rozliczanym miesiacu. */
+  plusyMonth: number;
+  /** Ile piatek wychodzi z (plusyIn + plusyMonth). */
+  piatki: number;
+  /** Reszta plusow, ktora przechodzi na nastepny miesiac. */
+  plusyOut: number;
+  /** To samo dla plomb ("minusow"): przeniesione, z miesiaca, jedynki, reszta. */
+  plombyIn: number;
+  plombyMonth: number;
+  jedynki: number;
+  plombyOut: number;
+}
+
+/** Klucz nastepnego miesiaca: "2026-12" -> "2027-01". */
+export function nextMonthKey(key: string): string {
+  const [y, m] = key.split('-').map(Number);
+  return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`;
 }
 
 /**
- * Uczniowie klasy wymagajacy reakcji nauczyciela: komplet plomb (jedynka) lub
- * komplet plusow (piatka) do rozliczenia na koniec miesiaca. Posortowani po
- * numerze z dziennika.
+ * Rozliczenie miesiaca ("RRRR-MM"): kazde pelne `plusesForFive` plusow to piatka,
+ * kazde pelne `plombyForOne` plomb to jedynka, a reszta przechodzi na nastepny
+ * miesiac. Liczone od pierwszego miesiaca z jakimkolwiek zdarzeniem ucznia, wiec
+ * przeniesienia lancuchuja sie same (wrzesien -> pazdziernik -> listopad...).
+ * Nic nie zapisuje - ocene nauczyciel wpisuje w dzienniku sam.
  */
-export function settlementRows(events: RecapEvent[], students: Student[], settings: Settings): SettlementRow[] {
+export function settlementRows(
+  events: RecapEvent[],
+  students: Student[],
+  settings: Settings,
+  monthKey: string,
+): SettlementRow[] {
+  const perFive = Math.max(1, settings.plusesForFive);
+  const perOne = Math.max(1, settings.plombyForOne);
   return students
     .map((student) => {
-      const plomby = outstandingPlomby(events, student.id);
-      const plusy = outstandingPlusy(events, student.id);
-      const earnedOne = plomby.count >= settings.plombyForOne;
-      const earnedFive = plusy.count >= settings.plusesForFive;
-      return {
+      const own = events.filter((e) => e.studentId === student.id);
+      const months = own.map((e) => toMonthKey(new Date(e.at))).sort();
+      let plusCarry = 0;
+      let plombaCarry = 0;
+      let row: SettlementRow = {
         student,
-        plomby: plomby.count,
-        plusy: plusy.count,
-        earnedOne,
-        earnedFive,
+        plusyIn: 0,
+        plusyMonth: 0,
+        piatki: 0,
+        plusyOut: 0,
+        plombyIn: 0,
+        plombyMonth: 0,
+        jedynki: 0,
+        plombyOut: 0,
       };
+      if (months.length === 0 || months[0] > monthKey) return row;
+      for (let m = months[0]; m <= monthKey; m = nextMonthKey(m)) {
+        const bal = monthBalance(own, student.id, m);
+        const plusTotal = plusCarry + bal.plus;
+        const plombaTotal = plombaCarry + bal.plombyTotal;
+        row = {
+          student,
+          plusyIn: plusCarry,
+          plusyMonth: bal.plus,
+          piatki: Math.floor(plusTotal / perFive),
+          plusyOut: plusTotal % perFive,
+          plombyIn: plombaCarry,
+          plombyMonth: bal.plombyTotal,
+          jedynki: Math.floor(plombaTotal / perOne),
+          plombyOut: plombaTotal % perOne,
+        };
+        plusCarry = row.plusyOut;
+        plombaCarry = row.plombyOut;
+      }
+      return row;
     })
-    .filter((row) => row.earnedOne || row.earnedFive)
     .sort((a, b) => a.student.number - b.student.number);
 }

@@ -34,6 +34,8 @@ function settings(partial: Partial<Settings> = {}): Settings {
     plombyForOne: 3,
     reviewQuestionCount: 7,
     slideFontPercent: 100,
+    salaWarningsResetDaily: false,
+    salaStudentSort: 'lastName',
     ...partial,
   };
 }
@@ -113,90 +115,55 @@ describe('toCsv', () => {
 });
 
 describe('settlementRows', () => {
-  it('zwraca tylko uczniow z kompletem plomb lub plusow, posortowanych po numerze', () => {
-    const students = [
-      student({ id: 's2', number: 2 }),
-      student({ id: 's1', number: 1 }),
-      student({ id: 's3', number: 3 }),
-    ];
-    const events: RecapEvent[] = [
-      // s1: 3 plomby -> earnedOne
-      ev({ studentId: 's1', result: 'plomba', questionId: 'q1' }),
-      ev({ studentId: 's1', result: 'plomba', questionId: 'q2' }),
-      ev({ studentId: 's1', result: 'plomba', questionId: 'q3' }),
-      // s2: tylko 1 plomba, 1 plus - nic nie oddaje
-      ev({ studentId: 's2', result: 'plomba', questionId: 'q4' }),
-      ev({ studentId: 's2', result: 'plus' }),
-      // s3: 3 plusy -> earnedFive
-      ev({ studentId: 's3', result: 'plus' }),
-      ev({ studentId: 's3', result: 'plus' }),
-      ev({ studentId: 's3', result: 'plus' }),
-    ];
-    const rows = settlementRows(events, students, settings());
-    expect(rows.map((r) => r.student.id)).toEqual(['s1', 's3']);
-    const s1Row = rows.find((r) => r.student.id === 's1')!;
-    expect(s1Row.earnedOne).toBe(true);
-    expect(s1Row.earnedFive).toBe(false);
-    expect(s1Row.plomby).toBe(3);
-    const s3Row = rows.find((r) => r.student.id === 's3')!;
-    expect(s3Row.earnedFive).toBe(true);
-    expect(s3Row.earnedOne).toBe(false);
-    expect(s3Row.plusy).toBe(3);
+  const sep = (d: number) => new Date(2026, 8, d).toISOString();
+  const oct = (d: number) => new Date(2026, 9, d).toISOString();
+
+  it('3 plusy to piatka, reszta przechodzi na nastepny miesiac', () => {
+    const events: RecapEvent[] = [1, 2, 3, 4].map((d) => ev({ result: 'plus', at: sep(d) }));
+    const [row] = settlementRows(events, [student({})], settings(), '2026-09');
+    expect(row).toMatchObject({ plusyIn: 0, plusyMonth: 4, piatki: 1, plusyOut: 1 });
   });
 
-  it('liczy plomby za podpowiadanie (hint_plomba) do kompletu', () => {
+  it('przeniesione plusy dolicza do kolejnego miesiaca', () => {
     const events: RecapEvent[] = [
-      ev({ studentId: 's1', result: 'plomba' }),
-      ev({ studentId: 's1', result: 'hint_plomba' }),
-      ev({ studentId: 's1', result: 'plomba' }),
+      ev({ result: 'plus', at: sep(1) }),
+      ev({ result: 'plus', at: sep(2) }),
+      ev({ result: 'plus', at: oct(1) }),
     ];
-    const rows = settlementRows(events, [student({})], settings());
-    expect(rows).toHaveLength(1);
-    expect(rows[0].plomby).toBe(3);
-    expect(rows[0].earnedOne).toBe(true);
+    const [row] = settlementRows(events, [student({})], settings(), '2026-10');
+    expect(row).toMatchObject({ plusyIn: 2, plusyMonth: 1, piatki: 1, plusyOut: 0 });
   });
 
-  it('historyczne zdarzenie rozliczenie tez zeruje licznik plomb (stare dane z Supabase)', () => {
+  it('plomby (tez za podpowiadanie) daja jedynke i tez przechodza', () => {
     const events: RecapEvent[] = [
-      ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 1).toISOString() }),
-      ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 2).toISOString() }),
-      ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 3).toISOString() }),
-      ev({ studentId: 's1', result: 'rozliczenie', at: new Date(2026, 8, 4).toISOString() }),
+      ev({ result: 'plomba', at: sep(1) }),
+      ev({ result: 'hint_plomba', at: sep(2) }),
     ];
-    const rows = settlementRows(events, [student({})], settings());
-    expect(rows).toHaveLength(0);
+    const [sepRow] = settlementRows(events, [student({})], settings(), '2026-09');
+    expect(sepRow).toMatchObject({ plombyMonth: 2, jedynki: 0, plombyOut: 2 });
+    const [octRow] = settlementRows(events, [student({})], settings(), '2026-10');
+    expect(octRow).toMatchObject({ plombyIn: 2, plombyMonth: 0, jedynki: 0, plombyOut: 2 });
   });
 
-  it('zdarzenie jedynka zeruje licznik plomb', () => {
+  it('przenosi przez miesiac bez zdarzen i przez nowy rok', () => {
     const events: RecapEvent[] = [
-      ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 1).toISOString() }),
-      ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 2).toISOString() }),
-      ev({ studentId: 's1', result: 'plomba', at: new Date(2026, 8, 3).toISOString() }),
-      ev({ studentId: 's1', result: 'jedynka', at: new Date(2026, 8, 4).toISOString() }),
+      ev({ result: 'plus', at: new Date(2026, 10, 3).toISOString() }),
+      ev({ result: 'plus', at: new Date(2027, 0, 5).toISOString() }),
     ];
-    const rows = settlementRows(events, [student({})], settings());
-    expect(rows).toHaveLength(0);
+    const [row] = settlementRows(events, [student({})], settings(), '2027-01');
+    expect(row).toMatchObject({ plusyIn: 1, plusyMonth: 1, piatki: 0, plusyOut: 2 });
   });
 
-  it('zdarzenie piatka zeruje licznik plusow', () => {
-    const events: RecapEvent[] = [
-      ev({ studentId: 's1', result: 'plus', at: new Date(2026, 8, 1).toISOString() }),
-      ev({ studentId: 's1', result: 'plus', at: new Date(2026, 8, 2).toISOString() }),
-      ev({ studentId: 's1', result: 'plus', at: new Date(2026, 8, 3).toISOString() }),
-      ev({ studentId: 's1', result: 'piatka', at: new Date(2026, 8, 4).toISOString() }),
-    ];
-    const rows = settlementRows(events, [student({})], settings());
-    expect(rows).toHaveLength(0);
-  });
-
-  it('respektuje niestandardowe progi z ustawien', () => {
-    const events: RecapEvent[] = [
-      ev({ studentId: 's1', result: 'plomba' }),
-      ev({ studentId: 's1', result: 'plomba' }),
-    ];
-    const rows = settlementRows(events, [student({})], settings({ plombyForOne: 2 }));
-    expect(rows).toHaveLength(1);
-    expect(rows[0].earnedOne).toBe(true);
+  it('respektuje progi z ustawien i sortuje po numerze', () => {
+    const events: RecapEvent[] = [ev({ studentId: 's2', result: 'plus', at: sep(1) }), ev({ studentId: 's2', result: 'plus', at: sep(2) })];
+    const rows = settlementRows(
+      events,
+      [student({ id: 's2', number: 2 }), student({ id: 's1', number: 1 })],
+      settings({ plusesForFive: 2 }),
+      '2026-09',
+    );
+    expect(rows.map((r) => r.student.id)).toEqual(['s1', 's2']);
+    expect(rows[1].piatki).toBe(1);
   });
 });
 

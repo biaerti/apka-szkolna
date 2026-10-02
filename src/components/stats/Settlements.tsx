@@ -1,115 +1,143 @@
-// Widok "Do rozliczenia": uczniowie z kompletem plomb (jedynka) albo kompletem
-// plusow (piatka). Plusy, kropki i plomby rozliczamy na koniec miesiaca (patrz
-// src/data/zasady.ts) - to miejsce nauczyciel odwiedza wtedy i wystawia ocene.
+// Widok "Do rozliczenia": rozliczenie wybranego miesiaca. Kazde pelne 3 plusy
+// (settings.plusesForFive) to piatka, kazde pelne 3 plomby to jedynka, a reszta
+// przechodzi na nastepny miesiac (src/lib/stats.ts: settlementRows). Nic nie
+// zapisuje - nauczyciel czyta liste klasie i wpisuje oceny w dzienniku.
 
 import { useMemo, useState } from 'react';
 import { useStore } from '../../data/store';
-import type { RecapResult } from '../../data/types';
-import { Button } from '../ui/Button';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
-import { EmptyState } from '../ui/EmptyState';
-import { settlementRows, type SettlementRow } from '../../lib/stats';
+import { Select } from '../ui/Select';
+import { Table, THead, TBody, TR, TH, TD } from '../ui/Table';
+import { nextMonthKey, settlementRows } from '../../lib/stats';
+import { monthKey } from '../../lib/week';
 
-type PendingType = Extract<RecapResult, 'jedynka' | 'piatka'>;
-interface Pending {
-  type: PendingType;
-  row: SettlementRow;
+function monthLabel(key: string): string {
+  const [year, month] = key.split('-').map(Number);
+  if (!year || !month) return key;
+  return new Date(year, month - 1, 1).toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' });
 }
 
-const CONFIRM_COPY: Record<PendingType, { title: string; message: (name: string) => string; confirmLabel: string }> = {
-  jedynka: {
-    title: 'Wystawić jedynkę?',
-    message: (name) => `${name} zebrał/-a komplet plomb w tym miesiącu. Plomby zostaną zamienione na ocenę niedostateczną.`,
-    confirmLabel: 'Jedynka',
-  },
-  piatka: {
-    title: 'Wystawić piątkę?',
-    message: (name) => `${name} zebrał/-a komplet plusów. Plusy zostaną zamienione na ocenę bardzo dobrą.`,
-    confirmLabel: 'Piątka',
-  },
-};
+/** "wrzesień 2026" -> "wrzesień" itp., do naglowkow kolumn. */
+function shortMonth(key: string): string {
+  return monthLabel(key).split(' ')[0];
+}
 
 export function Settlements({ classId }: { classId: string }) {
   const students = useStore((s) => s.students);
   const recapEvents = useStore((s) => s.recapEvents);
   const settings = useStore((s) => s.settings);
-  const addRecapEvent = useStore((s) => s.addRecapEvent);
 
   const classStudents = useMemo(
     () => students.filter((st) => st.classId === classId).sort((a, b) => a.number - b.number),
     [students, classId],
   );
+  const studentIds = useMemo(() => new Set(classStudents.map((s) => s.id)), [classStudents]);
+
+  const current = monthKey(new Date());
+  const months = useMemo(() => {
+    const set = new Set<string>([current]);
+    for (const e of recapEvents) if (studentIds.has(e.studentId)) set.add(monthKey(new Date(e.at)));
+    return [...set].sort().reverse();
+  }, [recapEvents, studentIds, current]);
+
+  // Domyslnie ostatni ZAKONCZONY miesiac - rozliczamy po jego koncu.
+  const [month, setMonth] = useState(() => months.find((m) => m < current) ?? current);
+  const activeMonth = months.includes(month) ? month : months[0];
 
   const rows = useMemo(
-    () => settlementRows(recapEvents, classStudents, settings),
-    [recapEvents, classStudents, settings],
+    () => settlementRows(recapEvents, classStudents, settings, activeMonth),
+    [recapEvents, classStudents, settings, activeMonth],
   );
 
-  const [pending, setPending] = useState<Pending | null>(null);
-
-  function confirmPending() {
-    if (!pending) return;
-    addRecapEvent({ studentId: pending.row.student.id, classId, result: pending.type });
-    setPending(null);
-  }
-
-  if (rows.length === 0) {
-    return (
-      <EmptyState
-        title="Nikt nic nie zbiera"
-        description="Żaden uczeń w tej klasie nie ma obecnie kompletu plomb ani plusów do rozliczenia."
-      />
-    );
-  }
+  const fives = rows.filter((r) => r.piatki > 0);
+  const ones = rows.filter((r) => r.jedynki > 0);
+  const anyPlomby = rows.some((r) => r.plombyIn + r.plombyMonth > 0);
+  const name = (r: (typeof rows)[number]) => `${r.student.lastName} ${r.student.firstName}`;
+  const now = shortMonth(activeMonth);
+  const next = shortMonth(nextMonthKey(activeMonth));
 
   return (
-    <div className="space-y-3">
-      {rows.map((row) => {
-        const fullName = `${row.student.firstName} ${row.student.lastName}`;
-        return (
-          <div key={row.student.id} className="rounded-lg border border-gray-200 bg-white p-4">
-            <p className="font-medium text-gray-900">
-              {row.student.number}. {row.student.lastName} {row.student.firstName}
-            </p>
+    <div className="space-y-4">
+      <div>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Rozliczany miesiąc</label>
+        <Select className="w-56" value={activeMonth} onChange={(e) => setMonth(e.target.value)}>
+          {months.map((m) => (
+            <option key={m} value={m}>
+              {monthLabel(m)}
+            </option>
+          ))}
+        </Select>
+      </div>
 
-            {row.earnedOne && (
-              <div className="mt-2">
-                <p className="text-sm text-gray-600">
-                  Zebrał/-a komplet plomb ({row.plomby}) - można wystawić jedynkę.
-                </p>
-                <div className="mt-3">
-                  <Button variant="danger" size="sm" onClick={() => setPending({ type: 'jedynka', row })}>
-                    Jedynka
-                  </Button>
-                </div>
-              </div>
-            )}
+      <p className="text-sm text-gray-500">
+        Każde {settings.plusesForFive} plusy to piątka, każde {settings.plombyForOne} plomby to jedynka. Reszta
+        przechodzi na {next}.
+      </p>
 
-            {row.earnedFive && (
-              <div className="mt-3">
-                <p className="text-sm text-gray-600">Zebrał/-a komplet plusów ({row.plusy}) - można wystawić piątkę.</p>
-                <div className="mt-2">
-                  <Button variant="primary" size="sm" onClick={() => setPending({ type: 'piatka', row })}>
-                    Piątka
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {pending && pending.row.student.id === row.student.id && (
-              <ConfirmDialog
-                open
-                title={CONFIRM_COPY[pending.type].title}
-                message={CONFIRM_COPY[pending.type].message(fullName)}
-                confirmLabel={CONFIRM_COPY[pending.type].confirmLabel}
-                danger={pending.type === 'jedynka'}
-                onConfirm={confirmPending}
-                onCancel={() => setPending(null)}
-              />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+          <p className="font-semibold text-green-900">Piątki za {now} ({fives.length})</p>
+          {fives.length === 0 ? (
+            <p className="mt-1 text-sm text-green-800">Nikt nie uzbierał kompletu.</p>
+          ) : (
+            <ul className="mt-2 space-y-0.5 text-sm text-green-900">
+              {fives.map((r) => (
+                <li key={r.student.id}>
+                  {r.student.number}. {name(r)}
+                  {r.piatki > 1 ? ` - ${r.piatki} piątki` : ''}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {(ones.length > 0 || anyPlomby) && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+            <p className="font-semibold text-red-900">Jedynki za {now} ({ones.length})</p>
+            {ones.length === 0 ? (
+              <p className="mt-1 text-sm text-red-800">Nikt nie ma kompletu plomb.</p>
+            ) : (
+              <ul className="mt-2 space-y-0.5 text-sm text-red-900">
+                {ones.map((r) => (
+                  <li key={r.student.id}>
+                    {r.student.number}. {name(r)}
+                    {r.jedynki > 1 ? ` - ${r.jedynki} jedynki` : ''}
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
-        );
-      })}
+        )}
+      </div>
+
+      <Table>
+        <THead>
+          <TR>
+            <TH>Nr</TH>
+            <TH>Uczeń</TH>
+            <TH className="text-center">Plusy z poprz.</TH>
+            <TH className="text-center">Plusy ({now})</TH>
+            <TH className="text-center">Piątki</TH>
+            <TH className="text-center">Plusy na {next}</TH>
+            {anyPlomby && <TH className="text-center">Plomby</TH>}
+            {anyPlomby && <TH className="text-center">Plomby na {next}</TH>}
+          </TR>
+        </THead>
+        <TBody>
+          {rows.map((r) => (
+            <TR key={r.student.id} className={r.piatki > 0 ? 'bg-green-50/60' : undefined}>
+              <TD>{r.student.number}</TD>
+              <TD className="font-medium">{name(r)}</TD>
+              <TD className="text-center text-gray-500">{r.plusyIn || '-'}</TD>
+              <TD className="text-center">{r.plusyMonth || '-'}</TD>
+              <TD className="text-center font-semibold text-green-700">{r.piatki || ''}</TD>
+              <TD className="text-center font-semibold">{r.plusyOut || '-'}</TD>
+              {anyPlomby && (
+                <TD className="text-center">{r.plombyIn + r.plombyMonth || '-'}</TD>
+              )}
+              {anyPlomby && <TD className="text-center font-semibold text-red-700">{r.plombyOut || '-'}</TD>}
+            </TR>
+          ))}
+        </TBody>
+      </Table>
     </div>
   );
 }
