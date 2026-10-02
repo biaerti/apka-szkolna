@@ -8,7 +8,7 @@
 // lekcji, "dyżur teraz" na przerwie.
 
 import clsx from 'clsx';
-import { DYZURY } from '../../data/dyzury';
+import { dyzuryNa } from '../../data/dyzury';
 import { useStore } from '../../data/store';
 import { dutyStatus } from '../../lib/dyzury';
 import { formatHm, formatRemaining, periodStatus } from '../../lib/timetable';
@@ -31,7 +31,7 @@ export function PresentClock({ position = 'top-right' }: PresentClockProps) {
   const periods = useStore((s) => s.periods);
   const now = useNow(1000);
   const status = periodStatus(periods, now);
-  const duty = dutyStatus(DYZURY, periods, now);
+  const duty = dutyStatus(dyzuryNa(now), periods, now);
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   let detail = '';
