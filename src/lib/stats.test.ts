@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { RecapEvent, Settings, Student } from '../data/types';
-import { aggregateMonth, findLatestEventId, settlementRows, toCsv } from './stats';
+import { aggregateMonth, findLatestEventId, settlementRows, toCsv, unsettledBalance } from './stats';
 
 function student(partial: Partial<Student>): Student {
   return {
@@ -111,6 +111,31 @@ describe('toCsv', () => {
     const rows = aggregateMonth([], [student({ lastName: 'Kowal,ski' })], '2026-09');
     const csv = toCsv(rows);
     expect(csv).toContain('"Kowal,ski"');
+  });
+});
+
+describe('plusy razem i piatki', () => {
+  const at = (m: number, d: number) => new Date(2026, m, d).toISOString();
+
+  it('plusy z wrzesnia licza sie w pazdzierniku, wystawiona piatka zabiera 3', () => {
+    const events: RecapEvent[] = [
+      ...[1, 2, 3, 4].map((d) => ev({ result: 'plus', at: at(8, d) })),
+      ev({ result: 'piatka', at: at(9, 2) }),
+      ev({ result: 'plus', at: at(9, 3) }),
+    ];
+    const [sep] = aggregateMonth(events, [student({})], '2026-09');
+    expect(sep).toMatchObject({ plus: 4, piatki: 0, plusyRazem: 4 });
+    const [oct] = aggregateMonth(events, [student({})], '2026-10');
+    expect(oct).toMatchObject({ plus: 1, piatki: 1, plusyRazem: 2 });
+  });
+
+  it('piatka na wyrost nie zjada przyszlych plusow', () => {
+    const events: RecapEvent[] = [
+      ev({ result: 'plus', at: at(8, 1) }),
+      ev({ result: 'piatka', at: at(9, 1) }),
+      ev({ result: 'plus', at: at(9, 2) }),
+    ];
+    expect(unsettledBalance(events, 's1', 3, 3).plusy).toBe(1);
   });
 });
 

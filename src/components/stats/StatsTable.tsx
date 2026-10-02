@@ -12,7 +12,7 @@ import type { EditableResult, StudentStatsRow } from '../../lib/stats';
 
 export type SortKey = keyof Pick<
   StudentStatsRow,
-  'number' | 'lastName' | 'plus' | 'kropka' | 'plomba' | 'hint' | 'pass' | 'uwaga' | 'bilans'
+  'number' | 'lastName' | 'plus' | 'kropka' | 'plomba' | 'hint' | 'pass' | 'uwaga' | 'bilans' | 'piatki' | 'plusyRazem'
 >;
 
 const RESULT_LABEL: Record<string, string> = {
@@ -132,6 +132,8 @@ export function StatsTable({
           <TH>{headerButton('pass', 'Pasy')}</TH>
           <TH>{headerButton('uwaga', 'Uwagi')}</TH>
           <TH>{headerButton('bilans', 'Bilans')}</TH>
+          <TH>{headerButton('piatki', 'Piątki')}</TH>
+          <TH>{headerButton('plusyRazem', 'Plusy razem')}</TH>
           <TH className="w-10">
             <span className="sr-only">Akcje</span>
           </TH>
@@ -186,6 +188,8 @@ export function StatsTable({
                 </TD>
               ))}
               <TD className="font-semibold">{row.bilans}</TD>
+              <TD className="text-center font-semibold text-green-700">{row.piatki || ''}</TD>
+              <TD className="text-center text-base font-bold">{row.plusyRazem}</TD>
               <TD className="text-right">
                 <Menu
                   items={[

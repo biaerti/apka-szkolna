@@ -20,12 +20,53 @@ export interface StudentStatsRow {
   /** plomba + hint - laczna liczba plomb w miesiacu (do wyliczenia bilansu). */
   plombyTotal: number;
   bilans: number;
+  /** Piatki wystawione (zapisane) w tym miesiacu. */
+  piatki: number;
+  /** Plusy jeszcze nie zamienione na piatke na koniec miesiaca - z poprzednich miesiecy tez. */
+  plusyRazem: number;
+}
+
+/**
+ * Nierozliczone plusy i plomby ucznia, liczone po kolei w czasie: plus dodaje 1,
+ * piatka zabiera `perFive` plusow (ale nie schodzi ponizej zera - piatka
+ * wystawiona "na wyrost" nie zjada przyszlych plusow), tak samo plomby i jedynka.
+ * `untilMonth` ("RRRR-MM") = licz tylko do konca tego miesiaca.
+ */
+export function unsettledBalance(
+  events: RecapEvent[],
+  studentId: string,
+  perFive: number,
+  perOne: number,
+  untilMonth?: string,
+): { plusy: number; plomby: number } {
+  const own = events
+    .filter((e) => e.studentId === studentId && (!untilMonth || toMonthKey(new Date(e.at)) <= untilMonth))
+    .sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
+  let plusy = 0;
+  let plomby = 0;
+  for (const e of own) {
+    if (e.result === 'plus') plusy++;
+    else if (e.result === 'piatka') plusy = Math.max(0, plusy - perFive);
+    else if (e.result === 'plomba' || e.result === 'hint_plomba') plomby++;
+    else if (e.result === 'jedynka') plomby = Math.max(0, plomby - perOne);
+  }
+  return { plusy, plomby };
 }
 
 /** Agreguje zdarzenia recapu per uczen danej klasy w danym miesiacu ("RRRR-MM"). */
-export function aggregateMonth(events: RecapEvent[], students: Student[], monthKey: string): StudentStatsRow[] {
+export function aggregateMonth(
+  events: RecapEvent[],
+  students: Student[],
+  monthKey: string,
+  thresholds: Pick<Settings, 'plusesForFive' | 'plombyForOne'> = { plusesForFive: 3, plombyForOne: 3 },
+): StudentStatsRow[] {
+  const perFive = Math.max(1, thresholds.plusesForFive);
+  const perOne = Math.max(1, thresholds.plombyForOne);
   return students
     .map((student) => {
+      const piatki = events.filter(
+        (e) => e.studentId === student.id && e.result === 'piatka' && toMonthKey(new Date(e.at)) === monthKey,
+      ).length;
       const { plus, kropka, plomba, pass, hint, uwaga, plombyTotal } = monthBalance(events, student.id, monthKey);
       return {
         studentId: student.id,
@@ -40,6 +81,8 @@ export function aggregateMonth(events: RecapEvent[], students: Student[], monthK
         uwaga,
         plombyTotal,
         bilans: plus - plombyTotal,
+        piatki,
+        plusyRazem: unsettledBalance(events, student.id, perFive, perOne, monthKey).plusy,
       };
     })
     .sort((a, b) => a.number - b.number);
@@ -118,19 +161,7 @@ export function settlementRows(events: RecapEvent[], students: Student[], settin
   const perOne = Math.max(1, settings.plombyForOne);
   return students
     .map((student) => {
-      let plus = 0;
-      let piatka = 0;
-      let plomba = 0;
-      let jedynka = 0;
-      for (const e of events) {
-        if (e.studentId !== student.id) continue;
-        if (e.result === 'plus') plus++;
-        else if (e.result === 'piatka') piatka++;
-        else if (e.result === 'plomba' || e.result === 'hint_plomba') plomba++;
-        else if (e.result === 'jedynka') jedynka++;
-      }
-      const plusy = Math.max(0, plus - piatka * perFive);
-      const plomby = Math.max(0, plomba - jedynka * perOne);
+      const { plusy, plomby } = unsettledBalance(events, student.id, perFive, perOne);
       return {
         student,
         plusy,
