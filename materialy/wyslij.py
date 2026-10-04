@@ -1,10 +1,10 @@
-"""Wysyla PDF-y sprawdzianow (grupy + klucz) do prywatnego bucketu Supabase "materialy".
+"""Wysyla PDF-y sprawdzianow (grupy + klucz) i karty pracy (+ rozwiazania) do prywatnego bucketu Supabase "materialy".
 
 Uzycie:
-  python materialy/wyslij.py klasa4-rozdzial1     # <folder>-sprawdzian.pdf i -klucz.pdf
+  python materialy/wyslij.py klasa4-rozdzial1     # <folder>-sprawdzian(-klucz).pdf, <folder>-karta(-rozwiazania).pdf
   python materialy/wyslij.py --zaloz-bucket       # jednorazowo: utworz bucket
 
-Pliki bierze z output/materialy/ (po node materialy/sprawdzian.mjs <folder>).
+Pliki bierze z output/materialy/ (po node materialy/sprawdzian.mjs i karta.mjs <folder>).
 Apka otwiera je przez podpisany URL (pasek "Po dziale" nad lista lekcji,
 src/data/materialyDzialow.ts). Odczyt dla zalogowanych daje polityka z
 supabase/migrations/0035_materialy_bucket.sql.
@@ -51,10 +51,12 @@ def main() -> None:
         print(zapytanie(f"{url}/storage/v1/bucket", key, body, "application/json"))
         return
     for folder in sys.argv[1:]:
-        for nazwa in (f"{folder}-sprawdzian.pdf", f"{folder}-sprawdzian-klucz.pdf"):
+        for nazwa in (f"{folder}-sprawdzian.pdf", f"{folder}-sprawdzian-klucz.pdf",
+                      f"{folder}-karta.pdf", f"{folder}-karta-rozwiazania.pdf"):
             plik = PDF / nazwa
             if not plik.exists():
-                print(f"brak {plik} - najpierw node materialy/sprawdzian.mjs {folder}")
+                skrypt = "karta" if "-karta" in nazwa else "sprawdzian"
+                print(f"brak {plik} - najpierw node materialy/{skrypt}.mjs {folder}")
                 continue
             wynik = zapytanie(f"{url}/storage/v1/object/materialy/{nazwa}", key, plik.read_bytes(),
                               "application/pdf", {"x-upsert": "true"})

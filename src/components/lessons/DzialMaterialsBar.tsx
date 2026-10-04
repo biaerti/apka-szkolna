@@ -1,8 +1,8 @@
 // Materialy po dziale nad lista lekcji zakladki: zeszyt powtorzeniowy (link do
-// VULCANA) i sprawdzian z grupami A-D + klucz (z prywatnego bucketu).
+// VULCANA), sprawdzian z grupami A-D + klucz i karta pracy (z prywatnego bucketu).
 
 import { useState } from 'react';
-import { materialyDzialu, sprawdzianUrl, zeszytUrl } from '../../data/materialyDzialow';
+import { materialyDzialu, prywatnyUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
 
 export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: string }) {
   const [info, setInfo] = useState<string | null>(null);
@@ -19,17 +19,17 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
     }
   }
 
-  async function otworzSprawdzian(klucz: boolean) {
+  async function otworz(rodzaj: PrywatnyPlik) {
     // Okno otwieramy od razu (w kliknieciu), bo po await przegladarka blokuje popup.
     const okno = window.open('', '_blank');
     try {
-      const url = await sprawdzianUrl(materialy!.folder, klucz);
+      const url = await prywatnyUrl(materialy!.folder, rodzaj);
       if (okno) okno.location.href = url;
       else window.location.href = url;
       setInfo(null);
     } catch (e) {
       okno?.close();
-      setInfo(e instanceof Error ? e.message : 'Nie udało się otworzyć sprawdzianu.');
+      setInfo(e instanceof Error ? e.message : 'Nie udało się otworzyć pliku.');
     }
   }
 
@@ -40,8 +40,15 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
       <a href={zeszyt} target="_blank" rel="noreferrer" className={btn}>Zeszyt powtórzeniowy</a>
       <button type="button" onClick={kopiuj} className={btn}>Kopiuj link do VULCANA</button>
       <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
-      <button type="button" onClick={() => otworzSprawdzian(false)} className={btn}>Sprawdzian A-D</button>
-      <button type="button" onClick={() => otworzSprawdzian(true)} className={btn}>Klucz</button>
+      {materialy.karta && (
+        <>
+          <button type="button" onClick={() => otworz('karta')} className={btn}>Karta pracy</button>
+          <button type="button" onClick={() => otworz('karta-rozwiazania')} className={btn}>Karta - rozwiązania</button>
+          <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
+        </>
+      )}
+      <button type="button" onClick={() => otworz('sprawdzian')} className={btn}>Sprawdzian A-D</button>
+      <button type="button" onClick={() => otworz('sprawdzian-klucz')} className={btn}>Klucz</button>
       {info && <span className="ml-auto text-xs text-gray-500">{info}</span>}
     </div>
   );
