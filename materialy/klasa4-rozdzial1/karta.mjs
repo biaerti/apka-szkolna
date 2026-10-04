@@ -77,8 +77,14 @@ export const KARTA = {
           ],
         },
         {
-          polecenie: 'Dokończ mapę myśli - dopisz trzy skojarzenia do hasła **WAKACJE**.',
-          linie: ['WAKACJE ➜ [[np. morze|26]], [[wolny czas|26]], [[lody|26]]'],
+          polecenie: 'Chcesz porównać w tabeli **hulajnogę** i **rower**. Wymyśl trzy nagłówki (cechy).',
+          tabela: {
+            wiersze: [
+              ['**pojazd**', '[[np. cena|24]]', '[[prędkość|24]]', '[[ile waży|24]]'],
+              ['hulajnoga', '', '', ''],
+              ['rower', '', '', ''],
+            ],
+          },
         },
       ],
     },
@@ -129,7 +135,7 @@ export const KARTA = {
       tytul: 'Czasownik',
       wiedza: [
         '**Czasownik** mówi, co ktoś **robi** (pisze, skacze) albo **co się z nim dzieje** (śpi, choruje). **Nie** z czasownikiem piszemy **osobno**: nie wiem.',
-        'Odmienia się przez **osobę** (ja, ty, on / my, wy, oni), **liczbę** (pojedyncza, mnoga), **czas** (przeszły, teraźniejszy, przyszły), a w czasie przeszłym też przez **rodzaj** (czytał, czytała, czytało).',
+        'Odmienia się przez **osobę** (ja, ty, on / my, wy, oni), **liczbę** (pojedyncza, mnoga), **czas** (przeszły, teraźniejszy, przyszły), a w czasie przeszłym (i w przyszłym typu „będzie czytała”) też przez **rodzaj**: męski, żeński, nijaki (czytał, czytała, czytało), a w liczbie mnogiej **męskoosobowy** (czytali) i **niemęskoosobowy** (czytały).',
         'Formy **nieosobowe**: **bezokolicznik** (co robić? - pływać) i formy na **-no, -to** (posprzątano, zbito).',
       ],
       zadania: [
@@ -140,11 +146,11 @@ export const KARTA = {
         {
           polecenie: 'Uzupełnij tabelę.',
           tabela: {
-            naglowki: ['czasownik', 'osoba', 'liczba', 'czas'],
+            naglowki: ['czasownik', 'osoba', 'liczba', 'czas', 'rodzaj'],
             wiersze: [
-              ['**skaczesz**', '[[2.|14]]', '[[pojedyncza|24]]', '[[teraźniejszy|24]]'],
-              ['**pływaliśmy**', '[[1.|14]]', '[[mnoga|24]]', '[[przeszły|24]]'],
-              ['**będą malować**', '[[3.|14]]', '[[mnoga|24]]', '[[przyszły|24]]'],
+              ['**skakałaś**', '[[2.|10]]', '[[pojedyncza|22]]', '[[przeszły|22]]', '[[żeński|30]]'],
+              ['**pływaliśmy**', '[[1.|10]]', '[[mnoga|22]]', '[[przeszły|22]]', '[[męskoosobowy|30]]'],
+              ['**będą malowały**', '[[3.|10]]', '[[mnoga|22]]', '[[przyszły|22]]', '[[niemęskoosobowy|30]]'],
             ],
           },
         },
@@ -197,7 +203,7 @@ export const KARTA = {
           linie: ['[[3|8]] Zbudowanie bałwana.', '[[1|8]] Pierwszy śnieg za oknem.', '[[4|8]] Powrót do domu na gorące kakao.', '[[2|8]] Wyjście na podwórko z sankami.'],
         },
         {
-          polecenie: 'Zamień zdania na punkty planu.',
+          polecenie: 'Zamień zdania na punkty planu (na równoważniki zdań).',
           linie: [
             'Chłopcy znaleźli w parku portfel. ➜ [[Znalezienie portfela w parku.|80]]',
             'Zanieśli go na policję. ➜ [[Oddanie portfela na policję.|80]]',

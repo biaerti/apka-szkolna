@@ -39,7 +39,8 @@ function linia(tekst, rozw) {
 }
 
 function tabela(t, rozw) {
-  return `<table class="tab"><thead><tr>${t.naglowki.map((h) => `<th>${z(h)}</th>`).join('')}</tr></thead>
+  const glowa = t.naglowki ? `<thead><tr>${t.naglowki.map((h) => `<th>${z(h)}</th>`).join('')}</tr></thead>` : '';
+  return `<table class="tab">${glowa}
   <tbody>${t.wiersze.map((w) => `<tr>${w.map((c) => `<td>${linia(c, rozw)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
 
@@ -94,6 +95,8 @@ body { font-size: 10pt; line-height: 1.3; }
 .tab { margin: 1mm 0 0 2mm; border-collapse: collapse; }
 .tab th { background: var(--k); color: #fff; font-family: 'Baloo 2'; font-size: 9.5pt; padding: .4mm 2.5mm; text-align: left; }
 .tab td { border: 1px solid var(--ramka); padding: .3mm 1.5mm; height: 7mm; }
+.tab:not(:has(thead)) td { min-width: 28mm; }
+.tab:not(:has(thead)) tr:first-child td { background: color-mix(in srgb, var(--k) 12%, white); }
 .tab td .luka { border-bottom: none; }
 .stopka { margin-top: 2mm; text-align: center; font-size: 8.5pt; color: var(--szary); }
 :root { --czerw: #D62828; }
