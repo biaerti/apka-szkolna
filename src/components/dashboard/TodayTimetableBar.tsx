@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { dyzuryNa } from '../../data/dyzury';
 import { useStore } from '../../data/store';
 import { dutyAfter } from '../../lib/dyzury';
+import { obiadAfter, obiadTitle } from '../../lib/obiady';
 import {
   currentOrNextEntry,
   entriesForDay,
@@ -57,6 +58,7 @@ export function TodayTimetableBar() {
         const cls = e.classId ? classById.get(e.classId) : undefined;
         const isHighlighted = highlighted?.id === e.id;
         const duty = dutyAfter(dyzuryNa(now), weekday, e.period);
+        const obiad = cls ? obiadAfter(now, e.period, cls.name) : undefined;
         return (
           <span key={e.id} className="flex items-center gap-2">
             {i > 0 && <span className="text-gray-300">·</span>}
@@ -97,6 +99,14 @@ export function TodayTimetableBar() {
                   title={`Po tej lekcji dyżur: ${duty.place}`}
                 >
                   + dyżur
+                </span>
+              )}
+              {obiad && (
+                <span
+                  className="rounded border border-emerald-300 bg-emerald-50 px-1.5 py-0.5 text-xs font-medium text-emerald-800"
+                  title={obiadTitle(obiad)}
+                >
+                  + obiad
                 </span>
               )}
             </span>

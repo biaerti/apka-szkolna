@@ -7,11 +7,13 @@
 // przypomnienie o dyzurze (src/data/dyzury.ts): "po lekcji: dyżur" w trakcie
 // lekcji, "dyżur teraz" na przerwie. Do tego sala z planu: "po lekcji: sala 35",
 // gdy nastepna lekcja jest gdzie indziej, a na przerwie sala najblizszej lekcji.
+// I obiad (src/data/obiady.ts): "po lekcji: obiad 4c · 10 os. · sami".
 
 import clsx from 'clsx';
 import { dyzuryNa } from '../../data/dyzury';
 import { useStore } from '../../data/store';
 import { dutyStatus } from '../../lib/dyzury';
+import { obiadLabel, obiadStatus } from '../../lib/obiady';
 import { formatHm, formatRemaining, nextRoom, periodStatus } from '../../lib/timetable';
 import { useNow } from '../timetable/useNow';
 
@@ -31,9 +33,11 @@ export interface PresentClockProps {
 export function PresentClock({ position = 'top-right' }: PresentClockProps) {
   const periods = useStore((s) => s.periods);
   const timetable = useStore((s) => s.timetable);
+  const classes = useStore((s) => s.classes);
   const now = useNow(1000);
   const status = periodStatus(periods, now);
   const duty = dutyStatus(dyzuryNa(now), periods, now);
+  const obiad = obiadStatus(timetable, classes, periods, now);
   const room = nextRoom(timetable, periods, now);
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
@@ -60,6 +64,11 @@ export function PresentClock({ position = 'top-right' }: PresentClockProps) {
       {duty.kind !== 'none' && (
         <div className="mt-0.5 text-sm font-semibold text-amber-300">
           {duty.kind === 'after-lesson' ? 'po lekcji: dyżur' : 'dyżur teraz'} · {duty.duty.place}
+        </div>
+      )}
+      {obiad.kind !== 'none' && (
+        <div className="mt-0.5 text-sm font-semibold text-emerald-300">
+          {obiad.kind === 'after-lesson' ? 'po lekcji: obiad' : 'obiad teraz'} · {obiadLabel(obiad.obiad)}
         </div>
       )}
       {room && (
