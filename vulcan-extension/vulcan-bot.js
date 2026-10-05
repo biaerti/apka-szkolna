@@ -1,4 +1,6 @@
 const BOT_ID = 'apka-szkolna-vulcan-bot';
+// Wersja w panelu - widac od razu, czy karta VULCANA ma juz nowy kod dodatku.
+const BOT_VERSION = (() => { try { return chrome.runtime.getManifest().version; } catch { return ''; } })();
 let transfer = null;
 let phase = 'start';
 // Uwaga z apki (zakładka „Uwagi” w lekcji -> „Dodaj”). Osobna paczka niż
@@ -233,7 +235,7 @@ function render(message, error = false) {
         #${BOT_ID} .buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:12px} #${BOT_ID} .close{position:absolute;right:10px;top:8px;background:transparent;color:#6b7280;padding:5px}
       </style>
       <button class="close" data-action="close" aria-label="Zamknij">×</button>
-      <h2>Pomocnik VULCAN</h2><div data-slot="content"></div><div class="buttons" data-slot="buttons"></div>`;
+      <h2>Pomocnik VULCAN <small style="font-weight:400;color:#9ca3af;font-size:12px">v${BOT_VERSION}</small></h2><div data-slot="content"></div><div class="buttons" data-slot="buttons"></div>`;
     document.body.appendChild(root);
     root.addEventListener('click', (event) => {
       const action = event.target?.dataset?.action;
@@ -1123,9 +1125,25 @@ async function finishFrek(result) {
   } catch { /* apka zamknieta - zlecenie samo przejdzie w blad po czasie */ }
 }
 
+// Okno "Dodawanie lekcji" / "Dodawanie tematu" zostawione po nieudanej
+// probie zaslania drzewo (maska ExtJS) - kolejna proba utknelaby za nim.
+async function closeLeftoverWindows() {
+  for (const title of ['Dodawanie tematu lekcji', 'Dodawanie lekcji']) {
+    const header = findText(title);
+    const win = header?.closest('.x-window');
+    if (!win) continue;
+    const cancel = findTextIn(win, 'Anuluj', true);
+    if (cancel) {
+      clickElement(cancel);
+      await waitFor(() => !document.contains(win) || !visible(win), 3000);
+    }
+  }
+}
+
 async function runFrekwencja() {
   let roster = [];
   try {
+    await closeLeftoverWindows();
     await openLekcjaView();
     const state = await openFrekLesson();
     if (state === 'new') await createFrekLesson();

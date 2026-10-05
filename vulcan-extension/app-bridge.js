@@ -19,8 +19,22 @@ chrome.runtime.onMessage.addListener((message) => {
   }
 });
 
+// Most w karcie apki po przeladowaniu dodatku jest "osierocony": chrome.runtime
+// znika i kazde sendMessage rzuca wyjatek, wiec zlecenie przepadalo po cichu.
+// Teraz nie zglaszamy gotowosci, a zlecenie wraca z bledem.
+const STALE = 'Dodatek został zaktualizowany - odśwież kartę apki (F5) i kartę VULCANA.';
+const alive = () => Boolean(globalThis.chrome?.runtime?.id);
+
 window.addEventListener('message', (event) => {
   if (event.source !== window || !event.data || event.data.source !== PAGE_SOURCE) return;
+  if (!alive()) {
+    if (event.data.type === 'VULCAN_FREKWENCJA') reply('VULCAN_FREKWENCJA_RESULT', { jobId: event.data.payload?.jobId, ok: false, message: STALE });
+    if (event.data.type === 'VULCAN_UWAGA') reply('VULCAN_UWAGA_ERROR', STALE);
+    if (event.data.type === 'VULCAN_TRANSFER') reply('VULCAN_TRANSFER_ERROR', STALE);
+    if (event.data.type === 'VULCAN_SCHEDULE_REQUEST') reply('VULCAN_SCHEDULE_ERROR', STALE);
+    if (event.data.type === 'VULCAN_ATTENDANCE_REQUEST') reply('VULCAN_ATTENDANCE_ERROR', STALE);
+    return;
+  }
   if (event.data.type === 'VULCAN_BRIDGE_PING') {
     reply('VULCAN_BRIDGE_READY');
     // Odzyskaj potwierdzenia, które przyszły, gdy karta apki spała albo była

@@ -90,7 +90,7 @@ export function useVulcanTopics() {
         if (!(await pingBridge())) {
           // Bez dodatku nic z kolejki nie pojdzie - oznacz wszystko naraz.
           for (const rest of [item, ...queue.current.splice(0)]) {
-            update(topicKey(rest), { status: 'error', topic: rest.topic.trim(), message: 'Nie widzę dodatku „pomocnik VULCAN” w tej przeglądarce.' });
+            update(topicKey(rest), { status: 'error', topic: rest.topic.trim(), message: 'Nie widzę dodatku „pomocnik VULCAN”. Jeśli był właśnie odświeżany, odśwież tę kartę (F5) i kartę VULCANA.' });
           }
           return;
         }
