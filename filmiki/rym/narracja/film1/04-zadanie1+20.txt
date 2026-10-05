@@ -1,1 +1,0 @@
-Zadanie pierwsze. Na ekranie jest sześć par wyrazów. Przepisz numery do zeszytu i przy każdym napisz: rym albo nie rym. Przeczytaj każdą parę na głos, szeptem, i posłuchaj końcówek. Start!

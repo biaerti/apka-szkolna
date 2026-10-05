@@ -1,1 +1,0 @@
-Zadanie drugie. Przeczytaj wiersz z ekranu. Wypisz do zeszytu dwie pary rymów i napisz, czy to rymy parzyste, czy przeplatane. Start!

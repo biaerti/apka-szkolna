@@ -13,7 +13,7 @@ export const KARTA = {
       tytul: 'Wiersz: rym i porównanie',
       wiedza: [
         'W wierszu mówi **podmiot liryczny** (nie autor!). Wiersz składa się z **wersów** (linijek) i **zwrotek**.',
-        '**Rym** to podobne brzmienie końcówek wersów: ==las== - ==czas==. Rymy **parzyste**: 1. wers z 2., 3. z 4. **Przeplatane**: 1. z 3., 2. z 4.',
+        '**Rym** to podobne lub identyczne brzmienie końcówek wyrazów, najczęściej na końcu wersów: ==las== - ==czas==. Schematy: **AABB** parzyste, **ABAB** krzyżowe, **ABBA** okalające.',
         '**Porównanie** zestawia dwie rzeczy słówkiem **jak, niczym, jakby**: szybki ==jak== wiatr.',
       ],
       zadania: [
@@ -22,7 +22,7 @@ export const KARTA = {
           linie: [
             'Mój pies ma uszy miękkie jak ((puch)), / a gdy go wołam, nadstawia ((słuch)).',
             'Choć czasem w błocie brudny ((cały)), / to przyjaciel z niego ((wspaniały)).',
-            'Rymy: {{*parzyste|przeplatane}} · Kto mówi? [[właściciel psa|40]]',
+            'Rymy: {{*parzyste|krzyżowe|okalające}} · Kto mówi? [[właściciel psa|40]]',
             'Porównanie: [[uszy miękkie jak puch|60]]',
           ],
         },

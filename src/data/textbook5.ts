@@ -8,7 +8,7 @@
 // "Plan" na liscie lekcji): co czytamy, o czym powiedziec, jak wyjasnic, co
 // narysowac na tablicy. Nagrania czytanek sa w src/data/czytanki.ts (V.2...).
 
-import type { Lesson, Question, QuestionSet } from './types';
+import type { Lesson, Question, QuestionSet, Slide } from './types';
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
 import { DZIAL2_TOPICS } from './textbook5dzial2';
@@ -18,6 +18,13 @@ import {
 } from './textbook5slides';
 
 const DZIAL = 'Dział 1 - W poszukiwaniu przyjaźni';
+
+/** Slajd z materialow Bartka o rymach (teoria + karta pracy) - obraz z prywatnego bucketu czytanek. */
+function obrazRymy(plik: string, title: string, code?: string): Slide {
+  return code
+    ? { id: newId(), kind: 'image', url: `czytanki:rymy-${plik}.webp`, title, code, studentAction: 'write-answer' }
+    : { id: newId(), kind: 'image', url: `czytanki:rymy-${plik}.webp`, title, studentAction: 'look' };
+}
 
 const TOPICS: Topic[] = [
   {
@@ -394,58 +401,64 @@ const TOPICS: Topic[] = [
     ],
   },
   {
-    // Rym jest na mapie dzialu (s. 13 i s. 56), a nie mial osobnej lekcji - dopisany 2026-10-05 po Wikipedii.
-    title: '15a. Rym - wers, zwrotka i układ rymów',
-    topic: 'Rym - wers, zwrotka i układ rymów',
+    // Rym jest na mapie dzialu (s. 13 i s. 56). Lekcja na materialach Bartka (teoria + karta pracy,
+    // obrazy rymy-*.webp w prywatnym buckecie czytanek - we fragmentach sa cudze wiersze i rap).
+    title: '15a. Rym - schematy i rodzaje rymów',
+    topic: 'Rym - schematy i rodzaje rymów',
     textbookPage: 13,
     teacherPlan: plan(
-      ['Co dziś', 'Lekcja językowo-literacka o budowie wiersza: wers, zwrotka, rym, rymy parzyste i przeplatane, jak samemu wymyślić rym. Rdzeń to film (9 min) z 4 zadaniami i sprawdzeniem po każdym - przykłady w filmie są własne, nie z podręcznika. Po filmie koło z nowymi, podobnymi zadaniami. Rym wraca na podsumowaniu działu (lekcja 16), więc ta lekcja ją przygotowuje.'],
+      ['Co dziś', 'Lekcja na Twoich materiałach: najpierw **teoria rymów** (7 slajdów), potem **karta pracy** (4 ćwiczenia, ćwiczenie 3 na dwóch slajdach). Na koniec koło z pytaniami i notatka. Rym wraca na podsumowaniu działu (lekcja 16).'],
       ['Po lekcji uczeń', [
-        '- wskazuje w wierszu wers i zwrotkę,',
-        '- wyjaśnia, co to jest rym, i odróżnia rym od pary wyrazów, które się nie rymują,',
-        '- wie, że rym słyszymy (góry - chmury), a nie widzimy w pisowni,',
-        '- rozpoznaje rymy parzyste i przeplatane,',
-        '- dobiera rymy do wyrazu i dopisuje wers z rymem.',
+        '- wyjaśnia, co to jest rym,',
+        '- rozpoznaje schemat rymów: parzyste (AABB), krzyżowe (ABAB), okalające (ABBA),',
+        '- odróżnia rym dokładny od niedokładnego, męski od żeńskiego, gramatyczny od niegramatycznego,',
+        '- dopisuje wers według schematu,',
+        '- wskazuje rym wewnętrzny.',
       ].join('\n')],
       ['Przebieg (45 min)', [
-        '1. **Temat + koło powtórzeniowe** (6 min) - pytania o Wikipedię i sposoby komunikowania się.',
-        '2. **Na start, ustnie** (2 min): „Dokończcie: Wlazł kotek na płotek i…” - klasa sama słyszy rym. „Dlaczego to tak łatwo zapamiętać?”',
-        '3. **Film** (9 min). Zanim puścisz: „Zeszyty otwarte. W filmie są 4 zadania, po każdym od razu sprawdzenie - stawiacie sobie ✓ albo poprawiacie na zielono”.',
-        '4. **Koło z pytaniami lekcji** (8 min) - 5 losowanych pytań, inne niż w filmie.',
-        '5. **Notatka** (5 min).',
-        '6. **Na koniec, w parach** (8 min): dopiszcie drugą zwrotkę do wierszyka o kotku z filmu (4 wersy, rymy parzyste). 2-3 pary czytają na głos, klasa sprawdza uchem, czy końcówki się rymują.',
+        '1. **Temat + koło powtórzeniowe** (5 min) - pytania o Wikipedię i sposoby komunikowania się.',
+        '2. **Teoria** (12 min) - 7 slajdów, uczniowie zapisują schematy i przykłady.',
+        '3. **Ćwiczenie 1** - schemat rymów (5 min).',
+        '4. **Ćwiczenie 2** - rodzaje rymów w parach (6 min).',
+        '5. **Ćwiczenie 3** - dopisz wersy (8 min, wybierz 2 z 4 albo w grupach).',
+        '6. **Ćwiczenie 4** - rymy wewnętrzne (zapas).',
+        '7. **Koło z pytaniami lekcji** (5 min) i **notatka** (4 min).',
       ].join('\n')],
-      ['Odpowiedzi do zadań z filmu', [
-        '- **Z1** rym: szafa - żyrafa, noc - moc, lody - wody; nie rym: kot - kos, słońce - łąka, zima - lato.',
-        '- **Z2** wieje - grzeję, drzewa - śpiewa; rymy przeplatane (1 z 3, 2 z 4).',
-        '- **Z3** np. dom - tom, grom, prom, złom; noga - droga, podłoga, trwoga; ryba - szyba, chyba.',
-        '- **Z4** np. „a wiewiórki orzechy zbierają”, „a już rysuje piękny kwiat” - liczy się rym i sens.',
+      ['Odpowiedzi', [
+        '- **Ćw. 1** fragment 1 - okalający (ABBA), fragment 2 - krzyżowy (ABAB), fragment 3 - parzysty (AABB).',
+        '- **Ćw. 2** dom - tom: dokładny, męski, gramatyczny · kochanie - szukanie: dokładny, żeński, gramatyczny · serce - więcej: niedokładny, żeński, niegramatyczny · biały - klawisz: niedokładny, żeński, niegramatyczny · miłość - zażyłość: dokładny, żeński, gramatyczny.',
+        '- **Ćw. 3** wersy dowolne, sprawdzamy schemat i rodzaj rymu.',
+        '- **Ćw. 4** podpowiedzi są na karcie: Asy - klasy, szóstki - nudny, Kier - jazz; torbę stylu - problem synu; epitety - etykiety.',
       ].join('\n')],
-      ['Jak wyjaśnić', [
-        '- **Rym słyszymy, nie widzimy.** Każ przeczytać parę szeptem: „mrówka - główka” piszemy inaczej (ó i u), ale brzmi tak samo, więc to rym.',
-        '- **Zgadza się sama ostatnia litera? To za mało.** Kot - but: oba kończą się na „t”, ale nie brzmią podobnie. Liczy się końcówka od przedostatniej samogłoski (s**owa** - gł**owa**).',
-        '- **Układ rymów:** każdą parę rymów zaznaczamy innym kolorem i patrzymy na numery wersów. Pary obok siebie = parzyste, na przemian = przeplatane („jak warkocz”).',
-        '- Słabsi uczniowie przy Z3: mów wyraz powoli i „odcinaj” końcówkę ręką, potem doklejajcie początki z alfabetu po kolei (b-, d-, g-, k-...).',
-      ].join('\n')],
-      ['Tablica', 'Wierszyk o kotku (4 wersy), wersy ponumerowane, rymy zakreślone dwoma kolorami.\nObok: **WERS** = linijka · **ZWROTKA** = kilka wersów · **RYM** = podobne brzmienie końcówek\n**PARZYSTE** 1-2, 3-4 | **PRZEPLATANE** 1-3, 2-4'],
     ),
-    // Kolo po filmie: nowe, podobne zadania (zadania filmu sprawdza sam film).
+    // Kolo na koniec: nowe przyklady do pojec z teorii.
     questions: [
-      { text: 'Co to jest wers, a co zwrotka?', answer: 'Wers to jedna linijka wiersza, a zwrotka to kilka wersów, które tworzą całość.' },
-      { text: 'Które pary się rymują: kaczka - taczka, pies - las, mrówka - główka?', answer: 'Kaczka - taczka i mrówka - główka (ó i u brzmią tak samo). Pies - las to nie rym.' },
-      { text: 'Dlaczego góra - chmura to rym, choć piszemy je inaczej?', answer: 'Bo rym słyszymy - liczy się dźwięk końcówki, a nie pisownia.' },
-      { text: 'W wierszu 1. wers rymuje się z 3., a 2. z 4. Jakie to rymy?', answer: 'Przeplatane.' },
-      { text: 'Jak nazywamy rymy, gdy 1. wers rymuje się z 2., a 3. z 4.?', answer: 'Parzyste.' },
-      { text: 'Dopisz dwa rymy do słowa „woda” i do słowa „piasek”.', answer: 'Np. woda - moda, broda, pogoda, szkoda; piasek - lasek, pasek, kwasek.' },
-      { text: 'Dokończ wierszyk rymem: „Na śniegu stoi bałwanek mały…”', answer: 'Np. „…a obok niego dzieci się śmiały”. Ostatnie słowo musi brzmieć podobnie jak „mały”.' },
-      { text: 'Dlaczego przysłowia i wyliczanki często się rymują?', answer: 'Bo tekst z rymem łatwo zapamiętać.' },
+      { text: 'Co to jest rym?', answer: 'Podobne lub identyczne brzmienie końcówek wyrazów, najczęściej na końcu wersów.' },
+      { text: 'Jak nazywa się schemat AABB? A ABAB? A ABBA?', answer: 'AABB - parzyste, ABAB - krzyżowe, ABBA - okalające.' },
+      { text: 'Rym dokładny czy niedokładny: mama - brama? kot - kos?', answer: 'Mama - brama: dokładny (brzmi identycznie). Kot - kos: niedokładny (zgadza się samogłoska, końcówki podobne).' },
+      { text: 'Rym męski czy żeński: kot - płot? lato - złoto?', answer: 'Kot - płot: męski (akcent na ostatniej sylabie). Lato - złoto: żeński (akcent na przedostatniej).' },
+      { text: 'Rym gramatyczny czy niegramatyczny: skacze - płacze? rzeka - czeka?', answer: 'Skacze - płacze: gramatyczny (oba czasowniki). Rzeka - czeka: niegramatyczny (rzeczownik i czasownik).' },
+      { text: 'Podaj rym gramatyczny z dwóch przymiotników.', answer: 'Np. biały - mały, wesoły - goły, zielony - czerwony.' },
+      { text: 'Co to jest rym wewnętrzny?', answer: 'Rym w tym samym miejscu w różnych wersach, a nie tylko na ich końcu.' },
+      { text: 'Dopisz wers do „Na śniegu stoi bałwanek mały”, tak żeby wyszedł rym parzysty.', answer: 'Np. „a obok niego dzieci się śmiały”.' },
     ],
     makeSlides: (previousSetId, ownSetId) => [
-      slideTopic('Rym - wers, zwrotka i układ rymów'),
+      slideTopic('Rym - schematy i rodzaje rymów'),
       ...recap(previousSetId),
-      slideVideo('rym-film1'),
+      obrazRymy('teoria-1', 'Teoria rymów - czym jest rym?'),
+      obrazRymy('teoria-2', 'Teoria rymów - schematy'),
+      obrazRymy('teoria-3', 'Teoria rymów - dokładny i niedokładny'),
+      obrazRymy('teoria-4', 'Teoria rymów - męski i żeński'),
+      obrazRymy('teoria-5', 'Teoria rymów - gramatyczny i niegramatyczny'),
+      obrazRymy('teoria-6', 'Teoria rymów - rymy wewnętrzne'),
+      obrazRymy('teoria-7', 'Teoria rymów - podsumowanie'),
+      obrazRymy('karta-1', 'Ćwiczenie 1', 'Ćw. 1'),
+      obrazRymy('karta-2', 'Ćwiczenie 2', 'Ćw. 2'),
+      obrazRymy('karta-3ab', 'Ćwiczenie 3 (A i B)', 'Ćw. 3 A-B'),
+      obrazRymy('karta-3cd', 'Ćwiczenie 3 (C i D)', 'Ćw. 3 C-D'),
+      obrazRymy('karta-4', 'Ćwiczenie 4', 'Ćw. 4'),
       ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : []),
-      slideNote('Rym - wers, zwrotka i układ rymów', '1. Wiersz składa się z **wersów** (linijek). Kilka wersów tworzy **zwrotkę**.\n2. **Rym** to podobne brzmienie zakończeń wyrazów, zwykle na końcu wersów: sowa - głowa. Rym słyszymy: góry - chmury.\n3. Rymy **parzyste**: wers 1 z 2, wers 3 z 4. Rymy **przeplatane**: wers 1 z 3, wers 2 z 4.\n4. Tekst z rymem łatwo zapamiętać (przysłowia, wyliczanki, piosenki).'),
+      slideNote('Rym - schematy i rodzaje rymów', '1. **Rym** - podobne lub identyczne brzmienie końcówek wyrazów, najczęściej na końcu wersów.\n2. Schematy: **AABB** parzyste, **ABAB** krzyżowe, **ABBA** okalające.\n3. Rym **dokładny** (koc - noc) i **niedokładny** (serce - grzeszę).\n4. Rym **męski** - akcent na ostatnią sylabę (dom - tom), **żeński** - na przedostatnią (kochanie - szukanie).\n5. Rym **gramatyczny** - ta sama część mowy (biały - mały), **niegramatyczny** - różne.\n6. **Rym wewnętrzny** - w tym samym miejscu w różnych wersach.'),
     ],
   },
   {

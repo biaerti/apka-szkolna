@@ -60,6 +60,8 @@ const TITLE_ALIASES: Record<string, string> = {
   // Temat 11 wchlonal 12-13 (jedna prezentacja o czasowniku na dwie godziny) -
   // stara lekcja 11 aktualizuje sie w miejscu i zachowuje postep klas.
   [titleMatchKey('11. Czas na czasownik')]: titleMatchKey('11-13. Czas na czasownik'),
+  // Klasa 5: lekcja o rymie przerobiona z filmu na materialy Bartka (teoria + karta pracy).
+  [titleMatchKey('15a. Rym - wers, zwrotka i układ rymów')]: titleMatchKey('15a. Rym - schematy i rodzaje rymów'),
 };
 
 /**

@@ -75,14 +75,16 @@ describe('buildTextbook5', () => {
     expect(lesson.slides[6]).toMatchObject({ kind: 'note', diagram: 'trybyCzasownika' });
   });
 
-  it('rym: zaraz po Wikipedii, film, kolo z nowymi pytaniami, notatka; temat do dziennika bez numeru', () => {
+  it('rym: zaraz po Wikipedii, teoria i karta pracy Bartka jako obrazy, kolo, notatka; bez filmu', () => {
     const index = bundle.lessons.findIndex((l) => l.title.startsWith('15a. Rym'));
     expect(bundle.lessons[index - 1].title).toMatch(/^15\. Wikipedia/);
     const lesson = bundle.lessons[index];
-    expect(lesson.registerTopic).toBe('Rym - wers, zwrotka i układ rymów');
-    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'video', 'recap', 'note']);
-    expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'rym-film1' });
-    expect(lesson.slides[3]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId, questionCount: 5 });
+    expect(lesson.registerTopic).toBe('Rym - schematy i rodzaje rymów');
+    expect(lesson.slides.some((s) => s.kind === 'video')).toBe(false);
+    const obrazy = lesson.slides.filter((s) => s.kind === 'image');
+    expect(obrazy).toHaveLength(12);
+    expect(obrazy.every((s) => s.kind === 'image' && s.url.startsWith('czytanki:rymy-'))).toBe(true);
+    expect(lesson.slides.slice(-2).map((s) => s.kind)).toEqual(['recap', 'note']);
   });
 
   it('Wikipedia: czytanka, film, mapa s. 40-41, kolo z 6 pytaniami, notatka i zadanie domowe', () => {
