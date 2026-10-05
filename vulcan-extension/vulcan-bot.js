@@ -820,25 +820,71 @@ function findLessonNode(period, className) {
     .sort((a, b) => a.getBoundingClientRect().width * a.getBoundingClientRect().height - b.getBoundingClientRect().width * b.getBoundingClientRect().height)[0] || null;
 }
 
+// Wiersz drzewa (ExtJS 4: tr/table .x-grid-row, ExtJS 5+: .x-grid-item).
+function treeRow(element) {
+  return element?.closest('.x-grid-item, .x-grid-row, tr') || null;
+}
+
+function isRowSelected(element) {
+  for (let node = element, depth = 0; node && depth < 8; node = node.parentElement, depth += 1) {
+    if (/\bx-grid-(item|row)-selected\b/.test(node.className || '')) return true;
+    if (node.getAttribute?.('aria-selected') === 'true') return true;
+  }
+  return false;
+}
+
+function isDayExpanded(dayElement) {
+  for (let node = dayElement, depth = 0; node && depth < 8; node = node.parentElement, depth += 1) {
+    if (/\bx-grid-tree-node-expanded\b/.test(node.className || '')) return true;
+    if (node.getAttribute?.('aria-expanded') === 'true') return true;
+  }
+  return false;
+}
+
+async function expandDay(day) {
+  const dayElement = await waitFor(() => findText(day), 6000);
+  if (!dayElement) throw new Error(`Nie ma dnia „${day}” w drzewie lekcji (inny tydzień?).`);
+  const found = () => findLessonNode(frek.period, frek.vulcanClassName);
+  dayElement.setAttribute('data-apka-bot', 'day');
+  await extRun('expand-day', '', { day });
+  dayElement.removeAttribute('data-apka-bot');
+  // Godziny dnia VULCAN dociaga z serwera - w karcie w tle potrafi to trwac.
+  let node = await waitFor(found, 6000);
+  if (node) return node;
+  // Zapas: klik w plusik. NIE dwuklik - na rozwinietym dniu zwijal go z powrotem.
+  if (!isDayExpanded(dayElement)) {
+    const row = treeRow(dayElement);
+    const expander = row?.querySelector('.x-tree-expander');
+    if (expander) clickElement(expander);
+    else clickElement(dayElement);
+    node = await waitFor(found, 6000);
+  }
+  return node;
+}
+
+// Klik w godzine w drzewie musi ja naprawde ZAZNACZYC - inaczej panel po
+// prawej zostaje przy poprzedniej godzinie i "Utwórz lekcję" tworzy lekcje
+// nie tam (pusty formularz bez klasy i przedmiotu, test 2026-10-05).
+async function selectLessonNode(node) {
+  clickElement(node);
+  if (await waitFor(() => isRowSelected(findLessonNode(frek.period, frek.vulcanClassName)), 2500)) return;
+  const fresh = findLessonNode(frek.period, frek.vulcanClassName) || node;
+  const result = await realClick([fresh]);
+  if (result !== 'ok') throw new Error(`Nie udało się kliknąć ${frek.period}. lekcji w drzewie (${result}).`);
+  if (await waitFor(() => isRowSelected(findLessonNode(frek.period, frek.vulcanClassName)), 3500)) return;
+  throw new Error(`Kliknąłem ${frek.period}. lekcję klasy ${frek.vulcanClassName}, ale VULCAN jej nie zaznaczył - kliknij ją w drzewie i spróbuj jeszcze raz.`);
+}
+
 async function openFrekLesson() {
   render('Otwieram lekcję w drzewie…');
   const day = new Date(`${frek.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   let node = findLessonNode(frek.period, frek.vulcanClassName);
-  if (!node) {
-    const dayElement = await waitFor(() => findText(day), 6000);
-    if (!dayElement) throw new Error(`Nie ma dnia „${day}” w drzewie lekcji (inny tydzień?).`);
-    dayElement.setAttribute('data-apka-bot', 'day');
-    await extRun('expand-day', '', { day });
-    dayElement.removeAttribute('data-apka-bot');
-    node = await waitFor(() => findLessonNode(frek.period, frek.vulcanClassName), 2500);
-    if (!node) {
-      dayElement.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
-      node = await waitFor(() => findLessonNode(frek.period, frek.vulcanClassName), 3000);
-    }
-  }
-  if (!node) throw new Error(`Nie znalazłem ${frek.period}. lekcji klasy ${frek.vulcanClassName} w drzewie.`);
-  clickElement(node);
-  await sleep(1200);
+  if (!node) node = await expandDay(day);
+  if (!node) throw new Error(`Nie znalazłem ${frek.period}. lekcji klasy ${frek.vulcanClassName} w drzewie (${day}).`);
+  await selectLessonNode(node);
+  // Panel po prawej przeladowuje sie po zaznaczeniu - bez tej chwili bot
+  // czytal jeszcze stan poprzedniej godziny.
+  await sleep(1800);
   const opis = exactVisible(document, 'Opis lekcji')[0];
   if (opis) {
     clickElement(opis);
@@ -855,9 +901,18 @@ async function createFrekLesson() {
   }
   render(frek.topicOnly ? 'Tworzę lekcję z tematem z apki…' : 'Tworzę lekcję z tematem z telefonu…');
   clickElement(await waitForText('Utwórz lekcję'));
-  await waitForText('Dodawanie lekcji');
-  await sleep(500);
-  clickElement(exactVisible(document, 'Dalej')[0] || (await waitForText('Dalej')));
+  const addTitle = await waitForText('Dodawanie lekcji');
+  await sleep(700);
+  // Formularz dla godziny z planu ma klase i przedmiot juz wpisane. Pusty
+  // przedmiot = VULCAN otworzyl tworzenie dla innej (pustej) godziny - stop.
+  const addWin = addTitle.closest('.x-window') || document.body;
+  const subject = fieldByLabel('Przedmiot:', addWin);
+  if (subject && !String(subject.value || '').trim()) {
+    const cancel = findTextIn(addWin, 'Anuluj', true);
+    if (cancel) clickElement(cancel);
+    throw new Error(`Okno „Dodawanie lekcji” otworzyło się bez przedmiotu - to nie ta godzina. Nic nie zapisałem.`);
+  }
+  clickElement(exactVisible(addWin, 'Dalej')[0] || exactVisible(document, 'Dalej')[0] || (await waitForText('Dalej')));
   const title = await waitForText('Dodawanie tematu lekcji', 8000);
   await sleep(600);
   const win = title.closest('.x-window') || document.body;
