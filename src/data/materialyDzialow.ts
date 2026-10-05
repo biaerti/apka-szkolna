@@ -13,11 +13,14 @@ export type MaterialyDzialu = {
   folder: string;
   /** Jest karta pracy na 2 strony (materialy/karta.mjs) - wersja do druku i z rozwiazaniami. */
   karta?: boolean;
+  /** false = dzial ma tylko karte pracy, bez zeszytu powtorzeniowego i sprawdzianu. */
+  zeszytISprawdzian?: boolean;
 };
 
 export const MATERIALY_DZIALOW: MaterialyDzialu[] = [
   { grade: 'IV', dzial: 'Rozdział I. Poznajemy siebie i innych', folder: 'klasa4-rozdzial1', karta: true },
   { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2' },
+  { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszytISprawdzian: false },
   { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2' },
 ];
 

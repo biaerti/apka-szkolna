@@ -9,6 +9,7 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
   const materialy = materialyDzialu(grade, dzial);
   if (!materialy) return null;
   const zeszyt = zeszytUrl(materialy.folder);
+  const pelne = materialy.zeszytISprawdzian !== false;
 
   async function kopiuj() {
     try {
@@ -37,18 +38,26 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
   return (
     <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm">
       <span className="mr-1 text-gray-500">Po dziale</span>
-      <a href={zeszyt} target="_blank" rel="noreferrer" className={btn}>Zeszyt powtórzeniowy</a>
-      <button type="button" onClick={kopiuj} className={btn}>Kopiuj link do VULCANA</button>
-      <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
+      {pelne && (
+        <>
+          <a href={zeszyt} target="_blank" rel="noreferrer" className={btn}>Zeszyt powtórzeniowy</a>
+          <button type="button" onClick={kopiuj} className={btn}>Kopiuj link do VULCANA</button>
+          <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
+        </>
+      )}
       {materialy.karta && (
         <>
           <button type="button" onClick={() => otworz('karta')} className={btn}>Karta pracy</button>
           <button type="button" onClick={() => otworz('karta-rozwiazania')} className={btn}>Karta - rozwiązania</button>
-          <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
+          {pelne && <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />}
         </>
       )}
-      <button type="button" onClick={() => otworz('sprawdzian')} className={btn}>Sprawdzian A-D</button>
-      <button type="button" onClick={() => otworz('sprawdzian-klucz')} className={btn}>Klucz</button>
+      {pelne && (
+        <>
+          <button type="button" onClick={() => otworz('sprawdzian')} className={btn}>Sprawdzian A-D</button>
+          <button type="button" onClick={() => otworz('sprawdzian-klucz')} className={btn}>Klucz</button>
+        </>
+      )}
       {info && <span className="ml-auto text-xs text-gray-500">{info}</span>}
     </div>
   );

@@ -25,7 +25,7 @@ Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recyt
 - W narracji nie ma gołych liter („ek”, „ó”), bo TTS czyta je jako nazwy liter. Końcówki i litery pokazuj na ekranie.
 
 **Pipeline nowego filmu:**
-1. Skopiuj folder wzoru i zamień jego nazwę w `*.py`/`*.mjs`. W `renderuj.mjs` ustaw **nowy PORT** (zajęte 9333-9348, kolejny wolny 9349). Profil Chrome i folder klatek biorą nazwę z folderu, dzięki temu rendery idą równolegle.
+1. Skopiuj folder wzoru i zamień jego nazwę w `*.py`/`*.mjs`. W `renderuj.mjs` ustaw **nowy PORT** (zajęte 9333-9399, kolejny wolny 9401). Profil Chrome i folder klatek biorą nazwę z folderu, dzięki temu rendery idą równolegle.
 2. Narrację pisz skryptem Python do pliku (`narracja/film1/NN-nazwa.txt`, pauza na zadanie jako sufiks `+20`). **Nie przez heredoc w bashu**, bo psuje polskie znaki.
 3. Przed generacją sprawdź kredyty ElevenLabs (`GET /v1/user/subscription`). Koszt to ok. 0,35 kredytu na znak razem z alignmentem, film 5000 znaków ≈ 1700 kredytów.
 4. `python filmiki/X/generuj-audio.py film1` (audio + timeline + forced alignment).

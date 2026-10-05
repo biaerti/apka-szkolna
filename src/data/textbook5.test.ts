@@ -75,6 +75,16 @@ describe('buildTextbook5', () => {
     expect(lesson.slides[6]).toMatchObject({ kind: 'note', diagram: 'trybyCzasownika' });
   });
 
+  it('rym: zaraz po Wikipedii, film, kolo z nowymi pytaniami, notatka; temat do dziennika bez numeru', () => {
+    const index = bundle.lessons.findIndex((l) => l.title.startsWith('15a. Rym'));
+    expect(bundle.lessons[index - 1].title).toMatch(/^15\. Wikipedia/);
+    const lesson = bundle.lessons[index];
+    expect(lesson.registerTopic).toBe('Rym - wers, zwrotka i układ rymów');
+    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'video', 'recap', 'note']);
+    expect(lesson.slides[2]).toMatchObject({ kind: 'video', videoId: 'rym-film1' });
+    expect(lesson.slides[3]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId, questionCount: 5 });
+  });
+
   it('Wikipedia: czytanka, film, mapa s. 40-41, kolo z 6 pytaniami, notatka i zadanie domowe', () => {
     const lesson = bundle.lessons.find((l) => l.title.startsWith('15. Wikipedia'))!;
     expect(lesson.textbookPage).toBe(54);

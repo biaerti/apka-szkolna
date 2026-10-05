@@ -70,7 +70,8 @@ body { font-size: 10pt; line-height: 1.3; }
 .gora { display: flex; align-items: flex-end; gap: 5mm; border-bottom: 2.5px solid var(--ciemny); padding-bottom: 1.5mm; }
 .gora h1 { font-size: 19pt; }
 .gora .pod { font-family: 'Baloo 2'; font-size: 12pt; color: var(--szary); }
-.gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; }
+.gora h1, .gora .pod { white-space: nowrap; }
+.gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; overflow: hidden; min-width: 0; }
 .gora .rozw { margin-left: auto; font-family: 'Caveat'; font-size: 20pt; color: var(--czerw); }
 .temat { display: grid; grid-template-columns: 58mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
 .wiedza { background: color-mix(in srgb, var(--k) 9%, white); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
@@ -83,6 +84,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .linie { margin: .6mm 0 0 2mm; line-height: 2; }
 .linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
 .linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
+.linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }
 .luka { display: inline-block; border-bottom: 1.3px dotted #8d7b6b; height: 5.2mm; vertical-align: -1.2mm; text-align: center; margin: 0 .8mm; position: relative; }
 .luka.dluga { min-width: 0 !important; display: block; margin: .3mm 0 0 0; }
 .l:has(.luka.dluga) { margin-bottom: .6mm; }
