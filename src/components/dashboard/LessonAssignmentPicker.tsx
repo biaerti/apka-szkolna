@@ -4,8 +4,32 @@ import type { Lesson } from '../../data/types';
 import { lessonProgress } from '../../lib/grade';
 import { lessonSections } from '../../lib/lessonMaterial';
 import { slotsFromProgress } from '../../lib/lessonSlots';
+import { Modal } from '../ui/Modal';
+
+// Ostatnio otwarty dzial, osobno dla rocznika (kl. 4 i 5 maja inne dzialy):
+// jak Bartek jest w Rozdziale I, picker otwiera sie od razu tam.
+const SECTION_KEY = 'apka-szkolna-temat-dzial';
+
+function readSection(grade: string): string | null {
+  try {
+    return (JSON.parse(localStorage.getItem(SECTION_KEY) ?? '{}') as Record<string, string>)[grade] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function rememberSection(grade: string, key: string) {
+  try {
+    const all = JSON.parse(localStorage.getItem(SECTION_KEY) ?? '{}') as Record<string, string>;
+    localStorage.setItem(SECTION_KEY, JSON.stringify({ ...all, [grade]: key }));
+  } catch {
+    /* bez pamieci picker otworzy sie na dziale wybranej albo nastepnej lekcji */
+  }
+}
 
 interface Props {
+  /** Np. "IV B · wtorek 6.10 · 1. lekcja". */
+  label: string;
   lessons: Lesson[];
   classId: string;
   selectedLessonId?: string;
@@ -14,37 +38,56 @@ interface Props {
   onClose: () => void;
 }
 
-export function LessonAssignmentPicker({ lessons, classId, selectedLessonId, onSelect, onClear, onClose }: Props) {
+export function LessonAssignmentPicker({ label, lessons, classId, selectedLessonId, onSelect, onClear, onClose }: Props) {
+  const grade = lessons[0]?.grade ?? '';
   const sections = useMemo(() => lessonSections(lessons), [lessons]);
   const suggested = lessons.find((lesson) => lessonProgress(lesson, classId).status === 'planned')
     ?? lessons.find((lesson) => lessonProgress(lesson, classId).status === 'in_progress')
     ?? lessons[0];
   const suggestedSection = sections.find((section) => section.lessons.some((lesson) => lesson.id === suggested?.id));
   const selectedSection = sections.find((section) => section.lessons.some((lesson) => lesson.id === selectedLessonId));
-  const [activeKey, setActiveKey] = useState(selectedSection?.key ?? suggestedSection?.key ?? sections[0]?.key ?? '');
+  const remembered = sections.find((section) => section.key === readSection(grade));
+  const [activeKey, setActiveKey] = useState(selectedSection?.key ?? remembered?.key ?? suggestedSection?.key ?? sections[0]?.key ?? '');
   const active = sections.find((section) => section.key === activeKey) ?? sections[0];
 
-  return (
-    <div className="mt-3 overflow-hidden rounded-xl border border-accent-200 bg-white shadow-[0_10px_24px_-18px_rgba(30,41,59,0.55)]">
-      <div className="flex items-center justify-between gap-3 border-b border-gray-200 px-3 py-2.5">
-        <div>
-          <p className="text-sm font-semibold text-gray-950">Wybierz temat</p>
-          <p className="text-xs text-gray-500">Najpierw dział, potem lekcja</p>
-        </div>
-        <button type="button" onClick={onClose} className="min-h-11 rounded-lg px-3 text-sm font-semibold text-gray-600 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500">
-          Zamknij
-        </button>
-      </div>
+  function openSection(key: string) {
+    setActiveKey(key);
+    rememberSection(grade, key);
+  }
 
-      <div className="overflow-x-auto border-b border-gray-200 p-2">
-        <div role="tablist" aria-label="Dział materiału" className="flex min-w-max gap-1 rounded-lg bg-gray-100 p-1">
+  function select(lessonId: string) {
+    if (active) rememberSection(grade, active.key);
+    onSelect(lessonId);
+  }
+
+  return (
+    <Modal
+      open
+      onClose={onClose}
+      title={`Wybierz temat · ${label}`}
+      widthClassName="max-w-2xl"
+      footer={
+        <>
+          {selectedLessonId && onClear && (
+            <button type="button" onClick={onClear} className="mr-auto rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
+              Usuń temat z tej godziny
+            </button>
+          )}
+          <button type="button" onClick={onClose} className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100">
+            Zamknij
+          </button>
+        </>
+      }
+    >
+      <div className="-mx-1 mb-3">
+        <div role="tablist" aria-label="Dział materiału" className="flex flex-wrap gap-1 rounded-lg bg-gray-100 p-1">
           {sections.map((section) => (
             <button
               key={section.key}
               type="button"
               role="tab"
               aria-selected={section.key === active?.key}
-              onClick={() => setActiveKey(section.key)}
+              onClick={() => openSection(section.key)}
               className={clsx(
                 'min-h-10 rounded-md px-3 text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent-500',
                 section.key === active?.key ? 'bg-white text-gray-950 shadow-sm' : 'text-gray-600 hover:text-gray-900',
@@ -56,7 +99,7 @@ export function LessonAssignmentPicker({ lessons, classId, selectedLessonId, onS
         </div>
       </div>
 
-      <div role="tabpanel" className="max-h-80 overflow-y-auto p-2">
+      <div role="tabpanel" className="-mx-2 max-h-[60vh] overflow-y-auto px-1">
         <div className="space-y-1">
           {active?.lessons.map((lesson) => {
             const progress = lessonProgress(lesson, classId);
@@ -74,7 +117,7 @@ export function LessonAssignmentPicker({ lessons, classId, selectedLessonId, onS
               <button
                 key={lesson.id}
                 type="button"
-                onClick={() => onSelect(lesson.id)}
+                onClick={() => select(lesson.id)}
                 className={clsx(
                   'flex min-h-12 w-full items-center gap-3 rounded-lg px-3 py-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent-500',
                   selected ? 'bg-accent-100 text-accent-950' : 'hover:bg-gray-50',
@@ -92,14 +135,6 @@ export function LessonAssignmentPicker({ lessons, classId, selectedLessonId, onS
           })}
         </div>
       </div>
-
-      {selectedLessonId && onClear && (
-        <div className="border-t border-gray-200 p-2">
-          <button type="button" onClick={onClear} className="min-h-11 w-full rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500">
-            Usuń temat z tej godziny
-          </button>
-        </div>
-      )}
-    </div>
+    </Modal>
   );
 }

@@ -1,6 +1,6 @@
 // Plan tygodnia na pulpicie: piec kolumn (pon-pt), w kazdej lekcje z planu
 // albo z VULCANA. Lekcja to jeden wiersz: numer i godzina z lewej, klasa i
-// sala, pod spodem temat (albo podpowiedz nastepnego). Dyzur i obiad dzieja
+// sala, pod spodem temat (albo "Wybierz temat"). Dyzur i obiad dzieja
 // sie na przerwie, wiec stoja jako cienka linia "przerwa" MIEDZY lekcjami,
 // a nie jako odznaki na lekcji. Spokojnie: bez ramek w ramkach, kolor tylko
 // tam, gdzie cos znaczy (trwajaca lekcja, "teraz" na przerwie).
@@ -85,10 +85,6 @@ export function WeekPlanner(props: Props) {
                 const current = isToday && currentPeriod === entry.period;
                 const pickerId = `${dateKey}-${entry.period}`;
                 const togglePicker = () => setOpenPicker((value) => (value === pickerId ? null : pickerId));
-                const suggested = cls
-                  ? available.find((lesson) => lessonProgress(lesson, cls.id).status === 'planned')
-                    ?? available.find((lesson) => lessonProgress(lesson, cls.id).status === 'in_progress')
-                  : undefined;
                 const duty = dutyAfter(dyzuryNa(date), date.getDay(), entry.period);
                 const obiad = cls ? obiadAfter(date, entry.period, cls.name) : undefined;
                 const dutyTeraz = isToday && dutyNow.kind === 'now' && dutyNow.duty === duty;
@@ -159,17 +155,15 @@ export function WeekPlanner(props: Props) {
                             type="button"
                             onClick={togglePicker}
                             aria-expanded={openPicker === pickerId}
-                            className="group mt-1.5 block w-full text-left text-sm leading-snug text-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500"
+                            className="mt-1.5 rounded text-sm font-medium text-accent-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500"
                           >
-                            <span className="line-clamp-2 group-hover:text-gray-700">{suggested ? suggested.title : 'Wybierz temat'}</span>
-                            <span className="mt-0.5 block text-xs font-medium text-accent-700 opacity-80 group-hover:opacity-100">
-                              {suggested ? 'wybierz temat' : ''}
-                            </span>
+                            Wybierz temat
                           </button>
                         )}
 
                         {cls && openPicker === pickerId && (
                           <LessonAssignmentPicker
+                            label={`${cls.name} · ${WEEKDAY[date.getDay()]} ${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')} · ${entry.period}. lekcja`}
                             lessons={available}
                             classId={cls.id}
                             selectedLessonId={assigned?.lesson.id}
