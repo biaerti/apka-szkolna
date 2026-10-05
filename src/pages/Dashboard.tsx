@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { addDays, toDateKey, weekDays } from '../lib/dates';
 import { WeekPlanner } from '../components/dashboard/WeekPlanner';
+import { useVulcanTopics } from '../components/dashboard/useVulcanTopics';
+import { isTopicSent, topicKey, weekTopicItems } from '../lib/vulcanTemat';
 import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
 
@@ -21,6 +23,7 @@ export function Dashboard() {
   const [anchor, setAnchor] = useState(() => new Date());
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
+  const topics = useVulcanTopics();
 
   useEffect(() => {
     function onMessage(event: MessageEvent) {
@@ -48,6 +51,13 @@ export function Dashboard() {
   const days = weekDays(anchor);
   const rangeLabel = `${days[0].getDate()}.${String(days[0].getMonth() + 1).padStart(2, '0')} - ${days[4].getDate()}.${String(days[4].getMonth() + 1).padStart(2, '0')}`;
   const currentWeek = toDateKey(days[0]) === toDateKey(weekDays(now)[0]);
+  // "Tematy tygodnia do VULCANA": lekcje z wybranym tematem, ktorych jeszcze tam nie ma.
+  const weekTopics = weekTopicItems(days, lessons, classes, timetable, vulcanLessons);
+  const topicsToSend = weekTopics.filter((item) => {
+    const state = topics.states[topicKey(item)];
+    return !isTopicSent(state, item.topic) && !(state?.topic === item.topic.trim() && (state.status === 'queued' || state.status === 'sending'));
+  });
+  const topicsBusy = weekTopics.filter((item) => ['queued', 'sending'].includes(topics.states[topicKey(item)]?.status ?? '')).length;
 
   return (
     <div className="mx-auto max-w-[104rem]">
@@ -73,13 +83,25 @@ export function Dashboard() {
           <button type="button" onClick={refreshFromVulcan} disabled={refreshState === 'loading'} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
             {refreshState === 'loading' ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
           </button>
+          {topicsBusy > 0 ? (
+            <span className="px-2 py-1 text-gray-500">Dodaję do VULCANA… zostało {topicsBusy}</span>
+          ) : topicsToSend.length > 0 && (
+            <button
+              type="button"
+              onClick={() => topics.send(topicsToSend)}
+              className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              title="Tworzy w VULCANIE lekcje tego tygodnia z wybranymi tematami. Lekcji, które już tam są, nie rusza."
+            >
+              Tematy do VULCANA ({topicsToSend.length})
+            </button>
+          )}
           <Link to="/plan" className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900">Edytuj stały plan</Link>
         </div>
       </div>
 
       <WazneInfoPasek />
 
-      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} setLessonProgress={setLessonProgress} />
+      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} setLessonProgress={setLessonProgress} topics={topics} />
     </div>
   );
 }

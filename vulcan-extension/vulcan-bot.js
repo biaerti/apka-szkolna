@@ -251,7 +251,9 @@ function render(message, error = false) {
   const late = transfer?.attendance?.filter((row) => row.status === 'late').length ?? 0;
   const absentCount = frek?.students?.filter((row) => row.legend === 'nieobecność').length ?? 0;
   const lateCount = frek?.students?.filter((row) => row.legend === 'spóźnienie').length ?? 0;
-  const summary = frek
+  const summary = frek?.topicOnly
+    ? `<div class="summary"><strong>Temat z apki · ${frek.period}. lekcja · ${escapeHtml(frek.vulcanClassName)}</strong><br>${escapeHtml(frek.topic)}</div>`
+    : frek
     ? `<div class="summary"><strong>Frekwencja z telefonu · ${frek.period}. lekcja · ${escapeHtml(frek.vulcanClassName)}</strong><br>Nieobecni: ${absentCount}, spóźnieni: ${lateCount}${frek.topic ? `<br>Temat: ${escapeHtml(frek.topic)}` : ''}</div>`
     : uwaga
     ? `<div class="summary"><strong>Uwaga · ${escapeHtml(uwaga.student.lastName)} ${escapeHtml(uwaga.student.firstName)} (${escapeHtml(uwaga.vulcanClassName)})</strong><br>${escapeHtml(uwaga.category)}<br>${escapeHtml(uwaga.content)}</div>`
@@ -851,7 +853,7 @@ async function createFrekLesson() {
   if (!frek.topic) {
     throw new Error('Tej lekcji nie ma jeszcze w VULCANIE, a do utworzenia potrzebny jest temat - wpisz go na telefonie i wyślij jeszcze raz.');
   }
-  render('Tworzę lekcję z tematem z telefonu…');
+  render(frek.topicOnly ? 'Tworzę lekcję z tematem z apki…' : 'Tworzę lekcję z tematem z telefonu…');
   clickElement(await waitForText('Utwórz lekcję'));
   await waitForText('Dodawanie lekcji');
   await sleep(500);
@@ -1072,6 +1074,15 @@ async function runFrekwencja() {
     await openLekcjaView();
     const state = await openFrekLesson();
     if (state === 'new') await createFrekLesson();
+    if (frek.topicOnly) {
+      // "do VULCANA" z pulpitu: sam temat, frekwencji nie ruszamy. Istniejacej
+      // lekcji tez nie - jej temat zostaje taki, jaki jest w dzienniku.
+      const message = state === 'new' ? 'Lekcja utworzona z tematem.' : 'Ta lekcja już była w VULCANIE - temat bez zmian.';
+      phase = 'done';
+      render(`Gotowe. ${message}`);
+      await finishFrek({ ok: true, existed: state !== 'new', message });
+      return;
+    }
     const root = await openFrekEditor();
     const marked = await markFrekAttendance(root);
     roster = marked.roster;

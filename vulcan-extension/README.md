@@ -58,3 +58,13 @@ nietknięci.
 
 Po aktualizacji dodatku: `chrome://extensions` -> odśwież dodatek, potem
 odśwież kartę VULCANA i kartę apki.
+
+## Tematy z pulpitu (bez zmiany wersji dodatku - wystarczy go odświeżyć)
+
+1. Na pulpicie (plan tygodnia) wybierz temat przy lekcji.
+2. Kliknij **do VULCANA** przy tej lekcji albo u góry **Tematy do VULCANA (N)**
+   - wtedy pójdą wszystkie lekcje tygodnia z wybranym tematem, po kolei.
+3. Pomocnik w karcie VULCANA (w tle) otwiera godzinę w drzewie i, jeśli lekcji
+   jeszcze nie ma, klika „Utwórz lekcję” z tym tematem i zapisuje. Frekwencji
+   nie rusza. Lekcji, która już jest w VULCANIE, też nie zmienia.
+4. Przy lekcji pojawia się „✓ w VULCANIE”. Gdy zmienisz temat, przycisk wraca.

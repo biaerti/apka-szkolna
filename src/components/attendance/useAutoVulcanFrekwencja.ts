@@ -14,6 +14,7 @@ import {
   finishFrekwencjaJob,
   subscribeFrekwencjaJobs,
 } from '../../data/remote/frekwencjaJobs';
+import { isTopicJobId } from '../../lib/vulcanTemat';
 
 const APP_SOURCE = 'apka-szkolna';
 const HELPER_SOURCE = 'vulcan-pomocnik';
@@ -51,7 +52,8 @@ export function useAutoVulcanFrekwencja(): void {
 
     async function onResult(detail: { jobId?: string; ok?: boolean; message?: string; roster?: RosterRow[] } | undefined) {
       const jobId = detail?.jobId;
-      if (!jobId) return;
+      // Temat z pulpitu (vt-...) to nie zlecenie z chmury - obsluguje useVulcanTopics.
+      if (!jobId || isTopicJobId(jobId)) return;
       if (busy.current === jobId) {
         busy.current = null;
         window.clearTimeout(timeout);

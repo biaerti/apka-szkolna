@@ -13,12 +13,14 @@ import { dyzuryNa } from '../../data/dyzury';
 import { OBIADOWICZE } from '../../data/obiady';
 import { classGrade, lessonProgress } from '../../lib/grade';
 import { toDateKey, weekDays } from '../../lib/dates';
-import { assignedLessonForSlot, lessonAssignmentUpdates, lessonTitleWithPart } from '../../lib/dashboardPlan';
+import { assignedLessonForSlot, dayEntries, lessonAssignmentUpdates, lessonTitleWithPart } from '../../lib/dashboardPlan';
 import { dutyAfter, dutyStatus } from '../../lib/dyzury';
 import { obiadAfter, obiadStatus, obiadTitle } from '../../lib/obiady';
 import { periodStatus } from '../../lib/timetable';
+import { isTopicSent, topicItemForSlot, topicKey, type TopicItem, type TopicSendState } from '../../lib/vulcanTemat';
 import { classBadgeClasses } from '../calendar/classColor';
 import { LessonAssignmentPicker } from './LessonAssignmentPicker';
+import type { VulcanTopics } from './useVulcanTopics';
 
 interface Props {
   anchor: Date;
@@ -29,15 +31,7 @@ interface Props {
   timetable: TimetableEntry[];
   vulcanLessons: VulcanLesson[];
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
-}
-
-interface DayEntry {
-  id: string;
-  period: number;
-  classId?: string;
-  className?: string;
-  room?: string;
-  replacement?: string;
+  topics: VulcanTopics;
 }
 
 const WEEKDAY = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
@@ -52,20 +46,6 @@ export function WeekPlanner(props: Props) {
   const dutyNow = dutyStatus(dyzuryNa(props.now), props.periods, props.now);
   const obiadNow = obiadStatus(props.timetable, props.classes, props.periods, props.now);
 
-  function entriesFor(date: Date): DayEntry[] {
-    const dateKey = toDateKey(date);
-    const vulcan = props.vulcanLessons.filter((item) => item.date === dateKey);
-    if (vulcan.length > 0) {
-      return [...vulcan].sort((a, b) => a.period - b.period).map((item) => {
-        const local = props.timetable.find((entry) => entry.weekday === date.getDay() && entry.period === item.period);
-        return { ...item, room: local?.room };
-      });
-    }
-    return props.timetable
-      .filter((item) => item.weekday === date.getDay() && item.classId)
-      .sort((a, b) => a.period - b.period);
-  }
-
   function assign(classId: string, date: string, period: number, lessonId: string) {
     const slot = { id: `${date}-${period}`, date, period };
     for (const update of lessonAssignmentUpdates(props.lessons, classId, slot, lessonId)) {
@@ -79,7 +59,7 @@ export function WeekPlanner(props: Props) {
       {days.map((date) => {
         const dateKey = toDateKey(date);
         const isToday = dateKey === toDateKey(props.now);
-        const entries = entriesFor(date);
+        const entries = dayEntries(date, props.vulcanLessons, props.timetable);
         return (
           <section key={dateKey} className="min-w-0">
             <header className={clsx('flex items-baseline justify-between border-b-2 pb-2', isToday ? 'border-accent-500' : 'border-gray-200')}>
@@ -113,6 +93,7 @@ export function WeekPlanner(props: Props) {
                 const obiad = cls ? obiadAfter(date, entry.period, cls.name) : undefined;
                 const dutyTeraz = isToday && dutyNow.kind === 'now' && dutyNow.duty === duty;
                 const obiadTeraz = isToday && obiadNow.kind === 'now' && obiadNow.obiad === obiad;
+                const topicItem = cls && assigned ? topicItemForSlot(props.lessons, cls, dateKey, entry.period) : undefined;
 
                 return (
                   <li key={entry.id}>
@@ -165,7 +146,13 @@ export function WeekPlanner(props: Props) {
                               <button type="button" onClick={togglePicker} aria-expanded={openPicker === pickerId} className="text-gray-400 hover:text-gray-700">
                                 zmień
                               </button>
+                              {topicItem && (
+                                <VulcanTopicButton item={topicItem} state={props.topics.states[topicKey(topicItem)]} onSend={() => props.topics.send([topicItem])} />
+                              )}
                             </div>
+                            {topicItem && props.topics.states[topicKey(topicItem)]?.status === 'error' && (
+                              <p className="mt-1 text-xs text-red-600">{props.topics.states[topicKey(topicItem)]?.message}</p>
+                            )}
                           </div>
                         ) : (
                           <button
@@ -218,6 +205,31 @@ export function WeekPlanner(props: Props) {
         );
       })}
     </div>
+  );
+}
+
+function VulcanTopicButton({ item, state, onSend }: { item: TopicItem; state: TopicSendState | undefined; onSend: () => void }) {
+  if (isTopicSent(state, item.topic)) {
+    return (
+      <span className="text-emerald-700" title={state?.message ?? `W VULCANIE: ${item.topic}`}>
+        ✓ w VULCANIE
+      </span>
+    );
+  }
+  const busy = state?.topic === item.topic.trim() && (state.status === 'queued' || state.status === 'sending');
+  if (busy) {
+    return <span className="text-gray-500">{state?.status === 'sending' ? 'dodaję do VULCANA…' : 'czeka na VULCANA…'}</span>;
+  }
+  const failed = state?.status === 'error' && state.topic === item.topic.trim();
+  return (
+    <button
+      type="button"
+      onClick={onSend}
+      title={failed ? state?.message : `Utwórz w VULCANIE ${item.period}. lekcję ${item.vulcanClassName} z tematem: ${item.topic}`}
+      className={clsx('font-medium hover:underline', failed ? 'text-red-600' : 'text-gray-500 hover:text-gray-900')}
+    >
+      {failed ? 'błąd - ponów' : 'do VULCANA'}
+    </button>
   );
 }
 

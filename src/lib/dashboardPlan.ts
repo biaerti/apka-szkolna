@@ -1,4 +1,5 @@
-import type { Lesson, LessonProgress, LessonSlot } from '../data/types';
+import type { Lesson, LessonProgress, LessonSlot, TimetableEntry, VulcanLesson } from '../data/types';
+import { toDateKey } from './dates';
 import { lessonProgress } from './grade';
 import { progressWithoutSlot, slotsFromProgress } from './lessonSlots';
 
@@ -20,6 +21,30 @@ export function assignedLessonForSlot(
     if (index >= 0) return { lesson, slot: slots[index], part: index + 1 };
   }
   return undefined;
+}
+
+export interface DayEntry {
+  id: string;
+  period: number;
+  classId?: string;
+  className?: string;
+  room?: string;
+  replacement?: string;
+}
+
+/** Lekcje dnia: z VULCANA, gdy plan jest pobrany (zastepstwa), inaczej ze stalego planu. */
+export function dayEntries(date: Date, vulcanLessons: VulcanLesson[], timetable: TimetableEntry[]): DayEntry[] {
+  const dateKey = toDateKey(date);
+  const vulcan = vulcanLessons.filter((item) => item.date === dateKey);
+  if (vulcan.length > 0) {
+    return [...vulcan].sort((a, b) => a.period - b.period).map((item) => {
+      const local = timetable.find((entry) => entry.weekday === date.getDay() && entry.period === item.period);
+      return { ...item, room: local?.room };
+    });
+  }
+  return timetable
+    .filter((item) => item.weekday === date.getDay() && item.classId)
+    .sort((a, b) => a.period - b.period);
 }
 
 export function lessonTitleWithPart(title: string, part: number): string {
