@@ -16,7 +16,6 @@ import { toDateKey, weekDays } from '../../lib/dates';
 import { assignedLessonForSlot, dayEntries, lessonAssignmentUpdates, lessonTitleWithPart } from '../../lib/dashboardPlan';
 import { dutyAfter, dutyStatus } from '../../lib/dyzury';
 import { obiadAfter, obiadStatus, obiadTitle } from '../../lib/obiady';
-import { slotsFromProgress } from '../../lib/lessonSlots';
 import { periodStatus } from '../../lib/timetable';
 import { isTopicSent, topicItemForSlot, topicKey, type TopicItem, type TopicSendState } from '../../lib/vulcanTemat';
 import { classBadgeClasses } from '../calendar/classColor';
@@ -53,16 +52,6 @@ export function WeekPlanner(props: Props) {
       props.setLessonProgress(update.lessonId, classId, update.progress);
     }
     setOpenPicker(null);
-  }
-
-  function toggleDone(classId: string, lessonId: string, done: boolean) {
-    const lesson = props.lessons.find((item) => item.id === lessonId);
-    if (!lesson) return;
-    const progress = lessonProgress(lesson, classId);
-    const hasSlots = slotsFromProgress(progress).length > 0;
-    props.setLessonProgress(lessonId, classId, done
-      ? { ...progress, status: 'done', doneDate: progress.doneDate ?? toDateKey(props.now) }
-      : { ...progress, status: hasSlots ? 'in_progress' : 'planned', doneDate: undefined });
   }
 
   return (
@@ -180,7 +169,7 @@ export function WeekPlanner(props: Props) {
                             selectedLessonId={assigned?.lesson.id}
                             onSelect={(lessonId) => assign(cls.id, dateKey, entry.period, lessonId)}
                             onClear={assigned ? () => assign(cls.id, dateKey, entry.period, '') : undefined}
-                            onToggleDone={(lessonId, isDone) => toggleDone(cls.id, lessonId, isDone)}
+                            slotId={pickerId}
                             onClose={() => setOpenPicker(null)}
                           />
                         )}
