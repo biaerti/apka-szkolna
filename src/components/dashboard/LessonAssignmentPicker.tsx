@@ -35,15 +35,16 @@ interface Props {
   selectedLessonId?: string;
   onSelect: (lessonId: string) => void;
   onClear?: () => void;
+  /** Checkbox "juz byla" - zrobiona w tej klasie albo z powrotem do zrobienia. */
+  onToggleDone: (lessonId: string, done: boolean) => void;
   onClose: () => void;
 }
 
-export function LessonAssignmentPicker({ label, lessons, classId, selectedLessonId, onSelect, onClear, onClose }: Props) {
+export function LessonAssignmentPicker({ label, lessons, classId, selectedLessonId, onSelect, onClear, onToggleDone, onClose }: Props) {
   const grade = lessons[0]?.grade ?? '';
   const sections = useMemo(() => lessonSections(lessons), [lessons]);
-  const suggested = lessons.find((lesson) => lessonProgress(lesson, classId).status === 'planned')
-    ?? lessons.find((lesson) => lessonProgress(lesson, classId).status === 'in_progress')
-    ?? lessons[0];
+  // Bez zapamietanego dzialu otwieramy dzial pierwszej lekcji, ktora jeszcze nie byla.
+  const suggested = lessons.find((lesson) => lessonProgress(lesson, classId).status !== 'done') ?? lessons[0];
   const suggestedSection = sections.find((section) => section.lessons.some((lesson) => lesson.id === suggested?.id));
   const selectedSection = sections.find((section) => section.lessons.some((lesson) => lesson.id === selectedLessonId));
   const remembered = sections.find((section) => section.key === readSection(grade));
@@ -100,39 +101,42 @@ export function LessonAssignmentPicker({ label, lessons, classId, selectedLesson
       </div>
 
       <div role="tabpanel" className="-mx-2 max-h-[60vh] overflow-y-auto px-1">
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {active?.lessons.map((lesson) => {
             const progress = lessonProgress(lesson, classId);
             const slots = slotsFromProgress(progress);
             const selected = lesson.id === selectedLessonId;
-            const suggestedNext = lesson.id === suggested?.id;
-            // Juz byla w tej klasie (zrobiona, w trakcie, pominieta albo ma godzine
-            // w planie) - wyszarzona, zeby do wyboru wyrozniały sie te jeszcze nieruszone.
-            const muted = progress.status !== 'planned' || slots.length > 0;
-            let state: string | null = null;
-            if (selected) state = 'Wybrana tutaj';
-            else if (progress.status === 'done') state = 'Zrobiona';
-            else if (progress.status === 'skipped') state = 'Pominięta';
-            else if (progress.status === 'in_progress') state = slots.length > 0 ? `W trakcie · ponownie będzie cz. ${slots.length + 1}` : 'W trakcie';
-            else if (slots.length > 0) state = `W planie · ponownie będzie cz. ${slots.length + 1}`;
+            // Checkbox "juz byla" = status zrobiona. Zaznaczonej nie da sie
+            // wybrac na godzine - trzeba ja najpierw odznaczyc.
+            const done = progress.status === 'done';
+            const locked = done && !selected;
+            const note = selected ? 'wybrana tutaj' : !done && slots.length > 0 ? `będzie cz. ${slots.length + 1}` : null;
 
             return (
-              <button
+              <div
                 key={lesson.id}
-                type="button"
-                onClick={() => select(lesson.id)}
-                className={clsx(
-                  'flex min-h-12 w-full items-center gap-3 rounded-lg px-3 py-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent-500',
-                  selected ? 'bg-accent-100 text-accent-950' : 'hover:bg-gray-50',
-                )}
+                className={clsx('flex min-h-11 items-center gap-1 rounded-lg', selected ? 'bg-accent-100' : !locked && 'hover:bg-gray-50')}
               >
-                <span className={clsx('w-10 shrink-0 text-xs font-semibold tabular-nums', selected ? 'text-accent-700' : muted ? 'text-gray-300' : 'text-gray-400')}>{lesson.code ?? '–'}</span>
-                <span className="min-w-0 flex-1">
-                  <span className={clsx('block text-sm leading-5', muted && !selected ? 'font-normal text-gray-400' : 'font-semibold text-gray-900')}>{lesson.title}</span>
-                  {state && <span className={clsx('mt-0.5 block text-xs', muted && !selected ? 'text-gray-400' : 'text-gray-500')}>{state}</span>}
-                </span>
-                {suggestedNext && !selected && <span className="shrink-0 rounded-full bg-accent-50 px-2 py-1 text-[11px] font-semibold text-accent-700">Następna</span>}
-              </button>
+                <label className="flex shrink-0 cursor-pointer items-center self-stretch pl-3 pr-1" title={done ? 'Już była - odznacz, żeby znów dało się wybrać' : 'Zaznacz, jeśli już była'}>
+                  <input
+                    type="checkbox"
+                    checked={done}
+                    onChange={(event) => onToggleDone(lesson.id, event.target.checked)}
+                    className="h-4 w-4 rounded border-gray-300 text-gray-500 focus:ring-accent-500"
+                    aria-label={`${lesson.title} - już była`}
+                  />
+                </label>
+                <button
+                  type="button"
+                  disabled={locked}
+                  onClick={() => select(lesson.id)}
+                  className="flex min-w-0 flex-1 items-center gap-3 self-stretch rounded-lg px-2 py-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent-500 disabled:cursor-default"
+                >
+                  <span className={clsx('w-10 shrink-0 text-xs tabular-nums', locked ? 'text-gray-300' : selected ? 'font-semibold text-accent-700' : 'text-gray-400')}>{lesson.code ?? '–'}</span>
+                  <span className={clsx('min-w-0 flex-1 text-sm leading-5', locked ? 'text-gray-400 line-through decoration-gray-300' : 'font-medium text-gray-900')}>{lesson.title}</span>
+                  {note && <span className={clsx('shrink-0 text-xs', selected ? 'text-accent-700' : 'text-gray-500')}>{note}</span>}
+                </button>
+              </div>
             );
           })}
         </div>
