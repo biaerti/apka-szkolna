@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { addDays, toDateKey, weekDays } from '../lib/dates';
-import { Button } from '../components/ui/Button';
 import { WeekPlanner } from '../components/dashboard/WeekPlanner';
 import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
@@ -47,43 +46,38 @@ export function Dashboard() {
   }
 
   const days = weekDays(anchor);
-  const rangeLabel = `${days[0].toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' })} - ${days[4].toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+  const rangeLabel = `${days[0].getDate()}.${String(days[0].getMonth() + 1).padStart(2, '0')} - ${days[4].getDate()}.${String(days[4].getMonth() + 1).padStart(2, '0')}`;
   const currentWeek = toDateKey(days[0]) === toDateKey(weekDays(now)[0]);
 
   return (
     <div className="mx-auto max-w-[104rem]">
-      <div className="mb-5 flex flex-col gap-4 border-b border-gray-200 pb-5 xl:flex-row xl:items-end xl:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-gray-950">Plan lekcji</h1>
-          <p className="mt-1 max-w-2xl text-sm text-gray-600">Wybierz dział i temat przy konkretnej godzinie, a potem przejdź prosto do obecności. Ten sam temat wybrany ponownie dostanie „cz. 2”.</p>
+      <div className="mb-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-950">Plan lekcji</h1>
+        <div className="flex items-center gap-1">
+          <button type="button" onClick={() => setAnchor((date) => addDays(date, -7))} aria-label="Poprzedni tydzień" className="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+            <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m10 3-5 5 5 5" /></svg>
+          </button>
+          <span className="min-w-[9.5rem] text-center text-sm font-medium tabular-nums text-gray-700">{rangeLabel}</span>
+          <button type="button" onClick={() => setAnchor((date) => addDays(date, 7))} aria-label="Następny tydzień" className="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+            <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+          </button>
+          {!currentWeek && (
+            <button type="button" onClick={() => setAnchor(new Date())} className="ml-1 rounded-md px-2 py-1 text-xs font-medium text-accent-700 hover:bg-accent-50">
+              wróć do dziś
+            </button>
+          )}
         </div>
-        <div className="flex flex-col items-start gap-2 xl:items-end">
-          <div className="text-left text-xs text-gray-500 xl:text-right">
-            <p>{updatedAt ? `VULCAN: zaktualizowano ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'VULCAN: jeszcze nie pobrano'}</p>
-            {refreshState === 'error' && <p className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</p>}
-            {refreshState === 'missing' && <p className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</p>}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" onClick={refreshFromVulcan} disabled={refreshState === 'loading'}>{refreshState === 'loading' ? 'Pobieram…' : 'Aktualizuj z VULCANA'}</Button>
-            <Link to="/plan"><Button variant="secondary">Edytuj stały plan</Button></Link>
-          </div>
+        <div className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+          {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
+          {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
+          <button type="button" onClick={refreshFromVulcan} disabled={refreshState === 'loading'} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
+            {refreshState === 'loading' ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
+          </button>
+          <Link to="/plan" className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900">Edytuj stały plan</Link>
         </div>
       </div>
 
       <WazneInfoPasek />
-
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Button variant="secondary" size="sm" onClick={() => setAnchor((date) => addDays(date, -7))} aria-label="Poprzedni tydzień">
-            <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m10 3-5 5 5 5" /></svg>
-          </Button>
-          <Button variant="secondary" size="sm" onClick={() => setAnchor(new Date())} disabled={currentWeek}>Dzisiaj</Button>
-          <Button variant="secondary" size="sm" onClick={() => setAnchor((date) => addDays(date, 7))} aria-label="Następny tydzień">
-            <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
-          </Button>
-        </div>
-        <p className="text-sm font-semibold capitalize text-gray-800">{rangeLabel}</p>
-      </div>
 
       <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} setLessonProgress={setLessonProgress} />
     </div>
