@@ -30,7 +30,6 @@ export const KAHOOT = {
     { t: 'Ile sylab ma wyraz „samochody”?', o: ['3', '4', '5', '9'], ok: 2 },
     { t: 'Który podział na sylaby jest poprawny?', o: ['ko-mpu-ter', 'komp-u-ter', 'kom-pu-ter', 'ko-mp-uter'], ok: 3 },
     // Epitet
-    { t: 'Na jakie pytania odpowiada epitet?', o: ['co robi?', 'jaki? jaka? jakie?', 'kto? co?', 'gdzie? kiedy?'], ok: 2 },
     { t: '„Stary, skrzypiący most.” Które wyrazy są epitetami?', o: ['stary, skrzypiący', 'most', 'stary, most', 'tylko skrzypiący'], ok: 1 },
     { t: 'Który epitet najlepiej buduje nastrój grozy? „… zamek”', o: ['fajny', 'super', 'ponury', 'ładny'], ok: 3 },
     // Czasownik
