@@ -16,7 +16,7 @@ import { toDateKey, weekDays } from '../../lib/dates';
 import { assignedLessonForSlot, dayEntries, lessonAssignmentUpdates, lessonTitleWithPart } from '../../lib/dashboardPlan';
 import { dutyAfter, dutyStatus } from '../../lib/dyzury';
 import { obiadAfter, obiadStatus, obiadTitle } from '../../lib/obiady';
-import { periodStatus } from '../../lib/timetable';
+import { parseHm, periodStatus } from '../../lib/timetable';
 import { isTopicSent, topicItemForSlot, topicKey, type TopicItem, type TopicSendState } from '../../lib/vulcanTemat';
 import { classBadgeClasses } from '../calendar/classColor';
 import { LessonAssignmentPicker } from './LessonAssignmentPicker';
@@ -45,6 +45,23 @@ export function WeekPlanner(props: Props) {
   const currentPeriod = status.kind === 'lesson' ? status.period.no : undefined;
   const dutyNow = dutyStatus(dyzuryNa(props.now), props.periods, props.now);
   const obiadNow = obiadStatus(props.timetable, props.classes, props.periods, props.now);
+
+  const nowMin = props.now.getHours() * 60 + props.now.getMinutes() + props.now.getSeconds() / 60;
+  /** Gdzie miedzy start a end jest teraz (0-1), poza tym odcinkiem undefined. */
+  function nowIn(start: string | undefined, end: string | undefined): number | undefined {
+    if (!start || !end) return undefined;
+    const from = parseHm(start);
+    const to = parseHm(end);
+    if (!(to > from) || nowMin < from || nowMin >= to) return undefined;
+    return (nowMin - from) / (to - from);
+  }
+  function breakMinutes(no: number): number | undefined {
+    const end = periodByNo.get(no)?.end;
+    const next = periodByNo.get(no + 1)?.start;
+    if (!end || !next) return undefined;
+    const minutes = parseHm(next) - parseHm(end);
+    return minutes > 0 ? minutes : undefined;
+  }
 
   function assign(classId: string, date: string, period: number, lessonId: string) {
     const slot = { id: `${date}-${period}`, date, period };
@@ -87,19 +104,22 @@ export function WeekPlanner(props: Props) {
                   const gapDutyTeraz = isToday && dutyNow.kind === 'now' && dutyNow.duty === gapDuty;
                   return (
                     <li key={`okienko-${no}`}>
-                      <div className="-mx-2 flex min-h-[5.25rem] gap-3 px-2 py-3">
+                      <div className="relative -mx-2 flex min-h-[5.25rem] gap-3 px-2 py-3">
+                        {isToday && <NowLine at={nowIn(periodByNo.get(no)?.start, periodByNo.get(no)?.end)} />}
                         <div className="w-9 shrink-0 pt-0.5 text-right">
                           <div className="text-lg font-semibold leading-none tabular-nums text-gray-200">{no}</div>
                           <div className="mt-1 text-[11px] leading-none tabular-nums text-gray-300">{periodByNo.get(no)?.start}</div>
                         </div>
                         <p className="pt-0.5 text-xs text-gray-300">okienko</p>
                       </div>
-                      {gapDuty && (
-                        <div className="space-y-1 py-1 pl-12">
-                          <BreakNote teraz={gapDutyTeraz} tone="amber" title={`Przerwa po ${no}. lekcji: dyżur`}>
-                            dyżur · {gapDuty.place}
-                          </BreakNote>
-                        </div>
+                      {no < lastPeriod && (
+                        <BreakRow minutes={breakMinutes(no)} nowAt={isToday ? nowIn(periodByNo.get(no)?.end, periodByNo.get(no + 1)?.start) : undefined}>
+                          {gapDuty && (
+                            <BreakNote teraz={gapDutyTeraz} tone="amber" title={`Przerwa po ${no}. lekcji: dyżur`}>
+                              dyżur · {gapDuty.place}
+                            </BreakNote>
+                          )}
+                        </BreakRow>
                       )}
                     </li>
                   );
@@ -129,6 +149,7 @@ export function WeekPlanner(props: Props) {
                       )}
                     >
                       {current && <span aria-hidden className="absolute inset-y-2 left-0 w-0.5 rounded bg-accent-500" />}
+                      {isToday && <NowLine at={nowIn(period?.start, period?.end)} />}
                       <div className="w-9 shrink-0 pt-0.5 text-right">
                         <div className={clsx('text-lg font-semibold leading-none tabular-nums', current ? 'text-accent-700' : 'text-gray-300')}>
                           {entry.period}
@@ -205,8 +226,8 @@ export function WeekPlanner(props: Props) {
                       </div>
                     </article>
 
-                    {(duty || obiad) && (
-                      <div className="space-y-1 py-1 pl-12">
+                    {entry.period < lastPeriod && (
+                      <BreakRow minutes={breakMinutes(entry.period)} nowAt={isToday ? nowIn(period?.end, periodByNo.get(entry.period + 1)?.start) : undefined}>
                         {duty && (
                           <BreakNote teraz={dutyTeraz} tone="amber" title={`Przerwa po ${entry.period}. lekcji: dyżur`}>
                             dyżur · {duty.place}
@@ -219,7 +240,7 @@ export function WeekPlanner(props: Props) {
                             {obiad.mode === 'sami' ? ' · idą sami' : ` · ${obiad.mode}`}
                           </BreakNote>
                         )}
-                      </div>
+                      </BreakRow>
                     )}
                   </li>
                 );
@@ -254,6 +275,29 @@ function VulcanTopicButton({ item, state, onSend }: { item: TopicItem; state: To
     >
       {failed ? 'błąd - ponów' : 'do VULCANA'}
     </button>
+  );
+}
+
+// Przerwa miedzy lekcjami: cienka linia z dlugoscia, pod nia dyzur i obiad.
+function BreakRow({ minutes, nowAt, children }: { minutes: number | undefined; nowAt: number | undefined; children?: React.ReactNode }) {
+  return (
+    <div className="relative space-y-1 py-1.5 pl-12">
+      {nowAt !== undefined && <NowLine at={nowAt} />}
+      {minutes !== undefined && <p className="text-[11px] leading-none text-gray-400">przerwa {minutes} min</p>}
+      {children}
+    </div>
+  );
+}
+
+// "Jestes tutaj": pozioma kreska z trojkatem na wysokosci biezacej chwili
+// w wierszu lekcji albo przerwy (procent uplynietego czasu tego odcinka).
+function NowLine({ at }: { at: number | undefined }) {
+  if (at === undefined) return null;
+  return (
+    <div aria-hidden className="pointer-events-none absolute -left-3 right-0 z-10 flex items-center" style={{ top: `${at * 100}%` }}>
+      <svg viewBox="0 0 8 10" className="-my-[5px] h-2.5 w-2 shrink-0 fill-red-500"><path d="M0 0 8 5 0 10z" /></svg>
+      <span className="h-px flex-1 bg-red-500" />
+    </div>
   );
 }
 
