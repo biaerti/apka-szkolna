@@ -783,10 +783,47 @@ function frekStudentLabel(student) {
   return `nr ${student.number}`;
 }
 
+// Nazwiska porownujemy bez ogonkow (Pokładenko = Pokladenko) - apka i
+// VULCAN potrafia je zapisac roznie.
+const fold = (value) => normalized(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l');
+
 function startsWithName(text, student) {
-  const row = normalized(text);
-  const wanted = normalized(`${student.lastName} ${student.firstName}`);
+  const row = fold(text);
+  const wanted = fold(`${student.lastName} ${student.firstName}`);
   return row === wanted || row.startsWith(`${wanted} `) || row.startsWith(`${wanted}…`);
+}
+
+function editDistance(a, b) {
+  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i += 1) {
+    let diag = prev[0];
+    prev[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const up = prev[j];
+      prev[j] = Math.min(prev[j] + 1, prev[j - 1] + 1, diag + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diag = up;
+    }
+  }
+  return prev[b.length];
+}
+
+// Literowka w nazwisku (apka vs dziennik): poczatek wiersza rozni sie
+// najwyzej o 2 znaki. Uzywane tylko, gdy pasuje jeden jedyny wiersz.
+function nearName(text, student) {
+  const wanted = fold(`${student.lastName} ${student.firstName}`);
+  const row = fold(text);
+  return [row.slice(0, wanted.length), row.slice(0, wanted.length + 1), row.slice(0, wanted.length - 1)]
+    .some((prefix) => editDistance(prefix.trim(), wanted) <= 2);
+}
+
+// Wiersz ucznia: dokladnie po nazwisku i imieniu, a gdy takiego nie ma -
+// jedyny wiersz z literowka (i nie zajety przez innego ucznia z paczki).
+function frekStudentRow(rows, student) {
+  const exact = rows.find((row) => startsWithName(row.name, student));
+  if (exact) return exact;
+  const taken = (row) => frek.students.some((other) => other !== student && startsWithName(row.name, other));
+  const near = rows.filter((row) => !taken(row) && nearName(row.name, student));
+  return near.length === 1 ? near[0] : null;
 }
 
 function exactVisible(root, text, selector = 'td, span, div, a, label, button') {
@@ -983,8 +1020,23 @@ function frekRows(root) {
         return r.left <= nrX && r.right >= nrX && Math.abs(r.top + r.height / 2 - c.y) < 5;
       });
       const number = numberCell ? Number(normalized(numberCell.textContent)) : NaN;
-      return { cell, name: (cell.textContent || '').replace(/\s+/g, ' ').trim(), number: Number.isFinite(number) ? number : undefined };
+      return { cell, name: (cell.textContent || '').replace(/\s+/g, ' ').trim(), main: mainName(cell), number: Number.isFinite(number) ? number : undefined };
     });
+}
+
+// "Adamek Jan Ignacy": drugie imie VULCAN pisze szarym - bez niego zostaje
+// nazwisko i imie, ktore apka moze przepisac do siebie.
+function mainName(cell) {
+  let base = null;
+  let text = '';
+  const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (!node.textContent.trim()) continue;
+    const color = getComputedStyle(node.parentElement).color;
+    if (base === null) base = color;
+    if (color === base) text += ` ${node.textContent}`;
+  }
+  return text.replace(/\s+/g, ' ').replace(/…$/, '').trim();
 }
 
 // Naglowek kolumny godziny: dokladny numer, NAD wierszami uczniow (w wierszach
@@ -1014,7 +1066,7 @@ function cellAt(root, x, y) {
 }
 
 function markCell(root, student, header) {
-  const row = frekRows(root).find((candidate) => startsWithName(candidate.name, student));
+  const row = frekStudentRow(frekRows(root), student);
   if (!row) return null;
   row.cell.scrollIntoView({ block: 'nearest' });
   return cellAt(root, centerOf(header).x, centerOf(row.cell).y);
@@ -1036,31 +1088,75 @@ const symbolMatches = (text, symbol) => {
   return value === symbol || dash(dot(value)) === dash(dot(symbol));
 };
 
+// Symbole wpisane przez szkole, ktorych bot nie rusza: nauczanie
+// indywidualne, zwolniony, zdalne, edukacja domowa, oddelegowany.
+const KEEP_SYMBOLS = ['ni', 'z', 'zn', 'ed', 'od'];
+// Nieobecnosc juz usprawiedliwiona (wychowawca wpisuje "u" z gory na caly
+// dzien) - nieobecnemu zostawiamy "u" zamiast myslnika.
+const EXCUSED_SYMBOLS = ['u', 'ns'];
+const LEGEND_ORDER = ['obecność', 'nieobecność', 'spóźnienie', 'nauczanie indywidualne'];
+
+// Lista klasy odczytana z okna frekwencji - wraca do apki takze przy bledzie,
+// zeby apka poprawila swoje listy (numery, pisownia, kto odszedl, kto ma "ni").
+let frekRoster = [];
+
+function rowCell(root, row, header) {
+  row.cell.scrollIntoView({ block: 'nearest' });
+  return cellAt(root, centerOf(header).x, centerOf(row.cell).y);
+}
+
 async function markFrekAttendance(root) {
-  const rows = frekRows(root);
-  if (rows.length === 0) throw new Error('Nie widzę uczniów w oknie frekwencji.');
-  const roster = rows.map((row) => ({ number: row.number, name: row.name })).filter((row) => row.number !== undefined);
+  const rows = await waitFor(() => {
+    try {
+      const found = frekRows(root);
+      return found.length > 0 ? found : null;
+    } catch {
+      return null;
+    }
+  }, 6000);
+  if (!rows) {
+    frekRows(root); // rzuca czytelny blad, gdy nie ma kolumny "Uczeń"
+    throw new Error('Nie widzę uczniów w oknie frekwencji.');
+  }
   const header = periodHeader(root, rows);
   if (!header) throw new Error(`Nie znalazłem kolumny ${frek.period}. lekcji w oknie frekwencji.`);
+  frekRoster = rows
+    .filter((row) => row.number !== undefined)
+    .map((row) => ({ number: row.number, name: row.name, main: row.main, symbol: normalized(rowCell(root, row, header)?.textContent) }));
 
+  const found = frek.students.filter((student) => frekStudentRow(rows, student));
   // Uczen z nauczaniem indywidualnym jest w apce wylaczony - gdy VULCAN go nie
-  // ma (albo juz ma "ni"), nie ma o czym meldowac.
-  const missing = frek.students.filter((student) => !rows.some((row) => startsWithName(row.name, student)));
-  const reportMissing = missing.filter((student) => student.legend !== 'nauczanie indywidualne');
-  const order = ['obecność', 'nieobecność', 'spóźnienie', 'nauczanie indywidualne'];
-  const symbols = {};
+  // ma, nie ma o czym meldowac.
+  const missing = frek.students.filter((student) => !found.includes(student) && student.legend !== 'nauczanie indywidualne');
+  const expected = frek.students.filter((student) => student.legend !== 'nauczanie indywidualne');
+  const foundExpected = expected.filter((student) => found.includes(student));
+  if (expected.length >= 4 && foundExpected.length < expected.length / 2) {
+    throw new Error(`W oknie frekwencji jest inna lista (znalazłem ${foundExpected.length} z ${expected.length} uczniów ${frek.vulcanClassName}) - nic nie zaznaczam.`);
+  }
+
+  const legends = {};
+  for (const name of LEGEND_ORDER) {
+    if (!found.some((student) => student.legend === name)) continue;
+    legends[name] = legendRow(root, name);
+    if (!legends[name]) throw new Error(`Nie ma symbolu „${name}” w legendzie.`);
+  }
+  const cellText = (student) => normalized(markCell(root, student, header)?.textContent);
+  const isRight = (student) => symbolMatches(markCell(root, student, header)?.textContent, legends[student.legend].symbol);
+
+  const initial = new Map(found.map((student) => [student, cellText(student)]));
+  const kept = found.filter((student) => {
+    const now = initial.get(student);
+    return KEEP_SYMBOLS.includes(now) || (student.legend === 'nieobecność' && EXCUSED_SYMBOLS.includes(now));
+  });
+  const targets = found.filter((student) => !kept.includes(student));
+
   let useRealClicks = false;
-  for (const legendName of order) {
-    const group = frek.students.filter((student) => student.legend === legendName && !missing.includes(student));
+  for (const legendName of LEGEND_ORDER) {
+    const group = targets.filter((student) => student.legend === legendName);
     if (group.length === 0) continue;
-    const legend = legendRow(root, legendName);
-    if (!legend) throw new Error(`Nie ma symbolu „${legendName}” w legendzie.`);
-    symbols[legendName] = legend.symbol;
+    const legend = legends[legendName];
     render(`Zaznaczam: ${legendName} (${group.length})…`);
-    const todo = group.filter((student) => {
-      const cell = markCell(root, student, header);
-      return !cell || !symbolMatches(cell.textContent, legend.symbol);
-    });
+    const todo = group.filter((student) => !isRight(student));
     if (todo.length === 0) continue;
     if (!useRealClicks) {
       clickElement(legend.cell);
@@ -1070,14 +1166,14 @@ async function markFrekAttendance(root) {
         if (!cell) continue;
         clickElement(cell);
         await sleep(120);
-        if (!symbolMatches(markCell(root, student, header)?.textContent, legend.symbol)) {
+        if (!isRight(student)) {
           useRealClicks = true;
           break;
         }
       }
     }
     if (useRealClicks) {
-      const still = group.filter((student) => !symbolMatches(markCell(root, student, header)?.textContent, legend.symbol));
+      const still = group.filter((student) => !isRight(student));
       if (still.length > 0) {
         render(`Zaznaczam prawdziwymi kliknięciami: ${legendName} (${still.length})…`);
         const cells = still.map((student) => markCell(root, student, header)).filter(Boolean);
@@ -1088,15 +1184,30 @@ async function markFrekAttendance(root) {
     }
   }
 
-  const wrong = frek.students.filter((student) => {
-    if (missing.includes(student)) return false;
-    const cell = markCell(root, student, header);
-    return !cell || !symbolMatches(cell.textContent, symbols[student.legend]);
-  });
+  // VULCAN odswieza komorki z opoznieniem - chwila na dojscie, potem jedna
+  // poprawka prawdziwymi kliknieciami, dopiero wtedy blad.
+  const wrongNow = () => targets.filter((student) => !isRight(student));
+  await waitFor(() => wrongNow().length === 0, 4000);
+  let wrong = wrongNow();
   if (wrong.length > 0) {
-    throw new Error(`Kolumna się nie zgadza (${wrong.map(frekStudentLabel).join(', ')}) - nie zapisuję. Sprawdź okno frekwencji.`);
+    render(`Poprawiam ${wrong.length} komórek…`);
+    for (const legendName of LEGEND_ORDER) {
+      const cells = wrong.filter((student) => student.legend === legendName).map((student) => markCell(root, student, header)).filter(Boolean);
+      if (cells.length === 0) continue;
+      const result = await realClick([legends[legendName].cell, ...cells]);
+      if (result !== 'ok') throw new Error(`Kliknięcia przez debugger nie przeszły: ${result}.`);
+    }
+    await waitFor(() => wrongNow().length === 0, 4000);
+    wrong = wrongNow();
   }
-  return { roster, missing: reportMissing };
+  // Obecny, ktoremu VULCAN nie dal zmienic "u" z gory - zostaje "u", meldujemy.
+  const stuck = wrong.filter((student) => EXCUSED_SYMBOLS.includes(initial.get(student)) && cellText(student) === initial.get(student));
+  wrong = wrong.filter((student) => !stuck.includes(student));
+  if (wrong.length > 0) {
+    const details = wrong.map((student) => `${frekStudentLabel(student)}: jest „${cellText(student) || 'puste'}”, ma być „${legends[student.legend].symbol}”`);
+    throw new Error(`Kolumna się nie zgadza (${details.join('; ')}) - nie zapisuję. Sprawdź okno frekwencji.`);
+  }
+  return { roster: frekRoster, missing, stuck: stuck.map((student) => ({ student, symbol: initial.get(student) })) };
 }
 
 async function saveFrekEditor(root) {
@@ -1141,7 +1252,7 @@ async function closeLeftoverWindows() {
 }
 
 async function runFrekwencja() {
-  let roster = [];
+  frekRoster = [];
   try {
     await closeLeftoverWindows();
     await openLekcjaView();
@@ -1158,17 +1269,19 @@ async function runFrekwencja() {
     }
     const root = await openFrekEditor();
     const marked = await markFrekAttendance(root);
-    roster = marked.roster;
     await saveFrekEditor(root);
-    const note = marked.missing.length > 0 ? ` Nie było w VULCANIE: ${marked.missing.map(frekStudentLabel).join(', ')}.` : '';
+    let note = marked.missing.length > 0 ? ` Nie było w VULCANIE: ${marked.missing.map(frekStudentLabel).join(', ')}.` : '';
+    if (marked.stuck.length > 0) {
+      note += ` Zostawione z dziennika (VULCAN nie dał zmienić): ${marked.stuck.map(({ student, symbol }) => `${frekStudentLabel(student)} „${symbol}”`).join(', ')}.`;
+    }
     phase = 'done';
     render(`Gotowe. Frekwencja zapisana.${note}`);
-    await finishFrek({ ok: true, message: note.trim(), roster });
+    await finishFrek({ ok: true, message: note.trim(), roster: marked.roster });
   } catch (error) {
     phase = 'done';
     const message = String(error?.message || error);
     render(message, true);
-    await finishFrek({ ok: false, message, roster });
+    await finishFrek({ ok: false, message, roster: frekRoster });
   } finally {
     frek = null;
     activeFrekJobId = null;

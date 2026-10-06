@@ -35,6 +35,32 @@ describe('checkRoster', () => {
     expect(check.missingInVulcan.map((s) => s.id)).toEqual(['c']);
     expect(rosterSummary(check)).toBe('poprawione numery: 21→20; w VULCANIE, brak w apce: nr 7; w apce, brak w VULCANIE: nr 12');
   });
+  it('bez ogonkow i z literowka: poprawia pisownie z VULCANA', () => {
+    const kids = [st('p', 17, 'Pokładenko', 'Kira'), st('m', 9, 'Mikalauskajte', 'Kiryl')];
+    const check = checkRoster(
+      [
+        { number: 17, name: 'Pokladenko Kira', main: 'Pokladenko Kira' },
+        { number: 9, name: 'Mikalauskaite Kiryl', main: 'Mikalauskaite Kiryl' },
+      ],
+      kids,
+    );
+    expect(check.missingInApp).toEqual([]);
+    expect(check.missingInVulcan).toEqual([]);
+    expect(check.nameFixes).toEqual([{ studentId: 'm', lastName: 'Mikalauskaite', firstName: 'Kiryl' }]);
+  });
+  it('"ni" w kolumnie = nauczanie indywidualne, a pelna lista wylacza tych, co odeszli', () => {
+    const kids = [1, 2, 3, 4, 5, 6].map((n) => st(`s${n}`, n, `Uczen${'abcdef'[n - 1]}`, 'X'));
+    const rows = [1, 2, 3, 4, 5].map((n) => ({ number: n, name: `Uczen${'abcdef'[n - 1]} X`, symbol: n === 3 ? 'ni' : '' }));
+    const check = checkRoster(rows, kids);
+    expect(check.individual).toEqual(['s3']);
+    expect(check.trusted).toBe(true);
+    expect(check.missingInVulcan.map((s) => s.id)).toEqual(['s6']);
+  });
+  it('lista innej klasy nie wylacza nikogo', () => {
+    const kids = [1, 2, 3, 4, 5, 6].map((n) => st(`s${n}`, n, `Uczen${'abcdef'[n - 1]}`, 'X'));
+    const rows = [1, 2, 3, 4, 5, 6].map((n) => ({ number: n, name: `Obcy${'abcdef'[n - 1]}ski Y` }));
+    expect(checkRoster(rows, kids).trusted).toBe(false);
+  });
   it('pomija nieaktywnych', () => {
     expect(checkRoster([], [st('x', 9, 'A', 'B', false)]).missingInVulcan).toEqual([]);
   });

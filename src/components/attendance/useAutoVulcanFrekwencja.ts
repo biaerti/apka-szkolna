@@ -64,8 +64,15 @@ export function useAutoVulcanFrekwencja(): void {
         const state = useStore.getState();
         const classmates = state.students.filter((st) => st.classId === job.classId);
         const roster = checkRoster(detail.roster, classmates);
-        // Numery z dziennika bierzemy z VULCANA - to on jest zrodlem prawdy.
+        // Lista z dziennika (numery, pisownia, kto odszedl, kto ma "ni") bierzemy
+        // z VULCANA - to on jest zrodlem prawdy. Lista wraca takze przy bledzie.
         for (const fix of roster.numberFixes) state.updateStudent(fix.studentId, { number: fix.to });
+        for (const fix of roster.nameFixes) state.updateStudent(fix.studentId, { lastName: fix.lastName, firstName: fix.firstName });
+        for (const id of roster.individual) {
+          const note = classmates.find((st) => st.id === id)?.note?.trim();
+          state.updateStudent(id, { active: false, note: note ? `${note}; nauczanie indywidualne` : 'nauczanie indywidualne' });
+        }
+        if (roster.trusted) for (const st of roster.missingInVulcan) state.updateStudent(st.id, { active: false });
         rosterNote = rosterSummary(roster);
       }
       const base = detail?.ok ? 'Zapisane w VULCANIE.' : `Nie udało się: ${detail?.message || 'brak szczegółów'}`;

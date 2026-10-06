@@ -122,28 +122,74 @@ function norm(value: string): string {
   return value.replace(/\s+/g, ' ').trim().toLocaleLowerCase('pl');
 }
 
+/** Bez ogonkow: apka i VULCAN potrafia zapisac nazwisko roznie (Pokładenko/Pokladenko). */
+function fold(value: string): string {
+  return norm(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l');
+}
+
 /**
  * Czy wiersz VULCANA ("Staroń Oliwia Julia" - z drugim imieniem, czasem
  * uciety wielokropkiem) to ten uczen. Nazwisko + pierwsze imie od poczatku.
  */
 export function rowMatchesStudent(rowName: string, st: Pick<Student, 'firstName' | 'lastName'>): boolean {
-  const row = norm(rowName);
-  const wanted = norm(`${st.lastName} ${st.firstName}`);
-  return row === wanted || row.startsWith(`${wanted} `);
+  const row = fold(rowName);
+  const wanted = fold(`${st.lastName} ${st.firstName}`);
+  return row === wanted || row.startsWith(`${wanted} `) || row.startsWith(`${wanted}…`);
+}
+
+function editDistance(a: string, b: string): number {
+  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i += 1) {
+    let diag = prev[0];
+    prev[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const up = prev[j];
+      prev[j] = Math.min(prev[j] + 1, prev[j - 1] + 1, diag + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diag = up;
+    }
+  }
+  return prev[b.length];
+}
+
+/** Literowka: poczatek wiersza rozni sie od "nazwisko imie" najwyzej o 2 znaki. */
+export function rowNearStudent(rowName: string, st: Pick<Student, 'firstName' | 'lastName'>): boolean {
+  const row = fold(rowName);
+  const wanted = fold(`${st.lastName} ${st.firstName}`);
+  return [wanted.length - 1, wanted.length, wanted.length + 1].some((n) => editDistance(row.slice(0, n).trim(), wanted) <= 2);
 }
 
 export interface RosterRow {
   number: number;
   name: string;
+  /** Nazwisko i imie bez szarego drugiego imienia ("Adamek Jan"). */
+  main?: string;
+  /** Co stalo w kolumnie lekcji, zanim bot cokolwiek kliknal ("u", "ni"...). */
+  symbol?: string;
 }
 
 export interface RosterCheck {
   /** Uczen apki ma w VULCANIE inny numer - do poprawienia. */
   numberFixes: { studentId: string; from: number; to: number }[];
+  /** Nazwisko w apce z literowka - bierzemy pisownie z VULCANA. */
+  nameFixes: { studentId: string; lastName: string; firstName: string }[];
+  /** Aktywni uczniowie, ktorzy w VULCANIE maja "ni" - nauczanie indywidualne. */
+  individual: string[];
   /** Numery z VULCANA, ktorych nie ma w apce (nazwiska zostaja lokalnie). */
   missingInApp: RosterRow[];
   /** Aktywni uczniowie apki, ktorych nie ma w VULCANIE. */
   missingInVulcan: Student[];
+  /**
+   * Lista z VULCANA wyglada na cala i ta sama klase (roznice na pojedyncze
+   * osoby) - uczniow, ktorych tam nie ma, mozna w apce wylaczyc.
+   */
+  trusted: boolean;
+}
+
+/** "Adamek Jan" -> nazwisko + imie (imie to ostatni wyraz). */
+function splitName(main: string | undefined): { lastName: string; firstName: string } | null {
+  const words = (main ?? '').replace(/…/g, '').trim().split(/\s+/).filter(Boolean);
+  if (words.length < 2) return null;
+  return { lastName: words.slice(0, -1).join(' '), firstName: words[words.length - 1] };
 }
 
 /** Porownuje liste klasy z VULCANA z aktywnymi uczniami klasy w apce. */
@@ -151,29 +197,55 @@ export function checkRoster(rows: RosterRow[], classStudents: Student[]): Roster
   const active = classStudents.filter((st) => st.active);
   // Nauczanie indywidualne: wylaczony w apce, ale jest w VULCANIE - to nie brak.
   const known = [...active, ...classStudents.filter(isIndividual)];
+  const matched = new Map<RosterRow, Student>();
   const used = new Set<string>();
-  const numberFixes: RosterCheck['numberFixes'] = [];
-  const missingInApp: RosterRow[] = [];
   for (const row of rows) {
     const st = known.find((candidate) => !used.has(candidate.id) && rowMatchesStudent(row.name, candidate));
+    if (!st) continue;
+    matched.set(row, st);
+    used.add(st.id);
+  }
+  // Druga runda: literowki - tylko gdy do wiersza pasuje jeden jedyny uczen.
+  const nameFixes: RosterCheck['nameFixes'] = [];
+  for (const row of rows) {
+    if (matched.has(row)) continue;
+    const near = known.filter((candidate) => !used.has(candidate.id) && rowNearStudent(row.name, candidate));
+    if (near.length !== 1) continue;
+    const st = near[0];
+    matched.set(row, st);
+    used.add(st.id);
+    const fixed = splitName(row.main);
+    if (fixed && (fixed.lastName !== st.lastName || fixed.firstName !== st.firstName)) nameFixes.push({ studentId: st.id, ...fixed });
+  }
+  const numberFixes: RosterCheck['numberFixes'] = [];
+  const individual: string[] = [];
+  const missingInApp: RosterRow[] = [];
+  for (const row of rows) {
+    const st = matched.get(row);
     if (!st) {
       missingInApp.push(row);
       continue;
     }
-    used.add(st.id);
     if (Number.isInteger(row.number) && row.number > 0 && row.number !== st.number) {
       numberFixes.push({ studentId: st.id, from: st.number, to: row.number });
     }
+    if (st.active && norm(row.symbol ?? '') === 'ni') individual.push(st.id);
   }
   const missingInVulcan = active.filter((st) => !used.has(st.id));
-  return { numberFixes, missingInApp, missingInVulcan };
+  const trusted = rows.length >= 5 && missingInApp.length <= 3 && missingInVulcan.length <= 3;
+  return { numberFixes, nameFixes, individual, missingInApp, missingInVulcan, trusted };
 }
 
 /** Krotki komunikat do chmury - same numery, bez nazwisk. */
 export function rosterSummary(check: RosterCheck): string {
   const parts: string[] = [];
   if (check.numberFixes.length > 0) parts.push(`poprawione numery: ${check.numberFixes.map((f) => `${f.from}→${f.to}`).join(', ')}`);
+  if (check.nameFixes.length > 0) parts.push(`poprawiona pisownia: ${check.nameFixes.length}`);
+  if (check.individual.length > 0) parts.push(`nauczanie indywidualne (wyłączeni z listy): ${check.individual.length}`);
   if (check.missingInApp.length > 0) parts.push(`w VULCANIE, brak w apce: nr ${check.missingInApp.map((r) => r.number).join(', ')}`);
-  if (check.missingInVulcan.length > 0) parts.push(`w apce, brak w VULCANIE: nr ${check.missingInVulcan.map((s) => s.number).join(', ')}`);
+  if (check.missingInVulcan.length > 0) {
+    const label = check.trusted ? 'wyłączeni w apce (nie ma ich w VULCANIE)' : 'w apce, brak w VULCANIE';
+    parts.push(`${label}: nr ${check.missingInVulcan.map((s) => s.number).join(', ')}`);
+  }
   return parts.join('; ');
 }
