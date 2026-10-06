@@ -49,7 +49,7 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
     () => students.filter((st) => st.classId === classId && st.active).sort((a, b) => a.number - b.number),
     [students, classId],
   );
-  const { absentSet, togglePresent, presentStudents, pullFromVulcan } = useAttendance(classStudents, classId);
+  const { absentSet, togglePresent, pullFromVulcan } = useAttendance(classStudents, classId);
 
   const [open, setOpen] = useState(false);
   const [allowRepeats, setAllowRepeats] = useState(false);
@@ -75,8 +75,8 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
   const usedFor = useCallback((studentId: string) => answered.get(studentId) ?? 0, [answered]);
 
   const entries = useMemo(
-    () => buildRoundEntries({ students: presentStudents, usedFor, allowRepeats }),
-    [presentStudents, usedFor, allowRepeats],
+    () => buildRoundEntries({ students: classStudents, usedFor, allowRepeats, absentStudentIds: absentSet }),
+    [classStudents, usedFor, allowRepeats, absentSet],
   );
   const pool = useMemo(() => drawableEntries(entries), [entries]);
 

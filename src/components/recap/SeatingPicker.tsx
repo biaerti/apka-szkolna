@@ -96,8 +96,9 @@ export function SeatingPicker({
     if (!student) return 'border border-dashed border-gray-800 text-transparent';
     if (student.id === hopId) return 'bg-accent-500 text-white';
     if (!spinning && student.id === currentStudentId) return 'bg-accent-600 font-semibold text-white';
-    if (absentSet.has(student.id)) return 'text-gray-600 opacity-50';
+    // Jak na kole: kto juz odpowiadal, jest czerwony, nawet gdy dzis go nie ma.
     if ((usedCount.get(student.id) ?? 0) >= 1) return 'text-red-400 line-through';
+    if (absentSet.has(student.id)) return 'text-gray-600 opacity-50';
     return 'bg-gray-800 text-gray-200';
   }
 

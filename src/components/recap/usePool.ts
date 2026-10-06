@@ -22,7 +22,7 @@ import type { Student } from '../../data/types';
 import { buildRoundEntries, drawableEntries, plannedDraws, type PoolEntry } from '../../lib/recap';
 import { wheelCycle } from '../../lib/wheelCycle';
 
-export function usePool(students: Student[], classId: string) {
+export function usePool(students: Student[], classId: string, absentStudentIds: ReadonlySet<string>) {
   const recapEvents = useStore((s) => s.recapEvents);
   const [localUsed, setLocalUsed] = useState<Map<string, number>>(new Map());
   const [resetAt, setResetAt] = useState<string | null>(null);
@@ -48,13 +48,16 @@ export function usePool(students: Student[], classId: string) {
   const usedFor = useCallback((studentId: string) => usedCount.get(studentId) ?? 0, [usedCount]);
 
   const entries: PoolEntry[] = useMemo(
-    () => buildRoundEntries({ students, usedFor, allowRepeats }),
-    [students, usedFor, allowRepeats],
+    () => buildRoundEntries({ students, usedFor, allowRepeats, absentStudentIds }),
+    [students, usedFor, allowRepeats, absentStudentIds],
   );
 
   const pool: PoolEntry[] = useMemo(() => drawableEntries(entries), [entries]);
 
-  const plannedTotal = useMemo(() => plannedDraws(students), [students]);
+  const plannedTotal = useMemo(
+    () => plannedDraws(students.filter((student) => !absentStudentIds.has(student.id))),
+    [students, absentStudentIds],
+  );
 
   function bumpUsedCount(studentId: string) {
     setDrawsCompleted((n) => n + 1);

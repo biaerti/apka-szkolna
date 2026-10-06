@@ -177,6 +177,7 @@ describe('buildRoundEntries', () => {
     expect(entries).toHaveLength(3);
     expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0', 's3#0']);
     expect(entries.every((e) => !e.done)).toBe(true);
+    expect(entries.every((e) => !e.absent)).toBe(true);
   });
 
   it('wykorzystane wejscia zostaja na kole, ale sa oznaczone jako done', () => {
@@ -204,6 +205,19 @@ describe('buildRoundEntries', () => {
     expect(entries.map((e) => e.student.id)).toEqual(['s1', 's2']);
     expect(entries.every((e) => !e.done)).toBe(true);
   });
+
+  it('nieobecni zostaja we wpisach kola i sa oznaczeni osobnym stanem', () => {
+    const entries = buildRoundEntries({
+      students: [s1, s2, s3],
+      usedFor: () => 0,
+      absentStudentIds: new Set(['s2']),
+    });
+    expect(entries.map((e) => [e.student.id, e.absent])).toEqual([
+      ['s1', false],
+      ['s2', true],
+      ['s3', false],
+    ]);
+  });
 });
 
 describe('drawableEntries', () => {
@@ -216,6 +230,16 @@ describe('drawableEntries', () => {
       students: [s1, s2],
       usedFor: (id) => used.get(id) ?? 0,
     });
+    expect(drawableEntries(entries).map((e) => e.key)).toEqual(['s2#0']);
+  });
+
+  it('losowanie omija nieobecnych, chociaz ich sektory zostaja na kole', () => {
+    const entries = buildRoundEntries({
+      students: [s1, s2],
+      usedFor: () => 0,
+      absentStudentIds: new Set(['s1']),
+    });
+    expect(entries.map((e) => e.key)).toEqual(['s1#0', 's2#0']);
     expect(drawableEntries(entries).map((e) => e.key)).toEqual(['s2#0']);
   });
 });

@@ -76,7 +76,7 @@ export function useRecapSession({
   // Pamiec "kto juz dzis odpowiadal" jest wspolna dla calej klasy i calego dnia
   // (patrz usePool) - kolo powtorzeniowe, kolo na lekcji i plywajacy panel nie
   // losuja tej samej osoby drugi raz, dopoki reszta klasy nie byla.
-  const poolState = usePool(attendance.presentStudents, classId);
+  const poolState = usePool(classStudents, classId, attendance.absentSet);
 
   const setQuestions = useMemo(
     () => {
@@ -133,9 +133,9 @@ export function useRecapSession({
     absentSet: attendance.absentSet,
     togglePresent: attendance.togglePresent,
     presentStudents: attendance.presentStudents,
-    // Sektory kola: wszyscy z rundy, razem z tymi, ktorzy juz odpowiadali.
+    // Sektory kola: cala klasa, razem z nieobecnymi i tymi, ktorzy juz odpowiadali.
     entries: poolState.entries,
-    // Kandydaci do losowania: `entries` bez tych, ktorzy juz byli.
+    // Kandydaci do losowania: tylko obecni, ktorzy jeszcze nie odpowiadali.
     pool: poolState.pool,
     plannedTotal: poolState.plannedTotal,
     drawsCompleted: poolState.drawsCompleted,

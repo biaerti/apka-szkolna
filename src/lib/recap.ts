@@ -70,6 +70,8 @@ export interface PoolEntry {
    * wiecej jej nie wylosujemy. Z losowania wypada (patrz drawableEntries).
    */
   done: boolean;
+  /** true = uczen jest nieobecny: widac go na kole, ale nie bierze udzialu w losowaniu. */
+  absent: boolean;
 }
 
 export interface BuildPoolArgs {
@@ -78,6 +80,8 @@ export interface BuildPoolArgs {
   usedFor: (studentId: string) => number;
   /** true = ignoruj "juz odpowiadal", nikt nie jest `done` i wszyscy wracaja do losowania. */
   allowRepeats?: boolean;
+  /** Id uczniow nieobecnych - ich sektory zostaja na kole, ale nie trafiaja do puli. */
+  absentStudentIds?: ReadonlySet<string>;
 }
 
 /**
@@ -85,18 +89,29 @@ export interface BuildPoolArgs {
  * (`done: true`). Lista jest stala przez cala runde (zmienia ja tylko obecnosc),
  * wiec sektory na kole nie przeskakuja po kazdej ocenie.
  */
-export function buildRoundEntries({ students, usedFor, allowRepeats = false }: BuildPoolArgs): PoolEntry[] {
+export function buildRoundEntries({
+  students,
+  usedFor,
+  allowRepeats = false,
+  absentStudentIds = new Set<string>(),
+}: BuildPoolArgs): PoolEntry[] {
   const entries: PoolEntry[] = [];
   for (const student of students) {
     const used = allowRepeats ? 0 : usedFor(student.id);
-    entries.push({ key: `${student.id}#0`, student, copy: 0, done: used > 0 });
+    entries.push({
+      key: `${student.id}#0`,
+      student,
+      copy: 0,
+      done: used > 0,
+      absent: absentStudentIds.has(student.id),
+    });
   }
   return entries;
 }
 
-/** Wejscia, ktore biora udzial w losowaniu - czyli te, ktore jeszcze nie odpowiadaly. */
+/** Wejscia, ktore biora udzial w losowaniu - obecni, ktorzy jeszcze nie odpowiadali. */
 export function drawableEntries(entries: PoolEntry[]): PoolEntry[] {
-  return entries.filter((entry) => !entry.done);
+  return entries.filter((entry) => !entry.done && !entry.absent);
 }
 
 /** Ile losowan (a wiec i pytan) przewiduje pelna runda - kazdy uczen raz. */

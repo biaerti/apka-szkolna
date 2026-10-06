@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Powtórka 2B</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #fdf8ee; color: #1f2a37; font-family: "Segoe UI", Arial, sans-serif; }
+  .slide { display: none; height: 100vh; padding: 4vh 6vw; flex-direction: column; }
+  .slide.on { display: flex; }
+  h1 { font-size: 7vh; margin: 0 0 3vh; color: #1d4e89; }
+  h2 { font-size: 3.4vh; margin: 0 0 1vh; color: #b5462d; text-transform: uppercase; letter-spacing: .08em; }
+  .lead { font-size: 4.2vh; margin: 0 0 3vh; line-height: 1.35; }
+  .items { display: flex; flex-direction: column; gap: 2.2vh; }
+  .item { font-size: 5vh; display: flex; align-items: baseline; gap: 3vw; flex-wrap: wrap; }
+  .ans { color: #1a7f4b; font-weight: 700; visibility: hidden; }
+  .ans.show { visibility: visible; }
+  .big { font-size: 9vh; font-weight: 800; letter-spacing: .05em; }
+  .center { justify-content: center; align-items: center; text-align: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 2vh 2vw; margin: 2vh 0; }
+  .chip { font-size: 5vh; padding: 1vh 2vw; border: 3px solid #1d4e89; border-radius: 14px; background: #fff; }
+  .hint { position: fixed; bottom: 1.5vh; right: 2vw; font-size: 1.8vh; color: #8a8f98; }
+  .num { position: fixed; bottom: 1.5vh; left: 2vw; font-size: 1.8vh; color: #8a8f98; }
+  .tip { font-size: 3vh; color: #5b6472; margin-top: auto; }
+  .letters span { display: inline-block; margin: 0 .4vw; }
+  .v { color: #b5462d; }
+</style>
+</head>
+<body>
+
+<section class="slide center">
+  <h2>Zastępstwo</h2>
+  <h1 style="font-size:10vh">Powtórka z polskiego</h1>
+  <p class="lead">Klasa 2B</p>
+  <p class="tip">Strzałki albo klik - dalej. Spacja - pokaż odpowiedź.</p>
+</section>
+
+<section class="slide">
+  <h2>Rozgrzewka</h2>
+  <h1>Alfabet - jaka litera jest dalej?</h1>
+  <div class="items">
+    <div class="item">A, B, C, ... <span class="ans">D</span></div>
+    <div class="item">K, L, Ł, ... <span class="ans">M</span></div>
+    <div class="item">R, S, Ś, ... <span class="ans">T</span></div>
+    <div class="item">Jaka litera jest przed F? <span class="ans">E</span></div>
+    <div class="item">Jaka litera jest ostatnia? <span class="ans">Ż</span></div>
+  </div>
+  <p class="tip">Na koniec: cała klasa mówi alfabet na głos, po jednej literze w kółko.</p>
+</section>
+
+<section class="slide">
+  <h2>Samogłoski</h2>
+  <h1>Te litery śpiewamy:</h1>
+  <p class="big letters"><span class="v">a</span><span class="v">ą</span><span class="v">e</span><span class="v">ę</span><span class="v">i</span><span class="v">o</span><span class="v">ó</span><span class="v">u</span><span class="v">y</span></p>
+  <p class="lead">Ile samogłosek jest w słowie?</p>
+  <div class="items">
+    <div class="item">ROWER <span class="ans">2 (o, e)</span></div>
+    <div class="item">BALON <span class="ans">2 (a, o)</span></div>
+    <div class="item">TELEFON <span class="ans">3 (e, e, o)</span></div>
+    <div class="item">KOT <span class="ans">1 (o)</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Sylaby</h2>
+  <h1>Klaszczemy! Ile sylab?</h1>
+  <div class="items">
+    <div class="item">dom <span class="ans">1 - dom</span></div>
+    <div class="item">mama <span class="ans">2 - ma-ma</span></div>
+    <div class="item">szkoła <span class="ans">2 - szko-ła</span></div>
+    <div class="item">pomidor <span class="ans">3 - po-mi-dor</span></div>
+    <div class="item">samochody <span class="ans">4 - sa-mo-cho-dy</span></div>
+    <div class="item">hipopotam <span class="ans">4 - hi-po-po-tam</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Sylaby - zabawa</h2>
+  <h1>Wymyśl słowo, które ma...</h1>
+  <div class="items">
+    <div class="item">1 sylabę <span class="ans">np. kot, las, but</span></div>
+    <div class="item">2 sylaby <span class="ans">np. lala, kino, rower</span></div>
+    <div class="item">3 sylaby <span class="ans">np. banany, telefon</span></div>
+    <div class="item">4 sylaby <span class="ans">np. biedronka, telewizor</span></div>
+  </div>
+  <p class="tip">Kto poda słowo, klaszcze je razem z klasą.</p>
+</section>
+
+<section class="slide">
+  <h2>Wielka litera</h2>
+  <h1>Który zapis jest dobry?</h1>
+  <div class="items">
+    <div class="item">ola &nbsp;/&nbsp; Ola <span class="ans">Ola - imię</span></div>
+    <div class="item">warszawa &nbsp;/&nbsp; Warszawa <span class="ans">Warszawa - miasto</span></div>
+    <div class="item">pies Burek &nbsp;/&nbsp; pies burek <span class="ans">pies Burek - imię psa</span></div>
+    <div class="item">Kot &nbsp;/&nbsp; kot <span class="ans">kot - to nie imię</span></div>
+    <div class="item">wisła &nbsp;/&nbsp; Wisła <span class="ans">Wisła - rzeka</span></div>
+  </div>
+  <p class="tip">Wielką literą piszemy: imiona, nazwiska, miasta, rzeki, imiona zwierząt i początek zdania.</p>
+</section>
+
+<section class="slide">
+  <h2>Zdanie</h2>
+  <h1>Ułóż zdanie z rozsypanki</h1>
+  <div class="items">
+    <div class="item">kota &nbsp; ma &nbsp; Ala <span class="ans">Ala ma kota.</span></div>
+    <div class="item">szkoły &nbsp; idzie &nbsp; do &nbsp; Tomek <span class="ans">Tomek idzie do szkoły.</span></div>
+    <div class="item">pies &nbsp; Burek &nbsp; szczeka &nbsp; głośno <span class="ans">Pies Burek głośno szczeka.</span></div>
+    <div class="item">liście &nbsp; spadają &nbsp; jesienią <span class="ans">Jesienią spadają liście.</span></div>
+  </div>
+  <p class="tip">Zdanie: na początku wielka litera, na końcu kropka.</p>
+</section>
+
+<section class="slide">
+  <h2>Kto? Co?</h2>
+  <h1>Osoba, zwierzę czy rzecz?</h1>
+  <div class="items">
+    <div class="item">pani <span class="ans">osoba - kto?</span></div>
+    <div class="item">jeż <span class="ans">zwierzę - kto?</span></div>
+    <div class="item">plecak <span class="ans">rzecz - co?</span></div>
+    <div class="item">strażak <span class="ans">osoba - kto?</span></div>
+    <div class="item">kasztan <span class="ans">rzecz - co?</span></div>
+    <div class="item">wiewiórka <span class="ans">zwierzę - kto?</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Co robi?</h2>
+  <h1>Pokaż ruchem, klasa zgaduje!</h1>
+  <div class="chips">
+    <span class="chip">skacze</span><span class="chip">czyta</span><span class="chip">pływa</span>
+    <span class="chip">śpi</span><span class="chip">je zupę</span><span class="chip">gra w piłkę</span>
+    <span class="chip">maluje</span><span class="chip">tańczy</span><span class="chip">myje zęby</span>
+  </div>
+  <p class="tip">Nauczyciel szepcze słowo jednej osobie, ona pokazuje bez mówienia. Kto zgadnie, pokazuje następne.</p>
+</section>
+
+<section class="slide">
+  <h2>Kolejność alfabetyczna</h2>
+  <h1>Ułóż po kolei jak w alfabecie</h1>
+  <div class="items">
+    <div class="item">kot, ananas, mysz <span class="ans">ananas, kot, mysz</span></div>
+    <div class="item">zebra, dom, lis <span class="ans">dom, lis, zebra</span></div>
+    <div class="item">Tomek, Basia, Ola, Ewa <span class="ans">Basia, Ewa, Ola, Tomek</span></div>
+  </div>
+  <p class="tip">Patrzymy na pierwszą literę.</p>
+</section>
+
+<section class="slide">
+  <h2>Zagadki</h2>
+  <h1>Co to jest?</h1>
+  <div class="items">
+    <div class="item">Ma kolce, jesienią szuka liści na zimowe spanie. <span class="ans">jeż</span></div>
+    <div class="item">Spada z drzewa, jest brązowy i błyszczący. <span class="ans">kasztan</span></div>
+    <div class="item">Nosisz go na plecach do szkoły. <span class="ans">plecak</span></div>
+    <div class="item">Rude futerko, puszysty ogon, zbiera orzechy. <span class="ans">wiewiórka</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Łańcuch słów</h2>
+  <h1>Ostatnia litera = pierwsza litera</h1>
+  <p class="big" style="margin:2vh 0">kot → tor → rak → ...</p>
+  <p class="lead">Każdy po kolei mówi słowo, które zaczyna się na ostatnią literę poprzedniego. Kto się zatnie na 5 sekund, siada.</p>
+</section>
+
+<section class="slide">
+  <h2>Do zeszytu</h2>
+  <h1>Napisz 3 zdania o jesieni</h1>
+  <p class="lead">Pamiętaj: wielka litera na początku, kropka na końcu.</p>
+  <div class="chips">
+    <span class="chip">liście</span><span class="chip">kasztany</span><span class="chip">deszcz</span>
+    <span class="chip">parasol</span><span class="chip">wiatr</span><span class="chip">jeż</span>
+  </div>
+  <p class="tip">Kto skończy - rysuje obrazek do swoich zdań.</p>
+</section>
+
+<section class="slide center">
+  <h1 style="font-size:10vh">Brawo, 2B!</h1>
+  <p class="lead">Dziękuję za lekcję.</p>
+</section>
+
+<div class="num" id="num"></div>
+<div class="hint">← → slajdy &nbsp;·&nbsp; spacja: odpowiedź</div>
+
+<script>
+(function () {
+  var slides = document.querySelectorAll('.slide');
+  var cur = 0;
+  function show(i) {
+    if (i < 0 || i >= slides.length) return;
+    slides[cur].className = slides[cur].className.replace(' on', '');
+    cur = i;
+    slides[cur].className += ' on';
+    document.getElementById('num').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  function reveal() {
+    var hidden = slides[cur].querySelectorAll('.ans:not(.show)');
+    if (hidden.length) { hidden[0].className += ' show'; return true; }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') show(cur + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(cur - 1);
+    else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!reveal()) show(cur + 1); }
+  });
+  document.addEventListener('click', function (e) {
+    if (e.clientX < window.innerWidth / 4) show(cur - 1);
+    else if (!reveal()) show(cur + 1);
+  });
+  slides[0].className += ' on';
+  show(0);
+})();
+</script>
+</body>
+</html>

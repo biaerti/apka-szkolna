@@ -15,6 +15,10 @@
 // z glowy i wiecej jej nie wylosujemy (bez powtorek), zamiast zgadywac, czemu
 // kolo z lekcji na lekcje sie kurczy. Losowanie omija te sektory - patrz
 // drawableEntries w src/lib/recap.ts.
+// Nieobecni rowniez zostaja na kole, ale sa szarzy i przekresleni. Dzieki temu
+// cala klasa zachowuje swoje stale miejsce, a nieobecnosc jest widoczna bez
+// sugerowania, ze uczen moze zostac wylosowany. Kto juz odpowiadal, zostaje
+// czerwony takze wtedy, gdy dzis go nie ma - szary = nieobecny i jeszcze nie byl.
 
 import { useEffect, useRef } from 'react';
 import type { PoolEntry } from '../../lib/recap';
@@ -36,6 +40,8 @@ const DOUBLE_COLORS = ['#b45309', '#d97706'];
 // "Juz byl/a" - czerwien, ktora z konca sali czyta sie jednoznacznie.
 const DONE_COLORS = ['#7f1d1d', '#991b1b'];
 const DONE_TEXT = '#fca5a5';
+const ABSENT_COLORS = ['#374151', '#4b5563'];
+const ABSENT_TEXT = '#d1d5db';
 
 function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
@@ -121,7 +127,8 @@ export function Wheel({
       // Wylosowany sektor zostaje zolty tak dlugo, jak uczen jest na ekranie -
       // dopiero przy nastepnym losowaniu robi sie czerwony jak reszta "juz byli".
       const isDone = entry.done && !isHighlighted;
-      const colorSet = isDone ? DONE_COLORS : isDouble ? DOUBLE_COLORS : COLORS;
+      const isAbsent = entry.absent && !entry.done && !isHighlighted;
+      const colorSet = isAbsent ? ABSENT_COLORS : isDone ? DONE_COLORS : isDouble ? DOUBLE_COLORS : COLORS;
 
       ctx.beginPath();
       ctx.moveTo(cx, cy);
@@ -129,7 +136,7 @@ export function Wheel({
       ctx.closePath();
       ctx.fillStyle = isHighlighted ? '#facc15' : colorSet[i % colorSet.length];
       ctx.fill();
-      ctx.strokeStyle = isHighlighted ? '#fff7ed' : isDone ? '#450a0a' : '#0f172a';
+      ctx.strokeStyle = isHighlighted ? '#fff7ed' : isAbsent ? '#111827' : isDone ? '#450a0a' : '#0f172a';
       ctx.lineWidth = isHighlighted ? 4 : 2;
       ctx.stroke();
 
@@ -140,7 +147,8 @@ export function Wheel({
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(mid);
-      ctx.fillStyle = isHighlighted ? '#1f2937' : isDone ? DONE_TEXT : '#ffffff';
+      const inactiveText = isAbsent ? ABSENT_TEXT : DONE_TEXT;
+      ctx.fillStyle = isHighlighted ? '#1f2937' : isAbsent ? ABSENT_TEXT : isDone ? DONE_TEXT : '#ffffff';
       ctx.font = `bold ${fontSize}px sans-serif`;
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
@@ -154,9 +162,9 @@ export function Wheel({
       }
       ctx.fillText(label, radius * 0.92, 0);
       // Przekreslenie - sam kolor to za malo, gdy sala patrzy pod katem.
-      if (isDone) {
+      if (isDone || isAbsent) {
         const labelWidth = ctx.measureText(label).width;
-        ctx.strokeStyle = DONE_TEXT;
+        ctx.strokeStyle = inactiveText;
         ctx.lineWidth = Math.max(1.5, fontSize / 12);
         ctx.beginPath();
         ctx.moveTo(radius * 0.92 - labelWidth, 0);
@@ -224,7 +232,10 @@ export function Wheel({
       ref={canvasRef}
       className="mx-auto block"
       role="img"
-      aria-label="Koło fortuny z uczniami"
+      aria-label={`Koło fortuny z uczniami. Nieobecni: ${entries
+        .filter((entry) => entry.absent)
+        .map((entry) => `${entry.student.firstName} ${entry.student.lastName}`)
+        .join(', ') || 'brak'}.`}
     />
   );
 }
