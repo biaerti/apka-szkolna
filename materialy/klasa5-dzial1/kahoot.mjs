@@ -1,4 +1,4 @@
-// Kahoot - klasa 5, dział 1: dialog, opowiadanie, głoski, formy nieosobowe, rymy.
+// Kahoot - klasa 5, dział 1: dialog, opowiadanie, głoski, formy nieosobowe, tryby i „by”, rymy.
 // node materialy/klasa5-dzial1/kahoot.mjs -> output/kahoot/klasa5-dzial1-kahoot.pdf
 // PDF wrzucamy w Kahoot: Utwórz -> „PDF na kahoota”. Limity Kahoota: pytanie 120 znaków, odpowiedź 75.
 // Przykłady własne (nie z filmików i nie z podręcznika). `ok` = numer poprawnej odpowiedzi (od 1).
@@ -34,6 +34,14 @@ const PYTANIA = [
   { t: '„Ktoś zamknął drzwi.” Jak to powiedzieć formą nieosobową?', o: ['Zamknąłem drzwi.', 'Zamknięto drzwi.', 'Zamknij drzwi.', 'Zamknęli drzwi.'], ok: 2 },
   { t: '„Mówi się, że w zamku straszy.” Czy wiemy, kto to mówi?', o: ['Tak, zamek', 'Tak, duchy', 'Nie, to forma nieosobowa', 'Tak, narrator'], ok: 3 },
   { t: 'Każdy czasownik ze słowem „się” jest formą nieosobową.', o: ['Prawda', 'Fałsz - w „Ola się śmieje” wiemy, kto się śmieje'], ok: 2 },
+  // Tryby czasownika i pisownia „by”
+  { t: '„Posprzątaj swój pokój!” - w jakim trybie jest czasownik?', o: ['oznajmującym', 'rozkazującym', 'przypuszczającym', 'nieosobowym'], ok: 2 },
+  { t: '„Pojechałabym nad morze.” - w jakim trybie jest czasownik?', o: ['przypuszczającym', 'oznajmującym', 'rozkazującym', 'bezokolicznik'], ok: 1 },
+  { t: '„Wczoraj gotowaliśmy zupę.” - w jakim trybie jest czasownik?', o: ['rozkazującym', 'przypuszczającym', 'oznajmującym', 'nieosobowym'], ok: 3 },
+  { t: '„Niech Ola przeczyta ten wiersz.” - w jakim trybie jest czasownik?', o: ['oznajmującym', 'przypuszczającym', 'to bezokolicznik', 'rozkazującym'], ok: 4 },
+  { t: 'Po czym najłatwiej rozpoznać tryb przypuszczający?', o: ['Po wykrzykniku', 'Po cząstce -by-', 'Po końcówce -no, -to', 'Po słowie „niech”'], ok: 2 },
+  { t: 'Który zapis jest poprawny?', o: ['zagrał bym', 'zagrałbym', 'zagrał-bym', 'zagrałby m'], ok: 2 },
+  { t: 'Który zapis jest poprawny?', o: ['trzebaby', 'gdy by', 'trzeba by', 'zrobił byś'], ok: 3 },
   // Rymy
   { t: 'Rymy w schemacie AABB to rymy…', o: ['krzyżowe', 'okalające', 'parzyste', 'wewnętrzne'], ok: 3 },
   { t: 'Rymy w schemacie ABAB to rymy…', o: ['krzyżowe', 'parzyste', 'okalające', 'niedokładne'], ok: 1 },
@@ -69,7 +77,7 @@ h1 { font-size: 20pt; margin-bottom: 2mm; }
 .ok { color: var(--ziel); font-weight: 700; margin-left: 4mm; margin-top: 1mm; }
 </style></head><body>
 <h1>Kahoot - klasa 5, dział 1</h1>
-<p class="pod">Quiz: dialog, opowiadanie, głoski, formy nieosobowe czasownika, rymy. ${PYTANIA.length} pytań, przy każdym poprawna odpowiedź i limit czasu.</p>
+<p class="pod">Quiz: dialog, opowiadanie, głoski, formy nieosobowe i tryby czasownika, pisownia „by”, rymy. ${PYTANIA.length} pytań, przy każdym poprawna odpowiedź i limit czasu.</p>
 ${PYTANIA.map((p, i) => `<div class="p">
 <h3>Pytanie ${i + 1}. ${esc(p.t)}</h3>
 <ul>${p.o.map((o, j) => `<li>${LIT[j]}. ${esc(o)}</li>`).join('')}</ul>
