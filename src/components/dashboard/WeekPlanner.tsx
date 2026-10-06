@@ -60,6 +60,13 @@ export function WeekPlanner(props: Props) {
         const dateKey = toDateKey(date);
         const isToday = dateKey === toDateKey(props.now);
         const entries = dayEntries(date, props.vulcanLessons, props.timetable);
+        const lastPeriod = Math.max(0, ...entries.map((entry) => entry.period));
+        const gaps = Array.from({ length: lastPeriod }, (_, index) => index + 1).filter(
+          (no) => !entries.some((entry) => entry.period === no),
+        );
+        const rows = [...entries.map((entry) => ({ no: entry.period, entry })), ...gaps.map((no) => ({ no, entry: undefined }))].sort(
+          (a, b) => a.no - b.no,
+        );
         return (
           <section key={dateKey} className="min-w-0">
             <header className={clsx('flex items-baseline justify-between border-b-2 pb-2', isToday ? 'border-accent-500' : 'border-gray-200')}>
@@ -74,7 +81,29 @@ export function WeekPlanner(props: Props) {
             {entries.length === 0 && <p className="py-6 text-sm text-gray-400">Bez lekcji</p>}
 
             <ol>
-              {entries.map((entry) => {
+              {rows.map(({ no, entry }) => {
+                if (!entry) {
+                  const gapDuty = dutyAfter(dyzuryNa(date), date.getDay(), no);
+                  const gapDutyTeraz = isToday && dutyNow.kind === 'now' && dutyNow.duty === gapDuty;
+                  return (
+                    <li key={`okienko-${no}`}>
+                      <div className="-mx-2 flex min-h-[5.25rem] gap-3 px-2 py-3">
+                        <div className="w-9 shrink-0 pt-0.5 text-right">
+                          <div className="text-lg font-semibold leading-none tabular-nums text-gray-200">{no}</div>
+                          <div className="mt-1 text-[11px] leading-none tabular-nums text-gray-300">{periodByNo.get(no)?.start}</div>
+                        </div>
+                        <p className="pt-0.5 text-xs text-gray-300">okienko</p>
+                      </div>
+                      {gapDuty && (
+                        <div className="space-y-1 py-1 pl-12">
+                          <BreakNote teraz={gapDutyTeraz} tone="amber" title={`Przerwa po ${no}. lekcji: dyżur`}>
+                            dyżur · {gapDuty.place}
+                          </BreakNote>
+                        </div>
+                      )}
+                    </li>
+                  );
+                }
                 const cls = entry.classId ? classById.get(entry.classId) : undefined;
                 const available = cls
                   ? props.lessons.filter((lesson) => lesson.grade === classGrade(cls.name)).sort((a, b) => a.order - b.order)
