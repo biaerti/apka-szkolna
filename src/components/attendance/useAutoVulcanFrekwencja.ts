@@ -68,6 +68,7 @@ export function useAutoVulcanFrekwencja(): void {
         // z VULCANA - to on jest zrodlem prawdy. Lista wraca takze przy bledzie.
         for (const fix of roster.numberFixes) state.updateStudent(fix.studentId, { number: fix.to });
         for (const fix of roster.nameFixes) state.updateStudent(fix.studentId, { lastName: fix.lastName, firstName: fix.firstName });
+        for (const id of roster.reactivate) state.updateStudent(id, { active: true });
         for (const id of roster.individual) {
           const note = classmates.find((st) => st.id === id)?.note?.trim();
           state.updateStudent(id, { active: false, note: note ? `${note}; nauczanie indywidualne` : 'nauczanie indywidualne' });

@@ -170,17 +170,21 @@ export interface RosterRow {
 export interface RosterCheck {
   /** Uczen apki ma w VULCANIE inny numer - do poprawienia. */
   numberFixes: { studentId: string; from: number; to: number }[];
-  /** Nazwisko w apce z literowka - bierzemy pisownie z VULCANA. */
+  /** Nazwisko w apce z literowka albo odwrotnie - bierzemy pisownie z VULCANA. */
   nameFixes: { studentId: string; lastName: string; firstName: string }[];
   /** Aktywni uczniowie, ktorzy w VULCANIE maja "ni" - nauczanie indywidualne. */
   individual: string[];
+  /** Wylaczeni w apce, a w VULCANIE sa - do wlaczenia z powrotem. */
+  reactivate: string[];
   /** Numery z VULCANA, ktorych nie ma w apce (nazwiska zostaja lokalnie). */
   missingInApp: RosterRow[];
   /** Aktywni uczniowie apki, ktorych nie ma w VULCANIE. */
   missingInVulcan: Student[];
   /**
-   * Lista z VULCANA wyglada na cala i ta sama klase (roznice na pojedyncze
-   * osoby) - uczniow, ktorych tam nie ma, mozna w apce wylaczyc.
+   * Lista z VULCANA to ta sama klasa, a kazdy jej wiersz ma ucznia w apce -
+   * dopiero wtedy uczniow, ktorych w dzienniku nie ma, mozna w apce wylaczyc.
+   * Nieznany wiersz to czesto ten sam uczen zapisany inaczej (2026-10-07: dwie
+   * osoby wylaczone przez pomylke).
    */
   trusted: boolean;
 }
@@ -192,31 +196,62 @@ function splitName(main: string | undefined): { lastName: string; firstName: str
   return { lastName: words.slice(0, -1).join(' '), firstName: words[words.length - 1] };
 }
 
-/** Porownuje liste klasy z VULCANA z aktywnymi uczniami klasy w apce. */
+/** Uczen dopisany recznie bywa odwrotnie: imie w polu nazwiska. */
+function swapped(st: Pick<Student, 'firstName' | 'lastName'>) {
+  return { lastName: st.firstName, firstName: st.lastName };
+}
+
+/** Porownuje liste klasy z VULCANA z uczniami klasy w apce. */
 export function checkRoster(rows: RosterRow[], classStudents: Student[]): RosterCheck {
   const active = classStudents.filter((st) => st.active);
   // Nauczanie indywidualne: wylaczony w apce, ale jest w VULCANIE - to nie brak.
   const known = [...active, ...classStudents.filter(isIndividual)];
+  const inactive = classStudents.filter((st) => !st.active && !isIndividual(st));
   const matched = new Map<RosterRow, Student>();
   const used = new Set<string>();
-  for (const row of rows) {
-    const st = known.find((candidate) => !used.has(candidate.id) && rowMatchesStudent(row.name, candidate));
-    if (!st) continue;
-    matched.set(row, st);
-    used.add(st.id);
-  }
-  // Druga runda: literowki - tylko gdy do wiersza pasuje jeden jedyny uczen.
   const nameFixes: RosterCheck['nameFixes'] = [];
-  for (const row of rows) {
-    if (matched.has(row)) continue;
-    const near = known.filter((candidate) => !used.has(candidate.id) && rowNearStudent(row.name, candidate));
-    if (near.length !== 1) continue;
-    const st = near[0];
+  const reactivate: string[] = [];
+
+  const take = (row: RosterRow, st: Student, fixName: boolean) => {
     matched.set(row, st);
     used.add(st.id);
-    const fixed = splitName(row.main);
+    const fixed = fixName ? splitName(row.main) : null;
     if (fixed && (fixed.lastName !== st.lastName || fixed.firstName !== st.firstName)) nameFixes.push({ studentId: st.id, ...fixed });
+  };
+  // Kolejne rundy, od najpewniejszej. W kazdej wiersz bierze ucznia tylko,
+  // gdy pasuje dokladnie jeden.
+  const round = (pool: Student[], fits: (row: RosterRow, st: Student) => boolean, fixName: boolean, onTake?: (st: Student) => void) => {
+    for (const row of rows) {
+      if (matched.has(row)) continue;
+      const hits = pool.filter((candidate) => !used.has(candidate.id) && fits(row, candidate));
+      if (hits.length !== 1) continue;
+      take(row, hits[0], fixName);
+      onTake?.(hits[0]);
+    }
+  };
+  const exact = (row: RosterRow, st: Student) => rowMatchesStudent(row.name, st);
+  const reversed = (row: RosterRow, st: Student) => rowMatchesStudent(row.name, swapped(st));
+  const near = (row: RosterRow, st: Student) => rowNearStudent(row.name, st) || rowNearStudent(row.name, swapped(st));
+  for (const row of rows) {
+    const st = known.find((candidate) => !used.has(candidate.id) && exact(row, candidate));
+    if (st) take(row, st, false);
   }
+  round(known, reversed, true);
+  round(known, near, true);
+  // Ostatnia runda dla aktywnych: ten sam numer - to ten sam uczen zapisany
+  // zupelnie inaczej. Tylko dla 1-2 resztek, gdy cala reszta zgadza sie po
+  // nazwiskach (lista innej klasy dopasowalaby sie po numerach cala).
+  const leftover = rows.filter((r) => !matched.has(r));
+  if (rows.length >= 5 && leftover.length <= 2) {
+    round(known, (row, st) => row.number === st.number && leftover.filter((r) => r.number === row.number).length === 1, true);
+  }
+  // Wylaczeni w apce, ktorzy w dzienniku sa - tylko po nazwisku, bez numeru
+  // (stare duplikaty maja numery zajete przez aktywnych).
+  const back = (st: Student) => reactivate.push(st.id);
+  round(inactive, exact, false, back);
+  round(inactive, reversed, true, back);
+  round(inactive, near, true, back);
+
   const numberFixes: RosterCheck['numberFixes'] = [];
   const individual: string[] = [];
   const missingInApp: RosterRow[] = [];
@@ -229,11 +264,19 @@ export function checkRoster(rows: RosterRow[], classStudents: Student[]): Roster
     if (Number.isInteger(row.number) && row.number > 0 && row.number !== st.number) {
       numberFixes.push({ studentId: st.id, from: st.number, to: row.number });
     }
-    if (st.active && norm(row.symbol ?? '') === 'ni') individual.push(st.id);
+    if ((st.active || reactivate.includes(st.id)) && norm(row.symbol ?? '') === 'ni') individual.push(st.id);
   }
   const missingInVulcan = active.filter((st) => !used.has(st.id));
-  const trusted = rows.length >= 5 && missingInApp.length <= 3 && missingInVulcan.length <= 3;
-  return { numberFixes, nameFixes, individual, missingInApp, missingInVulcan, trusted };
+  const trusted = rows.length >= 5 && missingInApp.length === 0 && missingInVulcan.length <= 3;
+  return {
+    numberFixes,
+    nameFixes,
+    individual,
+    reactivate: reactivate.filter((id) => !individual.includes(id)),
+    missingInApp,
+    missingInVulcan,
+    trusted,
+  };
 }
 
 /** Krotki komunikat do chmury - same numery, bez nazwisk. */
@@ -241,6 +284,7 @@ export function rosterSummary(check: RosterCheck): string {
   const parts: string[] = [];
   if (check.numberFixes.length > 0) parts.push(`poprawione numery: ${check.numberFixes.map((f) => `${f.from}→${f.to}`).join(', ')}`);
   if (check.nameFixes.length > 0) parts.push(`poprawiona pisownia: ${check.nameFixes.length}`);
+  if (check.reactivate.length > 0) parts.push(`włączeni z powrotem: ${check.reactivate.length}`);
   if (check.individual.length > 0) parts.push(`nauczanie indywidualne (wyłączeni z listy): ${check.individual.length}`);
   if (check.missingInApp.length > 0) parts.push(`w VULCANIE, brak w apce: nr ${check.missingInApp.map((r) => r.number).join(', ')}`);
   if (check.missingInVulcan.length > 0) {

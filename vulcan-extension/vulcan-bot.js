@@ -816,14 +816,28 @@ function nearName(text, student) {
     .some((prefix) => editDistance(prefix.trim(), wanted) <= 2);
 }
 
-// Wiersz ucznia: dokladnie po nazwisku i imieniu, a gdy takiego nie ma -
-// jedyny wiersz z literowka (i nie zajety przez innego ucznia z paczki).
+// Uczen dopisany w apce recznie bywa odwrotnie: "Zofia Niewiadomska".
+const swapped = (student) => ({ lastName: student.firstName, firstName: student.lastName });
+const exactName = (text, student) => startsWithName(text, student) || startsWithName(text, swapped(student));
+const roughName = (text, student) => nearName(text, student) || nearName(text, swapped(student));
+
+// Numer z apki to ostatnia deska - tylko gdy cala reszta klasy zgadza sie po
+// nazwiskach (inaczej lista innej klasy dopasowalaby sie po numerach).
+let frekNumberFallback = false;
+
+// Wiersz ucznia: dokladnie po nazwisku i imieniu (takze odwrotnie), potem
+// jedyny wiersz z literowka, a na koniec niczyj wiersz z tym samym numerem.
+// Wiersze dopasowane dokladnie do innych uczniow z paczki sa zajete.
 function frekStudentRow(rows, student) {
-  const exact = rows.find((row) => startsWithName(row.name, student));
+  const exact = rows.find((row) => startsWithName(row.name, student)) || rows.find((row) => startsWithName(row.name, swapped(student)));
   if (exact) return exact;
-  const taken = (row) => frek.students.some((other) => other !== student && startsWithName(row.name, other));
-  const near = rows.filter((row) => !taken(row) && nearName(row.name, student));
-  return near.length === 1 ? near[0] : null;
+  const others = frek.students.filter((other) => other !== student);
+  const free = rows.filter((row) => !others.some((other) => exactName(row.name, other)));
+  const near = free.filter((row) => roughName(row.name, student));
+  if (near.length > 0) return near.length === 1 ? near[0] : null;
+  if (!frekNumberFallback) return null;
+  const same = free.filter((row) => row.number === student.number && !others.some((other) => roughName(row.name, other)));
+  return same.length === 1 ? same[0] : null;
 }
 
 function exactVisible(root, text, selector = 'td, span, div, a, label, button') {
@@ -1124,12 +1138,15 @@ async function markFrekAttendance(root) {
     .filter((row) => row.number !== undefined)
     .map((row) => ({ number: row.number, name: row.name, main: row.main, symbol: normalized(rowCell(root, row, header)?.textContent) }));
 
+  frekNumberFallback = false;
+  const byName = frek.students.filter((student) => frekStudentRow(rows, student));
+  frekNumberFallback = rows.length >= 5 && frek.students.length - byName.length <= 2;
   const found = frek.students.filter((student) => frekStudentRow(rows, student));
   // Uczen z nauczaniem indywidualnym jest w apce wylaczony - gdy VULCAN go nie
   // ma, nie ma o czym meldowac.
   const missing = frek.students.filter((student) => !found.includes(student) && student.legend !== 'nauczanie indywidualne');
   const expected = frek.students.filter((student) => student.legend !== 'nauczanie indywidualne');
-  const foundExpected = expected.filter((student) => found.includes(student));
+  const foundExpected = expected.filter((student) => byName.includes(student));
   if (expected.length >= 4 && foundExpected.length < expected.length / 2) {
     throw new Error(`W oknie frekwencji jest inna lista (znalazłem ${foundExpected.length} z ${expected.length} uczniów ${frek.vulcanClassName}) - nic nie zaznaczam.`);
   }

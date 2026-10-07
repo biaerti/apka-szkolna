@@ -56,6 +56,38 @@ describe('checkRoster', () => {
     expect(check.trusted).toBe(true);
     expect(check.missingInVulcan.map((s) => s.id)).toEqual(['s6']);
   });
+  it('odwrocone imie i nazwisko, inna pisownia z tym samym numerem: nikt nie wylatuje (4A i 4C, 2026-10-07)', () => {
+    const kids = [1, 2, 3, 4, 5].map((n) => st(`s${n}`, n, `Uczen${'abcde'[n - 1]}`, 'X'));
+    kids.push(st('zofia', 21, 'Zofia', 'Niewiadomska'), st('jas', 27, 'Lendwaj', 'Jasiek'));
+    const rows = [
+      ...[1, 2, 3, 4, 5].map((n) => ({ number: n, name: `Uczen${'abcde'[n - 1]} X` })),
+      { number: 20, name: 'Niewiadomska Zofia', main: 'Niewiadomska Zofia' },
+      { number: 27, name: 'Lendvai Jascha', main: 'Lendvai Jascha' },
+    ];
+    const check = checkRoster(rows, kids);
+    expect(check.missingInApp).toEqual([]);
+    expect(check.missingInVulcan).toEqual([]);
+    expect(check.numberFixes).toEqual([{ studentId: 'zofia', from: 21, to: 20 }]);
+    expect(check.nameFixes).toEqual([
+      { studentId: 'zofia', lastName: 'Niewiadomska', firstName: 'Zofia' },
+      { studentId: 'jas', lastName: 'Lendvai', firstName: 'Jascha' },
+    ]);
+  });
+  it('nieznany wiersz w VULCANIE = nikogo nie wylaczamy', () => {
+    const kids = [1, 2, 3, 4, 5, 6].map((n) => st(`s${n}`, n, `Uczen${'abcdef'[n - 1]}`, 'X'));
+    const rows = [...[1, 2, 3, 4, 5].map((n) => ({ number: n, name: `Uczen${'abcdef'[n - 1]} X` })), { number: 9, name: 'Zupelnie Ktosinny' }];
+    const check = checkRoster(rows, kids);
+    expect(check.missingInVulcan.map((s) => s.id)).toEqual(['s6']);
+    expect(check.trusted).toBe(false);
+  });
+  it('wylaczony przez pomylke wraca, gdy jest w VULCANIE', () => {
+    const kids = [1, 2, 3, 4, 5].map((n) => st(`s${n}`, n, `Uczen${'abcde'[n - 1]}`, 'X'));
+    kids.push(st('zofia', 21, 'Zofia', 'Niewiadomska', false));
+    const rows = [...[1, 2, 3, 4, 5].map((n) => ({ number: n, name: `Uczen${'abcde'[n - 1]} X` })), { number: 20, name: 'Niewiadomska Zofia', main: 'Niewiadomska Zofia' }];
+    const check = checkRoster(rows, kids);
+    expect(check.reactivate).toEqual(['zofia']);
+    expect(check.missingInApp).toEqual([]);
+  });
   it('lista innej klasy nie wylacza nikogo', () => {
     const kids = [1, 2, 3, 4, 5, 6].map((n) => st(`s${n}`, n, `Uczen${'abcdef'[n - 1]}`, 'X'));
     const rows = [1, 2, 3, 4, 5, 6].map((n) => ({ number: n, name: `Obcy${'abcdef'[n - 1]}ski Y` }));
