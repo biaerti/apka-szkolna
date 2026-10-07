@@ -1,5 +1,5 @@
-// Kahoot z pytań działu: node materialy/kahoot.mjs <folder> -> output/kahoot/<plik>.pdf
-// Pytania w <folder>/kahoot.mjs (export KAHOOT). PDF wrzucamy w Kahoot: Utwórz -> „PDF na kahoota”
+// Kahoot z pytań działu: node materialy/kahoot.mjs <folder> [plik] -> output/kahoot/<plik>.pdf
+// Pytania w <folder>/kahoot.mjs albo <folder>/<plik>.mjs (export KAHOOT). PDF wrzucamy w Kahoot: Utwórz -> „PDF na kahoota”
 // (wyodrębnij pytania). Skrypt pilnuje limitów Kahoota: pytanie 120 znaków, odpowiedź 75, 2-4 odpowiedzi.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -8,7 +8,7 @@ import { drukujPdf, ROOT, STYL_BAZOWY } from './pdf.mjs';
 
 const folder = process.argv[2];
 if (!folder) { console.error('Użycie: node materialy/kahoot.mjs <folder>'); process.exit(1); }
-const { KAHOOT } = await import(pathToFileURL(join(ROOT, 'materialy', folder, 'kahoot.mjs')).href);
+const { KAHOOT } = await import(pathToFileURL(join(ROOT, 'materialy', folder, `${process.argv[3] || 'kahoot'}.mjs`)).href);
 const PYTANIA = KAHOOT.pytania;
 
 const DOZWOLONE_CZASY = [5, 10, 20, 30, 60, 90, 120, 240];
