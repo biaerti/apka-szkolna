@@ -7,6 +7,8 @@ import { useVulcanTopics } from '../components/dashboard/useVulcanTopics';
 import { isTopicSent, topicKey, weekTopicItems } from '../lib/vulcanTemat';
 import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
+import { ZadaniaOgolnePrzycisk } from '../components/dashboard/Zadania';
+import { useZadania } from '../data/zadania';
 
 type RefreshState = 'idle' | 'loading' | 'ready' | 'error' | 'missing';
 const UPDATED_KEY = 'apka-szkolna-vulcan-plan-updated-at';
@@ -24,6 +26,7 @@ export function Dashboard() {
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
   const topics = useVulcanTopics();
+  const zadania = useZadania();
 
   useEffect(() => {
     function onMessage(event: MessageEvent) {
@@ -78,6 +81,7 @@ export function Dashboard() {
           )}
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+          {zadania.error && <span className="text-red-600">{zadania.error}</span>}
           {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
           {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
           <button type="button" onClick={refreshFromVulcan} disabled={refreshState === 'loading'} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
@@ -95,13 +99,14 @@ export function Dashboard() {
               Tematy do VULCANA ({topicsToSend.length})
             </button>
           )}
+          <ZadaniaOgolnePrzycisk zadania={zadania.zadania} add={zadania.add} toggle={zadania.toggle} remove={zadania.remove} />
           <Link to="/plan" className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900">Edytuj stały plan</Link>
         </div>
       </div>
 
       <WazneInfoPasek />
 
-      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} setLessonProgress={setLessonProgress} topics={topics} />
+      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} />
     </div>
   );
 }

@@ -19,8 +19,11 @@ import { obiadAfter, obiadStatus, obiadTitle } from '../../lib/obiady';
 import { parseHm, periodStatus } from '../../lib/timetable';
 import { isTopicSent, topicItemForSlot, topicKey, type TopicItem, type TopicSendState } from '../../lib/vulcanTemat';
 import { classBadgeClasses } from '../calendar/classColor';
+import { zadaniaDnia, zadaniaLekcji, zadaniaZalegle, type Zadanie } from '../../lib/zadania';
+import type { UseZadaniaResult } from '../../data/zadania';
 import { LessonAssignmentPicker } from './LessonAssignmentPicker';
 import type { VulcanTopics } from './useVulcanTopics';
+import { DodajZadanie, ZadaniaLista } from './Zadania';
 
 interface Props {
   anchor: Date;
@@ -32,12 +35,25 @@ interface Props {
   vulcanLessons: VulcanLesson[];
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
   topics: VulcanTopics;
+  zadania: UseZadaniaResult;
 }
 
 const WEEKDAY = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
+const WEEKDAY_SHORT = ['nd', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
 
 export function WeekPlanner(props: Props) {
   const [openPicker, setOpenPicker] = useState<string | null>(null);
+  // Gdzie jest otwarte pole "+ zadanie": "RRRR-MM-DD" (dzien) albo "RRRR-MM-DD-N" (lekcja).
+  const [adding, setAdding] = useState<string | null>(null);
+  const { zadania, add, toggle, remove } = props.zadania;
+  const todayKey = toDateKey(props.now);
+  const zalegle = zadaniaZalegle(zadania, todayKey);
+  const removeOne = (id: string) => remove([id]);
+  function zaleglePrefix(z: Zadanie): string {
+    const date = new Date(`${z.data}T12:00:00`);
+    const cls = z.klasaId ? classById.get(z.klasaId)?.name : undefined;
+    return [`${WEEKDAY_SHORT[date.getDay()]} ${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')}`, cls].filter(Boolean).join(' · ');
+  }
   const days = weekDays(props.anchor).slice(0, 5);
   const classById = useMemo(() => new Map(props.classes.map((item) => [item.id, item])), [props.classes]);
   const periodByNo = useMemo(() => new Map(props.periods.map((item) => [item.no, item])), [props.periods]);
@@ -75,7 +91,8 @@ export function WeekPlanner(props: Props) {
     <div className="grid gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-5">
       {days.map((date) => {
         const dateKey = toDateKey(date);
-        const isToday = dateKey === toDateKey(props.now);
+        const isToday = dateKey === todayKey;
+        const dayTasks = zadaniaDnia(zadania, dateKey);
         const entries = dayEntries(date, props.vulcanLessons, props.timetable);
         const lastPeriod = Math.max(0, ...entries.map((entry) => entry.period));
         const gaps = Array.from({ length: lastPeriod }, (_, index) => index + 1).filter(
@@ -90,10 +107,27 @@ export function WeekPlanner(props: Props) {
               <h2 className={clsx('text-sm font-semibold capitalize', isToday ? 'text-accent-700' : 'text-gray-900')}>
                 {WEEKDAY[date.getDay()]}
               </h2>
-              <span className={clsx('text-xs tabular-nums', isToday ? 'font-medium text-accent-700' : 'text-gray-400')}>
-                {isToday ? 'dziś' : `${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')}`}
-              </span>
+              <div className="flex items-baseline gap-3">
+                <AddTaskButton onClick={() => setAdding(dateKey)} title="Zadanie na ten dzień" />
+                <span className={clsx('text-xs tabular-nums', isToday ? 'font-medium text-accent-700' : 'text-gray-400')}>
+                  {isToday ? 'dziś' : `${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')}`}
+                </span>
+              </div>
             </header>
+
+            {(dayTasks.length > 0 || adding === dateKey || (isToday && zalegle.length > 0)) && (
+              <div className="pt-2">
+                {isToday && <ZadaniaLista items={zalegle} onToggle={toggle} onRemove={removeOne} prefix={zaleglePrefix} className="mb-1" />}
+                <ZadaniaLista items={dayTasks} onToggle={toggle} onRemove={removeOne} />
+                {adding === dateKey && (
+                  <DodajZadanie
+                    placeholder="Na ten dzień - Enter dodaje"
+                    onAdd={(tekst) => add({ tekst, data: dateKey, lekcja: null, klasaId: null })}
+                    onClose={() => setAdding(null)}
+                  />
+                )}
+              </div>
+            )}
 
             {entries.length === 0 && <p className="py-6 text-sm text-gray-400">Bez lekcji</p>}
 
@@ -139,6 +173,8 @@ export function WeekPlanner(props: Props) {
                 const dutyTeraz = isToday && dutyNow.kind === 'now' && dutyNow.duty === duty;
                 const obiadTeraz = isToday && obiadNow.kind === 'now' && obiadNow.obiad === obiad;
                 const topicItem = cls && assigned ? topicItemForSlot(props.lessons, cls, dateKey, entry.period) : undefined;
+                const lessonTasks = zadaniaLekcji(zadania, dateKey, entry.period);
+                const addingHere = adding === pickerId;
 
                 return (
                   <li key={entry.id}>
@@ -163,7 +199,10 @@ export function WeekPlanner(props: Props) {
                             {cls?.name ?? entry.className ?? '?'}
                           </span>
                           {entry.room && <span className="text-xs text-gray-400">s. {entry.room}</span>}
-                          {current && <span className="ml-auto text-[11px] font-medium text-accent-700">teraz</span>}
+                          <span className="ml-auto flex items-baseline gap-2">
+                            {current && <span className="text-[11px] font-medium text-accent-700">teraz</span>}
+                            <AddTaskButton onClick={() => setAdding(pickerId)} title={`Zadanie na tę lekcję (${cls?.name ?? entry.className ?? ''})`} />
+                          </span>
                         </div>
                         {entry.replacement && <p className="mt-1 text-xs text-amber-700">{entry.replacement}</p>}
 
@@ -211,6 +250,19 @@ export function WeekPlanner(props: Props) {
                           </button>
                         )}
 
+                        {(lessonTasks.length > 0 || addingHere) && (
+                          <div className="mt-2">
+                            <ZadaniaLista items={lessonTasks} onToggle={toggle} onRemove={removeOne} />
+                            {addingHere && (
+                              <DodajZadanie
+                                placeholder="Na tę lekcję - Enter dodaje"
+                                onAdd={(tekst) => add({ tekst, data: dateKey, lekcja: entry.period, klasaId: cls?.id ?? null })}
+                                onClose={() => setAdding(null)}
+                              />
+                            )}
+                          </div>
+                        )}
+
                         {cls && openPicker === pickerId && (
                           <LessonAssignmentPicker
                             label={`${cls.name} · ${WEEKDAY[date.getDay()]} ${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')} · ${entry.period}. lekcja`}
@@ -250,6 +302,14 @@ export function WeekPlanner(props: Props) {
         );
       })}
     </div>
+  );
+}
+
+function AddTaskButton({ onClick, title }: { onClick: () => void; title: string }) {
+  return (
+    <button type="button" onClick={onClick} title={title} className="text-[11px] text-gray-300 hover:text-accent-700 focus-visible:text-accent-700">
+      + zadanie
+    </button>
   );
 }
 
