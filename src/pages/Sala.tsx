@@ -122,11 +122,16 @@ export function Sala() {
     return out;
   }, [recapEvents, classId]);
 
-  // Ostrzezenia sa POZA historia: zostaja przy uczniu z lekcji na lekcje,
-  // wiec filtr po dzisiejszej dacie by je gubil (patrz src/lib/ostrzezenia.ts).
+  // Ostrzezenia licza sie tylko dzisiaj (patrz src/lib/ostrzezenia.ts) -
+  // nastepnego dnia uczen zaczyna od zera.
+  const todayStartIso = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString();
+  }, [today]);
   const ostrzezenia = useMemo(
-    () => (classId ? warningsByStudent(recapEvents, classId) : new Map<string, RecapEvent[]>()),
-    [recapEvents, classId],
+    () => (classId ? warningsByStudent(recapEvents, classId, todayStartIso) : new Map<string, RecapEvent[]>()),
+    [recapEvents, classId, todayStartIso],
   );
 
   const onMove = useCallback(

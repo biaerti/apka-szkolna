@@ -29,4 +29,10 @@ describe('warningsByStudent', () => {
     ];
     expect(warningsByStudent(wiele, 'k1').get('s1')?.map((e) => e.id)).toEqual(['e2', 'e5', 'e6']);
   });
+
+  it('z since bierze tylko dzisiejsze - ostrzezenie z wczoraj nie wisi', () => {
+    const dwa = [...events, event('e7', 's1', 'ostrzezenie', '2026-10-08T07:30:00.000Z')];
+    expect(warningsByStudent(dwa, 'k1', '2026-10-07T22:00:00.000Z').get('s1')?.map((e) => e.id)).toEqual(['e7']);
+    expect(warningsByStudent(events, 'k1', '2026-10-07T22:00:00.000Z').size).toBe(0);
+  });
 });
