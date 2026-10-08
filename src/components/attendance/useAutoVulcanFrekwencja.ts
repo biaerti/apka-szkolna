@@ -76,7 +76,11 @@ export function useAutoVulcanFrekwencja(): void {
         if (roster.trusted) for (const st of roster.missingInVulcan) state.updateStudent(st.id, { active: false });
         rosterNote = rosterSummary(roster);
       }
-      const base = detail?.ok ? 'Zapisane w VULCANIE.' : `Nie udało się: ${detail?.message || 'brak szczegółów'}`;
+      // Przy sukcesie bot tez cos melduje (kogo nie znalazl, co zostawil) -
+      // bez tego 07.10 pominiety uczen z 4C przeszedl jako "zapisane".
+      const base = detail?.ok
+        ? `Zapisane w VULCANIE.${detail.message ? ` ${detail.message}` : ''}`
+        : `Nie udało się: ${detail?.message || 'brak szczegółów'}`;
       await finishFrekwencjaJob(jobId, detail?.ok ? 'done' : 'error', rosterNote ? `${base} Lista: ${rosterNote}.` : base).catch(() => {});
       void check();
     }
