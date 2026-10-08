@@ -180,3 +180,11 @@ for (const rozw of [false, true]) {
   await drukujPdf(htmlPath, join(outDir, `${nazwa}.pdf`));
   console.log('Gotowe:', join(outDir, `${nazwa}.pdf`));
 }
+// Sprawdzian: dodatkowo osobny PDF dla każdej grupy (łatwiej drukować).
+for (const w of KARTA.wersje ?? []) {
+  const nazwa = `${KARTA.plik}-${w.grupa}`;
+  const htmlPath = join(outDir, `${nazwa}.html`);
+  writeFileSync(htmlPath, dokument(arkusz(w.tematy, false, w.grupa)), 'utf-8');
+  await drukujPdf(htmlPath, join(outDir, `${nazwa}.pdf`));
+  console.log('Gotowe:', join(outDir, `${nazwa}.pdf`));
+}
