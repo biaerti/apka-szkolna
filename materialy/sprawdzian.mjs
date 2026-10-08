@@ -39,22 +39,61 @@ function wylosujGrupe(grupa) {
   const los = rng(`${SPRAWDZIAN.plik}-${grupa}`);
   return SPRAWDZIAN.zadania.map((zad) => ({
     ...zad,
-    wybrane: zad.typ === 'jeden' ? losuj(zad.pula, 1, los) : losuj(zad.pula, zad.ile, los),
+    wybrane: zad.stale
+      ? zad.pula.slice(0, zad.ile ?? 1)
+      : zad.typ === 'jeden' ? losuj(zad.pula, 1, los) : losuj(zad.pula, zad.ile, los),
   }));
 }
 
 function zadanieHtml(zad, nr) {
   let srodek = '';
   if (zad.typ === 'wybor') {
-    srodek = `<ol class="poz">${zad.wybrane.map((p) => `<li><span class="t">${z(p.t)}</span><span class="opcje">${zad.opcje.map(z).join(' / ')}</span></li>`).join('')}</ol>`;
+    srodek = `<ol class="poz${zad.kolumny ? ` kolumny-${zad.kolumny}` : ''}">${zad.wybrane.map((p) => `<li><span class="t">${z(p.t)}</span><span class="opcje">${zad.opcje.map(z).join(' / ')}</span></li>`).join('')}</ol>`;
   } else if (zad.typ === 'lista') {
     const linia = zad.linia === 'brak' ? '' : `<span class="linia ${zad.linia}">${zad.wzor ? z(zad.wzor) : ''}</span>`;
-    srodek = `<ol class="poz${zad.linia === 'brak' ? ' bez' : ''}">${zad.wybrane.map((p) => `<li><span class="t">${z(p.t)}</span>${linia}</li>`).join('')}</ol>`;
+    srodek = `<ol class="poz${zad.linia === 'brak' ? ' bez' : ''}${zad.kolumny ? ` kolumny-${zad.kolumny}` : ''}">${zad.wybrane.map((p) => `<li><span class="t">${z(p.t)}</span>${linia}</li>`).join('')}</ol>`;
   } else {
     const p = zad.wybrane[0];
-    srodek = `<p class="jeden">${z(p.t)}</p>${'<div class="lin"></div>'.repeat(zad.linie)}`;
+    const pola = zad.pola?.length
+      ? `<div class="pola">${zad.pola.map((pole) => `<div><span>${z(pole)}</span></div>`).join('')}</div>`
+      : '';
+    srodek = `<p class="jeden${zad.prosty ? ' prosty' : ''}">${z(p.t)}</p>${pola}${'<div class="lin"></div>'.repeat(zad.linie ?? 0)}`;
   }
-  return `<div class="zad"><h3><span class="nr">${nr}.</span> ${z(zad.polecenie)} <span class="pkt">${zad.punkty} pkt</span></h3>${srodek}</div>`;
+  return `<div class="zad"><h3><span class="nr">${nr}.</span><span class="polecenie">${z(zad.polecenie)}</span><span class="pkt">${zad.punkty} pkt</span></h3>${srodek}</div>`;
+}
+
+const KOLORY = ['#8A4FD0', '#1FA58A', '#E0679A', '#D98A1F', '#2A8C9E', '#B5562B', '#D6336C', '#2F7D5B'];
+
+function arkuszeKartowe(grupa, zadania) {
+  const tematy = [];
+  for (const zad of zadania) {
+    let temat = tematy.find((t) => t.tytul === zad.temat);
+    if (!temat) {
+      temat = { tytul: zad.temat, strona: zad.strona ?? 1, zadania: [] };
+      tematy.push(temat);
+    }
+    temat.zadania.push(zad);
+  }
+
+  const liczbaStron = Math.max(...tematy.map((t) => t.strona), 1);
+  return Array.from({ length: liczbaStron }, (_, indeksStrony) => {
+    const strona = indeksStrony + 1;
+    const sekcje = tematy
+      .map((temat, indeksTematu) => ({ temat, indeksTematu }))
+      .filter(({ temat }) => temat.strona === strona)
+      .map(({ temat, indeksTematu }) => `<section class="temat" style="--k:${KOLORY[indeksTematu % KOLORY.length]}">
+        <h2><span>${indeksTematu + 1}</span>${z(temat.tytul)}</h2>
+        ${temat.zadania.map((zad, indeksZadania) => zadanieHtml(zad, `${indeksTematu + 1}.${indeksZadania + 1}`)).join('')}
+      </section>`)
+      .join('');
+    const ostatnia = strona === liczbaStron;
+    return `<section class="arkusz karta-arkusz">
+      <div class="glowa${strona > 1 ? ' druga' : ''}"><h1>${z(SPRAWDZIAN.tytul)}</h1><span class="grupa">Grupa ${grupa}</span></div>
+      ${strona === 1 ? '<div class="dane"><span>Imię i nazwisko:</span><span>Klasa:</span><span>Data:</span></div>' : ''}
+      ${sekcje}
+      <div class="stopka"><span>Strona ${strona} z ${liczbaStron}</span>${ostatnia ? `<strong>Wynik: ……… / ${suma} pkt</strong>` : ''}</div>
+    </section>`;
+  }).join('');
 }
 
 const STYL = `${STYL_BAZOWY}
@@ -76,12 +115,35 @@ body { font-size: 11pt; }
 .poz .t { display: inline-block; min-width: 55mm; }
 .poz.bez .t { min-width: 0; }
 .poz .opcje { margin-left: 6mm; color: var(--szary); letter-spacing: .3px; }
+.poz.kolumny-2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 9mm; }
+.poz.kolumny-2 .t { min-width: 0; }
 .linia { display: inline-block; border-bottom: 1px solid #999; margin-left: 3mm; color: var(--szary); font-size: 9.5pt; }
 .linia.krotka { width: 60mm; }
 .linia.dluga { width: 105mm; }
 .jeden { margin: 1.5mm 0 0 2mm; font-style: italic; }
+.jeden.prosty { font-style: normal; }
 .lin { border-bottom: 1px solid #999; height: 8mm; margin-left: 2mm; }
+.pola { display: grid; grid-template-columns: repeat(4, 1fr); margin: 2mm 0 0 2mm; }
+.pola div { min-height: 14mm; border: 1px solid var(--ramka); border-right: 0; }
+.pola div:last-child { border-right: 1px solid var(--ramka); }
+.pola span { display: block; background: #f6efe4; padding: .7mm 1.5mm; color: var(--szary); font-size: 8.5pt; font-weight: 800; }
 .stopka { margin-top: 5mm; text-align: right; font-family: 'Baloo 2'; font-size: 14pt; font-weight: 800; }
+.karta-arkusz { min-height: 273mm; display: flex; flex-direction: column; }
+.karta-arkusz .glowa { padding-bottom: 1.8mm; }
+.karta-arkusz .glowa.druga h1 { font-size: 14.5pt; }
+.karta-arkusz .glowa.druga .grupa { font-size: 16pt; }
+.karta-arkusz .temat { padding: 3.2mm 0 2.5mm; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.karta-arkusz .temat h2 { display: flex; align-items: center; gap: 2mm; color: var(--k); font-size: 13.5pt; }
+.karta-arkusz .temat h2 > span { display: inline-flex; min-width: 6mm; height: 6mm; align-items: center; justify-content: center; border-radius: 99px; background: var(--k); color: #fff; font-size: 9.5pt; }
+.karta-arkusz .zad { margin-top: 2.3mm; }
+.karta-arkusz .zad h3 { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: .8mm; line-height: 1.3; }
+.karta-arkusz .zad .nr { color: var(--k); }
+.karta-arkusz .pkt { float: none; border: 0; padding-right: 0; white-space: nowrap; }
+.karta-arkusz .poz { margin-top: 1mm; }
+.karta-arkusz .poz li { margin: 1.35mm 0; }
+.karta-arkusz .lin { height: 8.3mm; }
+.karta-arkusz .stopka { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 3mm; font-size: 9pt; color: var(--szary); }
+.karta-arkusz .stopka strong { color: var(--ciemny); font-size: 13pt; }
 .klucz h2 { font-size: 16pt; margin: 4mm 0 1mm; color: var(--roz); }
 .klucz ol { margin-left: 6mm; font-size: 10.5pt; }
 .klucz li { margin: .8mm 0; }
@@ -90,7 +152,9 @@ body { font-size: 11pt; }
 
 const wylosowane = GRUPY.map((g) => ({ grupa: g, zadania: wylosujGrupe(g) }));
 
-const arkusze = wylosowane.map(({ grupa, zadania }) => `<section class="arkusz">
+const arkusze = SPRAWDZIAN.uklad === 'karta'
+  ? wylosowane.map(({ grupa, zadania }) => arkuszeKartowe(grupa, zadania)).join('')
+  : wylosowane.map(({ grupa, zadania }) => `<section class="arkusz">
   <div class="glowa"><h1>${z(SPRAWDZIAN.tytul)}</h1><span class="grupa">Grupa ${grupa}</span></div>
   <div class="dane"><span>Imię i nazwisko:</span><span>Klasa:</span><span>Data:</span></div>
   ${zadania.map((zad, i) => zadanieHtml(zad, i + 1)).join('')}
