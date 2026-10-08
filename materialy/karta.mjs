@@ -69,7 +69,10 @@ function arkusz(tematyDanych, rozw, grupa) {
           ? `<div class="wzor">${linia(zad.wzor ?? '', rozw)}</div>`
           : '<div class="lin"></div>'.repeat(zad.pisanie))
         : '';
-      const pkt = zad.punkty ? `<span class="pkt">${zad.punkty} pkt</span>` : '';
+      // Na sprawdzianie dla ucznia kratka na zdobyte punkty: [  ] / 3 pkt.
+      const pkt = !zad.punkty ? ''
+        : grupa && !rozw ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
+        : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
         <div class="pol">${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
         ${linie ? `<div class="linie${zad.kolumny ? ` k${zad.kolumny}` : ''}">${linie}</div>` : ''}
@@ -153,6 +156,8 @@ body { font-size: 10pt; line-height: 1.3; }
 .temat.bez-wiedzy .zad { break-inside: avoid; }
 .temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
 .temat.bez-wiedzy > h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.pol .pkt.ocena { display: inline-flex; align-items: center; gap: 1mm; font-size: 9.5pt; color: var(--ciemny); border: 0; padding: 0; line-height: 1.2; }
+.pol .pkt .kratka { display: inline-block; width: 8mm; height: 4.4mm; border: 1.3px solid var(--ciemny); border-radius: 1mm; background: #fff; }
 .pol .pkt { float: right; font-weight: 700; font-size: 8.5pt; color: var(--szary); border: 1px solid var(--ramka); border-radius: 2mm; padding: 0 1.5mm; margin-left: 2mm; }
 .lin { border-bottom: 1px solid #b9a894; height: 8mm; margin-left: 2mm; }
 .sprawdzian .tab td { height: 6.5mm; }
