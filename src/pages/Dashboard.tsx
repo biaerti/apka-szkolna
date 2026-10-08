@@ -29,6 +29,7 @@ export function Dashboard() {
   const [anchor, setAnchor] = useState(() => new Date());
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
   const [attendanceRefreshState, setAttendanceRefreshState] = useState<AttendanceRefreshState>('idle');
+  const [attendanceError, setAttendanceError] = useState('');
   const [attendanceChecks, setAttendanceChecks] = useState<VulcanAttendanceCheck[]>([]);
   const attendanceTimeout = useRef<number | null>(null);
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
@@ -51,11 +52,13 @@ export function Dashboard() {
         attendanceTimeout.current = null;
         const checks = Array.isArray(event.data.detail?.checks) ? event.data.detail.checks as VulcanAttendanceCheck[] : [];
         setAttendanceChecks(checks);
+        setAttendanceError('');
         setAttendanceRefreshState('idle');
       }
       if (event.data.type === 'VULCAN_ATTENDANCE_STATUS_ERROR') {
         if (attendanceTimeout.current !== null) window.clearTimeout(attendanceTimeout.current);
         attendanceTimeout.current = null;
+        setAttendanceError(String(event.data.detail || 'Nie udało się odczytać stanu obecności z VULCANA.'));
         setAttendanceRefreshState('error');
       }
     }
@@ -81,10 +84,12 @@ export function Dashboard() {
     setRefreshState('loading');
     window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_SCHEDULE_REQUEST' }, '*');
     setAttendanceRefreshState('loading');
+    setAttendanceError('');
     window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_ATTENDANCE_STATUS_REQUEST', targets: attendanceTargets }, '*');
     if (attendanceTimeout.current !== null) window.clearTimeout(attendanceTimeout.current);
     attendanceTimeout.current = window.setTimeout(() => {
       setAttendanceRefreshState((state) => state === 'loading' ? 'error' : state);
+      setAttendanceError('Pomocnik VULCAN nie odpowiedział w ciągu minuty. Odśwież dodatek oraz obie karty.');
       attendanceTimeout.current = null;
     }, 60_000);
     window.setTimeout(() => setRefreshState((state) => state === 'loading' ? 'missing' : state), 4500);
@@ -123,7 +128,7 @@ export function Dashboard() {
           {zadania.error && <span className="text-red-600">{zadania.error}</span>}
           {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
           {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
-          {attendanceRefreshState === 'error' && <span className="text-amber-700">Nie udało się odczytać stanu obecności z VULCANA.</span>}
+          {attendanceRefreshState === 'error' && <span className="text-amber-700">{attendanceError || 'Nie udało się odczytać stanu obecności z VULCANA.'}</span>}
           <button type="button" onClick={refreshFromVulcan} disabled={refreshing} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
             {refreshing ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
           </button>

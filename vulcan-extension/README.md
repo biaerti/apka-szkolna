@@ -59,7 +59,7 @@ nietknięci.
 Po aktualizacji dodatku: `chrome://extensions` -> odśwież dodatek, potem
 odśwież kartę VULCANA i kartę apki.
 
-## Stan obecności na pulpicie (wersja 0.9.5)
+## Stan obecności na pulpicie (wersja 0.9.6)
 
 Przycisk **Odśwież z VULCANA** sprawdza dla każdej lekcji tygodnia jej kolumnę
 w zwykłej tabeli „Frekwencja”. `☑ obecność` oznacza, że w kolumnie nie zostały

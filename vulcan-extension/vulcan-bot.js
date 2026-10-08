@@ -70,47 +70,33 @@ function readScheduleFromPage() {
   return entries.filter((entry, index) => entries.findIndex((candidate) => candidate.date === entry.date && candidate.period === entry.period && candidate.className === entry.className) === index);
 }
 
-// Odczyt frekwencji z otwartej tabeli (kierunek VULCAN -> apka). Szukamy
-// tabeli, ktora w naglowku (pierwsze wiersze) ma numer wskazanej godziny,
-// a w wierszach nazwiska - i czytamy symbol z komorki pod ta kolumna.
+// Odczyt frekwencji z otwartej tabeli (kierunek VULCAN -> apka). ExtJS trzyma
+// naglowki i wiersze w osobnych elementach, wiec laczymy je po polozeniu na
+// ekranie, tak samo jak sprawdzony automat wpisujacy frekwencje.
 function readAttendanceFromPage(period, className) {
-  const tables = [...document.querySelectorAll('table')].filter(visible);
-  for (const table of tables) {
-    let header = null;
-    for (let rowIndex = 0; rowIndex < Math.min(3, table.rows.length) && !header; rowIndex += 1) {
-      for (const cell of table.rows[rowIndex].cells) {
-        if (normalized(cell.textContent) === String(period)) { header = cell; break; }
+  const root = document.body;
+  const rows = frekRows(root);
+  if (rows.length === 0) throw new Error('Nie znalazłem uczniów w tabeli frekwencji.');
+  const header = periodHeader(root, rows, period);
+  if (!header) throw new Error(`Nie znalazłem kolumny ${period}. lekcji w tabeli frekwencji.`);
+
+  if (className) {
+    const classHeader = exactVisible(root, 'Oddział')[0];
+    if (classHeader) {
+      const classX = centerOf(classHeader).x;
+      const wantedClass = normalized(className).replace(/\s+/g, '');
+      const actualClasses = rows.map((row) => normalized(cellAt(root, classX, centerOf(row.cell).y)?.textContent).replace(/\s+/g, ''));
+      if (!actualClasses.some((value) => value === wantedClass)) {
+        throw new Error(`Tabela frekwencji pokazuje inną klasę niż ${className}.`);
       }
     }
-    if (!header) continue;
-    if (className) {
-      const wantedClass = normalized(className).replace(/\s+/g, '');
-      const hasWantedClass = [...table.rows].some((row) => [...row.cells]
-        .some((cell) => normalized(cell.textContent).replace(/\s+/g, '') === wantedClass));
-      if (!hasWantedClass) continue;
-    }
-    const headerRect = header.getBoundingClientRect();
-    const targetX = headerRect.left + headerRect.width / 2;
-    const rows = [];
-    for (const row of table.rows) {
-      const cells = [...row.cells];
-      const nameCell = cells.find((cell) => /\p{Lu}[\p{Ll}-]+\s+\p{Lu}[\p{Ll}-]+/u.test((cell.textContent || '').trim()));
-      if (!nameCell) continue;
-      const mark = cells.find((cell) => {
-        const rect = cell.getBoundingClientRect();
-        return cell !== nameCell && targetX >= rect.left && targetX <= rect.right;
-      });
-      if (!mark) continue;
-      const numberCell = cells.find((cell) => /^\d{1,2}$/.test(normalized(cell.textContent)));
-      rows.push({
-        number: numberCell ? Number(normalized(numberCell.textContent)) : undefined,
-        name: (nameCell.textContent || '').replace(/\s+/g, ' ').trim(),
-        symbol: normalized(mark.textContent),
-      });
-    }
-    if (rows.length > 0) return rows;
   }
-  throw new Error(`Nie znalazłem tabeli frekwencji klasy ${className || ''} z kolumną ${period}. lekcji.`);
+
+  return rows.map((row) => ({
+    number: row.number,
+    name: row.main || row.name,
+    symbol: normalized(rowCell(root, row, header)?.textContent),
+  }));
 }
 
 function candidates(selector = 'button, a, input[type="button"], input[type="submit"], [role="button"], td, span, div') {
@@ -1131,11 +1117,11 @@ function mainName(cell) {
 
 // Naglowek kolumny godziny: dokladny numer, NAD wierszami uczniow (w wierszach
 // tez sa liczby - kolumna Nr) i najnizej z takich (wyzej jest data dnia).
-function periodHeader(root, rows) {
+function periodHeader(root, rows, period = frek?.period) {
   const firstTop = Math.min(...rows.map((row) => row.cell.getBoundingClientRect().top));
   const uczen = exactVisible(root, 'Uczeń')[0];
   const minX = uczen ? uczen.getBoundingClientRect().right - 2 : 0;
-  return exactVisible(root, String(frek.period), 'td, div, span')
+  return exactVisible(root, String(period), 'td, div, span')
     .filter((element) => {
       const rect = element.getBoundingClientRect();
       return rect.bottom <= firstTop + 2 && rect.left >= minX;
