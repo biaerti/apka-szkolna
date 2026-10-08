@@ -18,13 +18,14 @@ import { dutyAfter, dutyStatus } from '../../lib/dyzury';
 import { obiadAfter, obiadStatus, obiadTitle } from '../../lib/obiady';
 import { parseHm, periodStatus } from '../../lib/timetable';
 import { isTopicSent, topicItemForSlot, topicKey, type TopicItem, type TopicSendState } from '../../lib/vulcanTemat';
+import { vulcanClassName } from '../../lib/vulcan';
+import { vulcanAttendanceCheckKey, type VulcanAttendanceCheck } from '../../lib/vulcanAttendance';
 import { classBadgeClasses } from '../calendar/classColor';
 import { zadaniaDnia, zadaniaLekcji, zadaniaZalegle, type Zadanie } from '../../lib/zadania';
 import type { UseZadaniaResult } from '../../data/zadania';
 import { LessonAssignmentPicker } from './LessonAssignmentPicker';
 import type { VulcanTopics } from './useVulcanTopics';
 import { DodajZadanie, ZadaniaLista } from './Zadania';
-import { frekwencjaJobId, type FrekwencjaJob } from '../../lib/vulcanFrekwencja';
 
 interface Props {
   anchor: Date;
@@ -34,7 +35,7 @@ interface Props {
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
   vulcanLessons: VulcanLesson[];
-  frekwencjaJobs: FrekwencjaJob[];
+  attendanceChecks: VulcanAttendanceCheck[];
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
   topics: VulcanTopics;
   zadania: UseZadaniaResult;
@@ -177,7 +178,11 @@ export function WeekPlanner(props: Props) {
                 const topicItem = cls && assigned ? topicItemForSlot(props.lessons, cls, dateKey, entry.period) : undefined;
                 const lessonTasks = zadaniaLekcji(zadania, dateKey, entry.period);
                 const addingHere = adding === pickerId;
-                const frekwencjaJob = cls ? props.frekwencjaJobs.find((job) => job.id === frekwencjaJobId(dateKey, entry.period, cls.id)) : undefined;
+                const attendanceCheck = cls ? props.attendanceChecks.find((check) => vulcanAttendanceCheckKey(check) === vulcanAttendanceCheckKey({
+                  date: dateKey,
+                  period: entry.period,
+                  className: vulcanClassName(cls.name),
+                })) : undefined;
 
                 return (
                   <li key={entry.id}>
@@ -238,7 +243,7 @@ export function WeekPlanner(props: Props) {
                               </button>
                             )}
                             <div className="mt-1 flex gap-3 text-xs">
-                              <AttendanceSavedStatus job={frekwencjaJob} />
+                              <AttendanceCheckedStatus checked={attendanceCheck?.checked ?? false} />
                               {assigned && (
                               <button type="button" onClick={togglePicker} aria-expanded={openPicker === pickerId} className="text-gray-400 hover:text-gray-700">
                                 zmień
@@ -342,17 +347,11 @@ function VulcanTopicButton({ item, state, onSend }: { item: TopicItem; state: To
   );
 }
 
-function AttendanceSavedStatus({ job }: { job: FrekwencjaJob | undefined }) {
-  if (job?.status === 'done') {
-    return <span className="font-medium text-emerald-700" title={job.message ?? 'Frekwencja zapisana w VULCANIE'}>☑ obecność</span>;
+function AttendanceCheckedStatus({ checked }: { checked: boolean }) {
+  if (checked) {
+    return <span className="font-medium text-emerald-700" title="Frekwencja sprawdzona w VULCANIE">☑ obecność</span>;
   }
-  if (job?.status === 'pending' || job?.status === 'sending') {
-    return <span className="font-medium text-gray-500" title={job.message ?? 'Trwa zapisywanie frekwencji w VULCANIE'}>◌ obecność</span>;
-  }
-  if (job?.status === 'error') {
-    return <span className="font-medium text-red-600" title={job.message ?? 'Nie udało się zapisać frekwencji w VULCANIE'}>☒ obecność</span>;
-  }
-  return <span className="text-gray-400" title="Brak potwierdzenia zapisu frekwencji w VULCANIE">☐ obecność</span>;
+  return <span className="text-gray-400" title="Frekwencja jeszcze niesprawdzona w VULCANIE">☐ obecność</span>;
 }
 
 // Przerwa miedzy lekcjami: cienka linia z dlugoscia, pod nia dyzur i obiad.

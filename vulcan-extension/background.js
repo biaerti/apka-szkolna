@@ -338,6 +338,17 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
     return true;
   }
+  if (message?.type === 'READ_VULCAN_ATTENDANCE_STATUS') {
+    (async () => {
+      const tabs = await chrome.tabs.query({ url: 'https://dziennik-dziennik.vulcan.net.pl/*' });
+      const tab = tabs.find((candidate) => candidate.id && candidate.url?.includes('/wroclaw/003013/')) ?? tabs[0];
+      if (!tab?.id) throw new Error('Najpierw otwórz zalogowany dziennik VULCAN.');
+      const result = await chrome.tabs.sendMessage(tab.id, { type: 'READ_VULCAN_ATTENDANCE_STATUS', targets: message.targets });
+      if (result?.error) throw new Error(result.error);
+      sendResponse({ ok: true, checks: result?.checks ?? [] });
+    })().catch((error) => sendResponse({ ok: false, error: String(error?.message || error) }));
+    return true;
+  }
   if (message?.type !== 'OPEN_VULCAN_TRANSFER') return false;
   (async () => {
     const tabs = await chrome.tabs.query({ url: 'https://dziennik-dziennik.vulcan.net.pl/*' });

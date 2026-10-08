@@ -21,6 +21,22 @@ export interface VulcanGridRow {
   symbol: string;
 }
 
+/** Cel prostego sprawdzenia, czy kolumna frekwencji nie zawiera już pytajników. */
+export interface VulcanAttendanceTarget {
+  date: string;
+  period: number;
+  className: string;
+}
+
+/** Wynik odczytu kolumny bez pobierania listy obecnych i nieobecnych do apki. */
+export interface VulcanAttendanceCheck extends VulcanAttendanceTarget {
+  checked: boolean;
+}
+
+export function vulcanAttendanceCheckKey(item: VulcanAttendanceTarget): string {
+  return `${item.date}-${item.period}-${item.className.replace(/\s+/g, '').toLocaleUpperCase('pl')}`;
+}
+
 /**
  * Status apki dla symbolu VULCANA. Nieznany symbol (np. "?" - frekwencja
  * jeszcze niesprawdzona) daje undefined i taki wiersz jest pomijany - lepiej

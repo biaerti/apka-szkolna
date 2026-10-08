@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Student } from '../data/types';
-import { matchVulcanAttendance, statusFromVulcanSymbol } from './vulcanAttendance';
+import { matchVulcanAttendance, statusFromVulcanSymbol, vulcanAttendanceCheckKey } from './vulcanAttendance';
 
 const st = (id: string, number: number, firstName: string, lastName: string): Student => ({
   id,
@@ -25,6 +25,12 @@ describe('statusFromVulcanSymbol', () => {
   it('nieznany symbol (niesprawdzona frekwencja) -> undefined', () => {
     expect(statusFromVulcanSymbol('?')).toBeUndefined();
     expect(statusFromVulcanSymbol('')).toBeUndefined();
+  });
+});
+
+describe('vulcanAttendanceCheckKey', () => {
+  it('lacze dzien, godzine i klase niezaleznie od spacji w nazwie', () => {
+    expect(vulcanAttendanceCheckKey({ date: '2026-10-08', period: 2, className: '4 B' })).toBe('2026-10-08-2-4B');
   });
 });
 

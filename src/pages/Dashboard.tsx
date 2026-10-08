@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { addDays, toDateKey, weekDays } from '../lib/dates';
@@ -9,8 +9,9 @@ import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
 import { ZadaniaOgolnePrzycisk } from '../components/dashboard/Zadania';
 import { useZadania } from '../data/zadania';
-import { fetchFrekwencjaJobs, subscribeFrekwencjaJobs } from '../data/remote/frekwencjaJobs';
-import type { FrekwencjaJob } from '../lib/vulcanFrekwencja';
+import { dayEntries } from '../lib/dashboardPlan';
+import { vulcanClassName } from '../lib/vulcan';
+import { vulcanAttendanceCheckKey, type VulcanAttendanceCheck, type VulcanAttendanceTarget } from '../lib/vulcanAttendance';
 
 type RefreshState = 'idle' | 'loading' | 'ready' | 'error' | 'missing';
 type AttendanceRefreshState = 'idle' | 'loading' | 'error';
@@ -28,7 +29,8 @@ export function Dashboard() {
   const [anchor, setAnchor] = useState(() => new Date());
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
   const [attendanceRefreshState, setAttendanceRefreshState] = useState<AttendanceRefreshState>('idle');
-  const [frekwencjaJobs, setFrekwencjaJobs] = useState<FrekwencjaJob[]>([]);
+  const [attendanceChecks, setAttendanceChecks] = useState<VulcanAttendanceCheck[]>([]);
+  const attendanceTimeout = useRef<number | null>(null);
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
   const topics = useVulcanTopics();
   const zadania = useZadania();
@@ -44,52 +46,47 @@ export function Dashboard() {
         setRefreshState('ready');
       }
       if (event.data.type === 'VULCAN_SCHEDULE_ERROR') setRefreshState('error');
+      if (event.data.type === 'VULCAN_ATTENDANCE_STATUS_RESULT') {
+        if (attendanceTimeout.current !== null) window.clearTimeout(attendanceTimeout.current);
+        attendanceTimeout.current = null;
+        const checks = Array.isArray(event.data.detail?.checks) ? event.data.detail.checks as VulcanAttendanceCheck[] : [];
+        setAttendanceChecks(checks);
+        setAttendanceRefreshState('idle');
+      }
+      if (event.data.type === 'VULCAN_ATTENDANCE_STATUS_ERROR') {
+        if (attendanceTimeout.current !== null) window.clearTimeout(attendanceTimeout.current);
+        attendanceTimeout.current = null;
+        setAttendanceRefreshState('error');
+      }
     }
     window.addEventListener('message', onMessage);
     window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_BRIDGE_PING' }, '*');
-    return () => window.removeEventListener('message', onMessage);
+    return () => {
+      window.removeEventListener('message', onMessage);
+      if (attendanceTimeout.current !== null) window.clearTimeout(attendanceTimeout.current);
+    };
   }, []);
 
   const days = weekDays(anchor);
-  const weekDates = days.map(toDateKey);
-  const weekKey = weekDates.join(',');
-
-  async function refreshAttendanceStatus() {
-    setAttendanceRefreshState('loading');
-    try {
-      const result = await Promise.all(weekDates.map(fetchFrekwencjaJobs));
-      setFrekwencjaJobs(result.flat());
-      setAttendanceRefreshState('idle');
-    } catch {
-      setAttendanceRefreshState('error');
-    }
-  }
-
-  useEffect(() => {
-    let stopped = false;
-    const load = async () => {
-      try {
-        const result = await Promise.all(weekKey.split(',').map(fetchFrekwencjaJobs));
-        if (!stopped) {
-          setFrekwencjaJobs(result.flat());
-          setAttendanceRefreshState('idle');
-        }
-      } catch {
-        if (!stopped) setAttendanceRefreshState('error');
-      }
-    };
-    void load();
-    const unsubscribe = subscribeFrekwencjaJobs(() => void load());
-    return () => {
-      stopped = true;
-      unsubscribe();
-    };
-  }, [weekKey]);
+  const attendanceTargets = days.slice(0, 5).flatMap((date): VulcanAttendanceTarget[] => {
+    const dateKey = toDateKey(date);
+    return dayEntries(date, vulcanLessons, timetable).flatMap((entry) => {
+      const cls = entry.classId ? classes.find((item) => item.id === entry.classId) : undefined;
+      const className = cls ? vulcanClassName(cls.name) : entry.className?.replace(/\s+/g, '');
+      return className ? [{ date: dateKey, period: entry.period, className }] : [];
+    });
+  }).filter((target, index, all) => all.findIndex((item) => vulcanAttendanceCheckKey(item) === vulcanAttendanceCheckKey(target)) === index);
 
   function refreshFromVulcan() {
     setRefreshState('loading');
     window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_SCHEDULE_REQUEST' }, '*');
-    void refreshAttendanceStatus();
+    setAttendanceRefreshState('loading');
+    window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_ATTENDANCE_STATUS_REQUEST', targets: attendanceTargets }, '*');
+    if (attendanceTimeout.current !== null) window.clearTimeout(attendanceTimeout.current);
+    attendanceTimeout.current = window.setTimeout(() => {
+      setAttendanceRefreshState((state) => state === 'loading' ? 'error' : state);
+      attendanceTimeout.current = null;
+    }, 60_000);
     window.setTimeout(() => setRefreshState((state) => state === 'loading' ? 'missing' : state), 4500);
   }
 
@@ -126,7 +123,7 @@ export function Dashboard() {
           {zadania.error && <span className="text-red-600">{zadania.error}</span>}
           {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
           {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
-          {attendanceRefreshState === 'error' && <span className="text-amber-700">Nie udało się pobrać potwierdzeń obecności z chmury.</span>}
+          {attendanceRefreshState === 'error' && <span className="text-amber-700">Nie udało się odczytać stanu obecności z VULCANA.</span>}
           <button type="button" onClick={refreshFromVulcan} disabled={refreshing} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
             {refreshing ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
           </button>
@@ -149,7 +146,7 @@ export function Dashboard() {
 
       <WazneInfoPasek />
 
-      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} frekwencjaJobs={frekwencjaJobs} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} />
+      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} attendanceChecks={attendanceChecks} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} />
     </div>
   );
 }

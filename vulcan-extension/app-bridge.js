@@ -33,6 +33,7 @@ window.addEventListener('message', (event) => {
     if (event.data.type === 'VULCAN_TRANSFER') reply('VULCAN_TRANSFER_ERROR', STALE);
     if (event.data.type === 'VULCAN_SCHEDULE_REQUEST') reply('VULCAN_SCHEDULE_ERROR', STALE);
     if (event.data.type === 'VULCAN_ATTENDANCE_REQUEST') reply('VULCAN_ATTENDANCE_ERROR', STALE);
+    if (event.data.type === 'VULCAN_ATTENDANCE_STATUS_REQUEST') reply('VULCAN_ATTENDANCE_STATUS_ERROR', STALE);
     return;
   }
   if (event.data.type === 'VULCAN_BRIDGE_PING') {
@@ -67,6 +68,16 @@ window.addEventListener('message', (event) => {
         return;
       }
       reply('VULCAN_ATTENDANCE_RESULT', { rows: response.rows });
+    });
+    return;
+  }
+  if (event.data.type === 'VULCAN_ATTENDANCE_STATUS_REQUEST') {
+    chrome.runtime.sendMessage({ type: 'READ_VULCAN_ATTENDANCE_STATUS', targets: event.data.targets }, (response) => {
+      if (chrome.runtime.lastError || !response?.ok) {
+        reply('VULCAN_ATTENDANCE_STATUS_ERROR', chrome.runtime.lastError?.message || response?.error || 'Nie udało się odczytać stanu obecności.');
+        return;
+      }
+      reply('VULCAN_ATTENDANCE_STATUS_RESULT', { checks: response.checks });
     });
     return;
   }

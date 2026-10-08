@@ -73,7 +73,7 @@ function readScheduleFromPage() {
 // Odczyt frekwencji z otwartej tabeli (kierunek VULCAN -> apka). Szukamy
 // tabeli, ktora w naglowku (pierwsze wiersze) ma numer wskazanej godziny,
 // a w wierszach nazwiska - i czytamy symbol z komorki pod ta kolumna.
-function readAttendanceFromPage(period) {
+function readAttendanceFromPage(period, className) {
   const tables = [...document.querySelectorAll('table')].filter(visible);
   for (const table of tables) {
     let header = null;
@@ -83,6 +83,12 @@ function readAttendanceFromPage(period) {
       }
     }
     if (!header) continue;
+    if (className) {
+      const wantedClass = normalized(className).replace(/\s+/g, '');
+      const hasWantedClass = [...table.rows].some((row) => [...row.cells]
+        .some((cell) => normalized(cell.textContent).replace(/\s+/g, '') === wantedClass));
+      if (!hasWantedClass) continue;
+    }
     const headerRect = header.getBoundingClientRect();
     const targetX = headerRect.left + headerRect.width / 2;
     const rows = [];
@@ -104,7 +110,7 @@ function readAttendanceFromPage(period) {
     }
     if (rows.length > 0) return rows;
   }
-  throw new Error(`Nie znalazłem tabeli frekwencji z kolumną ${period}. lekcji. Otwórz w VULCANIE frekwencję tej lekcji.`);
+  throw new Error(`Nie znalazłem tabeli frekwencji klasy ${className || ''} z kolumną ${period}. lekcji.`);
 }
 
 function candidates(selector = 'button, a, input[type="button"], input[type="submit"], [role="button"], td, span, div') {
@@ -864,9 +870,25 @@ async function openLekcjaView() {
   await sleep(900);
 }
 
-function findLessonNode(period, className) {
+function findLessonNode(period, className, day) {
   const pattern = new RegExp(`^${period}\\.\\s*${className.replace(/\s+/g, '\\s*')}(\\s|$)`, 'i');
   const nodes = [...document.querySelectorAll('.x-tree-node-text')].filter(visible);
+  if (day && nodes.length > 0) {
+    const wantedDay = normalized(day);
+    const dayPattern = /^(poniedziałek|wtorek|środa|czwartek|piątek|sobota|niedziela),?\s+\d{1,2}\s+/;
+    let insideDay = false;
+    for (const element of nodes) {
+      const text = normalized(textOf(element));
+      if (text === wantedDay) {
+        insideDay = true;
+        continue;
+      }
+      if (!insideDay) continue;
+      if (dayPattern.test(text)) break;
+      if (pattern.test(text)) return element;
+    }
+    return null;
+  }
   const pool = nodes.length > 0 ? nodes : candidates('span, div, td, a');
   return pool
     .filter((element) => pattern.test(normalized(textOf(element))))
@@ -894,10 +916,10 @@ function isDayExpanded(dayElement) {
   return false;
 }
 
-async function expandDay(day) {
+async function expandDay(day, period = frek?.period, className = frek?.vulcanClassName) {
   const dayElement = await waitFor(() => findText(day), 6000);
   if (!dayElement) throw new Error(`Nie ma dnia „${day}” w drzewie lekcji (inny tydzień?).`);
-  const found = () => findLessonNode(frek.period, frek.vulcanClassName);
+  const found = () => findLessonNode(period, className, day);
   dayElement.setAttribute('data-apka-bot', 'day');
   await extRun('expand-day', '', { day });
   dayElement.removeAttribute('data-apka-bot');
@@ -918,23 +940,77 @@ async function expandDay(day) {
 // Klik w godzine w drzewie musi ja naprawde ZAZNACZYC - inaczej panel po
 // prawej zostaje przy poprzedniej godzinie i "Utwórz lekcję" tworzy lekcje
 // nie tam (pusty formularz bez klasy i przedmiotu, test 2026-10-05).
-async function selectLessonNode(node) {
+async function selectLessonNode(node, period = frek?.period, className = frek?.vulcanClassName, day) {
   clickElement(node);
-  if (await waitFor(() => isRowSelected(findLessonNode(frek.period, frek.vulcanClassName)), 2500)) return;
-  const fresh = findLessonNode(frek.period, frek.vulcanClassName) || node;
+  if (await waitFor(() => isRowSelected(findLessonNode(period, className, day)), 2500)) return;
+  const fresh = findLessonNode(period, className, day) || node;
   const result = await realClick([fresh]);
-  if (result !== 'ok') throw new Error(`Nie udało się kliknąć ${frek.period}. lekcji w drzewie (${result}).`);
-  if (await waitFor(() => isRowSelected(findLessonNode(frek.period, frek.vulcanClassName)), 3500)) return;
-  throw new Error(`Kliknąłem ${frek.period}. lekcję klasy ${frek.vulcanClassName}, ale VULCAN jej nie zaznaczył - kliknij ją w drzewie i spróbuj jeszcze raz.`);
+  if (result !== 'ok') throw new Error(`Nie udało się kliknąć ${period}. lekcji w drzewie (${result}).`);
+  if (await waitFor(() => isRowSelected(findLessonNode(period, className, day)), 3500)) return;
+  throw new Error(`Kliknąłem ${period}. lekcję klasy ${className}, ale VULCAN jej nie zaznaczył.`);
+}
+
+async function readAttendanceStatus(targets) {
+  if (activeFrekJobId || (activeUwagaEventId && phase === 'uwaga-filling')) {
+    throw new Error('VULCAN zapisuje teraz inne dane. Spróbuj ponownie po zakończeniu zapisu.');
+  }
+  const unique = (Array.isArray(targets) ? targets : [])
+    .filter((target) => /^\d{4}-\d{2}-\d{2}$/.test(target?.date || '') && Number.isInteger(target?.period) && target?.className)
+    .filter((target, index, all) => all.findIndex((item) => `${item.date}-${item.period}-${normalized(item.className).replace(/\s+/g, '')}` === `${target.date}-${target.period}-${normalized(target.className).replace(/\s+/g, '')}`) === index);
+  if (unique.length === 0) return [];
+
+  await openLekcjaView();
+  const groups = new Map();
+  for (const target of unique) {
+    const key = `${target.date}-${normalized(target.className).replace(/\s+/g, '')}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(target);
+  }
+
+  const checks = [];
+  for (const group of groups.values()) {
+    const first = group[0];
+    const day = new Date(`${first.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    let node = group.map((target) => findLessonNode(target.period, target.className, day)).find(Boolean);
+    if (!node) node = await expandDay(day, first.period, first.className);
+    if (!node) {
+      node = group.map((target) => findLessonNode(target.period, target.className, day)).find(Boolean);
+    }
+    if (!node) throw new Error(`Nie znalazłem lekcji klasy ${first.className} w dniu ${day}.`);
+
+    const nodeText = normalized(textOf(node));
+    const selectedTarget = group.find((target) => new RegExp(`^${target.period}\\.`).test(nodeText)) || first;
+    await selectLessonNode(node, selectedTarget.period, selectedTarget.className, day);
+    await sleep(1400);
+
+    const attendanceTab = exactVisible(document, 'Frekwencja', 'a, span, div, button')
+      .filter((element) => element.getBoundingClientRect().top < 420)[0];
+    if (!attendanceTab) throw new Error('Nie znalazłem zakładki „Frekwencja” w VULCANIE.');
+    clickElement(attendanceTab);
+    await sleep(900);
+
+    for (const target of group) {
+      const rows = await waitFor(() => {
+        try { return readAttendanceFromPage(target.period, target.className); } catch { return null; }
+      }, 6000);
+      if (!rows) throw new Error(`Nie udało się odczytać ${target.period}. lekcji klasy ${target.className}.`);
+      const checked = rows.length > 0 && rows.every((row) => {
+        const symbol = normalized(row.symbol);
+        return symbol !== '?';
+      });
+      checks.push({ ...target, checked });
+    }
+  }
+  return checks;
 }
 
 async function openFrekLesson() {
   render('Otwieram lekcję w drzewie…');
   const day = new Date(`${frek.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  let node = findLessonNode(frek.period, frek.vulcanClassName);
+  let node = findLessonNode(frek.period, frek.vulcanClassName, day);
   if (!node) node = await expandDay(day);
   if (!node) throw new Error(`Nie znalazłem ${frek.period}. lekcji klasy ${frek.vulcanClassName} w drzewie (${day}).`);
-  await selectLessonNode(node);
+  await selectLessonNode(node, frek.period, frek.vulcanClassName, day);
   // Panel po prawej przeladowuje sie po zaznaczeniu - bez tej chwili bot
   // czytal jeszcze stan poprzedniej godziny.
   await sleep(1800);
@@ -1347,6 +1423,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       sendResponse({ error: String(error?.message || error) });
     }
     return false;
+  }
+  if (message?.type === 'READ_VULCAN_ATTENDANCE_STATUS') {
+    void readAttendanceStatus(message.targets)
+      .then((checks) => sendResponse({ checks }))
+      .catch((error) => sendResponse({ error: String(error?.message || error) }));
+    return true;
   }
   if (message?.type !== 'VULCAN_TRANSFER') return;
   transfer = message.payload;

@@ -59,6 +59,14 @@ nietknięci.
 Po aktualizacji dodatku: `chrome://extensions` -> odśwież dodatek, potem
 odśwież kartę VULCANA i kartę apki.
 
+## Stan obecności na pulpicie (wersja 0.9.5)
+
+Przycisk **Odśwież z VULCANA** sprawdza dla każdej lekcji tygodnia jej kolumnę
+w zwykłej tabeli „Frekwencja”. `☑ obecność` oznacza, że w kolumnie nie zostały
+żadne znaki zapytania. `☐ obecność` oznacza, że frekwencja nie
+jest jeszcze sprawdzona. Nie jest to status zadania wysłanego z telefonu i
+pomocnik nie otwiera formularza „Zmień frekwencję”.
+
 ## Tematy z pulpitu (bez zmiany wersji dodatku - wystarczy go odświeżyć)
 
 1. Na pulpicie (plan tygodnia) wybierz temat przy lekcji.

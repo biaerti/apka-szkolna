@@ -63,3 +63,22 @@ export function ChevronDownIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={16}
+      height={16}
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 2.25v7.25M5.25 6.75 8 9.5l2.75-2.75M3 11.25v2h10v-2" />
+    </svg>
+  );
+}

@@ -34,6 +34,7 @@ import { lessonSections, pickLessonSection } from '../lib/lessonMaterial';
 import { MaterialTabs } from '../components/lessons/MaterialTabs';
 import { useNow } from '../components/timetable/useNow';
 import { LessonMobileCard } from '../components/lessons/LessonMobileCard';
+import { RemedialMaterials } from '../components/lessons/RemedialMaterials';
 
 const SECTION_KEY = 'lekcje-dzial:';
 
@@ -79,6 +80,7 @@ export function Lessons() {
   const sortedClasses = useMemo(() => [...classes].sort((a, b) => a.order - b.order), [classes]);
   const requested = params.get('klasa');
   const classId = sortedClasses.some((c) => c.id === requested) ? (requested as string) : sortedClasses[0]?.id ?? '';
+  const remedialActive = params.get('widok') === 'wyrownawcze';
   const grade = gradeOfClass(classes, classId) ?? '';
   const gradeClasses = useMemo(() => classesOfGrade(classes, grade), [classes, grade]);
   // Konkretne nazwy klas zamiast odmiany "klas IV / klasy IV" - czytelniej i bez bledow gramatycznych.
@@ -160,6 +162,10 @@ export function Lessons() {
 
   function selectClass(id: string) {
     setParams({ klasa: id, typ: materialType }, { replace: true });
+  }
+
+  function selectRemedial() {
+    setParams({ klasa: classId, widok: 'wyrownawcze' }, { replace: true });
   }
 
   function selectSection(key: string) {
@@ -252,6 +258,22 @@ export function Lessons() {
     setLessonProgress(lesson.id, classId, progressWithoutSlot(lessonProgress(lesson, classId), slotId));
   }
 
+  if (remedialActive) {
+    return (
+      <div>
+        <PageHeader title="Lekcje" description="Materiały do pracy na zajęciach wyrównawczych" />
+        <ClassTabs
+          classes={sortedClasses}
+          activeId={classId}
+          onSelect={selectClass}
+          remedialActive
+          onSelectRemedial={selectRemedial}
+        />
+        <RemedialMaterials />
+      </div>
+    );
+  }
+
   return (
     <div>
       <PageHeader
@@ -270,7 +292,13 @@ export function Lessons() {
         }
       />
 
-      <ClassTabs classes={sortedClasses} activeId={classId} onSelect={selectClass} />
+      <ClassTabs
+        classes={sortedClasses}
+        activeId={classId}
+        onSelect={selectClass}
+        remedialActive={false}
+        onSelectRemedial={selectRemedial}
+      />
 
       {gradeClasses.length > 1 && (
         <p className="-mt-1 mb-4 text-xs text-gray-500">
