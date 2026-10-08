@@ -9,13 +9,15 @@ import type { NoweZadanie, UseZadaniaResult } from '../../data/zadania';
 interface ListaProps {
   items: Zadanie[];
   onToggle: (id: string) => void;
+  onEdit: (id: string, tekst: string) => void;
   onRemove: (id: string) => void;
   /** Dopisek przed trescia, np. "pon 5.10 · IV A". */
   prefix?: (z: Zadanie) => string | undefined;
   className?: string;
 }
 
-export function ZadaniaLista({ items, onToggle, onRemove, prefix, className }: ListaProps) {
+export function ZadaniaLista({ items, onToggle, onEdit, onRemove, prefix, className }: ListaProps) {
+  const [editing, setEditing] = useState<string | null>(null);
   if (items.length === 0) return null;
   return (
     <ul className={clsx('space-y-1', className)}>
@@ -28,10 +30,19 @@ export function ZadaniaLista({ items, onToggle, onRemove, prefix, className }: L
             aria-label={z.zrobione ? `Odznacz: ${z.tekst}` : `Zrobione: ${z.tekst}`}
             className="mt-[3px] h-3.5 w-3.5 shrink-0 cursor-pointer accent-accent-600"
           />
-          <span className={clsx('min-w-0 flex-1 break-words', z.zrobione ? 'text-gray-400 line-through' : 'text-gray-800')}>
-            {prefix?.(z) && <span className="mr-1 text-xs text-amber-700">{prefix(z)}</span>}
-            {z.tekst}
-          </span>
+          {editing === z.id ? (
+            <EdytujZadanie tekst={z.tekst} onSave={(tekst) => onEdit(z.id, tekst)} onClose={() => setEditing(null)} />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setEditing(z.id)}
+              title="Kliknij, żeby poprawić"
+              className={clsx('min-w-0 flex-1 cursor-text break-words text-left', z.zrobione ? 'text-gray-400 line-through' : 'text-gray-800')}
+            >
+              {prefix?.(z) && <span className="mr-1 text-xs text-amber-700">{prefix(z)}</span>}
+              {z.tekst}
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onRemove(z.id)}
@@ -44,6 +55,32 @@ export function ZadaniaLista({ items, onToggle, onRemove, prefix, className }: L
         </li>
       ))}
     </ul>
+  );
+}
+
+/** Poprawianie tresci: Enter albo klik obok zapisuje, Esc zostawia stara. */
+function EdytujZadanie({ tekst: start, onSave, onClose }: { tekst: string; onSave: (tekst: string) => void; onClose: () => void }) {
+  const [tekst, setTekst] = useState(start);
+  const cancelled = useRef(false);
+  return (
+    <input
+      autoFocus
+      value={tekst}
+      onChange={(e) => setTekst(e.target.value)}
+      onFocus={(e) => e.target.select()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') e.currentTarget.blur();
+        if (e.key === 'Escape') {
+          cancelled.current = true;
+          onClose();
+        }
+      }}
+      onBlur={() => {
+        if (!cancelled.current) onSave(tekst);
+        onClose();
+      }}
+      className="-my-0.5 min-w-0 flex-1 rounded border border-gray-300 bg-white px-1 py-0.5 text-sm text-gray-900 focus:border-accent-500 focus:outline-none"
+    />
   );
 }
 
@@ -84,7 +121,7 @@ export function DodajZadanie({ onAdd, onClose, placeholder = 'Co zrobić? Enter 
 }
 
 /** "Do zrobienia (N)" w naglowku pulpitu - ogolna lista, nieprzypieta do dnia. */
-export function ZadaniaOgolnePrzycisk({ zadania, add, toggle, remove }: Pick<UseZadaniaResult, 'zadania' | 'add' | 'toggle' | 'remove'>) {
+export function ZadaniaOgolnePrzycisk({ zadania, add, toggle, edit, remove }: Pick<UseZadaniaResult, 'zadania' | 'add' | 'toggle' | 'edit' | 'remove'>) {
   const [open, setOpen] = useState(false);
   const [tekst, setTekst] = useState('');
   const boxRef = useRef<HTMLDivElement>(null);
@@ -141,7 +178,7 @@ export function ZadaniaOgolnePrzycisk({ zadania, add, toggle, remove }: Pick<Use
               Pusto. Zadanie na konkretny dzień albo lekcję dopiszesz w planie: „+ zadanie”.
             </p>
           ) : (
-            <ZadaniaLista items={items} onToggle={toggle} onRemove={(id) => remove([id])} className="mt-3 max-h-80 overflow-y-auto" />
+            <ZadaniaLista items={items} onToggle={toggle} onEdit={edit} onRemove={(id) => remove([id])} className="mt-3 max-h-80 overflow-y-auto" />
           )}
           {zrobione.length > 0 && (
             <button type="button" onClick={() => remove(zrobione.map((z) => z.id))} className="mt-3 text-xs text-gray-400 hover:text-gray-700">

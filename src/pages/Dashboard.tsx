@@ -144,7 +144,7 @@ export function Dashboard() {
               Tematy do VULCANA ({topicsToSend.length})
             </button>
           )}
-          <ZadaniaOgolnePrzycisk zadania={zadania.zadania} add={zadania.add} toggle={zadania.toggle} remove={zadania.remove} />
+          <ZadaniaOgolnePrzycisk zadania={zadania.zadania} add={zadania.add} toggle={zadania.toggle} edit={zadania.edit} remove={zadania.remove} />
           <Link to="/plan" className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900">Edytuj stały plan</Link>
         </div>
       </div>

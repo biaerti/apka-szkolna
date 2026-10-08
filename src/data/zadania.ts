@@ -61,6 +61,7 @@ export interface UseZadaniaResult {
   error: string | null;
   add: (input: NoweZadanie) => void;
   toggle: (id: string) => void;
+  edit: (id: string, tekst: string) => void;
   remove: (ids: string[]) => void;
 }
 
@@ -125,6 +126,15 @@ export function useZadania(): UseZadaniaResult {
     );
   }
 
+  function edit(id: string, tekst: string) {
+    const clean = tekst.trim();
+    if (!clean || zadania.find((z) => z.id === id)?.tekst === clean) return;
+    change(
+      (list) => list.map((z) => (z.id === id ? { ...z, tekst: clean } : z)),
+      () => getSupabase().from('zadania').update({ tekst: clean }).eq('id', id),
+    );
+  }
+
   function remove(ids: string[]) {
     if (ids.length === 0) return;
     change(
@@ -133,5 +143,5 @@ export function useZadania(): UseZadaniaResult {
     );
   }
 
-  return { zadania, error, add, toggle, remove };
+  return { zadania, error, add, toggle, edit, remove };
 }

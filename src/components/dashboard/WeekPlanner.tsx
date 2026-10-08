@@ -48,7 +48,7 @@ export function WeekPlanner(props: Props) {
   const [openPicker, setOpenPicker] = useState<string | null>(null);
   // Gdzie jest otwarte pole "+ zadanie": "RRRR-MM-DD" (dzien) albo "RRRR-MM-DD-N" (lekcja).
   const [adding, setAdding] = useState<string | null>(null);
-  const { zadania, add, toggle, remove } = props.zadania;
+  const { zadania, add, toggle, edit, remove } = props.zadania;
   const todayKey = toDateKey(props.now);
   const zalegle = zadaniaZalegle(zadania, todayKey);
   const removeOne = (id: string) => remove([id]);
@@ -120,8 +120,8 @@ export function WeekPlanner(props: Props) {
 
             {(dayTasks.length > 0 || adding === dateKey || (isToday && zalegle.length > 0)) && (
               <div className="pt-2">
-                {isToday && <ZadaniaLista items={zalegle} onToggle={toggle} onRemove={removeOne} prefix={zaleglePrefix} className="mb-1" />}
-                <ZadaniaLista items={dayTasks} onToggle={toggle} onRemove={removeOne} />
+                {isToday && <ZadaniaLista items={zalegle} onToggle={toggle} onEdit={edit} onRemove={removeOne} prefix={zaleglePrefix} className="mb-1" />}
+                <ZadaniaLista items={dayTasks} onToggle={toggle} onEdit={edit} onRemove={removeOne} />
                 {adding === dateKey && (
                   <DodajZadanie
                     placeholder="Na ten dzień - Enter dodaje"
@@ -261,7 +261,7 @@ export function WeekPlanner(props: Props) {
 
                         {(lessonTasks.length > 0 || addingHere) && (
                           <div className="mt-2">
-                            <ZadaniaLista items={lessonTasks} onToggle={toggle} onRemove={removeOne} />
+                            <ZadaniaLista items={lessonTasks} onToggle={toggle} onEdit={edit} onRemove={removeOne} />
                             {addingHere && (
                               <DodajZadanie
                                 placeholder="Na tę lekcję - Enter dodaje"
