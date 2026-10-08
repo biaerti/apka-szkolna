@@ -38,13 +38,7 @@ export function statusFromVulcanSymbol(symbol: string): AttendanceStatus | undef
 }
 
 function nameKey(value: string): string {
-  return value
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLocaleLowerCase('pl')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/ł/g, 'l');
+  return value.replace(/\s+/g, ' ').trim().toLocaleLowerCase('pl');
 }
 
 export interface MatchedAttendance {
@@ -81,15 +75,8 @@ export function matchVulcanAttendance(
   for (const row of rows) {
     const status = statusFromVulcanSymbol(row.symbol);
     if (!status) continue;
-    const rowName = nameKey(row.name);
     const student =
-      byName.get(rowName) ??
-      students.find((candidate) => {
-        const lastFirst = nameKey(`${candidate.lastName} ${candidate.firstName}`);
-        const firstLast = nameKey(`${candidate.firstName} ${candidate.lastName}`);
-        return rowName.startsWith(`${lastFirst} `) || rowName.startsWith(`${firstLast} `);
-      }) ??
-      (!opts.byNameOnly && row.number !== undefined ? byNumber.get(row.number) : undefined);
+      byName.get(nameKey(row.name)) ?? (!opts.byNameOnly && row.number !== undefined ? byNumber.get(row.number) : undefined);
     if (!student) {
       unmatched.push(row.name);
       continue;

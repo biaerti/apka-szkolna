@@ -119,27 +119,6 @@ export function currentEntry(timetable: TimetableEntry[], periods: LessonPeriod[
 }
 
 /**
- * Lekcja, ktorej frekwencje najrozsadniej pobrac recznie: trwajaca teraz,
- * a na przerwie lub po lekcjach - ostatnia, ktora juz sie zaczela.
- * Przed pierwsza lekcja i w weekend niczego nie zgadujemy.
- */
-export function currentOrPreviousEntry(
-  timetable: TimetableEntry[],
-  periods: LessonPeriod[],
-  now: Date,
-): TimetableEntry | undefined {
-  const current = currentEntry(timetable, periods, now);
-  if (current) return current;
-  const weekday = weekdayOf(now);
-  if (weekday === 0) return undefined;
-  const nowMin = minutesOfDay(now);
-  const startOf = new Map(validPeriods(periods).map((p) => [p.no, parseHm(p.start)]));
-  const started = entriesForDay(timetable, weekday)
-    .filter((entry) => (startOf.get(entry.period) ?? Infinity) <= nowMin);
-  return started[started.length - 1];
-}
-
-/**
  * Numer godziny, na ktora sprawdzamy dzis obecnosc klasy `classId`: trwajaca
  * lekcja tej klasy, a gdy jej nie ma - ostatnia dzisiejsza, ktora juz sie
  * zaczela (kolo po dzwonku albo po lekcjach), a przed pierwsza - pierwsza.

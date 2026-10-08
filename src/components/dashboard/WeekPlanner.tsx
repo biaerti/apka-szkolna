@@ -24,6 +24,7 @@ import type { UseZadaniaResult } from '../../data/zadania';
 import { LessonAssignmentPicker } from './LessonAssignmentPicker';
 import type { VulcanTopics } from './useVulcanTopics';
 import { DodajZadanie, ZadaniaLista } from './Zadania';
+import { frekwencjaJobId, type FrekwencjaJob } from '../../lib/vulcanFrekwencja';
 
 interface Props {
   anchor: Date;
@@ -33,6 +34,7 @@ interface Props {
   periods: LessonPeriod[];
   timetable: TimetableEntry[];
   vulcanLessons: VulcanLesson[];
+  frekwencjaJobs: FrekwencjaJob[];
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
   topics: VulcanTopics;
   zadania: UseZadaniaResult;
@@ -175,6 +177,7 @@ export function WeekPlanner(props: Props) {
                 const topicItem = cls && assigned ? topicItemForSlot(props.lessons, cls, dateKey, entry.period) : undefined;
                 const lessonTasks = zadaniaLekcji(zadania, dateKey, entry.period);
                 const addingHere = adding === pickerId;
+                const frekwencjaJob = cls ? props.frekwencjaJobs.find((job) => job.id === frekwencjaJobId(dateKey, entry.period, cls.id)) : undefined;
 
                 return (
                   <li key={entry.id}>
@@ -208,29 +211,39 @@ export function WeekPlanner(props: Props) {
 
                         {!cls ? (
                           <p className="mt-1.5 text-xs text-gray-400">Klasy nie ma w aplikacji</p>
-                        ) : assigned ? (
-                          <div className="mt-1.5">
-                            <Link
-                              to={`/dziennik?data=${dateKey}&lekcja=${entry.period}&klasa=${cls.id}&material=${assigned.lesson.id}&czesc=${assigned.part}`}
-                              className={clsx(
-                                'block text-sm leading-snug hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500',
-                                done ? 'text-gray-400' : 'font-medium text-gray-900',
-                              )}
-                              title="Otwórz obecność z tym tematem"
-                            >
-                              {done && <span className="mr-1 text-emerald-600">✓</span>}
-                              {lessonTitleWithPart(assigned.lesson.title, assigned.part)}
-                            </Link>
-                            <div className="mt-1 flex gap-3 text-xs">
-                              <Link
-                                to={`/dziennik?data=${dateKey}&lekcja=${entry.period}&klasa=${cls.id}&material=${assigned.lesson.id}&czesc=${assigned.part}`}
-                                className="font-medium text-accent-700 hover:underline"
+                        ) : (
+                          <>
+                            {assigned ? (
+                              <div className="mt-1.5">
+                                <Link
+                                  to={`/dziennik?data=${dateKey}&lekcja=${entry.period}&klasa=${cls.id}&material=${assigned.lesson.id}&czesc=${assigned.part}`}
+                                  className={clsx(
+                                    'block text-sm leading-snug hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500',
+                                    done ? 'text-gray-400' : 'font-medium text-gray-900',
+                                  )}
+                                  title="Otwórz temat lekcji"
+                                >
+                                  {done && <span className="mr-1 text-emerald-600">✓</span>}
+                                  {lessonTitleWithPart(assigned.lesson.title, assigned.part)}
+                                </Link>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={togglePicker}
+                                aria-expanded={openPicker === pickerId}
+                                className="mt-1.5 rounded text-sm font-medium text-accent-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500"
                               >
-                                Obecność
-                              </Link>
+                                Wybierz temat
+                              </button>
+                            )}
+                            <div className="mt-1 flex gap-3 text-xs">
+                              <AttendanceSavedStatus job={frekwencjaJob} />
+                              {assigned && (
                               <button type="button" onClick={togglePicker} aria-expanded={openPicker === pickerId} className="text-gray-400 hover:text-gray-700">
                                 zmień
                               </button>
+                              )}
                               {topicItem && (
                                 <VulcanTopicButton item={topicItem} state={props.topics.states[topicKey(topicItem)]} onSend={() => props.topics.send([topicItem])} />
                               )}
@@ -238,16 +251,7 @@ export function WeekPlanner(props: Props) {
                             {topicItem && props.topics.states[topicKey(topicItem)]?.status === 'error' && (
                               <p className="mt-1 text-xs text-red-600">{props.topics.states[topicKey(topicItem)]?.message}</p>
                             )}
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={togglePicker}
-                            aria-expanded={openPicker === pickerId}
-                            className="mt-1.5 rounded text-sm font-medium text-accent-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500"
-                          >
-                            Wybierz temat
-                          </button>
+                          </>
                         )}
 
                         {(lessonTasks.length > 0 || addingHere) && (
@@ -336,6 +340,19 @@ function VulcanTopicButton({ item, state, onSend }: { item: TopicItem; state: To
       {failed ? 'błąd - ponów' : 'do VULCANA'}
     </button>
   );
+}
+
+function AttendanceSavedStatus({ job }: { job: FrekwencjaJob | undefined }) {
+  if (job?.status === 'done') {
+    return <span className="font-medium text-emerald-700" title={job.message ?? 'Frekwencja zapisana w VULCANIE'}>☑ obecność</span>;
+  }
+  if (job?.status === 'pending' || job?.status === 'sending') {
+    return <span className="font-medium text-gray-500" title={job.message ?? 'Trwa zapisywanie frekwencji w VULCANIE'}>◌ obecność</span>;
+  }
+  if (job?.status === 'error') {
+    return <span className="font-medium text-red-600" title={job.message ?? 'Nie udało się zapisać frekwencji w VULCANIE'}>☒ obecność</span>;
+  }
+  return <span className="text-gray-400" title="Brak potwierdzenia zapisu frekwencji w VULCANIE">☐ obecność</span>;
 }
 
 // Przerwa miedzy lekcjami: cienka linia z dlugoscia, pod nia dyzur i obiad.

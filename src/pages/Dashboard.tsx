@@ -9,9 +9,8 @@ import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
 import { ZadaniaOgolnePrzycisk } from '../components/dashboard/Zadania';
 import { useZadania } from '../data/zadania';
-import { currentOrPreviousEntry } from '../lib/timetable';
-import { effectiveTimetable } from '../lib/vulcanPlan';
-import { matchVulcanAttendance, requestVulcanAttendance } from '../lib/vulcanAttendance';
+import { fetchFrekwencjaJobs, subscribeFrekwencjaJobs } from '../data/remote/frekwencjaJobs';
+import type { FrekwencjaJob } from '../lib/vulcanFrekwencja';
 
 type RefreshState = 'idle' | 'loading' | 'ready' | 'error' | 'missing';
 type AttendanceRefreshState = 'idle' | 'loading' | 'error';
@@ -20,17 +19,16 @@ const UPDATED_KEY = 'apka-szkolna-vulcan-plan-updated-at';
 export function Dashboard() {
   const classes = useStore((s) => s.classes);
   const lessons = useStore((s) => s.lessons);
-  const students = useStore((s) => s.students);
   const periods = useStore((s) => s.periods);
   const timetable = useStore((s) => s.timetable);
   const vulcanLessons = useStore((s) => s.vulcanLessons);
   const setLessonProgress = useStore((s) => s.setLessonProgress);
-  const setAttendance = useStore((s) => s.setAttendance);
   // Zegar co 30 s: podswietlenie trwajacej lekcji i chipy "teraz" (dyzur, obiad).
   const now = useNow(30_000);
   const [anchor, setAnchor] = useState(() => new Date());
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
   const [attendanceRefreshState, setAttendanceRefreshState] = useState<AttendanceRefreshState>('idle');
+  const [frekwencjaJobs, setFrekwencjaJobs] = useState<FrekwencjaJob[]>([]);
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
   const topics = useVulcanTopics();
   const zadania = useZadania();
@@ -52,39 +50,49 @@ export function Dashboard() {
     return () => window.removeEventListener('message', onMessage);
   }, []);
 
-  async function refreshAttendanceFromVulcan() {
-    const refreshNow = new Date();
-    const entry = currentOrPreviousEntry(effectiveTimetable(timetable, vulcanLessons, refreshNow), periods, refreshNow);
-    if (!entry?.classId) return;
-    const classmates = students.filter((student) => student.classId === entry.classId && student.active);
-    if (classmates.length === 0) return;
+  const days = weekDays(anchor);
+  const weekDates = days.map(toDateKey);
+  const weekKey = weekDates.join(',');
 
+  async function refreshAttendanceStatus() {
     setAttendanceRefreshState('loading');
     try {
-      const rows = await requestVulcanAttendance(entry.period);
-      // Przy recznym odswiezeniu nie ufamy samym numerom z dziennika - otwarta
-      // w VULCANIE tabela moze nalezec do innej klasy.
-      const { matched } = matchVulcanAttendance(rows, classmates, { byNameOnly: true });
-      if (matched.length === 0) throw new Error('W VULCANIE jest otwarta inna klasa.');
-      const date = toDateKey(refreshNow);
-      for (const item of matched) {
-        setAttendance({ studentId: item.studentId, classId: entry.classId, date, period: entry.period, status: item.status });
-      }
+      const result = await Promise.all(weekDates.map(fetchFrekwencjaJobs));
+      setFrekwencjaJobs(result.flat());
       setAttendanceRefreshState('idle');
     } catch {
       setAttendanceRefreshState('error');
     }
   }
 
+  useEffect(() => {
+    let stopped = false;
+    const load = async () => {
+      try {
+        const result = await Promise.all(weekKey.split(',').map(fetchFrekwencjaJobs));
+        if (!stopped) {
+          setFrekwencjaJobs(result.flat());
+          setAttendanceRefreshState('idle');
+        }
+      } catch {
+        if (!stopped) setAttendanceRefreshState('error');
+      }
+    };
+    void load();
+    const unsubscribe = subscribeFrekwencjaJobs(() => void load());
+    return () => {
+      stopped = true;
+      unsubscribe();
+    };
+  }, [weekKey]);
+
   function refreshFromVulcan() {
     setRefreshState('loading');
-    setAttendanceRefreshState('idle');
     window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_SCHEDULE_REQUEST' }, '*');
-    void refreshAttendanceFromVulcan();
+    void refreshAttendanceStatus();
     window.setTimeout(() => setRefreshState((state) => state === 'loading' ? 'missing' : state), 4500);
   }
 
-  const days = weekDays(anchor);
   const rangeLabel = `${days[0].getDate()}.${String(days[0].getMonth() + 1).padStart(2, '0')} - ${days[4].getDate()}.${String(days[4].getMonth() + 1).padStart(2, '0')}`;
   const currentWeek = toDateKey(days[0]) === toDateKey(weekDays(now)[0]);
   // "Tematy tygodnia do VULCANA": lekcje z wybranym tematem, ktorych jeszcze tam nie ma.
@@ -118,7 +126,7 @@ export function Dashboard() {
           {zadania.error && <span className="text-red-600">{zadania.error}</span>}
           {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
           {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
-          {attendanceRefreshState === 'error' && <span className="text-amber-700">Nie odświeżyłem obecności - otwórz frekwencję ostatniej lekcji w VULCANIE.</span>}
+          {attendanceRefreshState === 'error' && <span className="text-amber-700">Nie udało się pobrać potwierdzeń obecności z chmury.</span>}
           <button type="button" onClick={refreshFromVulcan} disabled={refreshing} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
             {refreshing ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
           </button>
@@ -141,7 +149,7 @@ export function Dashboard() {
 
       <WazneInfoPasek />
 
-      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} />
+      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} frekwencjaJobs={frekwencjaJobs} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} />
     </div>
   );
 }

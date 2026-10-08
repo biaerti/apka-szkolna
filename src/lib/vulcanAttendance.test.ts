@@ -51,14 +51,6 @@ describe('matchVulcanAttendance', () => {
     expect(matched).toEqual([{ studentId: 'c', status: 'late' }]);
     expect(unmatched).toEqual([]);
   });
-  it('bezpiecznie dopasowuje po nazwisku bez ogonkow i ignoruje drugie imie', () => {
-    const { matched } = matchVulcanAttendance(
-      [{ number: 99, name: 'Wisniewska Ola Maria', symbol: '-' }],
-      STUDENTS,
-      { byNameOnly: true },
-    );
-    expect(matched).toEqual([{ studentId: 'c', status: 'absent' }]);
-  });
   it('pomija wiersze z nieznanym symbolem, zglasza niedopasowane', () => {
     const { matched, unmatched } = matchVulcanAttendance(
       [
