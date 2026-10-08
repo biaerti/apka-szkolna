@@ -3,6 +3,7 @@ import type { LessonPeriod, TimetableEntry } from '../data/types';
 import {
   currentEntry,
   currentOrNextEntry,
+  currentOrPreviousEntry,
   entriesForDay,
   formatHm,
   formatRemaining,
@@ -105,7 +106,7 @@ const TT: TimetableEntry[] = [
   { id: 'd', weekday: 1, period: 3, note: 'Jagoda ma lekcję' },
 ];
 
-describe('entriesForDay / currentEntry / currentOrNextEntry', () => {
+describe('entriesForDay / currentEntry / currentOrNextEntry / currentOrPreviousEntry', () => {
   it('wpisy dnia posortowane po godzinie', () => {
     expect(entriesForDay(TT, 1).map((e) => e.id)).toEqual(['b', 'a']);
     expect(entriesForDay(TT, 3)).toEqual([]);
@@ -125,6 +126,13 @@ describe('entriesForDay / currentEntry / currentOrNextEntry', () => {
     expect(currentOrNextEntry(TT, PERIODS, at(8, 47))?.id).toBe('a');
     expect(currentOrNextEntry(TT, PERIODS, at(11, 0))).toBeUndefined();
     expect(currentOrNextEntry(TT, PERIODS, new Date(2026, 8, 12, 8, 10))).toBeUndefined();
+  });
+  it('do recznego odswiezenia frekwencji bierze trwajaca albo ostatnia rozpoczeta lekcje', () => {
+    expect(currentOrPreviousEntry(TT, PERIODS, at(8, 10))?.id).toBe('b');
+    expect(currentOrPreviousEntry(TT, PERIODS, at(8, 47))?.id).toBe('b');
+    expect(currentOrPreviousEntry(TT, PERIODS, at(10, 30))?.id).toBe('a');
+    expect(currentOrPreviousEntry(TT, PERIODS, at(7, 30))).toBeUndefined();
+    expect(currentOrPreviousEntry(TT, PERIODS, new Date(2026, 8, 12, 10, 30))).toBeUndefined();
   });
 });
 

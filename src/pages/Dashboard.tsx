@@ -9,21 +9,28 @@ import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
 import { ZadaniaOgolnePrzycisk } from '../components/dashboard/Zadania';
 import { useZadania } from '../data/zadania';
+import { currentOrPreviousEntry } from '../lib/timetable';
+import { effectiveTimetable } from '../lib/vulcanPlan';
+import { matchVulcanAttendance, requestVulcanAttendance } from '../lib/vulcanAttendance';
 
 type RefreshState = 'idle' | 'loading' | 'ready' | 'error' | 'missing';
+type AttendanceRefreshState = 'idle' | 'loading' | 'error';
 const UPDATED_KEY = 'apka-szkolna-vulcan-plan-updated-at';
 
 export function Dashboard() {
   const classes = useStore((s) => s.classes);
   const lessons = useStore((s) => s.lessons);
+  const students = useStore((s) => s.students);
   const periods = useStore((s) => s.periods);
   const timetable = useStore((s) => s.timetable);
   const vulcanLessons = useStore((s) => s.vulcanLessons);
   const setLessonProgress = useStore((s) => s.setLessonProgress);
+  const setAttendance = useStore((s) => s.setAttendance);
   // Zegar co 30 s: podswietlenie trwajacej lekcji i chipy "teraz" (dyzur, obiad).
   const now = useNow(30_000);
   const [anchor, setAnchor] = useState(() => new Date());
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
+  const [attendanceRefreshState, setAttendanceRefreshState] = useState<AttendanceRefreshState>('idle');
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
   const topics = useVulcanTopics();
   const zadania = useZadania();
@@ -45,9 +52,35 @@ export function Dashboard() {
     return () => window.removeEventListener('message', onMessage);
   }, []);
 
+  async function refreshAttendanceFromVulcan() {
+    const refreshNow = new Date();
+    const entry = currentOrPreviousEntry(effectiveTimetable(timetable, vulcanLessons, refreshNow), periods, refreshNow);
+    if (!entry?.classId) return;
+    const classmates = students.filter((student) => student.classId === entry.classId && student.active);
+    if (classmates.length === 0) return;
+
+    setAttendanceRefreshState('loading');
+    try {
+      const rows = await requestVulcanAttendance(entry.period);
+      // Przy recznym odswiezeniu nie ufamy samym numerom z dziennika - otwarta
+      // w VULCANIE tabela moze nalezec do innej klasy.
+      const { matched } = matchVulcanAttendance(rows, classmates, { byNameOnly: true });
+      if (matched.length === 0) throw new Error('W VULCANIE jest otwarta inna klasa.');
+      const date = toDateKey(refreshNow);
+      for (const item of matched) {
+        setAttendance({ studentId: item.studentId, classId: entry.classId, date, period: entry.period, status: item.status });
+      }
+      setAttendanceRefreshState('idle');
+    } catch {
+      setAttendanceRefreshState('error');
+    }
+  }
+
   function refreshFromVulcan() {
     setRefreshState('loading');
+    setAttendanceRefreshState('idle');
     window.postMessage({ source: 'apka-szkolna', type: 'VULCAN_SCHEDULE_REQUEST' }, '*');
+    void refreshAttendanceFromVulcan();
     window.setTimeout(() => setRefreshState((state) => state === 'loading' ? 'missing' : state), 4500);
   }
 
@@ -61,6 +94,7 @@ export function Dashboard() {
     return !isTopicSent(state, item.topic) && !(state?.topic === item.topic.trim() && (state.status === 'queued' || state.status === 'sending'));
   });
   const topicsBusy = weekTopics.filter((item) => ['queued', 'sending'].includes(topics.states[topicKey(item)]?.status ?? '')).length;
+  const refreshing = refreshState === 'loading' || attendanceRefreshState === 'loading';
 
   return (
     <div className="mx-auto max-w-[104rem]">
@@ -84,8 +118,9 @@ export function Dashboard() {
           {zadania.error && <span className="text-red-600">{zadania.error}</span>}
           {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
           {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
-          <button type="button" onClick={refreshFromVulcan} disabled={refreshState === 'loading'} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
-            {refreshState === 'loading' ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
+          {attendanceRefreshState === 'error' && <span className="text-amber-700">Nie odświeżyłem obecności - otwórz frekwencję ostatniej lekcji w VULCANIE.</span>}
+          <button type="button" onClick={refreshFromVulcan} disabled={refreshing} className="rounded-md px-2 py-1 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50" title={updatedAt ? `Ostatnio: ${new Date(updatedAt).toLocaleString('pl-PL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Jeszcze nie pobrano'}>
+            {refreshing ? 'Pobieram z VULCANA…' : 'Odśwież z VULCANA'}
           </button>
           {topicsBusy > 0 ? (
             <span className="px-2 py-1 text-gray-500">Dodaję do VULCANA… zostało {topicsBusy}</span>
