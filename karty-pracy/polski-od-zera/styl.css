@@ -175,3 +175,19 @@ b .ru, .ru b { color: inherit; }
 .dip-b { font-size: 16pt; color: #1f4e8c; }
 .diploma p { font-size: 12pt; }
 .dip-sign { display: flex; gap: 8mm; margin-top: 12mm; font-size: 9pt; }
+
+/* czesc 3 */
+.pics.three { grid-template-columns: repeat(3, 1fr); }
+.umiem-tab td { height: 8mm; width: auto; padding: 0 2mm; }
+.umiem-tab th:first-child { width: 50%; }
+.sort3 td { width: 33%; height: 34mm; }
+.pm { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 2mm 0; }
+.pm th { text-align: left; font-size: 8pt; border-bottom: 0.4mm solid #1f4e8c; padding: 1mm; }
+.pm td { border-bottom: 0.25mm solid #d5dbe4; padding: 1.2mm 1mm; vertical-align: top; }
+.pm i { font-size: 7.5pt; }
+.mapwrap { display: flex; gap: 3mm; align-items: center; }
+.mapka { width: 60mm; flex: none; }
+.odd.big div { font-size: 12pt; margin: 2.5mm 0; }
+.key.dense { font-size: 8.2pt; }
+.key.dense p { line-height: 1.32; }
+.key.dense h4 { margin-top: 1.8mm; }

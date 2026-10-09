@@ -42,7 +42,7 @@ const polecenia = [
   ['Powiedz', 'Скажи'], ['Sprawdź', 'Проверь'],
 ]
 
-const stronaPolecen = (tytul = 'Polecenia w zeszycie', ru = 'Задания в тетради') => `
+export const stronaPolecen = (tytul = 'Polecenia w zeszycie', ru = 'Задания в тетради') => `
 <section class="page">
   ${head('!', tytul, ru)}
   <p class="ru">Эти слова будут в каждом задании. Выучи их - и ты поймёшь, что говорит учитель на уроке.</p>
@@ -488,13 +488,13 @@ const klucz1 = `
   3: a) babcia, b) dziadek, c) wujek, d) ciocia</p>
 </section>`
 
-const notatki = `
+export const notatki = `
 <section class="page">
   ${sec('Notatki', 'Заметки')}
   ${lines(21)}
 </section>`
 
-const stronaStartu = (tematy) => `
+export const stronaStartu = (tematy) => `
 <section class="page">
   ${head('★', 'Jak pracować z zeszytem?', 'Как работать с тетрадью?')}
   <p class="ru">Привет! Это твоя тетрадь по польскому. Ты работаешь с ней на уроках польского - сам, в своём темпе.</p>
@@ -765,7 +765,7 @@ const L8 = [
 </section>`,
 ]
 
-const kotek = (typ) => {
+export const kotek = (typ) => {
   const pud = `<rect x="18" y="38" width="44" height="30" fill="#fff" stroke="#222" stroke-width="2"/>`
   const stol = `<rect x="10" y="30" width="60" height="6" fill="#fff" stroke="#222" stroke-width="2"/><path d="M16 36 L16 70 M64 36 L64 70" stroke="#222" stroke-width="3"/>`
   const kot = (x, y, s = 22) => `<text x="${x}" y="${y}" font-size="${s}" font-family="Segoe UI Emoji" text-anchor="middle">🐈</text>`
@@ -963,7 +963,7 @@ const falszywi = `
   <p class="ru small">Знаешь ещё такие слова? Запиши их на странице «Notatki».</p>
 </section>`
 
-const dyplom = `
+export const dyplom = `
 <section class="page diploma">
   <div class="dip-star">★</div>
   <div class="dip-t">Dyplom</div>
@@ -1014,7 +1014,7 @@ const tematy2 = ['6. Dni tygodnia i plan lekcji', '7. Jedzenie', '8. Ciało i sa
 
 // Kolejne strony tematu dostaja klase "cont" - w przegladarce ich klocki doplywaja
 // na wolne miejsce poprzedniej strony (paginacja.js). Temat zawsze zaczyna sie od nowej strony.
-const ciag = (strony) => strony.map((s, i) => (i ? s.replace('class="page"', 'class="page cont"') : s))
+export const ciag = (strony) => strony.map((s, i) => (i ? s.replace('class="page"', 'class="page cont"') : s))
 
 export const notatkiStrona = notatki
 

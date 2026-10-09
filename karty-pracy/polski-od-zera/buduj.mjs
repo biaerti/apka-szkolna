@@ -6,6 +6,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { tmpdir } from 'node:os'
 import { czesc1, czesc2, notatkiStrona } from './tresc.mjs'
+import { czesc3 } from './tresc3.mjs'
 
 const DIR = dirname(fileURLToPath(import.meta.url))
 const OUT = join(DIR, 'pdf')
@@ -19,6 +20,7 @@ const html = (tytul, strony) => `<!doctype html><html lang="pl"><head><meta char
 const czesci = [
   { plik: 'czesc-1', tytul: 'Mój polski od zera - część 1', strony: czesc1() },
   { plik: 'czesc-2', tytul: 'Mój polski od zera - część 2', strony: czesc2() },
+  { plik: 'czesc-3', tytul: 'Mój polski od zera - część 3', strony: czesc3() },
 ]
 
 // Uklada klocki stron "cont" na wolnym miejscu poprzedniej strony, dopycha notatkami do
@@ -66,14 +68,15 @@ function paginacja(notatkiHtml) {
   return { strony: strony.length, przepelnione }
 }
 
-const profil = join(tmpdir(), 'polski-od-zera-chrome')
-rmSync(profil, { recursive: true, force: true })
-const chrome = spawn(CHROME, ['--headless=new', '--remote-debugging-port=9333', `--user-data-dir=${profil}`, '--no-first-run', 'about:blank'], { stdio: 'ignore' })
+// port 9401 zarezerwowany dla zeszytu (9333-9399 to rendery filmikow); profil osobny na kazde uruchomienie
+const PORT = 9401
+const profil = join(tmpdir(), `polski-od-zera-chrome-${process.pid}`)
+const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=${profil}`, '--no-first-run', 'about:blank'], { stdio: 'ignore' })
 
 async function ws() {
   for (let i = 0; i < 50; i++) {
     try {
-      const list = await (await fetch('http://127.0.0.1:9333/json')).json()
+      const list = await (await fetch(`http://127.0.0.1:${PORT}/json`)).json()
       const page = list.find(t => t.type === 'page')
       if (page) return page.webSocketDebuggerUrl
     } catch {}
@@ -122,4 +125,5 @@ for (const c of czesci) {
 }
 sock.close()
 chrome.kill()
+setTimeout(() => { try { rmSync(profil, { recursive: true, force: true }) } catch {} }, 1500)
 if (blad) process.exitCode = 1
