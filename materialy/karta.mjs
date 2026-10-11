@@ -140,7 +140,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .wiersz .przerwa { height: 2mm; }
 .pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
 .pyt .p { font-weight: 700; }
-.pyt .o .luka { display: block; min-width: 0 !important; margin: 0; }
+.pyt .o .luka { display: block; min-width: 0 !important; max-width: 95mm; margin: 0; }
 .linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
 .linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
 .linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }

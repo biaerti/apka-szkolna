@@ -147,8 +147,7 @@ export const KARTA = {
         },
         {
           polecenie: 'Zamień na formę nieosobową, tak żeby nie było wiadomo kto.',
-          kolumny: 2,
-          linie: ['Ktoś otworzył okno. ➜ [[Otwarto okno.|35]]', 'Ludzie mówią, że... ➜ [[Mówi się, że...|35]]'],
+          pytania: [['Ktoś otworzył okno. ➜', '[[Otwarto okno.|35]]'], ['Ludzie mówią, że... ➜', '[[Mówi się, że...|35]]']],
         },
       ],
     },
