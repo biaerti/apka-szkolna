@@ -2,7 +2,7 @@
 kind: handoff
 date: 2026-10-11
 topic: klasa4-filmy-poprawa-sprawdzania
-status: in-progress
+status: done
 ---
 
 # Summary
@@ -67,3 +67,8 @@ Usunąć `zachowajZadaniePrzyOdpowiedzi` ze wszystkich 12 plików `player.js`, a
 - Nie przywracać identycznych pytań bezpośrednio po filmie i na początku następnej lekcji.
 - Nie cofać tagów „Czytanka”.
 - Nie commitować istniejących, niezwiązanych zmian z brudnego drzewa roboczego.
+
+# Zamknięte (2026-10-11, po południu)
+
+- Klasa 4 dział 2: wszystkie 12 filmów sprawdza na ekranie zadania (asertywność `d1ee8e6`, reszta `09f72a1`), MP4 w Supabase i `public/filmiki/`.
+- Klasa 5 dział 2: 13 filmów skróconych do 4-5 min tym samym schematem i przebudowanych na ten sam wzór sprawdzania (`f4f93b5`), MP4 w Supabase. Koło po filmie usunięte z lekcji.
