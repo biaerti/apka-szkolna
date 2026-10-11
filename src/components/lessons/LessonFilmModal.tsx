@@ -13,6 +13,11 @@ export function lessonFilmIds(lesson: Lesson): string[] {
   return lesson.slides.flatMap((slide) => (slide.kind === 'video' && slide.videoId ? [slide.videoId] : []));
 }
 
+/** Czytanki sa oznaczone na liscie obok filmu, zeby bylo widac je bez otwierania lekcji. */
+export function lessonCzytankaIds(lesson: Lesson): string[] {
+  return lesson.slides.flatMap((slide) => (slide.kind === 'czytanka' && slide.czytankaId ? [slide.czytankaId] : []));
+}
+
 function Filmik({ videoId }: { videoId: string }) {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

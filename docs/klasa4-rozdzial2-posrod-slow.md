@@ -73,11 +73,28 @@ Pomijamy: Dzień Pisania Listów (s. 68-70), wiersz Beszczyńskiej, list Lewisa,
 antykwariusza" Bednarek jako czytanki, zad. 5 z s. 60 (ilustracja do wiersza), Laboratorium
 s. 92 (zostaje jako dodatek dla chętnych).
 
-## Scenariusze filmów (4 klasa: wolniej, prościej, krótkie zdania, dużo powtórek)
+## Scenariusze filmów (4 klasa: prosto, krótko, jedna lekcja)
 
-Każdy film ma 7-9 minut i 4 zadania z pauzą 20-25 s, a po każdym SPRAWDZAMY z wyjaśnieniem
-„dlaczego”. Na końcu scena „Zapamiętaj!”. Przykłady są własne, nie z podręcznika, a zadania
-nie powtarzają zadań z podręcznika.
+Rewizja 2026-10-11: każdy film ma 4-5 minut i 3 zadania z krótką pauzą 12 s. Film można
+zatrzymać, gdy klasa potrzebuje więcej czasu. Podczas SPRAWDZAMY polecenie i przykłady
+pozostają na górze ekranu, a rozwiązanie pojawia się poniżej. Koło z osobnymi przykładami
+wraca dopiero na początku kolejnej lekcji, nie bezpośrednio po filmie. Na końcu zostaje
+scena „Zapamiętaj!”.
+
+| Film | Było | Jest | Usunięte jako najmniej potrzebne / zbyt złożone |
+|---|---:|---:|---|
+| potoczne | 7:43 | 4:47 | zadanie „do kolegi czy do pani dyrektor” |
+| porównanie | 7:16 | 4:31 | osobne zadanie z utartymi porównaniami |
+| synonimy | 7:57 | 4:39 | końcowy test S/A |
+| list | 8:02 | 4:54 | rozbudowane zadanie o akapitach |
+| rzeczownik | 8:38 | 4:51 | trudniejsze „ci/te” i powtórzenia teorii |
+| przypadki | 8:42 | 4:44 | układanie nazw przypadków po kolei |
+| przypadki - liczba mnoga | 8:11 | 4:41 | tabela obu liczb do narysowania |
+| opinia i argument | 7:57 | 4:59 | zaawansowany kontrargument |
+| asertywność | 7:46 | 4:47 | druga, powtarzalna scenka w parach |
+| wielka litera | 7:58 | 4:40 | długie przepisywanie pocztówki |
+| nie z rzeczownikami | 8:00 | 4:40 | poboczna ciekawostka i zagadki |
+| podsumowanie | 10:26 | 5:00 | dwa powtarzalne bloki zadań |
 
 ### 1. `potoczne` - Wyrazy potoczne (GOTOWY 2026-10-01, 7:43)
 Zmiany względem szkicu: kumpel/spoko/fajny z ramki podręcznika zastąpione własnymi (nara, ściema, kimać, wcinać); zadanie 4 ułożone tak, żeby dwa wyrazy miały tę samą pierwszą literę.

@@ -163,7 +163,7 @@ describe('buildTextbook4', () => {
     expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId)).toHaveLength(8);
   });
 
-  it('rozdzial II: film i kolo w kazdej lekcji, notatka, potem screeny zadan po kolei', () => {
+  it('rozdzial II: film bez powtornego kola, notatka, potem screeny zadan po kolei', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const r2 = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_2);
     expect(r2).toHaveLength(12);
@@ -175,8 +175,10 @@ describe('buildTextbook4', () => {
       expect(lesson.teacherPlan).toBeTruthy();
       const kinds = lesson.slides.map((s) => s.kind);
       const video = kinds.indexOf('video');
-      // Zaraz po filmie kolo z pytaniami tej lekcji.
-      expect(lesson.slides[video + 1]).toMatchObject({ kind: 'recap', questionSetId: lesson.questionSetId, questionCount: 5 });
+      // Po filmie nie powtarzamy od razu tego samego zestawu. Pytania tej
+      // lekcji wroca w kole na poczatku nastepnej lekcji.
+      expect(lesson.slides[video + 1]?.kind).not.toBe('recap');
+      expect(lesson.slides.slice(video + 1).some((s) => s.kind === 'recap' && s.questionSetId === lesson.questionSetId)).toBe(false);
       const note = lesson.slides.find((s) => s.kind === 'note');
       expect(note?.kind === 'note' ? note.body : '').toMatch(/^\*\*Temat:\*\* /);
       // Screeny z buckeru i zadania po notatce w kolejnosci z ksiazki.

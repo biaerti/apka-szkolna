@@ -17,6 +17,66 @@
 (function () {
   var WYPRZEDZENIE = 0.45; // scena wchodzi chwile przed swoim audio (w przerwie)
 
+  // Podczas sprawdzania uczen nadal widzi polecenie i swoje przyklady.
+  // Odpowiedz zajmuje dol ekranu, a poprzedni ekran zadania zostaje w
+  // pomniejszeniu u gory. Dzieki temu nie trzeba pamietac, czego dotyczyly
+  // numery odpowiedzi ani przepisywac polecenia drugi raz.
+  function zachowajZadaniePrzyOdpowiedzi() {
+    var style = document.createElement('style');
+    style.textContent = [
+      '.scena.odp.z-poleceniem{padding:14px 28px!important;display:grid;grid-template-rows:38% 62%;gap:8px;text-align:center}',
+      '.podglad-zadania,.wynik-zadania{position:relative;overflow:hidden;border-radius:18px}',
+      '.podglad-zadania{background:#fffaf0;border:2px solid #ead9ba}',
+      '.podglad-zadania-srodek{position:absolute;inset:0;width:200%;height:200%;padding:20px 42px;transform:scale(.5);transform-origin:top left}',
+      '.podglad-zadania-srodek *{opacity:1!important;transform:none!important;animation:none!important}',
+      '.podglad-zadania-srodek .odliczanie{display:none!important}',
+      '.wynik-zadania{background:#f4fff8;border:2px solid #b9e3c8}',
+      '.wynik-zadania-srodek{width:147.06%;margin-left:-23.53%;padding:8px 28px;transform:scale(.68);transform-origin:top center}',
+      '.wynik-zadania-srodek .badge{margin-bottom:4px!important}',
+      '.wynik-zadania-srodek .lista{margin-top:5px!important;gap:5px!important}',
+      '.wynik-zadania-srodek .linia{padding:8px 14px!important}'
+    ].join('');
+    document.head.appendChild(style);
+
+    var ostatnieZadanie = null;
+    document.querySelectorAll('.scena').forEach(function (scena) {
+      if (scena.classList.contains('zadanie')) {
+        ostatnieZadanie = scena;
+        return;
+      }
+      if (!scena.classList.contains('odp') || !ostatnieZadanie) return;
+
+      var podglad = document.createElement('div');
+      podglad.className = 'podglad-zadania';
+      var podgladSrodek = document.createElement('div');
+      podgladSrodek.className = 'podglad-zadania-srodek';
+      Array.from(ostatnieZadanie.children).forEach(function (dziecko) {
+        var kopia = dziecko.cloneNode(true);
+        kopia.querySelectorAll('[data-slowo],[data-t],[data-po]').forEach(function (el) {
+          el.removeAttribute('data-slowo');
+          el.removeAttribute('data-t');
+          el.removeAttribute('data-po');
+        });
+        kopia.removeAttribute('data-slowo');
+        kopia.removeAttribute('data-t');
+        kopia.removeAttribute('data-po');
+        podgladSrodek.appendChild(kopia);
+      });
+      podglad.appendChild(podgladSrodek);
+
+      var wynik = document.createElement('div');
+      wynik.className = 'wynik-zadania';
+      var wynikSrodek = document.createElement('div');
+      wynikSrodek.className = 'wynik-zadania-srodek';
+      while (scena.firstChild) wynikSrodek.appendChild(scena.firstChild);
+      wynik.appendChild(wynikSrodek);
+
+      scena.appendChild(podglad);
+      scena.appendChild(wynik);
+      scena.classList.add('z-poleceniem');
+    });
+  }
+
   function norm(s) {
     return s.toLowerCase().replace(/[^a-ząćęłńóśźż]/g, '');
   }
@@ -73,6 +133,7 @@
 
   // Podglad na zywo: przycisk play, audio + requestAnimationFrame.
   window.addEventListener('DOMContentLoaded', function () {
+    zachowajZadaniePrzyOdpowiedzi();
     ustawOpoznienia();
     window.__seek(0);
     var btn = document.getElementById('playBtn');

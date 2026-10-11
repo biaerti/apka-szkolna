@@ -6,7 +6,7 @@ import { lessonMaterialType } from '../../lib/lessonMaterial';
 import { Button } from '../ui/Button';
 import { STATUS_BADGE_CLASSES, STATUS_LABELS } from './lessonStatus';
 import { LessonSlotPicker } from './LessonSlotPicker';
-import { lessonFilmIds } from './LessonFilmModal';
+import { lessonCzytankaIds, lessonFilmIds } from './LessonFilmModal';
 
 interface Props {
   lesson: Lesson;
@@ -71,6 +71,7 @@ export function LessonMobileCard(p: Props) {
         </select>
         <div className="flex justify-end gap-1">
           {lessonFilmIds(p.lesson).length > 0 && <Button size="sm" variant="ghost" onClick={p.onShowFilm}>Film</Button>}
+          {lessonCzytankaIds(p.lesson).length > 0 && <span className="inline-flex items-center rounded-md border border-amber-200 bg-amber-50 px-2 text-xs font-medium text-amber-800">Czytanka</span>}
           <Button size="sm" variant="secondary" onClick={() => navigate(`/lekcje/${p.lesson.id}/pokaz/${p.classId}?${query}`)}>Pokaż</Button>
           <Button size="sm" variant="ghost" onClick={() => navigate(`/lekcje/${p.lesson.id}/edytuj?${query}`)}>Edytuj</Button>
         </div>

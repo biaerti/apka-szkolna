@@ -18,10 +18,10 @@ Apka nauczyciela polskiego (Bartek, SP 97): lekcje jako prezentacje na projektor
 Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recytacja/`. Styl zaakceptowany przez Bartka - nie zmieniaj go.
 
 **Treść (najważniejsze):**
-- 7-9 minut, a nie 20 sekund. Każde pojęcie tłumaczone na **wielu różnych przykładach**, dużo powtórek.
-- Schemat: intro → część wyjaśniająca → ZADANIE (pauza 20-25 s, pasek odliczania, zapis w zeszycie) → SPRAWDZAMY z wyjaśnieniem **dlaczego** → kolejna część... → scena **„Zapamiętaj!”**, która prostymi słowami powtarza całość.
-- Zwykle 4 zadania. Na lekcjach praktycznych (np. recytacja) zadania są na głos, dla całej klasy.
-- Zadania w filmie nie mogą dublować zadań z podręcznika. Nie cytuj tekstów z podręcznika (prawa autorskie), używaj własnych przykładów.
+- 4-5 minut, tak aby film, notatka i ćwiczenia domknęły się na jednej lekcji.
+- Schemat: krótkie wyjaśnienie → ZADANIE (ok. 12 s, film można zatrzymać) → SPRAWDZAMY z wyjaśnieniem **dlaczego** → kolejna część... → scena **„Zapamiętaj!”**.
+- Zwykle 3 zadania. Podczas sprawdzania treść zadania i przykłady nadal są widoczne na górnej części ekranu, a odpowiedzi pojawiają się poniżej. Nie przełączaj na osobny ekran bez polecenia.
+- Zadania w filmie nie mogą dublować zadań z podręcznika ani pytań z koła powtórzeniowego. Koło z pytaniami lekcji wraca dopiero na początku kolejnej lekcji, nie bezpośrednio po filmie. Nie cytuj tekstów z podręcznika (prawa autorskie), używaj własnych przykładów.
 - W narracji nie ma gołych liter („ek”, „ó”), bo TTS czyta je jako nazwy liter. Końcówki i litery pokazuj na ekranie.
 
 **Pipeline nowego filmu:**

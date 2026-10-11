@@ -17,7 +17,7 @@ import { resolveRecapMode } from '../../lib/recap';
 import { lessonMaterialType } from '../../lib/lessonMaterial';
 import { isCurrentSlot, slotDisplayLabel, type LessonSlotOption } from '../../lib/lessonSlots';
 import { LessonSlotPicker } from './LessonSlotPicker';
-import { lessonFilmIds } from './LessonFilmModal';
+import { lessonCzytankaIds, lessonFilmIds } from './LessonFilmModal';
 
 export interface LessonRowProps {
   lesson: Lesson;
@@ -159,6 +159,17 @@ export function LessonRow(p: LessonRowProps) {
               >
                 Film
               </button>
+              <span aria-hidden="true">·</span>
+            </>
+          )}
+          {lessonCzytankaIds(lesson).length > 0 && (
+            <>
+              <span
+                title="Ta lekcja ma czytankę z lektorem"
+                className="shrink-0 rounded border border-amber-200 bg-amber-50 px-1.5 py-0.5 font-medium text-amber-800"
+              >
+                Czytanka
+              </span>
               <span aria-hidden="true">·</span>
             </>
           )}
