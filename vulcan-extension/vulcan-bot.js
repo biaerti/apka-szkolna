@@ -865,7 +865,8 @@ function findLessonNode(period, className, day) {
     let insideDay = false;
     for (const element of nodes) {
       const text = normalized(textOf(element));
-      if (text === wantedDay) {
+      // Dzien wolny ma dopisek: "środa, 14 października 2026, Dzień Edukacji...".
+      if (text === wantedDay || text.startsWith(`${wantedDay},`)) {
         insideDay = true;
         continue;
       }
@@ -902,8 +903,24 @@ function isDayExpanded(dayElement) {
   return false;
 }
 
-async function expandDay(day, period = frek?.period, className = frek?.vulcanClassName) {
-  const dayElement = await waitFor(() => findText(day), 6000);
+// Drzewo lekcji pokazuje jeden tydzien (pole "05.10 - 11.10 2026" nad nim).
+// Lekcja z innego tygodnia: przestawiamy to pole na jej date.
+async function showWeekOf(day, date) {
+  const existing = await waitFor(() => findText(day), 2500);
+  if (existing || !/^\d{4}-\d{2}-\d{2}$/.test(date || '')) return existing;
+  const input = [...document.querySelectorAll('input')].filter(visible)
+    .find((element) => /^\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2}\s+\d{4}$/.test(element.value.trim()));
+  if (input) input.setAttribute('data-apka-bot', 'week');
+  const result = await extRun('set-week', '', { date });
+  if (input) input.removeAttribute('data-apka-bot');
+  if (result?.error || String(result).startsWith('ERR')) {
+    throw new Error(`Nie udało się przełączyć tygodnia w VULCANIE (${result?.error || result}).`);
+  }
+  return waitFor(() => findText(day), 8000);
+}
+
+async function expandDay(day, period = frek?.period, className = frek?.vulcanClassName, date = frek?.date) {
+  const dayElement = await showWeekOf(day, date);
   if (!dayElement) throw new Error(`Nie ma dnia „${day}” w drzewie lekcji (inny tydzień?).`);
   const found = () => findLessonNode(period, className, day);
   dayElement.setAttribute('data-apka-bot', 'day');
@@ -958,7 +975,7 @@ async function readAttendanceStatus(targets) {
     const first = group[0];
     const day = new Date(`${first.date}T12:00:00`).toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     let node = group.map((target) => findLessonNode(target.period, target.className, day)).find(Boolean);
-    if (!node) node = await expandDay(day, first.period, first.className);
+    if (!node) node = await expandDay(day, first.period, first.className, first.date);
     if (!node) {
       node = group.map((target) => findLessonNode(target.period, target.className, day)).find(Boolean);
     }

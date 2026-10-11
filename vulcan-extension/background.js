@@ -124,6 +124,17 @@ function extMain(kind, lastName, payload) {
       if (field.fireEvent) field.fireEvent('change', field, field.getValue(), '');
       return { value: String(field.getValue?.() ?? '') };
     }
+    if (kind === 'set-week') {
+      // Pole tygodnia nad drzewem lekcji (weekfield VULCANA). onSelect to to
+      // samo, co klik w dzien w jego kalendarzu - drzewo przeladowuje sie.
+      const el = document.querySelector('[data-apka-bot="week"]');
+      const field = (el && cmpUp(el, (c) => !!c.onSelect && !!c.setValue)) || Ext.getCmp('biezacaLekcja-week-selector');
+      if (!field) return { error: 'no-week-component' };
+      const [year, month, day] = String(payload && payload.date || '').split('-').map(Number);
+      if (!year || !month || !day) return { error: 'bad-date' };
+      field.onSelect(field.getPicker ? field.getPicker() : null, new Date(year, month - 1, day));
+      return { value: String(field.getRawValue?.() ?? '') };
+    }
     if (kind === 'expand-day') {
       // Wezel dnia w drzewie lekcji - rozwiniecie przez API drzewa.
       const el = document.querySelector('[data-apka-bot="day"]');
