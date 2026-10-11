@@ -83,16 +83,32 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s03 .oczy { margin-top: 26px; font-size: 33px; background: var(--zielony); }
 
 /* ===== 04-05 ===== */
-#s04 .polecenie { margin-top: 8px; font-size: 32px; }
-#s04 .sceny { display: flex; gap: 14px; margin-top: 12px; align-items: stretch; }
-#s04 .sceny .karta { flex: 1; padding: 10px 12px; text-align: left; border-color: var(--pomarancz); }
-#s04 .sceny .nazwa { font-size: 27px; line-height: 1.2; text-align: center; margin-bottom: 8px; }
-#s04 .od { font-size: 25px; font-weight: 800; line-height: 1.25; padding: 5px 4px; border-top: 2px dashed var(--ramka); }
-#s04 .od b { font-family: 'Baloo 2'; color: var(--pomarancz); font-size: 27px; margin-right: 4px; }
-#s05 .lista { gap: 20px; margin-top: 34px; width: 1120px; }
-#s05 .linia { font-size: 31px; padding: 12px 22px; }
-#s05 .linia b { font-family: 'Baloo 2'; color: var(--zielony); }
-#s05 .pozost { margin-top: 36px; font-size: 32px; background: var(--roz); }
+#s04 .polecenie, #s05 .polecenie { margin-top: 8px; font-size: 32px; }
+#s04 .sceny, #s05 .sceny { display: flex; gap: 14px; margin-top: 12px; align-items: stretch; }
+#s04 .sceny .karta, #s05 .sceny .karta { flex: 1; padding: 10px 12px; text-align: left; border-color: var(--pomarancz); }
+#s04 .sceny .nazwa, #s05 .sceny .nazwa { font-size: 27px; line-height: 1.2; text-align: center; margin-bottom: 8px; }
+#s04 .od, #s05 .od { position: relative; font-size: 25px; font-weight: 800; line-height: 1.25; padding: 5px 4px; border-top: 2px dashed var(--ramka); }
+#s04 .od b, #s05 .od b { font-family: 'Baloo 2'; color: var(--pomarancz); font-size: 27px; margin-right: 4px; }
+@keyframes zaznacz-poprawna {
+  0% { background: transparent; box-shadow: inset 0 0 0 0 transparent; color: var(--ciemny); transform: scale(1); }
+  65% { background: #dff5e6; box-shadow: inset 0 0 0 3px var(--zielony); color: #1f6f40; transform: scale(1.025); }
+  100% { background: #e9f8ee; box-shadow: inset 0 0 0 3px var(--zielony); color: #1f6f40; transform: scale(1); }
+}
+@keyframes kolor-poprawny { from { color: var(--pomarancz); } to { color: var(--zielony); } }
+@keyframes pokaz-znacznik { from { opacity: 0; transform: scale(.65); } to { opacity: 1; transform: scale(1); } }
+#s05 .od.poprawna {
+  border-radius: 12px; animation: zaznacz-poprawna .55s cubic-bezier(.16,1,.3,1) both;
+}
+#s05 .od.poprawna b {
+  animation: kolor-poprawny .35s cubic-bezier(.16,1,.3,1) both; animation-delay: inherit;
+}
+#s05 .od.poprawna::after {
+  content: '✓'; position: absolute; top: 50%; right: 8px; width: 25px; height: 25px;
+  display: grid; place-items: center; border-radius: 50%; background: var(--zielony); color: #fff;
+  font-family: 'Baloo 2'; font-size: 20px; line-height: 1; opacity: 0;
+  animation: pokaz-znacznik .28s cubic-bezier(.16,1,.3,1) both; animation-delay: inherit;
+}
+#s05 .pozost { margin-top: 12px; font-size: 25px; background: var(--roz); }
 
 /* ===== 06 ===== */
 #s06 .wzor { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
@@ -110,9 +126,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s07 .lista, #s08 .lista { width: 1100px; }
 #s07 .linia { font-size: 33px; }
 #s07 .wsk { background: var(--fiolet); font-size: 34px; margin-top: 20px; }
-#s08 .lista { gap: 16px; margin-top: 24px; }
-#s08 .linia { font-size: 30px; line-height: 1.4; padding: 10px 22px; }
-#s08 .wsk { background: var(--fiolet); margin-top: 24px; font-size: 32px; }
+@keyframes ujawnij-odpowiedz {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+#s08 .polecenie { margin-top: 8px; }
+#s08 .lista { gap: 14px; margin-top: 12px; }
+#s08 .linia { font-size: 27px; line-height: 1.3; padding: 10px 18px; }
+#s08 .prosba-zadania { color: var(--ciemny); font-size: 29px; }
+#s08 .odpowiedz-wiersza { margin-top: 6px; color: var(--zielony); font-weight: 800; animation: ujawnij-odpowiedz .55s cubic-bezier(.16,1,.3,1) both; }
+#s08 .wsk { background: var(--fiolet); margin-top: 14px; font-size: 28px; }
 
 /* ===== 09 ===== */
 #s09 .alarm { margin: 14px auto 0; width: 1000px; border-color: var(--roz); background: #fdecef; padding: 10px 20px; }
@@ -127,16 +150,17 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 /* ===== 10-11 ===== */
 #s10 .sytuacja { margin: 16px auto 0; width: 1000px; border-color: var(--niebieski); }
 #s10 .sytuacja .nazwa { font-size: 36px; }
-#s10 .lista { width: 1000px; }
+#s10 .lista, #s11 .lista { width: 1000px; }
 #s10 .linia { font-size: 34px; }
-#s11 .kol { display: flex; gap: 18px; margin-top: 18px; align-items: stretch; }
-#s11 .kol .karta { flex: 1; text-align: left; padding: 10px 18px; }
-#s11 .kol .nazwa { font-size: 30px; margin-bottom: 6px; }
-#s11 .k1 { border-color: var(--roz); } #s11 .k1 .nazwa { color: var(--roz); }
-#s11 .k2 { border-color: var(--zielony); } #s11 .k2 .nazwa { color: var(--zielony); }
-#s11 .wyp { font-size: 29px; font-weight: 800; line-height: 1.3; padding: 6px 0; }
-#s11 .dol { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 18px; }
-#s11 .dol .chip { font-size: 30px; }
+#s11 .sytuacja { margin: 8px auto 0; width: 1000px; border-color: var(--niebieski); padding: 8px 18px; }
+#s11 .sytuacja .nazwa { font-size: 30px; }
+#s11 .polecenie { margin-top: 5px; font-size: 31px; }
+#s11 .lista { gap: 8px; margin-top: 8px; }
+#s11 .linia { padding: 8px 16px; }
+#s11 .pytanie-wiersza { font-size: 28px; }
+#s11 .wyp { color: var(--zielony); font-size: 25px; font-weight: 800; line-height: 1.25; padding: 3px 0 0 64px; animation: ujawnij-odpowiedz .5s cubic-bezier(.16,1,.3,1) both; }
+#s11 .dol { display: flex; gap: 10px; justify-content: center; margin-top: 9px; }
+#s11 .dol .chip { font-size: 23px; padding: 4px 18px; }
 #s11 .spok { background: var(--zielony); }
 #s11 .nauc { background: var(--niebieski); }
 
@@ -237,13 +261,30 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · CO TO JEST?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="pierwszej">🚌 <b>1 ➜ c)</b> „Nie, siedzę tu pierwszy. Ale...” <span class="dlaczego">nie + powód + propozycja</span></div>
-      <div class="linia wjazd-lewo" data-slowo="drugiej">🌶️ <b>2 ➜ a)</b> „Nie mam ochoty na to wyzwanie.” <span class="dlaczego">nie trzeba robić głupot</span></div>
-      <div class="linia wjazd-lewo" data-slowo="trzeciej">🍬 <b>3 ➜ b)</b> „To moje cukierki. Mogę ci dać jednego.” <span class="dlaczego">spokojnie i uczciwie</span></div>
+    <div class="polecenie">Która odpowiedź jest asertywna? Zapisz: scenka + litera.</div>
+    <div class="sceny">
+      <div class="karta">
+        <div class="nazwa">1 · 🚌 Kolega chce usiąść na twoim miejscu przy oknie.</div>
+        <div class="od"><b>a)</b> „No dobra, siadaj...”</div>
+        <div class="od"><b>b)</b> „Wynocha, to moje!”</div>
+        <div class="od poprawna" data-slowo="pierwszej"><b>c)</b> „Nie, siedzę tu pierwszy. Ale w drodze powrotnej możemy się zamienić.”</div>
+      </div>
+      <div class="karta">
+        <div class="nazwa">2 · 🌶️ „Nie bądź nudny, zjedz ostrą papryczkę na wyzwanie!”</div>
+        <div class="od poprawna" data-slowo="drugiej"><b>a)</b> „Nie mam ochoty na to wyzwanie.”</div>
+        <div class="od"><b>b)</b> „Sama jesteś nudna!”</div>
+        <div class="od"><b>c)</b> „No dobra, zjem...”</div>
+      </div>
+      <div class="karta">
+        <div class="nazwa">3 · 🍬 Starszy kuzyn: „Oddawaj mi swoje cukierki!”</div>
+        <div class="od"><b>a)</b> „Masz, bierz wszystkie.”</div>
+        <div class="od poprawna" data-slowo="trzeciej"><b>b)</b> „To moje cukierki. Mogę ci dać jednego.”</div>
+        <div class="od"><b>c)</b> „Zabieraj łapy, głupku!”</div>
+      </div>
     </div>
-    <div><span class="chip pozost pop" data-slowo="pozostałe">pozostałe: 😔 zgoda na wszystko albo 😡 krzyk i wyzwiska</span></div>
+    <div><span class="chip pozost pop" data-slowo="pozostałe">Pozostałe odpowiedzi: zgoda na wszystko albo krzyk i wyzwiska</span></div>
   </section>
 
   <!-- ===== 06 wzor ===== -->
@@ -277,10 +318,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <span class="czesc c2">2 · WZÓR ODMOWY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Odmów asertywnie</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="telefonie"><span class="prosi">📱 gra na twoim telefonie całą przerwę</span><br><span class="ty">„<span class="hl">Nie, bo</span> kończy mi się bateria, a muszę zadzwonić do mamy. <span class="hl">Ale mogę</span> ci pokazać tę grę po lekcjach.”</span></div>
-      <div class="linia wjazd-lewo" data-slowo="płot"><span class="prosi">⚽ przez płot do sąsiada po piłkę</span><br><span class="ty">„<span class="hl">Nie, bo</span> to cudzy ogród i można spaść. <span class="hl">Ale mogę</span> pójść z tobą do sąsiada i poprosić o piłkę.”</span></div>
+      <div class="linia">
+        <div class="prosba-zadania"><span class="nr">1</span>📱 Kolega chce grać na twoim telefonie całą przerwę.</div>
+        <div class="odpowiedz-wiersza" data-slowo="mówisz">„<span class="hl">Nie, bo</span> kończy mi się bateria, a muszę zadzwonić do mamy. <span class="hl">Ale mogę</span> ci pokazać tę grę po lekcjach.”</div>
+      </div>
+      <div class="linia">
+        <div class="prosba-zadania"><span class="nr">2</span>⚽ Koleżanka: „Przejdźmy przez płot do sąsiada po piłkę!”</div>
+        <div class="odpowiedz-wiersza" data-slowo="mówisz">„<span class="hl">Nie, bo</span> to cudzy ogród i można spaść. <span class="hl">Ale mogę</span> pójść z tobą do sąsiada i poprosić o piłkę.”</div>
+      </div>
     </div>
     <div><span class="chip wsk pop" data-slowo="ważne">✓ nie + powód + spokojny ton</span></div>
   </section>
@@ -315,15 +364,20 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
-    <div class="kol">
-      <div class="karta k1 pop" data-slowo="kolegów"><div class="nazwa">do kolegów 😂</div>
-        <div class="wyp wjazd-lewo" data-slowo="przestańcie">„Przestańcie, to wcale nie jest śmieszne.”</div>
-        <div class="wyp wjazd-lewo" data-slowo="pomóżmy">„Ona jest nowa, lepiej jej pomóżmy.”</div>
+    <span class="czesc c3">3 · KIEDY CHRONI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="karta sytuacja"><div class="nazwa">🧑‍🎒 W klasie jest nowa osoba. Kilku kolegów się z niej śmieje. 😂</div></div>
+    <div class="polecenie">Co powiesz?</div>
+    <div class="lista">
+      <div class="linia">
+        <div class="pytanie-wiersza"><span class="nr">1</span>do kolegów:</div>
+        <div class="wyp" data-slowo="przestańcie">„Przestańcie, to wcale nie jest śmieszne.”</div>
+        <div class="wyp" data-slowo="pomóżmy">„Ona jest nowa, lepiej jej pomóżmy.”</div>
       </div>
-      <div class="karta k2 pop" data-slowo="osoby"><div class="nazwa">do nowej osoby 🙂</div>
-        <div class="wyp wjazd-lewo" data-slowo="chodź">„Chodź z nami na przerwę!”</div>
-        <div class="wyp wjazd-lewo" data-slowo="stołówka">„Pokażę ci, gdzie jest stołówka.”</div>
+      <div class="linia">
+        <div class="pytanie-wiersza"><span class="nr">2</span>do nowej osoby:</div>
+        <div class="wyp" data-slowo="chodź">„Chodź z nami na przerwę!”</div>
+        <div class="wyp" data-slowo="stołówka">„Pokażę ci, gdzie jest stołówka.”</div>
       </div>
     </div>
     <div class="dol">
