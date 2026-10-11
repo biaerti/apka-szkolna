@@ -10,26 +10,54 @@ export const KARTA = {
   podtytul: 'W poszukiwaniu przyjaźni',
   tematy: [
     {
-      tytul: 'Wiersz: rym i porównanie',
+      tytul: 'Wiersz',
       wiedza: [
         'W wierszu mówi **podmiot liryczny** (nie autor!). Wiersz składa się z **wersów** (linijek) i **zwrotek**.',
-        '**Rym** to podobne lub identyczne brzmienie końcówek wyrazów, najczęściej na końcu wersów: ==las== - ==czas==. Schematy: **AABB** parzyste, **ABAB** krzyżowe, **ABBA** okalające.',
+        '**Rym** to podobne brzmienie końcówek wyrazów na końcu wersów: ==las== - ==czas==. Schematy: **AABB** parzyste, **ABAB** krzyżowe, **ABBA** okalające.',
         '**Porównanie** zestawia dwie rzeczy słówkiem **jak, niczym, jakby**: szybki ==jak== wiatr.',
       ],
       zadania: [
         {
           polecenie: 'Przeczytaj wiersz. Podkreśl wyrazy, które się rymują, i odpowiedz.',
-          linie: [
-            'Mój pies ma uszy miękkie jak ((puch)), / a gdy go wołam, nadstawia ((słuch)).',
-            'Choć czasem w błocie brudny ((cały)), / to przyjaciel z niego ((wspaniały)).',
-            'Rymy: {{*parzyste|krzyżowe|okalające}} · Kto mówi? [[właściciel psa|40]]',
-            'Porównanie: [[uszy miękkie jak puch|60]]',
+          wiersz: [
+            'Mój pies ma uszy miękkie jak ((puch)),',
+            'gdy tylko zawołam, nadstawia ((słuch)).',
+            'Choć wraca z błota brudny ((cały)),',
+            'to przyjaciel z niego ((wspaniały)).',
+          ],
+          pytania: [
+            ['Kto mówi w wierszu?', '[[właściciel psa (podmiot liryczny)|60]]'],
+            ['Ile wersów ma zwrotka?', '[[4|60]]'],
+            ['Porównanie:', '[[uszy miękkie jak puch|60]]'],
+            ['Schemat rymów:', '{{*parzyste|krzyżowe|okalające}}'],
           ],
         },
+      ],
+    },
+    {
+      tytul: 'Rodzaje rymów',
+      wiedza: [
+        '**Dokładny** - końcówki brzmią tak samo (==mama - brama==). **Niedokładny** - zgadza się samogłoska, ale reszta trochę inna (==kot - kos==).',
+        '**Męski** - akcent na ostatniej sylabie, zwykle krótkie wyrazy (==dom - tom==). **Żeński** - na przedostatniej (==lato - złoto==).',
+        '**Gramatyczny** - ta sama część mowy (==biały - mały==). **Niegramatyczny** - różne (==rzeka - czeka==).',
+      ],
+      zadania: [
         {
-          polecenie: 'Dopisz rymy.',
+          polecenie: 'Jaki to rym? Zakreśl w każdej kolumnie.',
+          tabela: {
+            naglowki: ['rym', 'dokładny czy niedokładny?', 'męski czy żeński?', 'gramatyczny czy niegramatyczny?'],
+            wiersze: [
+              ['**kot - koc**', '{{dokładny|*niedokładny}}', '{{*męski|żeński}}', '{{*gramatyczny|niegramatyczny}}'],
+              ['**okno - mokro**', '{{dokładny|*niedokładny}}', '{{męski|*żeński}}', '{{gramatyczny|*niegramatyczny}}'],
+              ['**czyta - pyta**', '{{*dokładny|niedokładny}}', '{{męski|*żeński}}', '{{*gramatyczny|niegramatyczny}}'],
+              ['**las - nas**', '{{*dokładny|niedokładny}}', '{{*męski|żeński}}', '{{gramatyczny|*niegramatyczny}}'],
+            ],
+          },
+        },
+        {
+          polecenie: 'Dopisz rym **dokładny** i **gramatyczny** (ta sama część mowy).',
           kolumny: 4,
-          linie: ['nos - [[włos|14]]', 'mama - [[brama|14]]', 'lato - [[tato|14]]', 'rzeka - [[czeka|14]]'],
+          linie: ['śpiewa - [[ziewa|14]]', 'kotek - [[płotek|14]]', 'sowa - [[krowa|14]]', 'myje - [[szyje|14]]'],
         },
       ],
     },
@@ -76,24 +104,6 @@ export const KARTA = {
       ],
     },
     {
-      tytul: 'Tekst informacyjny',
-      wiedza: [
-        '**Tekst informacyjny** (encyklopedia, Wikipedia) podaje tylko **fakty**, czyli to, co da się sprawdzić. Nie ma w nim **opinii** (najpiękniejszy, uważam, wykrzykniki).',
-        'Wikipedię piszą internauci. Sprawdzam **przypisy** i **drugie źródło**.',
-      ],
-      zadania: [
-        {
-          polecenie: 'Fakt czy opinia? Wpisz **F** albo **O**.',
-          kolumny: 2,
-          linie: ['[[F|8]] Wisła płynie przez Kraków.', '[[O|8]] Kraków jest najpiękniejszy!', '[[O|8]] Uważam, że koty są mądre.', '[[F|8]] Pszczoły żyją w rojach.'],
-        },
-        {
-          polecenie: 'Popraw zdanie tak, żeby pasowało do encyklopedii.',
-          linie: ['Delfiny to cudowne i przesłodkie ssaki, które mieszkają w morzu! ➜ [[Delfiny to ssaki, które żyją w morzach.|80]]'],
-        },
-      ],
-    },
-    {
       tytul: 'E-mail',
       wiedza: [
         'Grzeczny e-mail ma: **temat** · **powitanie** (Dzień dobry, Szanowna Pani) · **treść** · **pożegnanie** (Pozdrawiam, Z poważaniem) · **podpis**.',
@@ -101,16 +111,9 @@ export const KARTA = {
       ],
       zadania: [
         {
-          polecenie: 'Do nauczycielki czy do kolegi? Zakreśl, co pasuje do e-maila do **nauczycielki**.',
-          linie: ['{{Siema!|*Dzień dobry,|*Pozdrawiam|Nara!|*Z poważaniem|thx}}'],
-        },
-        {
-          polecenie: 'Uzupełnij e-mail.',
-          linie: [
-            'Temat: [[Nieobecność na lekcji|45]]',
-            '[[Dzień dobry,|30]] jutro nie będzie mnie w szkole, bo jadę do lekarza. Czy mogę oddać zadanie w czwartek?',
-            '[[Pozdrawiam|30]] [[Ola Nowak, 5a|35]]',
-          ],
+          polecenie: 'Napisz e-mail do wychowawczyni. Klasa chce pojechać na wycieczkę do zoo: zapytaj, czy pani się zgodzi i kiedy można by pojechać.',
+          pisanie: 5,
+          wzor: 'Temat: Wycieczka do zoo\nDzień dobry,\nnasza klasa chciałaby pojechać na wycieczkę do zoo. Czy zgodziłaby się Pani z nami pojechać? Moglibyśmy wybrać się w maju.\nPozdrawiam\nOla Nowak, 5a',
         },
       ],
     },

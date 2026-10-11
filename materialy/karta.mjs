@@ -63,6 +63,14 @@ function arkusz(tematyDanych, rozw, grupa) {
       nr += 1;
       // wLinii: długa luka zostaje w tej samej linii co zdanie (oszczędza miejsce na sprawdzianie).
       const linie = (zad.linie ?? []).map((l) => `<div class="l">${linia(l, rozw, zad.wLinii)}</div>`).join('');
+      // Wiersz: każdy wers w osobnej linijce, pusty napis = przerwa między zwrotkami.
+      const wiersz = zad.wiersz
+        ? `<div class="wiersz">${zad.wiersz.map((w) => (w ? `<div>${linia(w, rozw)}</div>` : '<div class="przerwa"></div>')).join('')}</div>`
+        : '';
+      // Pytania: [pytanie, odpowiedź] równo w dwóch kolumnach.
+      const pytania = zad.pytania
+        ? `<div class="pyt">${zad.pytania.map(([p, o]) => `<div class="p">${z(p)}</div><div class="o">${linia(o, rozw, true)}</div>`).join('')}</div>`
+        : '';
       // Pisanie: puste linie, a w rozwiązaniach przykładowa odpowiedź i kryteria.
       const pisanie = zad.pisanie
         ? (rozw
@@ -75,6 +83,7 @@ function arkusz(tematyDanych, rozw, grupa) {
         : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
         <div class="pol">${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
+        ${wiersz}${pytania}
         ${linie ? `<div class="linie${zad.kolumny ? ` k${zad.kolumny}` : ''}">${linie}</div>` : ''}
         ${zad.tabela ? tabela(zad.tabela, rozw) : ''}
         ${pisanie}
@@ -127,6 +136,11 @@ body { font-size: 10pt; line-height: 1.3; }
 .pol { font-weight: 800; }
 .pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
 .linie { margin: .6mm 0 0 2mm; line-height: 2; }
+.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid color-mix(in srgb, var(--k) 45%, white); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
+.wiersz .przerwa { height: 2mm; }
+.pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
+.pyt .p { font-weight: 700; }
+.pyt .o .luka { display: block; min-width: 0 !important; margin: 0; }
 .linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
 .linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
 .linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }
@@ -145,6 +159,9 @@ body { font-size: 10pt; line-height: 1.3; }
 .tab:not(:has(thead)) td { min-width: 28mm; }
 .tab:not(:has(thead)) tr:first-child td { background: color-mix(in srgb, var(--k) 12%, white); }
 .tab td .luka { border-bottom: none; }
+.tab .wybor { flex-wrap: nowrap; }
+.tab .opc { font-size: 9pt; padding: 0 1.3mm; }
+.tab td:first-child { white-space: nowrap; }
 .stopka { margin-top: 2mm; text-align: center; font-size: 8.5pt; color: var(--szary); }
 .arkusz + .arkusz { break-before: page; }
 .gora .grupa { margin-left: auto; font-family: 'Baloo 2'; font-weight: 800; font-size: 15pt; color: #fff; background: var(--roz); border-radius: 2mm; padding: 0 3mm; line-height: 1.35; align-self: center; white-space: nowrap; }
