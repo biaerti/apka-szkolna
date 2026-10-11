@@ -18,7 +18,7 @@ Apka nauczyciela polskiego (Bartek, SP 97): lekcje jako prezentacje na projektor
 Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recytacja/`. Styl zaakceptowany przez Bartka - nie zmieniaj go.
 
 **Treść (najważniejsze):**
-- 4-5 minut, tak aby film, notatka i ćwiczenia domknęły się na jednej lekcji.
+- 4-5 minut, tak aby film, notatka i ćwiczenia domknęły się na jednej lekcji. Przy skracaniu gotowego filmu (`tools/sklej-filmy.py`) **spójność jest ważniejsza niż limit**: nie ucinamy intra, początków ani wyjaśnień, do których coś się odwołuje (może wyjść ponad 5 minut). Wycinamy tylko całe zadania ze sprawdzeniem i słowa z liczbami, które przestałyby się zgadzać („cztery zadania”, „Zadanie trzecie”), a numery na ekranie poprawiamy.
 - Schemat: krótkie wyjaśnienie → ZADANIE (ok. 12 s, film można zatrzymać) → SPRAWDZAMY z wyjaśnieniem **dlaczego** → kolejna część... → scena **„Zapamiętaj!”**.
 - Zwykle 3 zadania. Podczas sprawdzania treść zadania i przykłady nadal są widoczne na górnej części ekranu, a odpowiedzi pojawiają się poniżej. Nie przełączaj na osobny ekran bez polecenia.
 - Zadania w filmie nie mogą dublować zadań z podręcznika ani pytań z koła powtórzeniowego. Koło z pytaniami lekcji wraca dopiero na początku kolejnej lekcji, nie bezpośrednio po filmie. Nie cytuj tekstów z podręcznika (prawa autorskie), używaj własnych przykładów.

@@ -68,4 +68,4 @@ Recytacja jako ocena: "Lwy" albo fragment "Przenośni" do wyboru, zaliczanie 3-4
 
 ## Filmy - wersja zwarta (2026-10-11)
 
-Wszystkie filmy działu mają 4-5 minut (recytacja 3:58), tak jak w klasie 4: lektor przyspieszony o 25%, 12 s na zadanie, bez intro. Zwykle 3 zadania (reklama 4, recytacja 2 na głos). Sprawdzanie dzieje się na ekranie zadania: polecenie i przykłady zostają, odpowiedź pojawia się przy przykładzie. Koło z pytaniami lekcji jest dopiero na początku następnej lekcji. Wycięte sceny: `tools/skroc-filmy-klasa5.py`.
+Lektor przyspieszony o 25%, 12 s na zadanie, zwykle 3 zadania (reklama i ogonki bez zmian w liczbie, recytacja nietknięta). Zasada Bartka: początków i wyjaśnień nie ucinamy, film ma być spójny, może trwać ponad 5 minut (4:05-6:07). Wypadają tylko zadania razem ze sprawdzeniem, a z narracji wycinamy słowa z liczbami, które by się nie zgadzały („cztery zadania”, „Zadanie trzecie”). Sprawdzanie dzieje się na ekranie zadania. Koło z pytaniami lekcji jest dopiero na początku następnej lekcji. Konfiguracja: `tools/sklej-filmy.py`.

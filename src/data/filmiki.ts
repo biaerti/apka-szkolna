@@ -32,12 +32,12 @@ export const FILMIKI: Filmik[] = [
   // Podsumowanie s. 56 - caly dzial 1 kl. 5 w 10 min, 8 zadan ze sprawdzeniem po kazdym.
   { id: 'podsumowanie5-dzial1-film1', lekcja: 'V.16', title: 'Podsumowanie działu 1 - To wiem! To potrafię! (8 zadań)' },
   // Dzial 2 kl. 5: filmik do kazdej lekcji, zadania ze sprawdzeniem + podsumowanie na koncu.
-  { id: 'przenosnia-film1', lekcja: 'V.17', title: 'Przenośnia - test rysowania, jak ją odczytać (3 zadania)' },
+  { id: 'przenosnia-film1', lekcja: 'V.17', title: 'Przenośnia - porównanie, przenośnia, jak ją odczytać (3 zadania)' },
   { id: 'frazeologizmy-film1', lekcja: 'V.18', title: 'Związki frazeologiczne - czuć miętę, serce, uczucia (3 zadania)' },
   { id: 'zdrobnienia-film1', lekcja: 'V.19', title: 'Zdrobnienia i zgrubienia, siła uczuć (3 zadania)' },
   { id: 'zlosc-film1', lekcja: 'V.20', title: '„Lwy” - co robić ze złością? (3 zadania)' },
   { id: 'recytacja-film1', lekcja: 'V.21', title: 'Jak recytować? (2 zadania na głos)' },
-  { id: 'rzeczownik-film1', lekcja: 'V.22', title: 'Rzeczownik - rodzaj i przypadki (3 zadania)' },
+  { id: 'rzeczownik-film1', lekcja: 'V.22', title: 'Rzeczownik - rodzaj, przypadki, własne i pospolite (3 zadania)' },
   { id: 'nietypowe-film1', lekcja: 'V.23', title: 'Nietypowa odmiana - muzeum, jedne drzwi (3 zadania)' },
   { id: 'ogonki-film1', lekcja: 'V.24', title: 'Ę i ą na końcu wyrazu (3 zadania)' },
   { id: 'temat-film1', lekcja: 'V.25', title: 'Temat i końcówka, trik na ó (3 zadania)' },

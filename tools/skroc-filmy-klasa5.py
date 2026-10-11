@@ -1,4 +1,5 @@
-"""Zwarte wersje filmow dzialu 2 klasy 5 (NEON) - te same zasady co w klasie 4.
+"""ZASTAPIONY przez tools/sklej-filmy.py (intra i wyjasnienia wracaja, numery zadan sie zgadzaja).
+Zwarte wersje filmow dzialu 2 klasy 5 (NEON) - te same zasady co w klasie 4.
 
 Uzywa compact() z skroc-filmy-klasa4.py: lektor przyspieszony o 25 procent,
 12 sekund na zadanie, wyciete intro i najmniej potrzebne zadanie. Cel: 4-5 minut.

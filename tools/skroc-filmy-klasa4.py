@@ -1,4 +1,5 @@
-"""Buduje zwarte wersje filmow rozdzialu II klasy 4 z istniejacych nagran.
+"""ZASTAPIONY przez tools/sklej-filmy.py (intra i wyjasnienia wracaja, numery zadan sie zgadzaja).
+Buduje zwarte wersje filmow rozdzialu II klasy 4 z istniejacych nagran.
 
 Zasady nowej wersji:
 - trzy zadania zamiast czterech (w podsumowaniu trzy zamiast pieciu),
