@@ -3,6 +3,7 @@
 // Linie liniatury: czysty CSS przez repeating-linear-gradient w atrybucie
 // style (bez :has(), bez color-mix() - Chrome 109 na szkolnym komputerze).
 
+import { createContext, useContext, useState } from 'react';
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { ZeszytIcon } from './ZeszytBadge';
@@ -19,6 +20,22 @@ const RULED_LINES_STYLE = {
 const TEMAT_PREFIX = '**Temat:** ';
 
 /**
+ * Prezentacja podaje tu zapis tresci notatki - wtedy na slajdzie jest olowek
+ * i notatke da sie poprawic w trakcie lekcji. Lekcja nalezy do rocznika, wiec
+ * poprawka trafia do wszystkich jego klas. Poza prezentacja kontekstu nie ma.
+ */
+export const NoteEditContext = createContext<((body: string) => void) | null>(null);
+
+function PencilIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-7 w-7" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 20h4L19 9l-4-4L4 16v4Z" />
+      <path d="m13.5 6.5 4 4" />
+    </svg>
+  );
+}
+
+/**
  * "Temat: Czas na czasownik" -> "Temat: 4.11. Czas na czasownik" - w zeszycie
  * temat ma stac dokladnie tak, jak na slajdzie tematu (z kodem lekcji).
  */
@@ -31,6 +48,8 @@ export function withLessonCode(body: string, code?: string): string {
 
 export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: 'note' }>; code?: string }) {
   const scale = useSlideFontScale();
+  const onEdit = useContext(NoteEditContext);
+  const [draft, setDraft] = useState<string | null>(null);
   const body = withLessonCode(slide.body, code);
   // Notatka jest przepisywana z tablicy, wiec ma byc tak duza, jak sie da -
   // rozmiar dobieramy do dlugosci tresci (fitText.ts), w pikselach kartki 1280x720.
@@ -203,15 +222,65 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
     );
   }
 
+  function save() {
+    if (draft !== null && onEdit && draft.trim() !== slide.body.trim()) onEdit(draft.trim());
+    setDraft(null);
+  }
+
   return (
-      <div className="flex h-full flex-col bg-amber-50 px-20 py-12 text-amber-950" style={RULED_LINES_STYLE}>
+      <div className="relative flex h-full flex-col bg-amber-50 px-20 py-12 text-amber-950" style={RULED_LINES_STYLE}>
       <h2 className="mb-6 text-6xl font-bold text-gray-900">{slide.title || 'Notatka do zeszytu'}</h2>
 
-      <RichText
-        text={body}
-        className="flex-1 space-y-[0.5em] leading-[1.6] text-gray-800"
-        style={{ fontSize: bodySize }}
-      />
+      {onEdit && draft === null && (
+        <button
+          type="button"
+          title="Popraw notatkę (dla wszystkich klas rocznika)"
+          aria-label="Popraw notatkę"
+          onClick={(e) => {
+            // Klik w slajd = nastepny/poprzedni slajd - olowek nie moze go przepuscic.
+            e.stopPropagation();
+            setDraft(slide.body);
+          }}
+          className="absolute right-8 top-8 z-30 rounded-xl p-3 text-gray-300 hover:bg-amber-100 hover:text-amber-700"
+        >
+          <PencilIcon />
+        </button>
+      )}
+
+      {draft !== null ? (
+        <div className="relative z-30 flex flex-1 flex-col gap-4" onClick={(e) => e.stopPropagation()}>
+          <textarea
+            autoFocus
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                e.stopPropagation();
+                setDraft(null);
+              } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                save();
+              }
+            }}
+            className="flex-1 resize-none rounded-xl border-2 border-amber-300 bg-white/80 p-5 font-mono text-2xl leading-relaxed text-gray-900 outline-none focus:border-amber-500"
+          />
+          <div className="flex items-center justify-end gap-4 text-xl">
+            <span className="mr-auto text-gray-500">**pogrubienie**, każdy punkt w nowej linii · Ctrl+Enter zapisuje, Esc anuluje</span>
+            <button type="button" onClick={() => setDraft(null)} className="rounded-xl px-6 py-3 font-semibold text-gray-600 hover:bg-amber-100">
+              Anuluj
+            </button>
+            <button type="button" onClick={save} className="rounded-xl bg-amber-600 px-6 py-3 font-semibold text-white hover:bg-amber-700">
+              Zapisz dla wszystkich klas
+            </button>
+          </div>
+        </div>
+      ) : (
+        <RichText
+          text={body}
+          className="flex-1 space-y-[0.5em] leading-[1.6] text-gray-800"
+          style={{ fontSize: bodySize }}
+        />
+      )}
 
       {/* Ta sama ikonka co plakietka "do zeszytu" na ciemnych slajdach - jedna umowa. */}
       <div className="mt-4 flex items-center justify-center gap-8">

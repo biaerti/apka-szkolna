@@ -5,6 +5,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import { SlideView, supportsWritePane } from '../components/slides/SlideView';
 import { StudentActionEditContext } from '../components/slides/StudentActionBadge';
+import { NoteEditContext } from '../components/slides/NoteSlideView';
 import { withStudentAction } from '../lib/slideStudentAction';
 import { AnnotationLayer } from '../components/slides/AnnotationLayer';
 import { AnnotationToolbar } from '../components/slides/AnnotationToolbar';
@@ -66,6 +67,7 @@ export function LessonPresent() {
   const classes = useStore((s) => s.classes);
   const setLessonProgress = useStore((s) => s.setLessonProgress);
   const updateLesson = useStore((s) => s.updateLesson);
+  const updateLessonFromEditor = useStore((s) => s.updateLessonFromEditor);
   const lesson = lessons.find((l) => l.id === id);
 
   const classId = classIdParam ?? (lesson ? classesOfGrade(classes, lesson.grade)[0]?.id : undefined);
@@ -113,6 +115,12 @@ export function LessonPresent() {
   const changeStudentAction = lesson && currentSlide
     ? (action: StudentAction, text: string) =>
         updateLesson(lesson.id, { slides: lesson.slides.map((s) => (s.id === currentSlide.id ? withStudentAction(s, action, text) : s)) })
+    : null;
+  // Olowek na notatce: poprawka idzie do lekcji rocznika (wszystkie klasy) i jest
+  // reczna edycja - automat odswiezania gotowych materialow jej nie nadpisze.
+  const changeNoteBody = lesson && currentSlide?.kind === 'note'
+    ? (body: string) =>
+        updateLessonFromEditor(lesson.id, { slides: lesson.slides.map((s) => (s.id === currentSlide.id && s.kind === 'note' ? { ...s, body } : s)) })
     : null;
   // Kolo na lekcji: slajd zadania albo screen zadania z podrecznika (obraz z kodem).
   const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : currentSlide?.kind === 'image' ? (currentSlide.code ?? '') : '';
@@ -242,6 +250,7 @@ export function LessonPresent() {
           <LessonStartTimer onContinue={() => goTo(index + 1)} />
         ) : currentSlide ? (
           <StudentActionEditContext.Provider value={changeStudentAction}>
+            <NoteEditContext.Provider value={changeNoteBody}>
             <SlideView
               slide={currentSlide}
               classId={classId}
@@ -252,6 +261,7 @@ export function LessonPresent() {
               overlay={<AnnotationLayer ann={ann} />}
               writePane={writePaneOn}
             />
+            </NoteEditContext.Provider>
           </StudentActionEditContext.Provider>
         ) : null}
       </div>
