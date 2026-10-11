@@ -125,9 +125,9 @@ export const KARTA = {
       ],
       zadania: [
         {
-          polecenie: 'Kreska czy „i”? Uzupełnij.',
-          kolumny: 4,
-          linie: ['ko[[ń|8]]', '[[ni|8]]ebo', 'ło[[ś|8]]', '[[ci|8]]asto', 'ja[[ś|8]]ko', 'pła[[ć|8]]', '[[zi|8]]ma', 'mie[[ć|8]]'],
+          polecenie: 'Wpisz brakującą głoskę: z kreską (ń, ś, ć, ź) albo z „i” (ni, si, ci, zi).',
+          kolumny: 2,
+          linie: ['**ń** czy **ni**?  ko[[ń|8]]  [[ni|8]]ebo', '**ś** czy **si**?  [[si|8]]korka  ło[[ś|8]]', '**ć** czy **ci**?  pła[[ć|8]]  [[ci|8]]asto', '**ź** czy **zi**?  [[zi|8]]ma  wo[[ź|8]]ny'],
         },
         {
           polecenie: 'Podkreśl spółgłoski miękkie.',
