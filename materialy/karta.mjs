@@ -66,7 +66,7 @@ function arkusz(tematyDanych, rozw, grupa) {
       // Pisanie: puste linie, a w rozwiązaniach przykładowa odpowiedź i kryteria.
       const pisanie = zad.pisanie
         ? (rozw
-          ? `<div class="wzor">${linia(zad.wzor ?? '', rozw)}</div>`
+          ? `<div class="wzor">${linia(zad.wzor ?? '', rozw).replace(/\n/g, '<br>')}</div>`
           : '<div class="lin"></div>'.repeat(zad.pisanie))
         : '';
       // Na sprawdzianie dla ucznia kratka na zdobyte punkty: [  ] / 3 pkt.
