@@ -87,8 +87,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
 /* ===== 07-08 ===== */
 #s07 .linia, #s08 .linia { font-size: 32px; }
-#s08 .linia { font-size: 29px; }
-#s08 .styl { margin-top: 18px; font-size: 32px; background: var(--fiolet); }
+@keyframes ujawnij-poprawke { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes przekresl-stare { from { color: inherit; text-decoration-color: transparent; } to { color: var(--roz); text-decoration-color: var(--roz); } }
+#s08 .polecenie, #s11 .polecenie, #s14 .polecenie { margin-top: 6px; font-size: 30px; }
+#s08 .lista { margin-top: 12px; }
+#s08 .linia { font-size: 30px; }
+#s08 .poprawka { color: var(--zielony); margin-left: 10px; animation: ujawnij-poprawke .5s cubic-bezier(.16,1,.3,1) both; }
+#s08 .styl { margin-top: 12px; font-size: 28px; background: var(--fiolet); }
 
 /* ===== 09 ===== */
 #s09 .ubrania { display: flex; gap: 20px; justify-content: center; margin-top: 16px; }
@@ -104,8 +109,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 /* ===== 10-11 ===== */
 #s10 .wyp { margin: 16px auto 0; width: 1040px; text-align: left; font-size: 34px; font-weight: 800; line-height: 1.45; border-color: var(--niebieski); }
 #s10 .wyp .podpis { font-family: 'Baloo 2'; color: var(--niebieski); font-size: 26px; }
-#s11 .linia { font-size: 34px; }
-#s11 .brawo { margin-top: 18px; font-size: 32px; background: var(--zielony); }
+#s11 .wyp { margin: 12px auto 0; width: 1040px; text-align: left; font-size: 31px; font-weight: 800; line-height: 1.5; border-color: var(--niebieski); }
+#s11 .wyp .podpis { font-family: 'Baloo 2'; color: var(--niebieski); font-size: 25px; }
+#s11 .korekta { display: inline; color: var(--zielony); animation: ujawnij-poprawke .5s cubic-bezier(.16,1,.3,1) both; }
+#s11 .stare { text-decoration: line-through 4px transparent; animation: przekresl-stare .35s ease forwards; }
+#s11 .brawo { margin-top: 12px; font-size: 28px; background: var(--zielony); }
 
 /* ===== 12 slownik ===== */
 #s12 .alf { margin-top: 12px; font-size: 30px; background: var(--zielony); }
@@ -125,12 +133,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 /* ===== 13-14 ===== */
 .alfabet { margin: 14px auto 0; font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; letter-spacing: 4px; color: var(--szary); }
 #s13 .slowa, #s14 .slowa { display: flex; gap: 14px; justify-content: center; margin-top: 22px; }
-#s13 .slowa .chip, #s14 .slowa .chip { font-size: 42px; background: var(--zielony); padding: 6px 30px; }
-#s14 .slowa .chip { font-size: 36px; padding: 6px 20px; white-space: nowrap; }
-#s14 .slowa .nrk { display: inline-block; background: #fff; color: var(--zielony); border-radius: 999px; padding: 0 12px; margin-right: 10px; font-size: 30px; vertical-align: 4px; }
+#s13 .slowa .chip, #s14 .slowa .chip { position: relative; font-size: 42px; background: var(--zielony); padding: 6px 30px; }
+#s14 .slowa { margin-top: 18px; }
+#s14 .slowa .chip { font-size: 34px; padding: 6px 24px; white-space: nowrap; }
+#s14 .porzadek { position: absolute; top: -18px; right: -8px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--roz); color: #fff; font-size: 24px; animation: pop .45s cubic-bezier(.16,1,.3,1) both; }
 #s13 .wsk { margin-top: 22px; font-size: 32px; background: var(--fiolet); }
-#s14 .lista { width: 900px; }
-#s14 .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; }
+#s14 .alfabet { margin-top: 14px; }
+#s14 .lista { width: 900px; gap: 8px; margin-top: 14px; }
+#s14 .linia { font-family: 'Baloo 2'; font-size: 30px; text-align: center; padding: 6px 14px; }
 #s14 .linia u { text-decoration-color: var(--roz); text-decoration-thickness: 5px; text-underline-offset: 6px; }
 
 /* ===== 15 ===== */
@@ -250,12 +260,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · POWAŻNI BRACIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Zamień wyraz potoczny na oficjalny</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="zgubiłem">1. Zgubiłem <span class="skr">całą kasę</span> ➜ <span class="ok">wszystkie pieniądze</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="brat">2. Mój brat <span class="skr">wcina</span> ➜ <span class="ok">je</span> już trzecią kanapkę.</div>
-      <div class="linia wjazd-lewo" data-slowo="mapy">3. Nie <span class="skr">ogarniam</span> ➜ <span class="ok">rozumiem</span> tej mapy.</div>
-      <div class="linia wjazd-lewo" data-slowo="babcia">4. Babcia była <span class="skr">wkurzona</span> ➜ <span class="ok">zdenerwowana</span> na kota.</div>
+      <div class="linia"><span class="nr">1</span>Zgubiłem całą <span class="hl">kasę</span>.<span class="poprawka" data-slowo="zgubiłem">➜ wszystkie pieniądze</span></div>
+      <div class="linia"><span class="nr">2</span>Mój brat <span class="hl">wcina</span> już trzecią kanapkę.<span class="poprawka" data-slowo="brat">➜ je</span></div>
+      <div class="linia"><span class="nr">3</span>Nie <span class="hl">ogarniam</span> tej mapy.<span class="poprawka" data-slowo="mapy">➜ rozumiem</span></div>
+      <div class="linia"><span class="nr">4</span>Babcia była <span class="hl">wkurzona</span> na kota.<span class="poprawka" data-slowo="babcia">➜ zdenerwowana</span></div>
     </div>
     <div><span class="chip styl pop" data-slowo="styl">sens ten sam, zmienia się styl: 😎 ➜ 🎩</span></div>
   </section>
@@ -286,13 +298,10 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · KIEDY WOLNO?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="mega"><span class="nr">1</span>Było <span class="skr">mega</span> ➜ <span class="ok">wspaniale / bardzo ciekawie</span>!</div>
-      <div class="linia wjazd-lewo" data-slowo="wcinaliśmy"><span class="nr">2</span><span class="skr">wcinaliśmy</span> ➜ <span class="ok">jedliśmy</span> lody</div>
-      <div class="linia wjazd-lewo" data-slowo="kasa"><span class="nr">3</span>wydał <span class="skr">całą kasę</span> ➜ <span class="ok">wszystkie pieniądze</span></div>
-      <div class="linia wjazd-lewo" data-slowo="kimali"><span class="nr">4</span>wszyscy <span class="skr">kimali</span> ➜ <span class="ok">spali</span></div>
-    </div>
+    <div class="polecenie">Znajdź 4 wyrazy potoczne i popraw je</div>
+    <div class="karta wyp"><div class="podpis">📝 Wypracowanie Oli: Wycieczka do zoo</div>W sobotę pojechaliśmy na wycieczkę do zoo. Było <span class="stare" data-slowo="mega">mega</span><span class="korekta" data-slowo="mega"> ➜ wspaniale</span>! Najbardziej spodobały mi się małpy, bo cały czas się wygłupiały. Potem <span class="stare" data-slowo="wcinaliśmy">wcinaliśmy</span><span class="korekta" data-slowo="wcinaliśmy"> ➜ jedliśmy</span> lody, a tata wydał na nie <span class="stare" data-slowo="kasa">całą kasę</span><span class="korekta" data-slowo="kasa"> ➜ wszystkie pieniądze</span>. W drodze powrotnej wszyscy w autobusie <span class="stare" data-slowo="kimali">kimali</span><span class="korekta" data-slowo="kimali"> ➜ spali</span>.</div>
     <div><span class="chip brawo pop" data-slowo="poważnie">🎩 teraz brzmi poważnie - jak w wypracowaniu!</span></div>
   </section>
 
@@ -330,14 +339,17 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 14 odpowiedz 4 ===== -->
   <section class="scena odp" data-id="14-odpowiedz4" id="s14">
+    <span class="czesc c4">4 · SŁOWNIK</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Ułóż alfabetycznie, jak w słowniku</div>
     <div class="slowa">
-      <span class="chip pop" data-slowo="kasa"><span class="nrk">1</span>kasa</span>
-      <span class="chip pop" data-slowo="kimać"><span class="nrk">2</span>kimać</span>
-      <span class="chip pop" data-slowo="ogarniać"><span class="nrk">3</span>ogarniać</span>
-      <span class="chip pop" data-slowo="ściema"><span class="nrk">4</span>ściema</span>
-      <span class="chip pop" data-slowo="wcinać"><span class="nrk">5</span>wcinać</span>
+      <span class="chip">wcinać<span class="porzadek" data-slowo="wcinać">5</span></span>
+      <span class="chip">kimać<span class="porzadek" data-slowo="kimać">2</span></span>
+      <span class="chip">ściema<span class="porzadek" data-slowo="ściema">4</span></span>
+      <span class="chip">kasa<span class="porzadek" data-slowo="kasa">1</span></span>
+      <span class="chip">ogarniać<span class="porzadek" data-slowo="ogarniać">3</span></span>
     </div>
+    <div class="alfabet">a ą b c ć d e ę f g h i j k l ł m n ń o ó p r s ś t u w y z ź ż</div>
     <div class="lista">
       <div class="linia wjazd-lewo" data-slowo="drugą">k<u>a</u>sa przed k<u>i</u>mać, bo a jest przed i</div>
       <div class="linia wjazd-lewo" data-slowo="ściema"><u>ś</u>ciema przed <u>w</u>cinać, bo ś jest przed w</div>

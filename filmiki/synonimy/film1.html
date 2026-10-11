@@ -85,10 +85,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s05 .kol { display: flex; flex-direction: column; gap: 10px; width: 400px; }
 #s05 .linia { font-family: 'Baloo 2'; font-size: 36px; padding: 2px 20px; }
 #s05 .kol2 .nr { background: var(--niebieski); }
-#s06 .lista { gap: 16px; margin-top: 30px; }
-#s06 .linia { font-size: 33px; padding: 10px 24px; }
-#s06 .dlaczego { font-size: 28px; }
-#s06 .linia b { font-family: 'Baloo 2'; color: var(--pomarancz); font-size: 38px; }
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
+@keyframes skresl { from { color:var(--ciemny); text-decoration-color:transparent; } to { color:var(--roz); text-decoration:line-through 4px; } }
+#s06 .polecenie { margin-top:7px; font-size:31px; }
+#s06 .kolumny { display:flex; gap:60px; justify-content:center; margin-top:12px; }
+#s06 .kol { display:flex; flex-direction:column; gap:8px; width:400px; }
+#s06 .linia { position:relative; font-family:'Baloo 2'; font-size:34px; padding:2px 70px 2px 20px; }
+#s06 .kol2 .nr { background:var(--niebieski); }
+#s06 .polaczenie { position:absolute; right:12px; top:7px; bottom:7px; display:flex; align-items:center; justify-content:center; min-width:42px; line-height:1; color:#fff; background:var(--zielony); border-radius:10px; animation:pop .45s cubic-bezier(.16,1,.3,1) both; }
 
 /* ===== 07 ===== */
 #s07 .siatka { gap: 12px 20px; margin-top: 22px; }
@@ -102,11 +106,12 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s08 .linia .hl { background: #ffd0d6; }
 #s08 .podp { display: flex; gap: 12px; justify-content: center; margin-top: 14px; }
 #s08 .podp .chip { font-size: 27px; background: var(--fiolet); }
-#s09 .lista { gap: 16px; margin-top: 30px; }
-#s09 .linia { font-size: 33px; padding: 10px 22px; }
-#s09 .dlaczego { font-size: 27px; }
-#s09 .linia b { font-family: 'Baloo 2'; color: var(--fiolet); font-size: 33px; }
-#s09 .wsk { background: var(--fiolet); font-size: 32px; margin-top: 28px; }
+#s09 .polecenie { margin-top:7px; font-size:31px; }
+#s09 .lista { gap:9px; margin-top:12px; }
+#s09 .linia { font-size:29px; padding:7px 20px; }
+#s09 .stare { animation:skresl .4s cubic-bezier(.16,1,.3,1) both; }
+#s09 .zamiana { color:var(--zielony); animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s09 .wsk { background: var(--fiolet); font-size:27px; margin-top:12px; }
 
 /* ===== 10 ===== */
 #s10 .def { margin: 12px auto 0; width: 900px; border-color: var(--niebieski); padding: 8px 20px; }
@@ -120,11 +125,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s11 .siatka, #s12 .siatka { width: 980px; }
 #s11 .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; padding: 4px 20px; }
 #s11 .linia.srodek { grid-column: 1 / span 2; width: 480px; margin: 0 auto; }
-#s12 .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; padding: 2px 20px; }
+#s12 .polecenie { margin-top:7px; font-size:30px; }
+#s12 .siatka { margin-top:12px; }
+#s12 .linia { font-family: 'Baloo 2'; font-size: 34px; text-align: center; padding: 2px 20px; }
 #s12 .linia.srodek { grid-column: 1 / span 2; width: 480px; margin: 0 auto; }
-#s12 .linia b { color: var(--niebieski); }
-#s12 .test { margin: 16px auto 0; width: 980px; font-size: 31px; text-align: center; border-color: var(--niebieski); }
-#s12 .wsk { background: var(--niebieski); font-size: 28px; }
+#s12 .odkryj { color:var(--niebieski); animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s12 .test { margin: 10px auto 0; width: 980px; font-size: 27px; text-align: center; border-color: var(--niebieski); }
+#s12 .wsk { background: var(--niebieski); font-size: 25px; margin-top:8px; }
 
 /* ===== 13 ===== */
 #s13 .rzad { margin-top: 30px; }
@@ -246,13 +253,20 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c1">1 · SYNONIMY</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="smutny"><span class="ok">1 - D</span> <b>smutny = markotny</b> <span class="dlaczego">ktoś nie ma humoru</span></div>
-      <div class="linia wjazd-lewo" data-slowo="szybki"><span class="ok">2 - B</span> <b>szybki = prędki</b> <span class="dlaczego">w krótkim czasie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="bać"><span class="ok">3 - E</span> <b>bać się = lękać się</b> <span class="dlaczego">dwa słowa na strach</span></div>
-      <div class="linia wjazd-lewo" data-slowo="zmęczony"><span class="ok">4 - C</span> <b>zmęczony = wyczerpany</b> <span class="dlaczego">ktoś nie ma już siły</span></div>
-      <div class="linia wjazd-lewo" data-slowo="auto"><span class="ok">5 - A</span> <b>auto = samochód</b> <span class="dlaczego">ta sama rzecz 🚗</span></div>
+    <div class="polecenie">Połącz w pary wyrazy bliskoznaczne</div>
+    <div class="kolumny">
+      <div class="kol">
+        <div class="linia"><span class="nr">1</span>smutny<span class="polaczenie" data-slowo="smutny">D</span></div>
+        <div class="linia"><span class="nr">2</span>szybki<span class="polaczenie" data-slowo="szybki">B</span></div>
+        <div class="linia"><span class="nr">3</span>bać się<span class="polaczenie" data-slowo="bać">E</span></div>
+        <div class="linia"><span class="nr">4</span>zmęczony<span class="polaczenie" data-slowo="zmęczony">C</span></div>
+        <div class="linia"><span class="nr">5</span>auto<span class="polaczenie" data-slowo="auto">A</span></div>
+      </div>
+      <div class="kol kol2">
+        <div class="linia"><span class="nr">A</span>samochód</div><div class="linia"><span class="nr">B</span>prędki</div><div class="linia"><span class="nr">C</span>wyczerpany</div><div class="linia"><span class="nr">D</span>markotny</div><div class="linia"><span class="nr">E</span>lękać się</div>
+      </div>
     </div>
   </section>
 
@@ -294,12 +308,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · PO CO?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Zamień „powiedział” na lepsze synonimy</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="zapytał">1. - Gdzie jest mój plecak? - <b>zapytał</b> Tomek. <span class="dlaczego">jest znak zapytania</span></div>
-      <div class="linia wjazd-lewo" data-slowo="odpowiedziała">2. - Pod ławką - <b>odpowiedziała</b> Ola. <span class="dlaczego">daje odpowiedź</span></div>
-      <div class="linia wjazd-lewo" data-slowo="krzyknął">3. - Uwaga, pies! - <b>krzyknął</b> tata. <span class="dlaczego">ostrzega, jest wykrzyknik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="szepnęła">4. - Śpij już, kochanie - <b>szepnęła</b> mama. <span class="dlaczego">przy śpiącym cicho</span></div>
+      <div class="linia"><span class="nr">1</span>- Gdzie jest mój plecak? - <span class="stare" data-slowo="zapytał">powiedział</span><span class="zamiana" data-slowo="zapytał"> ➜ zapytał</span> Tomek.</div>
+      <div class="linia"><span class="nr">2</span>- Pod ławką - <span class="stare" data-slowo="odpowiedziała">powiedziała</span><span class="zamiana" data-slowo="odpowiedziała"> ➜ odpowiedziała</span> Ola.</div>
+      <div class="linia"><span class="nr">3</span>- Uwaga, pies! - <span class="stare" data-slowo="krzyknął">powiedział</span><span class="zamiana" data-slowo="krzyknął"> ➜ krzyknął</span> tata.</div>
+      <div class="linia"><span class="nr">4</span>- Śpij już, kochanie - <span class="stare" data-slowo="szepnęła">powiedziała</span><span class="zamiana" data-slowo="szepnęła"> ➜ szepnęła</span> mama.</div>
     </div>
     <div><span class="chip wsk pop" data-slowo="więcej">💡 synonim mówi więcej o tym, JAK ktoś mówi</span></div>
   </section>
@@ -337,13 +353,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · ANTONIMY</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Dopisz antonimy - wyrazy o przeciwnym znaczeniu</div>
     <div class="siatka">
-      <div class="linia pop" data-slowo="wysoki">wysoki ↔ <b>niski</b></div>
-      <div class="linia pop" data-slowo="otwierać">otwierać ↔ <b>zamykać</b></div>
-      <div class="linia pop" data-slowo="cichy">cichy ↔ <b>głośny</b></div>
-      <div class="linia pop" data-slowo="początek">początek ↔ <b>koniec</b></div>
-      <div class="linia srodek pop" data-slowo="pełny">pełny ↔ <b>pusty</b></div>
+      <div class="linia">wysoki ↔ <span class="odkryj" data-slowo="wysoki">niski</span></div>
+      <div class="linia">otwierać ↔ <span class="odkryj" data-slowo="otwierać">zamykać</span></div>
+      <div class="linia">cichy ↔ <span class="odkryj" data-slowo="cichy">głośny</span></div>
+      <div class="linia">początek ↔ <span class="odkryj" data-slowo="początek">koniec</span></div>
+      <div class="linia srodek">pełny ↔ <span class="odkryj" data-slowo="pełny">pusty</span></div>
     </div>
     <div class="karta test pop" data-slowo="butelka">🍼 Butelka jest <span class="hl">pełna</span>. ↔ Butelka jest <span class="hl">pusta</span>.</div>
     <div><span class="chip wsk pop" data-slowo="odwróciło">🔄 znaczenie odwróciło się = dobry antonim</span></div>

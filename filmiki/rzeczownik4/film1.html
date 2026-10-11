@@ -77,15 +77,16 @@ b.f { font-family: 'Baloo 2'; font-size: 1.12em; }
 #s03 .skoro { margin-top: 26px; font-size: 32px; background: var(--pomarancz); }
 
 /* ===== 04-05 ===== */
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
 #s04 .kafel { font-size: 50px; }
 #s04 .kafle { margin-top: 34px; gap: 18px; }
 #s04 .grupy, #s05 .grupy { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 26px auto 0; width: 1140px; }
 #s04 .grupy .chip { font-size: 27px; padding: 6px 20px; background: var(--szary); }
 #s04 .grupy { margin-top: 40px; }
-#s05 .lista { width: 1040px; gap: 10px; margin-top: 18px; }
-#s05 .linia { font-size: 32px; padding: 6px 20px; }
-#s05 .dlaczego { font-size: 27px; }
-#s05 .linia b { font-family: 'Baloo 2'; color: var(--pomarancz); }
+#s05 .polecenie, #s08 .polecenie, #s12 .polecenie { margin-top:6px; font-size:30px; }
+#s05 .kafle, #s08 .kafle, #s12 .kafle { margin-top:14px; gap:14px; }
+#s05 .kafel, #s08 .kafel, #s12 .kafel { position:relative; min-width:250px; text-align:center; font-size:38px; padding:8px 20px; }
+#s05 .odkryj, #s08 .odkryj, #s12 .odkryj { display:block; color:var(--zielony); font-size:25px; line-height:1.1; animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
 
 /* ===== 06 ===== */
 #s06 .rzad { margin-top: 26px; }
@@ -101,10 +102,9 @@ b.f { font-family: 'Baloo 2'; font-size: 1.12em; }
 #s07 .kafel { border-color: var(--fiolet); font-size: 50px; }
 #s07 .kafle { margin-top: 34px; gap: 18px; }
 #s07 .wsk, #s08 .wsk { background: var(--fiolet); }
-#s08 .lista { width: 1000px; gap: 10px; margin-top: 18px; }
-#s08 .linia { font-size: 33px; padding: 6px 20px; }
-#s08 .dlaczego { font-size: 27px; }
-#s08 .linia b { font-family: 'Baloo 2'; color: var(--fiolet); font-size: 34px; }
+#s08 .kafel { border-color:var(--fiolet); min-width:320px; }
+#s08 .odkryj { color:var(--fiolet); font-size:30px; }
+#s08 .wsk { margin-top:12px; font-size:26px; }
 
 /* ===== 09 ===== */
 #s09 .rzad { margin-top: 30px; }
@@ -129,10 +129,9 @@ b.f { font-family: 'Baloo 2'; font-size: 1.12em; }
 #s11 .kafel { border-color: var(--niebieski); min-width: 340px; text-align: left; font-size: 48px; }
 #s11 .kafle, #s14 .kafle { margin-top: 34px; gap: 20px; }
 #s11 .wsk { background: var(--roz); }
-#s12 .lista { width: 1060px; gap: 14px; margin-top: 26px; }
-#s12 .linia { font-size: 35px; padding: 10px 24px; }
-#s12 .linia b { font-family: 'Baloo 2'; color: var(--niebieski); font-size: 40px; }
-#s12 .wsk { margin-top: 26px; }
+#s12 .kafel { border-color:var(--niebieski); min-width:330px; }
+#s12 .odkryj { color:var(--niebieski); font-size:23px; }
+#s12 .wsk { margin-top:12px; font-size:25px; }
 #s12 .wsk { background: var(--niebieski); }
 
 /* ===== 13 ===== */
@@ -242,15 +241,11 @@ b.f { font-family: 'Baloo 2'; font-size: 1.12em; }
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · CO NAZYWA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="babcia">👵 babcia ➜ <b>osoba</b> <span class="dlaczego">kto? babcia</span></div>
-      <div class="linia wjazd-lewo" data-slowo="chomik">🐹 chomik ➜ <b>zwierzę</b> <span class="dlaczego">też pytamy: kto?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="hulajnoga">🛴 hulajnoga ➜ <b>rzecz</b> <span class="dlaczego">można na niej jeździć</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tulipan">🌷 tulipan ➜ <b>roślina</b> <span class="dlaczego">rośnie w ogródku</span></div>
-      <div class="linia wjazd-lewo" data-slowo="śnieżyca">🌨️ śnieżyca ➜ <b>zjawisko</b> <span class="dlaczego">wiatr + śnieg</span></div>
-      <div class="linia wjazd-lewo" data-slowo="las">🌳 las ➜ <b>miejsce</b> <span class="dlaczego">można tam pójść</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tęsknota">💭 tęsknota ➜ <b>pojęcie</b> <span class="dlaczego">nie dotkniesz, ale poczujesz · co?</span></div>
+    <div class="polecenie">Co nazywa każdy rzeczownik? Napisz obok.</div>
+    <div class="kafle">
+      <span class="kafel">śnieżyca<span class="odkryj" data-slowo="śnieżyca">zjawisko</span></span><span class="kafel">babcia<span class="odkryj" data-slowo="babcia">osoba</span></span><span class="kafel">tęsknota<span class="odkryj" data-slowo="tęsknota">pojęcie</span></span><span class="kafel">las<span class="odkryj" data-slowo="las">miejsce</span></span><span class="kafel">hulajnoga<span class="odkryj" data-slowo="hulajnoga">rzecz</span></span><span class="kafel">tulipan<span class="odkryj" data-slowo="tulipan">roślina</span></span><span class="kafel">chomik<span class="odkryj" data-slowo="chomik">zwierzę</span></span>
     </div>
   </section>
 
@@ -289,14 +284,11 @@ b.f { font-family: 'Baloo 2'; font-size: 1.12em; }
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · LICZBA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="autobus">🚌 autobus ➜ <b>autobusy</b></div>
-      <div class="linia wjazd-lewo" data-slowo="lusterko">🪞 lusterko ➜ <b>lusterka</b></div>
-      <div class="linia wjazd-lewo" data-slowo="sąsiadka">👩 sąsiadka ➜ <b>sąsiadki</b></div>
-      <div class="linia wjazd-lewo" data-slowo="ptaki">🐦 ptaki ➜ <b>ptak</b> <span class="dlaczego">dwa ptaki - to już była mnoga</span></div>
-      <div class="linia wjazd-lewo" data-slowo="kanapki">🥪 kanapki ➜ <b>kanapka</b></div>
-      <div class="linia wjazd-lewo" data-slowo="przyjaciele">🤝 przyjaciele ➜ <b>przyjaciel</b> <span class="dlaczego">jak człowiek - ludzie</span></div>
+    <div class="polecenie">Zmień liczbę: pojedyncza ⇄ mnoga</div>
+    <div class="kafle">
+      <span class="kafel">autobus<span class="odkryj" data-slowo="autobus">➜ autobusy</span></span><span class="kafel">lusterko<span class="odkryj" data-slowo="lusterko">➜ lusterka</span></span><span class="kafel">sąsiadka<span class="odkryj" data-slowo="sąsiadka">➜ sąsiadki</span></span><span class="kafel">ptaki<span class="odkryj" data-slowo="ptaki">➜ ptak</span></span><span class="kafel">kanapki<span class="odkryj" data-slowo="kanapki">➜ kanapka</span></span><span class="kafel">przyjaciele<span class="odkryj" data-slowo="przyjaciele">➜ przyjaciel</span></span>
     </div>
     <div><span class="chip wsk pop" data-slowo="wiesz">💡 jeden ptak · dwa ptaki</span></div>
   </section>
@@ -343,12 +335,11 @@ b.f { font-family: 'Baloo 2'; font-size: 1.12em; }
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · RODZAJ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="słoń">🐘 <b>ten</b> słoń · 📱 <b>ten</b> telefon ➜ rodzaj męski</div>
-      <div class="linia wjazd-lewo" data-slowo="jajko">🥚 <b>to</b> jajko · 🏷️ <b>to</b> imię ➜ rodzaj nijaki</div>
-      <div class="linia wjazd-lewo" data-slowo="mysz"><span class="zle">✗ ten mysz</span> ➜ 🐭 <b>ta</b> mysz ➜ rodzaj żeński</div>
-      <div class="linia wjazd-lewo" data-slowo="noc"><span class="zle">✗ ten noc</span> ➜ 🌙 <b>ta</b> noc ➜ rodzaj żeński</div>
+    <div class="polecenie">Dopisz ten, ta albo to i nazwę rodzaju</div>
+    <div class="kafle">
+      <span class="kafel">słoń<span class="odkryj" data-slowo="słoń">ten · rodzaj męski</span></span><span class="kafel">mysz<span class="odkryj" data-slowo="mysz">ta · rodzaj żeński</span></span><span class="kafel">jajko<span class="odkryj" data-slowo="jajko">to · rodzaj nijaki</span></span><span class="kafel">telefon<span class="odkryj" data-slowo="telefon">ten · rodzaj męski</span></span><span class="kafel">noc<span class="odkryj" data-slowo="noc">ta · rodzaj żeński</span></span><span class="kafel">imię<span class="odkryj" data-slowo="imię">to · rodzaj nijaki</span></span>
     </div>
     <div><span class="chip wsk pop" data-slowo="oszukać">⚠️ wygląd wyrazu może oszukać - sprawdzaj: ten, ta, to</span></div>
   </section>

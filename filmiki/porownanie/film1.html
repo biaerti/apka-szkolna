@@ -77,10 +77,19 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
 /* ===== 04-05 ===== */
 #s04 .lista, #s05 .lista { gap: 8px; margin-top: 12px; }
-#s04 .linia { font-size: 28px; padding: 5px 20px; }
+#s04 .linia, #s05 .linia { position: relative; font-size: 28px; padding: 5px 48px 5px 20px; }
 #s04 .wsk { margin-top: 10px; font-size: 26px; background: var(--roz); }
-#s05 .linia { font-size: 27px; padding: 6px 20px; }
-#s05 .samo { margin-top: 14px; font-size: 32px; background: var(--roz); }
+@keyframes ocena-dobra { from { background:#fff; box-shadow:inset 0 0 0 0 transparent; } to { background:#e9f8ee; box-shadow:inset 0 0 0 3px var(--zielony); } }
+@keyframes ocena-zla { from { background:#fff; box-shadow:inset 0 0 0 0 transparent; } to { background:#fdecef; box-shadow:inset 0 0 0 3px var(--roz); } }
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
+#s05 .polecenie { margin-top: 6px; font-size: 31px; }
+#s05 .lista { margin-top: 8px; }
+#s05 .linia { font-size: 25px; padding-top: 4px; padding-bottom: 4px; }
+#s05 .ocena.dobra { animation:ocena-dobra .45s cubic-bezier(.16,1,.3,1) both; }
+#s05 .ocena.zla { animation:ocena-zla .45s cubic-bezier(.16,1,.3,1) both; }
+#s05 .ocena::after { position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:27px; opacity:0; animation:zjaw .3s ease-out both; animation-delay:inherit; }
+#s05 .dobra::after { content:'✓'; color:var(--zielony); } #s05 .zla::after { content:'✗'; color:var(--roz); }
+#s05 .samo { margin-top: 9px; font-size: 25px; background: var(--roz); }
 
 /* ===== 06 ===== */
 #s06 .rzad { margin-top: 26px; }
@@ -111,9 +120,12 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s10 .burek .linia { border: 0; padding: 4px 0; font-size: 38px; }
 #s10 .slowka, #s11 .check { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
 #s10 .slowka .chip { font-size: 30px; background: var(--niebieski); }
-#s11 .linia { font-size: 33px; }
+#s11 .polecenie, #s14 .polecenie { margin-top: 7px; font-size: 31px; }
+#s11 .burek { margin: 10px auto 0; width: 1000px; text-align: left; border-color:var(--niebieski); }
+#s11 .burek .linia { border:0; padding:5px 0; font-size:34px; }
+#s11 .dopisek, #s14 .dopisek { color:var(--zielony); animation:ujawnij .5s cubic-bezier(.16,1,.3,1) both; }
 #s11 .check .chip { font-size: 27px; background: var(--zielony); }
-#s11 .zgadza { margin-top: 14px; font-size: 28px; background: var(--niebieski); }
+#s11 .zgadza { margin-top: 10px; font-size: 25px; background: var(--niebieski); }
 
 /* ===== 12 ===== */
 #s12 .kroki { display: flex; gap: 14px; margin-top: 20px; align-items: stretch; }
@@ -124,7 +136,9 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s12 .zask { margin-top: 16px; font-size: 30px; background: var(--zielony); }
 
 /* ===== 13-14 ===== */
-#s13 .linia, #s14 .linia { font-size: 33px; }
+#s13 .linia, #s14 .linia { font-size: 31px; }
+#s14 .lista { margin-top:10px; gap:10px; width:1200px; }
+#s14 .linia { font-size: 28px; }
 #s13 .wsk { background: var(--zielony); }
 #s14 .wsk { background: var(--zielony); }
 
@@ -202,12 +216,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · JAK ROZPOZNAĆ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">W których zdaniach jest porównanie? Wypisz numery.</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="plecak"><span class="ok">✓ 1.</span> Plecak był ciężki <span class="hl">jak</span> kamień. <span class="dlaczego">plecak i kamień - ciężkie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="klasie"><span class="ok">✓ 4.</span> W klasie było cicho <span class="hl">jak</span> w bibliotece. <span class="dlaczego">tu i tu cisza</span></div>
-      <div class="linia wjazd-lewo" data-slowo="śnieg"><span class="ok">✓ 6.</span> Śnieg leżał na polu <span class="hl">niby</span> gruba kołdra. <span class="dlaczego">oba przykrywają</span></div>
-      <div class="linia wjazd-lewo" data-slowo="pułapka"><span class="zle">✗ 2.</span> <span class="hl">Jak</span> się nazywa twój pies? <span class="dlaczego">to pytanie - nic z niczym nie porównujemy</span></div>
+      <div class="linia ocena dobra" data-slowo="plecak"><span class="nr">1</span>Plecak był ciężki jak kamień.</div>
+      <div class="linia ocena zla" data-slowo="pułapka"><span class="nr">2</span>Jak się nazywa twój pies?</div>
+      <div class="linia"><span class="nr">3</span>Babcia piecze pyszne ciasto.</div>
+      <div class="linia ocena dobra" data-slowo="klasie"><span class="nr">4</span>W klasie było cicho jak w bibliotece.</div>
+      <div class="linia"><span class="nr">5</span>Mój młodszy brat jest uparty.</div>
+      <div class="linia ocena dobra" data-slowo="śnieg"><span class="nr">6</span>Śnieg leżał na polu niby gruba kołdra.</div>
     </div>
     <div><span class="chip samo pop" data-slowo="samo">⚠️ samo „jak” to jeszcze nie porównanie - muszą być dwie podobne rzeczy</span></div>
   </section>
@@ -287,15 +305,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="wielki">1. Burek jest wielki <span class="hl">jak szafa</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="szczeka">2. Szczeka głośno <span class="hl">niczym syrena strażacka</span>. 🚒</div>
-      <div class="linia wjazd-lewo" data-slowo="biega">3. Biega szybko <span class="hl">jak strzała</span>. 🏹</div>
-    </div>
-    <div class="check">
-      <span class="chip pop" data-slowo="słówko">✓ jest słówko: jak, jakby, niczym, niby</span>
-      <span class="chip pop" data-slowo="cechę">✓ ta rzecz naprawdę ma tę cechę</span>
+    <span class="czesc c3">3 · PO CO?</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Ulepsz opis psa Burka 🐕 - dopisz porównania</div>
+    <div class="karta burek">
+      <div class="linia"><span class="nr">1</span>Burek jest wielki <span class="dopisek" data-slowo="wielki">jak szafa.</span></div>
+      <div class="linia"><span class="nr">2</span>Szczeka głośno <span class="dopisek" data-slowo="szczeka">niczym syrena strażacka. 🚒</span></div>
+      <div class="linia"><span class="nr">3</span>Biega szybko <span class="dopisek" data-slowo="biega">jak strzała. 🏹</span></div>
     </div>
     <div><span class="chip zgadza pop" data-slowo="szafa">szafa - wielka · syrena - głośna · strzała - szybka 👍</span></div>
   </section>
@@ -329,11 +345,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 14 odpowiedz 4 ===== -->
   <section class="scena odp" data-id="14-odpowiedz4" id="s14">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <span class="czesc c4">4 · TWOJE PORÓWNANIA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Wymyśl własne porównania</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="korytarz">🏫 Korytarz na przerwie jest głośny <span class="hl">jak stadion podczas meczu</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="łóżko">🛏️ Moje łóżko w sobotę rano jest ciepłe <span class="hl">niczym gniazdko</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="deszcz">🌧️ Deszcz stuka w okno, <span class="hl">jakby ktoś bębnił palcami</span>.</div>
+      <div class="linia"><span class="nr">1</span>🏫 Szkolny korytarz na przerwie jest głośny <span class="dopisek" data-slowo="korytarz">jak stadion podczas meczu.</span></div>
+      <div class="linia"><span class="nr">2</span>🛏️ Moje łóżko w sobotę rano jest <span class="dopisek" data-slowo="łóżko">ciepłe niczym gniazdko.</span></div>
+      <div class="linia"><span class="nr">3</span>🌧️ Deszcz stuka w okno <span class="dopisek" data-slowo="deszcz">jakby ktoś bębnił palcami.</span></div>
     </div>
     <div><span class="chip wsk pop" data-slowo="każde">✓ cecha · słówko · rzecz, która ma tę cechę</span></div>
   </section>

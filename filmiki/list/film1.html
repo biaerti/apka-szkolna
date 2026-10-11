@@ -77,13 +77,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 .t4 { background: var(--niebieski); } .t5 { background: var(--zielony); } .t6 { background: #c2853a; } .t7 { background: var(--ciemny); } .t8 { background: var(--szary); }
 
 /* ===== 05-06 ===== */
-#s05 .papier { margin: 16px auto 0; width: 900px; font-size: 30px; }
+#s05 .papier, #s06 .papier { position:relative; margin: 16px auto 0; width: 900px; font-size: 30px; }
 #s05 .pisz { font-size: 30px; }
-#s06 .lista { gap: 14px; margin-top: 24px; }
-#s06 .linia { font-size: 33px; padding: 10px 24px; }
-#s06 .linia b { font-family: 'Baloo 2'; font-size: 36px; }
-#s06 .dlaczego { font-size: 27px; }
-#s06 .wsk { margin-top: 24px; font-size: 30px; background: var(--zielony); }
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
+#s06 .polecenie { margin-top:5px; font-size:30px; }
+#s06 .papier { margin-top:8px; padding-top:54px; padding-bottom:46px; font-size:27px; }
+#s06 .uzupelnienie { position:absolute; color:var(--zielony); font-family:'Baloo 2'; font-weight:800; animation:ujawnij .5s cubic-bezier(.16,1,.3,1) both; }
+#s06 .data { top:10px; right:22px; } #s06 .naglowek-listu { top:10px; left:22px; } #s06 .podpis-listu { bottom:8px; right:22px; }
+#s06 .wsk { margin-top:10px; font-size:25px; background: var(--zielony); }
 
 /* ===== 07 ===== */
 #s07 .znaki { display: flex; gap: 14px; justify-content: center; margin-top: 14px; }
@@ -104,9 +105,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s08 .karta .nr { margin-bottom: 6px; }
 #s08 .wsk { margin-top: 24px; background: var(--fiolet); }
 #s09 .karta { border-color: var(--zielony); }
-#s09 .list .hl { background: #c9f0d6; }
-#s09 .list { font-size: 35px; }
-#s09 .opis { font-size: 27px; margin-top: 12px; }
+#s09 .polecenie { margin-top:6px; font-size:30px; }
+#s09 .rzad { margin-top:12px; }
+#s09 .list { font-size:31px; }
+#s09 .poprawa { color:var(--zielony); background:#dff5e6; border-radius:8px; padding:0 4px; animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s09 .opis { font-size:24px; margin-top:8px; }
 
 /* ===== 10 ===== */
 #s10 .rzad { margin-top: 20px; align-items: stretch; }
@@ -127,9 +130,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s11 .linia { font-size: 32px; padding: 3px 22px; }
 #s11 .naw { color: var(--niebieski); }
 #s11 .wsk { background: var(--niebieski); }
-#s12 .linia { font-size: 31px; padding: 6px 22px; }
-#s12 .linia b { font-family: 'Baloo 2'; font-size: 36px; color: var(--niebieski); }
-#s12 .linia b.mala { color: var(--szary); }
+#s12 .polecenie { margin-top:5px; font-size:29px; }
+#s12 .lista { gap:7px; margin-top:10px; }
+#s12 .linia { font-size: 29px; padding: 5px 22px; }
+#s12 .odkryj { font-family:'Baloo 2'; font-size:33px; color:var(--niebieski); animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s12 .odkryj.mala { color:var(--szary); }
 
 /* ===== 13 ===== */
 #s13 .zas { display: flex; gap: 14px; justify-content: center; margin-top: 12px; }
@@ -239,11 +244,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c1">1 · CZĘŚCI LISTU</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="miejscowości"><span class="zle">✗</span> <b>miejscowość i data</b> <span class="dlaczego">ciocia nie wie, kiedy Ola pisała</span></div>
-      <div class="linia wjazd-lewo" data-slowo="nagłówka"><span class="zle">✗</span> <b>nagłówek</b>, np. „Droga Ciociu!” <span class="dlaczego">list zaczyna się od środka</span></div>
-      <div class="linia wjazd-lewo" data-slowo="podpisu"><span class="zle">✗</span> <b>podpis</b>, np. „Twoja Ola” <span class="dlaczego">kto to napisał?</span></div>
+    <div class="polecenie">Czego brakuje w liście Oli do cioci?</div>
+    <div class="papier">
+      <span class="uzupelnienie data" data-slowo="miejscowości">Wrocław, 12 maja 2026 r.</span>
+      <span class="uzupelnienie naglowek-listu" data-slowo="nagłówka">Droga Ciociu!</span>
+      <p class="wc">Dziękuję Ci za książkę o zwierzętach. Bardzo mi się przydała!</p><p class="wc">Wczoraj byliśmy z klasą w zoo. Najbardziej podobały mi się pingwiny, bo zabawnie chodzą.</p><p class="wc">Kiedy nas odwiedzisz?</p><p>Całuję mocno!</p>
+      <span class="uzupelnienie podpis-listu" data-slowo="podpisu">Twoja Ola</span>
     </div>
     <div><span class="chip wsk pop" data-slowo="pozdrowienia">✓ są: wstęp · rozwinięcie · zakończenie · pozdrowienia</span></div>
   </section>
@@ -287,11 +295,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · NAGŁÓWEK</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Popraw błędy w początkach listów</div>
     <div class="rzad">
-      <div class="karta pop" data-slowo="pierwszy"><div class="list">1. Kochana Ciociu<span class="hl">,</span><br><span class="hl">d</span>ziękuję za prezent.</div><div class="opis">po przecinku zdanie trwa ➜ mała</div></div>
-      <div class="karta pop" data-slowo="drugi"><div class="list">2. Drogi Wujku<span class="hl">!</span><br><span class="hl">D</span>awno do Ciebie nie pisałem.</div><div class="opis">po wykrzykniku nowe zdanie ➜ Wielka</div></div>
-      <div class="karta pop" data-slowo="trzeci"><div class="list">3. <span class="hl">D</span>rogi Marku!<br>Co u Ciebie słychać?</div><div class="opis">nagłówek zawsze Wielką literą</div></div>
+      <div class="karta"><div><span class="nr">1</span></div><div class="list">Kochana Ciociu,<br>D<span class="poprawa" data-slowo="pierwszy"> ➜ d</span>ziękuję za prezent.</div><div class="opis">po przecinku zdanie trwa ➜ mała litera</div></div>
+      <div class="karta"><div><span class="nr">2</span></div><div class="list">Drogi Wujku!<br>d<span class="poprawa" data-slowo="drugi"> ➜ D</span>awno do Ciebie nie pisałem.</div><div class="opis">po wykrzykniku nowe zdanie ➜ wielka litera</div></div>
+      <div class="karta"><div><span class="nr">3</span></div><div class="list">d<span class="poprawa" data-slowo="trzeci"> ➜ D</span>rogi Marku!<br>Co u Ciebie słychać?</div><div class="opis">nagłówek zaczynamy wielką literą</div></div>
     </div>
   </section>
 
@@ -333,13 +343,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · TY, CIEBIE, TWÓJ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Przepisz i wstaw słowa z nawiasów</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="dziękuję">1. Dziękuję <b>Ci</b> za list. <span class="dlaczego">do adresata</span></div>
-      <div class="linia wjazd-lewo" data-slowo="bardzo">2. Bardzo <b class="mala">mnie</b> ucieszył. <span class="dlaczego">o sobie - małą</span></div>
-      <div class="linia wjazd-lewo" data-slowo="czy">3. Czy <b>Twój</b> pies już wyzdrowiał? <span class="dlaczego">pies adresata</span></div>
-      <div class="linia wjazd-lewo" data-slowo="często">4. Często o <b>Tobie</b> myślę.</div>
-      <div class="linia wjazd-lewo" data-slowo="mój"><span class="nr" style="background:var(--roz)">⚠️</span>5. <b class="mala">Mój</b> kot przesyła <b>Ci</b> buziaki. <span class="dlaczego">Mój - bo początek zdania</span></div>
+      <div class="linia"><span class="nr">1</span>Dziękuję <span class="naw">(ty)</span> <span class="odkryj" data-slowo="dziękuję">Ci</span> za list.</div>
+      <div class="linia"><span class="nr">2</span>Bardzo <span class="naw">(ja)</span> <span class="odkryj mala" data-slowo="bardzo">mnie</span> ucieszył.</div>
+      <div class="linia"><span class="nr">3</span>Czy <span class="naw">(twój)</span> <span class="odkryj" data-slowo="czy">Twój</span> pies już wyzdrowiał?</div>
+      <div class="linia"><span class="nr">4</span>Często o <span class="naw">(ty)</span> <span class="odkryj" data-slowo="często">Tobie</span> myślę.</div>
+      <div class="linia"><span class="nr">5</span><span class="naw">(mój)</span> <span class="odkryj mala" data-slowo="mój">Mój</span> kot przesyła <span class="naw">(ty)</span> <span class="odkryj" data-slowo="ci">Ci</span> buziaki.</div>
     </div>
   </section>
 

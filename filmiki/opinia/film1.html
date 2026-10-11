@@ -79,12 +79,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s03 .zgoda { margin-top: 22px; font-size: 32px; background: var(--niebieski); }
 
 /* ===== 04-05 ===== */
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
+@keyframes dobra { from { background:#fff; box-shadow:inset 0 0 0 0 transparent; } to { background:#e9f8ee; box-shadow:inset 0 0 0 3px var(--zielony); } }
+@keyframes zla { from { background:#fff; box-shadow:inset 0 0 0 0 transparent; } to { background:#fdecef; box-shadow:inset 0 0 0 3px var(--roz); } }
 #s04 .lista { gap: 8px; margin-top: 12px; width: 900px; }
 #s04 .linia { font-size: 31px; padding: 5px 20px; }
 #s04 .wsk { margin-top: 12px; font-size: 28px; background: var(--niebieski); }
-#s05 .lista { gap: 8px; margin-top: 12px; }
-#s05 .linia { font-size: 28px; padding: 5px 20px; }
-#s05 .zdradza { margin-top: 12px; font-size: 27px; background: var(--pomarancz); }
+#s05 .polecenie, #s08 .polecenie, #s11 .polecenie { margin-top:5px; font-size:29px; }
+#s05 .lista { gap:7px; margin-top:9px; width:1000px; }
+#s05 .linia { font-size:27px; padding:5px 20px; }
+#s05 .odkryj { float:right; color:#fff; border-radius:9px; padding:0 12px; font-family:'Baloo 2'; animation:pop .4s cubic-bezier(.16,1,.3,1) both; }
+#s05 .fakt { background:var(--niebieski); } #s05 .opinia { background:var(--roz); }
+#s05 .zdradza { margin-top:9px; font-size:23px; background:var(--pomarancz); }
 
 /* ===== 06 ===== */
 #s06 .wzor { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 18px; }
@@ -105,10 +111,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s07 .op .nazwa { font-size: 36px; }
 #s07 .lista { width: 1000px; margin-top: 14px; }
 #s07 .linia { font-size: 32px; padding: 6px 22px; }
-#s08 .lista { width: 1140px; margin-top: 40px; gap: 18px; }
-#s08 .linia { font-size: 33px; padding: 12px 22px; }
-#s08 .dlaczego { font-size: 27px; }
-#s08 .wsk { background: var(--fiolet); font-size: 36px; margin-top: 40px; }
+#s08 .op { margin:8px auto 0; width:1000px; border-color:var(--fiolet); padding:8px 18px; }
+#s08 .op .nazwa { font-size:30px; }
+#s08 .lista { width:1000px; margin-top:9px; gap:9px; }
+#s08 .linia { position:relative; font-size:29px; padding:8px 56px 8px 20px; }
+#s08 .dobry { animation:dobra .45s cubic-bezier(.16,1,.3,1) both; } #s08 .slaby { animation:zla .45s cubic-bezier(.16,1,.3,1) both; }
+#s08 .linia::after { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:29px; opacity:0; animation:zjaw .3s ease-out both; animation-delay:inherit; }
+#s08 .dobry::after { content:'✓'; color:var(--zielony); } #s08 .slaby::after { content:'✗'; color:var(--roz); }
+#s08 .wsk { background:var(--fiolet); font-size:27px; margin-top:10px; }
 
 /* ===== 09 ===== */
 #s09 .rzad { margin: 22px auto 0; width: 900px; }
@@ -129,11 +139,12 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s10 .lista { width: 1000px; }
 #s10 .linia { font-size: 34px; }
 #s10 .wsk { background: var(--niebieski); }
-#s11 .op { margin: 14px auto 0; width: 1000px; border-color: var(--niebieski); padding: 8px 20px; }
+#s11 .op { margin: 8px auto 0; width: 1000px; border-color: var(--niebieski); padding: 8px 20px; }
 #s11 .op .nazwa { font-size: 32px; }
-#s11 .lista { width: 1000px; gap: 9px; margin-top: 12px; }
-#s11 .linia { font-size: 31px; padding: 6px 22px; }
-#s11 .wsk { background: var(--niebieski); margin-top: 14px; }
+#s11 .lista { width:1000px; gap:9px; margin-top:9px; }
+#s11 .linia { font-size:29px; padding:7px 20px; }
+#s11 .odkryj { color:var(--zielony); animation:ujawnij .5s cubic-bezier(.16,1,.3,1) both; }
+#s11 .wsk { background:var(--niebieski); margin-top:10px; font-size:25px; }
 
 /* ===== 12 ===== */
 #s12 .def { margin: 16px auto 0; width: 960px; border-color: var(--zielony); background: #eefaf1; padding: 8px 20px; }
@@ -236,14 +247,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · FAKT I OPINIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Przy każdym numerze napisz: fakt albo opinia</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="tydzień">1. Tydzień ma siedem dni. <span class="etyk e-f">FAKT</span> <span class="dlaczego">📅 kalendarz to potwierdzi</span></div>
-      <div class="linia wjazd-lewo" data-slowo="matematyka">2. Matematyka to <span class="hl">najnudniejszy</span> przedmiot. <span class="etyk e-o">OPINIA</span> <span class="dlaczego">niektórzy ją kochają</span></div>
-      <div class="linia wjazd-lewo" data-slowo="pająk">3. Pająk ma osiem nóg. <span class="etyk e-f">FAKT</span> <span class="dlaczego">🕷️ można policzyć</span></div>
-      <div class="linia wjazd-lewo" data-slowo="zima">4. Zima jest <span class="hl">piękniejsza</span> od lata. <span class="etyk e-o">OPINIA</span> <span class="dlaczego">ktoś woli lato</span></div>
-      <div class="linia wjazd-lewo" data-slowo="wisła">5. Wisła płynie przez Kraków. <span class="etyk e-f">FAKT</span> <span class="dlaczego">🗺️ widać na mapie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="koty">6. Koty są <span class="hl">mądrzejsze</span> od psów. <span class="etyk e-o">OPINIA</span> <span class="dlaczego">🐕 psiarze się nie zgodzą</span></div>
+      <div class="linia"><span class="nr">1</span>Tydzień ma siedem dni.<span class="odkryj fakt" data-slowo="tydzień">FAKT</span></div><div class="linia"><span class="nr">2</span>Matematyka to najnudniejszy przedmiot.<span class="odkryj opinia" data-slowo="matematyka">OPINIA</span></div><div class="linia"><span class="nr">3</span>Pająk ma osiem nóg.<span class="odkryj fakt" data-slowo="pająk">FAKT</span></div><div class="linia"><span class="nr">4</span>Zima jest piękniejsza od lata.<span class="odkryj opinia" data-slowo="zima">OPINIA</span></div><div class="linia"><span class="nr">5</span>Wisła płynie przez Kraków.<span class="odkryj fakt" data-slowo="wisła">FAKT</span></div><div class="linia"><span class="nr">6</span>Koty są mądrzejsze od psów.<span class="odkryj opinia" data-slowo="koty">OPINIA</span></div>
     </div>
     <div><span class="chip zdradza pop" data-slowo="zdradzają">🕵️ najnudniejszy · piękniejsza · mądrzejsze ➜ takie słowa często zdradzają opinię</span></div>
   </section>
@@ -288,11 +296,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · ARGUMENT</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="karta op"><div class="nazwa">🐠 Warto mieć w klasie akwarium z rybkami...</div></div><div class="polecenie">Który powód jest argumentem?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="trzeci"><span class="ok">✓ 3.</span> ponieważ uczymy się dbać o zwierzęta <span class="dlaczego">wyjaśnia, dlaczego</span></div>
-      <div class="linia wjazd-lewo" data-slowo="pierwszy"><span class="zle">✗ 1.</span> bo tak <span class="dlaczego">niczego nie tłumaczy</span></div>
-      <div class="linia wjazd-lewo" data-slowo="drugi"><span class="zle">✗ 2.</span> bo w innej klasie też jest <span class="dlaczego">ktoś ma ≠ my potrzebujemy</span></div>
+      <div class="linia slaby" data-slowo="pierwszy"><span class="nr">1</span>... bo tak.</div><div class="linia slaby" data-slowo="drugi"><span class="nr">2</span>... bo w innej klasie też jest akwarium.</div><div class="linia dobry" data-slowo="trzeci"><span class="nr">3</span>... ponieważ uczymy się dbać o zwierzęta.</div>
     </div>
     <div><span class="chip wsk pop" data-slowo="odpowiada">💡 dobry argument odpowiada na pytanie: DLACZEGO?</span></div>
   </section>
@@ -332,13 +340,9 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
-    <div class="karta op pop" data-t="0.3"><div class="nazwa">📖 🌙 Warto czytać książki przed snem, ponieważ...</div></div>
+    <span class="czesc c3">3 · ZOSIA PRZEKONUJE</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Dokończ opinię. Podaj dwa różne argumenty.</div><div class="karta op"><div class="nazwa">📖 🌙 Warto czytać książki przed snem, ponieważ...</div></div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="zasnąć">😴 ... łatwiej potem zasnąć.</div>
-      <div class="linia wjazd-lewo" data-slowo="słowa">🔤 ... poznajemy nowe słowa i lepiej piszemy.</div>
-      <div class="linia wjazd-lewo" data-slowo="wyobraźnia">🌈 ... wyobraźnia pracuje i mamy ciekawsze sny.</div>
-      <div class="linia wjazd-lewo" data-slowo="telefonu">📵 ... odpoczywamy od telefonu i telewizora.</div>
+      <div class="linia"><span class="nr">1</span><span class="odkryj" data-slowo="zasnąć">łatwiej potem zasnąć.</span></div><div class="linia"><span class="nr">2</span><span class="odkryj" data-slowo="słowa">poznajemy nowe słowa i lepiej piszemy.</span></div>
     </div>
     <div><span class="chip wsk pop" data-slowo="dlaczego">✓ każdy argument odpowiada na pytanie: dlaczego?</span></div>
   </section>

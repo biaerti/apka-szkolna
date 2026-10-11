@@ -88,9 +88,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 #s04 .ant .chip { background: var(--roz); }
 
 /* ===== zadania i odpowiedzi ===== */
+@keyframes ujawnij { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sprawdz-highlight { from { background: transparent; color: inherit; } to { background: #ffe066; color: var(--ciemny); } }
 #s05 .linia, #s06 .linia { font-size: 31px; }
 #s05 .linia .pol { color: var(--pomarancz); font-family: 'Baloo 2'; }
 #s06 .linia b { font-family: 'Baloo 2'; color: var(--zielony); font-size: 34px; }
+#s06 .polecenie, #s13 .polecenie, #s21 .polecenie { margin-top: 12px; font-size: 34px; font-weight: 800; line-height: 1.3; }
+#s06 .odkryj, #s13 .odkryj { opacity: 0; animation: ujawnij .35s ease forwards; }
 
 /* ===== 07 list ===== */
 #s07 .uklad { display: flex; gap: 22px; margin-top: 16px; align-items: stretch; }
@@ -183,14 +187,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 #s19 .pyt .chip { font-size: 30px; }
 
 /* ===== 20-21 ===== */
-#s20 .kartka { margin: 18px auto 0; width: 1100px; background: var(--bialy); border: 5px solid var(--morski); border-radius: 22px; padding: 16px 28px; text-align: left; font-size: 33px; font-weight: 800; line-height: 1.6; }
+#s20 .kartka, #s21 .kartka { margin: 18px auto 0; width: 1100px; background: var(--bialy); border: 5px solid var(--morski); border-radius: 22px; padding: 16px 28px; text-align: left; font-size: 33px; font-weight: 800; line-height: 1.6; }
 #s20 .w { color: var(--morski); font-family: 'Baloo 2'; }
 #s20 .chipy { display: flex; gap: 12px; justify-content: center; margin-top: 14px; }
 #s20 .chipy .chip { font-size: 26px; background: var(--morski); }
-#s21 .gotowe { margin: 12px auto 0; width: 1120px; border-color: var(--morski); text-align: left; font-size: 28px; font-weight: 800; line-height: 1.4; }
-#s21 .siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin: 12px auto 0; width: 1120px; }
-#s21 .linia { font-size: 24px; padding: 4px 16px; }
-#s21 .linia b { font-family: 'Baloo 2'; color: var(--morski); font-size: 27px; }
+#s21 .w { color: var(--morski); font-family: 'Baloo 2'; white-space: nowrap; }
+@keyframes wyb-skresl { from { opacity: 1; text-decoration-color: transparent; } to { opacity: .5; color: var(--roz); text-decoration-color: var(--roz); } }
+#s21 .wyb .wd { border-radius: 8px; padding: 0 3px; animation: sprawdz-highlight .35s ease both; animation-delay: inherit; }
+#s21 .wyb .wz { text-decoration: line-through 4px transparent; animation: wyb-skresl .35s ease both; animation-delay: inherit; }
 
 /* ===== 22 zapamietaj ===== */
 #s22 { padding: 34px 50px; }
@@ -255,10 +259,7 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 #s19 .pyt { margin-top: 34px; }
 #s19 .pyt .chip { font-size: 38px; }
 #s20 .w { white-space: nowrap; }
-#s21 .gotowe { font-size: 31px; }
-#s21 .siatka { gap: 10px 16px; margin-top: 16px; }
-#s21 .linia { font-size: 28px; padding: 6px 16px; }
-#s21 .linia b { font-size: 31px; }
+#s21 .kartka { margin-top: 22px; }
 #s22 .mapa { gap: 14px 18px; margin-top: 20px; }
 #s22 .g { font-size: 27px; padding: 10px 18px; }
 #s22 .g b { font-size: 31px; }
@@ -358,12 +359,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c1">1 · SŁOWA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Cztery szybkie polecenia</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="gada">1. gada ➜ <b>rozmawia / mówi</b> <span class="dlaczego">„gadać” to wyraz potoczny</span></div>
-      <div class="linia wjazd-lewo" data-slowo="piórko">2. lekki jak <b>piórko</b> 🪶 <span class="dlaczego">piórko prawie nic nie waży</span></div>
-      <div class="linia wjazd-lewo" data-slowo="przygnębiony">3. smutny ➜ <b>przygnębiony, markotny, zasmucony</b> <span class="dlaczego">prawie to samo</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tchórzliwy">4. odważny ➜ <b>tchórzliwy, bojaźliwy</b> <span class="dlaczego">przeciwieństwo</span></div>
+      <div class="linia"><span class="nr">1</span><span class="pol">Zamień na oficjalny:</span> Kuba ciągle <span class="u">gada</span> na lekcji. <span class="odkryj" data-slowo="gada">➜ <b>rozmawia / mówi</b></span></div>
+      <div class="linia"><span class="nr">2</span><span class="pol">Dokończ porównanie:</span> Mój nowy plecak jest lekki jak <span class="odkryj" data-slowo="piórko"><b>piórko</b> 🪶</span></div>
+      <div class="linia"><span class="nr">3</span><span class="pol">Podaj synonim:</span> smutny ➜ <span class="odkryj" data-slowo="przygnębiony"><b>przygnębiony, markotny, zasmucony</b></span></div>
+      <div class="linia"><span class="nr">4</span><span class="pol">Podaj antonim:</span> odważny ➜ <span class="odkryj" data-slowo="tchórzliwy"><b>tchórzliwy, bojaźliwy</b></span></div>
     </div>
   </section>
 
@@ -409,11 +412,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="nagłówku"><span class="zle">✗</span> drogi Wojtku! ➜ <b>Drogi Wojtku!</b> <span class="dlaczego">nagłówkiem zaczynamy list</span></div>
-      <div class="linia wjazd-lewo" data-slowo="twój"><span class="zle">✗</span> twój ➜ <b>Twój</b> <span class="dlaczego">zwrot do adresata</span></div>
-      <div class="linia wjazd-lewo" data-slowo="ciebie"><span class="zle">✗</span> ciebie ➜ <b>Ciebie</b> <span class="dlaczego">zwrot do adresata</span></div>
-      <div class="linia wjazd-lewo" data-slowo="mnie"><span class="ok">✓</span> mnie - małą literą <span class="dlaczego">to słowo o nadawcy</span></div>
-      <div class="linia wjazd-lewo" data-slowo="podpisu"><span class="zle">✗</span> brak podpisu ➜ <b>Ola</b> <span class="dlaczego">od kogo jest list?</span></div>
+      <div class="linia wjazd-lewo" data-slowo="nagłówku"><span class="wz">✗</span> drogi Wojtku! ➜ <b>Drogi Wojtku!</b> <span class="dlaczego">nagłówkiem zaczynamy list</span></div>
+      <div class="linia wjazd-lewo" data-slowo="twój"><span class="wz">✗</span> twój ➜ <b>Twój</b> <span class="dlaczego">zwrot do adresata</span></div>
+      <div class="linia wjazd-lewo" data-slowo="ciebie"><span class="wz">✗</span> ciebie ➜ <b>Ciebie</b> <span class="dlaczego">zwrot do adresata</span></div>
+      <div class="linia wjazd-lewo" data-slowo="mnie"><span class="wd">✓</span> mnie - małą literą <span class="dlaczego">to słowo o nadawcy</span></div>
+      <div class="linia wjazd-lewo" data-slowo="podpisu"><span class="wz">✗</span> brak podpisu ➜ <b>Ola</b> <span class="dlaczego">od kogo jest list?</span></div>
     </div>
   </section>
 
@@ -468,15 +471,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 13 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="13-odpowiedz3" id="s13">
+    <span class="czesc c3">3 · RZECZOWNIK</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">W jakim przypadku jest podkreślony wyraz?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="parasola">1. nie mam <i>czego?</i> parasola ➜ <b>dopełniacz</b></div>
-      <div class="linia wjazd-lewo" data-slowo="psu">2. daję <i>komu?</i> psu ➜ <b>celownik</b></div>
-      <div class="linia wjazd-lewo" data-slowo="tęczę">3. widzę <i>co?</i> tęczę ➜ <b>biernik</b></div>
-      <div class="linia wjazd-lewo" data-slowo="dziadkiem">4. idę <i>z kim?</i> z dziadkiem ➜ <b>narzędnik</b></div>
-      <div class="linia wjazd-lewo" data-slowo="wakacjach">5. marzę <i>o czym?</i> o wakacjach ➜ <b>miejscownik</b></div>
+      <div class="linia"><span class="nr">1</span>☔ Nie mam <span class="u">parasola</span>. <span class="odkryj" data-slowo="parasola">- <i>czego?</i> ➜ <b>dopełniacz</b></span></div>
+      <div class="linia"><span class="nr">2</span>🦴 Daję kość <span class="u">psu</span>. <span class="odkryj" data-slowo="psu">- <i>komu?</i> ➜ <b>celownik</b></span></div>
+      <div class="linia"><span class="nr">3</span>🌈 Widzę <span class="u">tęczę</span>. <span class="odkryj" data-slowo="tęczę">- <i>co?</i> ➜ <b>biernik</b></span></div>
+      <div class="linia"><span class="nr">4</span>🎬 Idę do kina z <span class="u">dziadkiem</span>. <span class="odkryj" data-slowo="dziadkiem">- <i>z kim?</i> ➜ <b>narzędnik</b></span></div>
+      <div class="linia"><span class="nr">5</span>🏖️ Marzę o <span class="u">wakacjach</span>. <span class="odkryj" data-slowo="wakacjach">- <i>o czym?</i> ➜ <b>miejscownik</b></span></div>
     </div>
-    <div><span class="chip wsk pop" data-slowo="prowadzi">💡 pytanie od czasownika ➜ przypadek</span></div>
   </section>
 
   <!-- ===== 14 opinia ===== -->
@@ -538,7 +542,7 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
       <div class="linia wjazd-lewo" data-slowo="bałwany">2. ⛄ <b class="ok">opinia</b> <span class="dlaczego">ktoś inny może myśleć inaczej</span></div>
       <div class="linia wjazd-lewo" data-slowo="sanki">3. 🛷 <b class="ok">opinia</b> <span class="dlaczego">zdradza ją „moim zdaniem”</span></div>
       <div class="linia wjazd-lewo" data-slowo="trzecia"><b class="ok">✓ C</b> - spokojne NIE + powód + propozycja</div>
-      <div class="linia wjazd-lewo" data-slowo="uległa"><span class="zle">✗ A</span> uległa · <span class="zle">✗ B</span> agresywna</div>
+      <div class="linia wjazd-lewo" data-slowo="uległa"><span class="wz">✗ A</span> uległa · <span class="wz">✗ B</span> agresywna</div>
     </div>
   </section>
 
@@ -603,16 +607,12 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 21 odpowiedz 5 ===== -->
   <section class="scena odp" data-id="21-odpowiedz5" id="s21">
+    <span class="czesc c5">5 · PISOWNIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="karta gotowe pop" data-t="0.3">W <span class="hl">niedzielę</span> pojechałam z <span class="hl">babcią</span> i psem <span class="hl">Reksem</span> do <span class="hl">Gdańska</span>. Mimo <span class="hl">niepogody</span> <span class="hl">nie narzekałyśmy</span>, bo nad <span class="hl">morzem</span> było pięknie.</div>
-    <div class="siatka">
-      <div class="linia wjazd-lewo" data-slowo="niedzielę"><b>niedzielę</b> - dni tygodnia małą</div>
-      <div class="linia wjazd-lewo" data-slowo="babcią"><b>babcią</b> - nazwa pospolita</div>
-      <div class="linia wjazd-lewo" data-slowo="reksem"><b>Reksem</b> - imię psa</div>
-      <div class="linia wjazd-lewo" data-slowo="gdańska"><b>Gdańska</b> - nazwa miasta</div>
-      <div class="linia wjazd-lewo" data-slowo="morzem"><b>morzem</b> - bez nazwy morza</div>
-      <div class="linia wjazd-lewo" data-slowo="niepogody"><b>niepogody</b> - rzeczownik, razem</div>
-      <div class="linia wjazd-lewo" data-slowo="narzekałyśmy" style="grid-column: 1 / span 2"><b>nie narzekałyśmy</b> - czasownik, osobno</div>
+    <div class="polecenie">Przepisz poprawnie do zeszytu</div>
+    <div class="kartka">
+      W <span class="w wyb" data-slowo="niedzielę">(<span class="wd">n</span>/<span class="wz">N</span>)</span>iedzielę pojechałam z <span class="w wyb" data-slowo="babcią">(<span class="wd">b</span>/<span class="wz">B</span>)</span>abcią i psem <span class="w wyb" data-slowo="reksem">(<span class="wz">r</span>/<span class="wd">R</span>)</span>eksem do <span class="w wyb" data-slowo="gdańska">(<span class="wz">g</span>/<span class="wd">G</span>)</span>dańska.
+      Mimo <span class="w wyb" data-slowo="niepogody">(<span class="wd">niepogody</span> / <span class="wz">nie pogody</span>)</span> <span class="w wyb" data-slowo="narzekałyśmy">(<span class="wz">nienarzekałyśmy</span> / <span class="wd">nie narzekałyśmy</span>)</span>, bo nad <span class="w wyb" data-slowo="morzem">(<span class="wd">m</span>/<span class="wz">M</span>)</span>orzem było pięknie.
     </div>
   </section>
 

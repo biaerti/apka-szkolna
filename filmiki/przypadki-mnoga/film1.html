@@ -91,15 +91,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s04 .konce .pyt { font-size: 24px; color: var(--szary); }
 
 /* ===== 05-06 ===== */
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
+@keyframes skresl { from { color:var(--ciemny); text-decoration-color:transparent; } to { color:var(--roz); text-decoration:line-through 4px; } }
 #s05 .tab { grid-template-columns: 210px 1fr; width: 820px; gap: 5px; margin-top: 10px; }
 #s05 .tab > div { font-size: 30px; padding: 1px 16px; }
-#s06 .siatka { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 16px; }
-#s06 .siatka { gap: 14px; margin-top: 22px; }
-#s06 .siatka .karta { width: 270px; padding: 12px 8px; }
-#s06 .siatka .nazwa { font-size: 34px; white-space: nowrap; }
-#s06 .siatka .opis { font-size: 24px; margin-top: 0; color: var(--fiolet); }
-#s06 .uwagi { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
-#s06 .uwagi .chip { font-size: 28px; background: var(--roz); }
+#s06 .polecenie { margin-top:5px; font-size:29px; }
+#s06 .tab { grid-template-columns:210px 1fr; width:850px; gap:5px; margin-top:8px; }
+#s06 .tab > div { font-size:27px; padding:1px 14px; }
+#s06 .odkryj { color:var(--fiolet); font-family:'Baloo 2'; animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s06 .uwagi { display:flex; gap:12px; justify-content:center; margin-top:8px; }
+#s06 .uwagi .chip { font-size:23px; background:var(--roz); }
 #s06 .uwagi .chip + .chip { background: var(--niebieski); }
 
 /* ===== 07 ===== */
@@ -116,11 +117,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s08 .lista, #s09 .lista { gap: 8px; margin-top: 12px; }
 #s08 .linia { font-size: 31px; padding: 5px 20px; }
 #s08 .wsk { margin-top: 12px; font-size: 28px; background: var(--fiolet); }
-#s09 .lista { gap: 12px; margin-top: 20px; }
-#s09 .linia { font-size: 31px; padding: 7px 20px; }
-#s09 .dlaczego { font-size: 27px; }
-#s09 .linia b { font-family: 'Baloo 2'; color: var(--fiolet); }
-#s09 .wsk { margin-top: 20px; font-size: 29px; background: var(--fiolet); }
+#s09 .polecenie { margin-top:5px; font-size:28px; }
+#s09 .lista { gap:7px; margin-top:9px; }
+#s09 .linia { font-size:27px; padding:5px 18px; }
+#s09 .odkryj { color:var(--fiolet); font-family:'Baloo 2'; animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s09 .wsk { margin-top:10px; font-size:24px; background:var(--fiolet); }
 
 /* ===== 10 ===== */
 #s10 .lista { width: 1060px; gap: 22px; margin-top: 34px; }
@@ -129,8 +130,12 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
 /* ===== 11-12 ===== */
 #s11 .linia { font-size: 33px; }
-#s12 .linia { font-size: 30px; padding: 6px 20px; }
-#s12 .wsk { margin-top: 14px; font-size: 28px; background: var(--niebieski); }
+#s12 .polecenie { margin-top:5px; font-size:28px; }
+#s12 .lista { gap:9px; margin-top:12px; }
+#s12 .linia { font-size:29px; padding:6px 20px; }
+#s12 .stare { animation:skresl .4s cubic-bezier(.16,1,.3,1) both; }
+#s12 .poprawnie { color:var(--zielony); animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
+#s12 .wsk { margin-top:10px; font-size:24px; background:var(--niebieski); }
 
 /* ===== 13-15 ===== */
 #s13 .tab, #s14 .tab, #s15 .tab { grid-template-columns: 240px 1fr 1fr; width: 900px; gap: 5px; margin-top: 10px; }
@@ -233,15 +238,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c1">1 · LICZBA MNOGA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="siatka">
-      <div class="karta pop" data-slowo="mianownik"><div class="opis">mianownik</div><div class="nazwa">książki</div></div>
-      <div class="karta pop" data-slowo="dopełniacz"><div class="opis">dopełniacz</div><div class="nazwa">nie ma <span class="hl">książek</span></div></div>
-      <div class="karta pop" data-slowo="celownik"><div class="opis">celownik</div><div class="nazwa">książkom</div></div>
-      <div class="karta pop" data-slowo="biernik"><div class="opis">biernik</div><div class="nazwa">widzę książki</div></div>
-      <div class="karta pop" data-slowo="narzędnik"><div class="opis">narzędnik</div><div class="nazwa">z książkami</div></div>
-      <div class="karta pop" data-slowo="miejscownik"><div class="opis">miejscownik</div><div class="nazwa">o książkach</div></div>
-      <div class="karta pop" data-slowo="wołacz"><div class="opis">wołacz</div><div class="nazwa">książki!</div></div>
+    <div class="polecenie">Odmień przez przypadki: <span class="hl">książki</span> 📚</div>
+    <div class="tab">
+      <div class="pr">mianownik</div><div>kto? co? <span class="odkryj" data-slowo="mianownik">książki</span></div><div class="pr">dopełniacz</div><div>nie ma <span class="odkryj" data-slowo="dopełniacz">książek</span></div><div class="pr">celownik</div><div>przyglądam się <span class="odkryj" data-slowo="celownik">książkom</span></div><div class="pr">biernik</div><div>widzę <span class="odkryj" data-slowo="biernik">książki</span></div><div class="pr">narzędnik</div><div>z <span class="odkryj" data-slowo="narzędnik">książkami</span></div><div class="pr">miejscownik</div><div>o <span class="odkryj" data-slowo="miejscownik">książkach</span></div><div class="pr">wołacz</div><div>o! <span class="odkryj" data-slowo="wołacz">książki!</span></div>
     </div>
     <div class="uwagi">
       <span class="chip pop" data-slowo="skrócił">✂️ dopełniacz się skrócił: książ<span style="color:#ffe066">ek</span></span>
@@ -280,13 +281,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · BLIŹNIAKI</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Mianownik, biernik czy wołacz?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="samochody">1. <span class="hl">Samochody</span> stoją na parkingu. ➜ <b>mianownik</b> <span class="dlaczego">co stoi?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="mama">2. Mama kupiła <span class="hl">jabłka</span>. ➜ <b>biernik</b> <span class="dlaczego">co kupiła?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="ptaki">3. <span class="hl">Ptaki</span>, lećcie do ciepłych krajów! ➜ <b>wołacz</b> <span class="dlaczego">wołamy</span></div>
-      <div class="linia wjazd-lewo" data-slowo="lubię">4. Lubię zimowe <span class="hl">wieczory</span>. ➜ <b>biernik</b> <span class="dlaczego">co lubię?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="lekcje">5. <span class="hl">Lekcje</span> kończą się wcześnie. ➜ <b>mianownik</b> <span class="dlaczego">co się kończy?</span></div>
+      <div class="linia"><span class="nr">1</span><span class="hl">Samochody</span> stoją na parkingu. <span class="odkryj" data-slowo="samochody">co stoi? ➜ mianownik</span></div><div class="linia"><span class="nr">2</span>Mama kupiła <span class="hl">jabłka</span>. <span class="odkryj" data-slowo="mama">co kupiła? ➜ biernik</span></div><div class="linia"><span class="nr">3</span><span class="hl">Ptaki</span>, lećcie do ciepłych krajów! <span class="odkryj" data-slowo="ptaki">wołamy ➜ wołacz</span></div><div class="linia"><span class="nr">4</span>Lubię zimowe <span class="hl">wieczory</span>. <span class="odkryj" data-slowo="lubię">co lubię? ➜ biernik</span></div><div class="linia"><span class="nr">5</span><span class="hl">Lekcje</span> kończą się wcześnie. <span class="odkryj" data-slowo="lekcje">co się kończy? ➜ mianownik</span></div>
     </div>
     <div><span class="chip wsk pop" data-slowo="pamiętajcie">kto? co? ➜ mianownik · (widzę, lubię) kogo? co? ➜ biernik · o! ➜ wołacz</span></div>
   </section>
@@ -319,12 +318,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · CZĘSTE BŁĘDY</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Znajdź źle odmieniony wyraz i zapisz go poprawnie</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="zgubiłem">1. Zgubiłem dwie pary <span class="skr">skarpetków</span> <span class="ok">skarpetek</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="znaleźć">2. Nie mogę znaleźć moich <span class="skr">spodniów</span> <span class="ok">spodni</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="wycieczce">3. Na wycieczce byliśmy z innymi <span class="skr">dzieciami</span> <span class="ok">dziećmi</span>.</div>
-      <div class="linia wjazd-lewo" data-slowo="sklepie">4. W sklepie nie było już <span class="skr">bułków</span> <span class="ok">bułek</span>.</div>
+      <div class="linia"><span class="nr">1</span>Zgubiłem dwie pary <span class="stare" data-slowo="zgubiłem">skarpetków</span><span class="poprawnie" data-slowo="zgubiłem"> ➜ skarpetek</span>.</div><div class="linia"><span class="nr">2</span>Nie mogę znaleźć moich <span class="stare" data-slowo="znaleźć">spodniów</span><span class="poprawnie" data-slowo="znaleźć"> ➜ spodni</span>.</div><div class="linia"><span class="nr">3</span>Na wycieczce byliśmy z innymi <span class="stare" data-slowo="wycieczce">dzieciami</span><span class="poprawnie" data-slowo="wycieczce"> ➜ dziećmi</span>.</div><div class="linia"><span class="nr">4</span>W sklepie nie było już <span class="stare" data-slowo="sklepie">bułków</span><span class="poprawnie" data-slowo="sklepie"> ➜ bułek</span>.</div>
     </div>
     <div><span class="chip wsk pop" data-slowo="dopełniaczu">🕵️ 3 błędy w dopełniaczu: nie ma czego? · nie było czego?</span></div>
     <div><span class="chip wsk pop" data-slowo="słowniku" style="background:var(--zielony)">📖 brzmi dziwnie? sprawdź w słowniku</span></div>

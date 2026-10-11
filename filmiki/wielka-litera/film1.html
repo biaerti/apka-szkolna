@@ -78,13 +78,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s03 .test .chip + .chip { background: var(--roz); }
 
 /* ===== 04-05 ===== */
+@keyframes ujawnij { from { opacity:0; clip-path:inset(0 100% 0 0); } to { opacity:1; clip-path:inset(0 0 0 0); } }
 #s04 .lista { width: 700px; gap: 8px; margin-top: 12px; }
 #s04 .linia { font-family: 'Baloo 2'; font-size: 36px; padding: 0 26px; }
 #s04 .wsk { margin-top: 10px; font-size: 28px; }
 #s04 .wsk { background: var(--roz); }
-#s05 .lista { gap: 10px; margin-top: 16px; }
-#s05 .linia { font-size: 32px; padding: 6px 22px; }
-#s05 .linia b { font-family: 'Baloo 2'; color: var(--roz); }
+#s05 .polecenie, #s09 .polecenie, #s12 .polecenie { margin-top:5px; font-size:29px; }
+#s05 .lista { gap:8px; margin-top:10px; width:900px; }
+#s05 .linia { font-size:29px; padding:6px 20px; }
+#s05 .odkryj, #s09 .odkryj, #s12 .odkryj { color:var(--roz); font-family:'Baloo 2'; animation:ujawnij .45s cubic-bezier(.16,1,.3,1) both; }
 #s05 .uwagi { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
 #s05 .uwagi .chip { font-size: 27px; background: var(--pomarancz); }
 #s05 .uwagi .chip + .chip { background: var(--roz); }
@@ -106,10 +108,9 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
 /* ===== 08-09 ===== */
 #s08 .tekst, #s09 .tekst { margin: 18px auto 0; width: 1100px; text-align: left; font-size: 42px; font-weight: 800; line-height: 1.6; border-color: var(--niebieski); }
-#s09 .tekst { font-size: 37px; line-height: 1.5; margin-top: 14px; }
-#s09 .powody { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
-#s09 .powody .chip { font-size: 29px; background: var(--roz); }
-#s09 .wsk { margin-top: 14px; font-size: 27px; background: var(--szary); }
+#s09 .tekst { font-size:32px; line-height:1.55; margin-top:10px; }
+#s09 .odkryj { white-space:nowrap; background:#fdecef; border-radius:8px; padding:0 4px; }
+#s09 .wsk { margin-top:10px; font-size:24px; background:var(--szary); }
 
 /* ===== 10 ===== */
 #s10 .pulapki { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; width: 1120px; margin: 16px auto 0; }
@@ -124,10 +125,10 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s11 .lista, #s12 .lista { width: 1060px; }
 #s11 .linia { font-size: 36px; padding: 8px 24px; }
 #s11 .wyb { font-family: 'Baloo 2'; color: #fff; background: var(--niebieski); border-radius: 10px; padding: 0 10px; }
-#s12 .lista { gap: 14px; margin-top: 22px; }
-#s12 .linia { font-size: 34px; padding: 10px 22px; }
-#s12 .dlaczego { font-size: 28px; }
-#s12 .wsk { margin-top: 16px; font-size: 30px; background: var(--niebieski); }
+#s12 .lista { gap:10px; margin-top:12px; }
+#s12 .linia { font-size:31px; padding:8px 20px; }
+#s12 .odkryj { color:var(--niebieski); margin-left:10px; }
+#s12 .wsk { margin-top:10px; font-size:26px; background:var(--niebieski); }
 
 /* ===== 13 ===== */
 #s13 .kroki { display: flex; gap: 14px; margin-top: 22px; align-items: stretch; }
@@ -218,13 +219,9 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <span class="czesc c1">1 · WŁASNE I POSPOLITE</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Do każdej nazwy pospolitej dopisz nazwę własną</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="góry">⛰️ góry ➜ <b>Tatry</b>, <b>Karkonosze</b>, <b>Bieszczady</b></div>
-      <div class="linia wjazd-lewo" data-slowo="planeta">🪐 planeta ➜ <b>Mars</b>, <b>Jowisz</b>, <b>Saturn</b></div>
-      <div class="linia wjazd-lewo" data-slowo="kot">🐈 kot ➜ <b>Filemon</b>, <b>Puszek</b></div>
-      <div class="linia wjazd-lewo" data-slowo="państwo">🗺️ państwo ➜ <b>Polska</b>, <b>Niemcy</b>, <b>Francja</b></div>
-      <div class="linia wjazd-lewo" data-slowo="święto">🎉 święto ➜ <b>Wielkanoc</b>, <b>Boże Narodzenie</b></div>
+      <div class="linia">⛰️ góry ➜ <span class="odkryj" data-slowo="góry">Tatry, Karkonosze, Bieszczady</span></div><div class="linia">🪐 planeta ➜ <span class="odkryj" data-slowo="planeta">Mars, Jowisz, Saturn</span></div><div class="linia">🐈 kot ➜ <span class="odkryj" data-slowo="kot">Filemon, Puszek</span></div><div class="linia">🗺️ państwo ➜ <span class="odkryj" data-slowo="państwo">Polska, Niemcy, Francja</span></div><div class="linia">🎉 święto ➜ <span class="odkryj" data-slowo="święto">Wielkanoc, Boże Narodzenie</span></div>
     </div>
     <div class="uwagi">
       <span class="chip pop" data-slowo="każda">każda nazywa jedną, konkretną rzecz</span>
@@ -271,15 +268,8 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
-    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="karta tekst zjaw" data-t="0">W sobotę <span class="hl pop" data-slowo="ola"><span class="wl">O</span>la</span> pojechała z tatą do <span class="hl pop" data-slowo="gdańska"><span class="wl">G</span>dańska</span>. Wzięła ze sobą psa <span class="hl pop" data-slowo="reksia"><span class="wl">R</span>eksia</span>. Z okna pociągu widziała rzekę <span class="hl pop" data-slowo="wisłę"><span class="wl">W</span>isłę</span>, a wieczorem jasną planetę <span class="hl pop" data-slowo="wenus"><span class="wl">W</span>enus</span>.</div>
-    <div class="powody">
-      <span class="chip pop" data-slowo="dziewczynki">Ola - imię</span>
-      <span class="chip pop" data-slowo="miasta">Gdańsk - miasto</span>
-      <span class="chip pop" data-slowo="psa">Reksio - imię psa</span>
-      <span class="chip pop" data-slowo="rzeki">Wisła - rzeka</span>
-      <span class="chip pop" data-slowo="planety">Wenus - planeta</span>
-    </div>
+    <span class="czesc c2">2 · GRUPY NAZW WŁASNYCH</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Wypisz słowa, które powinny zaczynać się wielką literą</div>
+    <div class="karta tekst">W sobotę ola <span class="odkryj" data-slowo="ola">➜ Ola</span> pojechała z tatą do gdańska <span class="odkryj" data-slowo="gdańska">➜ Gdańska</span>. Wzięła ze sobą psa reksia <span class="odkryj" data-slowo="reksia">➜ Reksia</span>. Z okna pociągu widziała rzekę wisłę <span class="odkryj" data-slowo="wisłę">➜ Wisłę</span>, a wieczorem jasną planetę wenus <span class="odkryj" data-slowo="wenus">➜ Wenus</span>.</div>
     <div><span class="chip wsk pop" data-slowo="pospolite">tata · pies · rzeka · planeta ➜ mała litera, bo to nazwy pospolite</span></div>
   </section>
 
@@ -314,12 +304,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · PUŁAPKI</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Wielką czy małą? Zapisz numer i poprawne słowo.</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="kret">1. Kret kopie korytarze w <span class="hl">ziemi</span>. <span class="dlaczego">mała - gleba</span></div>
-      <div class="linia wjazd-lewo" data-slowo="astronauta">2. Astronauta oglądał <span class="hl">Ziemię</span> z kosmosu. <span class="dlaczego">wielka - planeta</span></div>
-      <div class="linia wjazd-lewo" data-slowo="ogrodzie">3. W ogrodzie zakwitła czerwona <span class="hl">róża</span>. <span class="dlaczego">mała - kwiat</span></div>
-      <div class="linia wjazd-lewo" data-slowo="koleżanką">4. Moją najlepszą koleżanką jest <span class="hl">Róża</span>. <span class="dlaczego">wielka - imię</span></div>
+      <div class="linia"><span class="nr">1</span>Kret kopie korytarze w <span class="wyb">Z / z</span>iemi. <span class="odkryj" data-slowo="kret">➜ ziemi · gleba</span></div><div class="linia"><span class="nr">2</span>Astronauta oglądał <span class="wyb">Z / z</span>iemię z kosmosu. <span class="odkryj" data-slowo="astronauta">➜ Ziemię · planeta</span></div><div class="linia"><span class="nr">3</span>W ogrodzie zakwitła czerwona <span class="wyb">R / r</span>óża. <span class="odkryj" data-slowo="ogrodzie">➜ róża · kwiat</span></div><div class="linia"><span class="nr">4</span>Moją najlepszą koleżanką jest <span class="wyb">R / r</span>óża. <span class="odkryj" data-slowo="koleżanką">➜ Róża · imię</span></div>
     </div>
     <div><span class="chip wsk pop" data-slowo="myślimy">🧠 najpierw myślimy, potem piszemy</span></div>
   </section>
