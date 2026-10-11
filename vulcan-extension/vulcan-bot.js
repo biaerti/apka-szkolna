@@ -856,6 +856,21 @@ async function openLekcjaView() {
   await sleep(900);
 }
 
+// Dzien wolny ma dopisek: "środa, 14 października 2026, Dzień Edukacji...".
+function isDayText(text, wantedDay) {
+  return text === wantedDay || text.startsWith(`${wantedDay},`);
+}
+
+// Wezel dnia w drzewie lekcji. NIE findText: po zmianie tygodnia wygrywal
+// pusty kontener ExtJS (x-box-target) z tekstem calego drzewa, przez co
+// rozwijanie dnia nic nie robilo (test 2026-10-11).
+function findDayNode(day) {
+  const wantedDay = normalized(day);
+  const nodes = [...document.querySelectorAll('.x-tree-node-text')].filter(visible);
+  if (nodes.length === 0) return findText(day);
+  return nodes.find((element) => isDayText(normalized(textOf(element)), wantedDay)) || null;
+}
+
 function findLessonNode(period, className, day) {
   const pattern = new RegExp(`^${period}\\.\\s*${className.replace(/\s+/g, '\\s*')}(\\s|$)`, 'i');
   const nodes = [...document.querySelectorAll('.x-tree-node-text')].filter(visible);
@@ -865,8 +880,7 @@ function findLessonNode(period, className, day) {
     let insideDay = false;
     for (const element of nodes) {
       const text = normalized(textOf(element));
-      // Dzien wolny ma dopisek: "środa, 14 października 2026, Dzień Edukacji...".
-      if (text === wantedDay || text.startsWith(`${wantedDay},`)) {
+      if (isDayText(text, wantedDay)) {
         insideDay = true;
         continue;
       }
@@ -906,7 +920,7 @@ function isDayExpanded(dayElement) {
 // Drzewo lekcji pokazuje jeden tydzien (pole "05.10 - 11.10 2026" nad nim).
 // Lekcja z innego tygodnia: przestawiamy to pole na jej date.
 async function showWeekOf(day, date) {
-  const existing = await waitFor(() => findText(day), 2500);
+  const existing = await waitFor(() => findDayNode(day), 2500);
   if (existing || !/^\d{4}-\d{2}-\d{2}$/.test(date || '')) return existing;
   const input = [...document.querySelectorAll('input')].filter(visible)
     .find((element) => /^\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2}\s+\d{4}$/.test(element.value.trim()));
@@ -916,7 +930,7 @@ async function showWeekOf(day, date) {
   if (result?.error || String(result).startsWith('ERR')) {
     throw new Error(`Nie udało się przełączyć tygodnia w VULCANIE (${result?.error || result}).`);
   }
-  return waitFor(() => findText(day), 8000);
+  return waitFor(() => findDayNode(day), 8000);
 }
 
 async function expandDay(day, period = frek?.period, className = frek?.vulcanClassName, date = frek?.date) {
@@ -930,11 +944,12 @@ async function expandDay(day, period = frek?.period, className = frek?.vulcanCla
   let node = await waitFor(found, 6000);
   if (node) return node;
   // Zapas: klik w plusik. NIE dwuklik - na rozwinietym dniu zwijal go z powrotem.
-  if (!isDayExpanded(dayElement)) {
-    const row = treeRow(dayElement);
+  const freshDay = findDayNode(day) || dayElement;
+  if (!isDayExpanded(freshDay)) {
+    const row = treeRow(freshDay);
     const expander = row?.querySelector('.x-tree-expander');
     if (expander) clickElement(expander);
-    else clickElement(dayElement);
+    else clickElement(freshDay);
     node = await waitFor(found, 6000);
   }
   return node;
