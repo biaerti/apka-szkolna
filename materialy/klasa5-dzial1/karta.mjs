@@ -104,20 +104,6 @@ export const KARTA = {
       ],
     },
     {
-      tytul: 'E-mail',
-      wiedza: [
-        'Grzeczny e-mail ma: **temat** · **powitanie** (Dzień dobry, Szanowna Pani) · **treść** · **pożegnanie** (Pozdrawiam, Z poważaniem) · **podpis**.',
-        'Do nauczyciela piszemy z polskimi znakami, bez skrótów i emotek.',
-      ],
-      zadania: [
-        {
-          polecenie: 'Napisz e-mail do wychowawczyni. Klasa chce pojechać na wycieczkę do zoo: zapytaj, czy pani się zgodzi i kiedy można by pojechać.',
-          pisanie: 5,
-          wzor: 'Temat: Wycieczka do zoo\nDzień dobry,\nnasza klasa chciałaby pojechać na wycieczkę do zoo. Czy zgodziłaby się Pani z nami pojechać? Moglibyśmy wybrać się w maju.\nPozdrawiam\nOla Nowak, 5a',
-        },
-      ],
-    },
-    {
       tytul: 'Głoski',
       wiedza: [
         'Głoskę **słyszę**, literę **widzę**. **Samogłoski**: a, ą, e, ę, i, o, u (ó), y. Reszta to **spółgłoski**.',
@@ -132,6 +118,46 @@ export const KARTA = {
         {
           polecenie: 'Podkreśl spółgłoski miękkie.',
           linie: ['((ś))wieca · ko((ń)) · lis · ((ć))ma · nos · ((dź))wig · ((ź))le · las'],
+        },
+      ],
+    },
+    {
+      tytul: 'Odmiana czasownika',
+      wiedza: [
+        'Czasownik odmienia się przez **osoby** (1. ja, my · 2. ty, wy · 3. on, ona, ono, oni, one), **liczby** (pojedyncza, mnoga) i **czasy** (przeszły, teraźniejszy, przyszły).',
+        'W czasie przeszłym i przyszłym złożonym także przez **rodzaje**: męski, żeński, nijaki, a w liczbie mnogiej ==męskoosobowy== (oni) i ==niemęskoosobowy== (one).',
+        'Czas przyszły bywa **prosty** (zrobię) albo **złożony** (będę robić, będę robił).',
+      ],
+      zadania: [
+        {
+          polecenie: 'Uzupełnij tabelę.',
+          tabela: {
+            naglowki: ['czasownik', 'osoba', 'liczba', 'czas', 'rodzaj'],
+            wiersze: [
+              ['**pływaliście**', '[[2.|10]]', '[[mnoga|22]]', '[[przeszły|24]]', '[[męskoosobowy|32]]'],
+              ['**pisała**', '[[3.|10]]', '[[pojedyncza|22]]', '[[przeszły|24]]', '[[żeński|32]]'],
+              ['**będą rysowały**', '[[3.|10]]', '[[mnoga|22]]', '[[przyszły|24]]', '[[niemęskoosobowy|32]]'],
+            ],
+          },
+        },
+        {
+          polecenie: 'Odmień czasownik **biegać** w czasie przeszłym (chłopiec, chłopcy).',
+          tabela: {
+            naglowki: ['osoba', 'liczba pojedyncza', 'liczba mnoga'],
+            wiersze: [
+              ['1.', 'ja [[biegałem|30]]', 'my [[biegaliśmy|30]]'],
+              ['2.', 'ty [[biegałeś|30]]', 'wy [[biegaliście|30]]'],
+              ['3.', 'on [[biegał|30]]', 'oni [[biegali|30]]'],
+            ],
+          },
+        },
+        {
+          polecenie: 'Zamień na czas przyszły.',
+          pytania: [
+            ['Ola czyta książkę. ➜', '[[Ola będzie czytała książkę.|40]]'],
+            ['Zrobiłem zadanie. ➜', '[[Zrobię zadanie.|40]]'],
+            ['Kupujemy chleb. ➜', '[[Będziemy kupować chleb.|40]]'],
+          ],
         },
       ],
     },
