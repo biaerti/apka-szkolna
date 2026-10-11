@@ -93,3 +93,23 @@ h1, h2, .tytul { font-family: 'Baloo 2', sans-serif; }
   transform-origin: left center;
   animation: kurcz linear both;
 }
+
+/* Sprawdzanie na ekranie zadania: polecenie i przyklady zostaja,
+   odpowiedz pojawia sie przy wlasciwym przykladzie (data-slowo). */
+@keyframes odp-wpisz { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes odp-podswietl { from { background: transparent; } to { background: #ffe066; } }
+@keyframes odp-skresl { from { text-decoration-color: transparent; } to { color: var(--roz); text-decoration-color: var(--roz); } }
+@keyframes odp-dobra { from { background: var(--bialy); box-shadow: inset 0 0 0 0 transparent; } to { background: #e9f8ee; box-shadow: inset 0 0 0 3px #2E9E5B; } }
+@keyframes odp-zla { from { background: var(--bialy); box-shadow: inset 0 0 0 0 transparent; } to { background: #fdecef; box-shadow: inset 0 0 0 3px var(--roz); } }
+@keyframes odp-znak { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+.o-wpis { color: #2E9E5B; font-weight: 800; animation: odp-wpisz .5s cubic-bezier(.16,1,.3,1) both; }
+.o-wpis-blok { display: block; color: #2E9E5B; font-weight: 800; animation: odp-wpisz .5s cubic-bezier(.16,1,.3,1) both; }
+.o-podsw { border-radius: 8px; padding: 0 3px; animation: odp-podswietl .35s ease both; }
+.o-skresl { text-decoration: line-through 4px transparent; animation: odp-skresl .35s ease both; }
+.o-dobra { animation: odp-dobra .45s ease both; }
+.o-zla { animation: odp-zla .45s ease both; }
+.o-znak { display: inline-block; animation: odp-znak .35s cubic-bezier(.16,1,.3,1) both; }
+/* dziecko z animation-delay: inherit startuje razem z rodzicem z data-slowo */
+.o-razem { animation-delay: inherit !important; }
+/* polecenie zadania zostaje na ekranie sprawdzania */
+.odp .polecenie { margin-top: 10px; font-size: 32px; font-weight: 800; line-height: 1.3; }

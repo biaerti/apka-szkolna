@@ -101,6 +101,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 /* ===== 13 podsumowanie ===== */
 #s13 .lista .linia { font-size: 30px; }
 #s13 .brawo { margin-top: 18px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s05 .lista { gap: 8px; }
+#s05 .lista .linia { padding: 4px 22px; font-size: 28px; }
+#s05 .luka .duza, #s12 .luka span { font-family: 'Baloo 2'; }
+#s05 .dlaczego, #s12 .dlaczego { margin-left: 10px; }
+#s09 .ok { margin-top: 16px; font-size: 30px; background: var(--fiolet); }
+#s05 .luka, #s12 .luka { min-width: 0; margin: 0; padding: 0 1px; text-align: center; }
+#s09 .tab .o-wpis { color: var(--ciemny); }
+#s09 .tab .bezok .o-wpis { color: var(--szary); }
 </style>
 </head>
 <body>
@@ -166,14 +175,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc cf">1-2 · Ę CZY Ą?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie"><span class="E">ę</span> czy <span class="A">ą</span>? Zadaj pytanie!</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="babcię">1. Widzę babci<span class="E duza">ę</span>. <span class="dlaczego">widzę kogo?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="babcią">2. Rozmawiam z babci<span class="A duza">ą</span>. <span class="dlaczego">z kim?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="łyżką">3. Jem zupę łyżk<span class="A duza">ą</span>. <span class="dlaczego">czym?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="łyżkę">4. Podaj mi łyżk<span class="E duza">ę</span>. <span class="dlaczego">podaj co?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tęczę">5. Narysuj tęcz<span class="E duza">ę</span>. <span class="dlaczego">narysuj co?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="koleżanką">6. Idę z koleżank<span class="A duza">ą</span>. <span class="dlaczego">z kim?</span></div>
+      <div class="linia"><span class="nr">1</span>Widzę babci<span class="luka"><span class="E duza o-znak" data-slowo="babcię">ę</span></span>. <span class="dlaczego o-wpis" data-slowo="kogo">widzę kogo?</span></div>
+      <div class="linia"><span class="nr">2</span>Rozmawiam z babci<span class="luka"><span class="A duza o-znak" data-slowo="babcią">ą</span></span>. <span class="dlaczego o-wpis" data-slowo="kim">z kim?</span></div>
+      <div class="linia"><span class="nr">3</span>Jem zupę łyżk<span class="luka"><span class="A duza o-znak" data-slowo="łyżką">ą</span></span>. <span class="dlaczego o-wpis" data-slowo="czym">czym?</span></div>
+      <div class="linia"><span class="nr">4</span>Podaj mi łyżk<span class="luka"><span class="E duza o-znak" data-slowo="łyżkę">ę</span></span>. <span class="dlaczego o-wpis" data-slowo="co">podaj co?</span></div>
+      <div class="linia"><span class="nr">5</span>Narysuj tęcz<span class="luka"><span class="E duza o-znak" data-slowo="tęczę">ę</span></span>. <span class="dlaczego o-wpis" data-slowo="co">narysuj co?</span></div>
+      <div class="linia"><span class="nr">6</span>Idę z koleżank<span class="luka"><span class="A duza o-znak" data-slowo="koleżanką">ą</span></span>. <span class="dlaczego o-wpis" data-slowo="kim">z kim?</span></div>
     </div>
   </section>
 
@@ -226,13 +237,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc cf">4 · CZASOWNIKI</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Napisz formy: ja i oni</div>
     <div class="tab">
       <div class="gl"></div><div class="gl">ja</div><div class="gl">oni</div>
-      <div>pisać</div><div class="zjaw" data-slowo="pisać">pisz<span class="E">ę</span></div><div class="zjaw" data-slowo="pisać" data-po="0.8">pisz<span class="A">ą</span></div>
-      <div>nieść</div><div class="zjaw" data-slowo="nieść">nios<span class="E">ę</span></div><div class="zjaw" data-slowo="nieść" data-po="0.8">nios<span class="A">ą</span></div>
-      <div>robić</div><div class="zjaw" data-slowo="robić">robi<span class="E">ę</span></div><div class="zjaw" data-slowo="robić" data-po="0.8">robi<span class="A">ą</span></div>
-      <div>rozumieć</div><div class="zjaw bezok" data-slowo="rozumiem">rozumiem ⚠️</div><div class="gl"></div>
+      <div>pisać</div><div><span class="o-wpis" data-slowo="piszę">pisz<span class="E">ę</span></span></div><div><span class="o-wpis" data-slowo="piszą">pisz<span class="A">ą</span></span></div>
+      <div>nieść</div><div><span class="o-wpis" data-slowo="niosę">nios<span class="E">ę</span></span></div><div><span class="o-wpis" data-slowo="niosą">nios<span class="A">ą</span></span></div>
+      <div>robić</div><div><span class="o-wpis" data-slowo="robię">robi<span class="E">ę</span></span></div><div><span class="o-wpis" data-slowo="robią">robi<span class="A">ą</span></span></div>
+      <div>rozumieć 🤔</div><div class="bezok"><span class="o-wpis" data-slowo="rozumiem">rozumiem ⚠️</span></div><div class="gl"></div>
     </div>
     <div><span class="chip ok pop" data-slowo="zawsze">ja ➜ ę · oni ➜ ą · wyjątek: rozumiem</span></div>
   </section>
@@ -265,12 +278,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc cf">WSZYSTKO RAZEM</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Przepisz i uzupełnij końcówki</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="czytają">Oni czytaj<span class="A">ą</span> bajk<span class="E">ę</span> z mam<span class="A">ą</span>. <span class="dlaczego">oni · co? · z kim?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="niosę">Ja nios<span class="E">ę</span> szczeni<span class="E">ę</span> do domu. <span class="dlaczego">ja · małe zwierzę</span></div>
-      <div class="linia wjazd-lewo" data-slowo="śpiewają">Dzieci śpiewaj<span class="A">ą</span> z pani<span class="A">ą</span>. <span class="dlaczego">one · z kim?</span></div>
-      <div class="linia wjazd-lewo" data-slowo="wiem">Nie wiem, gdzie jest piłka. <span class="dlaczego">⚠️ wyjątek - bez ogonka</span></div>
+      <div class="linia">Oni czyt<span class="luka"><span class="A o-znak" data-slowo="czytają">ają</span></span> bajk<span class="luka"><span class="E o-znak" data-slowo="bajkę">ę</span></span> z mam<span class="luka"><span class="A o-znak" data-slowo="mamą">ą</span></span>. <span class="dlaczego o-wpis" data-slowo="kim">oni · co? · z kim?</span></div>
+      <div class="linia">Ja nios<span class="luka"><span class="E o-znak" data-slowo="niosę">ę</span></span> szczeni<span class="luka"><span class="E o-znak" data-slowo="szczenię">ę</span></span> do domu. <span class="dlaczego o-wpis" data-slowo="zwierzę">ja · małe zwierzę</span></div>
+      <div class="linia">Dzieci śpiewaj<span class="luka"><span class="A o-znak" data-slowo="śpiewają">ą</span></span> z pani<span class="luka"><span class="A o-znak" data-slowo="panią">ą</span></span>. <span class="dlaczego o-wpis" data-slowo="kim">one · z kim?</span></div>
+      <div class="linia">Nie wi<span class="luka"><span class="o-znak" data-slowo="wiem">em</span></span>, gdzie jest piłka. <span class="dlaczego o-wpis" data-slowo="wyjątek">⚠️ wyjątek - bez ogonka</span></div>
     </div>
   </section>
 

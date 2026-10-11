@@ -117,6 +117,21 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s16 .siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin: 22px auto 0; width: 1140px; }
 #s16 .linia { font-size: 29px; }
 #s16 .brawo { margin-top: 22px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s05 .kafle { gap: 14px; margin-top: 18px; }
+#s05 .kafel { flex-direction: column; justify-content: center; height: auto; min-height: 84px; padding: 4px 20px; line-height: 1.1; font-size: 40px; }
+#s05 .rodz { font-size: 28px; }
+#s05 .kafle { flex-wrap: nowrap; }
+#s05 .rodz .etyk { display: block; margin: 2px auto 4px; width: max-content; font-size: 22px; vertical-align: 0; }
+#s05 .podp { margin-top: 16px; font-size: 28px; background: var(--fiolet); }
+#s10 .polecenie { margin-top: 6px; }
+#s10 .przyp { margin-top: 8px; gap: 4px 10px; }
+#s10 .przyp > div { padding: 1px 14px; }
+#s10 .wpis-f { border-style: dashed !important; }
+#s10 .wpis-f .o-wpis { font-family: 'Baloo 2'; font-size: 32px; color: var(--ciemny); }
+#s10 .uwaga { margin-top: 10px; font-size: 26px; background: var(--fiolet); }
+#s12 .lista .linia .dlaczego { margin-left: 8px; }
+#s12 .pisz { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
 </style>
 </head>
 <body>
@@ -185,15 +200,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c2">2 · RODZAJ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="plecak">plecak ➜ <span class="m">ten plecak</span> <span class="etyk" style="background:var(--niebieski)">męski</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tęcza">tęcza ➜ <span class="z">ta tęcza</span> <span class="etyk" style="background:var(--roz)">żeński</span></div>
-      <div class="linia wjazd-lewo" data-slowo="jabłko">jabłko ➜ <span class="n">to jabłko</span> <span class="etyk" style="background:var(--zielony)">nijaki</span></div>
-      <div class="linia wjazd-lewo" data-slowo="radość">radość ➜ <span class="z">ta radość</span> <span class="etyk" style="background:var(--roz)">żeński</span> <span class="dlaczego">uczucie też ma rodzaj</span></div>
-      <div class="linia wjazd-lewo" data-slowo="psy">psy ➜ <span class="m">ten pies</span> <span class="etyk" style="background:var(--niebieski)">męski</span> <span class="dlaczego">lm ➜ lp</span></div>
-      <div class="linia wjazd-lewo" data-slowo="drzewa">drzewa ➜ <span class="n">to drzewo</span> <span class="etyk" style="background:var(--zielony)">nijaki</span></div>
+    <div class="polecenie">Jaki rodzaj? Dopisz: ten, ta, to</div>
+    <div class="kafle">
+      <span class="kafel"><span>plecak</span><span class="rodz m o-wpis-blok" data-slowo="plecak">ten plecak<span class="etyk" style="background:var(--niebieski)">męski</span></span></span>
+      <span class="kafel"><span>tęcza</span><span class="rodz z o-wpis-blok" data-slowo="tęcza">ta tęcza<span class="etyk" style="background:var(--roz)">żeński</span></span></span>
+      <span class="kafel"><span>jabłko</span><span class="rodz n o-wpis-blok" data-slowo="jabłko">to jabłko<span class="etyk" style="background:var(--zielony)">nijaki</span></span></span>
+      <span class="kafel"><span>radość</span><span class="rodz z o-wpis-blok" data-slowo="radość">ta radość<span class="etyk" style="background:var(--roz)">żeński</span></span></span>
+      <span class="kafel"><span>psy</span><span class="rodz m o-wpis-blok" data-slowo="psy">ten pies<span class="etyk" style="background:var(--niebieski)">męski</span></span></span>
+      <span class="kafel"><span>drzewa</span><span class="rodz n o-wpis-blok" data-slowo="drzewa">to drzewo<span class="etyk" style="background:var(--zielony)">nijaki</span></span></span>
     </div>
+    <div><span class="chip podp">liczba mnoga? ➜ zamień na pojedynczą</span></div>
   </section>
 
   <!-- ===== 06 przypadki cz. 1 ===== -->
@@ -262,15 +280,17 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 10 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="10-odpowiedz2" id="s10">
+    <span class="czesc c3">3 · PRZYPADKI</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Odmień: <span style="color:var(--rz)">SZKOŁA</span> 🏫</div>
     <div class="przyp">
-      <div class="p">Mianownik</div><div class="py">kto? co?</div><div class="pom">jest</div><div class="f zjaw" data-slowo="mianownik">szkoła</div>
-      <div class="p">Dopełniacz</div><div class="py">kogo? czego?</div><div class="pom">nie ma</div><div class="f zjaw" data-slowo="dopełniacz">szkoł<span class="konc">y</span></div>
-      <div class="p">Celownik</div><div class="py">komu? czemu?</div><div class="pom">przyglądam się</div><div class="f zjaw" data-slowo="celownik">szkol<span class="konc">e</span></div>
-      <div class="p">Biernik</div><div class="py">kogo? co?</div><div class="pom">widzę</div><div class="f zjaw" data-slowo="biernik">szkoł<span class="konc">ę</span></div>
-      <div class="p">Narzędnik</div><div class="py">z kim? z czym?</div><div class="pom">(ze)</div><div class="f zjaw" data-slowo="narzędnik">szkoł<span class="konc">ą</span></div>
-      <div class="p">Miejscownik</div><div class="py">o kim? o czym?</div><div class="pom">mówię o</div><div class="f zjaw" data-slowo="miejscownik">szkol<span class="konc">e</span></div>
-      <div class="p">Wołacz</div><div class="py">o!</div><div class="pom">wołam</div><div class="f zjaw" data-slowo="wołacz">szkoł<span class="konc">o</span>!</div>
+      <div class="p">Mianownik</div><div class="py">kto? co?</div><div class="pom">jest</div><div class="wpis-f"><span class="o-wpis" data-slowo="mianownik">szkoła</span></div>
+      <div class="p">Dopełniacz</div><div class="py">kogo? czego?</div><div class="pom">nie ma</div><div class="wpis-f"><span class="o-wpis" data-slowo="dopełniacz">szkoł<span class="konc">y</span></span></div>
+      <div class="p">Celownik</div><div class="py">komu? czemu?</div><div class="pom">przyglądam się</div><div class="wpis-f"><span class="o-wpis" data-slowo="celownik">szkol<span class="konc">e</span></span></div>
+      <div class="p">Biernik</div><div class="py">kogo? co?</div><div class="pom">widzę</div><div class="wpis-f"><span class="o-wpis" data-slowo="biernik">szkoł<span class="konc">ę</span></span></div>
+      <div class="p">Narzędnik</div><div class="py">z kim? z czym?</div><div class="pom">z</div><div class="wpis-f"><span class="o-wpis" data-slowo="narzędnik">ze szkoł<span class="konc">ą</span></span></div>
+      <div class="p">Miejscownik</div><div class="py">o kim? o czym?</div><div class="pom">mówię o</div><div class="wpis-f"><span class="o-wpis" data-slowo="miejscownik">szkol<span class="konc">e</span></span></div>
+      <div class="p">Wołacz</div><div class="py">o!</div><div class="pom">wołam</div><div class="wpis-f"><span class="o-wpis" data-slowo="wołacz">szkoł<span class="konc">o</span>!</span></div>
     </div>
     <div><span class="chip uwaga pop" data-slowo="rozróżnia">szkole = celownik i miejscownik ➜ rozróżnia je pomocnik</span></div>
   </section>
@@ -293,14 +313,17 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · PRZYPADKI</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">W jakim przypadku jest wyróżniony rzeczownik?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="długopisu">1. Nie mam <b>długopisu</b>. <span class="dlaczego">nie ma czego?</span><span class="etyk">dopełniacz</span></div>
-      <div class="linia wjazd-lewo" data-slowo="bratem">2. Idę do kina z <b>bratem</b>. <span class="dlaczego">z kim?</span><span class="etyk">narzędnik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="wakacjach">3. Myślę o <b>wakacjach</b>. <span class="dlaczego">o czym?</span><span class="etyk">miejscownik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="psu">4. Daj <b>psu</b> wody. <span class="dlaczego">komu?</span><span class="etyk">celownik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tęczę">5. Widzę <b>tęczę</b>. <span class="dlaczego">widzę co?</span><span class="etyk">biernik</span></div>
+      <div class="linia"><span class="nr">1</span>Nie mam <b>długopisu</b>. <span class="dlaczego o-wpis" data-slowo="czego">nie ma czego?</span><span class="etyk o-znak" data-slowo="dopełniacz">dopełniacz</span></div>
+      <div class="linia"><span class="nr">2</span>Idę do kina z <b>bratem</b>. <span class="dlaczego o-wpis" data-slowo="kim">z kim?</span><span class="etyk o-znak" data-slowo="narzędnik">narzędnik</span></div>
+      <div class="linia"><span class="nr">3</span>Myślę o <b>wakacjach</b>. <span class="dlaczego o-wpis" data-slowo="czym">o czym?</span><span class="etyk o-znak" data-slowo="miejscownik">miejscownik</span></div>
+      <div class="linia"><span class="nr">4</span>Daj <b>psu</b> wody. <span class="dlaczego o-wpis" data-slowo="komu">komu?</span><span class="etyk o-znak" data-slowo="celownik">celownik</span></div>
+      <div class="linia"><span class="nr">5</span>Widzę <b>tęczę</b>. <span class="dlaczego o-wpis" data-slowo="co">widzę co?</span><span class="etyk o-znak" data-slowo="biernik">biernik</span></div>
     </div>
+    <div class="pisz">🔎 zadaj pytanie albo podstaw pomocnika</div>
   </section>
 
   <!-- ===== 13 wlasne i pospolite ===== -->

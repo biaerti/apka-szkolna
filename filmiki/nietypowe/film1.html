@@ -99,6 +99,21 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s15 .k2 { border-color: var(--fiolet); } #s15 .k2 .nazwa { color: var(--fiolet); }
 #s15 .k3 { border-color: var(--niebieski); } #s15 .k3 .nazwa { color: var(--niebieski); }
 #s15 .brawo { margin-top: 26px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+@keyframes nt-lp { from { background: var(--bialy); } to { background: #f1e8fb; border-color: var(--fiolet); color: var(--fiolet); } }
+@keyframes nt-lm { from { background: var(--bialy); } to { background: #e3eefc; border-color: var(--niebieski); color: var(--niebieski); } }
+#s05 .linia .o-wpis { margin-left: 8px; }
+#s05 .linia .etyk { vertical-align: 3px; }
+#s05 .linia .dlaczego { margin-left: 8px; }
+#s08 .legenda { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s08 .legenda .chip { font-size: 28px; }
+#s08 .kafle { margin-top: 14px; }
+#s08 .kafel.lp { animation: nt-lp .4s ease both; }
+#s08 .kafel.lm { animation: nt-lm .4s ease both; }
+#s08 .uwagi { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+#s08 .uwagi .chip { font-size: 26px; }
+#s11 .luka { min-width: 0; padding: 0 8px; text-align: center; }
+#s11 .linia .dlaczego.o-wpis { color: var(--szary); margin-left: 6px; }
 </style>
 </head>
 <body>
@@ -182,13 +197,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · MUZEUM</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Które zdania są błędne? Popraw je.</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="muzeumie">1. Byliśmy <span class="zle">w muzeumie</span> ➜ <span class="dobrze">w muzeum</span><span class="etyk e-zle">błąd</span></div>
-      <div class="linia wjazd-lewo" data-slowo="akwarium">2. Poszliśmy do akwarium.<span class="etyk e-ok">dobrze</span></div>
-      <div class="linia wjazd-lewo" data-slowo="centrumu">3. Mieszkam blisko <span class="zle">centrumu</span> ➜ <span class="dobrze">centrum</span><span class="etyk e-zle">błąd</span></div>
-      <div class="linia wjazd-lewo" data-slowo="trzy">4. W mieście są trzy muzea.<span class="etyk e-ok">dobrze</span> <span class="dlaczego">liczba mnoga</span></div>
-      <div class="linia wjazd-lewo" data-slowo="pięć">5. Zwiedziliśmy pięć muzeów.<span class="etyk e-ok">dobrze</span> <span class="dlaczego">liczba mnoga</span></div>
+      <div class="linia o-zla" data-slowo="błąd"><span class="nr">1</span>Byliśmy w <span class="o-skresl o-razem">muzeumie</span>. <span class="etyk e-zle o-znak o-razem">błąd</span><span class="o-wpis" data-slowo="poprawnie">➜ w muzeum</span></div>
+      <div class="linia o-dobra" data-slowo="dobrze"><span class="nr">2</span>Poszliśmy do akwarium. <span class="etyk e-ok o-znak o-razem">dobrze</span></div>
+      <div class="linia o-zla" data-slowo="błąd"><span class="nr">3</span>Mieszkam blisko <span class="o-skresl o-razem">centrumu</span>. <span class="etyk e-zle o-znak o-razem">błąd</span><span class="o-wpis" data-slowo="poprawnie">➜ centrum</span></div>
+      <div class="linia o-dobra" data-slowo="dobrze"><span class="nr">4</span>W mieście są trzy muzea. <span class="etyk e-ok o-znak o-razem">dobrze</span><span class="dlaczego o-wpis o-razem">liczba mnoga</span></div>
+      <div class="linia o-dobra" data-slowo="dobrze"><span class="nr">5</span>Zwiedziliśmy pięć muzeów. <span class="etyk e-ok o-znak o-razem">dobrze</span><span class="dlaczego o-wpis o-razem">liczba mnoga</span></div>
     </div>
   </section>
 
@@ -233,16 +250,22 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · TYLKO JEDNA LICZBA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="dwie">
-      <div class="karta k-lp pop" data-slowo="pojedyncza">
-        <div class="nazwa">tylko pojedyncza</div>
-        <div class="elem"><span>powietrze</span><span>odzież</span><span>młodzież</span><span>zazdrość</span></div>
-      </div>
-      <div class="karta k-lm pop" data-slowo="mnoga">
-        <div class="nazwa">tylko mnoga</div>
-        <div class="elem"><span>nożyczki</span><span>wakacje</span><span>sanie</span><span>okulary</span></div>
-      </div>
+    <div class="polecenie">Tylko pojedyncza czy tylko mnoga?</div>
+    <div class="legenda">
+      <span class="chip o-znak" data-slowo="pojedyncza" style="background:var(--fiolet)">tylko pojedyncza</span>
+      <span class="chip o-znak" data-slowo="mnoga" style="background:var(--niebieski)">tylko mnoga</span>
+    </div>
+    <div class="kafle">
+      <span class="kafel lp" data-slowo="powietrze">powietrze</span>
+      <span class="kafel lm" data-slowo="nożyczki">nożyczki</span>
+      <span class="kafel lp" data-slowo="odzież">odzież</span>
+      <span class="kafel lm" data-slowo="wakacje">wakacje</span>
+      <span class="kafel lm" data-slowo="sanie">sanie</span>
+      <span class="kafel lp" data-slowo="młodzież">młodzież</span>
+      <span class="kafel lm" data-slowo="okulary">okulary</span>
+      <span class="kafel lp" data-slowo="zazdrość">zazdrość</span>
     </div>
     <div class="uwagi">
       <span class="chip pop" data-slowo="nożyczka" style="background:var(--roz)">❌ jedna nożyczka?</span>
@@ -279,12 +302,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · JAK LICZYĆ?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Uzupełnij: jedne · dwoje · troje · pary</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="kupiłam">1. Kupiłam <b class="wst">jedne</b> nożyczki. <span class="dlaczego">jedna rzecz, rzeczownik w lm</span></div>
-      <div class="linia wjazd-lewo" data-slowo="klasie">2. W klasie jest <b class="wst">dwoje</b> drzwi. <span class="dlaczego">dwoje, a nie dwa</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tata">3. Tata ma trzy <b class="wst">pary</b> spodni. <span class="dlaczego">liczymy parami</span></div>
-      <div class="linia wjazd-lewo" data-slowo="zgubiłem">4. Zgubiłem <b class="wst">jedne</b> okulary.</div>
+      <div class="linia"><span class="nr">1</span>Kupiłam <span class="luka"><b class="wst o-wpis" data-slowo="jedne">jedne</b></span> nożyczki. <span class="dlaczego">(1)</span></div>
+      <div class="linia"><span class="nr">2</span>W klasie jest <span class="luka"><b class="wst o-wpis" data-slowo="dwoje">dwoje</b></span> drzwi. <span class="dlaczego">(2)</span> <span class="dlaczego o-wpis" data-slowo="dwa">dwoje, a nie dwa</span></div>
+      <div class="linia"><span class="nr">3</span>Tata ma trzy <span class="luka"><b class="wst o-wpis" data-slowo="pary">pary</b></span> spodni.</div>
+      <div class="linia"><span class="nr">4</span>Zgubiłem <span class="luka"><b class="wst o-wpis" data-slowo="jedne">jedne</b></span> okulary. <span class="dlaczego">(1)</span></div>
     </div>
   </section>
 

@@ -189,6 +189,20 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 #s16 .kroki { display: flex; flex-direction: column; gap: 10px; margin: 16px auto 0; width: 1000px; }
 #s16 .kroki .linia { font-size: 29px; padding: 6px 22px; }
 #s16 .brawo { margin-top: 12px; font-family: 'Baloo 2'; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s06 .kafle, #s09 .kafle { width: 1140px; gap: 12px 24px; margin-top: 18px; }
+#s06 .kafel, #s09 .kafel { font-size: 32px; padding: 6px 18px; line-height: 1.25; }
+#s06 .kafel .etyk, #s09 .kafel .etyk { vertical-align: 4px; }
+#s06 .dl, #s09 .dl { font-family: 'Nunito'; font-size: 24px; color: var(--szary); }
+#s06 .pisz, #s09 .pisz, #s12 .pisz { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
+#s12 .rzad { margin-top: 22px; }
+#s12 .karta { border-color: var(--fiolet); padding: 12px 16px; }
+#s12 .karta .emo { font-size: 56px; line-height: 1.1; }
+#s12 .karta .nazwa { color: var(--fiolet); font-size: 44px; }
+#s12 .karta .znaczy { margin-top: 6px; font-size: 27px; line-height: 1.25; }
+#s12 .podp { display: flex; gap: 16px; justify-content: center; margin-top: 20px; }
+#s12 .podp .chip { flex: none; white-space: nowrap; font-size: 28px; background: var(--pomarancz); }
+#s12 .podp .chip b { color: var(--ciemny); background: #fff; border-radius: 999px; padding: 0 12px; margin-left: 6px; }
 </style>
 </head>
 <body>
@@ -290,15 +304,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c2">2 · PRZENOŚNIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="szybki"><span class="fr">1. szybki <span class="slowko">jak</span> strzała</span><span class="etyk e-por">porównanie</span> <span class="dlaczego">- jest „jak”</span></div>
-      <div class="linia wjazd-lewo" data-slowo="las"><span class="fr">2. las rąk</span><span class="etyk e-prz">przenośnia</span> <span class="dlaczego">- w klasie nie rośnie las 🌲</span></div>
-      <div class="linia wjazd-lewo" data-slowo="złote"><span class="fr">3. złote serce</span><span class="etyk e-prz">przenośnia</span> <span class="dlaczego">- to dobry człowiek</span></div>
-      <div class="linia wjazd-lewo" data-slowo="blady"><span class="fr">4. blady <span class="slowko">niczym</span> ściana</span><span class="etyk e-por">porównanie</span> <span class="dlaczego">- jest „niczym”</span></div>
-      <div class="linia wjazd-lewo" data-slowo="morze"><span class="fr">5. morze łez</span><span class="etyk e-prz">przenośnia</span> <span class="dlaczego">- nie prawdziwe morze 🌊</span></div>
-      <div class="linia wjazd-lewo" data-slowo="śpi"><span class="fr">6. śpi <span class="slowko">jak</span> suseł</span><span class="etyk e-por">porównanie</span> <span class="dlaczego">- jest „jak”</span></div>
+    <div class="polecenie">Porównanie czy przenośnia?</div>
+    <div class="kafle">
+      <div class="kafel" data-slowo="porównanie"><b>1</b>szybki jak strzała <span class="etyk e-por o-znak o-razem">porównanie</span><span class="dl o-wpis-blok o-razem">jest słówko „jak”</span></div>
+      <div class="kafel" data-slowo="przenośnia"><b>2</b>las rąk <span class="etyk e-prz o-znak o-razem">przenośnia</span><span class="dl o-wpis-blok o-razem">w klasie nie rośnie las 🌲</span></div>
+      <div class="kafel" data-slowo="przenośnia"><b>3</b>złote serce <span class="etyk e-prz o-znak o-razem">przenośnia</span><span class="dl o-wpis-blok o-razem">serce nie jest ze złota - to dobry człowiek</span></div>
+      <div class="kafel" data-slowo="porównanie"><b>4</b>blady niczym ściana <span class="etyk e-por o-znak o-razem">porównanie</span><span class="dl o-wpis-blok o-razem">jest słówko „niczym”</span></div>
+      <div class="kafel" data-slowo="przenośnia"><b>5</b>morze łez <span class="etyk e-prz o-znak o-razem">przenośnia</span><span class="dl o-wpis-blok o-razem">dużo łez, a nie prawdziwe morze 🌊</span></div>
+      <div class="kafel" data-slowo="porównanie"><b>6</b>śpi jak suseł <span class="etyk e-por o-znak o-razem">porównanie</span><span class="dl o-wpis-blok o-razem">jest słówko „jak”</span></div>
     </div>
+    <div class="pisz">Zapisz w zeszycie: 1 - porównanie, 2 - … 📓</div>
   </section>
 
   <!-- ===== 07 doslownie czy w przenosni ===== -->
@@ -339,15 +356,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c3">3 · ROZPOZNAJ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="pary">
-      <div class="linia dos wjazd-lewo" data-slowo="torba"><span class="fr">1. ciężka torba</span><span class="etyk e-dos">dosłownie</span><br><span class="dlaczego">trudno ją podnieść 🎒</span></div>
-      <div class="linia prz wjazd-prawo" data-slowo="dzień"><span class="fr">2. ciężki dzień</span><span class="etyk e-prz">w przenośni</span><br><span class="dlaczego">męczący, pełen kłopotów</span></div>
-      <div class="linia dos wjazd-lewo" data-slowo="mur"><span class="fr">3. kamienny mur</span><span class="etyk e-dos">dosłownie</span><br><span class="dlaczego">zbudowany z kamieni 🧱</span></div>
-      <div class="linia prz wjazd-prawo" data-slowo="twarz"><span class="fr">4. kamienna twarz</span><span class="etyk e-prz">w przenośni</span><br><span class="dlaczego">nie pokazuje uczuć 😐</span></div>
-      <div class="linia dos wjazd-lewo" data-slowo="herbata"><span class="fr">5. gorąca herbata</span><span class="etyk e-dos">dosłownie</span><br><span class="dlaczego">można się oparzyć ☕</span></div>
-      <div class="linia prz wjazd-prawo" data-slowo="powitanie"><span class="fr">6. gorące powitanie</span><span class="etyk e-prz">w przenośni</span><br><span class="dlaczego">bardzo serdeczne 🤗</span></div>
+    <div class="polecenie">Dosłownie czy w przenośni?</div>
+    <div class="kafle">
+      <div class="kafel" data-slowo="dosłownie"><b>1</b>ciężka torba <span class="etyk e-dos o-znak o-razem">dosłownie</span><span class="dl o-wpis-blok o-razem">naprawdę trudno ją podnieść 🎒</span></div>
+      <div class="kafel" data-slowo="przenośni"><b>2</b>ciężki dzień <span class="etyk e-prz o-znak o-razem">w przenośni</span><span class="dl o-wpis-blok o-razem">męczący, pełen kłopotów</span></div>
+      <div class="kafel" data-slowo="dosłownie"><b>3</b>kamienny mur <span class="etyk e-dos o-znak o-razem">dosłownie</span><span class="dl o-wpis-blok o-razem">zbudowany z kamieni 🧱</span></div>
+      <div class="kafel" data-slowo="przenośni"><b>4</b>kamienna twarz <span class="etyk e-prz o-znak o-razem">w przenośni</span><span class="dl o-wpis-blok o-razem">nie pokazuje uczuć 😐</span></div>
+      <div class="kafel" data-slowo="dosłownie"><b>5</b>gorąca herbata <span class="etyk e-dos o-znak o-razem">dosłownie</span><span class="dl o-wpis-blok o-razem">można się oparzyć ☕</span></div>
+      <div class="kafel" data-slowo="przenośni"><b>6</b>gorące powitanie <span class="etyk e-prz o-znak o-razem">w przenośni</span><span class="dl o-wpis-blok o-razem">bardzo serdeczne 🤗</span></div>
     </div>
+    <div class="pisz">Zapisz w zeszycie: 1 - dosłownie, 2 - … 🖍️📓</div>
   </section>
 
   <!-- ===== 10 jak odczytac ===== -->
@@ -401,11 +421,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c4">4 · ODCZYTAJ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="ręce">🙌 <span class="fr fiol">złote ręce</span> - wszystko potrafi zrobić i naprawić<br><span class="dlaczego">bo złoto jest cenne</span></div>
-      <div class="linia wjazd-lewo" data-slowo="oklasków">👏 <span class="fr fiol">burza oklasków</span> - bardzo głośne, długie brawa<br><span class="dlaczego">bo burza jest głośna i gwałtowna</span></div>
-      <div class="linia wjazd-lewo" data-slowo="nerwy">💪 <span class="fr fiol">żelazne nerwy</span> - zachowuje spokój w trudnej sytuacji<br><span class="dlaczego">bo żelazo jest twarde i mocne</span></div>
+    <div class="polecenie">Co znaczą te przenośnie?</div>
+    <div class="rzad">
+      <div class="karta"><div class="emo">🙌</div><div class="nazwa">złote ręce</div><div class="znaczy o-wpis-blok" data-slowo="potrafi">ktoś, kto wszystko potrafi zrobić i naprawić</div></div>
+      <div class="karta"><div class="emo">👏</div><div class="nazwa">burza oklasków</div><div class="znaczy o-wpis-blok" data-slowo="brawa">bardzo głośne i długie brawa</div></div>
+      <div class="karta"><div class="emo">💪</div><div class="nazwa">żelazne nerwy</div><div class="znaczy o-wpis-blok" data-slowo="spokój">ktoś zachowuje spokój w trudnej sytuacji</div></div>
+    </div>
+    <div class="podp">
+      <span class="chip">jakie jest złoto?<b class="o-znak" data-slowo="cenne">cenne</b></span>
+      <span class="chip">jaka jest burza?<b class="o-znak" data-slowo="głośna">głośna</b></span>
+      <span class="chip">jakie jest żelazo?<b class="o-znak" data-slowo="twarde">twarde</b></span>
     </div>
   </section>
 

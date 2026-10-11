@@ -105,6 +105,19 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s14 .lista { width: 1080px; }
 #s14 .linia { font-size: 28px; padding: 6px 20px; }
 #s14 .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s04 .linia .dlaczego { margin-left: 8px; }
+#s07 .powody { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 16px auto 0; width: 1000px; }
+#s07 .powody .linia { font-size: 26px; padding: 5px 18px; }
+#s07 .pisz, #s11 .pisz { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--szary); }
+#s11 .lista .linia { font-size: 30px; }
+#s11 .obiet, #s11 .napr { font-size: 26px; padding-left: 50px; }
+#s11 .obiet b { color: var(--rk); }
+#s11 .napr { color: var(--ciemny) !important; }
+#s11 .napr b { color: var(--zielony); }
+#s13 .temat { margin: 14px auto 0; width: 900px; font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; border-color: var(--zielony); padding: 6px 20px; }
+#s13 .lista { margin-top: 14px; }
+#s13 .lista .linia { font-family: 'Baloo 2'; font-size: 34px; text-align: center; border-color: var(--zielony); padding: 4px 20px; }
 </style>
 </head>
 <body>
@@ -155,12 +168,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 04 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <span class="czesc c1">1 · CO TO JEST</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Reklama czy informacja?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="sok">1. Nowy sok Słoneczko - zdrowie w każdej kropli! Kup teraz!<span class="etyk e-r">reklama</span></div>
-      <div class="linia wjazd-lewo" data-slowo="sklep">2. Sklep jest czynny od 8.00 do 20.00.<span class="etyk e-i">informacja</span></div>
-      <div class="linia wjazd-lewo" data-slowo="plecak">3. Tylko dziś drugi plecak GRATIS!<span class="etyk e-r">reklama</span> <span class="dlaczego">obietnica, pośpiech</span></div>
-      <div class="linia wjazd-lewo" data-slowo="biblioteka">4. Biblioteka szkolna jest na pierwszym piętrze.<span class="etyk e-i">informacja</span></div>
+      <div class="linia" data-slowo="reklama"><span class="nr">1</span>„Nowy sok Słoneczko - zdrowie w każdej kropli! Kup teraz!”<span class="etyk e-r o-znak o-razem">reklama</span></div>
+      <div class="linia" data-slowo="informacja"><span class="nr">2</span>„Sklep jest czynny od 8.00 do 20.00.”<span class="etyk e-i o-znak o-razem">informacja</span><span class="dlaczego o-wpis o-razem">sam fakt</span></div>
+      <div class="linia" data-slowo="reklama"><span class="nr">3</span>„Tylko dziś drugi plecak GRATIS!”<span class="etyk e-r o-znak o-razem">reklama</span><span class="dlaczego o-wpis o-razem">obietnica, pośpiech</span></div>
+      <div class="linia" data-slowo="informacja"><span class="nr">4</span>„Biblioteka szkolna jest na pierwszym piętrze.”<span class="etyk e-i o-znak o-razem">informacja</span></div>
     </div>
   </section>
 
@@ -194,20 +209,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 07 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="07-odpowiedz2" id="s07">
+    <span class="czesc c2">2 · JAK JĄ ROZPOZNAĆ</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="slowa">
-      <span class="chip pop" data-slowo="nowość">nowość!</span>
-      <span class="chip pop" data-slowo="najlepsze">najlepsze</span>
-      <span class="chip pop" data-slowo="tylko">tylko teraz!</span>
-      <span class="chip pop" data-slowo="cenie">dwie w cenie jednej!</span>
-      <span class="chip pop" data-slowo="spróbuj">spróbuj!</span>
-      <span class="chip pop" data-slowo="pokochasz">pokochasz!</span>
-    </div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="ciekawi">nowość ➜ mamy być ciekawi 🤔</div>
-      <div class="linia wjazd-lewo" data-slowo="uwierzyli">najlepsze ➜ mamy uwierzyć 🏆</div>
-      <div class="linia wjazd-lewo" data-slowo="pospieszyli">tylko teraz ➜ mamy się spieszyć ⏰</div>
-      <div class="linia wjazd-lewo" data-slowo="prosto">spróbuj ➜ mówi prosto do nas 👉</div>
+    <div class="polecenie">Wypisz słowa, które namawiają</div>
+    <div class="karta reklama">🚀 <span class="o-podsw" data-slowo="nowość">NOWOŚĆ!</span> Super Chrupki Kosmos - <span class="o-podsw" data-slowo="najlepsze">najlepsze</span> chrupki na świecie! <span class="o-podsw" data-slowo="tylko">Tylko teraz</span> <span class="o-podsw" data-slowo="cenie">dwie paczki w cenie jednej</span>! <span class="o-podsw" data-slowo="spróbuj">Spróbuj</span>, a <span class="o-podsw" data-slowo="pokochasz">pokochasz</span>!</div>
+    <div class="powody">
+      <div class="linia o-wpis-blok" data-slowo="ciekawi">nowość ➜ mamy być ciekawi 🤔</div>
+      <div class="linia o-wpis-blok" data-slowo="uwierzyli">najlepsze ➜ mamy uwierzyć 🏆</div>
+      <div class="linia o-wpis-blok" data-slowo="pospieszyli">tylko teraz ➜ mamy się spieszyć ⏰</div>
+      <div class="linia o-wpis-blok" data-slowo="prosto">spróbuj ➜ mówi prosto do nas 👉</div>
     </div>
   </section>
 
@@ -254,12 +264,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · CZY TO PRAWDA?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Co obiecuje? Jak jest naprawdę?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="rakieta">👟 Buty Rakieta - obiecuje: <b>zwycięstwo</b></div>
-      <div class="linia wjazd-lewo" data-slowo="trenować">naprawdę: trzeba trenować, buty mogą być najwyżej wygodne</div>
-      <div class="linia wjazd-lewo" data-slowo="geniusz">🎒 Plecak Geniusz - obiecuje: <b>dobre oceny</b></div>
-      <div class="linia wjazd-lewo" data-slowo="nauki">naprawdę: oceny zależą od nauki, nie od plecaka</div>
+      <div class="linia">👟 „Buty Rakieta - z nimi wygrasz każdy wyścig!”
+        <div class="obiet o-wpis-blok" data-slowo="zwycięstwo">obiecuje: <b>zwycięstwo</b></div>
+        <div class="napr o-wpis-blok" data-slowo="trenować"><b>naprawdę:</b> trzeba trenować, buty mogą być najwyżej wygodne</div>
+      </div>
+      <div class="linia">🎒 „Plecak Geniusz - z nim zawsze dostaniesz szóstkę!”
+        <div class="obiet o-wpis-blok" data-slowo="oceny">obiecuje: <b>dobre oceny</b></div>
+        <div class="napr o-wpis-blok" data-slowo="nauki"><b>naprawdę:</b> oceny zależą od nauki, nie od plecaka</div>
+      </div>
     </div>
   </section>
 
@@ -279,11 +295,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 13 odpowiedz 4 ===== -->
   <section class="scena odp" data-id="13-odpowiedz4" id="s13">
+    <span class="czesc c4">4 · TWOJE HASŁO</span>
     <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
+    <div class="polecenie">Wymyśl hasło reklamowe</div>
+    <div class="karta temat">🍎🍌🍐 owoce na drugie śniadanie</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="jabłko">🍎 „Jabłko chrup, będziesz zdrów jak dąb!”</div>
-      <div class="linia wjazd-lewo" data-slowo="owoc">🎒 „Owoc w plecaku, siła w dzieciaku!”</div>
-      <div class="linia wjazd-lewo" data-slowo="banan">🍌 „Banan, gruszka, śliwka - zdrowa przerwa, dobra chwilka!”</div>
+      <div class="linia o-wpis-blok" data-slowo="jabłko">🍎 „Jabłko chrup, będziesz zdrów jak dąb!”</div>
+      <div class="linia o-wpis-blok" data-slowo="owoc">🎒 „Owoc w plecaku, siła w dzieciaku!”</div>
+      <div class="linia o-wpis-blok" data-slowo="banan">🍌 „Banan, gruszka, śliwka - zdrowa przerwa, dobra chwilka!”</div>
     </div>
     <div class="check">
       <span class="chip pop" data-slowo="krótkie">✓ krótkie</span>

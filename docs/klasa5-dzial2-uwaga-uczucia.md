@@ -65,3 +65,7 @@ Dwie lekcje z tekstem, reszta filmiki z zadaniami. Kolejność: słowa i emocje 
 
 Pomijamy: obraz s. 59, Onichimowska s. 70-73, Gawryluk s. 79-81, tekst Etinga s. 93-94.
 Recytacja jako ocena: "Lwy" albo fragment "Przenośni" do wyboru, zaliczanie 3-4 osoby na początku lekcji 6-11.
+
+## Filmy - wersja zwarta (2026-10-11)
+
+Wszystkie filmy działu mają 4-5 minut (recytacja 3:58), tak jak w klasie 4: lektor przyspieszony o 25%, 12 s na zadanie, bez intro. Zwykle 3 zadania (reklama 4, recytacja 2 na głos). Sprawdzanie dzieje się na ekranie zadania: polecenie i przykłady zostają, odpowiedź pojawia się przy przykładzie. Koło z pytaniami lekcji jest dopiero na początku następnej lekcji. Wycięte sceny: `tools/skroc-filmy-klasa5.py`.

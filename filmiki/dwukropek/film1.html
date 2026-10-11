@@ -81,6 +81,20 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 #s15 .lista { width: 1080px; }
 #s15 .linia { font-size: 28px; padding: 6px 20px; }
 #s15 .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+@keyframes dk-wstaw { from { font-size: 0; opacity: 0; } to { font-size: 1.3em; opacity: 1; } }
+#s06 .lista .linia { font-size: 28px; }
+#s06 .dk.wstaw { display: inline-block; animation: dk-wstaw .35s cubic-bezier(.16,1,.3,1) both; }
+#s08 .nowe { margin-top: 4px; font-size: 28px; }
+#s08 .nowe .dk { color: var(--dk); }
+#s08 .pisz, #s12 .pisz { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
+#s08 .rada { margin-top: 14px; }
+#s12 .info { margin: 12px auto 0; width: 1000px; text-align: left; border-color: var(--sp); padding: 8px 20px; }
+#s12 .info div { font-size: 28px; font-weight: 800; padding: 1px 0; }
+#s12 .info b { color: var(--sp); display: inline-block; width: 160px; }
+#s12 .info .tick { color: var(--zielony); margin-left: 8px; }
+#s12 .wzor { margin: 12px auto 0; width: 1100px; font-size: 27px; line-height: 1.35; border-color: var(--zielony); }
+#s12 .wzor small { display: block; font-size: 22px; color: var(--zielony); }
 </style>
 </head>
 <body>
@@ -149,12 +163,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c1">1 · DWUKROPEK</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Gdzie brakuje dwukropka?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="urodziny">1. Na urodziny zaprosiłam trzy koleżanki<span class="dk">:</span> Zosię, Martę i Julię.<span class="etyk">wyliczenie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="tata">2. Tata krzyknął<span class="dk">:</span> - Uwaga, schody!<span class="etyk" style="background:var(--fiolet)">słowa</span></div>
-      <div class="linia wjazd-lewo" data-slowo="sklepie">3. W sklepie kupiliśmy<span class="dk">:</span> chleb, mleko i jajka.<span class="etyk">wyliczenie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="babcia">4. Babcia zawsze powtarza<span class="dk">:</span> „Kto rano wstaje, temu Pan Bóg daje”.<span class="etyk" style="background:var(--sp)">cytat</span></div>
+      <div class="linia"><span class="nr">1</span>Na urodziny zaprosiłam trzy koleżanki<span class="dk wstaw" data-slowo="dwukropek">:</span> Zosię, Martę i Julię.<span class="etyk o-znak" data-slowo="wyliczenie">wyliczenie</span></div>
+      <div class="linia"><span class="nr">2</span>Tata krzyknął<span class="dk wstaw" data-slowo="dwukropek">:</span> - Uwaga, schody!<span class="etyk o-znak" data-slowo="słów" style="background:var(--fiolet)">słowa</span></div>
+      <div class="linia"><span class="nr">3</span>W sklepie kupiliśmy<span class="dk wstaw" data-slowo="dwukropek">:</span> chleb, mleko i jajka.<span class="etyk o-znak" data-slowo="wyliczenie">wyliczenie</span></div>
+      <div class="linia"><span class="nr">4</span>Babcia zawsze powtarza<span class="dk wstaw" data-slowo="dwukropek">:</span> „Kto rano wstaje, temu Pan Bóg daje”.<span class="etyk o-znak" data-slowo="cytat" style="background:var(--sp)">cytat</span></div>
     </div>
   </section>
 
@@ -173,11 +189,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c1">1 · DWUKROPEK</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Zamień na dwukropek i cytat „ ”</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="kuba">1. Kuba powiedział<span class="dk">:</span> „<b>Zapomniałem</b> zeszytu”.</div>
-      <div class="linia wjazd-lewo" data-slowo="oznajmiła">2. Pani oznajmiła<span class="dk">:</span> „Jutro będzie kartkówka”.</div>
+      <div class="linia"><span class="nr">1</span>Kuba powiedział, że zapomniał zeszytu.
+        <div class="nowe o-wpis-blok" data-slowo="zamieniamy">➜ Kuba powiedział<span class="dk">:</span> „<b>Zapomniałem</b> zeszytu”.</div>
+      </div>
+      <div class="linia"><span class="nr">2</span>Pani oznajmiła, że jutro będzie kartkówka.
+        <div class="nowe o-wpis-blok" data-slowo="zamieniamy">➜ Pani oznajmiła<span class="dk">:</span> „Jutro będzie kartkówka”.</div>
+      </div>
     </div>
+    <div class="pisz">⚠️ pamiętaj o zmianie osoby</div>
     <div><span class="chip rada pop" data-slowo="zmieniliśmy">on zapomniał ➜ ja zapomniałem</span></div>
   </section>
 
@@ -223,16 +246,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
-    <div><span class="badge pop" data-t="0">PRZYKŁAD ✅</span></div>
-    <div class="linia zdanie pop" data-slowo="przykład">W środę 10 grudnia na korytarzu naszej szkoły samorząd uczniowski zorganizował kiermasz świąteczny, bo zbieraliśmy pieniądze dla schroniska.</div>
-    <div class="pyt">
-      <span class="chip pop" data-slowo="samorząd">kto ✓</span>
-      <span class="chip pop" data-slowo="kiermasz">co ✓</span>
-      <span class="chip pop" data-slowo="grudnia">kiedy ✓</span>
-      <span class="chip pop" data-slowo="korytarzu">gdzie ✓</span>
-      <span class="chip pop" data-slowo="schroniska">dlaczego ✓</span>
-      <span class="chip pop" data-slowo="inaczej" style="background:var(--zielony)">twoje zdanie może brzmieć inaczej</span>
+    <span class="czesc c2">2 · SPRAWOZDANIE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Napisz wstęp sprawozdania 🎄</div>
+    <div class="karta info">
+      <div><b>kto?</b> samorząd uczniowski<span class="tick o-znak" data-slowo="samorząd">✓</span></div>
+      <div><b>co?</b> kiermasz świąteczny<span class="tick o-znak" data-slowo="kiermasz">✓</span></div>
+      <div><b>kiedy?</b> środa, 10 grudnia<span class="tick o-znak" data-slowo="grudnia">✓</span></div>
+      <div><b>gdzie?</b> korytarz szkoły<span class="tick o-znak" data-slowo="korytarzu">✓</span></div>
+      <div><b>dlaczego?</b> zbiórka dla schroniska 🐶<span class="tick o-znak" data-slowo="schroniska">✓</span></div>
     </div>
+    <div class="linia wzor o-wpis-blok" data-slowo="przykład"><small>na przykład:</small>W środę 10 grudnia na korytarzu naszej szkoły samorząd uczniowski zorganizował kiermasz świąteczny, bo zbieraliśmy pieniądze dla schroniska.</div>
+    <div class="pisz o-wpis-blok" data-slowo="inaczej">twoje zdanie może brzmieć inaczej ✓</div>
   </section>
 
   <!-- ===== 13 zadanie 4 ===== -->

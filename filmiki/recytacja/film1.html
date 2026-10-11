@@ -100,6 +100,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 #s10 .k2 { border-color: var(--niebieski); } #s10 .k2 .nazwa { color: var(--niebieski); }
 #s10 .k3 { border-color: var(--zielony); } #s10 .k3 .nazwa { color: var(--zielony); }
 #s10 .brawo { margin-top: 28px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s06 .zdanie { margin-top: 14px; font-size: 52px; }
+#s06 .karta .emo { font-size: 54px; line-height: 1.1; }
+#s06 .karta .opis { margin-top: 4px; font-size: 27px; line-height: 1.25; }
+#s06 .karta .opis.o-wpis-blok { color: var(--ciemny); }
+#s06 .pisz, #s08 .pisz { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
+#s08 .wiersz div { justify-content: flex-start; }
 </style>
 </head>
 <body>
@@ -187,13 +194,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c2">2 · GŁOS</span>
     <div><span class="badge pop" data-t="0">SŁYSZELIŚCIE? ✅</span></div>
     <div class="zdanie">„Jutro idziemy do lasu.”</div>
     <div class="emocje">
-      <div class="karta pop" data-slowo="radośnie"><div class="emo">😄</div><div class="opis">głos wyżej<br>szybciej<br>z uśmiechem</div></div>
-      <div class="karta pop" data-slowo="smutno"><div class="emo">😢</div><div class="opis">ciszej<br>wolniej<br>głos opada</div></div>
-      <div class="karta pop" data-slowo="złością"><div class="emo">😠</div><div class="opis">mocno<br>krótko<br>twardo</div></div>
-      <div class="karta pop" data-slowo="strachem"><div class="emo">😨</div><div class="opis">cicho<br>z przerwami<br>głos drży</div></div>
+      <div class="karta"><div class="emo">😄</div><div class="nazwa">radośnie</div><div class="opis o-wpis-blok" data-slowo="radośnie">głos wyżej<br>szybciej<br>z uśmiechem</div></div>
+      <div class="karta"><div class="emo">😢</div><div class="nazwa">smutno</div><div class="opis o-wpis-blok" data-slowo="smutno">ciszej<br>wolniej<br>głos opada</div></div>
+      <div class="karta"><div class="emo">😠</div><div class="nazwa">ze złością</div><div class="opis o-wpis-blok" data-slowo="złością">mocno<br>krótko<br>twardo</div></div>
+      <div class="karta"><div class="emo">😨</div><div class="nazwa">ze strachem</div><div class="opis o-wpis-blok" data-slowo="strachem">cicho<br>z przerwami<br>głos drży</div></div>
     </div>
   </section>
 
@@ -213,13 +221,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · GŁOS</span>
     <div><span class="badge pop" data-t="0">POSŁUCHAJ ✅</span></div>
     <div class="karta wiersz">
-      <div class="zjaw" data-slowo="szedłem">Szedłem przez las, <span class="chip pop" data-slowo="krótka">krótka pauza</span></div>
-      <div class="zjaw" data-slowo="wiatr">a wiatr wiał mocno. <span class="chip pop" data-slowo="dłuższa">dłuższa pauza</span></div>
-      <div class="zjaw" data-slowo="nagle">Nagle - trzask! <span class="chip pop" data-slowo="szybko">mocno i szybko</span></div>
-      <div class="zjaw" data-slowo="kto">Kto tam jest? <span class="chip pop" data-slowo="ciszej">↗ w górę, ciszej</span></div>
+      <div>Szedłem przez las, <span class="pauza">|</span> <span class="chip o-znak" data-slowo="krótka">krótka pauza</span></div>
+      <div>a wiatr wiał mocno. <span class="pauza">||</span> <span class="chip o-znak" data-slowo="dłuższa">dłuższa pauza</span></div>
+      <div>Nagle - trzask! <span class="pauza">||</span> <span class="chip o-znak" data-slowo="szybko">mocno i szybko</span></div>
+      <div>Kto tam jest? ↗ <span class="chip o-znak" data-slowo="ciszej">w górę, ciszej</span></div>
     </div>
+    <div class="pisz">🗣️ pauza przy <span class="pauza">|</span> · głos w górę przy ?</div>
     <div><span class="chip napiecie pop" data-slowo="napięcie">pauzy budują napięcie 😮</span></div>
   </section>
 

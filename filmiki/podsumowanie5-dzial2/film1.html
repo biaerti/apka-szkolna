@@ -73,6 +73,11 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 #s17 .g { font-size: 26px; font-weight: 800; background: var(--bialy); border-radius: 18px; padding: 10px 18px; border: 4px solid var(--ramka); text-align: left; }
 #s17 .g b { font-family: 'Baloo 2'; font-size: 30px; display: block; }
 #s17 .koniec { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 6px 36px; display: inline-block; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s04 .linia .dlaczego, #s10 .linia .dlaczego { margin-left: 8px; }
+#s04 .linia .o-wpis, #s10 .linia .o-wpis { margin-left: 8px; }
+#s16 .lista { width: 1180px; }
+#s16 .lista .linia { font-size: 27px; }
 </style>
 </head>
 <body>
@@ -119,12 +124,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 04 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <span class="czesc c1">1 · SŁOWA I EMOCJE</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Porównanie czy przenośnia?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="strzała">1. szybki <b>jak</b> strzała<span class="etyk" style="background:var(--niebieski)">porównanie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="złote">2. złote serce<span class="etyk" style="background:var(--fiolet)">przenośnia</span> <span class="dlaczego">ktoś dobry</span></div>
-      <div class="linia wjazd-lewo" data-slowo="las">3. las rąk<span class="etyk" style="background:var(--fiolet)">przenośnia</span> <span class="dlaczego">mnóstwo rąk</span></div>
-      <div class="linia wjazd-lewo" data-slowo="trzymać">4. trzymać język za zębami = <b>nie zdradzić tajemnicy</b> 🤐</div>
+      <div class="linia" data-slowo="porównanie"><span class="nr">1</span>szybki jak strzała<span class="etyk o-znak o-razem" style="background:var(--niebieski)">porównanie</span><span class="dlaczego o-wpis o-razem">jest słówko „jak”</span></div>
+      <div class="linia" data-slowo="przenośnia"><span class="nr">2</span>złote serce<span class="etyk o-znak o-razem" style="background:var(--fiolet)">przenośnia</span><span class="dlaczego o-wpis o-razem">ktoś dobry</span></div>
+      <div class="linia" data-slowo="przenośnia"><span class="nr">3</span>las rąk<span class="etyk o-znak o-razem" style="background:var(--fiolet)">przenośnia</span><span class="dlaczego o-wpis o-razem">mnóstwo rąk</span></div>
+      <div class="linia" style="border-color:var(--fiolet)"><span class="nr" style="background:var(--fiolet)">4</span>Co znaczy: trzymać język za zębami?<span class="o-wpis" data-slowo="tajemnicy">➜ nie zdradzić tajemnicy 🤐</span></div>
     </div>
   </section>
 
@@ -198,11 +205,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 10 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="10-odpowiedz3" id="s10">
+    <span class="czesc c2">2 · RZECZOWNIK</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jaki przypadek? Popraw błąd.</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="siostrą">1. z <span class="u">siostrą</span> <span class="dlaczego">z kim?</span><span class="etyk" style="background:var(--niebieski)">narzędnik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="ołówka">2. <span class="u">ołówka</span> <span class="dlaczego">nie ma czego?</span><span class="etyk" style="background:var(--niebieski)">dopełniacz</span></div>
-      <div class="linia wjazd-lewo" data-slowo="muzeumie">3. <span style="text-decoration:line-through;color:var(--roz)">w muzeumie</span> ➜ <b style="color:var(--zielony)">w muzeum</b> <span class="dlaczego">w lp. się nie odmienia</span></div>
+      <div class="linia"><span class="nr">1</span>Idę do kina z <span class="u">siostrą</span>.<span class="dlaczego o-wpis" data-slowo="kim">z kim?</span><span class="etyk o-znak" data-slowo="narzędnik" style="background:var(--niebieski)">narzędnik</span></div>
+      <div class="linia"><span class="nr">2</span>Nie mam <span class="u">ołówka</span>.<span class="dlaczego o-wpis" data-slowo="czego">nie ma czego?</span><span class="etyk o-znak" data-slowo="dopełniacz" style="background:var(--niebieski)">dopełniacz</span></div>
+      <div class="linia o-zla" data-slowo="błąd"><span class="nr" style="background:var(--roz)">3</span>Byliśmy w <span class="o-skresl o-razem">muzeumie</span>. ⚠️<span class="o-wpis" data-slowo="poprawnie">➜ w muzeum</span><span class="dlaczego o-wpis" data-slowo="pojedynczej">w lp. się nie odmienia</span></div>
     </div>
   </section>
 
@@ -268,11 +277,13 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 54px; line-height: 1.05; color:
 
   <!-- ===== 16 odpowiedz 5 ===== -->
   <section class="scena odp" data-id="16-odpowiedz5" id="s16">
+    <span class="czesc c4">4 · FORMY WYPOWIEDZI</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Sprawozdanie czy reklama? Jaka część?</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="poniedziałek">1. W poniedziałek 3 czerwca nasza klasa pojechała do Torunia.<span class="etyk" style="background:var(--niebieski)">sprawozdanie · wstęp</span></div>
-      <div class="linia wjazd-lewo" data-slowo="bałwanek">2. Super Lody Bałwanek - NOWOŚĆ!…<span class="etyk" style="background:var(--roz)">reklama</span></div>
-      <div class="linia wjazd-lewo" data-slowo="pierniki">3. Na koniec kupiliśmy pierniki i wróciliśmy do domu.<span class="etyk" style="background:var(--niebieski)">sprawozdanie · rozwinięcie</span></div>
+      <div class="linia"><span class="nr">1</span>W poniedziałek 3 czerwca nasza klasa pojechała do Torunia.<span class="etyk o-znak" data-slowo="wstęp" style="background:var(--niebieski)">sprawozdanie · wstęp</span></div>
+      <div class="linia"><span class="nr">2</span>Super Lody Bałwanek - NOWOŚĆ! Tylko teraz dwie w cenie jednej!<span class="etyk o-znak" data-slowo="reklama" style="background:var(--roz)">reklama</span></div>
+      <div class="linia"><span class="nr">3</span>Na koniec kupiliśmy pierniki i wróciliśmy do domu.<span class="etyk o-znak" data-slowo="rozwinięcie" style="background:var(--niebieski)">sprawozdanie · rozwinięcie</span></div>
     </div>
   </section>
 

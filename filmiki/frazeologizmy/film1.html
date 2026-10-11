@@ -156,6 +156,21 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 #s16 .uczucia .linia { font-size: 24px; text-align: center; padding: 8px 10px; }
 #s16 .uczucia .linia b { display: block; font-family: 'Baloo 2'; font-size: 28px; }
 #s16 .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s06 .dwie { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 22px auto 0; width: 1120px; text-align: left; }
+#s06 .kol { display: flex; flex-direction: column; gap: 12px; }
+#s06 .linia { position: relative; font-size: 30px; }
+#s06 .lewa .linia { font-family: 'Baloo 2'; font-size: 34px; color: var(--mieta); padding-right: 74px; }
+#s06 .para { position: absolute; right: 12px; top: 8px; bottom: 8px; display: flex; align-items: center; justify-content: center; min-width: 44px; font-family: 'Baloo 2'; color: #fff; background: var(--zielony); border-radius: 10px; line-height: 1; }
+#s06 .pisz, #s09 .pisz { margin-top: 16px; font-size: 30px; font-weight: 800; color: var(--szary); }
+#s09 .lista .linia { font-size: 30px; }
+#s09 .bank { margin: 20px auto 0; width: 1000px; border-color: var(--roz); border-style: dashed; padding: 10px 18px; }
+#s09 .bank span { display: inline-block; font-family: 'Baloo 2'; font-size: 30px; font-weight: 800; color: var(--roz); margin: 0 14px; }
+#s09 .luka b { font-family: 'Baloo 2'; font-size: 34px; color: var(--roz); padding: 0 6px; }
+#s12 .opcje .chip { font-size: 30px; }
+#s12 .lista { width: 1180px; }
+#s12 .linia { font-size: 28px; }
+#s12 .linia .etyk { font-size: 24px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
 </style>
 </head>
 <body>
@@ -263,13 +278,24 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c1">1 · CO TO JEST?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="bułka"><b class="para">1 - C</b><span class="fr">bułka z masłem</span> = coś bardzo łatwego<br><span class="dlaczego">🍞 bułkę z masłem zje każdy, bez trudu</span></div>
-      <div class="linia wjazd-lewo" data-slowo="muchy"><b class="para">2 - B</b><span class="fr">muchy w nosie</span> = być obrażonym<br><span class="dlaczego">😤 kręci nosem i się dąsa</span></div>
-      <div class="linia wjazd-lewo" data-slowo="trzymać"><b class="para">3 - D</b><span class="fr">język za zębami</span> = nie zdradzić tajemnicy<br><span class="dlaczego">🤐 schowany język nic nie powie</span></div>
-      <div class="linia wjazd-lewo" data-slowo="rzucać"><b class="para">4 - A</b><span class="fr">słowa na wiatr</span> = obiecywać i nie dotrzymywać<br><span class="dlaczego">💨 wiatr porywa słowa i nic z nich nie zostaje</span></div>
+    <div class="polecenie">Połącz frazeologizm ze znaczeniem</div>
+    <div class="dwie">
+      <div class="kol lewa">
+        <div class="linia"><span class="nr">1</span>bułka z masłem<span class="para o-znak" data-slowo="bułka">C</span></div>
+        <div class="linia"><span class="nr">2</span>mieć muchy w nosie<span class="para o-znak" data-slowo="muchy">B</span></div>
+        <div class="linia"><span class="nr">3</span>trzymać język za zębami<span class="para o-znak" data-slowo="trzymać">D</span></div>
+        <div class="linia"><span class="nr">4</span>rzucać słowa na wiatr<span class="para o-znak" data-slowo="rzucać">A</span></div>
+      </div>
+      <div class="kol">
+        <div class="linia o-dobra" data-slowo="dotrzymywać"><span class="nr lit">A</span>obiecywać i nie dotrzymywać</div>
+        <div class="linia o-dobra" data-slowo="obrażonym"><span class="nr lit">B</span>być obrażonym</div>
+        <div class="linia o-dobra" data-slowo="łatwego"><span class="nr lit">C</span>coś bardzo łatwego</div>
+        <div class="linia o-dobra" data-slowo="tajemnicy"><span class="nr lit">D</span>nie zdradzić tajemnicy</div>
+      </div>
     </div>
+    <div class="pisz">Zapisz w zeszycie pary: 1 - ?, 2 - ?, … 📓</div>
   </section>
 
   <!-- ===== 07 serce ===== -->
@@ -302,12 +328,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · UCZUCIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Uzupełnij zdania frazeologizmami o sercu</div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="wzięła">1. Kasia bardzo przejęła się uwagą pani. Wzięła ją sobie <b class="wstaw">do serca</b>.<br><span class="dlaczego">przejąć się = wziąć coś do serca</span></div>
-      <div class="linia wjazd-lewo" data-slowo="podbił">2. Nowy kolega od razu <b class="wstaw">podbił serca</b> całej klasy.<br><span class="dlaczego">wszyscy go polubili</span></div>
-      <div class="linia wjazd-lewo" data-slowo="babcia">3. Babcia zawsze pomaga sąsiadom. Ma <b class="wstaw">serce na dłoni</b>.<br><span class="dlaczego">kto chętnie pomaga, ma serce na dłoni</span></div>
+      <div class="linia"><span class="nr">1</span>Kasia bardzo przejęła się uwagą pani. Wzięła ją sobie <span class="luka"><b class="o-wpis" data-slowo="serca">do serca</b></span>.</div>
+      <div class="linia"><span class="nr">2</span>Nowy kolega od razu <span class="luka"><b class="o-wpis" data-slowo="podbił">podbił serca</b></span> całej klasy.</div>
+      <div class="linia"><span class="nr">3</span>Babcia zawsze pomaga sąsiadom. Ma <span class="luka"><b class="o-wpis" data-slowo="dłoni">serce na dłoni</b></span>.</div>
     </div>
+    <div class="karta bank"><span>do serca</span>·<span>podbił serca</span>·<span>serce na dłoni</span>·<span>złamane serce</span></div>
+    <div class="pisz">Zapisz w zeszycie całe zdania 📓</div>
   </section>
 
   <!-- ===== 10 uczucia ===== -->
@@ -345,12 +375,20 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c2">2 · UCZUCIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jakie uczucie opisuje frazeologizm?</div>
+    <div class="opcje">
+      <span class="chip o1">😱 strach</span>
+      <span class="chip o2">😳 wstyd</span>
+      <span class="chip o3">😡 złość</span>
+      <span class="chip o4">🥳 radość</span>
+    </div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="cienia">1. Na widok cienia w piwnicy <b>włosy stanęły mu dęba</b>. <span class="chip o1">😱 strach</span></div>
-      <div class="linia wjazd-lewo" data-slowo="konkurs">2. Gdy wygrała konkurs, była <b>w siódmym niebie</b>. <span class="chip o4">🥳 radość</span></div>
-      <div class="linia wjazd-lewo" data-slowo="wpadce">3. Po tej wpadce chciał <b>zapaść się pod ziemię</b>. <span class="chip o2">😳 wstyd</span></div>
-      <div class="linia wjazd-lewo" data-slowo="ładowarkę">4. Brat zabrał mu ładowarkę - <b>wszystko się w nim gotowało</b>. <span class="chip o3">😡 złość</span></div>
+      <div class="linia"><span class="nr">1</span>Na widok cienia w piwnicy <span class="o-podsw" data-slowo="włosy">włosy stanęły mu dęba</span>. <span class="chip etyk o1 o-znak" data-slowo="strach">😱 strach</span></div>
+      <div class="linia"><span class="nr">2</span>Gdy wygrała konkurs, była <span class="o-podsw" data-slowo="siódmym">w siódmym niebie</span>. <span class="chip etyk o4 o-znak" data-slowo="radość">🥳 radość</span></div>
+      <div class="linia"><span class="nr">3</span>Po tej wpadce chciał <span class="o-podsw" data-slowo="zapaść">zapaść się pod ziemię</span>. <span class="chip etyk o2 o-znak" data-slowo="wstyd">😳 wstyd</span></div>
+      <div class="linia"><span class="nr">4</span>Brat znowu zabrał mu ładowarkę - <span class="o-podsw" data-slowo="gotowało">wszystko się w nim gotowało</span>. <span class="chip etyk o3 o-znak" data-slowo="złość">😡 złość</span></div>
     </div>
   </section>
 

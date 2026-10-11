@@ -145,6 +145,19 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 #s15 .linia { font-size: 29px; }
 #s15 .ja { margin-top: 18px; font-size: 34px; background: var(--niebieski); }
 #s15 .brawo { margin-top: 16px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s06 .lista, #s12 .lista { width: 1060px; gap: 14px; }
+#s06 .linia { font-size: 34px; text-align: center; }
+#s06 .cechy { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 8px; }
+#s06 .cechy .chip { font-size: 28px; padding: 2px 22px; background: var(--lew); }
+#s06 .odp-txt, #s12 .odp-txt { margin-top: 6px; font-family: 'Nunito'; font-size: 29px; line-height: 1.3; }
+#s06 .pisz, #s09 .pisz, #s12 .pisz { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
+#s09 .kafle { width: 1140px; gap: 12px 22px; margin-top: 18px; }
+#s09 .kafel { font-size: 32px; padding: 6px 18px; line-height: 1.25; }
+#s09 .dl { font-family: 'Nunito'; font-size: 24px; color: var(--szary); }
+#s12 .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; padding: 6px 22px; }
+#s12 .check { display: flex; gap: 12px; justify-content: center; margin-top: 18px; }
+#s12 .check .chip { font-size: 28px; background: var(--zielony); }
 </style>
 </head>
 <body>
@@ -241,18 +254,24 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 06 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c2">2 · LWY</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="cechy">
-      <span class="chip pop" data-slowo="groźny">groźny</span>
-      <span class="chip pop" data-slowo="silny">silny</span>
-      <span class="chip pop" data-slowo="drapieżny">drapieżny</span>
-      <span class="chip pop" data-slowo="ryczy">ryczy</span>
-      <span class="chip pop" data-slowo="zatrzymać">trudno go zatrzymać</span>
-    </div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="groźna">😠 Złość też bywa groźna i silna - gdy nas złapie, trudno ją powstrzymać.</div>
-      <div class="linia wjazd-lewo" data-slowo="minęła">🌇 Lwy odchodzą wieczorem, bo <b class="ziel">złość chłopca minęła</b> - uspokoił się.</div>
+      <div class="linia"><span class="nr">1</span>Dwie cechy lwa 🦁, które pasują do złości 😠
+        <div class="cechy">
+          <span class="chip o-znak" data-slowo="groźny">groźny</span>
+          <span class="chip o-znak" data-slowo="silny">silny</span>
+          <span class="chip o-znak" data-slowo="drapieżny">drapieżny</span>
+          <span class="chip o-znak" data-slowo="ryczy">ryczy</span>
+          <span class="chip o-znak" data-slowo="zatrzymać">trudno go zatrzymać</span>
+        </div>
+        <div class="odp-txt o-wpis-blok" data-slowo="groźna">Złość też bywa groźna i silna - gdy nas złapie, trudno ją powstrzymać.</div>
+      </div>
+      <div class="linia"><span class="nr">2</span>Dokończ: Lwy odchodzą wieczorem, bo…
+        <div class="odp-txt o-wpis-blok" data-slowo="minęła">…bo złość chłopca minęła - uspokoił się. 🌇</div>
+      </div>
     </div>
+    <div class="pisz">Zapisz w zeszycie 📓</div>
   </section>
 
   <!-- ===== 07 sposoby ===== -->
@@ -299,15 +318,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c3">3 · CO ROBIĆ?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia zla wjazd-lewo" data-slowo="trzasnąć"><span class="fr">1. trzasnąć drzwiami</span><span class="etyk e-zle">zły</span> <span class="dlaczego">- wszyscy się wystraszą</span></div>
-      <div class="linia dobra wjazd-lewo" data-slowo="policzyć"><span class="fr">2. policzyć do dziesięciu</span><span class="etyk e-ok">dobry</span> <span class="dlaczego">- chwila, żeby lwy się uspokoiły</span></div>
-      <div class="linia zla wjazd-lewo" data-slowo="uderzyć"><span class="fr">3. uderzyć brata</span><span class="etyk e-zle">zły</span> <span class="dlaczego">- krzywdzi drugą osobę</span></div>
-      <div class="linia dobra wjazd-lewo" data-slowo="pobiegać"><span class="fr">4. pobiegać po podwórku</span><span class="etyk e-ok">dobry</span> <span class="dlaczego">- ruch wypala złość</span></div>
-      <div class="linia dobra wjazd-lewo" data-slowo="powiedzieć"><span class="fr">5. „Jestem zły, bo…”</span><span class="etyk e-ok">dobry</span> <span class="dlaczego">- nazywasz uczucie i powód</span></div>
-      <div class="linia zla wjazd-lewo" data-slowo="obrazić"><span class="fr">6. obrazić się na tydzień</span><span class="etyk e-zle">zły</span> <span class="dlaczego">- nic się nie wyjaśni</span></div>
+    <div class="polecenie">Dobry czy zły sposób na złość?</div>
+    <div class="kafle">
+      <div class="kafel o-zla" data-slowo="zły"><b>1</b>trzasnąć drzwiami <span class="etyk e-zle o-znak o-razem">zły</span><span class="dl o-wpis-blok o-razem">wszyscy w domu się wystraszą</span></div>
+      <div class="kafel o-dobra" data-slowo="dobry"><b>2</b>policzyć do dziesięciu <span class="etyk e-ok o-znak o-razem">dobry</span><span class="dl o-wpis-blok o-razem">chwila, żeby lwy się uspokoiły</span></div>
+      <div class="kafel o-zla" data-slowo="zły"><b>3</b>uderzyć brata <span class="etyk e-zle o-znak o-razem">zły</span><span class="dl o-wpis-blok o-razem">krzywdzi drugą osobę</span></div>
+      <div class="kafel o-dobra" data-slowo="dobry"><b>4</b>pobiegać po podwórku <span class="etyk e-ok o-znak o-razem">dobry</span><span class="dl o-wpis-blok o-razem">ruch wypala złość</span></div>
+      <div class="kafel o-dobra" data-slowo="dobry"><b>5</b>„Jestem zły, bo…” <span class="etyk e-ok o-znak o-razem">dobry</span><span class="dl o-wpis-blok o-razem">nazywasz uczucie i powód</span></div>
+      <div class="kafel o-zla" data-slowo="zły"><b>6</b>obrazić się na tydzień <span class="etyk e-zle o-znak o-razem">zły</span><span class="dl o-wpis-blok o-razem">nic się nie wyjaśni</span></div>
     </div>
+    <div class="pisz">Zapisz: 1 - dobry / zły, 2 - … 📓</div>
   </section>
 
   <!-- ===== 10 zdanie od ja ===== -->
@@ -338,15 +360,15 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
-    <div><span class="badge pop" data-t="0">PRZYKŁADY ✅</span></div>
-    <div class="pary">
-      <div class="para">
-        <div class="linia zla">„Ty nigdy mnie nie słuchasz!”</div><div class="str">➜</div>
-        <div class="linia dobra pop" data-slowo="przykro">„Jest mi przykro, kiedy mówię, a ty mnie nie słuchasz.”</div>
+    <span class="czesc c4">4 · JAK MÓWIĆ O ZŁOŚCI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Zamień atak na zdanie od „ja”</div>
+    <div class="lista">
+      <div class="linia">❌ „Ty nigdy mnie nie słuchasz!”
+        <div class="odp-txt o-wpis-blok" data-slowo="przykro">✅ „Jest mi przykro, kiedy mówię, a ty mnie nie słuchasz.”</div>
       </div>
-      <div class="para">
-        <div class="linia zla">„Zepsułaś mi rysunek, jesteś okropna!”</div><div class="str">➜</div>
-        <div class="linia dobra pop" data-slowo="zniszczony">„Jestem zła, bo mój rysunek jest zniszczony, a bardzo się starałam.”</div>
+      <div class="linia">❌ „Zepsułaś mi rysunek, jesteś okropna!”
+        <div class="odp-txt o-wpis-blok" data-slowo="zniszczony">✅ „Jestem zła, bo mój rysunek jest zniszczony, a bardzo się starałam.”</div>
       </div>
     </div>
     <div class="check">

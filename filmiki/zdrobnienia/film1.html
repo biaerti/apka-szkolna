@@ -152,6 +152,16 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 #s15 .reszta { display: flex; gap: 16px; justify-content: center; margin-top: 20px; }
 #s15 .reszta .chip { font-size: 30px; }
 #s15 .brawo { margin-top: 20px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+#s05 .kafel { flex-direction: column; justify-content: center; height: auto; min-height: 84px; padding: 4px 26px; line-height: 1.15; }
+#s05 .zdr { color: var(--czule); font-size: 36px; }
+#s05 .zdr b { color: var(--roz); }
+#s05 .pisz { margin-top: 14px; font-size: 30px; font-weight: 800; color: var(--szary); }
+#s08 .kom .o-wpis.cz { color: var(--czule); } #s08 .kom .o-wpis.gr { color: var(--grube); }
+#s11 .opcje { display: flex; gap: 16px; justify-content: center; margin-top: 14px; }
+#s11 .opcje .chip { font-size: 28px; }
+#s11 .lista { margin-top: 16px; }
+#s11 .linia .etyk { font-family: 'Baloo 2'; font-size: 24px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 12px; vertical-align: 3px; }
 </style>
 </head>
 <body>
@@ -238,14 +248,17 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c2">2 · ZDROBNIENIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="szereg">
-      <div class="linia wjazd-lewo" data-slowo="stolik">stół <span class="str">➜</span> <span class="cz">stolik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="rączka">ręka <span class="str">➜</span> <span class="cz">rączka</span></div>
-      <div class="linia wjazd-lewo" data-slowo="bucik">but <span class="str">➜</span> <span class="cz">bucik</span></div>
-      <div class="linia wjazd-lewo" data-slowo="kwiatek">kwiat <span class="str">➜</span> <span class="cz">kwiatek</span></div>
-      <div class="linia wjazd-lewo" data-slowo="ptaszek">ptak <span class="str">➜</span> <span class="cz">ptaszek</span></div>
+    <div class="polecenie">Utwórz zdrobnienia 🥰</div>
+    <div class="kafle">
+      <span class="kafel"><span>stół</span><span class="zdr o-wpis-blok" data-slowo="stolik">st<b>o</b>lik</span></span>
+      <span class="kafel"><span>ręka</span><span class="zdr o-wpis-blok" data-slowo="rączka">r<b>ą</b>czka</span></span>
+      <span class="kafel"><span>but</span><span class="zdr o-wpis-blok" data-slowo="bucik">bucik</span></span>
+      <span class="kafel"><span>kwiat</span><span class="zdr o-wpis-blok" data-slowo="kwiatek">kwiatek</span></span>
+      <span class="kafel"><span>ptak</span><span class="zdr o-wpis-blok" data-slowo="ptaszek">ptaszek</span></span>
     </div>
+    <div class="pisz">Zapisz w zeszycie: stół - … 📓</div>
     <div class="zmiany">
       <span class="chip pop" data-slowo="środku">st<b>ó</b>ł ➜ st<b>o</b>lik · r<b>ę</b>ka ➜ r<b>ą</b>czka</span>
       <span class="chip pop" data-slowo="kwiatuszek" style="background:var(--zielony)">kwiatuszek, ptaszyna - też dobrze ✓</span>
@@ -288,12 +301,14 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 08 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c3">3 · ZGRUBIENIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Przerysuj tabelkę i uzupełnij</div>
     <div class="tab">
       <div class="gl cz">🥰 zdrobnienie</div><div class="gl neu">😐 neutralny</div><div class="gl gr">😠 zgrubienie</div>
-      <div class="kom cz pop" data-slowo="nosek">nosek</div><div class="kom">nos</div><div class="kom gr pop" data-slowo="nochal">nochal / nosisko</div>
-      <div class="kom cz pop" data-slowo="kotek">kotek</div><div class="kom">kot</div><div class="kom gr pop" data-slowo="kocur">kocur / kocisko</div>
-      <div class="kom cz pop" data-slowo="domek">domek</div><div class="kom">dom</div><div class="kom gr pop" data-slowo="domisko">domisko</div>
+      <div class="kom pusta"><span class="o-wpis cz" data-slowo="nosek">nosek</span></div><div class="kom">nos</div><div class="kom pusta"><span class="o-wpis gr" data-slowo="nochal">nochal / nosisko</span></div>
+      <div class="kom pusta"><span class="o-wpis cz" data-slowo="kotek">kotek</span></div><div class="kom">kot</div><div class="kom pusta"><span class="o-wpis gr" data-slowo="kocur">kocur / kocisko</span></div>
+      <div class="kom pusta"><span class="o-wpis cz" data-slowo="domek">domek</span></div><div class="kom">dom</div><div class="kom pusta"><span class="o-wpis gr" data-slowo="domisko">domisko</span></div>
     </div>
     <div class="wnioski">
       <span class="chip pop" data-slowo="czułe" style="background:var(--czule)">⬅️ małe i czułe</span>
@@ -335,12 +350,18 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 58px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c4">4 · SŁOWO ZDRADZA UCZUCIA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Wypisz wyraz nacechowany i jego uczucie</div>
+    <div class="opcje">
+      <span class="chip o-cz">🥰 czułość</span>
+      <span class="chip o-gr">😠 niechęć</span>
+    </div>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="mamusiu">1. <b>Mamusiu</b>, przytul mnie! <span class="chip o-cz">zdrobnienie · czułość</span></div>
-      <div class="linia wjazd-lewo" data-slowo="buciory">2. Zabierz stąd te <b>buciory</b>! <span class="chip o-gr">zgrubienie · niechęć</span></div>
-      <div class="linia wjazd-lewo" data-slowo="kotek">3. Jaki śliczny <b>kotek</b>! <span class="chip o-cz">zdrobnienie · czułość</span></div>
-      <div class="linia wjazd-lewo" data-slowo="psisko">4. Przy furtce warczy wielkie <b>psisko</b>. <span class="chip o-gr">zgrubienie · niechęć, strach</span></div>
+      <div class="linia"><span class="nr">1</span><span class="o-podsw" data-slowo="mamusiu">Mamusiu</span>, przytul mnie! <span class="etyk o-cz o-znak" data-slowo="zdrobnienie">zdrobnienie · czułość</span></div>
+      <div class="linia"><span class="nr">2</span>Zabierz stąd te <span class="o-podsw" data-slowo="buciory">buciory</span>! <span class="etyk o-gr o-znak" data-slowo="zgrubienie">zgrubienie · niechęć</span></div>
+      <div class="linia"><span class="nr">3</span>Jaki śliczny <span class="o-podsw" data-slowo="kotek">kotek</span>! <span class="etyk o-cz o-znak" data-slowo="zdrobnienie">zdrobnienie · czułość</span></div>
+      <div class="linia"><span class="nr">4</span>Przy furtce warczy wielkie <span class="o-podsw" data-slowo="psisko">psisko</span>. <span class="etyk o-gr o-znak" data-slowo="zgrubienie">zgrubienie · niechęć, strach</span></div>
     </div>
   </section>
 

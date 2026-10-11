@@ -84,6 +84,23 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 #s12 .lista { width: 1060px; }
 #s12 .lista .linia { font-size: 29px; }
 #s12 .brawo { margin-top: 18px; font-size: 44px; background: var(--roz); padding: 4px 44px; }
+/* ===== sprawdzanie na ekranie zadania ===== */
+@keyframes tm-temat { from { color: var(--ciemny); } to { color: var(--tm); } }
+@keyframes tm-konc { from { color: var(--ciemny); } to { color: var(--roz); } }
+#s05 .kafel .tt { animation: tm-temat .35s ease both; animation-delay: inherit; }
+#s05 .kafel .kk { animation: tm-konc .35s ease both; animation-delay: inherit; }
+@keyframes tm-kreska { from { font-size: 0; opacity: 0; } to { font-size: 1em; opacity: 1; } }
+@keyframes tm-zero { from { font-size: 0; opacity: 0; } to { font-size: .8em; opacity: 1; } }
+#s05 .kafel .kr { animation: tm-kreska .3s ease both; animation-delay: inherit; }
+#s05 .kafel .zero { animation: tm-zero .3s ease both; animation-delay: inherit; }
+#s05 .pisz, #s09 .pisz, #s11 .pisz { margin-top: 14px; font-size: 30px; font-weight: 800; color: var(--szary); }
+#s05 .jak { margin-top: 18px; font-size: 30px; background: var(--tm); }
+#s09 .kafle, #s11 .kafle { align-items: flex-start; }
+#s09 .kafel, #s11 .kafel { flex-direction: column; justify-content: center; height: auto; min-height: 84px; padding: 4px 26px; line-height: 1.1; }
+#s09 .bo, #s11 .bo { font-family: 'Nunito'; font-size: 26px; padding-bottom: 4px; }
+#s11 .luka { min-width: 40px; text-align: center; }
+#s09 .naz { margin-top: 16px; font-size: 28px; background: var(--fiolet); }
+#s11 .wsk { margin-top: 16px; font-size: 28px; background: var(--fiolet); }
 </style>
 </head>
 <body>
@@ -157,16 +174,19 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 05 odpowiedz 1 ===== -->
   <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · TEMAT I KOŃCÓWKA</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Oddziel temat od końcówki: temat <span class="kr">|</span> końcówka</div>
     <div class="kafle">
-      <span class="kafel pop" data-slowo="kotem"><span class="t">kot</span><span class="kr">|</span><span class="k">em</span></span>
-      <span class="kafel pop" data-slowo="książki"><span class="t">książk</span><span class="kr">|</span><span class="k">i</span></span>
-      <span class="kafel pop" data-slowo="okno"><span class="t">okn</span><span class="kr">|</span><span class="k">o</span></span>
-      <span class="kafel pop" data-slowo="lasu"><span class="t">las</span><span class="kr">|</span><span class="k">u</span></span>
-      <span class="kafel pop" data-slowo="brat"><span class="t">brat</span><span class="kr">|</span><span class="zero">ø</span></span>
-      <span class="kafel pop" data-slowo="szkołą"><span class="t">szkoł</span><span class="kr">|</span><span class="k">ą</span></span>
+      <span class="kafel" data-slowo="kotem"><span class="tt">kot</span><span class="kr">|</span><span class="kk">em</span></span>
+      <span class="kafel" data-slowo="książki"><span class="tt">książk</span><span class="kr">|</span><span class="kk">i</span></span>
+      <span class="kafel" data-slowo="okno"><span class="tt">okn</span><span class="kr">|</span><span class="kk">o</span></span>
+      <span class="kafel" data-slowo="lasu"><span class="tt">las</span><span class="kr">|</span><span class="kk">u</span></span>
+      <span class="kafel" data-slowo="brat"><span class="tt">brat</span><span class="kr">|</span><span class="zero">ø</span></span>
+      <span class="kafel" data-slowo="szkołą"><span class="tt">szkoł</span><span class="kr">|</span><span class="kk">ą</span></span>
     </div>
-    <div style="margin-top:22px"><span class="chip pop" data-slowo="sprawdzić" style="font-size:30px;background:var(--tm)">jak sprawdzić? odmień słowo - co się nie zmienia, to temat</span></div>
+    <div class="pisz">brak końcówki? narysuj ø</div>
+    <div><span class="chip jak pop" data-slowo="sprawdzić">jak sprawdzić? odmień słowo - co się nie zmienia, to temat</span></div>
   </section>
 
   <!-- ===== 06 obocznosci ===== -->
@@ -219,14 +239,17 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 09 odpowiedz 2 ===== -->
   <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c3">3 · TRIK NA Ó</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="noże">n<span class="k">ó</span>ż, bo n<span class="t">o</span>że</div>
-      <div class="linia wjazd-lewo" data-slowo="solony">s<span class="k">ó</span>l, bo s<span class="t">o</span>lony, s<span class="t">o</span>lić</div>
-      <div class="linia wjazd-lewo" data-slowo="doły">d<span class="k">ó</span>ł, bo d<span class="t">o</span>ły</div>
-      <div class="linia wjazd-lewo" data-slowo="głowa">gł<span class="k">ó</span>wka, bo gł<span class="t">o</span>wa</div>
-      <div class="linia wjazd-lewo" data-slowo="noga">n<span class="k">ó</span>żka, bo n<span class="t">o</span>ga</div>
+    <div class="polecenie">Uzasadnij pisownię ó</div>
+    <div class="kafle">
+      <span class="kafel"><span>n<span class="k">ó</span>ż</span><span class="bo o-wpis-blok" data-slowo="noże">bo n<span class="t">o</span>że</span></span>
+      <span class="kafel"><span>s<span class="k">ó</span>l</span><span class="bo o-wpis-blok" data-slowo="solony">bo s<span class="t">o</span>lić</span></span>
+      <span class="kafel"><span>d<span class="k">ó</span>ł</span><span class="bo o-wpis-blok" data-slowo="doły">bo d<span class="t">o</span>ły</span></span>
+      <span class="kafel"><span>gł<span class="k">ó</span>wka</span><span class="bo o-wpis-blok" data-slowo="głowa">bo gł<span class="t">o</span>wa</span></span>
+      <span class="kafel"><span>n<span class="k">ó</span>żka</span><span class="bo o-wpis-blok" data-slowo="noga">bo n<span class="t">o</span>ga</span></span>
     </div>
+    <div class="pisz">nóż, bo … (forma, w której słychać o)</div>
     <div><span class="chip naz pop" data-slowo="oboczność">ó : o - oboczność pomaga w ortografii</span></div>
   </section>
 
@@ -249,15 +272,19 @@ h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color:
 
   <!-- ===== 11 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · TRIK NA Ó</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="rogi">r<span class="k">ó</span>g, bo r<span class="t">o</span>gi</div>
-      <div class="linia wjazd-lewo" data-slowo="królowa">kr<span class="k">ó</span>l, bo kr<span class="t">o</span>lowa</div>
-      <div class="linia wjazd-lewo" data-slowo="stoły">st<span class="k">ó</span>ł, bo st<span class="t">o</span>ły</div>
-      <div class="linia wjazd-lewo" data-slowo="buty">b<span style="color:var(--niebieski)">u</span>t, bo b<span style="color:var(--niebieski)">u</span>ty <span class="dlaczego">dalej u</span></div>
-      <div class="linia wjazd-lewo" data-slowo="druty">dr<span style="color:var(--niebieski)">u</span>t, bo dr<span style="color:var(--niebieski)">u</span>ty <span class="dlaczego">dalej u</span></div>
-      <div class="linia wjazd-lewo" data-slowo="doły">d<span class="k">ó</span>ł, bo d<span class="t">o</span>ły</div>
+    <div class="polecenie">u czy ó? Zmień formę i sprawdź!</div>
+    <div class="kafle">
+      <span class="kafel"><span>r<span class="luka"><span class="k o-znak" data-slowo="róg">ó</span></span>g</span><span class="bo o-wpis-blok" data-slowo="rogi">bo r<span class="t">o</span>gi</span></span>
+      <span class="kafel"><span>kr<span class="luka"><span class="k o-znak" data-slowo="król">ó</span></span>l</span><span class="bo o-wpis-blok" data-slowo="królowa">bo kr<span class="t">o</span>lowa</span></span>
+      <span class="kafel"><span>st<span class="luka"><span class="k o-znak" data-slowo="stół">ó</span></span>ł</span><span class="bo o-wpis-blok" data-slowo="stoły">bo st<span class="t">o</span>ły</span></span>
+      <span class="kafel"><span>b<span class="luka"><span class="o-znak" data-slowo="but" style="color:var(--niebieski)">u</span></span>t</span><span class="bo o-wpis-blok" data-slowo="buty">bo b<span style="color:var(--niebieski)">u</span>ty</span></span>
+      <span class="kafel"><span>dr<span class="luka"><span class="o-znak" data-slowo="drut" style="color:var(--niebieski)">u</span></span>t</span><span class="bo o-wpis-blok" data-slowo="druty">bo dr<span style="color:var(--niebieski)">u</span>ty</span></span>
+      <span class="kafel"><span>d<span class="luka"><span class="k o-znak" data-slowo="dół">ó</span></span>ł</span><span class="bo o-wpis-blok" data-slowo="doły">bo d<span class="t">o</span>ły</span></span>
     </div>
+    <div class="pisz">zapisz z formą, która to udowadnia 📓</div>
+    <div><span class="chip wsk pop" data-slowo="słychać">dalej słychać u? ➜ zwykłe u</span></div>
   </section>
 
   <!-- ===== 12 podsumowanie ===== -->
