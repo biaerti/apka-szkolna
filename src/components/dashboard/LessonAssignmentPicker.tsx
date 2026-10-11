@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import type { Lesson, LessonSlot } from '../../data/types';
 import { lessonProgress } from '../../lib/grade';
+import { isCustomLesson } from '../../lib/customTopic';
 import { lessonSections } from '../../lib/lessonMaterial';
 import { slotsFromProgress } from '../../lib/lessonSlots';
 import { Modal } from '../ui/Modal';
@@ -47,11 +48,13 @@ interface Props {
   classId: string;
   selectedLessonId?: string;
   onSelect: (lessonId: string) => void;
+  /** Wpisany recznie temat ("Sprawdzian", "Omówienie sprawdzianu"). */
+  onCustom: (title: string) => void;
   onClear?: () => void;
   onClose: () => void;
 }
 
-export function LessonAssignmentPicker({ label, slotId, lessons, classId, selectedLessonId, onSelect, onClear, onClose }: Props) {
+export function LessonAssignmentPicker({ label, slotId, lessons, classId, selectedLessonId, onSelect, onCustom, onClear, onClose }: Props) {
   const grade = lessons[0]?.grade ?? '';
   const sections = useMemo(() => lessonSections(lessons), [lessons]);
   // Bez zapamietanego dzialu otwieramy dzial pierwszej lekcji, ktora jeszcze nie byla.
@@ -64,6 +67,7 @@ export function LessonAssignmentPicker({ label, slotId, lessons, classId, select
   const remembered = sections.find((section) => section.key === readSection(grade));
   const [activeKey, setActiveKey] = useState(selectedSection?.key ?? remembered?.key ?? suggestedSection?.key ?? sections[0]?.key ?? '');
   const active = sections.find((section) => section.key === activeKey) ?? sections[0];
+  const [customTitle, setCustomTitle] = useState('');
 
   function openSection(key: string) {
     setActiveKey(key);
@@ -94,6 +98,31 @@ export function LessonAssignmentPicker({ label, slotId, lessons, classId, select
         </>
       }
     >
+      <form
+        className="mb-4 flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const title = customTitle.trim().replace(/\s+/g, ' ');
+          if (title) onCustom(title);
+        }}
+      >
+        <input
+          type="text"
+          value={customTitle}
+          onChange={(e) => setCustomTitle(e.target.value)}
+          placeholder="Własny temat, np. Sprawdzian"
+          aria-label="Własny temat"
+          className="min-h-10 min-w-0 flex-1 rounded-lg border border-gray-200 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-accent-500 focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={!customTitle.trim()}
+          className="min-h-10 rounded-lg bg-accent-600 px-4 text-sm font-semibold text-white hover:bg-accent-700 disabled:bg-gray-200 disabled:text-gray-400"
+        >
+          Wpisz
+        </button>
+      </form>
+
       <div className="-mx-1 mb-3">
         <div role="tablist" aria-label="Dział materiału" className="flex flex-wrap gap-1 rounded-lg bg-gray-100 p-1">
           {sections.map((section) => (
@@ -140,7 +169,7 @@ export function LessonAssignmentPicker({ label, slotId, lessons, classId, select
                   selected ? 'bg-accent-100' : 'hover:bg-gray-50',
                 )}
               >
-                <span className={clsx('w-10 shrink-0 text-xs tabular-nums', selected ? 'font-semibold text-accent-700' : muted ? 'text-gray-300' : 'text-gray-400')}>{lesson.code ?? '–'}</span>
+                <span className={clsx('w-10 shrink-0 text-xs tabular-nums', selected ? 'font-semibold text-accent-700' : muted ? 'text-gray-300' : 'text-gray-400')}>{isCustomLesson(lesson) ? '' : lesson.code ?? '–'}</span>
                 <span className={clsx('min-w-0 flex-1 text-sm leading-5', muted ? 'text-gray-400' : 'font-medium text-gray-900')}>
                   {lesson.title}
                   {selected && nextPart > 1 && <span className="ml-1 text-accent-700">cz. {nextPart}</span>}

@@ -8,10 +8,12 @@
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+import { useStore } from '../../data/store';
 import type { Lesson, LessonPeriod, LessonProgress, SchoolClass, TimetableEntry, VulcanLesson } from '../../data/types';
 import { dyzuryNa } from '../../data/dyzury';
 import { OBIADOWICZE } from '../../data/obiady';
 import { classGrade, lessonProgress } from '../../lib/grade';
+import { CUSTOM_DZIAL, reusableCustomLesson } from '../../lib/customTopic';
 import { toDateKey, weekDays } from '../../lib/dates';
 import { assignedLessonForSlot, dayEntries, lessonAssignmentUpdates, lessonTitleWithPart } from '../../lib/dashboardPlan';
 import { dutyAfter, dutyStatus } from '../../lib/dyzury';
@@ -82,12 +84,25 @@ export function WeekPlanner(props: Props) {
     return minutes > 0 ? minutes : undefined;
   }
 
-  function assign(classId: string, date: string, period: number, lessonId: string) {
+  const addLesson = useStore((s) => s.addLesson);
+
+  function assign(classId: string, date: string, period: number, lessonId: string, lessons = props.lessons) {
     const slot = { id: `${date}-${period}`, date, period };
-    for (const update of lessonAssignmentUpdates(props.lessons, classId, slot, lessonId)) {
+    for (const update of lessonAssignmentUpdates(lessons, classId, slot, lessonId)) {
       props.setLessonProgress(update.lessonId, classId, update.progress);
     }
     setOpenPicker(null);
+  }
+
+  // Wlasny temat: ten sam, jesli inna klasa rocznika juz go ma, inaczej nowa lekcja bez slajdow.
+  function assignCustom(classId: string, grade: string, date: string, period: number, title: string) {
+    const existing = reusableCustomLesson(props.lessons, grade, classId, title);
+    if (existing) {
+      assign(classId, date, period, existing.id);
+      return;
+    }
+    const created = addLesson({ grade, title, registerTopic: title, dzial: CUSTOM_DZIAL, materialType: 'textbook', progress: {}, slides: [] });
+    assign(classId, date, period, created.id, [...props.lessons, created]);
   }
 
   return (
@@ -279,6 +294,7 @@ export function WeekPlanner(props: Props) {
                             classId={cls.id}
                             selectedLessonId={assigned?.lesson.id}
                             onSelect={(lessonId) => assign(cls.id, dateKey, entry.period, lessonId)}
+                            onCustom={(title) => assignCustom(cls.id, classGrade(cls.name), dateKey, entry.period, title)}
                             onClear={assigned ? () => assign(cls.id, dateKey, entry.period, '') : undefined}
                             slotId={pickerId}
                             onClose={() => setOpenPicker(null)}

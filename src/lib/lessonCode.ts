@@ -11,6 +11,7 @@
 import type { Lesson } from '../data/types';
 import { lessonProgress } from './grade';
 import { lessonMaterialType } from './lessonMaterial';
+import { isCustomLesson } from './customTopic';
 
 const ROMAN: Record<string, number> = {
   I: 1,
@@ -82,13 +83,15 @@ export function backfillLessonCodes(lessons: Lesson[]): Array<{ id: string; code
  */
 export function classLessonCode(lessons: Lesson[], lesson: Lesson, classId: string): string | undefined {
   if (lessonMaterialType(lesson) !== 'textbook') return lesson.code;
+  // "Sprawdzian" z planu to nie temat do zeszytu - bez kodu i bez przesuwania numeracji.
+  if (isCustomLesson(lesson)) return undefined;
 
   const gradeLessons = lessons.filter((item) => item.grade === lesson.grade);
   const completedReviews = gradeLessons.filter(
     (item) => lessonMaterialType(item) === 'review' && lessonProgress(item, classId).status === 'done',
   ).length;
   const textbookLessons = gradeLessons
-    .filter((item) => lessonMaterialType(item) === 'textbook')
+    .filter((item) => lessonMaterialType(item) === 'textbook' && !isCustomLesson(item))
     .sort((a, b) => a.order - b.order);
   const textbookIndex = textbookLessons.findIndex((item) => item.id === lesson.id);
 
