@@ -9,6 +9,7 @@ import { useNow } from '../components/timetable/useNow';
 import { WazneInfoPasek } from '../components/wazneinfo/WazneInfoAlarm';
 import { ZadaniaOgolnePrzycisk } from '../components/dashboard/Zadania';
 import { useZadania } from '../data/zadania';
+import { useSpotkania } from '../data/spotkania';
 import { dayEntries } from '../lib/dashboardPlan';
 import { vulcanClassName } from '../lib/vulcan';
 import { vulcanAttendanceCheckKey, type VulcanAttendanceCheck, type VulcanAttendanceTarget } from '../lib/vulcanAttendance';
@@ -35,6 +36,7 @@ export function Dashboard() {
   const [updatedAt, setUpdatedAt] = useState(() => localStorage.getItem(UPDATED_KEY));
   const topics = useVulcanTopics();
   const zadania = useZadania();
+  const spotkania = useSpotkania();
 
   useEffect(() => {
     function onMessage(event: MessageEvent) {
@@ -126,6 +128,7 @@ export function Dashboard() {
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
           {zadania.error && <span className="text-red-600">{zadania.error}</span>}
+          {spotkania.error && <span className="text-red-600">{spotkania.error}</span>}
           {refreshState === 'error' && <span className="text-red-600">Otwórz plan w VULCANIE i spróbuj ponownie.</span>}
           {refreshState === 'missing' && <span className="text-amber-700">Nie widzę dodatku lub otwartej karty VULCANA.</span>}
           {attendanceRefreshState === 'error' && <span className="text-amber-700">{attendanceError || 'Nie udało się odczytać stanu obecności z VULCANA.'}</span>}
@@ -151,7 +154,7 @@ export function Dashboard() {
 
       <WazneInfoPasek />
 
-      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} attendanceChecks={attendanceChecks} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} />
+      <WeekPlanner anchor={anchor} now={now} classes={classes} lessons={lessons} periods={periods} timetable={timetable} vulcanLessons={vulcanLessons} attendanceChecks={attendanceChecks} setLessonProgress={setLessonProgress} topics={topics} zadania={zadania} spotkania={spotkania} />
     </div>
   );
 }

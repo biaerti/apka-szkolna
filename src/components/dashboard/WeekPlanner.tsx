@@ -28,6 +28,9 @@ import type { UseZadaniaResult } from '../../data/zadania';
 import { LessonAssignmentPicker } from './LessonAssignmentPicker';
 import type { VulcanTopics } from './useVulcanTopics';
 import { DodajZadanie, ZadaniaLista } from './Zadania';
+import { spotkaniaDnia, spotkaniePoLekcji, znaneTagi, type Spotkanie } from '../../lib/spotkania';
+import type { UseSpotkaniaResult } from '../../data/spotkania';
+import { SpotkanieForm, SpotkanieWiersz } from './Spotkania';
 
 interface Props {
   anchor: Date;
@@ -41,6 +44,7 @@ interface Props {
   setLessonProgress: (lessonId: string, classId: string, progress: LessonProgress) => void;
   topics: VulcanTopics;
   zadania: UseZadaniaResult;
+  spotkania: UseSpotkaniaResult;
 }
 
 const WEEKDAY = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
@@ -59,7 +63,12 @@ export function WeekPlanner(props: Props) {
     const cls = z.klasaId ? classById.get(z.klasaId)?.name : undefined;
     return [`${WEEKDAY_SHORT[date.getDay()]} ${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')}`, cls].filter(Boolean).join(' · ');
   }
-  const days = weekDays(props.anchor).slice(0, 5);
+  // Gdzie jest otwarty formularz "+ spotkanie" (RRRR-MM-DD dnia).
+  const [addingMeeting, setAddingMeeting] = useState<string | null>(null);
+  const tagi = znaneTagi(props.spotkania.spotkania);
+  const week = weekDays(props.anchor);
+  // Sobota i niedziela pokazuja sie tylko wtedy, gdy jest na nie spotkanie.
+  const days = week.filter((date, index) => index < 5 || props.spotkania.spotkania.some((s) => s.data === toDateKey(date)));
   const classById = useMemo(() => new Map(props.classes.map((item) => [item.id, item])), [props.classes]);
   const periodByNo = useMemo(() => new Map(props.periods.map((item) => [item.no, item])), [props.periods]);
   const status = periodStatus(props.periods, props.now);
@@ -86,6 +95,17 @@ export function WeekPlanner(props: Props) {
 
   const addLesson = useStore((s) => s.addLesson);
 
+  function renderMeeting(s: Spotkanie) {
+    return (
+      <SpotkanieWiersz
+        spotkanie={s}
+        tagi={tagi}
+        onUpdate={(patch) => props.spotkania.update(s.id, patch)}
+        onRemove={() => props.spotkania.remove(s.id)}
+      />
+    );
+  }
+
   function assign(classId: string, date: string, period: number, lessonId: string, lessons = props.lessons) {
     const slot = { id: `${date}-${period}`, date, period };
     for (const update of lessonAssignmentUpdates(lessons, classId, slot, lessonId)) {
@@ -106,7 +126,7 @@ export function WeekPlanner(props: Props) {
   }
 
   return (
-    <div className="grid gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-5">
+    <div className={clsx('grid gap-x-6 gap-y-8 md:grid-cols-2', days.length === 7 ? 'lg:grid-cols-7' : days.length === 6 ? 'lg:grid-cols-6' : 'lg:grid-cols-5')}>
       {days.map((date) => {
         const dateKey = toDateKey(date);
         const isToday = dateKey === todayKey;
@@ -119,6 +139,11 @@ export function WeekPlanner(props: Props) {
         const rows = [...entries.map((entry) => ({ no: entry.period, entry })), ...gaps.map((no) => ({ no, entry: undefined }))].sort(
           (a, b) => a.no - b.no,
         );
+        const meetings = spotkaniaDnia(props.spotkania.spotkania, dateKey);
+        const meetingsAfter = (no: number) =>
+          meetings
+            .filter((s) => spotkaniePoLekcji(s.od, props.periods, lastPeriod) === no)
+            .map((s) => <li key={s.id}>{renderMeeting(s)}</li>);
         return (
           <section key={dateKey} className="min-w-0">
             <header className={clsx('flex items-baseline justify-between border-b-2 pb-2', isToday ? 'border-accent-500' : 'border-gray-200')}>
@@ -127,6 +152,7 @@ export function WeekPlanner(props: Props) {
               </h2>
               <div className="flex items-baseline gap-3">
                 <AddTaskButton onClick={() => setAdding(dateKey)} title="Zadanie na ten dzień" />
+                <AddTaskButton onClick={() => setAddingMeeting(dateKey)} title="Spotkanie o konkretnej godzinie" label="+ spotkanie" />
                 <span className={clsx('text-xs tabular-nums', isToday ? 'font-medium text-accent-700' : 'text-gray-400')}>
                   {isToday ? 'dziś' : `${date.getDate()}.${String(date.getMonth() + 1).padStart(2, '0')}`}
                 </span>
@@ -147,14 +173,29 @@ export function WeekPlanner(props: Props) {
               </div>
             )}
 
-            {entries.length === 0 && <p className="py-6 text-sm text-gray-400">Bez lekcji</p>}
+            {addingMeeting === dateKey && (
+              <div className="pt-2">
+                <SpotkanieForm
+                  start={{ tytul: '', data: dateKey, od: '', do: null, tag: null }}
+                  tagi={tagi}
+                  onSave={(input) => {
+                    props.spotkania.add(input);
+                    setAddingMeeting(null);
+                  }}
+                  onClose={() => setAddingMeeting(null)}
+                />
+              </div>
+            )}
+
+            {entries.length === 0 && meetings.length === 0 && <p className="py-6 text-sm text-gray-400">Bez lekcji</p>}
 
             <ol>
+              {meetingsAfter(0)}
               {rows.map(({ no, entry }) => {
                 if (!entry) {
                   const gapDuty = dutyAfter(dyzuryNa(date), date.getDay(), no);
                   const gapDutyTeraz = isToday && dutyNow.kind === 'now' && dutyNow.duty === gapDuty;
-                  return (
+                  return [
                     <li key={`okienko-${no}`}>
                       <div className="relative -mx-2 flex min-h-[5.25rem] gap-3 px-2 py-3">
                         {isToday && <NowLine at={nowIn(periodByNo.get(no)?.start, periodByNo.get(no)?.end)} />}
@@ -173,8 +214,9 @@ export function WeekPlanner(props: Props) {
                           )}
                         </BreakRow>
                       )}
-                    </li>
-                  );
+                    </li>,
+                    ...meetingsAfter(no),
+                  ];
                 }
                 const cls = entry.classId ? classById.get(entry.classId) : undefined;
                 const available = cls
@@ -199,7 +241,7 @@ export function WeekPlanner(props: Props) {
                   className: vulcanClassName(cls.name),
                 })) : undefined;
 
-                return (
+                return [
                   <li key={entry.id}>
                     <article
                       className={clsx(
@@ -319,8 +361,9 @@ export function WeekPlanner(props: Props) {
                         )}
                       </BreakRow>
                     )}
-                  </li>
-                );
+                  </li>,
+                  ...meetingsAfter(entry.period),
+                ];
               })}
             </ol>
           </section>
@@ -330,10 +373,10 @@ export function WeekPlanner(props: Props) {
   );
 }
 
-function AddTaskButton({ onClick, title }: { onClick: () => void; title: string }) {
+function AddTaskButton({ onClick, title, label = '+ zadanie' }: { onClick: () => void; title: string; label?: string }) {
   return (
     <button type="button" onClick={onClick} title={title} className="text-[11px] text-gray-300 hover:text-accent-700 focus-visible:text-accent-700">
-      + zadanie
+      {label}
     </button>
   );
 }
