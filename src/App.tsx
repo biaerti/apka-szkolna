@@ -32,7 +32,7 @@ import { Sala } from './pages/Sala';
 import { WazneInfoPage } from './pages/WazneInfo';
 import { AutoVulcanUwaga } from './components/uwagi/AutoVulcanUwaga';
 import { AutoRefreshMaterials } from './components/lessons/AutoRefreshMaterials';
-import { EnsureRemedialMaterials } from './components/lessons/EnsureRemedialMaterials';
+import { RemoveRemedialLessons } from './components/lessons/RemoveRemedialLessons';
 
 export default function App() {
   return (
@@ -43,7 +43,7 @@ export default function App() {
       <AutoVulcanUwaga />
       {/* Gotowe materialy odswiezaja sie same po zmianie w kodzie. */}
       <AutoRefreshMaterials />
-      <EnsureRemedialMaterials />
+      <RemoveRemedialLessons />
       <Routes>
       {/* Ekrany projektora - bez paska bocznego, pelny ekran */}
       {/* Trasa zostaje: uruchamia ja slajd "recap" w prezentacji lekcji (LessonPresent) */}

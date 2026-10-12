@@ -28,7 +28,7 @@ const WERSJE: Array<{ wersja: PolskiOdZeraWersja; label: string }> = [
   { wersja: 'A5', label: 'A5' },
 ];
 
-function PolskiOdZera() {
+export function PolskiOdZeraMaterials() {
   const [info, setInfo] = useState<string | null>(null);
 
   async function otworz(czesc: number, wersja: PolskiOdZeraWersja) {
@@ -47,7 +47,7 @@ function PolskiOdZera() {
 
   const btn = 'inline-flex min-h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500';
   return (
-    <section aria-labelledby="polski-od-zera-heading" className="mt-10">
+    <section aria-labelledby="polski-od-zera-heading" className="max-w-4xl">
       <div className="mb-5 max-w-3xl">
         <h2 id="polski-od-zera-heading" className="text-lg font-semibold text-gray-900">
           Mój polski od zera
@@ -127,8 +127,6 @@ export function RemedialMaterials() {
         </div>
         <DownloadLink href={REMEDIAL_KEY_HREF} label="Pobierz klucz odpowiedzi do arkuszy wyrównawczych" />
       </div>
-
-      <PolskiOdZera />
     </section>
   );
 }

@@ -21,7 +21,7 @@ import { LessonFilmModal } from '../components/lessons/LessonFilmModal';
 import { LessonQuestionsModal } from '../components/lessons/LessonQuestionsModal';
 import { NewLessonModal } from '../components/lessons/NewLessonModal';
 import { CopyLessonModal } from '../components/lessons/CopyLessonModal';
-import { ClassTabs } from '../components/lessons/ClassTabs';
+import { ClassTabs, type LessonTrack } from '../components/lessons/ClassTabs';
 import { CurrentLessonBar } from '../components/lessons/CurrentLessonBar';
 import { DzialMaterialsBar } from '../components/lessons/DzialMaterialsBar';
 import { ReadyMaterialsMenu } from '../components/lessons/ReadyMaterialsMenu';
@@ -34,7 +34,7 @@ import { lessonSections, pickLessonSection } from '../lib/lessonMaterial';
 import { MaterialTabs } from '../components/lessons/MaterialTabs';
 import { useNow } from '../components/timetable/useNow';
 import { LessonMobileCard } from '../components/lessons/LessonMobileCard';
-import { RemedialMaterials } from '../components/lessons/RemedialMaterials';
+import { PolskiOdZeraMaterials, RemedialMaterials } from '../components/lessons/RemedialMaterials';
 
 const SECTION_KEY = 'lekcje-dzial:';
 
@@ -80,7 +80,8 @@ export function Lessons() {
   const sortedClasses = useMemo(() => [...classes].sort((a, b) => a.order - b.order), [classes]);
   const requested = params.get('klasa');
   const classId = sortedClasses.some((c) => c.id === requested) ? (requested as string) : sortedClasses[0]?.id ?? '';
-  const remedialActive = params.get('widok') === 'wyrownawcze';
+  const widok = params.get('widok');
+  const track: LessonTrack | null = widok === 'wyrownawcze' || widok === 'polski-od-zera' ? widok : null;
   const grade = gradeOfClass(classes, classId) ?? '';
   const gradeClasses = useMemo(() => classesOfGrade(classes, grade), [classes, grade]);
   // Konkretne nazwy klas zamiast odmiany "klas IV / klasy IV" - czytelniej i bez bledow gramatycznych.
@@ -164,8 +165,8 @@ export function Lessons() {
     setParams({ klasa: id, typ: materialType }, { replace: true });
   }
 
-  function selectRemedial() {
-    setParams({ klasa: classId, widok: 'wyrownawcze' }, { replace: true });
+  function selectTrack(next: LessonTrack) {
+    setParams({ klasa: classId, widok: next }, { replace: true });
   }
 
   function selectSection(key: string) {
@@ -258,18 +259,23 @@ export function Lessons() {
     setLessonProgress(lesson.id, classId, progressWithoutSlot(lessonProgress(lesson, classId), slotId));
   }
 
-  if (remedialActive) {
+  if (track) {
     return (
       <div>
-        <PageHeader title="Lekcje" description="Materiały do pracy na zajęciach wyrównawczych" />
+        <PageHeader
+          title="Lekcje"
+          description={track === 'wyrownawcze'
+            ? 'Materiały do pracy na zajęciach wyrównawczych'
+            : 'Zeszyty dla uczniów, którzy dopiero uczą się polskiego'}
+        />
         <ClassTabs
           classes={sortedClasses}
           activeId={classId}
           onSelect={selectClass}
-          remedialActive
-          onSelectRemedial={selectRemedial}
+          track={track}
+          onSelectTrack={selectTrack}
         />
-        <RemedialMaterials />
+        {track === 'wyrownawcze' ? <RemedialMaterials /> : <PolskiOdZeraMaterials />}
       </div>
     );
   }
@@ -296,8 +302,8 @@ export function Lessons() {
         classes={sortedClasses}
         activeId={classId}
         onSelect={selectClass}
-        remedialActive={false}
-        onSelectRemedial={selectRemedial}
+        track={null}
+        onSelectTrack={selectTrack}
       />
 
       {gradeClasses.length > 1 && (

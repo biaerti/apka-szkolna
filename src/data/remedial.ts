@@ -1,8 +1,6 @@
-import { newId } from './id';
 import { getSupabase, isSupabaseConfigured } from './supabase';
-import type { Lesson } from './types';
-import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 
+/** Dawny dzial lekcji z arkuszami - teraz wyrownawcze to osobny tok, nie dzial rocznika. */
 export const REMEDIAL_SECTION = 'Wyrównawcze';
 
 export const REMEDIAL_WORKSHEETS = [
@@ -51,31 +49,4 @@ export async function polskiOdZeraUrl(czesc: number, wersja: PolskiOdZeraWersja)
     .createSignedUrl(`polski-od-zera-czesc-${czesc}-${wersja}.pdf`, 60 * 60);
   if (error || !data) throw new Error('Brak pliku w chmurze albo nie jesteś zalogowany.');
   return data.signedUrl;
-}
-
-/**
- * Ten sam zestaw jest wstawiany do kazdego rocznika. Model lekcji jest
- * rocznikowy, wiec IV i V dostaja osobne rekordy, ale identyczna zakladke i
- * tresc. Dzieki temu kazda klasa moze przypisac arkusz do swojego slotu.
- */
-export function buildRemedialMaterials(grade: string, _classIds: string[]): FreshMaterialsBundle {
-  const lessons: Array<Omit<Lesson, 'id' | 'order'>> = REMEDIAL_WORKSHEETS.map((worksheet, index) => ({
-    grade,
-    title: `${index + 1}. ${worksheet.title}`,
-    topic: `Zajęcia wyrównawcze: ${worksheet.title}`,
-    registerTopic: `Zajęcia wyrównawcze: ${worksheet.title}`,
-    materialType: 'textbook',
-    dzial: REMEDIAL_SECTION,
-    teacherPlan: `${worksheet.description}\n\nArkusz: ${worksheet.href}`,
-    progress: {},
-    slides: [
-      {
-        id: newId(),
-        kind: 'title',
-        title: worksheet.title,
-        subtitle: 'Zajęcia wyrównawcze',
-      },
-    ],
-  }));
-  return { lessons, questionSets: [], questions: [] };
 }
