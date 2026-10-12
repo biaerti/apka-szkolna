@@ -1213,6 +1213,26 @@ function rowCell(root, row, header) {
   return cellAt(root, centerOf(header).x, centerOf(row.cell).y);
 }
 
+// Syntetyczny klik w komorke ucznia i czekanie, az VULCAN ja odswiezy. Po
+// 120 ms bot uznawal klik za nieudany i przechodzil na prawdziwe klikniecia
+// przez debugger, a te (pasek debugowania przesuwa okno VULCANA) trafialy
+// wiersz nizej - psuly sie ostatnie numery listy. Teraz najpierw czekamy
+// i ponawiamy syntetycznie, z ponownym wyborem symbolu z legendy.
+async function clickFrekCell(root, student, header, legend, isRight) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (isRight(student)) return true;
+    if (attempt > 0) {
+      clickElement(legend.cell);
+      await sleep(250);
+    }
+    const cell = markCell(root, student, header);
+    if (!cell) return false;
+    clickElement(cell);
+    if (await waitFor(() => isRight(student), 2000)) return true;
+  }
+  return false;
+}
+
 async function markFrekAttendance(root) {
   const rows = await waitFor(() => {
     try {
@@ -1273,11 +1293,7 @@ async function markFrekAttendance(root) {
       clickElement(legend.cell);
       await sleep(250);
       for (const student of todo) {
-        const cell = markCell(root, student, header);
-        if (!cell) continue;
-        clickElement(cell);
-        await sleep(120);
-        if (!isRight(student)) {
+        if (!(await clickFrekCell(root, student, header, legend, isRight))) {
           useRealClicks = true;
           break;
         }
@@ -1302,6 +1318,17 @@ async function markFrekAttendance(root) {
   let wrong = wrongNow();
   if (wrong.length > 0) {
     render(`Poprawiam ${wrong.length} komórek…`);
+    for (const legendName of LEGEND_ORDER) {
+      const group = wrong.filter((student) => student.legend === legendName);
+      if (group.length === 0) continue;
+      clickElement(legends[legendName].cell);
+      await sleep(250);
+      for (const student of group) await clickFrekCell(root, student, header, legends[legendName], isRight);
+    }
+    wrong = wrongNow();
+  }
+  if (wrong.length > 0) {
+    render(`Poprawiam prawdziwymi kliknięciami ${wrong.length} komórek…`);
     for (const legendName of LEGEND_ORDER) {
       const cells = wrong.filter((student) => student.legend === legendName).map((student) => markCell(root, student, header)).filter(Boolean);
       if (cells.length === 0) continue;
