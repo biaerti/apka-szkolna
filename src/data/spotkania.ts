@@ -16,26 +16,24 @@ interface SpotkanieRow {
   od: string;
   do_godz: string | null;
   tag: string | null;
-  w_google: boolean;
   created_at: string;
 }
 
 function rowToSpotkanie(r: SpotkanieRow): Spotkanie {
-  return { id: r.id, tytul: r.tytul, data: r.data, od: r.od, do: r.do_godz, tag: r.tag, wGoogle: r.w_google, createdAt: r.created_at };
+  return { id: r.id, tytul: r.tytul, data: r.data, od: r.od, do: r.do_godz, tag: r.tag, createdAt: r.created_at };
 }
 
 function spotkanieToRow(s: Spotkanie): SpotkanieRow {
-  return { id: s.id, tytul: s.tytul, data: s.data, od: s.od, do_godz: s.do, tag: s.tag, w_google: s.wGoogle, created_at: s.createdAt };
+  return { id: s.id, tytul: s.tytul, data: s.data, od: s.od, do_godz: s.do, tag: s.tag, created_at: s.createdAt };
 }
 
-function patchToRow(patch: Partial<NoweSpotkanie & { wGoogle: boolean }>): Partial<SpotkanieRow> {
+function patchToRow(patch: Partial<NoweSpotkanie>): Partial<SpotkanieRow> {
   const row: Partial<SpotkanieRow> = {};
   if (patch.tytul !== undefined) row.tytul = patch.tytul;
   if (patch.data !== undefined) row.data = patch.data;
   if (patch.od !== undefined) row.od = patch.od;
   if (patch.do !== undefined) row.do_godz = patch.do;
   if (patch.tag !== undefined) row.tag = patch.tag;
-  if (patch.wGoogle !== undefined) row.w_google = patch.wGoogle;
   return row;
 }
 
@@ -70,7 +68,7 @@ export interface UseSpotkaniaResult {
   spotkania: Spotkanie[];
   error: string | null;
   add: (input: NoweSpotkanie) => void;
-  update: (id: string, patch: Partial<NoweSpotkanie & { wGoogle: boolean }>) => void;
+  update: (id: string, patch: Partial<NoweSpotkanie>) => void;
   remove: (id: string) => void;
 }
 
@@ -125,11 +123,11 @@ export function useSpotkania(): UseSpotkaniaResult {
   function add(input: NoweSpotkanie) {
     const fields = clean(input);
     if (!fields.tytul || !fields.od) return;
-    const spotkanie: Spotkanie = { ...fields, id: newId(), wGoogle: false, createdAt: new Date().toISOString() };
+    const spotkanie: Spotkanie = { ...fields, id: newId(), createdAt: new Date().toISOString() };
     change((list) => [...list, spotkanie], () => getSupabase().from('spotkania').insert(spotkanieToRow(spotkanie)));
   }
 
-  function update(id: string, patch: Partial<NoweSpotkanie & { wGoogle: boolean }>) {
+  function update(id: string, patch: Partial<NoweSpotkanie>) {
     const current = spotkania.find((s) => s.id === id);
     if (!current) return;
     const fields = { ...patch, ...('tytul' in patch ? clean({ ...current, ...patch }) : {}) };

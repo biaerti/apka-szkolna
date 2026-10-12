@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { googleCalendarUrl, godzinySpotkania, spotkaniaDnia, spotkaniePoLekcji, znaneTagi, type Spotkanie } from './spotkania';
+import { spotkaniaDnia, spotkaniePoLekcji, znaneTagi, type Spotkanie } from './spotkania';
 
 function s(id: string, patch: Partial<Spotkanie>): Spotkanie {
-  return { id, tytul: id, data: '2026-10-14', od: '13:00', do: null, tag: null, wGoogle: false, createdAt: '2026-10-12T10:00:00Z', ...patch };
+  return { id, tytul: id, data: '2026-10-14', od: '13:00', do: null, tag: null, createdAt: '2026-10-12T10:00:00Z', ...patch };
 }
 
 const periods = [
@@ -31,24 +31,5 @@ describe('spotkania', () => {
 
   it('podpowiada najczestsze tagi', () => {
     expect(znaneTagi([s('a', { tag: 'Pretium' }), s('b', { tag: 'Neron' }), s('c', { tag: 'Neron' }), s('d', {})])).toEqual(['Neron', 'Pretium']);
-  });
-
-  it('pisze godziny', () => {
-    expect(godzinySpotkania({ od: '13:00', do: null })).toBe('13:00');
-    expect(godzinySpotkania({ od: '13:00', do: '14:30' })).toBe('13:00-14:30');
-  });
-
-  it('robi link do Kalendarza Google', () => {
-    const url = new URL(googleCalendarUrl(s('x', { tytul: 'Spotkanie z Neronem', od: '13:00', tag: 'Neron' })));
-    expect(url.searchParams.get('action')).toBe('TEMPLATE');
-    expect(url.searchParams.get('text')).toBe('Spotkanie z Neronem');
-    expect(url.searchParams.get('dates')).toBe('20261014T130000/20261014T140000');
-    expect(url.searchParams.get('ctz')).toBe('Europe/Warsaw');
-    expect(url.searchParams.get('details')).toBe('Tag: Neron');
-  });
-
-  it('koniec spotkania i przejscie przez polnoc', () => {
-    expect(new URL(googleCalendarUrl(s('x', { od: '8:05', do: '9:30' }))).searchParams.get('dates')).toBe('20261014T080500/20261014T093000');
-    expect(new URL(googleCalendarUrl(s('x', { data: '2026-10-31', od: '23:30' }))).searchParams.get('dates')).toBe('20261031T233000/20261101T003000');
   });
 });

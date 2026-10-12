@@ -1,8 +1,7 @@
 -- Spotkania w planie tygodnia ("środa 13:00 - spotkanie z Neronem").
 --
 -- Plan lekcji na pulpicie sluzy tez jako kalendarz: spotkanie ma dzien,
--- godzine (tez poza lekcjami), opcjonalny koniec i tag. w_google zapamietuje,
--- ze spotkanie zostalo juz dodane do Kalendarza Google.
+-- godzine (tez poza lekcjami), opcjonalny koniec i tag.
 
 create table if not exists public.spotkania (
   id text primary key,
@@ -11,7 +10,6 @@ create table if not exists public.spotkania (
   od text not null,
   do_godz text,
   tag text,
-  w_google boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

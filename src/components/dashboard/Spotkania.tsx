@@ -1,10 +1,10 @@
 // Spotkanie w kolumnie dnia planu tygodnia: godzina z lewej (tam, gdzie
-// lekcja ma numer), tytul i tag, pod spodem "do Google". Klik w tytul
-// otwiera ten sam formularz co "+ spotkanie".
+// lekcja ma numer), tag i tytul. Klik w tytul otwiera ten sam formularz
+// co "+ spotkanie".
 
 import { useState } from 'react';
 import clsx from 'clsx';
-import { godzinySpotkania, googleCalendarUrl, type Spotkanie } from '../../lib/spotkania';
+import type { Spotkanie } from '../../lib/spotkania';
 import type { NoweSpotkanie } from '../../data/spotkania';
 
 const TAG_COLORS = [
@@ -30,7 +30,7 @@ export function TagChip({ tag }: { tag: string }) {
 interface WierszProps {
   spotkanie: Spotkanie;
   tagi: string[];
-  onUpdate: (patch: Partial<NoweSpotkanie & { wGoogle: boolean }>) => void;
+  onUpdate: (patch: Partial<NoweSpotkanie>) => void;
   onRemove: () => void;
 }
 
@@ -72,20 +72,6 @@ export function SpotkanieWiersz({ spotkanie: s, tagi, onUpdate, onRemove }: Wier
         >
           {s.tytul}
         </button>
-        <div className="mt-1 flex gap-3 text-xs">
-          <a
-            href={googleCalendarUrl(s)}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              if (!s.wGoogle) onUpdate({ wGoogle: true });
-            }}
-            title={s.wGoogle ? 'Już dodane. Klik otworzy Kalendarz Google jeszcze raz.' : `Otwiera Kalendarz Google z gotowym wydarzeniem: ${godzinySpotkania(s)} ${s.tytul}`}
-            className={s.wGoogle ? 'text-emerald-700' : 'font-medium text-gray-500 hover:text-gray-900 hover:underline'}
-          >
-            {s.wGoogle ? '✓ w Google' : 'do Google'}
-          </a>
-        </div>
       </div>
     </article>
   );
