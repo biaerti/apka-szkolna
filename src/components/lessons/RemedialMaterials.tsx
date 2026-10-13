@@ -23,8 +23,7 @@ function DownloadLink({ href, label }: { href: string; label: string }) {
 }
 
 const WERSJE: Array<{ wersja: PolskiOdZeraWersja; label: string }> = [
-  { wersja: 'broszura-A4', label: 'Broszura A4' },
-  { wersja: 'do-ciecia-A4', label: 'Do cięcia A4' },
+  { wersja: 'A4', label: 'Do druku A4' },
   { wersja: 'A5', label: 'A5' },
 ];
 
@@ -53,7 +52,7 @@ export function PolskiOdZeraMaterials() {
           Mój polski od zera
         </h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
-          Zeszyt A5 do samodzielnej pracy na lekcjach dla uczniów, którzy dopiero uczą się polskiego (polecenia po rosyjsku, klucz na końcu). Broszurę A4 drukuj dwustronnie z obracaniem po krótszej krawędzi, złóż i zszyj.
+          Zeszyt A5 do samodzielnej pracy na lekcjach dla uczniów, którzy dopiero uczą się polskiego (polecenia po rosyjsku, klucz na końcu). Wersję A4 drukuj jednostronnie i przetnij stos na pół: lewą kupkę połóż na prawej i zeszyt jest po kolei (numery stron na dole).
         </p>
       </div>
       <ol className="overflow-hidden rounded-xl border border-gray-200 bg-white">

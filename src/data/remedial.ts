@@ -39,7 +39,7 @@ export const POLSKI_OD_ZERA = [
   { czesc: 3, tematy: 'Pogoda, ubrania, zwierzęta, miasto, czas wolny, Kto? Co? Jaki?' },
 ] as const;
 
-export type PolskiOdZeraWersja = 'broszura-A4' | 'do-ciecia-A4' | 'A5';
+export type PolskiOdZeraWersja = 'A4' | 'A5';
 
 /** Podpisany adres jednej czesci zeszytu z prywatnego bucketu. */
 export async function polskiOdZeraUrl(czesc: number, wersja: PolskiOdZeraWersja): Promise<string> {

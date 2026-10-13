@@ -16,11 +16,12 @@ b .ru, .ru b { color: inherit; }
   width: 148mm; height: 210mm; padding: 9mm 10mm 12mm; position: relative; overflow: hidden;
   break-after: page; counter-increment: pg;
 }
+/* numer strony wyraznie, tez na okladce i dyplomie - po przecieciu kartek uklada sie po nim zeszyt */
 .page::after {
-  content: counter(pg); position: absolute; bottom: 5mm; left: 0; right: 0; text-align: center;
-  font-size: 8pt; color: #777;
+  content: counter(pg); position: absolute; bottom: 3.5mm; left: 50%; transform: translateX(-50%);
+  min-width: 7mm; padding: 0.4mm 1.6mm; border: 0.35mm solid #555; border-radius: 3mm;
+  font-size: 9.5pt; font-weight: 700; color: #222; text-align: center; background: #fff;
 }
-.cover::after, .diploma::after { content: none; }
 
 /* naglowek tematu */
 .lh { display: flex; gap: 3mm; align-items: center; margin-bottom: 2.5mm; padding-bottom: 2mm; border-bottom: 0.6mm solid #1f4e8c; }

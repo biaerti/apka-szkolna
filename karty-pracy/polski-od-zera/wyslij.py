@@ -14,7 +14,7 @@ sys.path.insert(0, str(DIR.parent.parent / "materialy"))
 from wyslij import env, zapytanie  # noqa: E402
 
 CZESCI = (1, 2, 3)
-WERSJE = ("broszura-A4", "do-ciecia-A4", "A5")
+WERSJE = ("A4", "A5")
 
 
 def main() -> None:

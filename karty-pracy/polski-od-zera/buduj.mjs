@@ -1,4 +1,4 @@
-// Buduje zeszyt "Mój polski od zera": HTML -> PDF A5 (headless Chrome przez CDP) -> broszura A4 (impozycja.py).
+// Buduje zeszyt "Mój polski od zera": HTML -> PDF A5 (headless Chrome przez CDP) -> A4 jednostronnie do przeciecia (impozycja.py).
 // Uruchom: node karty-pracy/polski-od-zera/buduj.mjs
 import { writeFileSync, readFileSync, mkdirSync, rmSync } from 'node:fs'
 import { spawn, execFileSync } from 'node:child_process'
@@ -24,7 +24,7 @@ const czesci = [
 ]
 
 // Uklada klocki stron "cont" na wolnym miejscu poprzedniej strony, dopycha notatkami do
-// wielokrotnosci 4 (broszura) i wpisuje numer strony klucza. Dziala w przegladarce.
+// parzystej liczby stron (dwie A5 na kartce A4) i wpisuje numer strony klucza. Dziala w przegladarce.
 function paginacja(notatkiHtml) {
   const mm = v => v * 96 / 25.4
   const out = document.createElement('main')
@@ -52,7 +52,7 @@ function paginacja(notatkiHtml) {
     s.remove()
   }
   const kluczPierwsza = out.querySelector('section.key')
-  const pad = (4 - (out.children.length % 4)) % 4
+  const pad = out.children.length % 2
   for (let i = 0; i < pad; i++) {
     const t = document.createElement('template')
     t.innerHTML = notatkiHtml.trim()
@@ -121,7 +121,7 @@ for (const c of czesci) {
   const { strony, przepelnione } = result.value
   console.log(`${c.plik}: ${strony} stron A5`, przepelnione.length ? `PRZEPELNIONE STRONY: ${przepelnione.join(', ')}` : 'bez przepelnien')
   if (przepelnione.length) blad = true
-  execFileSync('python', [join(DIR, 'impozycja.py'), plikPdf, join(OUT, `${c.plik}-broszura-A4.pdf`), join(OUT, `${c.plik}-do-ciecia-A4.pdf`)], { stdio: 'inherit' })
+  execFileSync('python', [join(DIR, 'impozycja.py'), plikPdf, join(OUT, `${c.plik}-A4.pdf`)], { stdio: 'inherit' })
 }
 sock.close()
 chrome.kill()

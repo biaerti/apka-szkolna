@@ -1,48 +1,34 @@
-"""Ukladanie stron A5 po dwie na A4 (poziomo).
+"""Uklada strony A5 po dwie na A4 (poziomo) do druku JEDNOSTRONNEGO i przeciecia.
 
-broszura: kartki skladane na pol i zszywane w grzbiecie (druk dwustronny, obracanie po krotszej krawedzi)
-do ciecia: kartki ciete na pol; stos lewych polowek kladzie sie na stos prawych
+Kartka k: po lewej strona k, po prawej strona S+k (S = liczba kartek).
+Po przecieciu stosu na pol lewa kupka to strony 1..S, prawa S+1..2S:
+lewa kupka na wierzch, prawa pod spod - i zeszyt jest po kolei.
+Na srodku kartki jest przerywana linia ciecia.
 
-Uzycie: python impozycja.py wejscie-A5.pdf broszura.pdf do-ciecia.pdf
+Uzycie: python impozycja.py wejscie-A5.pdf wyjscie-A4.pdf
 """
 import sys
-from pypdf import PdfReader, PdfWriter, Transformation, PageObject
+import pymupdf
 
 A4_W, A4_H = 841.89, 595.28
 
 
-def arkusz(writer, src, lewa, prawa):
-    strona = PageObject.create_blank_page(width=A4_W, height=A4_H)
-    for nr, dx in ((lewa, 0), (prawa, A4_W / 2)):
-        if nr is None:
-            continue
-        p = src.pages[nr - 1]
-        w, h = float(p.mediabox.width), float(p.mediabox.height)
-        s = min((A4_W / 2) / w, A4_H / h)
-        strona.merge_transformed_page(p, Transformation().scale(s).translate(dx + (A4_W / 2 - w * s) / 2, (A4_H - h * s) / 2))
-    writer.add_page(strona)
-
-
-def main(wej, broszura, ciecie):
-    src = PdfReader(wej)
-    n = len(src.pages)
-    if n % 4:
-        raise SystemExit(f"{wej}: {n} stron, a musi byc wielokrotnosc 4")
-    s = n // 4
-
-    w = PdfWriter()
+def main(wej, wyj):
+    src = pymupdf.open(wej)
+    n = len(src)
+    if n % 2:
+        raise SystemExit(f"{wej}: {n} stron, a musi byc parzyscie")
+    s = n // 2
+    out = pymupdf.open()
     for k in range(s):
-        arkusz(w, src, n - 2 * k, 2 * k + 1)          # przod
-        arkusz(w, src, 2 * k + 2, n - 2 * k - 1)      # tyl
-    w.write(broszura)
-
-    w = PdfWriter()
-    for k in range(s):
-        arkusz(w, src, 2 * k + 1, 2 * s + 2 * k + 1)  # przod
-        arkusz(w, src, 2 * s + 2 * k + 2, 2 * k + 2)  # tyl
-    w.write(ciecie)
-    print(f"  {n} stron A5 -> {s} kartek A4 (broszura i do ciecia)")
+        page = out.new_page(width=A4_W, height=A4_H)
+        page.show_pdf_page(pymupdf.Rect(0, 0, A4_W / 2, A4_H), src, k)
+        page.show_pdf_page(pymupdf.Rect(A4_W / 2, 0, A4_W, A4_H), src, s + k)
+        x = A4_W / 2
+        page.draw_line((x, 0), (x, A4_H), color=(0.6, 0.6, 0.6), width=0.4, dashes="[4 3] 0")
+    out.save(wyj, garbage=3, deflate=True)
+    print(f"  {n} stron A5 -> {s} kartek A4 (jednostronnie, do przeciecia)")
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    main(*sys.argv[1:3])
