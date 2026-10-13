@@ -19,6 +19,7 @@ import { RecapSlideView } from './RecapSlideView';
 import { ImageSlideView } from './ImageSlideView';
 import { VideoSlideView } from './VideoSlideView';
 import { CzytankaSlideView } from './CzytankaSlideView';
+import { CwiczenieSlideView } from './CwiczenieSlideView';
 import { TopicSlideView } from './TopicSlideView';
 
 export interface SlideViewProps {
@@ -153,6 +154,7 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
       {slide.kind === 'image' && <ImageSlideView slide={slide} />}
       {slide.kind === 'video' && <VideoSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'czytanka' && <CzytankaSlideView key={slide.id} slide={slide} />}
+      {slide.kind === 'cwiczenie' && <CwiczenieSlideView key={slide.id} slide={slide} />}
       {overlay}
     </SlideStage>
   );

@@ -2,6 +2,7 @@
 
 import { newId } from '../../data/id';
 import type { Slide } from '../../data/types';
+import { cwiczenieById } from '../../data/cwiczenia';
 
 export type SlideKind = Slide['kind'];
 
@@ -15,6 +16,7 @@ export const SLIDE_KIND_LABELS: Record<SlideKind, string> = {
   image: 'Obraz',
   video: 'Film',
   czytanka: 'Czytanka z lektorem',
+  cwiczenie: 'Ćwiczymy razem',
   note: 'Notatka do zeszytu',
 };
 
@@ -44,6 +46,8 @@ export function slideSummary(slide: Slide): string {
       return slide.title || (slide.videoId ? `Film: ${slide.videoId}` : '(bez filmu)');
     case 'czytanka':
       return slide.czytankaId ? `Czytanka: ${slide.czytankaId}` : '(bez czytanki)';
+    case 'cwiczenie':
+      return cwiczenieById(slide.cwiczenieId)?.tytul ?? '(bez ćwiczenia)';
     default:
       return '';
   }
@@ -85,6 +89,8 @@ export function createSlide(kind: SlideKind, existingSlides: Slide[]): Slide {
       return { id, kind: 'video', videoId: '' };
     case 'czytanka':
       return { id, kind: 'czytanka', czytankaId: '' };
+    case 'cwiczenie':
+      return { id, kind: 'cwiczenie', cwiczenieId: '' };
     default:
       throw new Error(`Nieznany typ slajdu: ${kind}`);
   }

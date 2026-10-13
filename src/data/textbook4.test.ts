@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildTextbook4, TEXTBOOK4_TOPIC_COUNT } from './textbook4';
 import { ROZDZIAL_2 } from './textbook4rozdzial2';
 import { filmikById } from './filmiki';
+import { cwiczenieById } from './cwiczenia';
 import { estimateTextHeight, fitFontSize } from '../components/slides/fitText';
 
 describe('buildTextbook4', () => {
@@ -87,7 +88,12 @@ describe('buildTextbook4', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const lesson = bundle.lessons.find((l) => l.title === '11-13. Czas na czasownik')!;
     expect(lesson.slides.map((slide) => slide.kind)).toEqual([
-      'topic', 'recap', 'image', 'video', 'recap', 'note', 'title', 'image', 'image', 'image', 'image', 'image',
+      'topic', 'recap', 'image', 'video', 'recap', 'note', 'cwiczenie', 'cwiczenie', 'title', 'image', 'image', 'image', 'image', 'image',
+    ]);
+    // Po notatce odmiana na slajdzie: osoby i liczby, potem czas przeszly z rodzajami.
+    expect(lesson.slides.slice(6, 8)).toEqual([
+      expect.objectContaining({ cwiczenieId: 'k4-czasownik-terazniejszy' }),
+      expect.objectContaining({ cwiczenieId: 'k4-czasownik-przeszly' }),
     ]);
     // Kolo na start powtarza poprzednia lekcje, kolo po filmie pyta o zadania z filmu.
     expect(lesson.slides[1]).toMatchObject({ kind: 'recap' });
@@ -96,7 +102,7 @@ describe('buildTextbook4', () => {
     const setQuestions = bundle.questions.filter((q) => q.setId === lesson.questionSetId);
     expect(setQuestions).toHaveLength(4);
     // Kazdy screen zadania ma strone i kod, wiec dziala na nim kolo na lekcji.
-    const screeny = lesson.slides.slice(7);
+    const screeny = lesson.slides.slice(9);
     expect(screeny.every((slide) => slide.kind === 'image' && typeof slide.page === 'number' && Boolean(slide.code))).toBe(true);
   });
 
@@ -181,8 +187,12 @@ describe('buildTextbook4', () => {
       expect(lesson.slides.slice(video + 1).some((s) => s.kind === 'recap' && s.questionSetId === lesson.questionSetId)).toBe(false);
       const note = lesson.slides.find((s) => s.kind === 'note');
       expect(note?.kind === 'note' ? note.body : '').toMatch(/^\*\*Temat:\*\* /);
-      // Screeny z buckeru i zadania po notatce w kolejnosci z ksiazki.
-      const poNotatce = lesson.slides.slice(kinds.indexOf('note') + 1);
+      // Zaraz po notatce "Ćwiczymy razem" (istniejace cwiczenia), potem
+      // screeny z bucketu w kolejnosci z ksiazki jako zapas.
+      const razem = lesson.slides.slice(kinds.indexOf('note') + 1).filter((s) => s.kind === 'cwiczenie');
+      expect(razem.length).toBeGreaterThan(0);
+      expect(razem.every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
+      const poNotatce = lesson.slides.slice(kinds.indexOf('note') + 1 + razem.length);
       expect(poNotatce.every((s) => s.kind === 'image' && s.url.startsWith('czytanki:r2-s'))).toBe(true);
       const klucze = poNotatce.map((s) => (s.kind === 'image' ? s.page ?? 0 : 0));
       expect([...klucze].sort((a, b) => a - b)).toEqual(klucze);

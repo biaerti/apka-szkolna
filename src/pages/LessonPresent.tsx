@@ -123,7 +123,15 @@ export function LessonPresent() {
         updateLessonFromEditor(lesson.id, { slides: lesson.slides.map((s) => (s.id === currentSlide.id && s.kind === 'note' ? { ...s, body } : s)) })
     : null;
   // Kolo na lekcji: slajd zadania albo screen zadania z podrecznika (obraz z kodem).
-  const taskCode = currentSlide?.kind === 'task' ? currentSlide.code : currentSlide?.kind === 'image' ? (currentSlide.code ?? '') : '';
+  // Kolo na lekcji dziala tez na "Ćwiczymy razem" - jeden przyklad, jedna wylosowana osoba.
+  const taskCode =
+    currentSlide?.kind === 'task'
+      ? currentSlide.code
+      : currentSlide?.kind === 'image'
+        ? (currentSlide.code ?? '')
+        : currentSlide?.kind === 'cwiczenie'
+          ? 'Ćwiczymy razem'
+          : '';
   // Rysowanie po slajdzie - stan trzyma prezentacja, wiec kreski przezywaja
   // przejscie na kolejny slajd i powrot (patrz useSlideAnnotations).
   const writePaneOn = writePane && !boardOpen && supportsWritePane(currentSlide);

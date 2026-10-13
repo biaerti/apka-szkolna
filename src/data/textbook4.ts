@@ -300,6 +300,9 @@ const TOPICS: Topic[] = [
       // Kolo po filmiku: cztery zadania z filmu, kazde dla jednej wylosowanej osoby.
       ...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 4, afterVideo: true }] : []),
       slideNote('Czasownik', '1. Czasownik nazywa czynności (co robi?) i stany (co się z nim dzieje?).\n2. „Nie” z czasownikami piszemy oddzielnie: nie wiem.\n3. Czasownik odmienia się przez osoby, liczby, czasy i rodzaje.\n4. Formy nieosobowe: bezokolicznik (czytać) i formy na -no, -to (zrobiono). Nie mają osoby, liczby ani rodzaju.', 4 * 60),
+      // Cwiczymy razem: odmiana przez osoby i liczby, potem czas przeszly z rodzajami.
+      { id: newId(), kind: 'cwiczenie', cwiczenieId: 'k4-czasownik-terazniejszy' },
+      { id: newId(), kind: 'cwiczenie', cwiczenieId: 'k4-czasownik-przeszly' },
       slideDoZadan('Otwórzcie podręczniki'),
       slideTextbookTask('czytanki:czasownik-s39-zad4.webp', 39, 's.39 zad.4', 'Zadanie 4', 'textbook'),
       slideTextbookTask('czytanki:czasownik-s39-zad5.webp', 39, 's.39 zad.5', 'Zadanie 5', 'textbook', 'Podkreśl w podręczniku'),

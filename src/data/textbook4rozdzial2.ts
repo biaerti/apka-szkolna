@@ -13,6 +13,7 @@
 // skryptem tmp/gwo/wytnij.py z JPG stron multibooka GWO wedlug ramek zadan,
 // ktore podaje sam multibook (API action-triggers).
 
+import { newId } from './id';
 import type { Slide, StudentAction } from './types';
 import { plan, recap, slideCzytanka, slideNote, slideTextbookImage, slideTextbookTask, slideTopic, slideVideo, type Topic } from './textbook5slides';
 
@@ -69,6 +70,15 @@ function poKolei(...slides: Slide[]): Slide[] {
     .map(({ s }) => s);
 }
 
+/**
+ * "Ćwiczymy razem" (src/data/cwiczenia4.ts): po notatce, przed zadaniami z
+ * podrecznika. Wiele wlasnych przykladow do wspolnego uzupelniania na
+ * projektorze, ze "Sprawdź" - podrecznik zostaje zapasem.
+ */
+function razem(...ids: string[]): Slide[] {
+  return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
+}
+
 /** Film bez drugiego kola. Nowe pytania wracaja jako powtorka na kolejnej lekcji. */
 function film(videoId: string): Slide[] {
   return [slideVideo(videoId)];
@@ -94,7 +104,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '3. **Czytanka „Dynastia Miziołków”** (2 min) + **s. 57 zad. 1** ustnie (P/F, 2 min).',
         '4. **Ramka s. 57** (1 min).',
         '5. **Film „Wyrazy potoczne”** (4:59) - poważni bracia słów, słowa jak ubrania i hasło w słowniku. 3 zadania, sprawdzane na tym samym ekranie.',
-        '6. **Notatka** (4 min).',
+        '6. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '7. Zadania z podręcznika po kolei, na ile starczy czasu: **s. 58 zad. 2** (wyrazy potoczne u Olech), **zad. 3** do zeszytu, **zad. 4**.',
         '8. Zapas: ramka „Budowa hasła słownikowego” s. 58, **zad. 5** - słowniczek w grupach (może być do domu).',
       ].join('\n')],
@@ -128,6 +138,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s57-ramka', 57, 'Wyrazy potoczne'),
       ...film('potoczne-film1'),
       slideNote('Wyrazy potoczne', '1. **Wyrazy potoczne** to słowa swobodne, „na luzie”, np. kasa, kumpel, spoko.\n2. Używamy ich w rozmowie z kolegami i rodziną. **Nie używamy** w rozmowie z nauczycielem, z obcym dorosłym ani w wypracowaniu.\n3. Każdy ma oficjalny odpowiednik: kasa - pieniądze, wcinać - jeść.\n4. W słowniku słowa stoją **alfabetycznie**, a przy wyrazie potocznym jest skrót **pot.**'),
+      ...razem('k4-potoczne-zamien', 'k4-potoczne-sytuacja'),
       ...poKolei(
         zad('r2-s58-zad2', 58, '2', 'ustnie'),
         zad('r2-s58-zad3', 58, '3', 'zeszyt'),
@@ -156,7 +167,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '3. **Czytanka „wiersze”** (1 min, można puścić dwa razy) + **s. 60 zad. 1** ustnie (2 min).',
         '4. **Ramka s. 60** (2 min) - czytacie razem.',
         '5. **Film „Porównanie”** (4:42) - słówka porównania, pułapka z „jak”, opis i własne porównania. 3 zadania.',
-        '6. **Notatka** (4 min).',
+        '6. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '7. Zadania z podręcznika po kolei: **s. 60 zad. 2** do zeszytu, **zad. 3** ustnie, **zad. 4** ustnie, **s. 61 zad. 6** - porównania z wiersza, **zad. 7** do zeszytu.',
         '8. Zapas: **s. 61 zad. 8** (porównanie + „ponieważ”), **Podsumujmy** - „Nasza klasa jest jak...” w kole.',
       ].join('\n')],
@@ -192,6 +203,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s60-ramka', 60, 'Porównanie'),
       ...film('porownanie-film1'),
       slideNote('Porównanie', '1. **Porównanie** zestawia dwie rzeczy i pokazuje, w czym są podobne.\n2. Słówka porównania: **jak, jakby, niczym, niby**.\n3. Przykład: Mój brat biega szybko **jak** gepard.\n4. Porównania sprawiają, że opis jest ciekawszy i łatwiej go sobie wyobrazić.'),
+      ...razem('k4-porownanie-dokoncz', 'k4-porownanie-czy'),
       ...poKolei(
         zad('r2-s60-zad2', 60, '2', 'zeszyt'),
         zad('r2-s60-zad3', 60, '3', 'ustnie'),
@@ -220,7 +232,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - porównanie.',
         '2. **Ramka synonimy s. 62** (1 min).',
         '3. **Film „Synonimy i antonimy”** (5:19). 3 zadania.',
-        '4. **Notatka** (4 min).',
+        '4. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '5. Zadania z podręcznika po kolei: **s. 62 zad. 1, 2** ustnie, **zad. 3** do zeszytu, **s. 63 zad. 4** do zeszytu, **zad. 5** (tekst o babci z „super”) do zeszytu.',
         '6. Zapas: **s. 63 zad. 6, 7**, **s. 64 zad. 8, 9, 10**, ramka antonimy s. 64, **Podsumujmy** - gra w antonimy w kole.',
       ].join('\n')],
@@ -249,6 +261,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s62-ramka', 62, 'Synonimy'),
       ...film('synonimy-film1'),
       slideNote('Synonimy i antonimy', '1. **Synonimy** to wyrazy o podobnym znaczeniu (bliskoznaczne): wesoły - radosny, iść - maszerować.\n2. Synonimy pomagają **unikać powtórzeń**.\n3. **Antonimy** to wyrazy o przeciwnym znaczeniu: zimny - gorący, wejść - wyjść.\n4. Nie każdy wyraz ma antonim, np. dom, niebieski.'),
+      ...razem('k4-synonimy-pary', 'k4-synonimy-czy'),
       ...poKolei(
         zad('r2-s62-zad1', 62, '1', 'ustnie'),
         zad('r2-s62-zad2', 62, '2', 'ustnie'),
@@ -282,7 +295,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - synonimy i antonimy.',
         '2. **Wzór listu s. 65** (3 min) - pokazujemy części.',
         '3. **Film „Budowa listu”** (5:25). 3 zadania.',
-        '4. **Notatka** (4 min).',
+        '4. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '5. **s. 69 zad. 1** - dopasuj części listu do babci (5 min).',
         '6. Zapas: ramki s. 66 (układ, akapit) i s. 67 (Ty wielką literą), **s. 68 zad. 5** - wspólny list klasy (może być na kolejną lekcję albo dla chętnych).',
       ].join('\n')],
@@ -304,6 +317,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s65-wzor', 65, 'Jak jest zbudowany list?'),
       ...film('list-film1'),
       slideNote('Jak się pisze list?', '1. Części listu: **miejscowość i data** (w prawym górnym rogu), **nagłówek** (zwrot do adresata), **wstęp, rozwinięcie, zakończenie**, **pozdrowienie**, **podpis** (ręcznie), czasem **PS**.\n2. Nagłówek z **!** - wstęp wielką literą. Nagłówek z **,** - wstęp małą literą.\n3. **Ty, Ciebie, Tobie, Twój** - wielką literą. **ja, mnie, mój** - małą.\n4. Jedna myśl = jeden **akapit** (zaczynamy od wcięcia).'),
+      ...razem('k4-list-pisownia'),
       ...poKolei(
         ramka('r2-s66-uklad', 66, 'Układ listu i akapit'),
         ramka('r2-s67-ramka', 67, 'Ty, Ciebie, Twój - wielką literą'),
@@ -330,7 +344,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **Zacznijmy od... s. 71** (2 min) - co pamiętasz o rzeczowniku?',
         '3. **Ramka s. 72** (1 min).',
         '4. **Film „Rzeczownik”** (4:58). 3 zadania.',
-        '5. **Notatka** (4 min).',
+        '5. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '6. Zadania z podręcznika po kolei: **s. 71 zad. 1, 2** ustnie, **s. 72 zad. 3** ustnie, **zad. 4** do zeszytu, **zad. 5** ustnie, **s. 73 zad. 6** do zeszytu.',
         '7. Zapas: ramki „liczba” i „rodzaj” s. 72.',
       ].join('\n')],
@@ -357,6 +371,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s72-ramka', 72, 'Rzeczownik'),
       ...film('rzeczownik4-film1'),
       slideNote('Rzeczownik - co nazywa, liczba i rodzaj', '1. **Rzeczownik** odpowiada na pytania **kto? co?**\n2. Nazywa osoby, zwierzęta, rzeczy, rośliny, zjawiska, miejsca i pojęcia (np. przyjaźń).\n3. **Liczba**: pojedyncza (kot) i mnoga (koty).\n4. **Rodzaj**: ten - męski, ta - żeński, to - nijaki; w liczbie mnogiej: ci - męskoosobowy, te - niemęskoosobowy.'),
+      ...razem('k4-rzeczownik-czy', 'k4-rzeczownik-liczba', 'k4-rzeczownik-rodzaj'),
       ...poKolei(
         zad('r2-s71-zad1', 71, '1', 'ustnie'),
         zad('r2-s71-zad2', 71, '2', 'ustnie'),
@@ -387,7 +402,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **s. 73 zad. 7** (3 min) - kot w zdaniach, od tego zaczyna podręcznik.',
         '3. **Ramka „Przypadki rzeczownika” s. 73** (2 min).',
         '4. **Film „Przypadki”** (5:46). 3 zadania.',
-        '5. **Notatka** (5 min) - tabela przypadków do zeszytu.',
+        '5. **Notatka** (5 min) - tabela przypadków do zeszytu, potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '6. Zadania z podręcznika: **s. 74 zad. 8** (sposoby zapamiętania - wybierz jeden), **zad. 9** do zeszytu.',
         '7. Zapas: **s. 74 zad. 10** - opis ilustracji z krasnalami (do domu).',
       ].join('\n')],
@@ -411,6 +426,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s73-przypadki', 73, 'Przypadki rzeczownika'),
       ...film('przypadki-film1'),
       slideNote('Przypadki rzeczownika', '1. **Mianownik** - kto? co? (jest)\n2. **Dopełniacz** - kogo? czego? (nie ma)\n3. **Celownik** - komu? czemu? (się przyglądam)\n4. **Biernik** - kogo? co? (widzę)\n5. **Narzędnik** - z kim? z czym? (idę)\n6. **Miejscownik** - o kim? o czym? (mówię)\n7. **Wołacz** - o! (wołam)'),
+      ...razem('k4-przypadki-lp', 'k4-przypadki-ktory'),
       ...poKolei(
         zad('r2-s74-zad8', 74, '8', 'cwiczymy'),
         zad('r2-s74-zad9', 74, '9', 'zeszyt'),
@@ -434,7 +450,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - przypadki.',
         '2. **Zacznijmy od... s. 84** (2 min) - przypomnienie przypadków.',
         '3. **Film „Przypadki w liczbie mnogiej”** (5:21). 3 zadania.',
-        '4. **Notatka** (3 min).',
+        '4. **Notatka** (3 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '5. **s. 84 zad. 1** - odmiana w kole (10 min), **zad. 2** - zeszyty po okręgu.',
         '6. **s. 84 zad. 3** - KRASNOLUDEK do zeszytu albo do domu.',
       ].join('\n')],
@@ -456,6 +472,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       zacznij('r2-s84-zacznij', 84),
       ...film('przypadki-mnoga-film1'),
       slideNote('Odmiana rzeczownika przez przypadki', '1. Rzeczownik odmieniamy przez **przypadki** i **liczby**.\n2. Liczba mnoga: koty, kotów, kotom, koty, kotami, kotach, koty!\n3. Mianownik i biernik często wyglądają tak samo - rozróżniamy je **pytaniem**: kto? co? jest / kogo? co? widzę.'),
+      ...razem('k4-przypadki-mnoga', 'k4-przypadki-forma'),
       ...poKolei(
         zad('r2-s84-zad1', 84, '1', 'cwiczymy'),
         zad('r2-s84-zad2', 84, '2', 'cwiczymy'),
@@ -481,7 +498,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **Zacznijmy od... s. 75** (2 min) - pizza czy spaghetti?',
         '3. **Czytanka „Kurs fotografii”** (5 min) + **s. 78 zad. 3** ustnie (2 min).',
         '4. **Film „Opinia i argument”** (5:12). 3 zadania.',
-        '5. **Notatka** (4 min).',
+        '5. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '6. Zadania z podręcznika po kolei, na ile starczy: **s. 75 zad. 1**, **s. 79 zad. 5** ustnie, **zad. 6** do zeszytu.',
         '7. Zapas: ramki s. 75 (zwroty) i s. 79 (argument), **s. 76 zad. 2** w parach, **s. 78 zad. 4** (schemat zysk/strata), **s. 79 zad. 7** - debata w dwóch grupach.',
       ].join('\n')],
@@ -507,6 +524,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       zad('r2-s78-zad3', 78, '3', 'ustnie'),
       ...film('opinia-film1'),
       slideNote('Opinia i argument', '1. **Fakt** można sprawdzić. **Opinia** to moje zdanie.\n2. Zwroty: moim zdaniem, uważam, że, sądzę, że, według mnie.\n3. **Argument** to powód, który uzasadnia opinię: Warto czytać, **ponieważ** poznaję ciekawe historie.\n4. „Bo tak” i „bo nie” to **nie są** argumenty.'),
+      ...razem('k4-fakt-opinia', 'k4-argument'),
       ...poKolei(
         ramka('r2-s75-opinia', 75, 'Opinia - zwroty'),
         zad('r2-s75-zad1', 75, '1', 'ustnie'),
@@ -537,7 +555,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **Zacznijmy od... s. 80** (2 min) - czy łatwo ci powiedzieć „nie”?',
         '3. **Czytanka „Pani z tramwaju”** (6 min) + **s. 83 zad. 2** ustnie (3 min).',
         '4. **Film „Asertywność”** (4:59). 3 zadania.',
-        '5. **Ramka s. 83 + notatka** (5 min).',
+        '5. **Ramka s. 83 + notatka** (5 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '6. Zadania z podręcznika po kolei: **s. 80 zad. 1** (trzy reakcje na prośbę koleżanki), **s. 83 zad. 3** w parach - asertywność Miłosza, **zad. 5** - jak odmówić (horror, muffinka, kino przed sprawdzianem).',
         '7. Zapas: **s. 83 zad. 4** (gdy ktoś namówił nas wbrew nam - tylko chętni), **zad. 6** - scenki w grupach.',
       ].join('\n')],
@@ -565,6 +583,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...film('asertywnosc-film1'),
       ramka('r2-s83-ramka', 83, 'Asertywność'),
       slideNote('Asertywność', '1. **Asertywność** to mówienie „nie” spokojnie i z szacunkiem.\n2. Trzy reakcje: **uległa** (robię, choć nie chcę), **agresywna** (krzyczę, obrażam), **asertywna** (spokojnie odmawiam i mówię dlaczego).\n3. Wzór: **Nie, bo... Ale mogę...**\n4. Gdy coś jest niebezpieczne: mówię „nie” i idę do zaufanego dorosłego.'),
+      ...razem('k4-asertywnosc'),
       ...poKolei(
         zad('r2-s80-zad1', 80, '1', 'ustnie'),
         zad('r2-s83-zad3', 83, '3', 'cwiczymy'),
@@ -590,7 +609,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - asertywność.',
         '2. **Ramka s. 85** (2 min).',
         '3. **Film „Wielka czy mała litera?”** (5:14). 3 zadania.',
-        '4. **Notatka** (4 min).',
+        '4. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '5. Zadania z podręcznika po kolei: **s. 85 zad. 1** ustnie, **zad. 2** do zeszytu (tabela), **s. 86 zad. 3** - zagadki do tej samej tabeli.',
         '6. Zapas: **s. 86 zad. 4** - drużyny (rzeka - Wisła, Odra...), **zad. 6** - nazwy dla nowego miasta, superbohatera, planety.',
       ].join('\n')],
@@ -614,6 +633,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s85-ramka', 85, 'Nazwy własne i pospolite'),
       ...film('wielka-litera-film1'),
       slideNote('Pisownia rzeczowników wielką i małą literą', '1. **Nazwy własne** - jedna konkretna osoba, zwierzę, miejsce: piszemy **wielką literą**.\n2. Wielką literą: imiona i nazwiska, imiona zwierząt, miasta, państwa, rzeki, góry, kontynenty, planety, święta.\n3. **Nazwy pospolite** - cała grupa (pies, rzeka, miasto): piszemy **małą literą**.\n4. Przykład: rzeka - Wisła, pies - Burek, planeta - Ziemia.'),
+      ...razem('k4-wielka-litera'),
       ...poKolei(
         zad('r2-s85-zad1', 85, '1', 'ustnie'),
         zad('r2-s85-zad2', 85, '2', 'zeszyt'),
@@ -640,7 +660,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **s. 87 zad. 1** (2 min) - nieporozumienie.',
         '3. **Ramka s. 87** (1 min).',
         '4. **Film „Nie z rzeczownikami”** (5:19). 3 zadania.',
-        '5. **Notatka** (3 min).',
+        '5. **Notatka** (3 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '6. Zadania z podręcznika po kolei: **s. 87 zad. 2** do zeszytu, **s. 88 zad. 4** - rebusy.',
         '7. Zapas: **s. 88 zad. 3** - idealna kraina w parach, **zad. 5** - Skwer Niezadowolenia.',
       ].join('\n')],
@@ -665,6 +685,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s87-ramka', 87, 'Nie z rzeczownikami'),
       ...film('nie-rzeczownik-film1'),
       slideNote('Pisownia nie z rzeczownikami', '1. **Nie** z rzeczownikami piszemy **łącznie**: niepokój, nieporządek, niepogoda.\n2. **Nie** z czasownikami piszemy **osobno**: nie wiem, nie lubię.\n3. Jak sprawdzić? Pytam: **kto? co?** - rzeczownik (razem). **Co robi?** - czasownik (osobno).'),
+      ...razem('k4-nie-rzeczownik'),
       ...poKolei(
         zad('r2-s87-zad2', 87, '2', 'zeszyt'),
         zad('r2-s88-zad3', 88, '3', 'cwiczymy'),
@@ -684,7 +705,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - nie z rzeczownikami.',
         '2. **Mapa s. 89** (2 min) - co już znamy?',
         '3. **Film „Podsumowanie rozdziału II”** (6:25, 3 zadania).',
-        '4. **Notatka** (5 min).',
+        '4. **Notatka** (5 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
         '5. Zadania z podręcznika po kolei: **s. 91 zad. 5, 6, 7, 9, 10**.',
         '6. Do domu: zeszyt powtórzeniowy PDF (link w VULCANIE) przed sprawdzianem.',
       ].join('\n')],
@@ -711,6 +732,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s89-mapa', 89, 'Pośród słów i znaczeń - mapa rozdziału'),
       ...film('podsumowanie4-dzial2-film1'),
       slideNote('Pośród słów i znaczeń - podsumowanie', '**SŁOWA:** wyrazy potoczne tylko na luzie (nie w wypracowaniu). Porównanie: jak, jakby, niczym, niby. Synonimy - podobne znaczenie, antonimy - przeciwne.\n**LIST:** miejscowość i data, nagłówek, wstęp, rozwinięcie, zakończenie, pozdrowienie, podpis, PS. Ty, Ciebie, Twój - wielką literą.\n**RZECZOWNIK:** kto? co?; liczba i rodzaj; 7 przypadków: M, D, C, B, N, Ms, W. Nazwy własne wielką literą. **Nie** z rzeczownikami razem.\n**ROZMOWA:** opinia + argument (ponieważ...). Asertywność: „Nie, bo... Ale mogę...”.'),
+      ...razem('k4-podsumowanie-r2'),
       ...poKolei(
         zad('r2-s91-zad5', 91, '5', 'ustnie'),
         zad('r2-s91-zad6', 91, '6', 'zeszyt'),

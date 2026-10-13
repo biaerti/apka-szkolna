@@ -437,7 +437,10 @@ export type Slide =
   | { id: ID; kind: 'video'; videoId: string; title?: string }
   // Czytanka z lektorem (src/data/czytanki.ts): tekst na slajdzie przewija sie
   // i podswietla slowo po slowie w rytm nagrania - dzieci sledza w podreczniku.
-  | { id: ID; kind: 'czytanka'; czytankaId: string };
+  | { id: ID; kind: 'czytanka'; czytankaId: string }
+  // Cwiczenie robione wspolnie na projektorze (src/data/cwiczenia.ts): wiele
+  // przykladow do wpisania albo klikniecia, "Sprawdź", kolejne zestawy.
+  | { id: ID; kind: 'cwiczenie'; cwiczenieId: string };
 
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki
