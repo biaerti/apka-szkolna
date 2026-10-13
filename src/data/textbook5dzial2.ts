@@ -4,9 +4,9 @@
 // Zasady Bartka (2026-09-29): podrecznik to pomoc, nie rama. Czytamy tylko dwa
 // teksty na dzial (Pisarski "Przenosnie", Januszewska "Lwy") plus krotkie
 // rozgrzewki (Kulmowa, Kasdepke). Reszta to jezyk i pisanie wg mapy
-// "To wiem! To potrafie!" z s. 96. Zadania z podrecznika tylko sensowne, jedno
-// zadanie = jeden screen = jeden slajd, z numerem strony. Lepiej miec zapas na
-// prezentacji niz go nie miec - Bartek sam decyduje, co zrobi na lekcji.
+// "To wiem! To potrafie!" z s. 96. Screen z podrecznika tylko przed filmem
+// (rozgrzewka, ramka, pytania do czytanki) - jedno zadanie = jeden slajd. Po
+// notatce 1-3 karty "Ćwiczymy razem" (Bartek 2026-10-13), bez screenow.
 //
 // Do kazdej lekcji film 4-5 minut (3 zadania sprawdzane na ekranie zadania),
 // po nim notatka. Pytania lekcji wracaja dopiero w kole na poczatku nastepnej
@@ -14,6 +14,7 @@
 // zadan leza w prywatnym buckecie "czytanki" jako d2-sNN-*.webp
 // (wyciete skryptem tmp/dzial2/wytnij.py z rozkladowek od Bartka).
 
+import { newId } from './id';
 import type { Slide, StudentAction } from './types';
 import { plan, recap, slideCzytanka, slideNote, slideText, slideTextbookImage, slideTextbookTask, slideTopic, slideVideo, type Topic } from './textbook5slides';
 
@@ -43,18 +44,13 @@ function ramka(plik: string, page: number, title: string): Slide {
   return slideTextbookImage(`czytanki:${plik}.webp`, page, title);
 }
 
-/** Zadania z podrecznika zawsze w kolejnosci z ksiazki: strona, potem numer zadania. */
-function poKolei(...slides: Slide[]): Slide[] {
-  const klucz = (s: Slide): [number, number] => {
-    if (s.kind !== 'image') return [0, 0];
-    const nr = /zad\. (\d+)/.exec(s.code ?? '');
-    return [s.page ?? 0, nr ? Number(nr[1]) : 0];
-  };
-  return [...slides].sort((a, b) => {
-    const [pa, na] = klucz(a);
-    const [pb, nb] = klucz(b);
-    return pa - pb || na - nb;
-  });
+/**
+ * "Ćwiczymy razem" (src/data/cwiczenia5.ts): 1-3 karty po notatce, z wlasnymi
+ * przykladami i "Sprawdź". Screenow zadan z podrecznika po notatce juz nie
+ * ma (Bartek 2026-10-13) - dobre typy zadan przeszly do kart.
+ */
+function razem(...ids: string[]): Slide[] {
+  return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
 }
 
 export const DZIAL2_TOPICS: Topic[] = [
@@ -78,9 +74,8 @@ export const DZIAL2_TOPICS: Topic[] = [
         '4. **Ramka s. 63** (2 min) - czytacie razem.',
         '5. **Film „Przenośnia”** (6:07) - porównanie, przenośnia, test rysowania, jak odczytać i jak zrobić przenośnię. 3 zadania, sprawdzane na tym samym ekranie.',
         '6. **Notatka** (4 min).',
-        '7. Zadania z podręcznika w kolejności z książki - na ile starczy czasu: **s. 62 zad. 1** ustnie, **s. 64 zad. 8** - przenośnie do zdjęć.',
-        '8. Zapas: s. 61 zad. 8 (własne porównania), s. 63 zad. 2, 3, 5, 6.',
-        '9. **s. 64 zad. 9** - do domu: przygotowanie recytacji (szczegóły i wybór wiersza na lekcji 21).',
+        '7. **Ćwiczymy razem** (3 karty): „Porównanie, przenośnia czy dosłownie?”, „Co to naprawdę znaczy?”, „Z porównania przenośnia”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
+        '8. **s. 64 zad. 9** - do domu: przygotowanie recytacji (szczegóły i wybór wiersza na lekcji 21).',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- **Porównanie** zestawia dwie rzeczy i mówi to wprost słowem „jak”, „niczym”, „jakby”: oczy jak gwiazdy.',
@@ -89,12 +84,6 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 61 zad. 3** Radość mała i wielka to drobne i duże powody do szczęścia. Wielka jak furkotanie mokrych chorągwi, mała jak czerwona kropelka biedronki na tulipanie.',
-        '- **s. 62 zad. 1** Lodowate spojrzenie - chłodne, nieprzyjazne. Zielono w głowie - ktoś niepoważny, beztroski. Kamienne serce - nieczuły, bez współczucia. Język ostry - mówi przykre, złośliwe rzeczy.',
-        '- **s. 63 zad. 2** zielone: liście, pończoszki, ławka, skrzynka, żaby, groszek, nić, podpinka. Kamienne: skały, mury, zamki, mosty, figury. Ostre: brzytwa, kosa, igła, nóż, ciernie, nożyce, widły.',
-        '- **s. 63 zad. 3** Zielona żaba i ostre nożyce - dosłownie (kolor, tnie). Zielono w głowie i ostry język - przenośnie.',
-        '- **s. 63 zad. 5** Przenośnie: lawina wspomnień, huragan braw.',
-        '- **s. 63 zad. 6** np. Muchomory przypominają kapelusze. Szron wygląda jak kryształy. Śnieg na choinkach jest podobny do cukru. Korzenie kojarzą się z wężami.',
-        '- **s. 64 zad. 8** np. owce - wełniane chmurki na trawie; przyprawy - tęcza na straganie; dmuchawiec - puchowe spadochrony.',
       ].join('\n')],
     ),
     questions: [
@@ -114,16 +103,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s63-ramka', 63, 'Przenośnia (metafora)'),
       slideVideo('przenosnia-film1'),
       slideNote('Przenośnia', '1. Porównanie mówi wprost słowem jak, niczym: szybki jak wiatr.\n2. Przenośnia (metafora) - wyrazy razem mają nowe znaczenie, nie rozumiemy ich dosłownie: kamienne serce, złote serce, morze łez.\n3. Test: narysuj to - wychodzi bzdura? To przenośnia.\n4. Przenośnię robię z porównania bez „jak”: biała pierzyna śniegu.'),
-      ...poKolei(
-        zad('d2-s61-zad8', 61, '8', 'zeszyt'),
-        zad('d2-s62-zad1', 62, '1', 'ustnie'),
-        zad('d2-s63-zad2', 63, '2', 'zeszyt'),
-        zad('d2-s63-zad3', 63, '3', 'ustnie'),
-        zad('d2-s63-zad5', 63, '5', 'zeszyt'),
-        zad('d2-s63-zad6', 63, '6', 'zeszyt'),
-        zad('d2-s64-zad8', 64, '8', 'zeszyt'),
-        zad('d2-s64-zad9', 64, '9', 'dom'),
-      ),
+      ...razem('k5-przenosnia-czy', 'k5-przenosnia-znaczenie', 'k5-przenosnia-zamien'),
     ],
   },
   {
@@ -143,7 +123,7 @@ export const DZIAL2_TOPICS: Topic[] = [
         '2. **Czytanka** (1 min), potem **s. 65 zad. 3** ustnie (4 min): co znaczy „czuć miętę” i czemu wujek się zdenerwował.',
         '3. **Film „Związki frazeologiczne”** (5:13) - co to jest, czemu nie zmieniamy wyrazów, frazeologizmy o sercu i o uczuciach, czemu nie dosłownie. 3 zadania, sprawdzane na tym samym ekranie.',
         '4. **Notatka** (4 min).',
-        '5. Zadania z podręcznika na ile starczy czasu: **s. 65 zad. 4** (serce - część była w filmie, tu z uzasadnieniem) i **s. 65 zad. 8** (frazeologizm do uczucia + zdanie).',
+        '5. **Ćwiczymy razem** (3 karty): „Co znaczy ten frazeologizm?”, „Dokończ frazeologizm”, „Jakie to uczucie?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
         '6. Zapas: każdy wymyśla scenkę, w której ktoś rozumie frazeologizm dosłownie jak Bartuś.',
       ].join('\n')],
       ['Jak wyjaśnić', [
@@ -153,8 +133,6 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 65 zad. 3** Czuć do kogoś miętę - podkochiwać się. Wujek się zdenerwował, bo Bartuś zdradził przy Idze jego uczucia (i jeszcze wąchał jej dłoń).',
-        '- **s. 65 zad. 4** Podbić czyjeś serce - zdobyć czyjąś miłość. Złamać komuś serce - zawieść w miłości, bardzo zranić. Wziąć sobie coś do serca - bardzo się czymś przejąć.',
-        '- **s. 65 zad. 8** Chcieć zapaść się pod ziemię - wstyd. Włosy stanęły dęba - strach. Patrzeć przez różowe okulary - szczęście. Wszystko się w nim gotuje - złość.',
       ].join('\n')],
     ),
     questions: [
@@ -172,8 +150,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       zad('d2-s65-zad3', 65, '3', 'ustnie'),
       slideVideo('frazeologizmy-film1'),
       slideNote('Związki frazeologiczne', '1. Związek frazeologiczny - stałe połączenie wyrazów o przenośnym znaczeniu.\n2. Nie zmieniam w nim wyrazów i nie rozumiem go dosłownie.\n3. Czuć miętę - podkochiwać się. Włosy stanęły dęba - strach. Chcieć zapaść się pod ziemię - wstyd.'),
-      zad('d2-s65-zad4', 65, '4', 'zeszyt'),
-      zad('d2-s65-zad8', 65, '8', 'zeszyt'),
+      ...razem('k5-frazeo-znaczenie', 'k5-frazeo-dokoncz', 'k5-frazeo-uczucia'),
     ],
   },
   {
@@ -194,7 +171,7 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Ramka s. 74** (2 min).',
         '4. **Film „Zdrobnienia i zgrubienia”** (4:48) - neutralne i nacechowane, zdrobnienia, zgrubienia, słowo zdradza uczucia, siła uczuć. 3 zadania, sprawdzane na tym samym ekranie.',
         '5. **Notatka** (4 min).',
-        '6. Zadania z podręcznika na ile starczy czasu: **s. 65 zad. 7** (siła uczuć - w filmie były inne trójki) i **s. 74 zad. 2** (tabela brzuch, but, pies).',
+        '6. **Ćwiczymy razem** (2 karty): „Zdrobnienie i zgrubienie”, „Neutralny czy nacechowany?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
         '7. **s. 74 zad. 3** - do domu: opis lubianej osoby ze zdrobnieniami.',
       ].join('\n')],
       ['Jak wyjaśnić', [
@@ -204,8 +181,6 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 74 zad. 1** Wyrazy z prawej są czułe - używamy ich w rozmowie z bliskimi, z dziećmi.',
-        '- **s. 74 zad. 2** brzuszek - brzuch - brzuchol / brzuszysko; bucik - but - buciór / butas; piesek - pies - psisko.',
-        '- **s. 65 zad. 7** niepokój, strach, groza; zadowolenie, radość, euforia; przygnębienie, żal, rozpacz (żal i przygnębienie można zamienić - ważne, że rozpacz na końcu).',
       ].join('\n')],
     ),
     questions: [
@@ -223,11 +198,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s74-ramka', 74, 'Wyrazy neutralne i nacechowane emocjonalnie'),
       slideVideo('zdrobnienia-film1'),
       slideNote('Zdrobnienia i zgrubienia', '1. Wyraz neutralny tylko nazywa: pies, nos.\n2. Wyraz nacechowany emocjonalnie wyraża uczucia:\n- zdrobnienie - coś małego albo czule: piesek, nosek,\n- zgrubienie - coś dużego, żartem albo pogardliwie: psisko, nochal.\n3. Uczucia mają siłę: niepokój - strach - groza.'),
-      ...poKolei(
-        zad('d2-s65-zad7', 65, '7', 'zeszyt'),
-        zad('d2-s74-zad2', 74, '2', 'zeszyt'),
-        zad('d2-s74-zad3', 74, '3', 'dom'),
-      ),
+      ...razem('k5-zdrobnienia-tabela', 'k5-nacechowane'),
     ],
   },
   {
@@ -245,17 +216,15 @@ export const DZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (7 min) - zdrobnienia i zgrubienia.',
-        '2. **Czytanka „Lwy”** (2 min).',
+        '2. **Czytanka „Lwy”** (2 min) + **s. 83 zad. 1, 2, 4** ustnie (4 min) - jak chłopiec okazuje złość, czemu lwy, co robi mama.',
         '3. **Film „Co robić ze złością?”** (4:56) - złość jako normalne uczucie, sygnały ciała, lwy jako przenośnia, dobre i złe sposoby, zdanie od „ja”. 3 zadania, sprawdzane na tym samym ekranie.',
         '4. **Notatka** - sposoby na złość (3 min).',
-        '5. Zadania z podręcznika na ile starczy czasu: **s. 83 zad. 1, 4** ustnie, **zad. 5** (złość według siły), ramka „Wśród ludzi” - pytanie: jakie są wasze sposoby?',
-        '6. Zapas: **zad. 6** - przeczytaj zwrotkę tak, żeby było słychać złość, a potem spokój (wstęp do recytacji), **zad. 8** ustnie.',
+        '5. **Ćwiczymy razem** (2 karty): „Dobry czy zły sposób na złość?”, „Powiedz to od „ja””. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **zad. 1** Zaciska pięści, trzaska drzwiami, wychodzi bez słowa, jest zjeżony, warczy.',
         '- **zad. 2** Lwy są groźne, silne i drapieżne - takie jak jego złość. Przy nich czuje się silny.',
         '- **zad. 4** Mama nie krzyczy ani nie robi wyrzutów. Rozumie syna i przyznaje, że sama bywa zła - rozmawia z nim jak z równym.',
-        '- **zad. 5** zdenerwowanie, złość, wściekłość.',
       ].join('\n')],
       ['Jak wyjaśnić', 'Lwy to złość chłopca pokazana jako zwierzęta. Idą z nim, warczą, aż wieczorem odchodzą w niebo - złość mija sama, kiedy da się jej czas i ruch. Karta wiersza w notatce ma ten sam układ co przy „Przenośniach”.'],
     ),
@@ -267,20 +236,17 @@ export const DZIAL2_TOPICS: Topic[] = [
       { text: 'Dobry czy zły sposób na złość: „idę na chwilę do swojego pokoju”?', answer: 'Dobry - daję sobie czas, żeby ochłonąć.' },
       { text: 'Które uczucie jest silniejsze: zdenerwowanie czy wściekłość?', answer: 'Wściekłość.' },
     ],
-    // Film po czytance, zadania z podrecznika jako zapas.
+    // Czytanka z trzema pytaniami do wiersza, film, notatka i karty.
     makeSlides: (previousSetId, _ownSetId) => [
       slideTopic('Co robić ze złością?'),
       ...recap(previousSetId),
       slideCzytanka('lwy'),
-      slideVideo('zlosc-film1'),
-      slideNote('Co robić ze złością?', '1. Złość to normalne uczucie - ważne, co z nią robię.\n2. Sposoby na złość: oddech i liczenie do 10, ruch, chwila w spokojnym miejscu, rozmowa, przeprosiny.\n3. O złości mówię zdaniem od „ja”: Jestem zły, bo…'),
       zad('d2-s83-zad1', 83, '1', 'ustnie'),
       zad('d2-s83-zad2', 83, '2', 'ustnie'),
       zad('d2-s83-zad4', 83, '4', 'ustnie'),
-      zad('d2-s83-zad5', 83, '5', 'zeszyt'),
-      ramka('d2-s83-wsrod-ludzi', 83, 'Wśród ludzi - co robić ze złością?'),
-      zad('d2-s83-zad6', 83, '6', 'ustnie'),
-      zad('d2-s83-zad8', 83, '8', 'ustnie'),
+      slideVideo('zlosc-film1'),
+      slideNote('Co robić ze złością?', '1. Złość to normalne uczucie - ważne, co z nią robię.\n2. Sposoby na złość: oddech i liczenie do 10, ruch, chwila w spokojnym miejscu, rozmowa, przeprosiny.\n3. O złości mówię zdaniem od „ja”: Jestem zły, bo…'),
+      ...razem('k5-zlosc-sposob', 'k5-zlosc-ja'),
     ],
   },
   {
@@ -300,10 +266,11 @@ export const DZIAL2_TOPICS: Topic[] = [
         '2. **Film „Jak recytować?”** (3:58) - przygotowanie w 4 krokach, głos (pauzy, pytanie, tempo), postawa. 2 zadania na głos - cała klasa mówi razem.',
         '3. **Wzór s. 91** (4 min) - czytasz „W lesie” dwa razy: płasko i według uwag. Pytasz, co się zmieniło. Ramka s. 90 jako zapas.',
         '4. **Notatka** (3 min).',
-        '5. **s. 91 zad. 1** - oddech, wszyscy na stojąco (3 min).',
-        '6. **s. 92 zad. 3** - łamańce (7 min). Koło losuje, kto czyta; kto się pomyli, próbuje jeszcze raz.',
-        '7. **s. 92 zad. 4** - „Czyżyk toczy kuleczkę” z czterema emocjami (5 min).',
-        '8. **Recytacja na ocenę** (4 min) - wybór wiersza, termin, zasady oceny.',
+        '5. **Ćwiczymy razem** (1 karta): „Jak to powiedzieć?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
+        '6. **s. 91 zad. 1** - oddech, wszyscy na stojąco (3 min).',
+        '7. **s. 92 zad. 3** - łamańce (7 min). Koło losuje, kto czyta; kto się pomyli, próbuje jeszcze raz.',
+        '8. **s. 92 zad. 4** - „Czyżyk toczy kuleczkę” z czterema emocjami (5 min).',
+        '9. **Recytacja na ocenę** (4 min) - wybór wiersza, termin, zasady oceny.',
       ].join('\n')],
       ['Ocena recytacji', 'Proponowane kryteria (po 1 pkt): znajomość tekstu, wyraźna wymowa, pauzy i tempo, głos oddaje nastrój, postawa i kontakt ze słuchaczami. Ocena trafia do kategorii „dyktanda/projekty/recytacja”.'],
     ),
@@ -321,6 +288,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s90-ramka', 90, 'Jak przygotować się do recytacji?'),
       ramka('d2-s91-wzor', 91, 'Wzór: „W lesie” z uwagami'),
       slideNote('Jak recytować?', '1. Recytacja - wygłaszanie tekstu z pamięci tak, by głosem oddać jego nastrój.\n2. Czytam ze zrozumieniem: kto mówi, jakie są emocje.\n3. Zaznaczam pauzy, ważne słowa (głośniej), tempo.\n4. Ćwiczę na głos, mówię wyraźnie, patrzę na słuchaczy.'),
+      ...razem('k5-recytacja-glos'),
       zad('d2-s91-zad1', 91, '1', 'cwiczymy'),
       zad('d2-s92-zad3', 92, '3', 'ustnie'),
       zad('d2-s92-zad4', 92, '4', 'ustnie'),
@@ -345,13 +313,10 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Ramki s. 75-76** (2 min) - tylko rzut oka, wszystko jest w filmie.',
         '4. **Film „Rzeczownik”** (5:28) - kto? co? (także uczucia), rodzaj, przypadki z pomocnikami na trzech rzeczownikach (kot, mama, szkoła), własne i pospolite. 3 zadania, sprawdzane na tym samym ekranie.',
         '5. **Notatka** (5 min).',
-        '6. Zadania z podręcznika na ile starczy czasu: **s. 76 zad. 1** (czat: forma + przypadek + liczba), **s. 77 zad. 1 i 2**.',
+        '6. **Ćwiczymy razem** (3 karty): „Odmieniamy rzeczownik”, „W jakim to przypadku?”, „Własne czy pospolite?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **Rozgrzewka** siostra (kto? ż.), kolega (kto? m.), pisklę (kto? co? n.), drzewo (co? n.), smutek (co? m.), przyjaciółka (kto? ż.).',
-        '- **s. 76 zad. 1** do kina (D. lp.), od mamy (D. lp.), dwa bilety (B. lm.), Olu (W. lp.), o której godzinie (Ms. lp.), przed zawodami (N. lm.), zajęć (D. lm.), 110 minut (D. lm.), w sobotę (B. lp.), z grami (N. lm.).',
-        '- **s. 77 zad. 1** Europie Środkowej, Niemcami, Czechami, Ukrainą, Polska, Bałtyku, Karpat, Sudetów, Wisła, Odra.',
-        '- **s. 77 zad. 2** np. Kraków, Bolesław Chrobry, „Hobbit”, Giewont, Wisła, Polska.',
       ].join('\n')],
     ),
     questions: [
@@ -370,9 +335,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s76-ramka', 76, 'Rzeczowniki własne i pospolite'),
       slideVideo('rzeczownik-film1'),
       slideNote('Co już wiemy o rzeczowniku?', '1. Rzeczownik: kto? co? - osoby, rzeczy, zwierzęta, rośliny, zjawiska, uczucia.\n2. Odmienia się przez liczby i przypadki: M. kto? co?, D. kogo? czego?, C. komu? czemu?, B. kogo? co?, N. z kim? z czym?, Ms. o kim? o czym?, W. o!\n3. Rodzaj: ten, ta, to. W lm. sprawdzam w lp.: koty - ten kot.\n4. Własne wielką literą (Wisła, Wawel), pospolite małą (rzeka, zamek).'),
-      zad('d2-s76-zad1', 76, '1', 'zeszyt'),
-      zad('d2-s77-zad1', 77, '1', 'ustnie'),
-      zad('d2-s77-zad2', 77, '2', 'zeszyt'),
+      ...razem('k5-rzeczownik-odmiana', 'k5-przypadek-ktory', 'k5-wlasne-pospolite'),
     ],
   },
   {
@@ -393,15 +356,11 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Ramki s. 77 i 78** (2 min) - rzut oka.',
         '4. **Film „Nietypowa odmiana”** (4:46) - muzeum w lp. i lm., tylko jedna liczba, jedne/dwoje drzwi, dopełniacz (nie ma sań, spodni). 3 zadania, sprawdzane na tym samym ekranie.',
         '5. **Notatka** (4 min).',
-        '6. Zadania z podręcznika na ile starczy czasu: **s. 78 zad. 1** (oceanaria, akwaria), **zad. 2**, **zad. 3**, **zad. 4**.',
+        '6. **Ćwiczymy razem** (2 karty): „Tylko jedna liczba?”, „Wstaw właściwą formę”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Jak wyjaśnić', 'Najczęstszy błąd: „w muzeumie”, „do muzeumu”. W liczbie pojedynczej muzeum się nie zmienia - zmienia się dopiero w mnogiej: muzea, muzeów, w muzeach. Przy rzeczownikach tylko w lm. pytaj: ile sztuk? Jedne drzwi (jedna sztuka), dwoje drzwi, troje nożyczek.'],
       ['Odpowiedzi', [
         '- **Rozgrzewka** o muzeum, muzeum Piernika, do muzeum, Muzeum Podróżników - w lp. jest tylko jedna forma.',
-        '- **zad. 1** w jednym z największych oceanariów, mnóstwo akwariów, do dwóch centrów handlowych, planetarium.',
-        '- **zad. 2** jedne nożyczki, dwoje nożyczek.',
-        '- **zad. 3** grabi, ferii, parę okularów, obcęgów.',
-        '- **zad. 4** młodzieży, odzieżą, biżuterię.',
       ].join('\n')],
     ),
     questions: [
@@ -420,10 +379,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s78-ramka', 78, 'Tylko liczba pojedyncza albo tylko mnoga'),
       slideVideo('nietypowe-film1'),
       slideNote('Nietypowa odmiana rzeczowników', '1. Rzeczowniki nijakie na -um w lp. się nie odmieniają: to muzeum, w muzeum. Odmieniam je w lm.: muzea, muzeów, w muzeach.\n2. Tylko lp.: powietrze, zazdrość, odzież.\n3. Tylko lm.: drzwi, sanie, nożyczki, okulary, wakacje.\n4. Jedne drzwi, dwoje drzwi, para spodni.'),
-      zad('d2-s78-zad1', 78, '1', 'ustnie'),
-      zad('d2-s78-zad2', 78, '2', 'zeszyt'),
-      zad('d2-s78-zad3', 78, '3', 'zeszyt'),
-      zad('d2-s78-zad4', 78, '4', 'zeszyt'),
+      ...razem('k5-tylko-liczba', 'k5-nietypowe-forma'),
     ],
   },
   {
@@ -444,18 +400,11 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Ramki s. 84 i 85** (2 min) - rzut oka.',
         '4. **Film „Ę i ą na końcu wyrazu”** (4:50) - biernik (widzę co?), narzędnik (z czym?), małe istoty, ja/oni, wyjątki wiem, jem, umiem, rozumiem. 3 zadania, sprawdzane na tym samym ekranie.',
         '5. **Plansza s. 86-87** (2 min) - rymowanki. **Notatka** (4 min).',
-        '6. Zadania z podręcznika na ile starczy czasu: **s. 84 zad. 1**, **s. 85 zad. 3** (przymiotniki: kolorową czapkę), **zad. 4**, **s. 86 zad. 1** - frazeologizmy z planszy; reszta jako zapas.',
+        '6. **Ćwiczymy razem** (2 karty): „Ę czy ą?”, „Skąd ten ogonek?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Jak wyjaśnić', 'Nie słychać, więc trzeba zapytać: **widzę kogo? co?** - ę (mamę, tęczę); **z kim? z czym?** - ą (z mamą, łyżką). Czasownik: **ja** - ę (robię), **oni** - ą (robią). Rymowanka z planszy: „Z kim? Z dziewczyną. Czym? Łyżką. W narzędniku stawiam ą”.'],
       ['Odpowiedzi', [
         '- **Rozgrzewka** siatkę, szparę, odwiedzę, przynoszę - wszystkie na ę.',
-        '- **s. 84 zad. 1** mamę, listę, pracę, kocię.',
-        '- **s. 84 zad. 2** odjadę - przyjadę, leżę - wstanę, zepsuję - naprawię, czyszczę - brudzę.',
-        '- **s. 85 zad. 3** z niebieską parasolką, z porcelanową filiżanką, z kwaśną śmietaną (ą); ulubioną kolorową czapkę (ą, ę).',
-        '- **s. 85 zad. 4** lubią, przygotowują, dokarmiają.',
-        '- **s. 86 zad. 1** kulą u nogi - być ciężarem; kamień w wodę - zaginąć bez śladu; koń pod górę - niepotrzebnie komplikować; mysz pod miotłą - siedzieć cicho; gdzie raki zimują - dać nauczkę; beczkę soli - wiele wspólnie przeżyć.',
-        '- **s. 86 zad. 2** kocię, niemowlę, pisklę, szczenię, źrebię.',
-        '- **s. 87 zad. 3** rzeczowniki -ę: mamę, tęczę; -ą: dziewczyną, łyżką, panią. Czasowniki -ę: śpię, mówię, słyszę, czuję, pasuję; -ą: krzyczą, milczą, są, mają, chodzą.',
       ].join('\n')],
     ),
     questions: [
@@ -475,15 +424,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       slideVideo('ogonki-film1'),
       ramka('d2-s86-87-plansza', 86, 'Plansza - rymowanki i frazeologizmy'),
       slideNote('Ę i ą na końcu wyrazu', '**-ę:** widzę kogo? co? - mamę, tęczę; małe istoty - kocię, źrebię; ja - piszę, zrobię.\n**-ą:** z kim? z czym? - z mamą, łyżką; oni - piszą, zrobią.\n**Wyjątki:** wiem, jem, umiem, rozumiem.'),
-      ...poKolei(
-        zad('d2-s84-zad1', 84, '1', 'zeszyt'),
-        zad('d2-s84-zad2', 84, '2', 'zeszyt'),
-        zad('d2-s85-zad3', 85, '3', 'zeszyt'),
-        zad('d2-s85-zad4', 85, '4', 'zeszyt'),
-        zad('d2-s86-zad1', 86, '1', 'zeszyt'),
-        zad('d2-s86-zad2', 86, '2', 'zeszyt'),
-        zad('d2-s87-zad3', 87, '3', 'zeszyt'),
-      ),
+      ...razem('k5-ea-koncowka', 'k5-ea-dlaczego'),
     ],
   },
   {
@@ -504,14 +445,10 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Ramki s. 88-89** (2 min) - rzut oka.',
         '4. **Film „Temat i końcówka”** (4:05) - temat, końcówka, końcówka zerowa, oboczność, trik na ó (stół, bo stoły; but, bo buty). 3 zadania, sprawdzane na tym samym ekranie.',
         '5. **Notatka** (4 min).',
-        '6. Zadania z podręcznika na ile starczy czasu: **s. 88 zad. 1**, **s. 89 zad. 3**, **zad. 4**, **zad. 5**.',
+        '6. **Ćwiczymy razem** (2 karty): „Temat i końcówka”, „Ó czy u? Udowodnij!”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **Rozgrzewka** róża, róży, różą, różę, róży, różo - temat róż- się nie zmienia, zmieniają się końcówki.',
-        '- **s. 88 zad. 1** mam|a, mam|y, mam|ę; krzesł|o, krzesł|a, krzesł|u; kwiat|ø, kwiat|u, kwiat|em.',
-        '- **s. 89 zad. 3** maluj|ę, maluj|esz, maluj|e, maluj|emy, maluj|ecie, maluj|ą.',
-        '- **s. 89 zad. 4** lód - lodu (ó : o), półka - półce (k : c), szafa - szafie (f : miękkie f).',
-        '- **s. 89 zad. 5** wóz, wozu, wozowi, Wóz, wozem, wozie. Tematy: wóz-, woz-, woź-. Oboczności: ó : o, z : ź.',
       ].join('\n')],
     ),
     questions: [
@@ -530,10 +467,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s89-ramka', 89, 'Oboczności'),
       slideVideo('temat-film1'),
       slideNote('Temat i końcówka', '1. Temat - część, która się nie zmienia; końcówka - zmienia się w odmianie: tablic|a, tablic|y.\n2. Końcówka zerowa (ø), gdy jej nie ma: brat|ø, stół|ø.\n3. Oboczność - wymiana głosek w temacie: stół - stołu (ó : o), ręka - ręce (k : c).\n4. Piszę ó, gdy wymienia się na o: stół - stoły, wóz - wozy.'),
-      zad('d2-s88-zad1', 88, '1', 'zeszyt'),
-      zad('d2-s89-zad3', 89, '3', 'zeszyt'),
-      zad('d2-s89-zad4', 89, '4', 'ustnie'),
-      zad('d2-s89-zad5', 89, '5', 'zeszyt'),
+      ...razem('k5-temat-koncowka', 'k5-o-u'),
     ],
   },
   {
@@ -554,15 +488,9 @@ export const DZIAL2_TOPICS: Topic[] = [
         '2. **Ramka s. 66 i wzór s. 67** (3 min) - rzut oka na strzałki: kto? co? kiedy? gdzie? dlaczego?',
         '3. **Film „Sprawozdanie”** (4:23) - sprawozdanie a opowiadanie, trzy części, zbędne szczegóły, słowa porządkujące. 3 zadania, sprawdzane na tym samym ekranie.',
         '4. **Notatka** (4 min).',
-        '5. Zadania z podręcznika na ile starczy czasu: **s. 67 zad. 1** (Sandomierz, ustnie), **s. 68 zad. 3**, **zad. 4**, **zad. 5** (plan wycieczki do Krakowa).',
+        '5. **Ćwiczymy razem** (2 karty): „Sprawozdanie czy opowiadanie?”, „Gdzie w sprawozdaniu?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Jak wyjaśnić', 'Sprawozdanie to opowiadanie „na serio”: tylko prawdziwe fakty, po kolei, bez fantazji i bez dialogów. Opinia jest dopiero w zakończeniu - jedno, dwa zdania.'],
-      ['Odpowiedzi', [
-        '- **s. 67 zad. 1** Uczestnicy: autorka, brat, rodzice. Kiedy i gdzie: 1 czerwca 2018 r., Sandomierz. Przebieg: zamek (Muzeum Okręgowe), bazylika katedralna, Dom Jana Długosza, spacer po rynku, trasa podziemna. Wrażenia: bardzo się podobało, chce wrócić na turniej rycerski.',
-        '- **s. 68 zad. 3** iść - maszerować, udać się, kroczyć; oglądać - podziwiać, zwiedzać, przyglądać się; opowiadać - relacjonować, mówić, opisywać.',
-        '- **s. 68 zad. 4** opinia o zupie, rozmowa o najpiękniejszych kwiatach, prośba mamy o wyniesienie śmieci.',
-        '- **s. 68 zad. 5** np. 1. Wyjazd do Krakowa. 2. Barbakan. 3. Rynek: Sukiennice i kościół Mariacki. 4. Wawel. 5. Smocza Jama. 6. Powrót.',
-      ].join('\n')],
     ),
     questions: [
       { text: 'Co to jest sprawozdanie?', answer: 'Krótka, rzeczowa relacja z prawdziwego wydarzenia, w którym się uczestniczyło.' },
@@ -579,12 +507,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s67-wzor', 67, 'Wzór sprawozdania'),
       slideVideo('sprawozdanie-film1'),
       slideNote('Sprawozdanie', '1. Sprawozdanie - krótka, rzeczowa relacja z wydarzenia, w którym brałem udział.\n2. Wstęp: kto? co? kiedy? gdzie? dlaczego?\n3. Rozwinięcie: jak przebiegało - po kolei (najpierw, następnie, na koniec).\n4. Zakończenie: krótka opinia.\n5. Tylko fakty, czas przeszły, tytuł.'),
-      ...poKolei(
-        zad('d2-s67-zad1', 67, '1', 'ustnie'),
-        zad('d2-s68-zad3', 68, '3', 'zeszyt'),
-        zad('d2-s68-zad4', 68, '4', 'zeszyt'),
-        zad('d2-s68-zad5', 68, '5', 'zeszyt'),
-      ),
+      ...razem('k5-sprawozdanie-czy', 'k5-sprawozdanie-czesc'),
     ],
   },
   {
@@ -602,13 +525,12 @@ export const DZIAL2_TOPICS: Topic[] = [
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (6 min) - sprawozdanie.',
         '2. **Film „Dwukropek i sprawozdanie”** (4:31) - dwukropek przed wyliczeniem, słowami i cytatem, zamiana „że” na cytat, przepis na sprawozdanie i przykład „Dzień Sportu”. 3 zadania, sprawdzane na tym samym ekranie.',
-        '3. **s. 69 zad. 1 i 2** - jeśli zostanie czas (zapas).',
-        '4. **s. 68 zad. 6** (20 min) - sprawozdanie. Na tablicy wypisz razem z klasą wydarzenia, z których można pisać (wycieczka, apel, zawody). Kto nie skończy - kończy w domu.',
+        '3. **Notatka** (3 min).',
+        '4. **Ćwiczymy razem** (2 karty): „Dwukropek, przecinek czy nic?”, „Z „że” na cytat”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
+        '5. **Piszemy sprawozdanie** (20 min) - slajd z poleceniem. Na tablicy wypisz razem z klasą wydarzenia, z których można pisać (wycieczka, apel, zawody). Kto nie skończy - kończy w domu.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **Rozgrzewka** Ewa wyjaśniła: „Nie mogę się z wami spotkać”. Paweł stwierdził: „Chętnie skorzystam z propozycji”.',
-        '- **zad. 1** trzy filmy: „Hugo i jego wynalazek”, „Księga dżungli”, „Merida Waleczna”; powiedział: „Nie można być rozważnym i zakochanym w tym samym czasie”; pisarzami: Andrzejem Maleszką, Pawłem Beręsewiczem, Katarzyną Ryrych.',
-        '- **zad. 2** np. brzmi: „na białym tulipanie”; na pytania: kto? co? kiedy? gdzie?; owoców: jabłek, pomarańczy i malin; powtarzam: „Nie poddawaj się”.',
       ].join('\n')],
     ),
     questions: [
@@ -625,9 +547,8 @@ export const DZIAL2_TOPICS: Topic[] = [
       rozgrzewka('d2-s69-rozgrzewka', 69, 'ustnie'),
       ramka('d2-s69-ramka', 69, 'Kiedy stawiamy dwukropek?'),
       slideNote('Dwukropek', 'Dwukropek stawiam:\n1. przed dialogiem: Nagle ktoś krzyknął:\n2. przed wyliczeniem: Zwiedziliśmy trzy miejsca: Wawel, Rynek i Barbakan.\n3. przed cytatem: Krasicki powiedział: „Umiej być przyjacielem”.'),
-      zad('d2-s69-zad1', 69, '1', 'zeszyt'),
-      zad('d2-s69-zad2', 69, '2', 'zeszyt'),
-      zad('d2-s68-zad6', 68, '6', 'zeszyt'),
+      ...razem('k5-dwukropek-gdzie', 'k5-dwukropek-cytat'),
+      slideText('Piszemy sprawozdanie', 'Napisz sprawozdanie z wydarzenia, w którym brałeś udział: wycieczki, apelu, zawodów albo wyjścia do kina.\n\n- **Wstęp:** kto? co? kiedy? gdzie? dlaczego?\n- **Rozwinięcie:** po kolei - najpierw, następnie, potem, na koniec. Przed wyliczeniem postaw dwukropek.\n- **Zakończenie:** krótka opinia.\n- Tytuł, czas przeszły, tylko fakty.'),
     ],
   },
   {
@@ -647,14 +568,9 @@ export const DZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (6 min) - dwukropek.',
         '2. **Ramka s. 94** (2 min) - rzut oka.',
         '3. **Film „Tekst reklamowy”** (4:23) - reklama a informacja, słowa z reklam, sztuczki, reklama a prawda, własne hasło. 4 zadania, sprawdzane na tym samym ekranie.',
-        '4. **s. 95 zad. 9** (6 min) - reklama pasty: hasło, kolory, obrazki, wyróżnienia.',
-        '5. **s. 95 zad. 10** (12 min) - hasło + szkic plakatu. W parach albo sam. Kilka osób prezentuje.',
-        '6. Zapas: **s. 95 zad. 7** i **zad. 5** ustnie.',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **zad. 7** Hasła: „Oto superskuteczne tabletki...” i „Wyjątkowa oferta! Kup zmywarkę...”. Poznajemy po zachwalaniu, wykrzyknikach, zwrocie do odbiorcy, obietnicy i słowach typu gratis.',
-        '- **zad. 9** Hasło obiecuje szybki efekt (14 dni). Biel i błękit kojarzą się z czystością i świeżością, mięta ze świeżym oddechem, lśniący ząb ze zdrowiem. Duża liczba 14 i napis „extra wybielanie” rzucają się w oczy.',
-        '- **zad. 5** W reklamach wszyscy są uśmiechnięci i piękni, domy lśnią, produkt rozwiązuje każdy problem. W życiu tak nie jest - reklama upiększa, żeby sprzedać.',
+        '4. **Notatka** (3 min).',
+        '5. **Ćwiczymy razem** (2 karty): „Reklama czy informacja?”, „Prawda czy przesada?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
+        '6. **Twoja reklama** (12 min) - slajd z poleceniem: hasło + szkic plakatu. W parach albo sam. Kilka osób prezentuje.',
       ].join('\n')],
     ),
     questions: [
@@ -671,10 +587,8 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s94-ramka', 94, 'Tekst reklamowy'),
       slideVideo('reklama-film1'),
       slideNote('Tekst reklamowy', '1. Tekst reklamowy namawia do kupna albo skorzystania z usługi (reclamo = wołać, krzyczeć).\n2. Rozpoznaję go po haśle i słowach: nowość, promocja, gratis, taniej, więcej; po wykrzyknikach i zwrotach do mnie.\n3. Reklama pokazuje świat piękniejszy niż naprawdę - najpierw sprawdzam, potem kupuję.'),
-      zad('d2-s95-zad7', 95, '7', 'ustnie'),
-      zad('d2-s95-zad9', 95, '9', 'zeszyt'),
-      zad('d2-s95-zad5', 95, '5', 'ustnie'),
-      zad('d2-s95-zad10', 95, '10', 'zeszyt'),
+      ...razem('k5-reklama-czy', 'k5-reklama-prawda'),
+      slideText('Twoja reklama', 'Wymyśl reklamę zdrowego drugiego śniadania albo szkolnego kiermaszu.\n\n- **Hasło:** krótkie, z wykrzyknikiem, najlepiej z rymem.\n- Słowa, które namawiają: nowość, tylko dziś, spróbuj...\n- **Szkic plakatu:** obrazek, kolory, najważniejsze słowo największe.\n- Uczciwie: obiecuj tylko to, co prawda.'),
     ],
   },
   {
@@ -697,7 +611,8 @@ export const DZIAL2_TOPICS: Topic[] = [
         '3. **Film „To wiem! To potrafię!”** (4:19) - cały dział w czterech częściach, 3 zadania sprawdzane na tym samym ekranie.',
         '4. **Tekst s. 97-98** (5 min) i **zadania s. 98** (15 min) - po kolei, koło losuje. Zad. 1, 2, 3, 5, 7 szybko ustnie; 4, 8, 9, 10 w zeszycie (co nie zdążysz - zapas).',
         '5. **Notatka** (4 min).',
-        '6. **Zad. 11** - sprawozdanie z wyjścia do kina, do domu (albo dla chętnych).',
+        '6. **Ćwiczymy razem** (1 karta): „Powtórka działu”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
+        '7. **Zad. 11** - sprawozdanie z wyjścia do kina, do domu (albo dla chętnych).',
       ].join('\n')],
       ['Odpowiedzi s. 98', [
         '- **zad. 1** A.',
@@ -736,7 +651,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       zad('d2-s98-zad9', 98, '9', 'zeszyt'),
       zad('d2-s98-zad10', 98, '10', 'zeszyt'),
       slideNote('Uwaga, uczucia! - podsumowanie', '**Słowa i emocje:** przenośnia (kamienne serce), związek frazeologiczny (czuć miętę), zdrobnienie (piesek), zgrubienie (psisko).\n**Rzeczownik:** przypadki; własne wielką literą; muzeum - w muzeum; tylko lp. (odzież), tylko lm. (drzwi).\n**Pisownia:** -ę: widzę mamę, piszę, kocię; -ą: z mamą, piszą. Dwukropek: dialog, wyliczenie, cytat.\n**Formy:** sprawozdanie (kto, co, gdzie, kiedy, przebieg, opinia), tekst reklamowy, recytacja.'),
-      zad('d2-s98-zad11', 98, '11', 'dom'),
+      ...razem('k5-podsumowanie-d2'),
     ],
   },
 ];

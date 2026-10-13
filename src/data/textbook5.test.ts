@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from './textbook5';
+import { cwiczenieById } from './cwiczenia';
 
 describe('buildTextbook5', () => {
   const bundle = buildTextbook5('V', ['klasa-5a']);
@@ -163,7 +164,21 @@ describe('buildTextbook5', () => {
     const czytanki = bundle.lessons.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka').map((s) => s.kind === 'czytanka' && s.czytankaId));
     expect(czytanki).toEqual(expect.arrayContaining(['co-to-jest-radosc', 'przenosnie', 'co-to-znaczy', 'lwy']));
     const lwy = bundle.lessons.find((l) => l.title.startsWith('20.'))!;
-    expect(lwy.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'czytanka', 'video', 'note', 'image', 'image', 'image', 'image', 'image', 'image', 'image']);
+    expect(lwy.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'czytanka', 'image', 'image', 'image', 'video', 'note', 'cwiczenie', 'cwiczenie']);
+  });
+
+  it('dzial 2: po notatce 1-3 karty Ćwiczymy razem, screeny zadan tylko przed filmem', () => {
+    const dzial2 = bundle.lessons.filter((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
+    for (const lesson of dzial2) {
+      const poNotatce = lesson.slides.slice(lesson.slides.findIndex((s) => s.kind === 'note') + 1);
+      const karty = poNotatce.filter((s) => s.kind === 'cwiczenie');
+      expect(karty.length, lesson.title).toBeGreaterThanOrEqual(1);
+      expect(karty.length, lesson.title).toBeLessThanOrEqual(3);
+      expect(karty.every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId))), lesson.title).toBe(true);
+      expect(poNotatce[0]?.kind, lesson.title).toBe('cwiczenie');
+      // Wyjatek: recytacja - lamance i oddech to teksty do mowienia na glos cala klasa.
+      if (!lesson.title.startsWith('21.')) expect(poNotatce.some((s) => s.kind === 'image'), lesson.title).toBe(false);
+    }
   });
 
   it('wycofane tematy nie wracaja w materiale', () => {
