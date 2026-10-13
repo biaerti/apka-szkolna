@@ -188,8 +188,8 @@ describe('buildTextbook4', () => {
       expect([...klucze].sort((a, b) => a - b)).toEqual(klucze);
       expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(5);
     }
-    // Dwie czytanki na rozdzial (Bartek: max 2 teksty).
-    expect(r2.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(2);
+    // Cztery czytanki na rozdzial: dwa teksty z planu + wiersz do porownania i Michalak do asertywnosci (Bartek, 2026-10-13).
+    expect(r2.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(4);
   });
 
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {

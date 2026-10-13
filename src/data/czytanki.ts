@@ -46,7 +46,9 @@ export const CZYTANKI: Czytanka[] = [
   { id: 'lwy', lekcja: 'V.20', temat: 'Co robić ze złością?', title: 'Lwy', author: 'Hanna Januszewska', pages: '81-82' },
   // Klasa 4, rozdzial II "Pośród słów i znaczeń" (src/data/textbook4rozdzial2.ts).
   { id: 'dynastia-miziolkow', lekcja: '18', temat: 'Wyrazy potoczne', title: 'Dynastia Miziołków (fragmenty)', author: 'Joanna Olech', pages: '56-57' },
+  { id: 'wiersze-beszczynska', lekcja: '19', temat: 'Porównanie', title: 'wiersze', author: 'Zofia Beszczyńska', pages: '59' },
   { id: 'kurs-fotografii', lekcja: '25', temat: 'Opinia i argument', title: 'Kurs fotografii, czyli o tym, co to jest przekonywanie', author: 'Michał Rusinek, Aneta Załazińska', pages: '76-78' },
+  { id: 'pani-z-tramwaju', lekcja: '26', temat: 'Asertywność', title: 'Historia o własnym zdaniu. Pani z tramwaju', author: 'Marek Michalak', pages: '80-82' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };

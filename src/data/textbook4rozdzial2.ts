@@ -3,7 +3,8 @@
 //
 // Zasady Bartka (2026-10-01): dwa teksty na rozdzial (Olech "Dynastia
 // Miziołków", Rusinek i Załazińska "Kurs fotografii"), reszta to jezyk i
-// pisanie. Dzien Pisania Listow (temat 5) wyciety w calosci. Do kazdej lekcji
+// pisanie. 2026-10-13 Bartek dolozyl wiersze Beszczyńskiej (porownanie) i
+// "Panią z tramwaju" Michalaka (asertywnosc) jako czytanki z lektorem. Dzien Pisania Listow (temat 5) wyciety w calosci. Do kazdej lekcji
 // filmik, notatka i zadania z podrecznika po kolei jako zapas. Pytania tej
 // lekcji wracaja dopiero w kole powtorkowym na poczatku nastepnej lekcji,
 // zeby dzieci nie robily tego samego zestawu dwa razy pod rzad.
@@ -142,7 +143,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Porównanie',
     textbookPage: 59,
     teacherPlan: plan(
-      ['Co dziś', 'Lekcja językowa bez tekstu. Wiersz Zofii Beszczyńskiej (s. 59) pomijamy - porównania ćwiczymy na własnych przykładach z filmu i na zadaniach 2-4, 7-8. Zadania 1, 5, 6 dotyczą wiersza, więc odpadają.'],
+      ['Co dziś', 'Krótki wiersz Zofii Beszczyńskiej „wiersze” (s. 59, ok. 30 s z lektorem) - same porównania z „jak”: wiersze jak czereśnie, jak woda, jak cienie. Z niego wychodzimy do porównania, potem film i zadania 2-4, 6-8. Zadanie 5 (ilustracja) pomijamy.'],
       ['Po lekcji uczeń', [
         '- rozpoznaje porównanie po słówkach jak, jakby, niczym, niby,',
         '- wie, że samo „jak” w pytaniu to jeszcze nie porównanie,',
@@ -151,11 +152,13 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (5 min) - wyrazy potoczne.',
-        '2. **Ramka s. 60** (2 min) - czytacie razem.',
-        '3. **Film „Porównanie”** (4:42) - słówka porównania, pułapka z „jak”, opis i własne porównania. 3 zadania.',
-        '4. **Notatka** (4 min).',
-        '5. Zadania z podręcznika po kolei: **s. 60 zad. 2** do zeszytu, **zad. 3** ustnie, **zad. 4** ustnie, **s. 61 zad. 7** do zeszytu.',
-        '6. Zapas: **s. 61 zad. 8** (porównanie + „ponieważ”), **Podsumujmy** - „Nasza klasa jest jak...” w kole.',
+        '2. **Zacznijmy od... s. 59** (2 min) - skąd poeci biorą pomysły i słowa?',
+        '3. **Czytanka „wiersze”** (1 min, można puścić dwa razy) + **s. 60 zad. 1** ustnie (2 min).',
+        '4. **Ramka s. 60** (2 min) - czytacie razem.',
+        '5. **Film „Porównanie”** (4:42) - słówka porównania, pułapka z „jak”, opis i własne porównania. 3 zadania.',
+        '6. **Notatka** (4 min).',
+        '7. Zadania z podręcznika po kolei: **s. 60 zad. 2** do zeszytu, **zad. 3** ustnie, **zad. 4** ustnie, **s. 61 zad. 6** - porównania z wiersza, **zad. 7** do zeszytu.',
+        '8. Zapas: **s. 61 zad. 8** (porównanie + „ponieważ”), **Podsumujmy** - „Nasza klasa jest jak...” w kole.',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- Porównanie zestawia dwie rzeczy i pokazuje, w czym są podobne: szybki jak gepard.',
@@ -164,9 +167,11 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '- Własne porównanie w 3 krokach: wybierz cechę, pomyśl, co ma ją najbardziej, połącz słówkiem.',
       ].join('\n')],
       ['Odpowiedzi', [
+        '- **s. 60 zad. 1** Podmiot liryczny to ktoś, kto pisze wiersze (poeta, poetka). Wymyśla wiersze - chodzą mu po głowie, śnią mu się, a on chce je złapać, zanim znikną. Kartka posłuży mu jak mapa: zapisze na niej wiersze.',
         '- **s. 60 zad. 2** odważny jak lew, wolny jak ptak, mądry jak sowa, uparty jak osioł, pracowity jak mrówka (pszczoła), łagodny jak baranek.',
         '- **s. 60 zad. 3** np. głodny jak wilk, dumny jak paw, cichy jak mysz, chytry jak lis, wierny jak pies, zdrowy jak ryba.',
         '- **s. 60 zad. 4** porównania: „szybki jak błyskawica”, „szumiało niczym wodospad”, „błyszczały niby gwiazdy”.',
+        '- **s. 61 zad. 6** krągłe słodkie jak czereśnie - wiersze są miłe, przyjemne; (bawić się) księżycem jak piłką - wiersze są wesołe, lubią zabawę; rozwieją się jak cienie - szybko znikają, trzeba je łapać; kartka jak mapa - pomaga odnaleźć i zapisać wiersze.',
         '- **s. 61 zad. 7 i 8** odpowiedzi własne - sprawdzamy, czy jest słówko i czy rzecz naprawdę ma tę cechę.',
       ].join('\n')],
     ),
@@ -181,6 +186,9 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     makeSlides: (previousSetId, _ownSetId) => [
       slideTopic('Porównanie'),
       ...recap(previousSetId),
+      zacznij('r2-s59-zacznij', 59),
+      slideCzytanka('wiersze-beszczynska'),
+      zad('r2-s60-zad1', 60, '1', 'ustnie'),
       ramka('r2-s60-ramka', 60, 'Porównanie'),
       ...film('porownanie-film1'),
       slideNote('Porównanie', '1. **Porównanie** zestawia dwie rzeczy i pokazuje, w czym są podobne.\n2. Słówka porównania: **jak, jakby, niczym, niby**.\n3. Przykład: Mój brat biega szybko **jak** gepard.\n4. Porównania sprawiają, że opis jest ciekawszy i łatwiej go sobie wyobrazić.'),
@@ -188,6 +196,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         zad('r2-s60-zad2', 60, '2', 'zeszyt'),
         zad('r2-s60-zad3', 60, '3', 'ustnie'),
         zad('r2-s60-zad4', 60, '4', 'ustnie'),
+        zad('r2-s61-zad6', 61, '6', 'zeszyt'),
         zad('r2-s61-zad7', 61, '7', 'zeszyt'),
         zad('r2-s61-zad8', 61, '8', 'zeszyt'),
         podsumujmy('r2-s61-podsumujmy', 61),
@@ -516,7 +525,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Asertywność',
     textbookPage: 80,
     teacherPlan: plan(
-      ['Co dziś', 'Lekcja bez tekstu. Opowiadanie Michalaka „Pani z tramwaju” (s. 80-82) pomijamy - asertywność pokazuje film na scenkach z życia czwartoklasisty, a w klasie robicie własne scenki (s. 83 zad. 6). Zadania 2-3 dotyczą tekstu, więc odpadają.'],
+      ['Co dziś', 'Opowiadanie Marka Michalaka „Pani z tramwaju” (s. 80-82, ok. 6 min z lektorem) - Miłosz grzecznie odmawia pani w tramwaju i szczerze mówi pisarce, co myśli o jej książce. Z tego wychodzimy do asertywności, potem film i własne scenki (s. 83 zad. 6). Lekcja jest pełna - zad. 3-6 to zapas.'],
       ['Po lekcji uczeń', [
         '- wyjaśnia, czym jest asertywność,',
         '- odróżnia reakcję uległą, agresywną i asertywną,',
@@ -526,13 +535,16 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (5 min) - opinia i argument.',
         '2. **Zacznijmy od... s. 80** (2 min) - czy łatwo ci powiedzieć „nie”?',
-        '3. **Film „Asertywność”** (4:59). 3 zadania.',
-        '4. **Ramka s. 83 + notatka** (5 min).',
-        '5. Zadania z podręcznika po kolei: **s. 80 zad. 1** (trzy reakcje na prośbę koleżanki), **s. 83 zad. 5** - jak odmówić (horror, muffinka, kino przed sprawdzianem).',
-        '6. Zapas: **s. 83 zad. 4** (gdy ktoś namówił nas wbrew nam - tylko chętni), **zad. 6** - scenki w grupach.',
+        '3. **Czytanka „Pani z tramwaju”** (6 min) + **s. 83 zad. 2** ustnie (3 min).',
+        '4. **Film „Asertywność”** (4:59). 3 zadania.',
+        '5. **Ramka s. 83 + notatka** (5 min).',
+        '6. Zadania z podręcznika po kolei: **s. 80 zad. 1** (trzy reakcje na prośbę koleżanki), **s. 83 zad. 3** w parach - asertywność Miłosza, **zad. 5** - jak odmówić (horror, muffinka, kino przed sprawdzianem).',
+        '7. Zapas: **s. 83 zad. 4** (gdy ktoś namówił nas wbrew nam - tylko chętni), **zad. 6** - scenki w grupach.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 80 zad. 1** np. zgoda wbrew sobie (koleżanka zadowolona, ja zły na siebie), odmowa niegrzeczna (koleżanka obrażona), odmowa asertywna: „Nie zrobię za ciebie zadania, ale mogę ci wytłumaczyć, jak je zrobić” (obie strony szanowane).',
+        '- **s. 83 zad. 2** Książki były dla młodszych dzieci - czytał je kuzynkom. Babcia kusiła: zobaczysz autorkę na żywo, zapytasz o pomysły, a potem lody (i mango). Pani w tramwaju ciągnęła go za rękę i mówiła „Siadaj tu, dziecko. Bo zajmą wam miejsce”. Babci powiedział „Zgoda” - sam zdecydował, a pani „Nie, dziękuję” - stanowczo i grzecznie. Nie żałował - spotkanie było świetne. Pisarka ucieszyła się z jego szczerości i obiecała książkę dla starszych.',
+        '- **s. 83 zad. 3** W tramwaju („Nie mam ochoty, proszę pani. I nie jestem bezczelny. Po prostu podziękowałem”) i przy pisarce (szczerze, ale grzecznie: książka podobałaby mu się, gdyby był młodszy). Zyskał szacunek babci i pisarki, a nawet obietnicę nowej książki. Asertywność chroni przed robieniem czegoś wbrew sobie i przed ludźmi, którzy chcą nas wykorzystać.',
         '- **s. 83 zad. 5** np. „Dziękuję, nie oglądam horrorów, wolę komedię”; „Dziękuję, nie jem słodyczy, chętnie zjem owoc”; „Nie dziś, jutro mam sprawdzian. Chodźmy w sobotę”.',
       ].join('\n')],
     ),
@@ -548,11 +560,14 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       slideTopic('Asertywność'),
       ...recap(previousSetId),
       zacznij('r2-s80-zacznij', 80),
+      slideCzytanka('pani-z-tramwaju'),
+      zad('r2-s83-zad2', 83, '2', 'ustnie'),
       ...film('asertywnosc-film1'),
       ramka('r2-s83-ramka', 83, 'Asertywność'),
       slideNote('Asertywność', '1. **Asertywność** to mówienie „nie” spokojnie i z szacunkiem.\n2. Trzy reakcje: **uległa** (robię, choć nie chcę), **agresywna** (krzyczę, obrażam), **asertywna** (spokojnie odmawiam i mówię dlaczego).\n3. Wzór: **Nie, bo... Ale mogę...**\n4. Gdy coś jest niebezpieczne: mówię „nie” i idę do zaufanego dorosłego.'),
       ...poKolei(
         zad('r2-s80-zad1', 80, '1', 'ustnie'),
+        zad('r2-s83-zad3', 83, '3', 'cwiczymy'),
         zad('r2-s83-zad4', 83, '4', 'ustnie'),
         zad('r2-s83-zad5', 83, '5', 'ustnie'),
         zad('r2-s83-zad6', 83, '6', 'cwiczymy'),
