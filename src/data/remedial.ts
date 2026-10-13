@@ -37,6 +37,7 @@ export const POLSKI_OD_ZERA = [
   { czesc: 1, tematy: 'Litery, powitania, klasa, liczby i kolory, rodzina' },
   { czesc: 2, tematy: 'Dni tygodnia, jedzenie, ciało, dom, mój dzień' },
   { czesc: 3, tematy: 'Pogoda, ubrania, zwierzęta, miasto, czas wolny, Kto? Co? Jaki?' },
+  { czesc: 4, tematy: 'Godziny, wczoraj i jutro, zakupy, opis osoby, uczucia' },
 ] as const;
 
 export type PolskiOdZeraWersja = 'A4' | 'A5';

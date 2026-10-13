@@ -192,3 +192,12 @@ b .ru, .ru b { color: inherit; }
 .key.dense { font-size: 8.2pt; }
 .key.dense p { line-height: 1.32; }
 .key.dense h4 { margin-top: 1.8mm; }
+
+/* czesc 4 */
+.zegary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; text-align: center; }
+.zegary div { display: flex; flex-direction: column; align-items: center; gap: 1.5mm; font-size: 9.5pt; }
+.zegary svg { width: 24mm; }
+.zegary.two { grid-template-columns: 1fr 1fr; }
+.zegary.two svg { width: 34mm; }
+.big-read { font-size: 11.5pt; line-height: 1.5; }
+.nn.godz { width: 10mm; }

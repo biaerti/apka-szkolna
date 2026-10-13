@@ -13,7 +13,7 @@ DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(DIR.parent.parent / "materialy"))
 from wyslij import env, zapytanie  # noqa: E402
 
-CZESCI = (1, 2, 3)
+CZESCI = (1, 2, 3, 4)
 WERSJE = ("A4", "A5")
 
 
