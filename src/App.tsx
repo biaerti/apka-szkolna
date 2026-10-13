@@ -30,6 +30,7 @@ import { LessonNotesPrint } from './pages/LessonNotesPrint';
 import { Journal } from './pages/Journal';
 import { Sala } from './pages/Sala';
 import { WazneInfoPage } from './pages/WazneInfo';
+import { TablicaDzialu } from './pages/TablicaDzialu';
 import { AutoVulcanUwaga } from './components/uwagi/AutoVulcanUwaga';
 import { AutoRefreshMaterials } from './components/lessons/AutoRefreshMaterials';
 import { RemoveRemedialLessons } from './components/lessons/RemoveRemedialLessons';
@@ -60,6 +61,8 @@ export default function App() {
       <Route path="/dokumenty/:slug" element={<DocPrint />} />
       <Route path="/lekcje/notatki/druk" element={<LessonNotesPrint />} />
       <Route path="/lektury/druk" element={<LekturyPrint />} />
+      {/* Tablica dzialu (Excalidraw) na projektor - mapa wiedzy rocznika i miejsce do rysowania */}
+      <Route path="/tablica" element={<TablicaDzialu />} />
 
       <Route element={<AppShell />}>
         <Route path="/" element={<Dashboard />} />
