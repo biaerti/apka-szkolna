@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>Karta pracy - rozdział I</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap&subset=latin-ext');
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap&subset=latin-ext');
+:root { --krem: #FFF7EA; --pom: #F58220; --roz: #E8425A; --ciemny: #4A3B32; --szary: #7a6a5c; --ramka: #e2d3bd; --ziel: #2E9E5B; --nieb: #3C7DD9; --fiol: #8A4FD0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; color: var(--ciemny); font-size: 11.5pt; line-height: 1.4; }
+h1, h2, h3 { font-family: 'Baloo 2', sans-serif; line-height: 1.1; }
+mark { background: #ffe066; border-radius: 3px; padding: 0 2px; color: inherit; }
+s { color: var(--roz); }
+
+@page { size: A4; margin: 9mm 10mm 9mm; }
+body { font-size: 10pt; line-height: 1.3; }
+.gora { display: flex; align-items: flex-end; gap: 5mm; border-bottom: 2.5px solid var(--ciemny); padding-bottom: 1.5mm; }
+.gora h1 { font-size: 19pt; }
+.gora .pod { font-family: 'Baloo 2'; font-size: 12pt; color: var(--szary); }
+.gora h1, .gora .pod { white-space: nowrap; }
+.gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; overflow: hidden; min-width: 0; }
+.gora .rozw { margin-left: auto; font-family: 'Caveat'; font-size: 20pt; color: var(--czerw); }
+.temat { display: grid; grid-template-columns: 58mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.wiedza { background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
+.wiedza h2 { font-size: 12.5pt; color: var(--k); margin-bottom: 1mm; display: flex; align-items: center; gap: 1.8mm; }
+.wiedza h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.wiedza p + p { margin-top: 1mm; }
+.zad + .zad { margin-top: 1.8mm; }
+.pol { font-weight: 800; }
+.pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.linie { margin: .6mm 0 0 2mm; line-height: 2; }
+.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid var(--k45); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
+.wiersz .przerwa { height: 2mm; }
+.pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
+.pyt .p { font-weight: 700; }
+.pyt .o .luka { display: block; min-width: 0 !important; max-width: 95mm; margin: 0; }
+.linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
+.linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
+.linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }
+.luka { display: inline-block; border-bottom: 1.3px dotted #8d7b6b; height: 5.2mm; vertical-align: -1.2mm; text-align: center; margin: 0 .8mm; position: relative; }
+.luka.dluga { min-width: 0 !important; display: block; margin: .3mm 0 0 0; }
+.l:has(.luka.dluga) { margin-bottom: .6mm; }
+.pis { font-family: 'Caveat'; font-weight: 700; font-size: 14.5pt; color: var(--czerw); line-height: 1; white-space: nowrap; padding: 0 1mm; }
+.luka.dluga .pis { white-space: normal; }
+.wybor { display: inline-flex; flex-wrap: wrap; gap: 1.2mm 1.5mm; margin-left: .5mm; }
+.opc { white-space: nowrap; padding: 0 1.6mm; border: 1.5px solid transparent; border-radius: 99px; background: #f6efe4; line-height: 1.5; }
+.opc.zakr { border-color: var(--czerw); background: #fff; }
+.podkr { text-decoration: underline 2px var(--czerw); text-underline-offset: 2px; }
+.tab { margin: 1mm 0 0 2mm; border-collapse: collapse; }
+.tab th { background: var(--k); color: #fff; font-family: 'Baloo 2'; font-size: 9.5pt; padding: .4mm 2.5mm; text-align: left; }
+.tab td { border: 1px solid var(--ramka); padding: .3mm 1.5mm; height: 7mm; }
+.tab:not(:has(thead)) td { min-width: 28mm; }
+.tab:not(:has(thead)) tr:first-child td { background: var(--k12); }
+.tab td .luka { border-bottom: none; }
+.tab .wybor { flex-wrap: nowrap; }
+.tab .opc { font-size: 9pt; padding: 0 1.3mm; }
+.tab td:first-child { white-space: nowrap; }
+.stopka { margin-top: 2mm; text-align: center; font-size: 8.5pt; color: var(--szary); }
+.arkusz + .arkusz { break-before: page; }
+.gora .grupa { margin-left: auto; font-family: 'Baloo 2'; font-weight: 800; font-size: 15pt; color: #fff; background: var(--roz); border-radius: 2mm; padding: 0 3mm; line-height: 1.35; align-self: center; white-space: nowrap; }
+.gora .rozw + .grupa { margin-left: 0; }
+.dane { display: grid; grid-template-columns: 3fr 1.2fr 1.3fr; gap: 6mm; margin-top: 2mm; font-size: 9.5pt; color: var(--szary); }
+.dane span { border-bottom: 1px dotted var(--szary); padding-bottom: .5mm; }
+.temat.bez-wiedzy { display: block; break-inside: auto; padding: 1.8mm 0; }
+.sprawdzian .linie { line-height: 1.8; }
+.temat.bez-wiedzy .zad { break-inside: avoid; }
+.temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
+.temat.bez-wiedzy > h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.pol .pkt.ocena { display: inline-flex; align-items: center; gap: 1mm; font-size: 9.5pt; color: var(--ciemny); border: 0; padding: 0; line-height: 1.2; }
+.pol .pkt .kratka { display: inline-block; width: 8mm; height: 4.4mm; border: 1.3px solid var(--ciemny); border-radius: 1mm; background: #fff; }
+.pol .pkt { float: right; font-weight: 700; font-size: 8.5pt; color: var(--szary); border: 1px solid var(--ramka); border-radius: 2mm; padding: 0 1.5mm; margin-left: 2mm; }
+.lin { border-bottom: 1px solid #b9a894; height: 8mm; margin-left: 2mm; }
+.sprawdzian .tab td { height: 6.5mm; }
+.wzor { margin: 1mm 0 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--czerw); line-height: 1.35; }
+.kryt { margin: 1mm 0 0 2mm; font-size: 9pt; color: var(--szary); }
+.kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
+.dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
+:root { --czerw: #D62828; }
+
+body.ekran { background: #e9e3d8; }
+.ekran .arkusz { width: 210mm; margin: 4mm auto 10mm; background: #fff; padding: 8mm 10mm; box-shadow: 0 1mm 4mm rgba(0,0,0,.15); }
+.ekran .temat { break-inside: auto; }
+.ekran .zadania { min-width: 0; }
+.ekran .tab .wybor { flex-wrap: wrap; }
+.ekran .luka { cursor: text; outline: none; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--nieb); line-height: 1; padding: 0 1mm; white-space: nowrap; }
+.ekran .luka.dluga { white-space: normal; height: auto; min-height: 5.2mm; }
+.ekran .luka:focus { background: #fff6cf; }
+.ekran .luka.odp { color: var(--ziel); }
+.ekran .podp { font-family: 'Caveat'; font-weight: 700; font-size: 14pt; color: var(--ziel); margin-left: 1.5mm; }
+.ekran .opc, .ekran .sl { cursor: pointer; user-select: none; }
+.ekran .opc.zakr { border-color: var(--nieb); background: #fff; }
+.ekran .sl.podkr { text-decoration: underline 2px var(--nieb); text-underline-offset: 2px; }
+.ekran .opc.dobrze { border-color: var(--ziel); background: #fff; }
+.ekran .opc.zle { border-color: var(--czerw); text-decoration: line-through; }
+.ekran .sl.dobrze { text-decoration: underline 2px var(--ziel); text-underline-offset: 2px; }
+.ekran .sl.zle { text-decoration: line-through 2px var(--czerw); }
+.ekran .pisz { margin-left: 2mm; outline: none; padding: 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 17pt; color: var(--nieb); line-height: 8mm; overflow: hidden;
+  background: repeating-linear-gradient(transparent 0, transparent calc(8mm - 1px), #b9a894 calc(8mm - 1px), #b9a894 8mm); }
+.ekran .wzor { color: var(--ziel); }
+.ekran .wzor .podkr { text-decoration-color: var(--ziel); }
+.ekran .wzor .kolko { border-color: var(--ziel); }
+.ekran .pokaz { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--szary); background: #fff; border: 1px solid var(--ramka); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .pokaz.wl { color: #fff; background: var(--ziel); border-color: var(--ziel); }
+.pasek { width: 210mm; margin: 3mm auto 0; display: flex; justify-content: flex-end; gap: 2mm; }
+.pasek button { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; cursor: pointer; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+.pasek button.wl { background: var(--ziel); border-color: var(--ziel); color: #fff; }
+@media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+
+</style></head><body class="ekran">
+<div class="pasek"><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
+<main id="karta"><section class="arkusz">
+<div class="gora"><h1>Karta pracy - rozdział I</h1><div class="pod">Klasa 4 · Poznajemy siebie i innych</div>
+</div>
+
+<section class="temat" style="--k:#8A4FD0;--k9:#f4effb;--k12:#f1eaf9;--k45:#cab0ea">
+      <div class="wiedza"><h2><span>1</span>Świat przedstawiony</h2><p><b>Świat przedstawiony</b> to wszystko, co dzieje się w utworze. Składa się z czterech elementów:</p><p><b>czas</b> (kiedy?) · <b>miejsce</b> (gdzie?) · <b>bohaterowie</b> (kto?) · <b>wydarzenia</b> (co się stało?)</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">1.1</span> Uzupełnij tabelę na podstawie zdania.</div>
+        
+        <div class="linie"><div class="l">W czasie wakacji Ola i jej kuzyn Bartek znaleźli na strychu u babci stary pamiętnik.</div></div>
+        <table class="tab"><thead><tr><th>czas</th><th>miejsce</th><th>bohaterowie</th><th>wydarzenie</th></tr></thead>
+  <tbody><tr><td><span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="wakacje"></span></td><td><span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="strych u babci"></span></td><td><span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="Ola i Bartek"></span></td><td><span class="luka" style="min-width:38mm" contenteditable="true" spellcheck="false" data-odp="znalezienie pamiętnika"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">1.2</span> Do jakiego pytania pasuje każde słowo? Zakreśl.</div>
+        
+        <div class="linie k2"><div class="l">o północy - <span class="wybor"><span class="opc" data-ok="1">kiedy?</span><span class="opc">gdzie?</span><span class="opc">kto?</span></span></div><div class="l">w zamku - <span class="wybor"><span class="opc">kiedy?</span><span class="opc" data-ok="1">gdzie?</span><span class="opc">kto?</span></span></div><div class="l">smok i rycerz - <span class="wybor"><span class="opc">kiedy?</span><span class="opc">gdzie?</span><span class="opc" data-ok="1">kto?</span></span></div><div class="l">w zeszłym roku - <span class="wybor"><span class="opc" data-ok="1">kiedy?</span><span class="opc">gdzie?</span><span class="opc">kto?</span></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#1FA58A;--k9:#ebf7f4;--k12:#e4f4f1;--k45:#9ad7ca">
+      <div class="wiedza"><h2><span>2</span>Kto mówi w tekście?</h2><p><b>Autor</b> napisał tekst - to prawdziwy człowiek. W tekście mówi ktoś inny:</p><p>w opowiadaniu <b>narrator</b>: <b>narrator-bohater</b> mówi o sobie (<mark>poszedłem</mark>, <mark>zobaczyłam</mark>), <b>narrator-obserwator</b> o innych (<mark>Ania poszła</mark>).</p><p>w wierszu (wersy, zwrotki) <b>podmiot liryczny</b>.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">2.1</span> Kto mówi? Wpisz: <b>B</b> - narrator-bohater, <b>O</b> - narrator-obserwator, <b>P</b> - podmiot liryczny.</div>
+        
+        <div class="linie"><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="B"></span> Wspięłam się na drzewo i zobaczyłam gniazdo.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="O"></span> Franek przez godzinę układał puzzle z dziadkiem.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="P"></span> Biegnę boso po trawie, / słońce grzeje mi plecy.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="B"></span> Spóźniliśmy się na autobus, więc poszliśmy pieszo.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">2.2</span> Zamień zdanie tak, żeby opowiadał narrator-bohater.</div>
+        
+        <div class="linie"><div class="l">Kasia otworzyła drzwi i krzyknęła ze strachu. ➜ <span class="luka dluga" style="min-width:95mm" contenteditable="true" spellcheck="false" data-odp="Otworzyłam drzwi i krzyknęłam ze strachu."></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#E0679A;--k9:#fcf1f6;--k12:#fbedf3;--k45:#f1bbd2">
+      <div class="wiedza"><h2><span>3</span>Notatka</h2><p>Dobra notatka jest <b>krótka, konkretna i czytelna</b>. Wybieramy formę: <b>punkty</b> (lista, kolejne kroki), <b>tabela</b> (porównanie według tych samych cech), <b>mapa myśli</b> (skojarzenia wokół jednego hasła), <b>notatka tradycyjna</b> (kilka krótkich zdań).</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">3.1</span> Jaka forma notatki pasuje najlepiej? Zakreśl.</div>
+        
+        <div class="linie"><div class="l">kroki robienia papierowego samolotu - <span class="wybor"><span class="opc" data-ok="1">punkty</span><span class="opc">tabela</span><span class="opc">mapa myśli</span></span></div><div class="l">porównanie lata i zimy: pogoda, ubranie, zabawy - <span class="wybor"><span class="opc">punkty</span><span class="opc" data-ok="1">tabela</span><span class="opc">mapa myśli</span></span></div><div class="l">wszystko, co kojarzy ci się z przyjaźnią - <span class="wybor"><span class="opc">punkty</span><span class="opc">tabela</span><span class="opc" data-ok="1">mapa myśli</span></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">3.2</span> Chcesz porównać w tabeli <b>hulajnogę</b> i <b>rower</b>. Wymyśl trzy nagłówki (cechy).</div>
+        
+        
+        <table class="tab">
+  <tbody><tr><td><b>pojazd</b></td><td><span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="np. cena"></span></td><td><span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="prędkość"></span></td><td><span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="ile waży"></span></td></tr><tr><td>hulajnoga</td><td></td><td></td><td></td></tr><tr><td>rower</td><td></td><td></td><td></td></tr></tbody></table>
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#D98A1F;--k9:#fcf4eb;--k12:#faf1e4;--k45:#eeca9a">
+      <div class="wiedza"><h2><span>4</span>Głoska, litera, sylaba</h2><p><b>Literę</b> piszemy i widzimy, <b>głoskę</b> słyszymy. Dwie litery mogą dawać jedną głoskę: <b>sz, cz, rz, ch, dz, dź, dż</b>.</p><p><b>Sylaba</b> to część wyrazu z jedną samogłoską (<b>a, ą, e, ę, i, o, u, ó, y</b>). Wyraz przenosimy tylko między sylabami: ko-szy-ko-wa.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">4.1</span> Policz litery, głoski i sylaby.</div>
+        
+        
+        <table class="tab"><thead><tr><th>wyraz</th><th>litery</th><th>głoski</th><th>sylaby</th></tr></thead>
+  <tbody><tr><td><b>szuflada</b></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="8"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="7"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="3"></span></td></tr><tr><td><b>chomik</b></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="6"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="5"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="2"></span></td></tr><tr><td><b>dżdżownica</b></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="10"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="8"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="3"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">4.2</span> Podziel wyrazy na sylaby.</div>
+        
+        <div class="linie k2"><div class="l">telefon ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="te-le-fon"></span></div><div class="l">czekolada ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="cze-ko-la-da"></span></div><div class="l">piórnik ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="piór-nik"></span></div><div class="l">samochód ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="sa-mo-chód"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#2A8C9E;--k9:#ecf5f6;--k12:#e5f1f3;--k45:#9fcbd3">
+      <div class="wiedza"><h2><span>5</span>Epitet</h2><p><b>Epitet</b> określa rzeczownik i odpowiada na pytanie <b>jaki? jaka? jakie?</b> Najczęściej to przymiotnik: <mark>mroźny</mark> poranek, <mark>skrzypiące</mark> schody.</p><p>Epitety pomagają zobaczyć i poczuć to, co opisujemy. Zamiast „fajny” wybieraj słowa dokładne.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">5.1</span> Podkreśl wszystkie epitety (jest ich pięć).</div>
+        
+        <div class="linie"><div class="l"><span class="sl" data-ok="1">Stary</span>, <span class="sl" data-ok="1">skrzypiący</span> <span class="sl">statek</span> <span class="sl">płynął</span> <span class="sl">po</span> <span class="sl" data-ok="1">wzburzonym</span> <span class="sl">morzu</span>, <span class="sl">a</span> <span class="sl" data-ok="1">zmęczeni</span> <span class="sl">marynarze</span> <span class="sl">patrzyli</span> <span class="sl">w</span> <span class="sl" data-ok="1">ciemne</span> <span class="sl">niebo</span>.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">5.2</span> Dopisz po dwa epitety.</div>
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:34mm" contenteditable="true" spellcheck="false" data-odp="np. puszysty, biały"></span> kot</div><div class="l"><span class="luka" style="min-width:34mm" contenteditable="true" spellcheck="false" data-odp="ciepła, słoneczna"></span> plaża</div><div class="l"><span class="luka" style="min-width:34mm" contenteditable="true" spellcheck="false" data-odp="stary, tajemniczy"></span> zamek</div><div class="l"><span class="luka" style="min-width:34mm" contenteditable="true" spellcheck="false" data-odp="pyszne, czekoladowe"></span> ciasto</div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#B5562B;--k9:#f8f0ec;--k12:#f6ebe6;--k45:#deb3a0">
+      <div class="wiedza"><h2><span>6</span>Czasownik</h2><p><b>Czasownik</b> mówi, co ktoś <b>robi</b> (pisze, skacze) albo <b>co się z nim dzieje</b> (śpi, choruje). <b>Nie</b> z czasownikiem piszemy <b>osobno</b>: nie wiem.</p><p>Odmienia się przez <b>osobę</b> (ja, ty, on / my, wy, oni), <b>liczbę</b> (pojedyncza, mnoga), <b>czas</b> (przeszły, teraźniejszy, przyszły), a w czasie przeszłym (i w przyszłym typu „będzie czytała”) też przez <b>rodzaj</b>: męski, żeński, nijaki (czytał, czytała, czytało), a w liczbie mnogiej <b>męskoosobowy</b> (czytali) i <b>niemęskoosobowy</b> (czytały).</p><p>Formy <b>nieosobowe</b>: <b>bezokolicznik</b> (co robić? - pływać) i formy na <b>-no, -to</b> (posprzątano, zbito).</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">6.1</span> Podkreśl czasowniki.</div>
+        
+        <div class="linie"><div class="l"><span class="sl">Rano</span> <span class="sl">Tymek</span> <span class="sl" data-ok="1">wstał</span>, <span class="sl" data-ok="1">zjadł</span> <span class="sl">szybkie</span> <span class="sl">śniadanie</span> <span class="sl">i</span> <span class="sl" data-ok="1">pobiegł</span> <span class="sl">do</span> <span class="sl">szkoły</span>. <span class="sl">Na</span> <span class="sl">przerwie</span> <span class="sl" data-ok="1">grał</span> <span class="sl">z</span> <span class="sl">kolegami</span> <span class="sl">w</span> <span class="sl">piłkę</span>.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">6.2</span> Uzupełnij tabelę.</div>
+        
+        
+        <table class="tab"><thead><tr><th>czasownik</th><th>osoba</th><th>liczba</th><th>czas</th><th>rodzaj</th></tr></thead>
+  <tbody><tr><td><b>skakałaś</b></td><td><span class="luka" style="min-width:10mm" contenteditable="true" spellcheck="false" data-odp="2."></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="pojedyncza"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="przeszły"></span></td><td><span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="żeński"></span></td></tr><tr><td><b>pływaliśmy</b></td><td><span class="luka" style="min-width:10mm" contenteditable="true" spellcheck="false" data-odp="1."></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="mnoga"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="przeszły"></span></td><td><span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="męskoosobowy"></span></td></tr><tr><td><b>będą malowały</b></td><td><span class="luka" style="min-width:10mm" contenteditable="true" spellcheck="false" data-odp="3."></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="mnoga"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="przyszły"></span></td><td><span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="niemęskoosobowy"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">6.3</span> Napisz poprawnie.</div>
+        
+        <div class="linie k2"><div class="l">(nie)lubię ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie lubię"></span></div><div class="l">(nie)chcemy ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie chcemy"></span></div><div class="l">(nie)wiedział ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie wiedział"></span></div><div class="l">(nie)spałam ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie spałam"></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">6.4</span> Zakreśl formy nieosobowe czasownika.</div>
+        
+        <div class="linie"><div class="l"><span class="wybor"><span class="opc" data-ok="1">zamknięto</span><span class="opc">zamknął</span><span class="opc" data-ok="1">śpiewać</span><span class="opc">śpiewam</span><span class="opc" data-ok="1">ugotowano</span><span class="opc">gotujesz</span></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">6.5</span> Napisz czasownik <b>rysować</b> w czasie przeszłym.</div>
+        
+        <div class="linie k3"><div class="l">ja (Ola) <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="rysowałam"></span></div><div class="l">ja (Kuba) <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="rysowałem"></span></div><div class="l">ono (dziecko) <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="rysowało"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#D6336C;--k9:#fbedf2;--k12:#fae7ed;--k45:#eda3bd">
+      <div class="wiedza"><h2><span>7</span>Zdanie i równoważnik zdania</h2><p><b>Zdanie</b> ma czasownik w formie osobowej: Pies <mark>szczeka</mark>. <b>Równoważnik zdania</b> go nie ma: Szczekanie psa. Uwaga: bezokolicznik to forma nieosobowa, więc „Nie hałasować!” to <b>równoważnik</b>.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">7.1</span> Wpisz <b>Z</b> (zdanie) albo <b>R</b> (równoważnik).</div>
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="R"></span> Piękna pogoda.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="Z"></span> Słońce świeci.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="R"></span> Nie deptać trawników!</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="Z"></span> Uważaj na schodach!</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="R"></span> Koniec lekcji.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="Z"></span> Zadzwonił dzwonek.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">7.2</span> Zamień równoważniki w zdania.</div>
+        
+        <div class="linie"><div class="l">Wycieczka do zoo. ➜ <span class="luka dluga" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="np. Pojechaliśmy na wycieczkę do zoo."></span></div><div class="l">Mróz za oknem. ➜ <span class="luka dluga" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="Za oknem jest mróz."></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">7.3</span> A teraz odwrotnie - zamień zdanie w równoważnik.</div>
+        
+        <div class="linie"><div class="l">Dzieci bawią się na boisku. ➜ <span class="luka dluga" style="min-width:60mm" contenteditable="true" spellcheck="false" data-odp="Zabawa dzieci na boisku."></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#2F7D5B;--k9:#ecf3f0;--k12:#e6efeb;--k45:#a1c5b5">
+      <div class="wiedza"><h2><span>8</span>Plan ramowy</h2><p><b>Plan ramowy</b> to najważniejsze wydarzenia, zapisane <b>po kolei</b>, w punktach i <b>bez szczegółów</b>. Punkty mają tę samą formę, najczęściej <b>równoważniki</b>: Ola <mark>zgubiła</mark> psa ➜ <mark>Zgubienie</mark> psa.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">8.1</span> Ponumeruj wydarzenia we właściwej kolejności.</div>
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="3"></span> Zbudowanie bałwana.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="1"></span> Pierwszy śnieg za oknem.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="4"></span> Powrót do domu na gorące kakao.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="2"></span> Wyjście na podwórko z sankami.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">8.2</span> Zamień zdania na punkty planu (na równoważniki zdań).</div>
+        
+        <div class="linie"><div class="l">Chłopcy znaleźli w parku portfel. ➜ <span class="luka dluga" style="min-width:80mm" contenteditable="true" spellcheck="false" data-odp="Znalezienie portfela w parku."></span></div><div class="l">Zanieśli go na policję. ➜ <span class="luka dluga" style="min-width:80mm" contenteditable="true" spellcheck="false" data-odp="Oddanie portfela na policję."></span></div><div class="l">Właściciel podziękował chłopcom. ➜ <span class="luka dluga" style="min-width:80mm" contenteditable="true" spellcheck="false" data-odp="Podziękowanie właściciela."></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">8.3</span> Zakreśl punkt, który nie pasuje do planu ramowego wycieczki, bo jest szczegółem.</div>
+        
+        <div class="linie"><div class="l"><span class="wybor"><span class="opc">Wyjazd nad morze.</span><span class="opc" data-ok="1">Niebieski ręcznik w paski.</span><span class="opc">Budowanie zamku z piasku.</span><span class="opc">Powrót do domu.</span></span></div></div>
+        
+        
+        
+      </div></div>
+    </section>
+</section></main>
+<script>
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial1-karta:22421';
+// Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
+function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
+window.addEventListener('resize', dopasuj); dopasuj();
+try { var zapis = localStorage.getItem(KLUCZ_ZAPISU); if (zapis) karta.innerHTML = zapis; } catch (e) {}
+var czas;
+function zapisz() { clearTimeout(czas); czas = setTimeout(function () { try { localStorage.setItem(KLUCZ_ZAPISU, karta.innerHTML); } catch (e) {} }, 300); }
+function norm(t) { return t.replace(/^np\.\s*/i, '').replace(/[\s.,!?…]+/g, ' ').trim().toLowerCase(); }
+function pokaz(zad, wl) {
+  zad.querySelector('.pokaz').classList.toggle('wl', wl);
+  zad.querySelectorAll('.luka').forEach(function (l) {
+    var nast = l.nextSibling;
+    if (nast && nast.classList && nast.classList.contains('podp')) nast.remove();
+    if (l.classList.contains('odp')) { l.textContent = ''; l.classList.remove('odp'); }
+    if (!wl) return;
+    var odp = l.getAttribute('data-odp'), wpis = l.textContent.trim();
+    if (!wpis) { l.textContent = odp; l.classList.add('odp'); }
+    else if (norm(wpis) !== norm(odp)) { var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s); }
+  });
+  zad.querySelectorAll('.opc, .sl').forEach(function (o) {
+    var ok = o.hasAttribute('data-ok'), wybrane = o.classList.contains('zakr') || o.classList.contains('podkr');
+    o.classList.toggle('dobrze', wl && ok);
+    o.classList.toggle('zle', wl && !ok && wybrane);
+  });
+  var w = zad.querySelector(':scope > .wzor');
+  if (w) w.remove();
+  var t = zad.querySelector('template');
+  if (wl && t) zad.appendChild(t.content.cloneNode(true));
+}
+karta.addEventListener('click', function (e) {
+  var b = e.target.closest('.pokaz');
+  if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var o = e.target.closest('.opc');
+  if (o) { o.classList.toggle('zakr'); zapisz(); return; }
+  var s = e.target.closest('.sl');
+  if (s) { s.classList.toggle('podkr'); zapisz(); }
+});
+karta.addEventListener('input', zapisz);
+karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
+document.getElementById('wszystko').onclick = function () {
+  var wl = !this.classList.contains('wl');
+  this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
+  karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
+};
+document.getElementById('wyczysc').onclick = function () {
+  if (!confirm('Wyczyścić wszystko, co jest wpisane na karcie?')) return;
+  try { localStorage.removeItem(KLUCZ_ZAPISU); } catch (e) {}
+  location.reload();
+};
+</script>
+</body></html>

@@ -34,6 +34,11 @@ export function zeszytUrl(folder: string): string {
   return `https://szkola.klippi.pl/materialy/${folder}-powtorka.pdf`;
 }
 
+/** Karta pracy do wypelniania na projektorze (materialy/karta.mjs -> public/materialy/karty/). */
+export function kartaNaProjektorUrl(folder: string): string {
+  return `/materialy/karty/${folder}-karta.html`;
+}
+
 /** Pliki w prywatnym buckecie: <folder>-<rodzaj>.pdf */
 export type PrywatnyPlik = 'sprawdzian' | 'sprawdzian-klucz' | 'karta' | 'karta-rozwiazania';
 

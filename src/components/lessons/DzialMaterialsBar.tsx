@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { materialyDzialu, prywatnyUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
+import { kartaNaProjektorUrl, materialyDzialu, prywatnyUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
 
 export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: string }) {
   const [info, setInfo] = useState<string | null>(null);
@@ -53,7 +53,8 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
           )}
           {materialy.karta && (
             <>
-              <button type="button" onClick={() => otworz('karta')} className={btn}>Karta pracy</button>
+              <a href={kartaNaProjektorUrl(materialy.folder)} target="_blank" rel="noreferrer" className={btn}>Karta na projektor</a>
+          <button type="button" onClick={() => otworz('karta')} className={btn}>Karta pracy</button>
               <button type="button" onClick={() => otworz('karta-rozwiazania')} className={btn}>Karta - rozwiązania</button>
               <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
             </>

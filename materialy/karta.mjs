@@ -6,6 +6,8 @@
 // Sprawdzian w tej samej szacie: node materialy/karta.mjs klasa4-rozdzial1 sprawdzian-karta.mjs
 // (KARTA.wersje = grupy A, B..., tematy bez ramki wiedzy, punkty przy zadaniach;
 // plik z treścią jest w .gitignore, bo repo jest publiczne).
+// Karta (nie sprawdzian) dostaje też wersję na projektor: public/materialy/karty/<plik>.html -
+// luki do wpisywania, klikane zakreślanie i podkreślanie, przycisk „Odpowiedź” przy każdym zadaniu.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -15,10 +17,41 @@ const folder = process.argv[2] || 'klasa4-rozdzial1';
 const plikDanych = process.argv[3] || 'karta.mjs';
 const { KARTA } = await import(pathToFileURL(join(ROOT, 'materialy', folder, plikDanych)).href);
 
+/** Na projektorze (wersja HTML do klikania) zamiast druku. */
+let ekran = false;
+const attr = (t) => String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+/** Kolor tematu zmieszany z białym (zamiast color-mix, którego nie ma Chrome 109 w szkole). */
+function jasny(hex, proc) {
+  const n = parseInt(hex.slice(1), 16);
+  const mix = (c) => Math.round(c * proc / 100 + 255 * (1 - proc / 100)).toString(16).padStart(2, '0');
+  return `#${mix(n >> 16)}${mix((n >> 8) & 255)}${mix(n & 255)}`;
+}
+
+/** Na projektorze linijka z ((podkreśleniami)): klikalne wszystkie wyrazy (albo litery, gdy
+ * podkreśla się kawałek wyrazu), żeby nie zdradzić, które są dobre. */
+function klikalne(tekst) {
+  const kawalki = [];
+  let ostatni = 0;
+  for (const m of tekst.matchAll(/\(\((.+?)\)\)/g)) {
+    kawalki.push({ t: tekst.slice(ostatni, m.index), ok: false }, { t: m[1], ok: true });
+    ostatni = m.index + m[0].length;
+  }
+  kawalki.push({ t: tekst.slice(ostatni), ok: false });
+  const litery = /\p{L}\(\(|\)\)\p{L}/u.test(tekst);
+  const sl = (t, ok) => `<span class="sl"${ok ? ' data-ok="1"' : ''}>${z(t)}</span>`;
+  return kawalki.map(({ t, ok }) => {
+    if (litery) return [...t].map((c) => (/\p{L}/u.test(c) ? sl(c, ok) : z(c))).join('');
+    if (ok) return sl(t, true);
+    return t.split(/([^\p{L}\p{N}-]+)/u).map((w, i) => (i % 2 || !w ? z(w) : sl(w, false))).join('');
+  }).join('');
+}
+
 const KOLORY = ['#8A4FD0', '#1FA58A', '#E0679A', '#D98A1F', '#2A8C9E', '#B5562B', '#D6336C', '#2F7D5B', '#1B6E8F', '#C2410C'];
 
 /** Luki [[...]], wybór {{a|*b}}, podkreślenia ((...)), kółka <<...>> + zwykłe znaczniki. */
 function linia(tekst, rozw, wLinii = false) {
+  if (ekran && !rozw && tekst.includes('((')) return klikalne(tekst);
   const czesci = [];
   const re = /\[\[(.+?)(?:\|(\d+))?\]\]|\{\{(.+?)\}\}|\(\((.+?)\)\)|<<(.+?)>>/g;
   let ostatni = 0;
@@ -27,11 +60,13 @@ function linia(tekst, rozw, wLinii = false) {
     if (m[1] !== undefined) {
       const szer = m[2] ? `${m[2]}mm` : '20mm';
       const dluga = !wLinii && m[2] && Number(m[2]) >= 60;
-      czesci.push(`<span class="luka${dluga ? ' dluga' : ''}" style="min-width:${szer}">${rozw ? `<span class="pis">${z(m[1])}</span>` : ''}</span>`);
+      czesci.push(ekran && !rozw
+        ? `<span class="luka${dluga ? ' dluga' : ''}" style="min-width:${szer}" contenteditable="true" spellcheck="false" data-odp="${attr(m[1])}"></span>`
+        : `<span class="luka${dluga ? ' dluga' : ''}" style="min-width:${szer}">${rozw ? `<span class="pis">${z(m[1])}</span>` : ''}</span>`);
     } else if (m[3] !== undefined) {
       czesci.push(`<span class="wybor">${m[3].split('|').map((o) => {
         const dobra = o.startsWith('*');
-        return `<span class="opc${rozw && dobra ? ' zakr' : ''}">${z(dobra ? o.slice(1) : o)}</span>`;
+        return `<span class="opc${rozw && dobra ? ' zakr' : ''}"${ekran && dobra ? ' data-ok="1"' : ''}>${z(dobra ? o.slice(1) : o)}</span>`;
       }).join('')}</span>`);
     } else if (m[4] !== undefined) {
       czesci.push(`<span class="${rozw ? 'podkr' : ''}">${z(m[4])}</span>`);
@@ -72,7 +107,10 @@ function arkusz(tematyDanych, rozw, grupa) {
         ? `<div class="pyt">${zad.pytania.map(([p, o]) => `<div class="p">${z(p)}</div><div class="o">${linia(o, rozw, true)}</div>`).join('')}</div>`
         : '';
       // Pisanie: puste linie, a w rozwiązaniach przykładowa odpowiedź i kryteria.
-      const pisanie = zad.pisanie
+      const wzorHtml = () => `<div class="wzor">${linia(zad.wzor ?? '', true).replace(/\n/g, '<br>')}</div>`;
+      const pisanie = zad.pisanie && ekran
+        ? `<div class="pisz" contenteditable="true" spellcheck="false" style="height:${zad.pisanie * 8}mm"></div><template>${wzorHtml()}</template>`
+        : zad.pisanie
         ? (rozw
           ? `<div class="wzor">${linia(zad.wzor ?? '', rozw).replace(/\n/g, '<br>')}</div>`
           : '<div class="lin"></div>'.repeat(zad.pisanie))
@@ -82,7 +120,7 @@ function arkusz(tematyDanych, rozw, grupa) {
         : grupa && !rozw ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
         : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
-        <div class="pol">${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
+        <div class="pol">${ekran ? '<button type="button" class="pokaz">Odpowiedź</button>' : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
         ${wiersz}${pytania}
         ${linie ? `<div class="linie${zad.kolumny ? ` k${zad.kolumny}` : ''}">${linie}</div>` : ''}
         ${zad.tabela ? tabela(zad.tabela, rozw) : ''}
@@ -90,7 +128,8 @@ function arkusz(tematyDanych, rozw, grupa) {
         ${rozw && zad.kryteria ? `<div class="kryt">${z(zad.kryteria)}</div>` : ''}
       </div>`;
     }).join('');
-    const kolor = `--k:${KOLORY[i % KOLORY.length]}`;
+    const k = KOLORY[i % KOLORY.length];
+    const kolor = `--k:${k};--k9:${jasny(k, 9)};--k12:${jasny(k, 12)};--k45:${jasny(k, 45)}`;
     if (!t.wiedza) {
       return `<section class="temat bez-wiedzy" style="${kolor}">
       <h2><span>${i + 1}</span>${z(t.tytul)}</h2>
@@ -106,7 +145,7 @@ function arkusz(tematyDanych, rozw, grupa) {
   // Sprawdzian (grupa): imię, klasa i data w osobnym wierszu, bo w nagłówku jest jeszcze litera grupy.
   const prawa = rozw
     ? '<div class="rozw">Rozwiązania</div>'
-    : grupa ? '' : `<div class="imie">Imię i nazwisko: ..........................................</div>`;
+    : grupa || ekran ? '' : `<div class="imie">Imię i nazwisko: ..........................................</div>`;
   return `<section class="arkusz${grupa ? ' sprawdzian' : ''}">
 <div class="gora"><h1>${z(KARTA.tytul)}</h1><div class="pod">${z(KARTA.klasa)} · ${z(KARTA.podtytul)}</div>
 ${prawa}${grupa ? `<div class="grupa">Grupa ${grupa}</div>` : ''}</div>
@@ -128,7 +167,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; overflow: hidden; min-width: 0; }
 .gora .rozw { margin-left: auto; font-family: 'Caveat'; font-size: 20pt; color: var(--czerw); }
 .temat { display: grid; grid-template-columns: 58mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
-.wiedza { background: color-mix(in srgb, var(--k) 9%, white); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
+.wiedza { background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
 .wiedza h2 { font-size: 12.5pt; color: var(--k); margin-bottom: 1mm; display: flex; align-items: center; gap: 1.8mm; }
 .wiedza h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
 .wiedza p + p { margin-top: 1mm; }
@@ -136,7 +175,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .pol { font-weight: 800; }
 .pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
 .linie { margin: .6mm 0 0 2mm; line-height: 2; }
-.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid color-mix(in srgb, var(--k) 45%, white); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
+.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid var(--k45); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
 .wiersz .przerwa { height: 2mm; }
 .pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
 .pyt .p { font-weight: 700; }
@@ -157,7 +196,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .tab th { background: var(--k); color: #fff; font-family: 'Baloo 2'; font-size: 9.5pt; padding: .4mm 2.5mm; text-align: left; }
 .tab td { border: 1px solid var(--ramka); padding: .3mm 1.5mm; height: 7mm; }
 .tab:not(:has(thead)) td { min-width: 28mm; }
-.tab:not(:has(thead)) tr:first-child td { background: color-mix(in srgb, var(--k) 12%, white); }
+.tab:not(:has(thead)) tr:first-child td { background: var(--k12); }
 .tab td .luka { border-bottom: none; }
 .tab .wybor { flex-wrap: nowrap; }
 .tab .opc { font-size: 9pt; padding: 0 1.3mm; }
@@ -183,10 +222,97 @@ body { font-size: 10pt; line-height: 1.3; }
 .kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
 .dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
 :root { --czerw: #D62828; }
-</style></head><body>
-${tresc}
+${ekran ? STYL_EKRAN : ''}
+</style></head><body${ekran ? ' class="ekran"' : ''}>
+${ekran ? `<div class="pasek"><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
+<main id="karta">${tresc}</main>
+<script>${SKRYPT_EKRAN.replace('__KLUCZ__', `karta:${KARTA.plik}:${tresc.length}`)}</script>` : tresc}
 </body></html>`;
 }
+
+const STYL_EKRAN = `
+body.ekran { background: #e9e3d8; }
+.ekran .arkusz { width: 210mm; margin: 4mm auto 10mm; background: #fff; padding: 8mm 10mm; box-shadow: 0 1mm 4mm rgba(0,0,0,.15); }
+.ekran .temat { break-inside: auto; }
+.ekran .zadania { min-width: 0; }
+.ekran .tab .wybor { flex-wrap: wrap; }
+.ekran .luka { cursor: text; outline: none; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--nieb); line-height: 1; padding: 0 1mm; white-space: nowrap; }
+.ekran .luka.dluga { white-space: normal; height: auto; min-height: 5.2mm; }
+.ekran .luka:focus { background: #fff6cf; }
+.ekran .luka.odp { color: var(--ziel); }
+.ekran .podp { font-family: 'Caveat'; font-weight: 700; font-size: 14pt; color: var(--ziel); margin-left: 1.5mm; }
+.ekran .opc, .ekran .sl { cursor: pointer; user-select: none; }
+.ekran .opc.zakr { border-color: var(--nieb); background: #fff; }
+.ekran .sl.podkr { text-decoration: underline 2px var(--nieb); text-underline-offset: 2px; }
+.ekran .opc.dobrze { border-color: var(--ziel); background: #fff; }
+.ekran .opc.zle { border-color: var(--czerw); text-decoration: line-through; }
+.ekran .sl.dobrze { text-decoration: underline 2px var(--ziel); text-underline-offset: 2px; }
+.ekran .sl.zle { text-decoration: line-through 2px var(--czerw); }
+.ekran .pisz { margin-left: 2mm; outline: none; padding: 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 17pt; color: var(--nieb); line-height: 8mm; overflow: hidden;
+  background: repeating-linear-gradient(transparent 0, transparent calc(8mm - 1px), #b9a894 calc(8mm - 1px), #b9a894 8mm); }
+.ekran .wzor { color: var(--ziel); }
+.ekran .wzor .podkr { text-decoration-color: var(--ziel); }
+.ekran .wzor .kolko { border-color: var(--ziel); }
+.ekran .pokaz { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--szary); background: #fff; border: 1px solid var(--ramka); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .pokaz.wl { color: #fff; background: var(--ziel); border-color: var(--ziel); }
+.pasek { width: 210mm; margin: 3mm auto 0; display: flex; justify-content: flex-end; gap: 2mm; }
+.pasek button { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; cursor: pointer; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+.pasek button.wl { background: var(--ziel); border-color: var(--ziel); color: #fff; }
+@media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+`;
+
+// Wersja na projektor: klikanie, wpisywanie, odpowiedzi, stan zapisany w przeglądarce.
+const SKRYPT_EKRAN = String.raw`
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = '__KLUCZ__';
+// Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
+function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
+window.addEventListener('resize', dopasuj); dopasuj();
+try { var zapis = localStorage.getItem(KLUCZ_ZAPISU); if (zapis) karta.innerHTML = zapis; } catch (e) {}
+var czas;
+function zapisz() { clearTimeout(czas); czas = setTimeout(function () { try { localStorage.setItem(KLUCZ_ZAPISU, karta.innerHTML); } catch (e) {} }, 300); }
+function norm(t) { return t.replace(/^np\.\s*/i, '').replace(/[\s.,!?…]+/g, ' ').trim().toLowerCase(); }
+function pokaz(zad, wl) {
+  zad.querySelector('.pokaz').classList.toggle('wl', wl);
+  zad.querySelectorAll('.luka').forEach(function (l) {
+    var nast = l.nextSibling;
+    if (nast && nast.classList && nast.classList.contains('podp')) nast.remove();
+    if (l.classList.contains('odp')) { l.textContent = ''; l.classList.remove('odp'); }
+    if (!wl) return;
+    var odp = l.getAttribute('data-odp'), wpis = l.textContent.trim();
+    if (!wpis) { l.textContent = odp; l.classList.add('odp'); }
+    else if (norm(wpis) !== norm(odp)) { var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s); }
+  });
+  zad.querySelectorAll('.opc, .sl').forEach(function (o) {
+    var ok = o.hasAttribute('data-ok'), wybrane = o.classList.contains('zakr') || o.classList.contains('podkr');
+    o.classList.toggle('dobrze', wl && ok);
+    o.classList.toggle('zle', wl && !ok && wybrane);
+  });
+  var w = zad.querySelector(':scope > .wzor');
+  if (w) w.remove();
+  var t = zad.querySelector('template');
+  if (wl && t) zad.appendChild(t.content.cloneNode(true));
+}
+karta.addEventListener('click', function (e) {
+  var b = e.target.closest('.pokaz');
+  if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var o = e.target.closest('.opc');
+  if (o) { o.classList.toggle('zakr'); zapisz(); return; }
+  var s = e.target.closest('.sl');
+  if (s) { s.classList.toggle('podkr'); zapisz(); }
+});
+karta.addEventListener('input', zapisz);
+karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
+document.getElementById('wszystko').onclick = function () {
+  var wl = !this.classList.contains('wl');
+  this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
+  karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
+};
+document.getElementById('wyczysc').onclick = function () {
+  if (!confirm('Wyczyścić wszystko, co jest wpisane na karcie?')) return;
+  try { localStorage.removeItem(KLUCZ_ZAPISU); } catch (e) {}
+  location.reload();
+};
+`;
 
 const outDir = join(ROOT, 'output', 'materialy');
 mkdirSync(outDir, { recursive: true });
@@ -196,6 +322,15 @@ for (const rozw of [false, true]) {
   writeFileSync(htmlPath, strona(rozw), 'utf-8');
   await drukujPdf(htmlPath, join(outDir, `${nazwa}.pdf`));
   console.log('Gotowe:', join(outDir, `${nazwa}.pdf`));
+}
+// Karta na projektor (tylko karta - sprawdzian nie może trafić do public/).
+if (!KARTA.wersje) {
+  ekran = true;
+  const dir = join(ROOT, 'public', 'materialy', 'karty');
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, `${KARTA.plik}.html`), strona(false), 'utf-8');
+  ekran = false;
+  console.log('Gotowe:', join(dir, `${KARTA.plik}.html`));
 }
 // Sprawdzian: dodatkowo osobny PDF dla każdej grupy (łatwiej drukować).
 for (const w of KARTA.wersje ?? []) {
