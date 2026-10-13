@@ -25,7 +25,9 @@ import { wheelCycle } from '../../lib/wheelCycle';
 export function usePool(students: Student[], classId: string, absentStudentIds: ReadonlySet<string>) {
   const recapEvents = useStore((s) => s.recapEvents);
   const [localUsed, setLocalUsed] = useState<Map<string, number>>(new Map());
-  const [resetAt, setResetAt] = useState<string | null>(null);
+  // Reset kola siedzi w klasie (baza) - przezywa przeladowanie i drugie okno.
+  const resetAt = useStore((s) => s.classes.find((c) => c.id === classId)?.wheelResetAt ?? null);
+  const updateClass = useStore((s) => s.updateClass);
   const [allowRepeats, setAllowRepeats] = useState(false);
   // Ile losowan poszlo W TEJ SESJI - postep rundy w pasku ("losowanie 3 z 20")
   // ma liczyc od otwarcia kola, a nie od poczatku dnia.
@@ -81,7 +83,7 @@ export function usePool(students: Student[], classId: string, absentStudentIds: 
 
   function resetRound() {
     setLocalUsed(new Map());
-    setResetAt(new Date().toISOString());
+    updateClass(classId, { wheelResetAt: new Date().toISOString() });
     setDrawsCompleted(0);
   }
 

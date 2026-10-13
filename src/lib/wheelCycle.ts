@@ -6,10 +6,22 @@
 // dawne answeredOnDay: przeladowanie strony nikogo nie wraca na kolo, cofniecie
 // oceny zwalnia sektor, a kolo na lekcji, kolo powtorzeniowe i plywajacy panel
 // widza ta sama liste. Przed WHEEL_CYCLE_START kolo pamieta tylko biezacy dzien.
+//
+// Skresla TYLKO odpowiedz z kola (isWheelAnswer). Plus wstawiony recznie (Sala,
+// telefon, statystyki) to nagroda, nie losowanie - nie zdejmuje nikogo z kola.
 
 import type { RecapEvent, Student } from '../data/types';
 import { answeredOnDay, GRADED_RESULTS } from './recap';
 import { toDateKey } from './dates';
+
+/**
+ * Czy zdarzenie to odpowiedz wylosowanej osoby. Kolo powtorzeniowe zapisuje
+ * questionSetId, kolo na lekcji i panel - adnotacje z kodem zadania (note).
+ * Reczny plus/kropka z Sali i statystyk nie ma ani jednego, ani drugiego.
+ */
+export function isWheelAnswer(e: RecapEvent): boolean {
+  return GRADED_RESULTS.includes(e.result) && (!!e.questionSetId || !!e.note);
+}
 
 /** Od tego dnia (lokalnie) kolo pamieta do wyczerpania, wczesniej - tylko dzien. */
 export const WHEEL_CYCLE_START = '2026-10-05';
@@ -44,7 +56,7 @@ export function wheelCycle(
     .filter(
       (e) =>
         e.classId === classId &&
-        GRADED_RESULTS.includes(e.result) &&
+        isWheelAnswer(e) &&
         toDateKey(new Date(e.at)) >= WHEEL_CYCLE_START &&
         (sinceMs === null || new Date(e.at).getTime() >= sinceMs),
     )

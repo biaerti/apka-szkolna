@@ -12,6 +12,11 @@ export interface SchoolClass {
   id: ID;
   name: string; // np. "IV A"
   order: number;
+  /**
+   * Reczny "Reset" kola (ISO): skreslenia liczymy od tej chwili. W bazie, a nie
+   * w stanie okna - inaczej przeladowanie albo panel desktopowy wracaly stare.
+   */
+  wheelResetAt?: string;
 }
 
 export interface Student {

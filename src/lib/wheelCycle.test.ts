@@ -8,6 +8,7 @@ const ev = (studentId: string, at: Date, result: RecapEvent['result'] = 'plus'):
   studentId,
   classId: 'c1',
   result,
+  note: 'podręcznik',
   at: at.toISOString(),
 });
 const students = [st('a'), st('b'), st('c'), st('x', false)];
@@ -46,5 +47,12 @@ describe('wheelCycle', () => {
     const events = [ev('a', new Date(2026, 9, 5, 9)), ev('b', new Date(2026, 9, 5, 11))];
     const r = wheelCycle(events, 'c1', students, new Date(2026, 9, 5, 12), new Date(2026, 9, 5, 10).toISOString());
     expect([...r.answered.keys()]).toEqual(['b']);
+  });
+
+  it('reczny plus (Sala, statystyki) nie skresla z kola', () => {
+    const reczny: RecapEvent = { ...ev('a', new Date(2026, 9, 6, 9)), note: undefined };
+    const zZestawu: RecapEvent = { ...ev('b', new Date(2026, 9, 6, 9)), note: undefined, questionSetId: 'qs1' };
+    const r = wheelCycle([reczny, zZestawu, ev('c', new Date(2026, 9, 6, 10))], 'c1', students, new Date(2026, 9, 6, 12));
+    expect([...r.answered.keys()].sort()).toEqual(['b', 'c']);
   });
 });

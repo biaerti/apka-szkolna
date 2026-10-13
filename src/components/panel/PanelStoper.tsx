@@ -8,7 +8,7 @@
 // Dwa rozmiary (srodkowy przycisk w naglowku, jak w pasku okna Windows):
 // - pelny - polecenie, czas, ustawianie dlugosci, Start i Od nowa;
 // - KOMPAKT - tylko czas i (jesli jest) polecenie. Sterowanie idzie wtedy
-//   klikiem w sam czas (jak w AnswerTimer na ekranie kola) albo spacja.
+//   klikiem w sam czas albo spacja.
 //   Polecenie jest tu SAMYM TEKSTEM, nie polem: pustej ramki z podpowiedzia nie
 //   ma po co pokazywac klasie, a wpisuje sie je w widoku pelnym.
 //

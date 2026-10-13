@@ -65,8 +65,10 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
 
   // "Reset skreslen": od tej chwili liczymy, kto juz byl. Wczesniejsze
   // odpowiedzi zostaja w bilansie miesiaca, tylko przestaja skreslac ludzi z
-  // kola (patrz answeredOnDay: sinceIso).
-  const [resetAt, setResetAt] = useState<string | null>(null);
+  // kola. Zapisany w klasie (baza), wiec przezywa przeladowanie i widza go
+  // wszystkie okna: apka webowa, panel desktopowy, telefon.
+  const resetAt = useStore((s) => s.classes.find((c) => c.id === classId)?.wheelResetAt ?? null);
+  const updateClass = useStore((s) => s.updateClass);
 
   const answered = useMemo(
     () => wheelCycle(recapEvents, classId, classStudents, new Date(), resetAt ?? undefined).answered,
@@ -139,7 +141,7 @@ export function useTaskWheel({ classId, lessonCode }: UseTaskWheelArgs) {
    * zapisane plusy/kropki zostaja (te ostatnie sa juz w bilansie miesiaca).
    */
   function resetPool() {
-    setResetAt(new Date().toISOString());
+    updateClass(classId, { wheelResetAt: new Date().toISOString() });
     setAllowRepeats(false);
     setCurrentEntry(null);
     setGraded(false);

@@ -24,14 +24,16 @@ export interface ClassRow {
   id: string;
   name: string;
   order: number;
+  // Kolumna doszla z resetem kola (0039_classes_wheel_reset_at.sql).
+  wheel_reset_at?: string | null;
 }
 
 export function classToRow(c: SchoolClass): ClassRow {
-  return { id: c.id, name: c.name, order: c.order };
+  return { id: c.id, name: c.name, order: c.order, wheel_reset_at: c.wheelResetAt ?? null };
 }
 
 export function rowToClass(row: ClassRow): SchoolClass {
-  return { id: row.id, name: row.name, order: row.order };
+  return { id: row.id, name: row.name, order: row.order, wheelResetAt: row.wheel_reset_at ?? undefined };
 }
 
 // --- students ----------------------------------------------------------------

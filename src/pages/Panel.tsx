@@ -55,6 +55,8 @@ import { formatCzasu, useCzytankaPlayer } from '../components/czytanki/useCzytan
 
 /** Adnotacja zdarzen z panelu - patrz lessonWheelNote (lessonCode jest pusty). */
 const ADNOTACJA = 'podręcznik';
+/** Jak dlugo pigulka i stoper pokazuja "koniec czasu", zanim wroca do zwyklego widoku. */
+const KONIEC_CZASU_MS = 10_000;
 
 // Rozmiary okna. Stoper dostaje wlasna wysokosc, bo w oknie kola zostawal pod
 // czasem wielki pusty prostokat; KOMPAKT to jeszcze mniej - samo polecenie
@@ -152,6 +154,17 @@ export function Panel() {
     localStorage.setItem(KLUCZ_MINUT, String(minuty));
   }, [minuty]);
   const stoper = useCountdown(minuty * 60);
+  // Po uplywie czasu czerwone "koniec czasu" wisi chwile, potem stoper wraca
+  // do zera sam - inaczej pigulka do konca lekcji pokazywala "koniec czasu"
+  // zamiast czasu do dzwonka.
+  const { finished: stoperSkonczony, reset: stoperReset } = stoper;
+  useEffect(() => {
+    if (!stoperSkonczony) return;
+    const t = setTimeout(stoperReset, KONIEC_CZASU_MS);
+    return () => clearTimeout(t);
+    // stoperReset to nowa funkcja co render - zaleznosc tylko od `finished`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stoperSkonczony]);
 
   // Czytanka gra dalej po zwinieciu do pigulki i po przejsciu na kolo.
   const czytanka = useCzytankaPlayer();
