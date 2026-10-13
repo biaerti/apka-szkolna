@@ -17,9 +17,14 @@ export interface CwiczenieLuki {
   tytul: string;
   polecenie: string;
   przyklady: string[];
+  /**
+   * Naglowki kolumn, gdy przyklady sa podzielone " | " na komorki - wtedy
+   * cwiczenie rysuje sie jako rowna tabela (np. wyraz / synonim / antonim).
+   */
+  naglowki?: string[];
   /** Ile przykladow na jednym ekranie (domyslnie 6). */
   naRaz?: number;
-  /** Krotkie przyklady w dwoch kolumnach (np. "kot → [[koty]]"). */
+  /** Krotkie przyklady w dwoch tabelach obok siebie (np. "kot | [[koty]]"). */
   kolumny?: 1 | 2;
   /** Luki sprawdzane z wielkoscia liter (cwiczenia o wielkiej literze). */
   wielkoscLiter?: boolean;

@@ -3,6 +3,12 @@
 // "Sprawdź". Tresc z rejestru src/data/cwiczenia.ts, logika sprawdzania w
 // src/lib/cwiczenia.ts.
 //
+// Uklad zawsze jest tabela (Bartek 2026-10-13: "ma byc rowno, nie
+// rozwalone"): przyklady podzielone " | " ida w kolumny pod naglowkami, pola
+// w jednej kolumnie maja te sama szerokosc na wszystkich stronach, a
+// poprawka po "Sprawdź" siada na gornej krawedzi pola - nic sie nie
+// przesuwa ani nie zawija.
+//
 // - luki: lista przykladow ze stronami ("Kolejne przykłady"),
 // - tabela: odmiana jednego wyrazu ("Następny wyraz"), a "Własny wyraz" daje
 //   pusta tabele do wpisania czegokolwiek - bez sprawdzania.
@@ -14,19 +20,25 @@
 import clsx from 'clsx';
 import { useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import type { Slide } from '../../data/types';
-import { cwiczenieById, type Cwiczenie, type CwiczenieTabela } from '../../data/cwiczenia';
+import { cwiczenieById, type Cwiczenie, type CwiczenieLuki, type CwiczenieTabela } from '../../data/cwiczenia';
 import {
+  jestPole,
   liczbaStron,
   parsujLinie,
+  podzielNaKomorki,
   sprawdzLuke,
   sprawdzWybor,
   stronaPrzykladow,
+  szerokosciKolumn,
   type Kawalek,
+  type Pole,
   type Wynik,
 } from '../../lib/cwiczenia';
 
 type CwiczenieSlide = Extract<Slide, { kind: 'cwiczenie' }>;
 type Stan = Wynik | 'pokazane';
+/** Rysuje komorke: kawalki linii `i`, pola numerowane od `j0` (klucz `${i}-${j}`). */
+type RenderKomorka = (kawalki: Kawalek[], i: number, j0: number, szerokoscCh?: number) => ReactNode;
 
 export function CwiczenieSlideView({ slide }: { slide: CwiczenieSlide }) {
   const cw = cwiczenieById(slide.cwiczenieId);
@@ -49,21 +61,18 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
   const [wyniki, setWyniki] = useState<Record<string, Stan> | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const stron = cw.typ === 'luki' ? liczbaStron(cw.przyklady.length, cw.naRaz ?? 6) : cw.wyrazy.length;
+  const naRaz = cw.typ === 'luki' ? (cw.naRaz ?? 6) : 0;
+  const stron = cw.typ === 'luki' ? liczbaStron(cw.przyklady.length, naRaz) : cw.wyrazy.length;
 
   // Linie biezacego ekranu: przyklady albo komorki tabeli (wiersz po wierszu).
   const linie: Kawalek[][] = useMemo(() => {
-    if (cw.typ === 'luki') return stronaPrzykladow(cw.przyklady, strona, cw.naRaz ?? 6).map(parsujLinie);
+    if (cw.typ === 'luki') return stronaPrzykladow(cw.przyklady, strona, naRaz).map(parsujLinie);
     if (wlasny) return cw.wiersze.flatMap(() => cw.kolumny.map((): Kawalek[] => [{ t: 'luka', odp: [], otwarta: true }]));
     return cw.wyrazy[strona].komorki.flat().map(parsujLinie);
-  }, [cw, strona, wlasny]);
+  }, [cw, strona, wlasny, naRaz]);
 
   const wielkosc = cw.typ === 'luki' && Boolean(cw.wielkoscLiter);
-  // W dwoch kolumnach jest ciasno - podpowiedz do luki otwartej to jeden przyklad, nie trzy.
-  const kompakt = cw.typ === 'luki' && cw.kolumny === 2;
-  const pola = linie.flatMap((linia, i) =>
-    linia.filter((k) => k.t !== 'tekst').map((k, j) => ({ klucz: `${i}-${j}`, k: k as Exclude<Kawalek, { t: 'tekst' }> })),
-  );
+  const pola = linie.flatMap((linia, i) => linia.filter(jestPole).map((k, j) => ({ klucz: `${i}-${j}`, k })));
 
   function wyczysc() {
     setWpisy({});
@@ -77,7 +86,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
     wyczysc();
   }
 
-  function ocen(klucz: string, k: (typeof pola)[number]['k']): Wynik {
+  function ocen(klucz: string, k: Pole): Wynik {
     return k.t === 'luka' ? sprawdzLuke(wpisy[klucz] ?? '', k, wielkosc) : sprawdzWybor(wybory[klucz], k.dobra);
   }
 
@@ -130,64 +139,59 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
     }
   }
 
-  function renderPole(klucz: string, k: (typeof pola)[number]['k'], wTabeli: boolean): ReactNode {
+  function renderWybor(klucz: string, k: Extract<Pole, { t: 'wybor' }>): ReactNode {
     const stan = wyniki?.[klucz];
-    if (k.t === 'wybor') {
-      // Sama litera (w/W): jedno pole w srodku wyrazu, klik przelacza
-      // litery - wyraz czyta sie w calosci, a nie "w W akacje".
-      if (k.opcje.every((o) => [...o].length === 1)) {
-        const wybrana = wybory[klucz];
-        const pokaz = wybrana === undefined ? k.opcje.join('/') : k.opcje[wybrana];
-        return (
-          <>
-            <button
-              type="button"
-              onClick={() => {
-                setWybory((prev) => ({ ...prev, [klucz]: prev[klucz] === undefined ? 0 : (prev[klucz] + 1) % k.opcje.length }));
-                zmienione(klucz);
-              }}
-              className={clsx(
-                'mx-px rounded-md border-2 px-1 leading-tight transition-colors',
-                wybrana === undefined && 'text-[0.7em] align-middle',
-                klasaOpcji(stan, wybrana !== undefined, false),
-              )}
-            >
-              {pokaz}
-            </button>
-            {stan === 'zle' && <sup className="font-bold text-green-300">{k.opcje[k.dobra]}</sup>}
-          </>
-        );
-      }
+    // Sama litera (w/W): jedno pole w srodku wyrazu, klik przelacza
+    // litery - wyraz czyta sie w calosci, a nie "w W akacje".
+    if (k.opcje.every((o) => [...o].length === 1)) {
+      const wybrana = wybory[klucz];
       return (
-        <span className="inline-flex flex-wrap gap-2 align-middle">
-          {k.opcje.map((opcja, n) => {
-            const wybrana = wybory[klucz] === n;
-            const dobra = n === k.dobra;
-            return (
-              <button
-                key={n}
-                type="button"
-                onClick={() => {
-                  setWybory((prev) => ({ ...prev, [klucz]: n }));
-                  zmienione(klucz);
-                }}
-                className={clsx('rounded-xl border-2 px-3 py-0.5 leading-snug transition-colors', klasaOpcji(stan, wybrana, dobra))}
-              >
-                {opcja}
-              </button>
-            );
-          })}
+        <span className="relative inline-block">
+          <button
+            type="button"
+            onClick={() => {
+              setWybory((prev) => ({ ...prev, [klucz]: prev[klucz] === undefined ? 0 : (prev[klucz] + 1) % k.opcje.length }));
+              zmienione(klucz);
+            }}
+            className={clsx(
+              'mx-px rounded-md border-2 px-1 leading-tight',
+              wybrana === undefined && 'align-middle text-[0.7em]',
+              klasaOpcji(stan, wybrana !== undefined, false),
+            )}
+          >
+            {wybrana === undefined ? k.opcje.join('/') : k.opcje[wybrana]}
+          </button>
+          {stan === 'zle' && <Poprawka>{k.opcje[k.dobra]}</Poprawka>}
         </span>
       );
     }
-    const wpis = wpisy[klucz] ?? '';
-    const najdluzsza = Math.max(4, ...k.odp.map((o) => o.length));
-    const podpowiedz = stan === 'zle' ? k.odp[0] : stan === 'otwarta' ? `np. ${k.odp.slice(0, kompakt ? 1 : 3).join(', ')}` : '';
     return (
-      <span className={clsx('relative inline-flex align-middle', wTabeli ? 'w-full flex-col' : 'items-baseline gap-2')}>
+      <span className="wybor inline-flex flex-wrap gap-2 align-middle">
+        {k.opcje.map((opcja, n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => {
+              setWybory((prev) => ({ ...prev, [klucz]: n }));
+              zmienione(klucz);
+            }}
+            className={clsx('rounded-xl border-2 px-3 py-0.5 leading-snug', klasaOpcji(stan, wybory[klucz] === n, n === k.dobra))}
+          >
+            {opcja}
+          </button>
+        ))}
+      </span>
+    );
+  }
+
+  function renderLuka(klucz: string, k: Extract<Pole, { t: 'luka' }>, szerokoscCh: number | 'pelna'): ReactNode {
+    const stan = wyniki?.[klucz];
+    const podpowiedz = stan === 'zle' ? k.odp[0] : stan === 'otwarta' ? `np. ${k.odp.slice(0, 2).join(', ')}` : '';
+    return (
+      <span className={clsx('relative align-middle', szerokoscCh === 'pelna' ? 'block w-full' : 'inline-block')}>
         <input
           data-pole
-          value={wpis}
+          value={wpisy[klucz] ?? ''}
           spellCheck={false}
           autoComplete="off"
           onChange={(e) => {
@@ -195,68 +199,61 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
             zmienione(klucz);
           }}
           onKeyDown={onKeyDownPole}
-          style={wTabeli ? undefined : { width: `${Math.min(najdluzsza + 2, 22)}ch` }}
+          style={szerokoscCh === 'pelna' ? undefined : { width: `${szerokoscCh}ch` }}
           className={clsx(
-            'rounded-lg border-2 bg-gray-900 px-2 text-white outline-none focus:border-accent-300',
-            wTabeli ? 'py-0' : 'py-0.5',
-            wTabeli && 'w-full',
-            !stan && 'border-gray-500',
-            stan === 'puste' && 'border-gray-500',
+            'rounded-lg border-2 bg-gray-900 px-2 py-0 text-white outline-none focus:border-accent-300',
+            szerokoscCh === 'pelna' && 'w-full',
+            (!stan || stan === 'puste') && 'border-gray-500',
             stan === 'dobrze' && 'border-green-400 bg-green-500/20',
             stan === 'zle' && 'border-red-400 bg-red-500/20 text-red-200 line-through',
             stan === 'otwarta' && 'border-amber-400 bg-amber-500/20',
             stan === 'pokazane' && 'border-sky-400 bg-sky-500/20 text-sky-100',
           )}
         />
-        {podpowiedz && (
-          <span
-            className={clsx(
-              'whitespace-nowrap font-semibold',
-              stan === 'zle' ? 'text-green-300' : 'text-amber-200',
-              wTabeli ? 'pointer-events-none absolute -top-3 right-2 rounded bg-gray-950 px-1.5 text-[0.65em] leading-tight' : 'text-[0.8em]',
-            )}
-          >
-            {podpowiedz}
-          </span>
-        )}
+        {podpowiedz && <Poprawka otwarta={stan === 'otwarta'}>{podpowiedz}</Poprawka>}
       </span>
     );
   }
 
-  function renderLinia(linia: Kawalek[], i: number, wTabeli = false): ReactNode {
-    let j = 0;
-    return linia.map((k, n) => {
+  const renderKomorka: RenderKomorka = (kawalki, i, j0, szerokoscCh) => {
+    let j = j0;
+    return kawalki.map((k, n) => {
       if (k.t === 'tekst') return <Tekst key={n} v={k.v} />;
+      if (k.t === 'sep') return null;
       const klucz = `${i}-${j++}`;
-      return <span key={n}>{renderPole(klucz, k, wTabeli)}</span>;
+      const szer = szerokoscCh ?? Math.min(Math.max(...(k.t === 'luka' ? k.odp : ['']).map((o) => [...o].length), 4) + 2, 24);
+      return <span key={n}>{k.t === 'luka' ? renderLuka(klucz, k, szer) : renderWybor(klucz, k)}</span>;
     });
-  }
+  };
+
+  // Komorka tabeli odmiany: jedna luka na cala szerokosc kolumny.
+  const renderKomorkaOdmiany: RenderKomorka = (kawalki, i) =>
+    kawalki.map((k, n) => {
+      if (k.t === 'tekst') return <Tekst key={n} v={k.v} />;
+      if (k.t === 'luka') return <span key={n}>{renderLuka(`${i}-0`, k, 'pelna')}</span>;
+      if (k.t === 'wybor') return <span key={n}>{renderWybor(`${i}-0`, k)}</span>;
+      return null;
+    });
 
   const sprawdzone = wyniki !== null && !wlasny;
   const dobrych = sprawdzone ? pola.filter(({ klucz }) => wyniki?.[klucz] === 'dobrze').length : 0;
   const doDecyzji = sprawdzone ? pola.filter(({ klucz }) => wyniki?.[klucz] === 'otwarta').length : 0;
 
   return (
-    <div
-      ref={rootRef}
-      className="relative flex h-full flex-col px-12 pb-6 pt-7"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <header className="flex items-start justify-between gap-6">
-        <div className="min-w-0">
-          <div className="flex items-center gap-4">
-            <span className="rounded-lg bg-accent-500/25 px-3 py-1 text-lg font-bold uppercase tracking-wider text-accent-200">
-              Ćwiczymy razem
-            </span>
-            <h2 className="truncate text-[40px] font-bold leading-tight text-white">{cw.tytul}</h2>
-          </div>
-          <p className="mt-2 text-2xl leading-snug text-gray-300">{cw.polecenie}</p>
+    <div ref={rootRef} className="relative flex h-full flex-col px-12 pb-6 pt-7" onClick={(e) => e.stopPropagation()}>
+      <header className="min-w-0">
+        <div className="flex items-center gap-4">
+          <span className="rounded-lg bg-accent-500/25 px-3 py-1 text-lg font-bold uppercase tracking-wider text-accent-200">
+            Ćwiczymy razem
+          </span>
+          <h2 className="truncate text-[40px] font-bold leading-tight text-white">{cw.tytul}</h2>
         </div>
+        <p className="mt-2 text-2xl leading-snug text-gray-300">{cw.polecenie}</p>
       </header>
 
       <div className="flex min-h-0 flex-1 items-center py-3">
         {cw.typ === 'luki' ? (
-          <ListaPrzykladow cw={cw} linie={linie} renderLinia={renderLinia} />
+          <ListaPrzykladow cw={cw} linie={linie} start={strona * naRaz} renderKomorka={renderKomorka} />
         ) : (
           <Tabela
             cw={cw}
@@ -275,7 +272,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
               )
             }
             linie={linie}
-            renderLinia={renderLinia}
+            renderKomorka={renderKomorkaOdmiany}
           />
         )}
       </div>
@@ -314,28 +311,84 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
   );
 }
 
-type RenderLinia = (linia: Kawalek[], i: number, wTabeli?: boolean) => ReactNode;
-
-function ListaPrzykladow({ cw, linie, renderLinia }: { cw: Extract<Cwiczenie, { typ: 'luki' }>; linie: Kawalek[][]; renderLinia: RenderLinia }) {
+/**
+ * Przyklady jako tabela: numer, potem komorki z " | ". Bez " | " (zdania z
+ * wyborem w srodku) to tabela z jedna kolumna - ten sam rytm wierszy i linie.
+ * `kolumny: 2` dzieli strone na dwie tabele obok siebie.
+ */
+function ListaPrzykladow({ cw, linie, start, renderKomorka }: { cw: CwiczenieLuki; linie: Kawalek[][]; start: number; renderKomorka: RenderKomorka }) {
+  const szerokosci = useMemo(() => szerokosciKolumn(cw.przyklady), [cw.przyklady]);
   const dwie = cw.kolumny === 2;
   const naRaz = cw.naRaz ?? 6;
-  const fontSize = dwie ? 32 : naRaz <= 4 ? 30 : naRaz === 5 ? 38 : naRaz >= 7 ? 30 : 34;
+  const wierszy = dwie ? Math.ceil(naRaz / 2) : naRaz;
+  // Dlugie zdania w pierwszej kolumnie: tabela na cala szerokosc, tekst sie
+  // zawija, a pola stoja rowno przy prawej. Krotkie hasla: tabela tak szeroka
+  // jak tresc, zeby pole nie odjechalo od wyrazu.
+  const dlugie = cw.przyklady.some((p) => (podzielNaKomorki(parsujLinie(p))[0] ?? []).reduce((n, k) => n + (k.t === 'tekst' ? k.v.length : 8), 0) > 34);
+  // Waska tabela krotkich hasel: wieksze litery i srodek kartki, zeby nie
+  // wisiala w lewym rogu.
+  const waska = !dlugie && !dwie;
+  const fontSize = waska ? (wierszy <= 6 ? 34 : 30) : wierszy <= 5 ? 32 : wierszy <= 6 ? 30 : 28;
+  const polowy = dwie ? [linie.slice(0, wierszy), linie.slice(wierszy)] : [linie];
+
   return (
-    <ol
-      className={clsx('w-full', dwie ? 'grid grid-flow-col grid-cols-2 gap-x-12 gap-y-4' : 'flex flex-col gap-4')}
-      style={{ fontSize, gridTemplateRows: dwie ? `repeat(${Math.ceil(naRaz / 2)}, auto)` : undefined }}
-    >
-      {linie.map((linia, i) => (
-        <li key={i} className="flex items-baseline gap-4 leading-snug text-gray-100">
-          <span className="w-8 shrink-0 text-right text-[0.75em] font-semibold tabular-nums text-gray-500">{i + 1}.</span>
-          <span className="min-w-0">{renderLinia(linia, i)}</span>
-        </li>
+    <div className={clsx('w-full', dwie && 'grid grid-cols-2 items-start gap-14', waska && 'flex justify-center')} style={{ fontSize }}>
+      {polowy.map((czesc, p) => (
+        <table key={p} className={clsx('border-collapse', dlugie || dwie ? 'w-full' : 'w-auto')}>
+          {cw.naglowki && (
+            <thead>
+              <tr>
+                <th className="w-12" />
+                {cw.naglowki.map((n, c) => (
+                  <th key={n} className={clsx('pb-2 text-left text-[0.6em] font-semibold uppercase tracking-wide text-gray-400', c > 0 && 'pl-6')}>
+                    {n}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          )}
+          <tbody>
+            {czesc.map((linia, r) => {
+              const i = p * wierszy + r;
+              const komorki = podzielNaKomorki(linia);
+              let j0 = 0;
+              return (
+                <tr key={i} className="border-t border-gray-800 first:border-t-0">
+                  <td className="w-12 py-2.5 pr-3 text-right align-middle text-[0.7em] font-semibold tabular-nums text-gray-500">
+                    {start + i + 1}.
+                  </td>
+                  {komorki.map((komorka, c) => {
+                    const node = renderKomorka(komorka, i, j0, szerokosci[c] || undefined);
+                    j0 += komorka.filter(jestPole).length;
+                    return (
+                      <td
+                        key={c}
+                        className={clsx(
+                          'py-2.5 align-middle leading-snug',
+                          c > 0 && 'pl-6',
+                          // Kolumna z samymi polami (albo "jak [[...]]") nie lamie sie - opcje stoja w
+                          // jednym rzedzie; dluzszy tekst z lukami moze sie zawinac.
+                          c > 0 && komorka.every((k) => k.t !== 'tekst' || k.v.trim().length <= 4) && 'whitespace-nowrap [&_.wybor]:flex-nowrap',
+                          c === 0 && komorki.length > 1 && 'font-medium text-white',
+                          c === 0 && dwie && 'whitespace-nowrap',
+                          c === 0 && komorki.length === 1 && 'text-gray-100',
+                        )}
+                      >
+                        {node}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       ))}
-    </ol>
+    </div>
   );
 }
 
-function Tabela({ cw, haslo, linie, renderLinia }: { cw: CwiczenieTabela; haslo: ReactNode; linie: Kawalek[][]; renderLinia: RenderLinia }) {
+function Tabela({ cw, haslo, linie, renderKomorka }: { cw: CwiczenieTabela; haslo: ReactNode; linie: Kawalek[][]; renderKomorka: RenderKomorka }) {
   const kol = cw.kolumny.length;
   const duzo = cw.wiersze.length > 4;
   return (
@@ -350,7 +403,7 @@ function Tabela({ cw, haslo, linie, renderLinia }: { cw: CwiczenieTabela; haslo:
         <tr>
           <th className="pb-2 text-left align-bottom text-[1.15em] font-bold text-accent-200">{haslo}</th>
           {cw.kolumny.map((k) => (
-            <th key={k} className="px-2 pb-2 text-left align-bottom text-[0.75em] font-semibold uppercase tracking-wide text-gray-400">
+            <th key={k} className="px-2 pb-2 text-left align-bottom text-[0.6em] font-semibold uppercase tracking-wide text-gray-400">
               {k}
             </th>
           ))}
@@ -369,10 +422,10 @@ function Tabela({ cw, haslo, linie, renderLinia }: { cw: CwiczenieTabela; haslo:
             {cw.kolumny.map((k, c) => {
               const i = w * kol + c;
               const linia = linie[i] ?? [];
-              const podana = linia.every((x) => x.t === 'tekst');
+              const podana = !linia.some(jestPole);
               return (
                 <td key={k} className={clsx('px-2', duzo ? 'py-1' : 'py-4', podana && 'font-bold text-accent-200')}>
-                  {renderLinia(linia, i, true)}
+                  {renderKomorka(linia, i, 0)}
                 </td>
               );
             })}
@@ -380,6 +433,20 @@ function Tabela({ cw, haslo, linie, renderLinia }: { cw: CwiczenieTabela; haslo:
         ))}
       </tbody>
     </table>
+  );
+}
+
+/** Poprawna odpowiedz albo przyklad - na gornej krawedzi pola, bez przesuwania ukladu. */
+function Poprawka({ children, otwarta = false }: { children: ReactNode; otwarta?: boolean }) {
+  return (
+    <span
+      className={clsx(
+        'pointer-events-none absolute -top-3.5 right-1 whitespace-nowrap rounded bg-gray-950 px-1.5 text-[0.6em] font-semibold leading-tight',
+        otwarta ? 'text-amber-200' : 'text-green-300',
+      )}
+    >
+      {children}
+    </span>
   );
 }
 

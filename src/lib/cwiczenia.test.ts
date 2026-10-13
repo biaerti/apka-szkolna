@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CWICZENIA } from '../data/cwiczenia';
-import { liczbaPol, liczbaStron, normalizuj, parsujLinie, sprawdzLuke, sprawdzWybor, stronaPrzykladow } from './cwiczenia';
+import { liczbaPol, liczbaStron, normalizuj, parsujLinie, podzielNaKomorki, sprawdzLuke, sprawdzWybor, stronaPrzykladow, szerokosciKolumn } from './cwiczenia';
 
 describe('parsujLinie', () => {
   it('rozbija linie na tekst, luki i wybory', () => {
@@ -11,6 +11,15 @@ describe('parsujLinie', () => {
       { t: 'wybor', opcje: ['ten', 'ta'], dobra: 1 },
       { t: 'tekst', v: ' mysz' },
     ]);
+  });
+
+  it('" | " poza znacznikami dzieli przyklad na kolumny, wewnatrz wyboru nie', () => {
+    const k = parsujLinie('dzień - noc | {{synonimy|*antonimy}}');
+    expect(podzielNaKomorki(k)).toEqual([[{ t: 'tekst', v: 'dzień - noc' }], [{ t: 'wybor', opcje: ['synonimy', 'antonimy'], dobra: 1 }]]);
+  });
+
+  it('pola w kolumnie maja jedna szerokosc z calego cwiczenia', () => {
+    expect(szerokosciKolumn(['kot | [[koty]]', 'księżniczka | [[księżniczki]]'])).toEqual([undefined, 13]);
   });
 
   it('znak zapytania oznacza luke otwarta', () => {
@@ -44,6 +53,13 @@ describe('sprawdzLuke', () => {
 
   it('w cwiczeniach o wielkiej literze wielkosc sie liczy', () => {
     expect(sprawdzLuke('kraków', { odp: ['Kraków'], otwarta: false }, true)).toBe('zle');
+    // Nazwa wlasna spoza listy, ale mala litera - to blad, nie "sprawdz sam".
+    expect(sprawdzLuke('pilica', { odp: ['Wisła'], otwarta: true }, true)).toBe('zle');
+    expect(sprawdzLuke('Pilica', { odp: ['Wisła'], otwarta: true }, true)).toBe('otwarta');
+  });
+
+  it('przecinki w kolejnosci alfabetycznej nie sa obowiazkowe', () => {
+    expect(sprawdzLuke('chata kasa ziomek', { odp: ['chata, kasa, ziomek'], otwarta: false })).toBe('dobrze');
   });
 });
 
@@ -79,6 +95,15 @@ describe('rejestr cwiczen', () => {
         }
         expect(l.includes('[[') || l.includes('{{') ? parsujLinie(l).some((k) => k.t !== 'tekst') : true).toBe(true);
       }
+    }
+  });
+
+  it('miesci sie na kartce: najwyzej 6 wierszy w kolumnie i 3 strony przykladow', () => {
+    for (const c of CWICZENIA) {
+      if (c.typ !== 'luki') continue;
+      const naRaz = c.naRaz ?? 6;
+      expect(c.kolumny === 2 ? naRaz / 2 : naRaz, c.id).toBeLessThanOrEqual(6);
+      expect(Math.ceil(c.przyklady.length / naRaz), c.id).toBeLessThanOrEqual(3);
     }
   });
 

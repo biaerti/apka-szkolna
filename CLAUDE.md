@@ -10,7 +10,8 @@ Apka nauczyciela polskiego (Bartek, SP 97): lekcje jako prezentacje na projektor
 ## Lekcje z podręcznika (dział po dziale)
 - Dane: `src/data/textbook4.ts` (kl. 4, GWO „Między nami”), `src/data/textbook5.ts` + `textbook5dzial2.ts` (kl. 5, Nowa Era „NEON”), wspólne klocki w `textbook5slides.ts`.
 - Każdy dział ma swoje `dzial: 'Dział N - nazwa'`. Na liście lekcji to osobna zakładka (Powtórzeniowe | Dział 1 | Dział 2...).
-- Zasady Bartka: podręcznik to pomoc, nie rama. Max 2 lekcje z czytanym tekstem na dział, reszta to język i pisanie. Zadania z podręcznika tylko sensowne, **po kolei** (strona, numer), jedno zadanie = jeden screen = jeden slajd. Screeny tylko renderem z NEON-a/multibooka, nigdy wycinki ze zrzutów ekranu. Bez własnych zadań Z1/Z2 na slajdach.
+- Zasady Bartka: podręcznik to pomoc, nie rama. Max 2 lekcje z czytanym tekstem na dział, reszta to język i pisanie. Screeny tylko renderem z NEON-a/multibooka, nigdy wycinki ze zrzutów ekranu, i tylko przed filmem (Zacznijmy od..., ramka, zadanie do czytanki). Bez własnych zadań Z1/Z2 na slajdach.
+- **Ćwiczymy razem** (od 2026-10-13, zamiast screenów zadań po notatce): 2-3 karty na lekcję, slajd `kind: 'cwiczenie'`, treść w `src/data/cwiczenia4.ts` / `cwiczenia5.ts`, klocki w `cwiczeniaKlocki.ts`. Dobre typy zadań z podręcznika przerabiamy na karty z **własnymi** przykładami. Zapis: `[[odp|odp2]]`, `[[?otwarta]]`, `{{a|*b}}` albo `wybor([...], dobra)`, kolumny przez ` | ` pod `naglowki`. Najwyżej 6 wierszy w kolumnie i 3 strony (pilnuje test). Po zmianie obejrzyj karty w podglądzie - nic nie może wchodzić na przyciski.
 - Nowy dział: najpierw mapa stron i plan w `docs/klasaN-dzialM-*.md`, potem lekcje.
 - **Notatka do zeszytu tylko z wiedzy** (reguły, pojęcia, sposoby). Z omawianego tekstu nie robimy notatki (żadnych kart wiersza, planów wydarzeń, „kto mówi / o czym”) - przy lekcji tylko z tekstem w notatce jest sam temat.
 
@@ -33,7 +34,7 @@ Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recyt
 6. `node filmiki/X/podejrzyj.mjs film1 <czasy końców scen>` → obejrzyj zrzuty (ucięte i zawinięte napisy) → popraw.
 7. `node filmiki/X/renderuj.mjs film1` → `output/filmiki/X-film1.mp4` → `python filmiki/wyslij.py X-film1.mp4` → kopia do `public/filmiki/` (dev).
 8. Wpis w `src/data/filmiki.ts`, a w lekcji: `slideVideo('X-film1')` i zaraz po nim `...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : [])` z `makeSlides: (previousSetId, ownSetId)`.
-9. `questions` lekcji = **nowe, podobne** zadania do koła po filmie, inne niż w filmie. Kolejność slajdów: [czytanka/ramka] → film → koło → notatka → zadania z podręcznika jako zapas.
+9. `questions` lekcji = **nowe, podobne** zadania do koła po filmie, inne niż w filmie. Kolejność slajdów: [czytanka/ramka] → film → notatka → 2-3 karty „Ćwiczymy razem”.
 10. Audio, mp4 i klatki nie idą do repo (gitignore). Commituj html, narrację, timeline i skrypty.
 
 ## Handoff

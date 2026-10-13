@@ -169,7 +169,7 @@ describe('buildTextbook4', () => {
     expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId)).toHaveLength(8);
   });
 
-  it('rozdzial II: film bez powtornego kola, notatka, potem screeny zadan po kolei', () => {
+  it('rozdzial II: film bez powtornego kola, notatka, potem 2-3 karty Ćwiczymy razem', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const r2 = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_2);
     expect(r2).toHaveLength(12);
@@ -187,15 +187,12 @@ describe('buildTextbook4', () => {
       expect(lesson.slides.slice(video + 1).some((s) => s.kind === 'recap' && s.questionSetId === lesson.questionSetId)).toBe(false);
       const note = lesson.slides.find((s) => s.kind === 'note');
       expect(note?.kind === 'note' ? note.body : '').toMatch(/^\*\*Temat:\*\* /);
-      // Zaraz po notatce "Ćwiczymy razem" (istniejace cwiczenia), potem
-      // screeny z bucketu w kolejnosci z ksiazki jako zapas.
-      const razem = lesson.slides.slice(kinds.indexOf('note') + 1).filter((s) => s.kind === 'cwiczenie');
-      expect(razem.length).toBeGreaterThan(0);
-      expect(razem.every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
-      const poNotatce = lesson.slides.slice(kinds.indexOf('note') + 1 + razem.length);
-      expect(poNotatce.every((s) => s.kind === 'image' && s.url.startsWith('czytanki:r2-s'))).toBe(true);
-      const klucze = poNotatce.map((s) => (s.kind === 'image' ? s.page ?? 0 : 0));
-      expect([...klucze].sort((a, b) => a - b)).toEqual(klucze);
+      // Po notatce tylko 2-3 karty "Ćwiczymy razem" - screenow zadan z
+      // podrecznika juz tam nie dajemy (Bartek 2026-10-13).
+      const poNotatce = lesson.slides.slice(kinds.indexOf('note') + 1);
+      expect(poNotatce.length).toBeGreaterThanOrEqual(2);
+      expect(poNotatce.length).toBeLessThanOrEqual(3);
+      expect(poNotatce.every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
       expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(5);
     }
     // Cztery czytanki na rozdzial: dwa teksty z planu + wiersz do porownania i Michalak do asertywnosci (Bartek, 2026-10-13).

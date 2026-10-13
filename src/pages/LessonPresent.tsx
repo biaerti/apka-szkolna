@@ -294,7 +294,12 @@ export function LessonPresent() {
       )}
 
       {isLast && !boardOpen && (
-        <div className="absolute bottom-4 left-4" onClick={(e) => e.stopPropagation()}>
+        // Na karcie "Ćwiczymy razem" lewy dol zajmuje "Sprawdź" - wtedy
+        // przycisk idzie pod zegar w prawym gornym rogu.
+        <div
+          className={currentSlide?.kind === 'cwiczenie' ? 'absolute right-4 top-24' : 'absolute bottom-4 left-4'}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button size="sm" onClick={finishLesson}>
             Zakończ lekcję
           </Button>

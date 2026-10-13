@@ -5,7 +5,8 @@
 // Miziołków", Rusinek i Załazińska "Kurs fotografii"), reszta to jezyk i
 // pisanie. 2026-10-13 Bartek dolozyl wiersze Beszczyńskiej (porownanie) i
 // "Panią z tramwaju" Michalaka (asertywnosc) jako czytanki z lektorem. Dzien Pisania Listow (temat 5) wyciety w calosci. Do kazdej lekcji
-// filmik, notatka i zadania z podrecznika po kolei jako zapas. Pytania tej
+// filmik, notatka i 2-3 karty "Ćwiczymy razem" (bez screenow zadan po
+// notatce - Bartek 2026-10-13). Pytania tej
 // lekcji wracaja dopiero w kole powtorkowym na poczatku nastepnej lekcji,
 // zeby dzieci nie robily tego samego zestawu dwa razy pod rzad.
 //
@@ -38,42 +39,16 @@ function zacznij(plik: string, page: number): Slide {
   const [action, text] = AKCJE.ustnie;
   return slideTextbookTask(`czytanki:${plik}.webp`, page, `s. ${page} zacznijmy`, 'Zacznijmy od...', action, text);
 }
-/** "Podsumujmy..." z podrecznika - zabawa w kole na koniec, jesli starczy czasu. */
-function podsumujmy(plik: string, page: number): Slide {
-  const [action, text] = AKCJE.cwiczymy;
-  return slideTextbookTask(`czytanki:${plik}.webp`, page, `s. ${page} podsumujmy`, 'Podsumujmy', action, text);
-}
 /** Ramka teorii z podrecznika - tylko do obejrzenia i przeczytania. */
 function ramka(plik: string, page: number, title: string): Slide {
   return slideTextbookImage(`czytanki:${plik}.webp`, page, title);
 }
 
 /**
- * Zadania z podrecznika w kolejnosci z ksiazki: strona, potem numer zadania
- * ("Podsumujmy" na koncu strony). Ramka bez numeru zostaje tam, gdzie stoi
- * na liscie - za zadaniem, ktore ja poprzedza.
- */
-function poKolei(...slides: Slide[]): Slide[] {
-  let poprzedni: [number, number] = [0, 0];
-  const klucze = slides.map((s): [number, number] => {
-    if (s.kind !== 'image') return poprzedni;
-    const code = s.code ?? '';
-    const nr = /zad\. (\d+)/.exec(code);
-    const page = s.page ?? 0;
-    const k: [number, number] = nr ? [page, Number(nr[1])] : code.includes('podsumujmy') ? [page, 99] : [page, page === poprzedni[0] ? poprzedni[1] + 0.5 : 0];
-    poprzedni = k;
-    return k;
-  });
-  return slides
-    .map((s, i) => ({ s, k: klucze[i] }))
-    .sort((a, b) => a.k[0] - b.k[0] || a.k[1] - b.k[1])
-    .map(({ s }) => s);
-}
-
-/**
- * "Ćwiczymy razem" (src/data/cwiczenia4.ts): po notatce, przed zadaniami z
- * podrecznika. Wiele wlasnych przykladow do wspolnego uzupelniania na
- * projektorze, ze "Sprawdź" - podrecznik zostaje zapasem.
+ * "Ćwiczymy razem" (src/data/cwiczenia4.ts): 2-3 karty po notatce. Wiele
+ * wlasnych przykladow do wspolnego uzupelniania na projektorze, ze "Sprawdź".
+ * Screenow zadan z podrecznika po notatce juz nie ma (Bartek 2026-10-13) -
+ * dobre typy zadan przeszly do kart na wlasnych przykladach.
  */
 function razem(...ids: string[]): Slide[] {
   return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
@@ -104,9 +79,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '3. **Czytanka „Dynastia Miziołków”** (2 min) + **s. 57 zad. 1** ustnie (P/F, 2 min).',
         '4. **Ramka s. 57** (1 min).',
         '5. **Film „Wyrazy potoczne”** (4:59) - poważni bracia słów, słowa jak ubrania i hasło w słowniku. 3 zadania, sprawdzane na tym samym ekranie.',
-        '6. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '7. Zadania z podręcznika po kolei, na ile starczy czasu: **s. 58 zad. 2** (wyrazy potoczne u Olech), **zad. 3** do zeszytu, **zad. 4**.',
-        '8. Zapas: ramka „Budowa hasła słownikowego” s. 58, **zad. 5** - słowniczek w grupach (może być do domu).',
+        '6. **Notatka** (4 min).',
+        '7. **Ćwiczymy razem** (reszta lekcji, 3 karty): „Poważny brat słowa”, „Które słowo pasuje?”, „Jak w słowniku”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- Wyrazy potoczne nie są brzydkie ani wulgarne - są swobodne, na luzie.',
@@ -116,9 +90,6 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 57 zad. 1** P (Klakson chciał zwierzątko), P (rodzice niby się zgodzili, ale postawili warunki nie do spełnienia), F (kupili zaskrońca, bo nie starczyło pieniędzy na kobrę i pytona), F (przenieśli go w dużym pudle po telewizorze), F (Napoleon to wąż).',
-        '- **s. 58 zad. 2** a) starzy, forsa, kasa (też: byle co, sztuka - o wężu). b) To pamiętnik chłopca - pisze tak, jak mówi do kolegów, swobodnie i zabawnie.',
-        '- **s. 58 zad. 3** np. bardzo przyjemnie / wspaniale; nie mów takich bzdur / nieprawdy; muszę iść; bardzo dobra / ciekawa; mam dużo pracy; jestem zmęczony; bardzo duży.',
-        '- **s. 58 zad. 4** totalną masakrą - bardzo trudny / zupełną porażką; megatrudnych - bardzo trudnych; strasznie mało - bardzo mało; koszmar - coś bardzo nieprzyjemnego.',
       ].join('\n')],
     ),
     questions: [
@@ -138,14 +109,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s57-ramka', 57, 'Wyrazy potoczne'),
       ...film('potoczne-film1'),
       slideNote('Wyrazy potoczne', '1. **Wyrazy potoczne** to słowa swobodne, „na luzie”, np. kasa, kumpel, spoko.\n2. Używamy ich w rozmowie z kolegami i rodziną. **Nie używamy** w rozmowie z nauczycielem, z obcym dorosłym ani w wypracowaniu.\n3. Każdy ma oficjalny odpowiednik: kasa - pieniądze, wcinać - jeść.\n4. W słowniku słowa stoją **alfabetycznie**, a przy wyrazie potocznym jest skrót **pot.**'),
-      ...razem('k4-potoczne-zamien', 'k4-potoczne-sytuacja'),
-      ...poKolei(
-        zad('r2-s58-zad2', 58, '2', 'ustnie'),
-        zad('r2-s58-zad3', 58, '3', 'zeszyt'),
-        zad('r2-s58-zad4', 58, '4', 'zeszyt'),
-        ramka('r2-s58-haslo', 58, 'Budowa hasła słownikowego'),
-        zad('r2-s58-zad5', 58, '5', 'cwiczymy'),
-      ),
+      ...razem('k4-potoczne-zamien', 'k4-potoczne-sytuacja', 'k4-potoczne-slownik'),
     ],
   },
   {
@@ -154,7 +118,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Porównanie',
     textbookPage: 59,
     teacherPlan: plan(
-      ['Co dziś', 'Krótki wiersz Zofii Beszczyńskiej „wiersze” (s. 59, ok. 30 s z lektorem) - same porównania z „jak”: wiersze jak czereśnie, jak woda, jak cienie. Z niego wychodzimy do porównania, potem film i zadania 2-4, 6-8. Zadanie 5 (ilustracja) pomijamy.'],
+      ['Co dziś', 'Krótki wiersz Zofii Beszczyńskiej „wiersze” (s. 59, ok. 30 s z lektorem) - same porównania z „jak”: wiersze jak czereśnie, jak woda, jak cienie. Z niego wychodzimy do porównania, potem film i wspólne ćwiczenia na własnych przykładach.'],
       ['Po lekcji uczeń', [
         '- rozpoznaje porównanie po słówkach jak, jakby, niczym, niby,',
         '- wie, że samo „jak” w pytaniu to jeszcze nie porównanie,',
@@ -167,9 +131,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '3. **Czytanka „wiersze”** (1 min, można puścić dwa razy) + **s. 60 zad. 1** ustnie (2 min).',
         '4. **Ramka s. 60** (2 min) - czytacie razem.',
         '5. **Film „Porównanie”** (4:42) - słówka porównania, pułapka z „jak”, opis i własne porównania. 3 zadania.',
-        '6. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '7. Zadania z podręcznika po kolei: **s. 60 zad. 2** do zeszytu, **zad. 3** ustnie, **zad. 4** ustnie, **s. 61 zad. 6** - porównania z wiersza, **zad. 7** do zeszytu.',
-        '8. Zapas: **s. 61 zad. 8** (porównanie + „ponieważ”), **Podsumujmy** - „Nasza klasa jest jak...” w kole.',
+        '6. **Notatka** (4 min).',
+        '7. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Dokończ porównanie”, „Porównanie czy pułapka?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- Porównanie zestawia dwie rzeczy i pokazuje, w czym są podobne: szybki jak gepard.',
@@ -179,11 +142,6 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 60 zad. 1** Podmiot liryczny to ktoś, kto pisze wiersze (poeta, poetka). Wymyśla wiersze - chodzą mu po głowie, śnią mu się, a on chce je złapać, zanim znikną. Kartka posłuży mu jak mapa: zapisze na niej wiersze.',
-        '- **s. 60 zad. 2** odważny jak lew, wolny jak ptak, mądry jak sowa, uparty jak osioł, pracowity jak mrówka (pszczoła), łagodny jak baranek.',
-        '- **s. 60 zad. 3** np. głodny jak wilk, dumny jak paw, cichy jak mysz, chytry jak lis, wierny jak pies, zdrowy jak ryba.',
-        '- **s. 60 zad. 4** porównania: „szybki jak błyskawica”, „szumiało niczym wodospad”, „błyszczały niby gwiazdy”.',
-        '- **s. 61 zad. 6** krągłe słodkie jak czereśnie - wiersze są miłe, przyjemne; (bawić się) księżycem jak piłką - wiersze są wesołe, lubią zabawę; rozwieją się jak cienie - szybko znikają, trzeba je łapać; kartka jak mapa - pomaga odnaleźć i zapisać wiersze.',
-        '- **s. 61 zad. 7 i 8** odpowiedzi własne - sprawdzamy, czy jest słówko i czy rzecz naprawdę ma tę cechę.',
       ].join('\n')],
     ),
     questions: [
@@ -204,15 +162,6 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...film('porownanie-film1'),
       slideNote('Porównanie', '1. **Porównanie** zestawia dwie rzeczy i pokazuje, w czym są podobne.\n2. Słówka porównania: **jak, jakby, niczym, niby**.\n3. Przykład: Mój brat biega szybko **jak** gepard.\n4. Porównania sprawiają, że opis jest ciekawszy i łatwiej go sobie wyobrazić.'),
       ...razem('k4-porownanie-dokoncz', 'k4-porownanie-czy'),
-      ...poKolei(
-        zad('r2-s60-zad2', 60, '2', 'zeszyt'),
-        zad('r2-s60-zad3', 60, '3', 'ustnie'),
-        zad('r2-s60-zad4', 60, '4', 'ustnie'),
-        zad('r2-s61-zad6', 61, '6', 'zeszyt'),
-        zad('r2-s61-zad7', 61, '7', 'zeszyt'),
-        zad('r2-s61-zad8', 61, '8', 'zeszyt'),
-        podsumujmy('r2-s61-podsumujmy', 61),
-      ),
     ],
   },
   {
@@ -221,7 +170,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Synonimy i antonimy',
     textbookPage: 62,
     teacherPlan: plan(
-      ['Co dziś', 'Lekcja językowa bez tekstu. Synonimy (wyrazy bliskoznaczne) i antonimy (przeciwieństwa). Podręcznik ma dużo dobrych zadań - zapas spokojnie na całą lekcję.'],
+      ['Co dziś', 'Lekcja językowa bez tekstu. Synonimy (wyrazy bliskoznaczne) i antonimy (przeciwieństwa). Dobre typy zadań z podręcznika (synonimy i antonimy, zamiana powtórzeń) są w kartach „Ćwiczymy razem” na własnych przykładach.'],
       ['Po lekcji uczeń', [
         '- wyjaśnia, co to synonim i antonim,',
         '- dobiera synonimy, żeby uniknąć powtórzeń,',
@@ -232,19 +181,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - porównanie.',
         '2. **Ramka synonimy s. 62** (1 min).',
         '3. **Film „Synonimy i antonimy”** (5:19). 3 zadania.',
-        '4. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '5. Zadania z podręcznika po kolei: **s. 62 zad. 1, 2** ustnie, **zad. 3** do zeszytu, **s. 63 zad. 4** do zeszytu, **zad. 5** (tekst o babci z „super”) do zeszytu.',
-        '6. Zapas: **s. 63 zad. 6, 7**, **s. 64 zad. 8, 9, 10**, ramka antonimy s. 64, **Podsumujmy** - gra w antonimy w kole.',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **s. 62 zad. 1** np. ziemniak - kartofel; laptop - komputer, notebook; wieżowiec - drapacz chmur, budynek.',
-        '- **s. 62 zad. 2** pasja, zainteresowanie, upodobanie, zamiłowanie.',
-        '- **s. 62 zad. 3** głośny - hałaśliwy, donośny, gromki; miły - sympatyczny, uprzejmy, życzliwy; mówić - opowiadać, rozmawiać, wypowiadać się; jeść - spożywać, zajadać, posilać się.',
-        '- **s. 63 zad. 4** szczęśliwy - radosny/zadowolony; ciekawą - interesującą; pyszny - smaczny; wędrowałem - chodziłem/maszerowałem.',
-        '- **s. 63 zad. 5** „super” zamieniamy np. na: świetnie, wyjątkowy prezent, bardzo kolorowe, cudownie, wspaniała, przepyszne, przyjemnie.',
-        '- **s. 63 zad. 6** siema - cześć, hej; kumać - rozumieć; czadowo - świetnie, wspaniale; lecieć - spieszyć się, iść, biec.',
-        '- **s. 64 zad. 8** „fajny” pasuje w rozmowie czwartoklasistów i grupy uczniów; nauczycielowi: „ciekawa, interesująca”; w wypracowaniu: „było wspaniale / przyjemnie”.',
-        '- **s. 64 zad. 9** np. pełny - pusty, gorący - zimny, twardy - miękki (mały - duży), wysoki - niski.',
+        '4. **Notatka** (4 min).',
+        '5. **Ćwiczymy razem** (reszta lekcji, 3 karty): „Synonim i antonim”, „Bez powtórzeń”, „Synonimy czy antonimy?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
     ),
     questions: [
@@ -261,21 +199,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s62-ramka', 62, 'Synonimy'),
       ...film('synonimy-film1'),
       slideNote('Synonimy i antonimy', '1. **Synonimy** to wyrazy o podobnym znaczeniu (bliskoznaczne): wesoły - radosny, iść - maszerować.\n2. Synonimy pomagają **unikać powtórzeń**.\n3. **Antonimy** to wyrazy o przeciwnym znaczeniu: zimny - gorący, wejść - wyjść.\n4. Nie każdy wyraz ma antonim, np. dom, niebieski.'),
-      ...razem('k4-synonimy-pary', 'k4-synonimy-czy'),
-      ...poKolei(
-        zad('r2-s62-zad1', 62, '1', 'ustnie'),
-        zad('r2-s62-zad2', 62, '2', 'ustnie'),
-        zad('r2-s62-zad3', 62, '3', 'zeszyt'),
-        zad('r2-s63-zad4', 63, '4', 'zeszyt'),
-        zad('r2-s63-zad5', 63, '5', 'zeszyt'),
-        zad('r2-s63-zad6', 63, '6', 'ustnie'),
-        zad('r2-s63-zad7', 63, '7', 'ustnie'),
-        ramka('r2-s64-ramka', 64, 'Antonimy'),
-        zad('r2-s64-zad8', 64, '8', 'ustnie'),
-        zad('r2-s64-zad9', 64, '9', 'ustnie'),
-        zad('r2-s64-zad10', 64, '10', 'zeszyt'),
-        podsumujmy('r2-s64-podsumujmy', 64),
-      ),
+      ...razem('k4-synonimy-pary', 'k4-synonimy-powtorzenia', 'k4-synonimy-czy'),
     ],
   },
   {
@@ -284,7 +208,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Budowa listu',
     textbookPage: 65,
     teacherPlan: plan(
-      ['Co dziś', 'Budowa listu (jest w podstawie). List C.S. Lewisa (s. 66-67) i Dzień Pisania Listów (s. 68-70, z kapsułą czasu i kopertą) pomijamy. Części listu ćwiczymy na wzorze od autorek (s. 65) i na liście do babci (s. 69 zad. 1).'],
+      ['Co dziś', 'Budowa listu (jest w podstawie). List C.S. Lewisa (s. 66-67) i Dzień Pisania Listów (s. 68-70, z kapsułą czasu i kopertą) pomijamy. Części listu pokazujemy na wzorze od autorek (s. 65), a ćwiczymy w kartach „Ćwiczymy razem” (części listu, wielka litera w zwrotach).'],
       ['Po lekcji uczeń', [
         '- wymienia części listu po kolei,',
         '- zapisuje poprawnie nagłówek (z wykrzyknikiem albo przecinkiem),',
@@ -295,12 +219,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - synonimy i antonimy.',
         '2. **Wzór listu s. 65** (3 min) - pokazujemy części.',
         '3. **Film „Budowa listu”** (5:25). 3 zadania.',
-        '4. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '5. **s. 69 zad. 1** - dopasuj części listu do babci (5 min).',
-        '6. Zapas: ramki s. 66 (układ, akapit) i s. 67 (Ty wielką literą), **s. 68 zad. 5** - wspólny list klasy (może być na kolejną lekcję albo dla chętnych).',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **s. 69 zad. 1** 1 - E (Warszawa, 26 września), 2 - B (Kochana Babciu!), 3 - F, 4 - G, 5 - C, 6 - H, 7 - D (Mateusz), 8 - A (PS).',
+        '4. **Notatka** (4 min).',
+        '5. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Części listu”, „Piszemy list”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
     ),
     questions: [
@@ -317,13 +237,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s65-wzor', 65, 'Jak jest zbudowany list?'),
       ...film('list-film1'),
       slideNote('Jak się pisze list?', '1. Części listu: **miejscowość i data** (w prawym górnym rogu), **nagłówek** (zwrot do adresata), **wstęp, rozwinięcie, zakończenie**, **pozdrowienie**, **podpis** (ręcznie), czasem **PS**.\n2. Nagłówek z **!** - wstęp wielką literą. Nagłówek z **,** - wstęp małą literą.\n3. **Ty, Ciebie, Tobie, Twój** - wielką literą. **ja, mnie, mój** - małą.\n4. Jedna myśl = jeden **akapit** (zaczynamy od wcięcia).'),
-      ...razem('k4-list-pisownia'),
-      ...poKolei(
-        ramka('r2-s66-uklad', 66, 'Układ listu i akapit'),
-        ramka('r2-s67-ramka', 67, 'Ty, Ciebie, Twój - wielką literą'),
-        zad('r2-s68-zad5', 68, '5', 'cwiczymy'),
-        zad('r2-s69-zad1', 69, '1', 'ustnie'),
-      ),
+      ...razem('k4-list-czesci', 'k4-list-pisownia'),
     ],
   },
   {
@@ -344,16 +258,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **Zacznijmy od... s. 71** (2 min) - co pamiętasz o rzeczowniku?',
         '3. **Ramka s. 72** (1 min).',
         '4. **Film „Rzeczownik”** (4:58). 3 zadania.',
-        '5. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '6. Zadania z podręcznika po kolei: **s. 71 zad. 1, 2** ustnie, **s. 72 zad. 3** ustnie, **zad. 4** do zeszytu, **zad. 5** ustnie, **s. 73 zad. 6** do zeszytu.',
-        '7. Zapas: ramki „liczba” i „rodzaj” s. 72.',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **s. 71 zad. 1** a) kobieta - kto?, reszta - co? b) rzeczy, osoby, rośliny, zjawiska, miejsca, pojęcia.',
-        '- **s. 71 zad. 2** odpowiada na pytania kto? co?; nazywa rzeczy, osoby, rośliny, zjawiska, miejsca, pojęcia.',
-        '- **s. 72 zad. 4** liczba pojedyncza: tablica, piórnik, plecak; liczba mnoga: kredki, ołówki, krzesła.',
-        '- **s. 72 zad. 5** Nie da się - rzeczownik ma stały rodzaj (ta książka - żeński).',
-        '- **s. 73 zad. 6** fotel - męski, okno - nijaki, drzwi - niemęskoosobowy (tylko liczba mnoga), chłopcy - męskoosobowy, kwiat - męski, sukienka - żeński.',
+        '5. **Notatka** (4 min).',
+        '6. **Ćwiczymy razem** (reszta lekcji, 3 karty): „Rzeczownik czy nie?”, „Zmień liczbę”, „Ten, ta, to, ci czy te?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
     ),
     questions: [
@@ -372,16 +278,6 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...film('rzeczownik4-film1'),
       slideNote('Rzeczownik - co nazywa, liczba i rodzaj', '1. **Rzeczownik** odpowiada na pytania **kto? co?**\n2. Nazywa osoby, zwierzęta, rzeczy, rośliny, zjawiska, miejsca i pojęcia (np. przyjaźń).\n3. **Liczba**: pojedyncza (kot) i mnoga (koty).\n4. **Rodzaj**: ten - męski, ta - żeński, to - nijaki; w liczbie mnogiej: ci - męskoosobowy, te - niemęskoosobowy.'),
       ...razem('k4-rzeczownik-czy', 'k4-rzeczownik-liczba', 'k4-rzeczownik-rodzaj'),
-      ...poKolei(
-        zad('r2-s71-zad1', 71, '1', 'ustnie'),
-        zad('r2-s71-zad2', 71, '2', 'ustnie'),
-        zad('r2-s72-zad3', 72, '3', 'ustnie'),
-        zad('r2-s72-zad4', 72, '4', 'zeszyt'),
-        ramka('r2-s72-liczba', 72, 'Liczba rzeczownika'),
-        zad('r2-s72-zad5', 72, '5', 'ustnie'),
-        ramka('r2-s72-rodzaj', 72, 'Rodzaj rzeczownika'),
-        zad('r2-s73-zad6', 73, '6', 'zeszyt'),
-      ),
     ],
   },
   {
@@ -402,9 +298,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **s. 73 zad. 7** (3 min) - kot w zdaniach, od tego zaczyna podręcznik.',
         '3. **Ramka „Przypadki rzeczownika” s. 73** (2 min).',
         '4. **Film „Przypadki”** (5:46). 3 zadania.',
-        '5. **Notatka** (5 min) - tabela przypadków do zeszytu, potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '6. Zadania z podręcznika: **s. 74 zad. 8** (sposoby zapamiętania - wybierz jeden), **zad. 9** do zeszytu.',
-        '7. Zapas: **s. 74 zad. 10** - opis ilustracji z krasnalami (do domu).',
+        '5. **Notatka** (5 min) - tabela przypadków do zeszytu.',
+        '6. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Odmieniamy przez przypadki”, „W jakim to przypadku?”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 73 zad. 7** kot, kota, kotu, kota, kotem, kocie, kocie.',
@@ -427,11 +322,6 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...film('przypadki-film1'),
       slideNote('Przypadki rzeczownika', '1. **Mianownik** - kto? co? (jest)\n2. **Dopełniacz** - kogo? czego? (nie ma)\n3. **Celownik** - komu? czemu? (się przyglądam)\n4. **Biernik** - kogo? co? (widzę)\n5. **Narzędnik** - z kim? z czym? (idę)\n6. **Miejscownik** - o kim? o czym? (mówię)\n7. **Wołacz** - o! (wołam)'),
       ...razem('k4-przypadki-lp', 'k4-przypadki-ktory'),
-      ...poKolei(
-        zad('r2-s74-zad8', 74, '8', 'cwiczymy'),
-        zad('r2-s74-zad9', 74, '9', 'zeszyt'),
-        zad('r2-s74-zad10', 74, '10', 'dom'),
-      ),
     ],
   },
   {
@@ -440,7 +330,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Odmiana rzeczownika przez przypadki',
     textbookPage: 84,
     teacherPlan: plan(
-      ['Co dziś', 'Temat 10 z podręcznika (s. 84) przeniesiony zaraz po przypadkach, żeby odmiana się nie rozjechała. Film dokłada liczbę mnogą, a resztę lekcji gracie: odmiana w kole, zeszyty po okręgu, KRASNOLUDEK.'],
+      ['Co dziś', 'Temat 10 z podręcznika (s. 84) przeniesiony zaraz po przypadkach, żeby odmiana się nie rozjechała. Film dokłada liczbę mnogą, a resztę lekcji odmieniacie razem na slajdzie - wyraz po wyrazie, z kołem.'],
       ['Po lekcji uczeń', [
         '- odmienia rzeczownik przez przypadki w obu liczbach,',
         '- odróżnia mianownik od biernika pytaniem,',
@@ -450,12 +340,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - przypadki.',
         '2. **Zacznijmy od... s. 84** (2 min) - przypomnienie przypadków.',
         '3. **Film „Przypadki w liczbie mnogiej”** (5:21). 3 zadania.',
-        '4. **Notatka** (3 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '5. **s. 84 zad. 1** - odmiana w kole (10 min), **zad. 2** - zeszyty po okręgu.',
-        '6. **s. 84 zad. 3** - KRASNOLUDEK do zeszytu albo do domu.',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **s. 84 zad. 3** np. las, kula, osa, sok, nos, rak, kura.',
+        '4. **Notatka** (3 min).',
+        '5. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Odmiana w obu liczbach”, „Wstaw we właściwej formie”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
     ),
     questions: [
@@ -473,11 +359,6 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...film('przypadki-mnoga-film1'),
       slideNote('Odmiana rzeczownika przez przypadki', '1. Rzeczownik odmieniamy przez **przypadki** i **liczby**.\n2. Liczba mnoga: koty, kotów, kotom, koty, kotami, kotach, koty!\n3. Mianownik i biernik często wyglądają tak samo - rozróżniamy je **pytaniem**: kto? co? jest / kogo? co? widzę.'),
       ...razem('k4-przypadki-mnoga', 'k4-przypadki-forma'),
-      ...poKolei(
-        zad('r2-s84-zad1', 84, '1', 'cwiczymy'),
-        zad('r2-s84-zad2', 84, '2', 'cwiczymy'),
-        zad('r2-s84-zad3', 84, '3', 'zeszyt'),
-      ),
     ],
   },
   {
@@ -498,14 +379,11 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **Zacznijmy od... s. 75** (2 min) - pizza czy spaghetti?',
         '3. **Czytanka „Kurs fotografii”** (5 min) + **s. 78 zad. 3** ustnie (2 min).',
         '4. **Film „Opinia i argument”** (5:12). 3 zadania.',
-        '5. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '6. Zadania z podręcznika po kolei, na ile starczy: **s. 75 zad. 1**, **s. 79 zad. 5** ustnie, **zad. 6** do zeszytu.',
-        '7. Zapas: ramki s. 75 (zwroty) i s. 79 (argument), **s. 76 zad. 2** w parach, **s. 78 zad. 4** (schemat zysk/strata), **s. 79 zad. 7** - debata w dwóch grupach.',
+        '5. **Notatka** (4 min).',
+        '6. **Ćwiczymy razem** (reszta lekcji, 3 karty): „Fakt czy opinia?”, „Prawdziwy argument?”, „Uzasadnij swoje zdanie”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
-        '- **s. 75 zad. 1** opinie: trampki wygodniejsze niż sandały, zima przyjemniejsza niż lato, matematyka najtrudniejsza, lody czekoladowe najsmaczniejsze. Fakty: temperatura ciała, imiona wielką literą, lód topi się w cieple.',
         '- **s. 78 zad. 3** Zosia zrezygnowała z płaczu i scen. Przygotowała argumenty: zrobi rodzinie piękne zdjęcia, kurs jest w sobotę (nic nie koliduje), nie jest drogi, odda kieszonkowe, babcia dołoży, trzeba podpisać zobowiązanie obecności, chodzi z Martą, rodzice Marty zawiozą, pani od plastyki mówi, że ma talent.',
-        '- **s. 79 zad. 5** np. brak czasu, koszty, słomiany zapał (rzuca zajęcia po dwóch miesiącach), zmęczenie, nauka.',
       ].join('\n')],
     ),
     questions: [
@@ -524,17 +402,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       zad('r2-s78-zad3', 78, '3', 'ustnie'),
       ...film('opinia-film1'),
       slideNote('Opinia i argument', '1. **Fakt** można sprawdzić. **Opinia** to moje zdanie.\n2. Zwroty: moim zdaniem, uważam, że, sądzę, że, według mnie.\n3. **Argument** to powód, który uzasadnia opinię: Warto czytać, **ponieważ** poznaję ciekawe historie.\n4. „Bo tak” i „bo nie” to **nie są** argumenty.'),
-      ...razem('k4-fakt-opinia', 'k4-argument'),
-      ...poKolei(
-        ramka('r2-s75-opinia', 75, 'Opinia - zwroty'),
-        zad('r2-s75-zad1', 75, '1', 'ustnie'),
-        zad('r2-s76-zad2', 76, '2', 'cwiczymy'),
-        zad('r2-s78-zad4', 78, '4', 'zeszyt'),
-        ramka('r2-s79-argument', 79, 'Argument'),
-        zad('r2-s79-zad5', 79, '5', 'ustnie'),
-        zad('r2-s79-zad6', 79, '6', 'zeszyt'),
-        zad('r2-s79-zad7', 79, '7', 'cwiczymy'),
-      ),
+      ...razem('k4-fakt-opinia', 'k4-argument', 'k4-uzasadnij'),
     ],
   },
   {
@@ -543,7 +411,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Asertywność',
     textbookPage: 80,
     teacherPlan: plan(
-      ['Co dziś', 'Opowiadanie Marka Michalaka „Pani z tramwaju” (s. 80-82, ok. 6 min z lektorem) - Miłosz grzecznie odmawia pani w tramwaju i szczerze mówi pisarce, co myśli o jej książce. Z tego wychodzimy do asertywności, potem film i własne scenki (s. 83 zad. 6). Lekcja jest pełna - zad. 3-6 to zapas.'],
+      ['Co dziś', 'Opowiadanie Marka Michalaka „Pani z tramwaju” (s. 80-82, ok. 6 min z lektorem) - Miłosz grzecznie odmawia pani w tramwaju i szczerze mówi pisarce, co myśli o jej książce. Z tego wychodzimy do asertywności, potem film i wspólne ćwiczenia: rozpoznajemy reakcje i układamy asertywne odmowy.'],
       ['Po lekcji uczeń', [
         '- wyjaśnia, czym jest asertywność,',
         '- odróżnia reakcję uległą, agresywną i asertywną,',
@@ -555,15 +423,11 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **Zacznijmy od... s. 80** (2 min) - czy łatwo ci powiedzieć „nie”?',
         '3. **Czytanka „Pani z tramwaju”** (6 min) + **s. 83 zad. 2** ustnie (3 min).',
         '4. **Film „Asertywność”** (4:59). 3 zadania.',
-        '5. **Ramka s. 83 + notatka** (5 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '6. Zadania z podręcznika po kolei: **s. 80 zad. 1** (trzy reakcje na prośbę koleżanki), **s. 83 zad. 3** w parach - asertywność Miłosza, **zad. 5** - jak odmówić (horror, muffinka, kino przed sprawdzianem).',
-        '7. Zapas: **s. 83 zad. 4** (gdy ktoś namówił nas wbrew nam - tylko chętni), **zad. 6** - scenki w grupach.',
+        '5. **Ramka s. 83 + notatka** (5 min).',
+        '6. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Jaka to reakcja?”, „Odmów asertywnie”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
-        '- **s. 80 zad. 1** np. zgoda wbrew sobie (koleżanka zadowolona, ja zły na siebie), odmowa niegrzeczna (koleżanka obrażona), odmowa asertywna: „Nie zrobię za ciebie zadania, ale mogę ci wytłumaczyć, jak je zrobić” (obie strony szanowane).',
         '- **s. 83 zad. 2** Książki były dla młodszych dzieci - czytał je kuzynkom. Babcia kusiła: zobaczysz autorkę na żywo, zapytasz o pomysły, a potem lody (i mango). Pani w tramwaju ciągnęła go za rękę i mówiła „Siadaj tu, dziecko. Bo zajmą wam miejsce”. Babci powiedział „Zgoda” - sam zdecydował, a pani „Nie, dziękuję” - stanowczo i grzecznie. Nie żałował - spotkanie było świetne. Pisarka ucieszyła się z jego szczerości i obiecała książkę dla starszych.',
-        '- **s. 83 zad. 3** W tramwaju („Nie mam ochoty, proszę pani. I nie jestem bezczelny. Po prostu podziękowałem”) i przy pisarce (szczerze, ale grzecznie: książka podobałaby mu się, gdyby był młodszy). Zyskał szacunek babci i pisarki, a nawet obietnicę nowej książki. Asertywność chroni przed robieniem czegoś wbrew sobie i przed ludźmi, którzy chcą nas wykorzystać.',
-        '- **s. 83 zad. 5** np. „Dziękuję, nie oglądam horrorów, wolę komedię”; „Dziękuję, nie jem słodyczy, chętnie zjem owoc”; „Nie dziś, jutro mam sprawdzian. Chodźmy w sobotę”.',
       ].join('\n')],
     ),
     questions: [
@@ -583,14 +447,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...film('asertywnosc-film1'),
       ramka('r2-s83-ramka', 83, 'Asertywność'),
       slideNote('Asertywność', '1. **Asertywność** to mówienie „nie” spokojnie i z szacunkiem.\n2. Trzy reakcje: **uległa** (robię, choć nie chcę), **agresywna** (krzyczę, obrażam), **asertywna** (spokojnie odmawiam i mówię dlaczego).\n3. Wzór: **Nie, bo... Ale mogę...**\n4. Gdy coś jest niebezpieczne: mówię „nie” i idę do zaufanego dorosłego.'),
-      ...razem('k4-asertywnosc'),
-      ...poKolei(
-        zad('r2-s80-zad1', 80, '1', 'ustnie'),
-        zad('r2-s83-zad3', 83, '3', 'cwiczymy'),
-        zad('r2-s83-zad4', 83, '4', 'ustnie'),
-        zad('r2-s83-zad5', 83, '5', 'ustnie'),
-        zad('r2-s83-zad6', 83, '6', 'cwiczymy'),
-      ),
+      ...razem('k4-asertywnosc', 'k4-asertywnosc-odmow'),
     ],
   },
   {
@@ -599,7 +456,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Pisownia rzeczowników wielką i małą literą',
     textbookPage: 85,
     teacherPlan: plan(
-      ['Co dziś', 'Ortografia: nazwy własne wielką literą, nazwy pospolite małą. Zadanie 5 ze s. 86 (historia o Ryśku do ilustracji) pomijamy - ilustracja nie mieści się na jednym screenie z poleceniem.'],
+      ['Co dziś', 'Ortografia: nazwy własne wielką literą, nazwy pospolite małą.'],
       ['Po lekcji uczeń', [
         '- odróżnia nazwę własną od pospolitej,',
         '- pisze wielką literą imiona, nazwy zwierząt, miast, państw, rzek, gór, kontynentów, planet i świąt,',
@@ -609,14 +466,8 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '1. **Temat + koło powtórzeniowe** (5 min) - asertywność.',
         '2. **Ramka s. 85** (2 min).',
         '3. **Film „Wielka czy mała litera?”** (5:14). 3 zadania.',
-        '4. **Notatka** (4 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '5. Zadania z podręcznika po kolei: **s. 85 zad. 1** ustnie, **zad. 2** do zeszytu (tabela), **s. 86 zad. 3** - zagadki do tej samej tabeli.',
-        '6. Zapas: **s. 86 zad. 4** - drużyny (rzeka - Wisła, Odra...), **zad. 6** - nazwy dla nowego miasta, superbohatera, planety.',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **s. 85 zad. 1** wielką literą, bo to nazwy własne: Wisła (rzeka), Boże Narodzenie (święto), Adaś (imię), Warszawa (miasto), Azor, Mruczek (imiona zwierząt), Mars (planeta), Beskidy (góry), Czechy (państwo), Europa (kontynent).',
-        '- **s. 85 zad. 2** własne: Wenus, Paryż, Nil, Łukasz, Sudety, Rysy, Azja; pospolite: woda, koszulka, krzesło, truskawka.',
-        '- **s. 86 zad. 3** róża, Tatry, gwiazdy, (Mikołaj) Kopernik, Zakopane, Bałtyk.',
+        '4. **Notatka** (4 min).',
+        '5. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Wielka czy mała?”, „Nazwa pospolita i własna”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
     ),
     questions: [
@@ -633,14 +484,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s85-ramka', 85, 'Nazwy własne i pospolite'),
       ...film('wielka-litera-film1'),
       slideNote('Pisownia rzeczowników wielką i małą literą', '1. **Nazwy własne** - jedna konkretna osoba, zwierzę, miejsce: piszemy **wielką literą**.\n2. Wielką literą: imiona i nazwiska, imiona zwierząt, miasta, państwa, rzeki, góry, kontynenty, planety, święta.\n3. **Nazwy pospolite** - cała grupa (pies, rzeka, miasto): piszemy **małą literą**.\n4. Przykład: rzeka - Wisła, pies - Burek, planeta - Ziemia.'),
-      ...razem('k4-wielka-litera'),
-      ...poKolei(
-        zad('r2-s85-zad1', 85, '1', 'ustnie'),
-        zad('r2-s85-zad2', 85, '2', 'zeszyt'),
-        zad('r2-s86-zad3', 86, '3', 'zeszyt'),
-        zad('r2-s86-zad4', 86, '4', 'cwiczymy'),
-        zad('r2-s86-zad6', 86, '6', 'cwiczymy'),
-      ),
+      ...razem('k4-wielka-litera', 'k4-nazwy-wlasne'),
     ],
   },
   {
@@ -660,14 +504,11 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
         '2. **s. 87 zad. 1** (2 min) - nieporozumienie.',
         '3. **Ramka s. 87** (1 min).',
         '4. **Film „Nie z rzeczownikami”** (5:19). 3 zadania.',
-        '5. **Notatka** (3 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '6. Zadania z podręcznika po kolei: **s. 87 zad. 2** do zeszytu, **s. 88 zad. 4** - rebusy.',
-        '7. Zapas: **s. 88 zad. 3** - idealna kraina w parach, **zad. 5** - Skwer Niezadowolenia.',
+        '5. **Notatka** (3 min).',
+        '6. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Razem czy osobno?”, „Dopisz „nie””. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
       ].join('\n')],
       ['Odpowiedzi', [
         '- **s. 87 zad. 1** nieporozumienie - łącznie (niesłusznie to nie rzeczownik, „nie zrobiłem” - czasownik, osobno).',
-        '- **s. 87 zad. 2** niemoc, nieporządek, niewdzięczność, niewiedza.',
-        '- **s. 88 zad. 4** niepamięć, niepogoda, nieprzyjaciel.',
       ].join('\n')],
     ),
     questions: [
@@ -685,13 +526,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s87-ramka', 87, 'Nie z rzeczownikami'),
       ...film('nie-rzeczownik-film1'),
       slideNote('Pisownia nie z rzeczownikami', '1. **Nie** z rzeczownikami piszemy **łącznie**: niepokój, nieporządek, niepogoda.\n2. **Nie** z czasownikami piszemy **osobno**: nie wiem, nie lubię.\n3. Jak sprawdzić? Pytam: **kto? co?** - rzeczownik (razem). **Co robi?** - czasownik (osobno).'),
-      ...razem('k4-nie-rzeczownik'),
-      ...poKolei(
-        zad('r2-s87-zad2', 87, '2', 'zeszyt'),
-        zad('r2-s88-zad3', 88, '3', 'cwiczymy'),
-        zad('r2-s88-zad4', 88, '4', 'zeszyt'),
-        zad('r2-s88-zad5', 88, '5', 'cwiczymy'),
-      ),
+      ...razem('k4-nie-rzeczownik', 'k4-nie-dopisz'),
     ],
   },
   {
@@ -700,20 +535,14 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     topic: 'Pośród słów i znaczeń - podsumowanie',
     textbookPage: 89,
     teacherPlan: plan(
-      ['Co dziś', 'Podsumowanie rozdziału przed sprawdzianem. Mapa ze s. 89 pokazuje wszystkie pojęcia, film powtarza każde z nich. Tekst Justyny Bednarek „Wnuczka antykwariusza” (s. 89-90) pomijamy - zostają zadania, które działają bez niego (s. 91 zad. 5, 6, 7, 9, 10).'],
+      ['Co dziś', 'Podsumowanie rozdziału przed sprawdzianem. Mapa ze s. 89 pokazuje wszystkie pojęcia, film powtarza każde z nich. Tekst Justyny Bednarek „Wnuczka antykwariusza” (s. 89-90) pomijamy. Na koniec powtórka w kartach „Ćwiczymy razem” i odmiana na sprawdzian.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (5 min) - nie z rzeczownikami.',
         '2. **Mapa s. 89** (2 min) - co już znamy?',
         '3. **Film „Podsumowanie rozdziału II”** (6:25, 3 zadania).',
-        '4. **Notatka** (5 min), potem **Ćwiczymy razem** na slajdzie: wpisujecie albo klikacie, „Sprawdź”, kolejne przykłady - ile starczy czasu.',
-        '5. Zadania z podręcznika po kolei: **s. 91 zad. 5, 6, 7, 9, 10**.',
+        '4. **Notatka** (5 min).',
+        '5. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Powtórka rozdziału”, „Odmiana na sprawdzian”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
         '6. Do domu: zeszyt powtórzeniowy PDF (link w VULCANIE) przed sprawdzianem.',
-      ].join('\n')],
-      ['Odpowiedzi', [
-        '- **s. 91 zad. 5** z prawej strony w górnym rogu; ręcznie; wielką; małą; postscriptum; przyczynę napisania listu.',
-        '- **s. 91 zad. 7** radosna - smutna; starsza - młodsza; wspaniale - okropnie (fatalnie); krótki - długi.',
-        '- **s. 91 zad. 9** P, F, P, P, F.',
-        '- **s. 91 zad. 10** list, listu, listowi, list, listem, liście, liście; listy, listów, listom, listy, listami, listach, listy. Rodzaj męski.',
       ].join('\n')],
     ),
     questions: [
@@ -732,14 +561,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ramka('r2-s89-mapa', 89, 'Pośród słów i znaczeń - mapa rozdziału'),
       ...film('podsumowanie4-dzial2-film1'),
       slideNote('Pośród słów i znaczeń - podsumowanie', '**SŁOWA:** wyrazy potoczne tylko na luzie (nie w wypracowaniu). Porównanie: jak, jakby, niczym, niby. Synonimy - podobne znaczenie, antonimy - przeciwne.\n**LIST:** miejscowość i data, nagłówek, wstęp, rozwinięcie, zakończenie, pozdrowienie, podpis, PS. Ty, Ciebie, Twój - wielką literą.\n**RZECZOWNIK:** kto? co?; liczba i rodzaj; 7 przypadków: M, D, C, B, N, Ms, W. Nazwy własne wielką literą. **Nie** z rzeczownikami razem.\n**ROZMOWA:** opinia + argument (ponieważ...). Asertywność: „Nie, bo... Ale mogę...”.'),
-      ...razem('k4-podsumowanie-r2'),
-      ...poKolei(
-        zad('r2-s91-zad5', 91, '5', 'ustnie'),
-        zad('r2-s91-zad6', 91, '6', 'zeszyt'),
-        zad('r2-s91-zad7', 91, '7', 'zeszyt'),
-        zad('r2-s91-zad9', 91, '9', 'ustnie'),
-        zad('r2-s91-zad10', 91, '10', 'zeszyt'),
-      ),
+      ...razem('k4-podsumowanie-r2', 'k4-podsumowanie-odmiana'),
     ],
   },
 ];
