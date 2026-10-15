@@ -8,7 +8,7 @@ import {
   type PolskiOdZeraWersja,
 } from '../../data/remedial';
 
-function DownloadLink({ href, label }: { href: string; label: string }) {
+function DownloadLink({ href, label, text = 'Pobierz DOCX' }: { href: string; label: string; text?: string }) {
   return (
     <a
       href={href}
@@ -17,7 +17,7 @@ function DownloadLink({ href, label }: { href: string; label: string }) {
       aria-label={label}
     >
       <DownloadIcon />
-      Pobierz DOCX
+      {text}
     </a>
   );
 }
@@ -85,7 +85,43 @@ export function PolskiOdZeraMaterials() {
   );
 }
 
+type Worksheet = (typeof REMEDIAL_WORKSHEETS)[number];
+
+function WorksheetList({ items }: { items: ReadonlyArray<{ worksheet: Worksheet; number: number }> }) {
+  return (
+    <ol className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+      {items.map(({ worksheet, number }) => (
+        <li
+          key={worksheet.href}
+          className="flex flex-col gap-3 border-b border-gray-200 px-4 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+        >
+          <div className="flex min-w-0 gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-50 text-sm font-semibold tabular-nums text-accent-700">
+              {number}
+            </span>
+            <div className="min-w-0">
+              <h3 className="font-semibold text-gray-900">{worksheet.title}</h3>
+              <p className="mt-0.5 text-sm leading-5 text-gray-600">{worksheet.description}</p>
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <DownloadLink href={worksheet.href} label={`Pobierz arkusz ${number}: ${worksheet.title} (DOCX, A4 dwustronnie)`} text="DOCX" />
+            <DownloadLink
+              href={worksheet.a5Href}
+              label={`Pobierz arkusz ${number}: ${worksheet.title} (PDF, dwie strony A5 na jednej A4)`}
+              text="PDF 2×A5"
+            />
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export function RemedialMaterials() {
+  const numbered = REMEDIAL_WORKSHEETS.map((worksheet, index) => ({ worksheet, number: index + 1 }));
+  const base = numbered.filter(({ worksheet }) => !('levelUp' in worksheet));
+  const levelUp = numbered.filter(({ worksheet }) => 'levelUp' in worksheet);
   return (
     <section aria-labelledby="remedial-heading" className="max-w-4xl">
       <div className="mb-5 max-w-3xl">
@@ -93,35 +129,25 @@ export function RemedialMaterials() {
           Arkusze na zajęcia wyrównawcze
         </h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
-          Cztery kolejne spotkania wspólne dla wszystkich klas. Każdy arkusz zajmuje jedną kartkę A4 drukowaną dwustronnie i zawiera czytanie ze zrozumieniem, ćwiczenia językowe oraz krótką wypowiedź.
+          Każdy arkusz to czytanie ze zrozumieniem, ćwiczenia językowe i krótka wypowiedź. DOCX to kartka A4 drukowana dwustronnie, PDF 2×A5 mieści obie strony obok siebie na jednej stronie A4 (druk jednostronny, poziomo).
         </p>
       </div>
 
-      <ol className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-        {REMEDIAL_WORKSHEETS.map((worksheet, index) => (
-          <li
-            key={worksheet.href}
-            className="flex flex-col gap-3 border-b border-gray-200 px-4 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between sm:px-5"
-          >
-            <div className="flex min-w-0 gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-50 text-sm font-semibold tabular-nums text-accent-700">
-                {index + 1}
-              </span>
-              <div className="min-w-0">
-                <h3 className="font-semibold text-gray-900">{worksheet.title}</h3>
-                <p className="mt-0.5 text-sm leading-5 text-gray-600">{worksheet.description}</p>
-              </div>
-            </div>
-            <DownloadLink href={worksheet.href} label={`Pobierz arkusz ${index + 1}: ${worksheet.title}`} />
-          </li>
-        ))}
-      </ol>
+      <WorksheetList items={base} />
+
+      <div className="mb-3 mt-8 max-w-3xl">
+        <h3 className="font-semibold text-gray-900">Poziom wyżej</h3>
+        <p className="mt-0.5 text-sm leading-5 text-gray-600">
+          Dla tych, którym podstawowe arkusze idą łatwo: odpowiedzi trzeba wywnioskować, a nie przepisać z tekstu.
+        </p>
+      </div>
+      <WorksheetList items={levelUp} />
 
       <div className="mt-6 flex flex-col gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="font-semibold text-gray-900">Klucz odpowiedzi dla nauczyciela</h3>
           <p className="mt-0.5 text-sm leading-5 text-gray-600">
-            Odpowiedzi, kryteria do wypowiedzi otwartych i krótka wskazówka do wspólnego omówienia.
+            Odpowiedzi do wszystkich siedmiu arkuszy, kryteria do wypowiedzi otwartych i krótka wskazówka do wspólnego omówienia.
           </p>
         </div>
         <DownloadLink href={REMEDIAL_KEY_HREF} label="Pobierz klucz odpowiedzi do arkuszy wyrównawczych" />
