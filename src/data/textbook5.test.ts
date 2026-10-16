@@ -106,7 +106,8 @@ describe('buildTextbook5', () => {
     for (const lesson of bundle.lessons) {
       expect(lesson.teacherPlan).toMatch(/^## /);
       expect(lesson.slides[0].kind).toBe('topic');
-      expect(lesson.slides.some((s) => s.kind === 'note')).toBe(true);
+      // Powtorka przed sprawdzianem (16a) to same karty - bez nowej notatki.
+      if (!lesson.title.startsWith('16a.')) expect(lesson.slides.some((s) => s.kind === 'note'), lesson.title).toBe(true);
     }
   });
 
@@ -179,6 +180,15 @@ describe('buildTextbook5', () => {
       // Wyjatek: recytacja - lamance i oddech to teksty do mowienia na glos cala klasa.
       if (!lesson.title.startsWith('21.')) expect(poNotatce.some((s) => s.kind === 'image'), lesson.title).toBe(false);
     }
+  });
+
+  it('powtorka przed sprawdzianem dzialu 1: same karty Ćwiczymy razem i opowiadanie na koniec', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('16a.'))!;
+    expect(lesson.dzial).toBe('Dział 1 - W poszukiwaniu przyjaźni');
+    const karty = lesson.slides.filter((s) => s.kind === 'cwiczenie');
+    expect(karty).toHaveLength(14);
+    expect(karty.every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
+    expect(lesson.slides[lesson.slides.length - 1].kind).toBe('task');
   });
 
   it('wycofane tematy nie wracaja w materiale', () => {

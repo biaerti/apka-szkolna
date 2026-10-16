@@ -26,6 +26,11 @@ function obrazRymy(plik: string, title: string, code?: string): Slide {
     : { id: newId(), kind: 'image', url: `czytanki:rymy-${plik}.webp`, title, studentAction: 'look' };
 }
 
+/** Karty "Ćwiczymy razem" (src/data/cwiczenia5.ts) - slajd trzyma tylko id karty. */
+function razem(...ids: string[]): Slide[] {
+  return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
+}
+
 const TOPICS: Topic[] = [
   {
     title: '2. Jak zapisać dialog?',
@@ -522,6 +527,53 @@ const TOPICS: Topic[] = [
       slideTask('Z1', 'Koks wrócił do domu. Napisz **4 linijki dialogu** Jacka i Radka.\n\nW dialogu muszą być:\n1. jedno **porównanie** (jak, niczym, jakby),\n2. jeden czasownik w **trybie rozkazującym**,\n3. jeden czasownik w **trybie przypuszczającym** - uważaj na pisownię „by”.\n\nPamiętaj o myślnikach i słowach narratora.', 8 * 60, 'dialog', '– Koks wrócił! – krzyknął Jacek, szczęśliwy jak dziecko w Wigilię.\n– Pogłaszcz go – zaproponował Radek. – Chyba już mnie lubi.\n– Gdybyś go nie znalazł, nie spałbym całą noc – powiedział cicho Jacek.\n– Chodźmy z nim na spacer! – zawołał Radek.'),
       slideTask('Z2', 'Napisz **e-mail do wychowawczyni**. Klasa chce zorganizować zbiórkę karmy dla schroniska.\n\n- temat,\n- powitanie,\n- 2-3 zdania: co chcecie zrobić i o co prosicie (użyj trybu przypuszczającego, np. „moglibyśmy”),\n- pożegnanie i podpis.', 7 * 60, undefined, 'Temat: Zbiórka karmy dla schroniska\n\nDzień dobry,\nnasza klasa chciałaby zorganizować zbiórkę karmy dla schroniska. Moglibyśmy ustawić pudło na korytarzu przez dwa tygodnie. Czy zgodziłaby się Pani nam pomóc?\n\nPozdrawiam\nOla Nowak, 5a'),
       slideNote('W poszukiwaniu przyjaźni - podsumowanie', '**LITERATURA:** podmiot liryczny mówi w wierszu, narrator w opowiadaniu. Rym, porównanie (jak, niczym). Opowiadanie: wstęp, rozwinięcie, zakończenie; dialog od myślnika.\n**TEKSTY, KTÓRE UCZĄ:** tekst informacyjny = fakty bez opinii. Wikipedię sprawdzam w drugim źródle. E-mail: temat, powitanie, treść, pożegnanie, podpis.\n**JĘZYK:** miękkie: kreska (koń) albo „i” (koniec). Formy nieosobowe: czytać, czytano, czyta się. Tryby: czytam, czytaj, czytałbym. „By” razem z osobową formą (zrobiłbym) i w gdyby, osobno przy reszcie (można by).'),
+    ],
+  },
+  {
+    title: '16a. Powtórka przed sprawdzianem - ćwiczymy razem',
+    topic: 'W poszukiwaniu przyjaźni - powtórka przed sprawdzianem',
+    textbookPage: 56,
+    teacherPlan: plan(
+      ['Co dziś', 'Lekcja tuż przed sprawdzianem z działu 1. Bez filmu i bez notatki - same wspólne przykłady na kartach „Ćwiczymy razem”, po jednej karcie na każdy typ zadania ze sprawdzianu, w tej samej kolejności co na sprawdzianie. Przykłady są inne niż na sprawdzianie i na karcie pracy. Na koniec opowiadanie z dialogiem - tak jak ostatnie zadanie sprawdzianu.'],
+      ['Po lekcji uczeń', [
+        '- wie, jak wygląda każde zadanie na sprawdzianie,',
+        '- wie, z czym jeszcze ma kłopot i co powtórzyć w domu.',
+      ].join('\n')],
+      ['Przebieg (45 min)', [
+        '1. **Temat + koło** (5 min) - pytania przekrojowe z podsumowania działu.',
+        '2. **Ćwiczymy razem** (30 min, 14 kart, ok. 2 min na kartę): wiersz i rymy (4 karty), opowiadanie, narrator i dialog (3), kreska czy „i” (1), czasownik: forma, czas przeszły, formy nieosobowe, tryby, „by” (6). Uczniowie mówią, Ty wpisujesz albo klikasz, potem „Sprawdź”; koło (K) losuje osobę na każdy przykład.',
+        '3. **Opowiadanie z dialogiem** (10 min) - ostatni slajd. Klawisz **P**: treść z lewej, czarne pole do pisania z prawej. Piszecie razem 5-6 zdań, uczniowie dyktują, Ty piszesz pisakiem. Na koniec zakreślacie porównanie i oba tryby.',
+        '- Brakuje czasu? Na każdej karcie tylko pierwsza strona. Kartę, na której klasa się myli, robicie do końca.',
+        '- Klawisz **0** - pusta czarna tablica, gdy trzeba coś rozpisać od zera (np. schemat rymów, odmianę).',
+        '- Do domu: karta pracy działu 1 (link w VULCANIE).',
+      ].join('\n')],
+      ['Jak wyjaśnić', [
+        '- **Rym męski czy żeński?** Klaśnij sylaby. Wyraz jednosylabowy (dom) - męski. Akcent na przedostatnią (wo-da) - żeński.',
+        '- **Rym gramatyczny?** Zadaj obu wyrazom to samo pytanie (kto? co? / co robi? / jaki?). To samo pytanie = gramatyczny.',
+        '- **Narrator uczestniczy czy obserwuje?** Szukaj „ja”, „my”, „poszłam”, „usłyszeliśmy”.',
+        '- **Dialog:** po słowach narratora mała litera. Mówi dalej? Kropka po narratorze i nowy myślnik.',
+        '- **Czas przeszły l. mnoga:** jest choć jeden chłopak - męskoosobowy (oni byli), same dziewczyny albo rzeczy - niemęskoosobowy (one były).',
+        '- **„By”:** czasownik ma osobę (zrobiłbym, śpiewalibyśmy) - razem. Forma na -no, -to, „ja”, „wy”, „można” - osobno.',
+      ].join('\n')],
+    ),
+    questions: [
+      { text: 'Jaki to schemat rymów: AABB?', answer: 'Rymy parzyste.' },
+      { text: 'Czym różni się rym dokładny od niedokładnego?', answer: 'W dokładnym końcówki brzmią tak samo (mama - brama), w niedokładnym zgadza się tylko samogłoska (kot - kos).' },
+      { text: 'Jak zapisać słowa narratora po wypowiedzi postaci?', answer: 'Po myślniku, małą literą: – Cześć – powiedziała Ola.' },
+      { text: 'Podaj formę nieosobową od „napisać” na -no lub -to.', answer: 'napisano' },
+      { text: 'W jakim trybie jest „przeczytajcie”?', answer: 'W trybie rozkazującym.' },
+      { text: 'Razem czy osobno: „widziano(by)”?', answer: 'Osobno: widziano by - forma na -no.' },
+    ],
+    makeSlides: (previousSetId) => [
+      slideTopic('W poszukiwaniu przyjaźni - powtórka przed sprawdzianem'),
+      ...recap(previousSetId),
+      ...razem(
+        'k5-powt1-wiersz', 'k5-powt1-porownania', 'k5-powt1-rymy-rodzaje', 'k5-powt1-rym-dopisz',
+        'k5-powt1-opowiadanie', 'k5-powt1-narrator', 'k5-powt1-dialog', 'k5-powt1-gloski',
+        'k5-powt1-czasownik-forma', 'k5-powt1-przeszly', 'k5-powt1-nieosobowe', 'k5-powt1-nieosobowe-zamien',
+        'k5-powt1-tryby', 'k5-powt1-by',
+      ),
+      slideTask('Opowiadanie', 'Piszemy razem krótkie opowiadanie (5-6 zdań): **Niespodzianka na urodziny**.\n\n1. Wstęp: kto? gdzie? kiedy?\n2. Rozwinięcie z **dialogiem** (co najmniej 2 wypowiedzi).\n3. Zakończenie.\n\nW środku jedno **porównanie**, jeden czasownik w **trybie rozkazującym** i jeden w **trybie przypuszczającym**.', 10 * 60, undefined, 'W piątek Maja wróciła ze szkoły i zobaczyła, że w domu jest zupełnie ciemno.\n– Zapal światło! – szepnął ktoś z kuchni.\nMaja nacisnęła włącznik, a cała rodzina krzyknęła: „Sto lat!”.\n– Gdybym wiedziała, ubrałabym się ładniej – zaśmiała się Maja, czerwona jak burak.\nTo były jej najlepsze urodziny.'),
     ],
   },
 ];
