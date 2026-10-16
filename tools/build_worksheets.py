@@ -804,9 +804,11 @@ def render_pdfs():
     import json
     import subprocess
 
-    data = [{**ws, "stem": file_stem(ws)} for ws in WORKSHEETS]
+    data = [{**ws, "stem": file_stem(ws), "answers": dict(ANSWERS[ws["number"]])} for ws in WORKSHEETS]
     (OUT / "arkusze.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     subprocess.run(["node", str(ROOT / "tools" / "arkusze-pdf.mjs"), str(OUT)], check=True)
+    # Ta sama tresc z odpowiedziami do wyswietlenia na projektorze.
+    subprocess.run(["node", str(ROOT / "tools" / "arkusze-projektor.mjs"), str(OUT)], check=True)
     return OUT / "pdf"
 
 

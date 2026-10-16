@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkusz 7 - Ktoś nowy w domu</title><style>
+:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; color: var(--ink); background: #F8FAFC; font-size: var(--fs); line-height: 1.45; display: flex; flex-direction: column; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 10px 24px; background: #fff; border-bottom: 1px solid var(--line); font-size: 16px; }
+header h1 { font-size: 22px; margin-right: auto; }
+header h1 small { font-weight: 600; color: #6B7280; font-size: 15px; margin-left: 8px; }
+button { font: inherit; cursor: pointer; }
+.przyc { border: 1px solid #CBD5E1; background: #fff; border-radius: 8px; padding: 6px 12px; font-size: 15px; font-weight: 600; color: #374151; }
+.przyc:hover { background: #F1F5F9; }
+.przyc[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+main { flex: 1; min-height: 0; }
+.widok { display: none; height: 100%; }
+.widok.on { display: grid; }
+#czytanie { grid-template-columns: 1.1fr 1fr; }
+.kol { overflow-y: auto; padding: 24px 32px 48px; }
+.kol + .kol { border-left: 1px solid var(--line); background: #fff; }
+#jezyk .kol { max-width: 1100px; width: 100%; margin: 0 auto; background: #fff; }
+h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
+.tekst p { text-indent: 1.4em; margin-bottom: .6em; }
+.tekst p.dialog { text-indent: 0; padding-left: 1.4em; }
+.zd { cursor: pointer; border-radius: 4px; transition: background .15s; }
+.zd:hover { background: #F1F5F9; }
+.zd.zazn { background: var(--mark); }
+.zad { padding: 14px 0 16px; border-bottom: 1px dashed var(--line); }
+.pol { display: flex; gap: 12px; }
+.nr { flex: none; background: var(--blue); color: #fff; border-radius: 99px; min-width: 1.6em; height: 1.6em; display: inline-flex; align-items: center; justify-content: center; font-size: .8em; font-weight: 700; margin-top: .15em; }
+.extra { margin: 6px 0 0 calc(1.6em + 12px); white-space: pre-wrap; }
+.opcje { list-style: none; margin: 6px 0 0 calc(1.6em + 12px); }
+.opcje li { padding: 3px 10px; border-radius: 6px; margin-bottom: 3px; border: 1px solid transparent; }
+.opcje li::before { content: '□  '; white-space: pre; }
+.zad.otw .opcje li.dobra { background: var(--okbg); border-color: var(--ok); color: var(--ok); font-weight: 700; }
+.zad.otw .opcje li.dobra::before { content: '☑  '; }
+.siatka { border-collapse: collapse; margin: 8px 0 0 calc(1.6em + 12px); font-size: .85em; }
+.siatka th, .siatka td { border: 1px solid #CBD5E1; padding: 6px 12px; text-align: left; min-width: 7em; height: 2em; }
+.siatka tr:first-child th { background: var(--pale); }
+.pokaz { display: block; margin: 10px 0 0 calc(1.6em + 12px); border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.zad.otw .pokaz { background: var(--ok); color: #fff; }
+.odp { display: none; margin: 8px 0 0 calc(1.6em + 12px); padding: 10px 14px; background: var(--okbg); border-left: 4px solid var(--ok); border-radius: 0 8px 8px 0; color: #14532D; }
+.zad.otw .odp { display: block; }
+@media (max-width: 900px) { #czytanie { grid-template-columns: 1fr; } .widok.on { height: auto; } .kol { overflow: visible; } }
+</style></head><body>
+<header>
+  <h1>Arkusz 7  Ktoś nowy w domu<small>Poziom wyżej</small></h1>
+  <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
+  <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
+  <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
+  <button type="button" class="przyc" id="wyczysc">Wyczyść</button>
+  <button type="button" class="przyc" id="mniej" aria-label="Mniejsze litery">A−</button>
+  <button type="button" class="przyc" id="wiecej" aria-label="Większe litery">A+</button>
+</header>
+<main>
+  <section class="widok on" id="czytanie">
+    <div class="kol tekst"><h2>Przeczytaj tekst</h2><p><span class="zd">Od trzech miesięcy w naszym mieszkaniu mieszka ktoś nowy.</span> <span class="zd">Jest mały, głośny i pachnie mlekiem.</span> <span class="zd">Kiedy płacze, wszyscy biegną do niego, nawet jeśli właśnie trzymam w zębach piłkę i czekam przy drzwiach.</span> <span class="zd">Wcześniej to ja byłem najważniejszy.</span> <span class="zd">Pani mówiła do mnie cienkim głosem, a pan codziennie rano zabierał mnie do parku, zanim wypił kawę.</span></p><p><span class="zd">Teraz spacery są krótsze.</span> <span class="zd">Pan ziewa, schodzi po schodach w kapciach i wraca, zanim zdążę obwąchać wszystkie krzaki.</span> <span class="zd">Wczoraj zjadłem skarpetkę z małego kosza.</span> <span class="zd">Nikt na mnie nie krzyczał.</span> <span class="zd">Pani tylko westchnęła i powiedziała, że chyba czuję się samotny.</span> <span class="zd">Nie wiem, co znaczy samotny, ale dodatkowy kawałek kiełbasy w misce bardzo mi się spodobał.</span></p><p><span class="zd">Dziś rano stało się coś dziwnego.</span> <span class="zd">Nowy leżał na kocu na podłodze i patrzył prosto na mnie.</span> <span class="zd">Podszedłem ostrożnie, a on wyciągnął rękę i złapał mnie za ucho.</span> <span class="zd">Nie bolało.</span> <span class="zd">Pani zamarła, ale ja się nie ruszyłem.</span> <span class="zd">Wtedy Nowy zaśmiał się pierwszy raz w życiu.</span> <span class="zd">Pan powiedział, że to najlepszy prezent.</span> <span class="zd">Nie rozumiem ludzi - przecież niczego mu nie dałem.</span> <span class="zd">Może jednak zostanę jego starszym bratem.</span></p></div>
+    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Kto opowiada tę historię? Podaj trzy dowody z tekstu.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Pies. Dowody, np.: trzyma piłkę w zębach, chodzi na spacery, obwąchuje krzaki, ma miskę, pan złapał go za ucho, je skarpetkę.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Kim jest Nowy? Po czym to poznajesz?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Niemowlę, nowe dziecko w rodzinie: jest małe, płacze, pachnie mlekiem, leży na kocu, pierwszy raz się śmieje.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Dlaczego narrator zjadł skarpetkę? Czy pani dobrze odgadła, co czuje? Uzasadnij.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Był zły albo zazdrosny, bo wszyscy zajmowali się dzieckiem, a spacery były krótsze. Pani odgadła częściowo - nazwała to samotnością.</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Zaznacz P (prawda), F (fałsz) albo ? (tekst o tym nie mówi).</span></div><p class="extra">Nowy mieszka w domu od trzech dni.  P / F / ?<br>Pani nakrzyczała na narratora za skarpetkę.  P / F / ?<br>Narrator ma na imię Burek.  P / F / ?</p><button type="button" class="pokaz">Odpowiedź</button><div class="odp">F (od trzech miesięcy), F, ?</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Pan powiedział, że to najlepszy prezent. Wyjaśnij, co miał na myśli.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Pierwszy śmiech dziecka sprawił rodzicom ogromną radość - to był dla nich prezent, choć nikt niczego nie dał.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Jak zmienia się stosunek narratora do Nowego? Co znaczy ostatnie zdanie?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Na początku pies jest zazdrosny i czuje się odsunięty, na końcu polubił dziecko i chce się nim opiekować jak starszy brat.</div></div></div>
+  </section>
+  <section class="widok" id="jezyk">
+    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Opowiedz te zdania tak, jakby mówił je ktoś z boku. Zmień formy czasowników: Wcześniej to ja byłem najważniejszy. Wczoraj zjadłem skarpetkę.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Wcześniej to on był najważniejszy. Wczoraj zjadł skarpetkę.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Określ osobę, liczbę i czas.<br>biegną - ...........................................   zjadłem - ...........................................   zostanę - ...........................................</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">biegną - 3. os., lm, czas teraźniejszy; zjadłem - 1. os., lp, czas przeszły; zostanę - 1. os., lp, czas przyszły</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Co znaczy w tekście zdanie Pani zamarła?</span></div><ul class="opcje"><li>Pani bardzo zmarzła.</li><li class="dobra">Pani znieruchomiała z wrażenia.</li><li>Pani nagle zasnęła.</li></ul><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Pani znieruchomiała z wrażenia.</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Wpisz ę albo ą: Pies trzyma w zębach piłk.. .  Pan rzuca piłk.. daleko.  Pies bawi się piłk.. .  Pani przykryła dziecko kołdr.. .<br>Kiedy piszesz ę, a kiedy ą? Pomóż sobie pytaniami kogo? co? oraz kim? czym?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">piłkę, piłkę, piłką, kołdrą. Ę po pytaniu kogo? co? (biernik), Ą po pytaniu kim? czym? (narzędnik).</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Jakie uczucie miał narrator, gdy wszyscy biegli do płaczącego dziecka? Nazwij je i dopisz dwa wyrazy z nim spokrewnione.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Zazdrość; np. zazdrosny, zazdrościć.</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Opisz jeden dzień z życia rodziny oczami zwierzęcia, które mieszka w domu. Nie zdradzaj, kim jest narrator - czytelnik ma to odgadnąć. Napisz 5-6 zdań.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Narrator mówi w 1. osobie, nie zdradza się wprost, ale daje wskazówki, kim jest. 5-6 zdań, jedna sytuacja.</div></div></div>
+  </section>
+</main>
+<script>
+(function () {
+  var root = document.documentElement;
+  function zapisz(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function czytaj(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var fs = parseInt(czytaj('wyr-fs'), 10) || 22;
+  function ustawFs() { root.style.setProperty('--fs', fs + 'px'); zapisz('wyr-fs', fs); }
+  ustawFs();
+  document.getElementById('mniej').onclick = function () { fs = Math.max(14, fs - 2); ustawFs(); };
+  document.getElementById('wiecej').onclick = function () { fs = Math.min(40, fs + 2); ustawFs(); };
+  var zakladki = document.querySelectorAll('[data-widok]');
+  function pokazWidok(id) {
+    zakladki.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.widok === id)); });
+    document.querySelectorAll('.widok').forEach(function (w) { w.classList.toggle('on', w.id === id); });
+  }
+  zakladki.forEach(function (b) { b.onclick = function () { pokazWidok(b.dataset.widok); }; });
+  document.addEventListener('click', function (e) {
+    var p = e.target.closest('.pokaz');
+    if (p) p.parentElement.classList.toggle('otw');
+    var z = e.target.closest('.zd');
+    if (z) z.classList.toggle('zazn');
+  });
+  document.getElementById('wszystkie').onclick = function () {
+    var widok = document.querySelector('.widok.on');
+    var zad = widok.querySelectorAll('.zad');
+    var wszystkieOtw = Array.prototype.every.call(zad, function (z) { return z.classList.contains('otw'); });
+    zad.forEach(function (z) { z.classList.toggle('otw', !wszystkieOtw); });
+  };
+  document.getElementById('wyczysc').onclick = function () {
+    document.querySelectorAll('.zazn').forEach(function (z) { z.classList.remove('zazn'); });
+    document.querySelectorAll('.otw').forEach(function (z) { z.classList.remove('otw'); });
+  };
+})();
+</script>
+</body></html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkusz 4 - Droga do starego dębu</title><style>
+:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; color: var(--ink); background: #F8FAFC; font-size: var(--fs); line-height: 1.45; display: flex; flex-direction: column; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 10px 24px; background: #fff; border-bottom: 1px solid var(--line); font-size: 16px; }
+header h1 { font-size: 22px; margin-right: auto; }
+header h1 small { font-weight: 600; color: #6B7280; font-size: 15px; margin-left: 8px; }
+button { font: inherit; cursor: pointer; }
+.przyc { border: 1px solid #CBD5E1; background: #fff; border-radius: 8px; padding: 6px 12px; font-size: 15px; font-weight: 600; color: #374151; }
+.przyc:hover { background: #F1F5F9; }
+.przyc[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+main { flex: 1; min-height: 0; }
+.widok { display: none; height: 100%; }
+.widok.on { display: grid; }
+#czytanie { grid-template-columns: 1.1fr 1fr; }
+.kol { overflow-y: auto; padding: 24px 32px 48px; }
+.kol + .kol { border-left: 1px solid var(--line); background: #fff; }
+#jezyk .kol { max-width: 1100px; width: 100%; margin: 0 auto; background: #fff; }
+h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
+.tekst p { text-indent: 1.4em; margin-bottom: .6em; }
+.tekst p.dialog { text-indent: 0; padding-left: 1.4em; }
+.zd { cursor: pointer; border-radius: 4px; transition: background .15s; }
+.zd:hover { background: #F1F5F9; }
+.zd.zazn { background: var(--mark); }
+.zad { padding: 14px 0 16px; border-bottom: 1px dashed var(--line); }
+.pol { display: flex; gap: 12px; }
+.nr { flex: none; background: var(--blue); color: #fff; border-radius: 99px; min-width: 1.6em; height: 1.6em; display: inline-flex; align-items: center; justify-content: center; font-size: .8em; font-weight: 700; margin-top: .15em; }
+.extra { margin: 6px 0 0 calc(1.6em + 12px); white-space: pre-wrap; }
+.opcje { list-style: none; margin: 6px 0 0 calc(1.6em + 12px); }
+.opcje li { padding: 3px 10px; border-radius: 6px; margin-bottom: 3px; border: 1px solid transparent; }
+.opcje li::before { content: '□  '; white-space: pre; }
+.zad.otw .opcje li.dobra { background: var(--okbg); border-color: var(--ok); color: var(--ok); font-weight: 700; }
+.zad.otw .opcje li.dobra::before { content: '☑  '; }
+.siatka { border-collapse: collapse; margin: 8px 0 0 calc(1.6em + 12px); font-size: .85em; }
+.siatka th, .siatka td { border: 1px solid #CBD5E1; padding: 6px 12px; text-align: left; min-width: 7em; height: 2em; }
+.siatka tr:first-child th { background: var(--pale); }
+.pokaz { display: block; margin: 10px 0 0 calc(1.6em + 12px); border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.zad.otw .pokaz { background: var(--ok); color: #fff; }
+.odp { display: none; margin: 8px 0 0 calc(1.6em + 12px); padding: 10px 14px; background: var(--okbg); border-left: 4px solid var(--ok); border-radius: 0 8px 8px 0; color: #14532D; }
+.zad.otw .odp { display: block; }
+@media (max-width: 900px) { #czytanie { grid-template-columns: 1fr; } .widok.on { height: auto; } .kol { overflow: visible; } }
+</style></head><body>
+<header>
+  <h1>Arkusz 4  Droga do starego dębu</h1>
+  <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
+  <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
+  <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
+  <button type="button" class="przyc" id="wyczysc">Wyczyść</button>
+  <button type="button" class="przyc" id="mniej" aria-label="Mniejsze litery">A−</button>
+  <button type="button" class="przyc" id="wiecej" aria-label="Większe litery">A+</button>
+</header>
+<main>
+  <section class="widok on" id="czytanie">
+    <div class="kol tekst"><h2>Przeczytaj tekst</h2><p><span class="zd">Klasa IV wybrała się do parku na grę terenową.</span> <span class="zd">Każda drużyna otrzymała mapę i krótką instrukcję.</span> <span class="zd">Celem było odnalezienie starego dębu, a przy nim koperty z ostatnim zadaniem.</span> <span class="zd">Uczniowie mieli poruszać się razem i zaznaczać na mapie wszystkie mijane miejsca.</span></p><p><span class="zd">Instrukcja drużyny Mai brzmiała: Od bramy idź prosto do fontanny.</span> <span class="zd">Skręć w lewo i przejdź obok dwóch ławek.</span> <span class="zd">Za małym mostkiem wybierz ścieżkę po prawej stronie.</span> <span class="zd">Idź nią aż do tablicy z rysunkiem wiewiórki.</span> <span class="zd">Stary dąb rośnie dziesięć kroków za tablicą.</span></p><p><span class="zd">Przy mostku Tomek chciał skręcić w lewo, bo zobaczył szeroką alejkę.</span> <span class="zd">Maja ponownie przeczytała instrukcję i wskazała właściwą drogę.</span> <span class="zd">Drużyna dotarła do dębu bez błądzenia.</span> <span class="zd">W kopercie znalazła pytanie: Co było ważniejsze - szybki marsz czy uważne czytanie?</span> <span class="zd">Wszyscy zgodnie zapisali drugą odpowiedź.</span></p></div>
+    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Jaki był cel gry terenowej?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Odnalezienie starego dębu i koperty z ostatnim zadaniem.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Co uczniowie mieli zaznaczać na mapie?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Wszystkie mijane miejsca.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Wpisz brakujące miejsca w planie drogi.</span></div><p class="extra">brama → ........................ → dwie ławki → ........................ → tablica z wiewiórką → stary dąb</p><button type="button" class="pokaz">Odpowiedź</button><div class="odp">fontanna; mały mostek</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Dlaczego Maja przeczytała instrukcję ponownie?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Tomek chciał wybrać niewłaściwą drogę, więc Maja sprawdziła instrukcję.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Która umiejętność pomogła drużynie dotrzeć do celu? Podaj odpowiedź i dowód z tekstu.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Uważne czytanie - Maja ponownie przeczytała instrukcję i wskazała właściwą drogę.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Wyjaśnij własnymi słowami wyrażenie dotarła bez błądzenia.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Drużyna dotarła do celu, nie gubiąc drogi i nie wybierając złych ścieżek.</div></div></div>
+  </section>
+  <section class="widok" id="jezyk">
+    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Dopisz po jednym przymiotniku do rzeczowników: dąb - .......................   alejka - .......................   instrukcja - .......................</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dowolne poprawne połączenia, na przykład: stary dąb, szeroka alejka, krótka instrukcja.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Ułóż w kolejności alfabetycznej: brama, mostek, dąb, fontanna.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">brama, dąb, fontanna, mostek</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wybierz poprawny zapis: drużyna / drurzyna, ścieżka / ścieszka, wiewiórka / wiewjurka.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">drużyna, ścieżka, wiewiórka</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Zmień zdanie Idź prosto do fontanny na zdanie grzecznej prośby.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Na przykład: Proszę, idź prosto do fontanny.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Rozwiń zdanie Drużyna dotarła, dodając co najmniej cztery wyrazy.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dowolne poprawne rozwinięcie o co najmniej cztery wyrazy, na przykład: Drużyna szybko dotarła do starego dębu w parku.</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz instrukcję dojścia od drzwi sali do wybranego miejsca w szkole. Użyj co najmniej trzech określeń kierunku, na przykład prosto, w lewo, obok.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Instrukcja prowadzi od drzwi sali do wybranego miejsca i zawiera co najmniej trzy określenia kierunku.</div></div></div>
+  </section>
+</main>
+<script>
+(function () {
+  var root = document.documentElement;
+  function zapisz(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function czytaj(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var fs = parseInt(czytaj('wyr-fs'), 10) || 22;
+  function ustawFs() { root.style.setProperty('--fs', fs + 'px'); zapisz('wyr-fs', fs); }
+  ustawFs();
+  document.getElementById('mniej').onclick = function () { fs = Math.max(14, fs - 2); ustawFs(); };
+  document.getElementById('wiecej').onclick = function () { fs = Math.min(40, fs + 2); ustawFs(); };
+  var zakladki = document.querySelectorAll('[data-widok]');
+  function pokazWidok(id) {
+    zakladki.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.widok === id)); });
+    document.querySelectorAll('.widok').forEach(function (w) { w.classList.toggle('on', w.id === id); });
+  }
+  zakladki.forEach(function (b) { b.onclick = function () { pokazWidok(b.dataset.widok); }; });
+  document.addEventListener('click', function (e) {
+    var p = e.target.closest('.pokaz');
+    if (p) p.parentElement.classList.toggle('otw');
+    var z = e.target.closest('.zd');
+    if (z) z.classList.toggle('zazn');
+  });
+  document.getElementById('wszystkie').onclick = function () {
+    var widok = document.querySelector('.widok.on');
+    var zad = widok.querySelectorAll('.zad');
+    var wszystkieOtw = Array.prototype.every.call(zad, function (z) { return z.classList.contains('otw'); });
+    zad.forEach(function (z) { z.classList.toggle('otw', !wszystkieOtw); });
+  };
+  document.getElementById('wyczysc').onclick = function () {
+    document.querySelectorAll('.zazn').forEach(function (z) { z.classList.remove('zazn'); });
+    document.querySelectorAll('.otw').forEach(function (z) { z.classList.remove('otw'); });
+  };
+})();
+</script>
+</body></html>

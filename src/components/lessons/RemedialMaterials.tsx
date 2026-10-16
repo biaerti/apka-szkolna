@@ -105,6 +105,15 @@ function WorksheetList({ items }: { items: ReadonlyArray<{ worksheet: Worksheet;
             </div>
           </div>
           <div className="flex shrink-0 flex-wrap gap-2">
+            <a
+              href={worksheet.projectorHref}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-md border border-accent-500 bg-accent-50 px-3.5 text-sm font-medium text-accent-700 transition-colors hover:bg-accent-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
+              aria-label={`Otwórz arkusz ${number}: ${worksheet.title} na projektorze`}
+            >
+              Projektor
+            </a>
             <DownloadLink href={worksheet.href} label={`Pobierz arkusz ${number}: ${worksheet.title} (DOCX, A4 dwustronnie)`} text="DOCX" />
             <DownloadLink
               href={worksheet.a5Href}

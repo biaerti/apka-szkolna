@@ -5,7 +5,8 @@ export const REMEDIAL_SECTION = 'Wyrównawcze';
 
 /**
  * Arkusze z tools/build_worksheets.py: DOCX (A4, druk dwustronny) i PDF A5 - obie strony
- * arkusza obok siebie na jednej stronie A4 (poziomo), druk jednostronny.
+ * arkusza obok siebie na jednej stronie A4 (poziomo), druk jednostronny. Do tego strona
+ * na projektor (tools/arkusze-projektor.mjs): tekst obok pytan i odpowiedzi do odsloniecia.
  */
 export const REMEDIAL_WORKSHEETS = [
   {
@@ -13,30 +14,35 @@ export const REMEDIAL_WORKSHEETS = [
     description: 'Kolejność wydarzeń, rzeczownik, zdanie i krótka wiadomość.',
     href: '/materialy/wyrownawcze/arkusz-1-kiermasz-dobrych-pomyslow.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-1-kiermasz-dobrych-pomyslow-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-1-kiermasz-dobrych-pomyslow.html',
   },
   {
     title: 'Klucz z numerem siedem',
     description: 'Wnioskowanie, części mowy, ortografia i opis przedmiotu.',
     href: '/materialy/wyrownawcze/arkusz-2-klucz-z-numerem-siedem.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-2-klucz-z-numerem-siedem-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-2-klucz-z-numerem-siedem.html',
   },
   {
     title: 'Sen pomaga się uczyć',
     description: 'Tekst informacyjny, przyczyna i skutek, fakt i opinia oraz notatka.',
     href: '/materialy/wyrownawcze/arkusz-3-sen-pomaga-sie-uczyc.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-3-sen-pomaga-sie-uczyc-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-3-sen-pomaga-sie-uczyc.html',
   },
   {
     title: 'Droga do starego dębu',
     description: 'Instrukcja, plan działania, kierunki, przymiotnik i opis trasy.',
     href: '/materialy/wyrownawcze/arkusz-4-droga-do-starego-debu.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-4-droga-do-starego-debu-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-4-droga-do-starego-debu.html',
   },
   {
     title: 'Drugie miejsce',
     description: 'Uczucia i intencje bohaterów nazwane nie wprost, odmiana rzeczownika, przecinki, dialog.',
     href: '/materialy/wyrownawcze/arkusz-5-drugie-miejsce.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-5-drugie-miejsce-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-5-drugie-miejsce.html',
     levelUp: true,
   },
   {
@@ -44,6 +50,7 @@ export const REMEDIAL_WORKSHEETS = [
     description: 'Tekst popularnonaukowy, porównanie w tabeli, łączenie informacji z akapitów, przymiotniki.',
     href: '/materialy/wyrownawcze/arkusz-6-dwie-drogi-do-afryki.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-6-dwie-drogi-do-afryki-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-6-dwie-drogi-do-afryki.html',
     levelUp: true,
   },
   {
@@ -51,6 +58,7 @@ export const REMEDIAL_WORKSHEETS = [
     description: 'Kto opowiada? Wnioskowanie z narracji, osoba i czas czasownika, ę czy ą.',
     href: '/materialy/wyrownawcze/arkusz-7-ktos-nowy-w-domu.docx',
     a5Href: '/materialy/wyrownawcze/arkusz-7-ktos-nowy-w-domu-A5.pdf',
+    projectorHref: '/materialy/wyrownawcze/projektor/arkusz-7-ktos-nowy-w-domu.html',
     levelUp: true,
   },
 ] as const;
