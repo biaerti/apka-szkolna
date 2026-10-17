@@ -1,0 +1,1 @@
+Zadanie drugie. Na ekranie są cztery zachowania, a pod nimi lista cech. Jaka to cecha? Przy każdym numerze zapisz jedno słowo z listy. Masz minutę. Start!

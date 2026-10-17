@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Stopniowanie przymiotników - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s01 .plecaki { display: flex; gap: 30px; align-items: flex-end; justify-content: center; margin-top: 6px; }
+#s01 .plecaki div { text-align: center; font-family: 'Baloo 2'; font-weight: 800; font-size: 26px; color: var(--szary); }
+#s01 .p1 span { font-size: 56px; } #s01 .p2 span { font-size: 76px; } #s01 .p3 span { font-size: 100px; }
+#s01 .plecaki span { display: block; line-height: 1; }
+.schody { display: flex; gap: 14px; align-items: flex-end; justify-content: center; margin-top: 24px; }
+.schody .karta { flex: 0 0 370px; }
+.schody .st1 { margin-bottom: 0; } .schody .st2 { margin-bottom: 50px; } .schody .st3 { margin-bottom: 100px; }
+.schody .stopien { font-size: 24px; font-weight: 800; color: var(--szary); }
+.schody .nazwa { font-size: 50px; color: var(--pomarancz); }
+.schody .opis { font-size: 26px; }
+#s02 .wsk { margin-top: 0; background: var(--pomarancz); font-size: 28px; }
+#s03 .lista { width: 900px; margin-top: 18px; }
+#s03 .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; }
+#s03 .linia b { color: var(--roz); }
+#s03 .zasada { margin-top: 18px; font-size: 30px; background: var(--pomarancz); }
+.tabela { margin: 14px auto 0; border-collapse: separate; border-spacing: 8px 6px; }
+.tabela th { font-size: 22px; color: var(--szary); font-weight: 800; }
+.tabela td { font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 16px; padding: 2px 30px; min-width: 250px; }
+.tabela td.luka { color: var(--roz); }
+.tabela .odkryj { font-size: 36px; }
+#s06 .lista, #s09 .lista { width: 980px; }
+#s06 .linia { font-family: 'Baloo 2'; font-size: 36px; text-align: center; }
+#s06 .linia s { color: var(--roz); font-size: 26px; }
+#s06 .wsk { background: var(--fiolet); font-size: 28px; }
+#s07 .rzad .karta .nazwa { font-size: 32px; }
+#s07 .rzad .karta .opis { font-size: 26px; color: var(--ciemny); }
+#s07 .op { border-color: var(--niebieski); } #s07 .op .nazwa { color: var(--niebieski); }
+#s07 .bez { border-color: var(--roz); } #s07 .bez .nazwa { color: var(--roz); }
+#s07 s { color: var(--roz); }
+.sposoby { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+.sposoby .chip { font-size: 24px; }
+.sposoby .r { background: var(--pomarancz); } .sposoby .nn { background: var(--fiolet); } .sposoby .o { background: var(--niebieski); }
+#s08 .linia, #s09 .linia { font-size: 25px; padding: 3px 16px; }
+#s08 .lista, #s09 .lista { width: 1160px; gap: 6px; margin-top: 8px; }
+#s10 h2 { margin-top: 12px; }
+#s08 .sposoby { margin-top: 6px; }
+#s10 .rzad .karta .nazwa { font-size: 30px; }
+#s10 .rzad .karta .opis { font-size: 27px; color: var(--ciemny); }
+#s10 .raz { border-color: var(--zielony); } #s10 .raz .nazwa { color: var(--zielony); }
+#s10 .os { border-color: var(--niebieski); } #s10 .os .nazwa { color: var(--niebieski); }
+#s10 .wsk { background: var(--zielony); font-size: 28px; }
+.szesc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px auto 0; width: 1000px; }
+.szesc .karta { padding: 10px; }
+.szesc .karta .nazwa { font-size: 38px; }
+.szesc .nawias { color: var(--roz); }
+.szesc .odkryj { font-size: 30px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="plecaki">
+      <div class="p1 pop" data-slowo="ciężki"><span>🎒</span>ciężki</div>
+      <div class="p2 pop" data-slowo="cięższy"><span>🎒</span>cięższy</div>
+      <div class="p3 pop" data-slowo="najcięższy"><span>🎒</span>najcięższy</div>
+    </div>
+    <div class="tytul pop" data-slowo="stopniowanie">Stopniowanie<br><span>przymiotników</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="stopnie">📶 3 stopnie</span>
+      <span class="chip pop" data-slowo="sposoby">🔧 3 sposoby</span>
+      <span class="chip pop" data-slowo="przymiotnikami">✍️ nie + przymiotnik</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-stopnie" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · STOPNIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Trzy stopnie przymiotnika 📶</h2>
+    <div class="schody">
+      <div class="karta st1 pop" data-slowo="równy"><div class="stopien">stopień równy</div><div class="nazwa">szybki</div><div class="opis">zwykła forma</div></div>
+      <div class="karta st2 pop" data-slowo="wyższy"><div class="stopien">stopień wyższy</div><div class="nazwa">szybszy</div><div class="opis pop" data-slowo="kot">🐈 kot szybszy od 🐢 żółwia</div></div>
+      <div class="karta st3 pop" data-slowo="najwyższy"><div class="stopien">stopień najwyższy</div><div class="nazwa">najszybszy</div><div class="opis pop" data-slowo="gepard">🐆 gepard najszybszy ze wszystkich</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="schody">🪜 jak schody coraz wyżej</span></div>
+  </section>
+
+  <section class="scena" data-id="03-regularne" id="s03">
+    <span class="czesc c2 zjaw" data-t="0">2 · SPOSOBY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Sposób regularny 📏</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="miły">miły ➜ mil<b>szy</b> ➜ <b>naj</b>milszy</div>
+      <div class="linia pop" data-slowo="ładny">ładny ➜ ładni<b>ejszy</b> ➜ <b>naj</b>ładniejszy</div>
+      <div class="linia pop" data-slowo="cichy">cichy ➜ cich<b>szy</b> ➜ <b>naj</b>cichszy</div>
+    </div>
+    <div><span class="chip zasada pop" data-slowo="naj">na końcu <b>-szy / -ejszy</b> · na początku <b>naj-</b></span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc c2">2 · SPOSOBY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="brakuje">Uzupełnij brakujący stopień. Zapisz tylko brakujące słowa.</div>
+    <table class="tabela pop" data-slowo="tabela">
+      <tr><th>równy</th><th>wyższy</th><th>najwyższy</th></tr>
+      <tr><td>młody</td><td class="luka">. . . . . .</td><td>najmłodszy</td></tr>
+      <tr><td>długi</td><td>dłuższy</td><td class="luka">. . . . . .</td></tr>
+      <tr><td class="luka">. . . . . .</td><td>grubszy</td><td>najgrubszy</td></tr>
+      <tr><td>ciepły</td><td class="luka">. . . . . .</td><td>najcieplejszy</td></tr>
+    </table>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c2">2 · SPOSOBY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Uzupełnij brakujący stopień. Zapisz tylko brakujące słowa.</div>
+    <table class="tabela">
+      <tr><th>równy</th><th>wyższy</th><th>najwyższy</th></tr>
+      <tr><td>młody</td><td><span class="odkryj" data-slowo="młodszy">młodszy</span></td><td>najmłodszy</td></tr>
+      <tr><td>długi</td><td>dłuższy</td><td><span class="odkryj" data-slowo="najdłuższy">najdłuższy</span></td></tr>
+      <tr><td><span class="odkryj" data-slowo="gruby">gruby</span></td><td>grubszy</td><td>najgrubszy</td></tr>
+      <tr><td>ciepły</td><td><span class="odkryj" data-slowo="cieplejszy">cieplejszy</span></td><td>najcieplejszy</td></tr>
+    </table>
+    <div><span class="chip wsk pop" data-slowo="dokładamy" style="background:var(--fiolet)">💡 naj- + stopień wyższy = stopień najwyższy</span></div>
+  </section>
+
+  <section class="scena" data-id="06-nieregularne" id="s06">
+    <span class="czesc c2">2 · SPOSOBY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Sposób nieregularny 🤪</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="dobry">👍 dobry ➜ lepszy ➜ najlepszy <s class="pop" data-slowo="dobrszy">dobrszy</s></div>
+      <div class="linia pop" data-slowo="zły">👎 zły ➜ gorszy ➜ najgorszy</div>
+      <div class="linia pop" data-slowo="duży">🐘 duży ➜ większy ➜ największy</div>
+      <div class="linia pop" data-slowo="mały">🐭 mały ➜ mniejszy ➜ najmniejszy</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="uparciuchy">🧠 4 uparciuchy - trzeba się ich nauczyć</span></div>
+  </section>
+
+  <section class="scena" data-id="07-opisowe" id="s07">
+    <span class="czesc c2">2 · SPOSOBY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Sposób opisowy 🌈</h2>
+    <div class="rzad">
+      <div class="karta op pop" data-slowo="bardziej"><div class="emo">🌈</div><div class="nazwa">kolorowy ➜ bardziej kolorowy ➜ najbardziej kolorowy</div><div class="opis"><s>kolorowszy</s> brzmi dziwnie</div></div>
+      <div class="karta bez pop" data-slowo="stopniujemy"><div class="emo">🪵📰</div><div class="nazwa">nie stopniujemy</div><div class="opis pop" data-slowo="drewniany">drewniany · papierowy · wczorajszy · krakowski</div></div>
+    </div>
+    <div class="sposoby">
+      <span class="chip r pop" data-slowo="opisowy">R · regularny</span><span class="chip nn pop" data-slowo="opisowy">N · nieregularny</span><span class="chip o pop" data-slowo="opisowy">O · opisowy</span>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc c2">2 · SPOSOBY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="sposób">Który to sposób? Zapisz literę: R, N albo O.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sześć"><span class="nr">1</span>stary ➜ starszy ➜ najstarszy</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.15"><span class="nr">2</span>dobry ➜ lepszy ➜ najlepszy</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.3"><span class="nr">3</span>zadowolony ➜ bardziej zadowolony ➜ najbardziej zadowolony</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.45"><span class="nr">4</span>mały ➜ mniejszy ➜ najmniejszy</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.6"><span class="nr">5</span>słodki ➜ słodszy ➜ najsłodszy</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.75"><span class="nr">6</span>pomarańczowy ➜ bardziej pomarańczowy ➜ najbardziej pomarańczowy</div>
+    </div>
+    <div class="sposoby"><span class="chip r">R · regularny</span><span class="chip nn">N · nieregularny</span><span class="chip o">O · opisowy</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · SPOSOBY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Który to sposób? Zapisz literę: R, N albo O.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>stary ➜ starszy ➜ najstarszy <span class="odkryj" data-slowo="regularny">R</span> <span class="odkryj dlaczego" data-slowo="końcówka">-szy, naj-</span></div>
+      <div class="linia"><span class="nr">2</span>dobry ➜ lepszy ➜ najlepszy <span class="odkryj" data-slowo="nieregularny">N</span> <span class="odkryj dlaczego" data-slowo="uparciuch">uparciuch</span></div>
+      <div class="linia"><span class="nr">3</span>zadowolony ➜ bardziej zadowolony ➜ najbardziej zadowolony <span class="odkryj" data-slowo="opisowy">O</span></div>
+      <div class="linia"><span class="nr">4</span>mały ➜ mniejszy ➜ najmniejszy <span class="odkryj" data-slowo="nieregularny">N</span></div>
+      <div class="linia"><span class="nr">5</span>słodki ➜ słodszy ➜ najsłodszy <span class="odkryj" data-slowo="regularny">R</span></div>
+      <div class="linia"><span class="nr">6</span>pomarańczowy ➜ bardziej pomarańczowy ➜ najbardziej pomarańczowy <span class="odkryj" data-slowo="opisowy">O</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="10-nie" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · NIE Z PRZYMIOTNIKAMI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)"><span class="n">nie</span> + przymiotnik = razem ✍️</h2>
+    <div class="rzad">
+      <div class="karta raz pop" data-slowo="razem"><div class="nazwa">jaki? ➜ RAZEM</div><div class="opis"><span class="pop" data-slowo="niemiły">niemiły</span> · <span class="pop" data-slowo="niewysoki">niewysoki</span> · <span class="pop" data-slowo="nieciekawy">nieciekawy</span> · <span class="pop" data-slowo="niegrzeczny">niegrzeczny</span></div><div class="opis pop" data-slowo="niemniejszy">też: niemniejszy · nielepszy</div></div>
+      <div class="karta os pop" data-slowo="czasownikami"><div class="nazwa">co robi? ➜ OSOBNO</div><div class="opis">nie wiem · nie śpię</div><div class="opis pop" data-slowo="rzeczownikami">(z rzeczownikami razem: nieprawda)</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="sprawdzić">❓ zadaj pytanie: jaki? czy co robi?</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="11-zadanie3+60" id="s11">
+    <span class="czesc c3">3 · NIE Z PRZYMIOTNIKAMI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="razem">Razem czy osobno? Zapisz każdy wyraz poprawnie.</div>
+    <div class="szesc">
+      <div class="karta pop" data-slowo="sześć"><div class="nazwa"><span class="nawias">(nie)</span>grzeczny</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.15"><div class="nazwa"><span class="nawias">(nie)</span>wiem</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.3"><div class="nazwa"><span class="nawias">(nie)</span>bezpieczny</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.45"><div class="nazwa"><span class="nawias">(nie)</span>śpię</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.6"><div class="nazwa"><span class="nawias">(nie)</span>duży</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.75"><div class="nazwa"><span class="nawias">(nie)</span>lubię</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · NIE Z PRZYMIOTNIKAMI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Razem czy osobno? Zapisz każdy wyraz poprawnie.</div>
+    <div class="szesc">
+      <div class="karta"><div class="nazwa"><span class="nawias">(nie)</span>grzeczny</div><span class="odkryj" data-slowo="niegrzeczny">niegrzeczny · jaki?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nawias">(nie)</span>wiem</div><span class="odkryj" data-slowo="wiem">nie wiem · co robię?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nawias">(nie)</span>bezpieczny</div><span class="odkryj" data-slowo="niebezpieczny">niebezpieczny · jaki?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nawias">(nie)</span>śpię</div><span class="odkryj" data-slowo="śpię">nie śpię · co robię?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nawias">(nie)</span>duży</div><span class="odkryj" data-slowo="nieduży">nieduży · jaki?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nawias">(nie)</span>lubię</div><span class="odkryj" data-slowo="lubię">nie lubię · co robię?</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="przymiotniki" style="background:var(--niebieski)">przymiotniki razem · czasowniki osobno</span></div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="13-podsumowanie" id="s13">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="stopnie">📶 3 stopnie: równy · wyższy · najwyższy (szybki · szybszy · najszybszy)</div>
+      <div class="linia pop" data-slowo="regularnie">📏 regularnie: miły · milszy · najmilszy</div>
+      <div class="linia pop" data-slowo="nieregularnie">🤪 nieregularnie: dobry · lepszy · najlepszy</div>
+      <div class="linia pop" data-slowo="opisowo">🌈 opisowo: kolorowy · bardziej kolorowy · najbardziej kolorowy</div>
+      <div class="linia pop" data-slowo="drewniany">🪵 nie stopniujemy: drewniany · ✍️ <span class="n">nie</span> + przymiotnik razem: niemiły</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

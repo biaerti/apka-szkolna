@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Ogłoszenie - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+.kartka { background: #fffbe0; border: 3px solid #e6d58a; border-radius: 6px; box-shadow: 4px 6px 0 rgba(74,59,50,.12); padding: 10px 22px; text-align: left; }
+.kartka .tyt { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; color: var(--roz); text-align: center; }
+.kartka .l { font-size: 25px; font-weight: 800; line-height: 1.4; }
+.kartka .podp { font-size: 22px; font-weight: 800; color: var(--szary); text-align: right; }
+#s01 .kartka { transform: rotate(-3deg); margin-top: 10px; padding: 16px 40px; }
+#s01 .kartka .l { font-family: 'Baloo 2'; font-size: 40px; }
+#s01 .pytania { display: flex; gap: 10px; margin-top: 18px; }
+#s01 .pytania .chip { font-size: 26px; background: var(--roz); }
+#s01 .tytul { font-size: 84px; margin-top: 6px; }
+#s02 .rodzaje { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 26px auto 0; width: 1100px; }
+#s02 .rodzaje .chip { font-size: 30px; background: var(--pomarancz); }
+#s02 .gdzie { margin-top: 20px; font-size: 26px; color: var(--szary); font-weight: 800; }
+#s02 .cel { margin-top: 22px; font-size: 28px; background: var(--ciemny); }
+.nagl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px auto 0; width: 1120px; }
+.nagl .linia { font-size: 26px; padding: 4px 16px; }
+.rodz { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+.rodz .chip { font-size: 24px; background: var(--fiolet); }
+#s05 .uklad { display: flex; gap: 22px; margin-top: 16px; align-items: flex-start; }
+#s05 .czesci { flex: 0 0 360px; display: flex; flex-direction: column; gap: 8px; }
+#s05 .czesci .chip { font-size: 25px; text-align: left; }
+#s05 .czesci .c-n { background: var(--roz); } #s05 .czesci .c-i { background: var(--pomarancz); }
+#s05 .czesci .c-k { background: var(--niebieski); } #s05 .czesci .c-p { background: var(--zielony); }
+#s05 .kartka { flex: 1; }
+#s05 .kartka .l { font-size: 25px; }
+#s06 .kartka, #s07 .kartka { margin: 12px auto 0; width: 900px; }
+.wybor { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+.wybor .chip { font-size: 26px; background: var(--niebieski); }
+.wybor .chip.zaz { background: var(--roz); color: #fff; font-family: "Baloo 2"; }
+#s08 .rzad .kartka .l { font-size: 23px; }
+#s08 .rzad .kartka.dl { border-color: var(--roz); }
+#s08 .stare-t { color: var(--szary); }
+#s08 .krotko { margin-top: 14px; font-size: 28px; background: var(--zielony); }
+#s09 .uklad { display: flex; gap: 22px; margin-top: 16px; align-items: center; }
+#s09 .kartka { flex: 1; }
+#s09 .pyt { flex: 0 0 360px; display: flex; flex-direction: column; gap: 8px; }
+#s09 .pyt .chip { font-size: 25px; background: var(--niebieski); text-align: left; }
+#s10 .kartka, #s11 .kartka { margin: 10px auto 0; width: 1080px; }
+#s10 .kartka .l, #s11 .kartka .l { font-size: 25px; }
+#s11 .wyrzuc { text-decoration: line-through 3px; color: var(--roz); animation: skresl .4s both; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="kartka pop" data-slowo="kartka"><div class="l">Zgubiłem psa. Kuba</div></div>
+    <div class="pytania">
+      <span class="chip pop" data-slowo="jakiego">🐕 jakiego?</span>
+      <span class="chip pop" data-slowo="gdzie">📍 gdzie?</span>
+      <span class="chip pop" data-slowo="oddać">📞 jak oddać?</span>
+    </div>
+    <div class="tytul pop" data-slowo="ogłoszenia">Ogłoszenie 📢</div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-co-to" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Krótka informacja dla wielu osób 📢</h2>
+    <div class="gdzie pop" data-slowo="tablicy">📌 tablica w szkole · 🏢 klatka schodowa · 🏪 sklep · 💻 internet</div>
+    <div class="rodzaje">
+      <span class="chip pop" data-slowo="sprzedać">💰 sprzedam</span>
+      <span class="chip pop" data-slowo="kupić">🛒 kupię</span>
+      <span class="chip pop" data-slowo="zgubił">😢 zgubiono</span>
+      <span class="chip pop" data-slowo="znalazł">🔎 znaleziono</span>
+      <span class="chip pop" data-slowo="zaprasza">🎉 zapraszamy</span>
+      <span class="chip pop" data-slowo="kocięta">🐱 oddam</span>
+    </div>
+    <div><span class="chip cel pop" data-slowo="zrozumieć">🎯 szybko zrozumieć, o co chodzi, i wiedzieć, co zrobić</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="03-zadanie1+60" id="s03">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dopasuj">Co to za ogłoszenie? Zapisz numer i literę.</div>
+    <div class="nagl">
+      <div class="linia pop" data-slowo="nagłówków"><span class="nr">1</span>Oddam kotki w dobre ręce</div>
+      <div class="linia pop" data-slowo="nagłówków" data-po="0.15"><span class="nr">2</span>Kupię używany rower dla 10-latka</div>
+      <div class="linia pop" data-slowo="nagłówków" data-po="0.3"><span class="nr">3</span>Znaleziono klucze na boisku</div>
+      <div class="linia pop" data-slowo="nagłówków" data-po="0.45"><span class="nr">4</span>Zapraszamy na szkolny festyn!</div>
+      <div class="linia pop" data-slowo="nagłówków" data-po="0.6"><span class="nr">5</span>Zaginęła papuga Kiki</div>
+    </div>
+    <div class="rodz pop" data-slowo="rodzajów"><span class="chip">A · kupię</span><span class="chip">B · znaleziono</span><span class="chip">C · oddam</span><span class="chip">D · zgubiono</span><span class="chip">E · zaproszenie</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Co to za ogłoszenie? Zapisz numer i literę.</div>
+    <div class="nagl">
+      <div class="linia"><span class="nr">1</span>Oddam kotki w dobre ręce <span class="odkryj" data-slowo="oddaje">➜ C</span></div>
+      <div class="linia"><span class="nr">2</span>Kupię używany rower dla 10-latka <span class="odkryj" data-slowo="rower">➜ A</span></div>
+      <div class="linia"><span class="nr">3</span>Znaleziono klucze na boisku <span class="odkryj" data-slowo="boisku">➜ B</span></div>
+      <div class="linia"><span class="nr">4</span>Zapraszamy na szkolny festyn! <span class="odkryj" data-slowo="zaproszenie">➜ E</span></div>
+      <div class="linia"><span class="nr">5</span>Zaginęła papuga Kiki <span class="odkryj" data-slowo="zgubiono">➜ D</span></div>
+    </div>
+    <div class="rodz"><span class="chip">A · kupię</span><span class="chip">B · znaleziono</span><span class="chip">C · oddam</span><span class="chip">D · zgubiono</span><span class="chip">E · zaproszenie</span></div>
+    <div><span class="chip wsk pop" data-slowo="mówi" style="background:var(--pomarancz)">💡 nagłówek od razu mówi, o co chodzi</span></div>
+  </section>
+
+  <section class="scena" data-id="05-czesci" id="s05">
+    <span class="czesc c2 zjaw" data-t="0">2 · CZĘŚCI OGŁOSZENIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Co musi mieć ogłoszenie? 🧩</h2>
+    <div class="uklad">
+      <div class="czesci">
+        <span class="chip c-n pop" data-slowo="nagłówek">1 · nagłówek</span>
+        <span class="chip c-i pop" data-slowo="gdzie">2 · co? gdzie? kiedy?</span>
+        <span class="chip c-k pop" data-slowo="kontakt">3 · kontakt</span>
+        <span class="chip c-p pop" data-slowo="podpis">4 · podpis</span>
+      </div>
+      <div class="kartka pop" data-slowo="przykładu">
+        <div class="tyt">Zgubiłam czapkę! 🧢</div>
+        <div class="l">We wtorek po lekcji wychowania fizycznego zostawiłam na boisku szkolnym czerwoną czapkę z pomponem.</div>
+        <div class="l">Proszę o oddanie jej do sekretariatu.</div>
+        <div class="podp">Ola z klasy czwartej</div>
+      </div>
+    </div>
+    <div class="lista-slow">
+      <span class="chip pop" data-slowo="czapka">co? czapka</span><span class="chip pop" data-slowo="boisku">gdzie? na boisku</span><span class="chip pop" data-slowo="wtorek">kiedy? we wtorek</span><span class="chip pop" data-slowo="sekretariat">kontakt? sekretariat</span><span class="chip pop" data-slowo="ola">podpis? Ola</span>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="06-zadanie2+60" id="s06">
+    <span class="czesc c2">2 · CZĘŚCI OGŁOSZENIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="brakuje">Czego brakuje w ogłoszeniu? Wybierz dwie rzeczy z listy.</div>
+    <div class="kartka pop" data-slowo="kiermaszu">
+      <div class="tyt">KIERMASZ CIAST! 🍰</div>
+      <div class="l">Samorząd Uczniowski zaprasza na kiermasz domowych ciast. Pieniądze przeznaczymy na wycieczkę do zoo. Przynieście drobne!</div>
+      <div class="podp">Samorząd Uczniowski</div>
+    </div>
+    <div class="wybor pop" data-slowo="wybierz"><span class="chip">nagłówek</span><span class="chip">co?</span><span class="chip">kiedy?</span><span class="chip">gdzie?</span><span class="chip">podpis</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="07-odpowiedz2" id="s07">
+    <span class="czesc c2">2 · CZĘŚCI OGŁOSZENIA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Czego brakuje w ogłoszeniu? Wybierz dwie rzeczy z listy.</div>
+    <div class="kartka">
+      <div class="tyt">KIERMASZ CIAST! 🍰</div>
+      <div class="l">Samorząd Uczniowski zaprasza na kiermasz domowych ciast. Pieniądze przeznaczymy na wycieczkę do zoo. Przynieście drobne!</div>
+      <div class="podp">Samorząd Uczniowski</div>
+    </div>
+    <div class="wybor"><span class="chip">nagłówek ✓</span><span class="chip">co? ✓</span><span class="chip zaz odkryj" data-slowo="kiedy">kiedy? ✗ brak</span><span class="chip zaz odkryj" data-slowo="gdzie">gdzie? ✗ brak</span><span class="chip">podpis ✓</span></div>
+    <div><span class="chip wsk pop" data-slowo="przyjdzie" style="background:var(--fiolet)">bez daty i miejsca nikt nie przyjdzie 🤷</span></div>
+  </section>
+
+  <section class="scena" data-id="08-krotko" id="s08">
+    <span class="czesc c3 zjaw" data-t="0">3 · KRÓTKO I KONKRETNIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Krótko i konkretnie ✂️</h2>
+    <div class="rzad">
+      <div class="kartka dl pop" data-slowo="hulajnogę"><div class="tyt">Sprzedam hulajnogę 🛴</div><div class="l stare-t">Dostałem ją od dziadka trzy lata temu. Jeździłem na niej do szkoły i raz się przewróciłem, ale nic mi się nie stało. Teraz urosłem i chcę rower.</div><div class="podp pop" data-slowo="długie">❌ za długie!</div></div>
+      <div class="kartka pop" data-slowo="krótsza"><div class="tyt">Sprzedam hulajnogę 🛴</div><div class="l">Niebieska, sprawna. Cena: 50 zł.<br>Tel. 600 100 200</div><div class="podp">Kuba</div></div>
+    </div>
+    <div><span class="chip krotko pop" data-slowo="zbędne">✅ wszystko, co ważne · ❌ nic, co zbędne</span></div>
+  </section>
+
+  <section class="scena" data-id="09-wydarzenie" id="s09">
+    <span class="czesc c3">3 · KRÓTKO I KONKRETNIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Ogłoszenie, które zaprasza 🎲</h2>
+    <div class="uklad">
+      <div class="pyt">
+        <span class="chip pop" data-slowo="kto">🙋 kto zaprasza?</span>
+        <span class="chip pop" data-slowo="na">🎯 na co?</span>
+        <span class="chip pop" data-slowo="kiedy">📅 kiedy?</span>
+        <span class="chip pop" data-slowo="gdzie">📍 gdzie?</span>
+        <span class="chip pop" data-slowo="zabrać">🎒 co zabrać?</span>
+      </div>
+      <div class="kartka pop" data-slowo="turniej">
+        <div class="tyt">Turniej planszówek! 🎲</div>
+        <div class="l">Klasa czwarta zaprasza na turniej gier planszowych.</div>
+        <div class="l pop" data-slowo="piątek">W piątek o 14.00, w świetlicy.</div>
+        <div class="l pop" data-slowo="przynieście">Przynieście swoją ulubioną grę!</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="10-zadanie3+60" id="s10">
+    <span class="czesc c3">3 · KRÓTKO I KONKRETNIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wyrzucić">Które zdania trzeba wyrzucić? Zapisz ich numery.</div>
+    <div class="kartka pop" data-slowo="kluczach">
+      <div class="l"><span class="nr">1</span>Znalazłem klucze!</div>
+      <div class="l"><span class="nr">2</span>W poniedziałek rano na przystanku przy szkole leżał pęk kluczy z żółtym breloczkiem.</div>
+      <div class="l"><span class="nr">3</span>Szedłem wtedy do szkoły i bardzo się spieszyłem.</div>
+      <div class="l"><span class="nr">4</span>Miałem klasówkę z matematyki i chyba dostałem czwórkę.</div>
+      <div class="l"><span class="nr">5</span>Klucze można odebrać w sekretariacie szkoły.</div>
+      <div class="l"><span class="nr">6</span>Michał</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · KRÓTKO I KONKRETNIE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Które zdania trzeba wyrzucić? Zapisz ich numery.</div>
+    <div class="kartka">
+      <div class="l"><span class="nr">1</span>Znalazłem klucze!</div>
+      <div class="l"><span class="nr">2</span>W poniedziałek rano na przystanku przy szkole leżał pęk kluczy z żółtym breloczkiem.</div>
+      <div class="l"><span class="nr">3</span><span class="wyrzuc" data-slowo="trzecie">Szedłem wtedy do szkoły i bardzo się spieszyłem.</span></div>
+      <div class="l"><span class="nr">4</span><span class="wyrzuc" data-slowo="czwarte">Miałem klasówkę z matematyki i chyba dostałem czwórkę.</span></div>
+      <div class="l"><span class="nr">5</span>Klucze można odebrać w sekretariacie szkoły.</div>
+      <div class="l"><span class="nr">6</span>Michał</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="zostaje" style="background:var(--niebieski)">✂️ 3 i 4 · zostaje: co, gdzie, kiedy, kontakt, podpis</span></div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="12-podsumowanie" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="informacja">📢 <b>Ogłoszenie</b> - krótka informacja dla wielu osób</div>
+      <div class="linia pop" data-slowo="nagłówek">🧩 nagłówek · co? gdzie? kiedy? · kontakt · podpis</div>
+      <div class="linia pop" data-slowo="krótko">✂️ krótko i konkretnie, bez zbędnych historii</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

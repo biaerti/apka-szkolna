@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildTextbook4, TEXTBOOK4_TOPIC_COUNT } from './textbook4';
 import { ROZDZIAL_2 } from './textbook4rozdzial2';
+import { ROZDZIAL_3 } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY } from './lekturaChlopcy';
 import { filmikById } from './filmiki';
 import { cwiczenieById } from './cwiczenia';
@@ -19,7 +20,7 @@ describe('buildTextbook4', () => {
   it('kazda lekcja zaczyna sie zapisaniem tematu i konczy notatka do zeszytu', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     // Rozdzial II ma wlasny format (klasa 5) - osobny test nizej.
-    const rozdzial1 = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY);
+    const rozdzial1 = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== ROZDZIAL_3);
     expect(rozdzial1.slice(5).map((lesson) => lesson.title)).toEqual([
       '8. Dlaczego warto być sobą?',
       '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
@@ -75,7 +76,7 @@ describe('buildTextbook4', () => {
   it('kazdy temat ma notatke A5 i pytania do kola z odpowiedziami', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     expect(bundle.questionSets).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
-    for (const lesson of bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY)) {
+    for (const lesson of bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== ROZDZIAL_3)) {
       expect(lesson.notebookNote).toBeTruthy();
     }
     for (const lesson of bundle.lessons) {
@@ -221,6 +222,33 @@ describe('buildTextbook4', () => {
       expect(note.kind === 'note' ? note.body.split('\n').length : 0).toBe(3);
       expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(5);
     }
+  });
+
+  it('rozdzial III: kolo 3 pytan, film, 2-3 karty Ćwiczymy razem i notatka na koniec', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const r3 = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_3);
+    expect(r3).toHaveLength(10);
+    expect(r3.map((l) => l.title.slice(0, 3))).toEqual(['30.', '31.', '32.', '33.', '34.', '35.', '36.', '37.', '38.', '39.']);
+    for (const lesson of r3) {
+      const kinds = lesson.slides.map((s) => s.kind);
+      expect(kinds[0]).toBe('topic');
+      // Kolo na start: 3 pytania z poprzedniej lekcji, nie z tej.
+      expect(lesson.slides[1]).toMatchObject({ kind: 'recap', questionCount: 3 });
+      expect(lesson.slides[1]).not.toMatchObject({ questionSetId: lesson.questionSetId });
+      const video = lesson.slides.find((s) => s.kind === 'video');
+      expect(video?.kind === 'video' && Boolean(filmikById(video.videoId))).toBe(true);
+      // Po filmie 2-3 karty, a notatka zamyka lekcje.
+      const poFilmie = lesson.slides.slice(kinds.indexOf('video') + 1);
+      expect(poFilmie[poFilmie.length - 1].kind).toBe('note');
+      const karty = poFilmie.slice(0, -1);
+      expect(karty.length).toBeGreaterThanOrEqual(2);
+      expect(karty.length).toBeLessThanOrEqual(3);
+      expect(karty.every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
+      expect(lesson.teacherPlan).toBeTruthy();
+      expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(6);
+    }
+    // Dwa teksty na rozdzial: Grabarczyk i Vestly.
+    expect(r3.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(2);
   });
 
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {

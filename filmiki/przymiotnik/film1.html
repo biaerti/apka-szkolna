@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Przymiotnik - król opisu - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s01 .zd { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; margin-top: 8px; }
+#s01 .zd .p { color: var(--roz); }
+#s02 .karta .nazwa { font-size: 34px; }
+#s02 .chipy { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
+#s02 .chipy .chip { font-size: 24px; background: var(--pomarancz); }
+#s02 .wsk { margin-top: 26px; background: var(--roz); font-size: 28px; }
+#s03 .pyt { font-family: 'Baloo 2'; font-size: 72px; font-weight: 800; color: var(--roz); margin-top: 6px; }
+#s03 .pary { display: flex; gap: 18px; justify-content: center; margin-top: 18px; }
+#s03 .pary .karta { flex: 0 0 330px; }
+#s03 .pary .nazwa { font-size: 34px; }
+#s03 .pary .opis { font-size: 30px; color: var(--roz); }
+#s03 .wsk { margin-top: 24px; background: var(--fiolet); font-size: 28px; }
+#s04 .tekst, #s05 .tekst { margin: 14px auto 0; width: 1060px; text-align: left; border-color: var(--pomarancz); }
+#s04 .tekst .nazwa, #s05 .tekst .nazwa { font-family: 'Nunito'; font-size: 31px; line-height: 1.55; }
+#s05 .p { background: #c9f0d6; border-radius: 8px; padding: 0 4px; animation: zjaw .4s ease-out both; }
+#s05 .lista-slow .chip { background: var(--zielony); }
+#s05 .pulapka { margin-top: 10px; font-size: 24px; background: var(--roz); }
+#s06 h2 { margin-top: 10px; }
+#s06 .trzy { display: flex; gap: 18px; justify-content: center; margin-top: 28px; }
+#s06 .trzy .karta { flex: 0 0 340px; padding: 18px; }
+#s06 .trzy .ten { font-size: 26px; color: var(--szary); font-weight: 800; }
+#s06 .trzy .nazwa { font-size: 40px; }
+#s06 .trzy .nazwa span { color: var(--zielony); }
+#s06 .wsk { margin-top: 28px; background: var(--zielony); font-size: 30px; }
+#s07 .plecak { font-size: 110px; margin-top: 6px; }
+#s07 .lista-slow .chip { font-size: 28px; }
+#s07 .lista-slow .k1 { background: var(--niebieski); } #s07 .lista-slow .k2 { background: var(--pomarancz); }
+#s07 .lista-slow .k3 { background: var(--zielony); } #s07 .lista-slow .k4 { background: var(--fiolet); } #s07 .lista-slow .k5 { background: var(--roz); }
+#s07 .lista-slow .chip small { font-size: 18px; opacity: .85; margin-right: 6px; }
+#s07 .ludzie { margin-top: 22px; font-size: 28px; background: var(--ciemny); }
+.paruj { display: flex; gap: 16px; justify-content: center; margin-top: 18px; }
+.paruj .karta { flex: 0 0 262px; }
+.paruj .karta .nazwa { font-size: 33px; white-space: nowrap; }
+.paruj.rz .karta { border-color: var(--niebieski); }
+.paruj .odkryj { font-size: 26px; display: block; }
+#s10 .rodzina { display: flex; gap: 16px; justify-content: center; margin-top: 22px; }
+#s10 .rodzina .karta { flex: 0 0 330px; }
+#s10 .rodzina .nazwa { font-size: 42px; }
+#s10 .rodzina .opis { font-size: 28px; }
+#s10 .tak { border-color: var(--zielony); } #s10 .tak .nazwa { color: var(--zielony); }
+#s10 .wsk { margin-top: 26px; background: var(--roz); font-size: 28px; }
+.szesc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px auto 0; width: 1000px; }
+.szesc .karta { padding: 12px; }
+.szesc .karta .nazwa { font-size: 40px; }
+.szesc .odkryj { font-size: 26px; display: block; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="zd pop" data-slowo="psa">🐕 Mam psa.</div>
+    <div class="zd pop" data-slowo="drugie">🐕 Mam <span class="p">małego, rudego, wesołego</span> psa.</div>
+    <div class="tytul pop" data-slowo="przymiotniki">Przymiotnik<br><span>👑 król opisu</span></div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-co-to" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Przymiotnik nazywa cechy 👑</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="ludzi"><div class="emo">🧒🐈</div><div class="nazwa">ludzi i zwierząt</div>
+        <div class="chipy"><span class="chip">wesoły</span><span class="chip">mądry</span><span class="chip">leniwy</span><span class="chip">szybki</span></div></div>
+      <div class="karta pop" data-slowo="przedmiotów"><div class="emo">⚽📦</div><div class="nazwa">przedmiotów</div>
+        <div class="chipy"><span class="chip">duży</span><span class="chip">okrągły</span><span class="chip">zielony</span><span class="chip">ciężki</span></div></div>
+      <div class="karta pop" data-slowo="właściwości"><div class="emo">🪵🎂</div><div class="nazwa">z czego? do czego?</div>
+        <div class="chipy"><span class="chip pop" data-slowo="drewniany">drewniany stół</span><span class="chip pop" data-slowo="czekoladowy">czekoladowy tort</span><span class="chip pop" data-slowo="szkolny">szkolny plecak</span></div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="szary">bez przymiotników świat byłby szary 🩶</span></div>
+  </section>
+
+  <section class="scena" data-id="03-pytania" id="s03">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Zadaj pytanie!</h2>
+    <div class="pyt pop" data-slowo="odpowiada">jaki? jaka? jakie?</div>
+    <div class="pary">
+      <div class="karta pop" data-slowo="pies"><div class="nazwa">🐕 pies - jaki?</div><div class="opis pop" data-slowo="rudy">rudy</div></div>
+      <div class="karta pop" data-slowo="zupa"><div class="nazwa">🍅 zupa - jaka?</div><div class="opis pop" data-slowo="pomidorowa">pomidorowa</div></div>
+      <div class="karta pop" data-slowo="jabłko"><div class="nazwa">🍏 jabłko - jakie?</div><div class="opis pop" data-slowo="soczyste">soczyste</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="sposób">1 · rzeczownik ➜ 2 · pytanie „jaki?”</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ukryło">Znajdź w tekście 5 przymiotników i wypisz je 🔍</div>
+    <div class="karta tekst pop" data-slowo="tekst">
+      <div class="nazwa">🍦 Na rogu ulicy stoi mała lodziarnia. Pani Ela sprzedaje tam pyszne lody. Najchętniej kupuję truskawkowe gałki w kolorowym waflu. Zjadam je na drewnianej ławce.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pytaniach" style="background:var(--roz)">❓ jaki? jaka? jakie?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · CO TO JEST?</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Znajdź w tekście 5 przymiotników i wypisz je 🔍</div>
+    <div class="karta tekst">
+      <div class="nazwa">🍦 Na rogu ulicy stoi <span class="p" data-slowo="mała">mała</span> lodziarnia. Pani Ela sprzedaje tam <span class="p" data-slowo="pyszne">pyszne</span> lody. Najchętniej kupuję <span class="p" data-slowo="truskawkowe">truskawkowe</span> gałki w <span class="p" data-slowo="kolorowym">kolorowym</span> waflu. Zjadam je na <span class="p" data-slowo="drewnianej">drewnianej</span> ławce.</div>
+    </div>
+    <div class="lista-slow">
+      <span class="chip pop" data-slowo="mała">lodziarnia - jaka? mała</span><span class="chip pop" data-slowo="pyszne">lody - jakie? pyszne</span><span class="chip pop" data-slowo="truskawkowe">gałki - jakie? truskawkowe</span><span class="chip pop" data-slowo="kolorowym">w jakim? kolorowym</span><span class="chip pop" data-slowo="drewnianej">na jakiej? drewnianej</span>
+    </div>
+    <div><span class="chip pulapka pop" data-slowo="najchętniej">⚠️ najchętniej ➜ jak? ➜ to nie przymiotnik</span></div>
+  </section>
+
+  <section class="scena" data-id="06-pasuje" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · PRZYMIOTNIK + RZECZOWNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Przymiotnik słucha rzeczownika 👂</h2>
+    <div class="trzy">
+      <div class="karta pop" data-slowo="ogórek"><div class="emo">🥒</div><div class="ten pop" data-slowo="ten">ten</div><div class="nazwa">zielon<span>y</span> ogórek</div></div>
+      <div class="karta pop" data-slowo="żaba"><div class="emo">🐸</div><div class="ten pop" data-slowo="ta">ta</div><div class="nazwa">zielon<span>a</span> żaba</div></div>
+      <div class="karta pop" data-slowo="jabłko"><div class="emo">🍏</div><div class="ten pop" data-slowo="to">to</div><div class="nazwa">zielon<span>e</span> jabłko</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="decyduje">👑 rzeczownik decyduje, jak kończy się przymiotnik</span></div>
+  </section>
+
+  <section class="scena" data-id="07-grupy" id="s07">
+    <span class="czesc c2">2 · PRZYMIOTNIK + RZECZOWNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Jaki jest plecak?</h2>
+    <div class="plecak pop" data-slowo="plecak">🎒</div>
+    <div class="lista-slow">
+      <span class="chip k1 pop" data-slowo="granatowy"><small>kolor</small>granatowy</span>
+      <span class="chip k2 pop" data-slowo="ogromny"><small>wielkość</small>ogromny</span>
+      <span class="chip k3 pop" data-slowo="materiałowy"><small>materiał</small>materiałowy</span>
+      <span class="chip k4 pop" data-slowo="ciężki"><small>waga</small>ciężki</span>
+      <span class="chip k5 pop" data-slowo="prostokątny"><small>kształt</small>prostokątny</span>
+    </div>
+    <div><span class="chip ludzie pop" data-slowo="charakteru">🧑 charakter: miły · odważny · uparty</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc c2">2 · PRZYMIOTNIK + RZECZOWNIK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="połącz">Połącz w pary: przymiotnik + rzeczownik. Zapisz numer i literę.</div>
+    <div class="paruj">
+      <div class="karta pop" data-slowo="przymiotniki"><div class="nazwa"><span class="nr">1</span>zimowe</div></div>
+      <div class="karta pop" data-slowo="przymiotniki" data-po="0.2"><div class="nazwa"><span class="nr">2</span>kolorowa</div></div>
+      <div class="karta pop" data-slowo="przymiotniki" data-po="0.4"><div class="nazwa"><span class="nr">3</span>mokry</div></div>
+      <div class="karta pop" data-slowo="przymiotniki" data-po="0.6"><div class="nazwa"><span class="nr">4</span>weseli</div></div>
+    </div>
+    <div class="paruj rz">
+      <div class="karta pop" data-slowo="rzeczowniki"><div class="nazwa"><span class="nr lit">A</span>parasol ☂️</div></div>
+      <div class="karta pop" data-slowo="rzeczowniki" data-po="0.2"><div class="nazwa"><span class="nr lit">B</span>klauni 🤡</div></div>
+      <div class="karta pop" data-slowo="rzeczowniki" data-po="0.4"><div class="nazwa"><span class="nr lit">C</span>ferie ⛷️</div></div>
+      <div class="karta pop" data-slowo="rzeczowniki" data-po="0.6"><div class="nazwa"><span class="nr lit">D</span>tęcza 🌈</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="formą" style="background:var(--fiolet)">💡 ten, ta, to, ci czy te?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · PRZYMIOTNIK + RZECZOWNIK</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Połącz w pary: przymiotnik + rzeczownik. Zapisz numer i literę.</div>
+    <div class="paruj">
+      <div class="karta"><div class="nazwa"><span class="nr">1</span>zimowe</div><span class="odkryj" data-slowo="zimowe">➜ C ferie · te</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">2</span>kolorowa</div><span class="odkryj" data-slowo="kolorowa">➜ D tęcza · ta</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">3</span>mokry</div><span class="odkryj" data-slowo="mokry">➜ A parasol · ten</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">4</span>weseli</div><span class="odkryj" data-slowo="weseli">➜ B klauni · ci</span></div>
+    </div>
+    <div class="paruj rz">
+      <div class="karta"><div class="nazwa"><span class="nr lit">A</span>parasol ☂️</div></div>
+      <div class="karta"><div class="nazwa"><span class="nr lit">B</span>klauni 🤡</div></div>
+      <div class="karta"><div class="nazwa"><span class="nr lit">C</span>ferie ⛷️</div></div>
+      <div class="karta"><div class="nazwa"><span class="nr lit">D</span>tęcza 🌈</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="zakończenie" style="background:var(--fiolet)">👂 podpowiada zakończenie przymiotnika</span></div>
+  </section>
+
+  <section class="scena" data-id="10-pulapka" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · PUŁAPKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Uwaga, pułapka! ⚠️</h2>
+    <div class="rodzina">
+      <div class="karta tak pop" data-slowo="szybki"><div class="emo">🏎️</div><div class="nazwa">szybki</div><div class="opis">jaki? ➜ przymiotnik ✅</div></div>
+      <div class="karta pop" data-slowo="szybko"><div class="emo">💨</div><div class="nazwa">szybko</div><div class="opis">jak? ➜ nie przymiotnik ✗</div></div>
+      <div class="karta pop" data-slowo="szybkość"><div class="emo">⏱️</div><div class="nazwa">szybkość</div><div class="opis">co? ➜ rzeczownik ✗</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="sprawdzaj">❓ tylko „jaki? jaka? jakie?” ➜ przymiotnik</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="11-zadanie3+60" id="s11">
+    <span class="czesc c3">3 · PUŁAPKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="sześć">Przymiotnik czy nie? Zapisz: <b>tak</b> albo <b>nie</b></div>
+    <div class="szesc">
+      <div class="karta pop" data-slowo="wyrazów"><div class="nazwa"><span class="nr">1</span>wesoły</div></div>
+      <div class="karta pop" data-slowo="wyrazów" data-po="0.15"><div class="nazwa"><span class="nr">2</span>wesoło</div></div>
+      <div class="karta pop" data-slowo="wyrazów" data-po="0.3"><div class="nazwa"><span class="nr">3</span>śmiać się</div></div>
+      <div class="karta pop" data-slowo="wyrazów" data-po="0.45"><div class="nazwa"><span class="nr">4</span>piękny</div></div>
+      <div class="karta pop" data-slowo="wyrazów" data-po="0.6"><div class="nazwa"><span class="nr">5</span>piękno</div></div>
+      <div class="karta pop" data-slowo="wyrazów" data-po="0.75"><div class="nazwa"><span class="nr">6</span>pięknie</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pytanie" style="background:var(--niebieski)">❓ jaki? jaka? jakie?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c3">3 · PUŁAPKA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Przymiotnik czy nie? Zapisz: <b>tak</b> albo <b>nie</b></div>
+    <div class="szesc">
+      <div class="karta"><div class="nazwa"><span class="nr">1</span>wesoły</div><span class="odkryj" data-slowo="tak">TAK · jaki?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">2</span>wesoło</div><span class="odkryj zle" data-slowo="nie">NIE · jak?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">3</span>śmiać się</div><span class="odkryj zle" data-slowo="czasownik">NIE · co robić?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">4</span>piękny</div><span class="odkryj" data-slowo="piękny">TAK · jaki?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">5</span>piękno</div><span class="odkryj zle" data-slowo="rzeczownik">NIE · co?</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">6</span>pięknie</div><span class="odkryj zle" data-slowo="pięknie">NIE · jak?</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="zawodzi" style="background:var(--niebieski)">2 przymiotniki na 6 wyrazów · „jaki?” nie zawodzi 💡</span></div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="13-podsumowanie" id="s13">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cechy">👑 <b>Przymiotnik</b> nazywa cechy i właściwości ludzi, zwierząt, roślin i przedmiotów</div>
+      <div class="linia pop" data-slowo="odpowiada">❓ odpowiada na pytania: <b>jaki? jaka? jakie?</b> (pytamy od rzeczownika)</div>
+      <div class="linia pop" data-slowo="dopasowuje">🥒 zielony ogórek · 🐸 zielona żaba · 🍏 zielone jabłko</div>
+      <div class="linia pop" data-slowo="pułapki">⚠️ szybko ➜ jak? ➜ to nie przymiotnik</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

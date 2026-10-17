@@ -1,0 +1,1 @@
+Zadanie trzecie. Na ekranie są trzy krótkie opisy postaci z bajek. Kto to? Zapisz imię albo nazwę postaci. Masz minutę. Start!

@@ -1,0 +1,1 @@
+Zadanie trzecie. Na ekranie są cztery pomieszane zdania z opisu piłki. Ułóż je od ogółu do szczegółu. Zapisz numery zdań w dobrej kolejności. Masz minutę. Start!

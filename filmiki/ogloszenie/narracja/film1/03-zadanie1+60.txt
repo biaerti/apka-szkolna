@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest pięć nagłówków ogłoszeń, a pod nimi pięć rodzajów. Co to za ogłoszenie? Dopasuj nagłówek do rodzaju i zapisz numer i literę. Masz minutę. Jeśli potrzebujesz więcej czasu, zatrzymaj film. Start!

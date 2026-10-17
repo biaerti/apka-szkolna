@@ -1,0 +1,1 @@
+Zadanie drugie. Na ekranie jest ogłoszenie o zgubionym kocie i lista części ogłoszenia. Których dwóch części brakuje? Zapisz je. Masz minutę. Start!

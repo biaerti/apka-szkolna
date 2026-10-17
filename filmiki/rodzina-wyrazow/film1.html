@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Rodzina wyrazów - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s01 .las { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+#s01 .las .chip { font-size: 30px; background: var(--zielony); }
+#s01 .las b { color: #ffe066; }
+#s01 .emo { font-size: 70px; }
+.rodzina { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
+.rodzina .chip { font-size: 32px; }
+.rodzina b { color: #ffe066; }
+#s02 .karta { margin: 16px auto 0; width: 1060px; }
+#s02 .karta .nazwa { font-size: 30px; }
+#s02 .r1 .chip { background: var(--pomarancz); } #s02 .r2 .chip { background: var(--niebieski); }
+#s02 .wsk { margin-top: 20px; font-size: 28px; background: var(--fiolet); }
+.cztery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px auto 0; width: 1100px; }
+.cztery .karta .nazwa { font-size: 40px; }
+.cztery .odkryj { font-size: 26px; display: block; }
+#s05 .pary { display: flex; gap: 20px; justify-content: center; margin-top: 30px; }
+#s05 .pary .karta { flex: 0 0 380px; border-color: var(--roz); }
+#s05 .pary .nazwa { font-size: 42px; }
+#s05 .pary .opis { font-size: 26px; }
+#s05 .wsk { margin-top: 30px; background: var(--roz); font-size: 30px; }
+.rzedy { display: flex; flex-direction: column; gap: 12px; margin: 18px auto 0; width: 1000px; }
+.rzedy .linia { font-family: 'Baloo 2'; font-size: 38px; text-align: center; }
+.rzedy .intruz { color: var(--roz); text-decoration: line-through 4px; }
+.rzedy .dlaczego { font-family: 'Nunito'; }
+#s08 .pary { display: flex; gap: 16px; justify-content: center; margin-top: 22px; }
+#s08 h2 { margin-top: 12px; }
+#s08 .pary .karta { flex: 0 0 350px; }
+#s08 .pary .nazwa { font-size: 40px; white-space: nowrap; }
+#s08 .pary b { color: var(--roz); }
+#s08 .stol { margin: 22px auto 0; width: 900px; border-color: var(--zielony); }
+#s08 .stol .nazwa { font-size: 34px; }
+#s08 .stol b { color: var(--roz); }
+#s09 .drzewo { position: relative; width: 900px; height: 420px; margin: 10px auto 0; }
+#s09 .pien { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); }
+#s09 .pien .chip { font-size: 44px; background: #8a5a2b; padding: 6px 40px; }
+#s09 .gal { position: absolute; }
+#s09 .gal .chip { font-size: 32px; background: var(--zielony); }
+#s09 .korona { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); font-size: 220px; opacity: .18; line-height: 1; }
+.trzy { display: flex; gap: 20px; justify-content: center; margin-top: 24px; }
+.trzy .karta { flex: 0 0 300px; }
+.trzy .karta .nazwa { font-size: 52px; }
+.trzy .karta .nazwa b { color: var(--roz); }
+.trzy .odkryj { font-size: 30px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="emo pop" data-slowo="rodzinę">🌳👨‍👩‍👧‍👦</div>
+    <div class="las">
+      <span class="chip pop" data-slowo="las"><b>las</b></span><span class="chip pop" data-slowo="lasek"><b>las</b>ek</span><span class="chip pop" data-slowo="leśny"><b>leś</b>ny</span><span class="chip pop" data-slowo="leśniczy"><b>leś</b>niczy</span><span class="chip pop" data-slowo="zalesić">za<b>les</b>ić</span>
+    </div>
+    <div class="tytul pop" data-slowo="rodziny">Rodzina<br><span>wyrazów</span></div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-pokrewne" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · WYRAZY POKREWNE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Wyrazy pokrewne 👨‍👩‍👧</h2>
+    <div class="lista-slow">
+      <span class="chip pop" data-slowo="cząstkę" style="background:var(--pomarancz)">🧩 wspólna cząstka</span>
+      <span class="chip pop" data-slowo="znaczeniem" style="background:var(--niebieski)">💭 wspólne znaczenie</span>
+    </div>
+    <div class="karta r1 pop" data-slowo="szkoła"><div class="nazwa">🏫 rodzina „szkoła”</div>
+      <div class="rodzina"><span class="chip"><b>szkoł</b>a</span><span class="chip"><b>szkol</b>ny</span><span class="chip"><b>szkol</b>ić</span><span class="chip">przed<b>szkol</b>e</span></div></div>
+    <div class="karta r2 pop" data-slowo="ryba"><div class="nazwa">🐟 rodzina „ryba”</div>
+      <div class="rodzina"><span class="chip"><b>ryb</b>a</span><span class="chip"><b>ryb</b>ka</span><span class="chip"><b>ryb</b>ak</span><span class="chip"><b>ryb</b>ny</span></div></div>
+    <div><span class="chip wsk pop" data-slowo="części">rzeczowniki · przymiotniki · czasowniki - w jednej rodzinie</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="03-zadanie1+60" id="s03">
+    <span class="czesc c1">1 · WYRAZY POKREWNE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dopisz">Dopisz <b>jeden</b> wyraz pokrewny do każdego słowa.</div>
+    <div class="cztery">
+      <div class="karta pop" data-slowo="cztery"><div class="emo">🌷</div><div class="nazwa">kwiat</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.2"><div class="emo">❄️</div><div class="nazwa">zima</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.4"><div class="emo">🐕</div><div class="nazwa">pies</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.6"><div class="emo">🎤</div><div class="nazwa">śpiewać</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pamiętaj" style="background:var(--pomarancz)">🧩 wspólna cząstka + 💭 wspólne znaczenie</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <span class="czesc c1">1 · WYRAZY POKREWNE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Dopisz <b>jeden</b> wyraz pokrewny do każdego słowa.</div>
+    <div class="cztery">
+      <div class="karta"><div class="emo">🌷</div><div class="nazwa">kwiat</div><span class="odkryj" data-slowo="kwiatek">kwiatek · kwiaciarnia · kwiecisty</span></div>
+      <div class="karta"><div class="emo">❄️</div><div class="nazwa">zima</div><span class="odkryj" data-slowo="zimowy">zimowy · zimować</span></div>
+      <div class="karta"><div class="emo">🐕</div><div class="nazwa">pies</div><span class="odkryj" data-slowo="piesek">piesek · psiak · psi</span></div>
+      <div class="karta"><div class="emo">🎤</div><div class="nazwa">śpiewać</div><span class="odkryj" data-slowo="śpiew">śpiew · śpiewak · śpiewnik</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="dobrze" style="background:var(--pomarancz)">✅ ta sama cząstka i to samo znaczenie = dobrze</span></div>
+  </section>
+
+  <section class="scena" data-id="05-pulapka" id="s05">
+    <span class="czesc c2 zjaw" data-t="0">2 · PUŁAPKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--roz)">Uwaga, pułapka! ⚠️</h2>
+    <div class="pary">
+      <div class="karta pop" data-slowo="kotlet"><div class="emo">🐈 🍖</div><div class="nazwa">kot ≠ kotlet</div><div class="opis">kotlet nie ma nic wspólnego z kotem</div></div>
+      <div class="karta pop" data-slowo="list"><div class="emo">🦊 ✉️</div><div class="nazwa">lis ≠ list</div><div class="opis">jedna litera różnicy, inne znaczenie</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="warunki">rodzina = 🧩 cząstka + 💭 znaczenie · jeden warunek nie wystarczy</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="06-zadanie2+60" id="s06">
+    <span class="czesc c2">2 · PUŁAPKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="znajdź">Który wyraz nie należy do rodziny? Zapisz go.</div>
+    <div class="rzedy">
+      <div class="linia pop" data-slowo="rzędy"><span class="nr">1</span>dom · domek · domowy · domino</div>
+      <div class="linia pop" data-slowo="rzędy" data-po="0.25"><span class="nr">2</span>sól · solniczka · solić · solo</div>
+      <div class="linia pop" data-slowo="rzędy" data-po="0.5"><span class="nr">3</span>ręka · rączka · ręczny · rekin</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="07-odpowiedz2" id="s07">
+    <span class="czesc c2">2 · PUŁAPKA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Który wyraz nie należy do rodziny? Zapisz go.</div>
+    <div class="rzedy">
+      <div class="linia"><span class="nr">1</span>dom · domek · domowy · <span class="intruz odkryj" data-slowo="intruz">domino</span> <span class="odkryj dlaczego" data-slowo="gra">🎲 to gra</span></div>
+      <div class="linia"><span class="nr">2</span>sól · solniczka · solić · <span class="intruz odkryj" data-slowo="solo">solo</span> <span class="odkryj dlaczego" data-slowo="śpiew">🎤 śpiew jednej osoby</span></div>
+      <div class="linia"><span class="nr">3</span>ręka · rączka · ręczny · <span class="intruz odkryj" data-slowo="rekin">rekin</span> <span class="odkryj dlaczego" data-slowo="ryba">🦈 to ryba</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="podobne" style="background:var(--roz)">podobne litery ≠ rodzina</span></div>
+  </section>
+
+  <section class="scena" data-id="08-wymiana" id="s08">
+    <span class="czesc c3 zjaw" data-t="0">3 · WYMIANA GŁOSEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">W rodzinie głoski się wymieniają 🔄</h2>
+    <div class="pary">
+      <div class="karta pop" data-slowo="stół"><div class="nazwa">st<b>ó</b>ł - st<b>o</b>ły</div><div class="opis">ó ➜ o</div></div>
+      <div class="karta pop" data-slowo="ręka"><div class="nazwa">r<b>ę</b>ka - r<b>ą</b>czka</div><div class="opis">ę ➜ ą</div></div>
+      <div class="karta pop" data-slowo="morze"><div class="nazwa">mo<b>rz</b>e - mo<b>r</b>ski</div><div class="opis">rz ➜ r</div></div>
+    </div>
+    <div class="karta stol pop" data-slowo="wiesz"><div class="nazwa">❓ st<b>?</b>ł ➜ st<b>o</b>ły, st<b>o</b>lik ➜ st<b>ó</b>ł ✅</div></div>
+  </section>
+
+  <section class="scena" data-id="09-mleko" id="s09">
+    <span class="czesc c3">3 · WYMIANA GŁOSEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Drzewo rodziny 🌳</h2>
+    <div class="drzewo">
+      <div class="korona">🌳</div>
+      <div class="pien pop" data-slowo="korzeniu"><span class="chip">🥛 mleko</span></div>
+      <div class="gal pop" data-slowo="mleczko" style="left:70px; top:210px"><span class="chip">mleczko</span></div>
+      <div class="gal pop" data-slowo="mleczny" style="left:150px; top:110px"><span class="chip">mleczny</span></div>
+      <div class="gal pop" data-slowo="mleczarz" style="left:370px; top:30px"><span class="chip">mleczarz</span></div>
+      <div class="gal pop" data-slowo="mleczarnia" style="left:580px; top:110px"><span class="chip">mleczarnia</span></div>
+      <div class="gal pop" data-slowo="mlecz" style="left:650px; top:210px"><span class="chip">🌼 mlecz</span></div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="10-zadanie3+60" id="s10">
+    <span class="czesc c3">3 · WYMIANA GŁOSEK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="podaj">Podaj wyraz z rodziny, który podpowiada pisownię.</div>
+    <div class="trzy">
+      <div class="karta pop" data-slowo="róg"><div class="emo">🦌</div><div class="nazwa">r<b>ó</b>g</div></div>
+      <div class="karta pop" data-slowo="dąb"><div class="emo">🌳</div><div class="nazwa">d<b>ą</b>b</div></div>
+      <div class="karta pop" data-slowo="ząb"><div class="emo">🦷</div><div class="nazwa">z<b>ą</b>b</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · WYMIANA GŁOSEK</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Podaj wyraz z rodziny, który podpowiada pisownię.</div>
+    <div class="trzy">
+      <div class="karta"><div class="emo">🦌</div><div class="nazwa">r<b>ó</b>g</div><span class="odkryj" data-slowo="rogi">rogi · rożek</span></div>
+      <div class="karta"><div class="emo">🌳</div><div class="nazwa">d<b>ą</b>b</div><span class="odkryj" data-slowo="dęby">dęby · dębowy</span></div>
+      <div class="karta"><div class="emo">🦷</div><div class="nazwa">z<b>ą</b>b</div><span class="odkryj" data-slowo="zęby">zęby</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="podpowiedź" style="background:var(--niebieski)">💡 wyraz z rodziny = najlepsza podpowiedź</span></div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="12-podsumowanie" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pokrewne">👨‍👩‍👧 <b>Wyrazy pokrewne</b>: wspólna cząstka + powiązane znaczenie</div>
+      <div class="linia pop" data-slowo="tworzą">🌳 razem tworzą <b>rodzinę wyrazów</b>: las · lasek · leśny · leśniczy</div>
+      <div class="linia pop" data-slowo="kotlet">⚠️ kot i kotlet to nie rodzina</div>
+      <div class="linia pop" data-slowo="wymieniają">🔄 stół - stoły · ręka - rączka ➜ podpowiedź do pisowni</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

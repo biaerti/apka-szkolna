@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Opis postaci - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s01 .dymek { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; background: var(--bialy); border: 5px solid var(--ramka); border-radius: 30px; padding: 6px 34px; margin-top: 8px; }
+#s01 .dymek s { color: var(--roz); }
+#s01 .emo { font-size: 72px; }
+.plan { display: flex; gap: 16px; margin-top: 22px; }
+.plan .karta { flex: 1; text-align: left; }
+.plan .karta .nazwa { font-size: 34px; }
+.plan .karta .opis { font-size: 25px; color: var(--ciemny); }
+.plan .w { border-color: var(--pomarancz); } .plan .w .nazwa { color: var(--pomarancz); }
+.plan .r { border-color: var(--fiolet); flex: 1.5; } .plan .r .nazwa { color: var(--fiolet); }
+.plan .z { border-color: var(--zielony); } .plan .z .nazwa { color: var(--zielony); }
+#s03 .uklad { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+#s03 .dziadek { font-size: 150px; flex: 0 0 200px; }
+#s03 .opisd { flex: 1; text-align: left; }
+#s03 .akap { font-size: 25px; font-weight: 800; line-height: 1.4; padding: 6px 14px; border-radius: 14px; margin-top: 6px; }
+#s03 .akap b { font-family: 'Baloo 2'; color: #fff; border-radius: 8px; padding: 0 10px; margin-right: 8px; font-size: 21px; }
+#s03 .aw { background: #fff1e3; } #s03 .aw b { background: var(--pomarancz); }
+#s03 .ar { background: #f1e8fb; } #s03 .ar b { background: var(--fiolet); }
+#s03 .az { background: #e3f5ea; } #s03 .az b { background: var(--zielony); }
+.lit3 { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+.lit3 .chip { font-size: 24px; }
+.lit3 .w { background: var(--pomarancz); } .lit3 .r { background: var(--fiolet); } .lit3 .z { background: var(--zielony); }
+#s04 .linia, #s05 .linia { font-size: 27px; padding: 3px 16px; }
+#s04 .lista, #s05 .lista { gap: 6px; margin-top: 10px; }
+#s06 .gora { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+#s06 .gora .chip { font-size: 26px; background: var(--fiolet); }
+#s06 .zamiast { display: flex; flex-direction: column; gap: 8px; margin: 16px auto 0; width: 1000px; }
+#s06 .zamiast .linia { font-size: 29px; text-align: center; }
+#s06 .zamiast s { color: var(--roz); }
+#s06 .zamiast b { color: var(--zielony); }
+#s06 .wsk { background: var(--roz); font-size: 26px; }
+.cztery { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 22px auto 0; width: 1060px; }
+.cztery .karta .nazwa { font-size: 34px; }
+.cztery .odkryj { font-size: 26px; display: block; }
+#s09 .zagadka { margin: 20px auto 0; width: 900px; border-color: var(--niebieski); }
+#s09 .zagadka .nazwa { font-size: 34px; }
+#s09 .odp-k { font-size: 80px; margin-top: 10px; }
+#s09 .wsk { background: var(--zielony); font-size: 28px; margin-top: 16px; }
+#s10 .lista, #s11 .lista { width: 1100px; margin-top: 18px; gap: 12px; }
+#s10 .linia, #s11 .linia { font-size: 30px; padding: 10px 20px; }
+#s11 .odkryj { font-size: 32px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="dymek pop" data-slowo="normalny">💬 „Mój tata jest <s>normalny</s>.”</div>
+    <div class="emo pop" data-slowo="dworcu">🚉 🤷 ❓</div>
+    <div class="tytul pop" data-slowo="zobaczyć">Opis<br><span>postaci</span></div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-plan" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · PLAN OPISU</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Trzy części opisu postaci 🧑</h2>
+    <div class="plan">
+      <div class="karta w pop" data-slowo="wstępie"><div class="nazwa">wstęp</div><div class="opis">kto to jest?<br>ile ma lat?<br>skąd go znam?</div></div>
+      <div class="karta r pop" data-slowo="rozwinięciu"><div class="nazwa">rozwinięcie: wygląd</div><div class="opis">wzrost i sylwetka · twarz · włosy · ubiór · coś charakterystycznego</div></div>
+      <div class="karta z pop" data-slowo="zakończeniu"><div class="nazwa">zakończenie</div><div class="opis">co o nim myślę?<br>i dlaczego?</div></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="03-dziadek" id="s03">
+    <span class="czesc c1">1 · PLAN OPISU</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Mój dziadek Stefan 👴</h2>
+    <div class="uklad">
+      <div class="dziadek pop" data-slowo="dziadka">👴</div>
+      <div class="opisd">
+        <div class="akap aw pop" data-slowo="dziadka"><b>wstęp</b>Opiszę mojego dziadka Stefana, który ma 70 lat.</div>
+        <div class="akap ar pop" data-slowo="wysoki"><b>wygląd</b>Jest wysoki i szczupły, trochę przygarbiony. <span class="pop" data-slowo="pociągłą">Ma pociągłą twarz, krzaczaste brwi i siwe wąsy.</span> <span class="pop" data-slowo="okulary">Nosi okulary w grubych oprawkach i brązowy sweter.</span> <span class="pop" data-slowo="uśmiecha">Gdy się uśmiecha, wokół oczu robią mu się zmarszczki.</span></div>
+        <div class="akap az pop" data-slowo="kocham"><b>zakończenie</b>Bardzo kocham dziadka, bo zawsze ma dla mnie czas.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc c1">1 · PLAN OPISU</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="części">Która to część opisu? Zapisz: wstęp, wygląd albo zakończenie.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sześć"><span class="nr">1</span>Ciocia jest niska i drobna.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.15"><span class="nr">2</span>Chcę opisać moją ciocię Martę, siostrę mamy.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.3"><span class="nr">3</span>Zawsze nosi kolorowe chusty.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.45"><span class="nr">4</span>Lubię ciocię, bo jest bardzo wesoła.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.6"><span class="nr">5</span>Ma rude, kręcone włosy do ramion.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.75"><span class="nr">6</span>Na jej twarzy jest mnóstwo piegów.</div>
+    </div>
+    <div class="lit3"><span class="chip w">wstęp</span><span class="chip r">wygląd</span><span class="chip z">zakończenie</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · PLAN OPISU</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Która to część opisu? Zapisz: wstęp, wygląd albo zakończenie.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Ciocia jest niska i drobna. <span class="odkryj" data-slowo="niska">➜ wygląd</span></div>
+      <div class="linia"><span class="nr">2</span>Chcę opisać moją ciocię Martę, siostrę mamy. <span class="odkryj" data-slowo="martę">➜ wstęp</span> <span class="odkryj dlaczego" data-slowo="kto">kto to jest</span></div>
+      <div class="linia"><span class="nr">3</span>Zawsze nosi kolorowe chusty. <span class="odkryj" data-slowo="chusty">➜ wygląd</span></div>
+      <div class="linia"><span class="nr">4</span>Lubię ciocię, bo jest bardzo wesoła. <span class="odkryj" data-slowo="lubię">➜ zakończenie</span> <span class="odkryj dlaczego" data-slowo="dlaczego">co myślę i dlaczego</span></div>
+      <div class="linia"><span class="nr">5</span>Ma rude, kręcone włosy do ramion. <span class="odkryj" data-slowo="rude">➜ wygląd</span></div>
+      <div class="linia"><span class="nr">6</span>Na jej twarzy jest mnóstwo piegów. <span class="odkryj" data-slowo="piegów">➜ wygląd</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="06-slowa" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · WYGLĄD</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Od góry do dołu ⬇️</h2>
+    <div class="gora pop" data-slowo="dołu"><span class="chip">🧍 cała postać</span><span class="chip">🙂 twarz</span><span class="chip">💇 włosy</span><span class="chip">👕 ubiór</span></div>
+    <div class="zamiast">
+      <div class="linia pop" data-slowo="kręcone"><s>ładne</s> włosy ➜ <b>kręcone, długie, kasztanowe</b></div>
+      <div class="linia pop" data-slowo="zadarty"><s>normalny</s> nos ➜ <b>zadarty, piegowaty</b></div>
+      <div class="linia pop" data-slowo="sportowy"><s>zwykłe</s> ubranie ➜ <b>sportowy dres</b></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="powtórzeń">🔁❌ ma, ma, ma ➜ nosi · zdobią · wyróżniają</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="07-zadanie2+60" id="s07">
+    <span class="czesc c2">2 · WYGLĄD</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="więcej">Które słowo mówi więcej? Zapisz je.</div>
+    <div class="cztery">
+      <div class="karta pop" data-slowo="cztery"><div class="nazwa"><span class="nr">1</span>Ma (ładne / kręcone) włosy.</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.2"><div class="nazwa"><span class="nr">2</span>Ma (zadarty / normalny) nos.</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.4"><div class="nazwa"><span class="nr">3</span>Nosi (zwykły / sportowy) dres.</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.6"><div class="nazwa"><span class="nr">4</span>Ma (fajne / piwne) oczy.</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · WYGLĄD</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Które słowo mówi więcej? Zapisz je.</div>
+    <div class="cztery">
+      <div class="karta"><div class="nazwa"><span class="nr">1</span>Ma (ładne / kręcone) włosy.</div><span class="odkryj" data-slowo="kręcone">kręcone · od razu je widzimy</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">2</span>Ma (zadarty / normalny) nos.</div><span class="odkryj" data-slowo="zadarty">zadarty · normalny nic nie mówi</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">3</span>Nosi (zwykły / sportowy) dres.</div><span class="odkryj" data-slowo="sportowy">sportowy</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">4</span>Ma (fajne / piwne) oczy.</div><span class="odkryj" data-slowo="piwne">piwne · pokazuje kolor</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="09-zgadywanka" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · ZGADYWANKA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Kto to? 🕵️</h2>
+    <div class="karta zagadka pop" data-slowo="posłuchajcie"><div class="nazwa">Niska, w czerwonej pelerynie z kapturem, z koszyczkiem pełnym jedzenia.</div></div>
+    <div class="odp-k pop" data-slowo="oczywiście">👧🧺🐺</div>
+    <div><span class="chip wsk pop" data-slowo="dlaczego">💭 zakończenie: lubię ją, <b>bo</b> jest odważna</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="10-zadanie3+60" id="s10">
+    <span class="czesc c3">3 · ZGADYWANKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="kto">Kto to? Zapisz imię albo nazwę postaci.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzy"><span class="nr">1</span>Drewniany chłopiec. Gdy kłamie, rośnie mu nos.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.25"><span class="nr">2</span>Mała, niebieska postać w białej czapce i białych spodniach.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.5"><span class="nr">3</span>Dziewczyna w szklanych pantofelkach. O północy ucieka z balu.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · ZGADYWANKA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Kto to? Zapisz imię albo nazwę postaci.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Drewniany chłopiec. Gdy kłamie, rośnie mu nos. <span class="odkryj" data-slowo="pinokio">➜ Pinokio 🤥</span></div>
+      <div class="linia"><span class="nr">2</span>Mała, niebieska postać w białej czapce i białych spodniach. <span class="odkryj" data-slowo="smerf">➜ Smerf 💙</span></div>
+      <div class="linia"><span class="nr">3</span>Dziewczyna w szklanych pantofelkach. O północy ucieka z balu. <span class="odkryj" data-slowo="kopciuszek">➜ Kopciuszek 👠</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="wiecie" style="background:var(--niebieski)">kilka dobrych słów ➜ od razu wiesz, kto to 💡</span></div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="12-podsumowanie" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="wstęp">👋 <b>Wstęp:</b> kto to jest i skąd go znam</div>
+      <div class="linia pop" data-slowo="rozwinięcie">⬇️ <b>Rozwinięcie:</b> wygląd od góry do dołu - wzrost, sylwetka, twarz, włosy, ubiór, coś charakterystycznego</div>
+      <div class="linia pop" data-slowo="zakończenie">💭 <b>Zakończenie:</b> co o nim myślę i <b>dlaczego</b></div>
+      <div class="linia pop" data-slowo="pokazują">✨ słowa, które pokazują · 🔁❌ bez powtórzeń</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

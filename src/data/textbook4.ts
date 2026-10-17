@@ -5,6 +5,7 @@ import type { Lesson, Question, QuestionSet, Slide, SlideArt, StudentAction } fr
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
 import { ROZDZIAL2_TOPICS } from './textbook4rozdzial2';
+import { ROZDZIAL3_TOPICS } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY_TOPICS } from './lekturaChlopcy';
 import { plan } from './textbook5slides';
 
@@ -450,7 +451,7 @@ const TOPICS: Topic[] = [
 
 // Rozdzial II ma wlasny plik (textbook4rozdzial2.ts) w formacie klasy 5,
 // lektura „Chłopcy z Placu Broni” tez (lekturaChlopcy.ts, bez stron podrecznika).
-const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? ROZDZIAL_1 })), ...ROZDZIAL2_TOPICS, ...LEKTURA_CHLOPCY_TOPICS];
+const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? ROZDZIAL_1 })), ...ROZDZIAL2_TOPICS, ...LEKTURA_CHLOPCY_TOPICS, ...ROZDZIAL3_TOPICS];
 
 export function buildTextbook4(grade: string, classIds: string[]): FreshMaterialsBundle {
   if (grade.toUpperCase() !== 'IV') throw new Error('Podręcznik jest przygotowany dla klasy IV.');

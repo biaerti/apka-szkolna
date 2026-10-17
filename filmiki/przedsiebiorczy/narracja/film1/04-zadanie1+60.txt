@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie są cztery krótkie historyjki. Przeczytaj każdą i zdecyduj: czy ta osoba jest przedsiębiorcza? Przy każdym imieniu zapisz w zeszycie tak albo nie. Masz minutę. Jeśli potrzebujesz więcej czasu, zatrzymaj film. Start!

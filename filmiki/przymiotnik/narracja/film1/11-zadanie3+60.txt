@@ -1,0 +1,1 @@
+Zadanie trzecie. Na ekranie jest sześć wyrazów. Przy każdym zapisz tak, jeśli to przymiotnik, albo nie, jeśli to nie przymiotnik. Zadaj pytanie! Masz minutę. Start!

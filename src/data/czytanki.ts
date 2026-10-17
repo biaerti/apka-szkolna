@@ -49,6 +49,9 @@ export const CZYTANKI: Czytanka[] = [
   { id: 'wiersze-beszczynska', lekcja: '19', temat: 'Porównanie', title: 'wiersze', author: 'Zofia Beszczyńska', pages: '59' },
   { id: 'kurs-fotografii', lekcja: '25', temat: 'Opinia i argument', title: 'Kurs fotografii, czyli o tym, co to jest przekonywanie', author: 'Michał Rusinek, Aneta Załazińska', pages: '76-78' },
   { id: 'pani-z-tramwaju', lekcja: '26', temat: 'Asertywność', title: 'Historia o własnym zdaniu. Pani z tramwaju', author: 'Marek Michalak', pages: '80-82' },
+  // Klasa 4, rozdzial III "Od pomysłu do działania" (src/data/textbook4rozdzial3.ts).
+  { id: 'i-ty-mozesz-zmienic-swiat', lekcja: '30', temat: 'Przedsiębiorczy, czyli jaki?', title: 'I ty możesz zmienić świat (fragmenty)', author: 'Karolina Grabarczyk', pages: '99-101' },
+  { id: '8-plus-2-i-domek-w-lesie', lekcja: '39', temat: 'Co już wiesz? Co umiesz?', title: '8 + 2 i domek w lesie (fragment)', author: 'Anne-Catharina Vestly', pages: '120-122' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };

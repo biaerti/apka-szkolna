@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Przedsiębiorczy, czyli jaki? - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s02 .rownanie { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 40px; }
+#s02 .rownanie .karta { flex: 0 0 300px; padding: 24px 16px; }
+#s02 .znak { font-family: 'Baloo 2'; font-size: 90px; font-weight: 800; color: var(--szary); }
+#s02 .wynik { border-color: var(--zielony); } #s02 .wynik .nazwa { color: var(--zielony); }
+#s02 .nie-wystarczy { margin-top: 34px; font-size: 30px; background: var(--roz); }
+#s03 .karta { padding: 20px 14px; }
+#s03 .karta .opis { color: var(--ciemny); font-size: 28px; }
+#s03 .wsk { margin-top: 30px; background: var(--pomarancz); font-size: 30px; }
+#s04 .linia, #s05 .linia { font-size: 27px; }
+#s06 .karta, #s07 .karta { padding: 16px 12px; }
+#s06 .karta .nazwa, #s07 .karta .nazwa { color: var(--fiolet); font-size: 40px; }
+#s06 .karta .opis, #s07 .karta .opis { font-size: 25px; }
+#s06 .def, #s07 .def { display: block; margin-top: 10px; font-size: 25px; color: var(--ciemny); }
+#s08 .linia, #s09 .linia { font-size: 26px; }
+#s10 .wielka { margin: 26px auto 0; width: 1040px; border-color: var(--niebieski); }
+#s10 .wielka .nazwa { font-size: 44px; color: var(--niebieski); }
+#s10 .wielka .opis { font-size: 29px; color: var(--ciemny); }
+#s10 .przys { margin: 22px auto 0; width: 1040px; text-align: left; }
+#s10 .przys .nazwa { font-size: 40px; }
+#s11 .lista { width: 1120px; margin-top: 22px; }
+#s11 .linia b { font-family: 'Baloo 2'; font-size: 32px; color: var(--niebieski); }
+#s11 .wsk { background: var(--niebieski); }
+#s12 .linia, #s13 .linia { font-size: 25px; padding: 4px 18px; }
+#s12 .przyslowia, #s13 .przyslowia { display: flex; gap: 12px; margin: 12px auto 0; width: 1100px; }
+#s12 .przyslowia .karta, #s13 .przyslowia .karta { flex: 1; border-color: var(--niebieski); padding: 8px 10px; }
+#s12 .przyslowia .nazwa, #s13 .przyslowia .nazwa { font-size: 26px; color: var(--niebieski); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="emo pop" data-slowo="piecze">👧 🧁 🧁</div>
+    <div class="tytul pop" data-slowo="przedsiębiorcza">Przedsiębiorczy,<br><span>czyli jaki?</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="znaczy">💡 co to znaczy?</span>
+      <span class="chip pop" data-slowo="cechy">⭐ cechy</span>
+      <span class="chip pop" data-slowo="przysłów">📜 przysłowia</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-pomysl" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · PRZEDSIĘBIORCZOŚĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co zrobiła Zuza? 🧁</h2>
+    <div class="rownanie">
+      <div class="karta pop" data-slowo="pomysł"><div class="emo">💡</div><div class="nazwa">pomysł</div><div class="opis">„upiekę i sprzedam”</div></div>
+      <div class="znak pop" data-slowo="ale">+</div>
+      <div class="karta pop" data-slowo="pracy"><div class="emo">💪</div><div class="nazwa">działanie</div><div class="opis">praca do końca, poprawki</div></div>
+      <div class="znak pop" data-slowo="jest">=</div>
+      <div class="karta wynik pop" data-slowo="przedsiębiorczość"><div class="emo">🏆</div><div class="nazwa">przedsię&shy;biorczość</div></div>
+    </div>
+    <div><span class="chip nie-wystarczy pop" data-slowo="mało">💡 bez 💪 = za mało · 💪 bez 💡 = też za mało</span></div>
+  </section>
+
+  <section class="scena" data-id="03-bez-firmy" id="s03">
+    <span class="czesc c1">1 · PRZEDSIĘBIORCZOŚĆ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Nie trzeba mieć firmy! 🏪❌</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="klasa"><div class="emo">🐶🥫</div><div class="opis">klasa organizuje zbiórkę karmy dla schroniska</div></div>
+      <div class="karta pop" data-slowo="chłopiec"><div class="emo">🚲🔧</div><div class="opis">chłopiec naprawia stary rower</div></div>
+      <div class="karta pop" data-slowo="dziewczynka"><div class="emo">🧹🎲</div><div class="opis">dziewczynka robi ze sprzątania zabawę</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="każdy">każdy: 💡 pomysł + 💪 działanie</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc c1">1 · PRZEDSIĘBIORCZOŚĆ</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zdecyduj">Czy ta osoba jest przedsiębiorcza? Zapisz: <b>tak</b> albo <b>nie</b></div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>🍋 <b>Olek</b> wymyślił, że można sprzedawać lemoniadę na festynie. Ale nic z tym nie zrobił.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.3"><span class="nr">2</span>🧢 <b>Maja</b> zbiera nakrętki dla chorej koleżanki. Namówiła klasę i postawiła pudło na korytarzu.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">3</span>😩 <b>Kuba</b> cały weekend narzeka, że jest nudno, i nic nie robi.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.9"><span class="nr">4</span>🐕 <b>Ania</b> zapytała sąsiadów, czy może wyprowadzać ich psy za drobne. Teraz chodzi z nimi codziennie.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · PRZEDSIĘBIORCZOŚĆ</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Czy ta osoba jest przedsiębiorcza? Zapisz: <b>tak</b> albo <b>nie</b></div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>🍋 <b>Olek</b> wymyślił, że można sprzedawać lemoniadę na festynie. Ale nic z tym nie zrobił. <span class="odkryj zle" data-slowo="olek">NIE</span> <span class="odkryj dlaczego" data-slowo="połowa">pomysł bez działania</span></div>
+      <div class="linia"><span class="nr">2</span>🧢 <b>Maja</b> zbiera nakrętki dla chorej koleżanki. Namówiła klasę i postawiła pudło na korytarzu. <span class="odkryj" data-slowo="maja">TAK</span></div>
+      <div class="linia"><span class="nr">3</span>😩 <b>Kuba</b> cały weekend narzeka, że jest nudno, i nic nie robi. <span class="odkryj zle" data-slowo="kuba">NIE</span> <span class="odkryj dlaczego" data-slowo="narzeka">ani pomysłu, ani działania</span></div>
+      <div class="linia"><span class="nr">4</span>🐕 <b>Ania</b> zapytała sąsiadów, czy może wyprowadzać ich psy za drobne. Teraz chodzi z nimi codziennie. <span class="odkryj" data-slowo="ania">TAK</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pamiętacie" style="background:var(--pomarancz)">💡 pomysł + 💪 działanie</span></div>
+  </section>
+
+  <section class="scena" data-id="06-cechy" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · CECHY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Osoba przedsiębiorcza jest... ⭐</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="zaradny"><div class="emo">🎒🧷</div><div class="nazwa">zaradny</div><div class="opis">plecak spięty agrafką</div><span class="def pop" data-slowo="radzi">radzi sobie w trudnej sytuacji</span></div>
+      <div class="karta pop" data-slowo="kreatywny"><div class="emo">📦🐱</div><div class="nazwa">kreatywny</div><div class="opis">domek dla kota z kartonu</div><span class="def pop" data-slowo="oryginalne">ma oryginalne pomysły</span></div>
+      <div class="karta pop" data-slowo="wytrwały"><div class="emo">🏀</div><div class="nazwa">wytrwały</div><div class="opis">50. rzut do kosza - trafia!</div><span class="def pop" data-slowo="poddaje">nie poddaje się</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="07-cechy2" id="s07">
+    <span class="czesc c2">2 · CECHY</span>
+    <h2 class="naglowek" style="color:var(--fiolet)">Osoba przedsiębiorcza jest... ⭐</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="odważny"><div class="emo">🎤</div><div class="nazwa">odważny</div><div class="opis">pierwsza do występu na apelu</div><span class="def pop" data-slowo="strach">pokonuje strach</span></div>
+      <div class="karta pop" data-slowo="odpowiedzialny"><div class="emo">🐟</div><div class="nazwa">odpowiedzialny</div><div class="opis">karmi rybki przez całe ferie</div><span class="def pop" data-slowo="polegać">można na nim polegać</span></div>
+    </div>
+    <div class="lista-slow">
+      <span class="chip pop" data-slowo="zaradny">zaradny</span><span class="chip pop" data-slowo="kreatywny">kreatywny</span><span class="chip pop" data-slowo="wytrwały">wytrwały</span><span class="chip pop" data-slowo="odważny">odważny</span><span class="chip pop" data-slowo="odpowiedzialny">odpowiedzialny</span>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc c2">2 · CECHY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="cecha">Jaka to cecha? Zapisz jedno słowo z listy.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="zachowania"><span class="nr">1</span>🛼 Zuzia uczy się jeździć na rolkach. Przewraca się, wstaje i próbuje dalej przez cały tydzień.</div>
+      <div class="linia pop" data-slowo="zachowania" data-po="0.3"><span class="nr">2</span>🔑 Filip zgubił klucz do domu, więc poszedł do sąsiadki i zadzwonił od niej do mamy.</div>
+      <div class="linia pop" data-slowo="zachowania" data-po="0.6"><span class="nr">3</span>🏮 Hania z pustych słoików i farb zrobiła lampiony na Dzień Babci.</div>
+      <div class="linia pop" data-slowo="zachowania" data-po="0.9"><span class="nr">4</span>⚽ Wojtek obiecał trenerowi, że przyniesie piłki. Przyniósł je, choć padał deszcz.</div>
+    </div>
+    <div class="lista-slow pop" data-slowo="lista"><span class="chip">zaradny</span><span class="chip">kreatywny</span><span class="chip">wytrwały</span><span class="chip">odważny</span><span class="chip">odpowiedzialny</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c2">2 · CECHY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jaka to cecha? Zapisz jedno słowo z listy.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>🛼 Zuzia uczy się jeździć na rolkach. Przewraca się, wstaje i próbuje dalej przez cały tydzień. ➜ <span class="odkryj" data-slowo="wytrwała">wytrwała</span></div>
+      <div class="linia"><span class="nr">2</span>🔑 Filip zgubił klucz do domu, więc poszedł do sąsiadki i zadzwonił od niej do mamy. ➜ <span class="odkryj" data-slowo="zaradny">zaradny</span></div>
+      <div class="linia"><span class="nr">3</span>🏮 Hania z pustych słoików i farb zrobiła lampiony na Dzień Babci. ➜ <span class="odkryj" data-slowo="kreatywna">kreatywna</span></div>
+      <div class="linia"><span class="nr">4</span>⚽ Wojtek obiecał trenerowi, że przyniesie piłki. Przyniósł je, choć padał deszcz. ➜ <span class="odkryj" data-slowo="odpowiedzialny">odpowiedzialny</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="polegać" style="background:var(--fiolet)">💡 wytrwały - nie poddaje się · zaradny - znajdzie wyjście · kreatywny - ma pomysł</span></div>
+  </section>
+
+  <section class="scena" data-id="10-przyslowie" id="s10">
+    <span class="czesc c3 zjaw" data-t="0">3 · PRZYSŁOWIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Przysłowie 📜</h2>
+    <div class="karta wielka pop" data-slowo="krótkie">
+      <div class="nazwa">krótkie, mądre zdanie powtarzane od dawna</div>
+      <div class="opis"><span class="pop" data-slowo="rym">🎵 często ma rym</span> · <span class="pop" data-slowo="radę">💡 daje radę albo ostrzega</span></div>
+    </div>
+    <div class="karta przys pop" data-slowo="posłuchajcie">
+      <div class="nazwa">❓ „Kto pyta, nie błądzi.”</div>
+      <div class="opis pop" data-slowo="dosłownie">🗺️ dosłownie: zapytasz o drogę - nie zgubisz się</div>
+      <div class="opis pop" data-slowo="naprawdę" style="color:var(--niebieski)">💡 naprawdę: kiedy czegoś nie wiesz, pytaj</div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="11-przyslowia2" id="s11">
+    <span class="czesc c3">3 · PRZYSŁOWIA</span>
+    <h2 class="naglowek" style="color:var(--niebieski)">Przysłowie 📜</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="nagle">🏃 <b>Co nagle, to po diable.</b> <span class="dlaczego pop" data-slowo="pośpiechu">w pośpiechu wychodzi źle</span></div>
+      <div class="linia pop" data-slowo="pracy">🥧 <b>Bez pracy nie ma kołaczy.</b> <span class="dlaczego pop" data-slowo="wysiłku">kołacz = dawne ciasto · nic bez wysiłku</span></div>
+      <div class="linia pop" data-slowo="wróbel">🐦 <b>Lepszy wróbel w garści niż gołąb na dachu.</b> <span class="dlaczego pop" data-slowo="pewnego">lepiej mało, ale pewnie</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="wszystkich">🌍 przysłowie mówi o życiu wszystkich ludzi, nie o jednym dniu</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="12-zadanie3+60" id="s12">
+    <span class="czesc c3">3 · PRZYSŁOWIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="połącz">Połącz sytuację z przysłowiem. Zapisz numer i literę.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sytuacje"><span class="nr">1</span>📝 Tomek odrobił pracę domową w trzy minuty. Ma w niej dziesięć błędów.</div>
+      <div class="linia pop" data-slowo="sytuacje" data-po="0.3"><span class="nr">2</span>🙋 Natalia nie wiedziała, jak zrobić zadanie. Zapytała panią i zrobiła je dobrze.</div>
+      <div class="linia pop" data-slowo="sytuacje" data-po="0.6"><span class="nr">3</span>🎸 Kacper cały rok ćwiczył grę na gitarze i wygrał szkolny konkurs.</div>
+    </div>
+    <div class="przyslowia">
+      <div class="karta pop" data-slowo="przysłowia"><div class="nazwa"><span class="nr lit">A</span>Bez pracy nie ma kołaczy.</div></div>
+      <div class="karta pop" data-slowo="przysłowia" data-po="0.3"><div class="nazwa"><span class="nr lit">B</span>Co nagle, to po diable.</div></div>
+      <div class="karta pop" data-slowo="przysłowia" data-po="0.6"><div class="nazwa"><span class="nr lit">C</span>Kto pyta, nie błądzi.</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="13-odpowiedz3" id="s13">
+    <span class="czesc c3">3 · PRZYSŁOWIA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Połącz sytuację z przysłowiem. Zapisz numer i literę.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>📝 Tomek odrobił pracę domową w trzy minuty. Ma w niej dziesięć błędów. <span class="odkryj" data-slowo="nagle">➜ B</span> <span class="odkryj dlaczego" data-slowo="błędów">spieszył się</span></div>
+      <div class="linia"><span class="nr">2</span>🙋 Natalia nie wiedziała, jak zrobić zadanie. Zapytała panią i zrobiła je dobrze. <span class="odkryj" data-slowo="pyta">➜ C</span> <span class="odkryj dlaczego" data-slowo="zapytała">zapytała</span></div>
+      <div class="linia"><span class="nr">3</span>🎸 Kacper cały rok ćwiczył grę na gitarze i wygrał szkolny konkurs. <span class="odkryj" data-slowo="kołaczy">➜ A</span> <span class="odkryj dlaczego" data-slowo="ćwiczył">ciężka praca</span></div>
+    </div>
+    <div class="przyslowia">
+      <div class="karta"><div class="nazwa"><span class="nr lit">A</span>Bez pracy nie ma kołaczy.</div></div>
+      <div class="karta"><div class="nazwa"><span class="nr lit">B</span>Co nagle, to po diable.</div></div>
+      <div class="karta"><div class="nazwa"><span class="nr lit">C</span>Kto pyta, nie błądzi.</div></div>
+    </div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="14-podsumowanie" id="s14">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="przedsiębiorczość">💡 <b>Przedsiębiorczość</b> = pomysł + działanie</div>
+      <div class="linia pop" data-slowo="marzy">💪 nie tylko marzy - bierze się do pracy i kończy, co zaczął</div>
+      <div class="linia pop" data-slowo="zaradna">⭐ zaradny · kreatywny · wytrwały · odważny · odpowiedzialny</div>
+      <div class="linia pop" data-slowo="przysłowie">📜 <b>Przysłowie</b> - krótkie, mądre zdanie powtarzane od dawna, daje radę albo ostrzega</div>
+      <div class="linia pop" data-slowo="pyta">❓ Kto pyta, nie błądzi. · 🏃 Co nagle, to po diable. · 🥧 Bez pracy nie ma kołaczy.</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

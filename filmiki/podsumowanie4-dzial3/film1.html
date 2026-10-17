@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Od pomysłu do działania - podsumowanie - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+.o { color: var(--roz); } .u { color: var(--niebieski); }
+#s01 .tytul { font-size: 80px; }
+h2.naglowek { margin-top: 12px; }
+.temat { margin: 20px auto 0; width: 1100px; text-align: left; }
+.temat .nazwa { font-size: 34px; }
+.temat .opis { font-size: 27px; color: var(--ciemny); }
+.temat .opis b { color: var(--roz); }
+.temat.t1 { border-color: var(--pomarancz); } .temat.t1 .nazwa { color: var(--pomarancz); }
+.temat.t2 { border-color: var(--fiolet); } .temat.t2 .nazwa { color: var(--fiolet); }
+.temat.t3 { border-color: var(--niebieski); } .temat.t3 .nazwa { color: var(--niebieski); }
+.temat.t4 { border-color: var(--zielony); } .temat.t4 .nazwa { color: var(--zielony); }
+#s05 .linia, #s06 .linia { font-size: 29px; }
+.kartka { background: #fffbe0; border: 3px solid #e6d58a; border-radius: 6px; box-shadow: 4px 6px 0 rgba(74,59,50,.12); padding: 10px 22px; text-align: left; margin: 14px auto 0; width: 900px; }
+.kartka .tyt { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; color: var(--roz); text-align: center; }
+.kartka .l { font-size: 27px; font-weight: 800; line-height: 1.4; }
+.wybor { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+.wybor .chip { font-size: 26px; background: var(--niebieski); }
+.wybor .chip.zaz { background: var(--roz); color: #fff; font-family: 'Baloo 2'; }
+.piec { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 22px auto 0; width: 1100px; }
+.piec .karta .nazwa { font-size: 42px; }
+.piec .luka { color: var(--roz); }
+.piec .odkryj { font-size: 22px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III</div>
+    <div class="tytul pop" data-slowo="podsumowanie">Od pomysłu<br><span>do działania</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="przedsiębiorczość">💡 przedsiębiorczość</span>
+      <span class="chip pop" data-slowo="przymiotnik">👑 przymiotnik</span>
+      <span class="chip pop" data-slowo="opisy">📝 opisy i ogłoszenie</span>
+      <span class="chip pop" data-slowo="rodzinę">🌳 rodzina wyrazów · ó i u</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-przedsiebiorczosc" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · POMYSŁ I DZIAŁANIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Przedsiębiorczość i przysłowia 💡</h2>
+    <div class="karta temat t1 pop" data-slowo="przedsiębiorczość"><div class="nazwa">💡 pomysł + 💪 działanie</div><div class="opis pop" data-slowo="zaradna">zaradny · kreatywny · wytrwały · odważny · odpowiedzialny</div></div>
+    <div class="karta temat t1 pop" data-slowo="przysłowie"><div class="nazwa">📜 przysłowie</div><div class="opis">krótkie, mądre zdanie powtarzane od dawna, daje radę albo ostrzega</div><div class="opis pop" data-slowo="pyta">❓ „Kto pyta, nie błądzi.”</div></div>
+  </section>
+
+  <section class="scena" data-id="03-przymiotnik" id="s03">
+    <span class="czesc c2 zjaw" data-t="0">2 · PRZYMIOTNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Przymiotnik 👑</h2>
+    <div class="karta temat t2 pop" data-slowo="cechy"><div class="nazwa">nazywa cechy · jaki? jaka? jakie?</div></div>
+    <div class="karta temat t2 pop" data-slowo="odmienia"><div class="nazwa">odmienia się z rzeczownikiem</div>
+      <div class="opis pop" data-slowo="chłopiec">mądr<b>y</b> chłopiec · mądr<b>a</b> dziewczynka · mądr<b>e</b> dziecko</div>
+      <div class="opis pop" data-slowo="mnogiej">ci mądr<b>zy</b> chłopcy · te mądr<b>e</b> psy</div></div>
+  </section>
+
+  <section class="scena" data-id="04-stopniowanie" id="s04">
+    <span class="czesc c2">2 · PRZYMIOTNIK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Stopniowanie 📶</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="regularnie">📏 regularnie: miły · milszy · najmilszy</div>
+      <div class="linia pop" data-slowo="nieregularnie">🤪 nieregularnie: dobry · lepszy · najlepszy</div>
+      <div class="linia pop" data-slowo="opisowo">🌈 opisowo: kolorowy · bardziej kolorowy · najbardziej kolorowy</div>
+      <div class="linia pop" data-slowo="razem">✍️ <span class="o">nie</span> + przymiotnik = razem: niemiły · nieduży</div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="05-zadanie1+60" id="s05">
+    <span class="czesc c2">2 · PRZYMIOTNIK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wybierz">Wybierz dobrą formę z nawiasu i zapisz ją.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć"><span class="nr">1</span>Ci (odważni / odważne) chłopcy.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.2"><span class="nr">2</span>Ta kanapa jest bardzo (wygodny / wygodna).</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.4"><span class="nr">3</span>Stopień wyższy od „dobry”: (dobrszy / lepszy).</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.6"><span class="nr">4</span>Stopień najwyższy od „zmęczony”: (najzmęczeńszy / najbardziej zmęczony).</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.8"><span class="nr">5</span>Mój brat jest (niewysoki / nie wysoki).</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc c2">2 · PRZYMIOTNIK</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Wybierz dobrą formę z nawiasu i zapisz ją.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Ci (odważni / odważne) chłopcy. <span class="odkryj" data-slowo="odważni">➜ odważni</span> <span class="odkryj dlaczego" data-slowo="odważni">ci</span></div>
+      <div class="linia"><span class="nr">2</span>Ta kanapa jest bardzo (wygodny / wygodna). <span class="odkryj" data-slowo="wygodna">➜ wygodna</span> <span class="odkryj dlaczego" data-slowo="wygodna">ta</span></div>
+      <div class="linia"><span class="nr">3</span>Stopień wyższy od „dobry”: (dobrszy / lepszy). <span class="odkryj" data-slowo="lepszy">➜ lepszy</span> <span class="odkryj dlaczego" data-slowo="dobrszy">nieregularny</span></div>
+      <div class="linia"><span class="nr">4</span>Stopień najwyższy od „zmęczony”: (najzmęczeńszy / najbardziej zmęczony). <span class="odkryj" data-slowo="opisowo">➜ najbardziej zmęczony</span></div>
+      <div class="linia"><span class="nr">5</span>Mój brat jest (niewysoki / nie wysoki). <span class="odkryj" data-slowo="niewysoki">➜ niewysoki</span> <span class="odkryj dlaczego" data-slowo="razem">razem</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="07-opisy" id="s07">
+    <span class="czesc c3 zjaw" data-t="0">3 · OPISY I OGŁOSZENIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Opis i ogłoszenie 📝📢</h2>
+    <div class="karta temat t3 pop" data-slowo="opis"><div class="nazwa">📝 opis przedmiotu i postaci</div>
+      <div class="opis pop" data-slowo="wstępie">wstęp: co albo kogo opisujemy</div>
+      <div class="opis pop" data-slowo="rozwinięciu">rozwinięcie: wygląd od ogółu do szczegółu · postać od góry do dołu</div>
+      <div class="opis pop" data-slowo="zakończeniu">zakończenie: co myślę i dlaczego</div></div>
+    <div class="karta temat t3 pop" data-slowo="ogłoszenie"><div class="nazwa">📢 ogłoszenie</div><div class="opis">nagłówek · co? gdzie? kiedy? · kontakt · podpis</div></div>
+  </section>
+
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc c3">3 · OPISY I OGŁOSZENIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="brakuje">Których dwóch części brakuje w ogłoszeniu? Zapisz je.</div>
+    <div class="kartka pop" data-slowo="kocie">
+      <div class="tyt">ZAGINĄŁ KOT! 🐈</div>
+      <div class="l">W sobotę w parku przy ulicy Lipowej uciekł nam rudy kot z białą łatką na nosie. Wabi się Imbir.</div>
+    </div>
+    <div class="wybor pop" data-slowo="części"><span class="chip">nagłówek</span><span class="chip">co?</span><span class="chip">gdzie?</span><span class="chip">kiedy?</span><span class="chip">kontakt</span><span class="chip">podpis</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c3">3 · OPISY I OGŁOSZENIE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Których dwóch części brakuje w ogłoszeniu? Zapisz je.</div>
+    <div class="kartka">
+      <div class="tyt">ZAGINĄŁ KOT! 🐈</div>
+      <div class="l">W sobotę w parku przy ulicy Lipowej uciekł nam rudy kot z białą łatką na nosie. Wabi się Imbir.</div>
+    </div>
+    <div class="wybor"><span class="chip">nagłówek ✓</span><span class="chip">co? ✓</span><span class="chip">gdzie? ✓</span><span class="chip">kiedy? ✓</span><span class="chip zaz odkryj" data-slowo="kontaktu">kontakt ✗</span><span class="chip zaz odkryj" data-slowo="podpisu">podpis ✗</span></div>
+    <div><span class="chip wsk pop" data-slowo="oddać" style="background:var(--niebieski)">kto znajdzie kota, nie wie, komu go oddać 🤷</span></div>
+  </section>
+
+  <section class="scena" data-id="10-rodzina" id="s10">
+    <span class="czesc c4 zjaw" data-t="0">4 · SŁOWA I PISOWNIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Rodzina wyrazów i pisownia 🌳</h2>
+    <div class="karta temat t4 pop" data-slowo="pokrewne"><div class="nazwa">🌳 wspólna cząstka + wspólne znaczenie</div><div class="opis pop" data-slowo="leśniczy">las · leśny · leśniczy · <span class="pop" data-slowo="wymieniają">st<b>ó</b>ł - st<b>o</b>ły</span></div></div>
+    <div class="karta temat t4 pop" data-slowo="kreską"><div class="nazwa"><span class="o">ó</span>: wymienne na o, e, a · -ów (Kraków) · -ówka</div>
+      <div class="opis pop" data-slowo="zwykłe"><span class="u">u</span>: -unek (rysunek) · -utki (malutki) · -uj- · na początku i na końcu wyrazu</div></div>
+  </section>
+
+  <section class="scena zadanie" data-id="11-zadanie3+60" id="s11">
+    <span class="czesc c4">4 · SŁOWA I PISOWNIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="całe"><span class="o">ó</span> czy <span class="u">u</span>? Zapisz całe wyrazy.</div>
+    <div class="piec">
+      <div class="karta pop" data-slowo="pięć"><div class="emo">🔪</div><div class="nazwa">n<span class="luka">_</span>ż</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.15"><div class="emo">🏙️</div><div class="nazwa">Rzesz<span class="luka">_</span>w</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.3"><div class="emo">👶</div><div class="nazwa">mal<span class="luka">_</span>szek</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.45"><div class="emo">🍲</div><div class="nazwa">got<span class="luka">_</span>je</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.6"><div class="emo">💛</div><div class="nazwa">ż<span class="luka">_</span>łty</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c4">4 · SŁOWA I PISOWNIA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie"><span class="o">ó</span> czy <span class="u">u</span>? Zapisz całe wyrazy.</div>
+    <div class="piec">
+      <div class="karta"><div class="emo">🔪</div><div class="nazwa">n<span class="o">ó</span>ż</div><span class="odkryj" data-slowo="noże">bo noże</span></div>
+      <div class="karta"><div class="emo">🏙️</div><div class="nazwa">Rzesz<span class="o">ó</span>w</div><span class="odkryj" data-slowo="miasta">-ów, nazwa miasta</span></div>
+      <div class="karta"><div class="emo">👶</div><div class="nazwa">mal<span class="u">u</span>szek</div><span class="odkryj" data-slowo="kożuszek">-uszek</span></div>
+      <div class="karta"><div class="emo">🍲</div><div class="nazwa">got<span class="u">u</span>je</div><span class="odkryj" data-slowo="uj">-uj- w czasowniku</span></div>
+      <div class="karta"><div class="emo">💛</div><div class="nazwa">ż<span class="o">ó</span>łty</div><span class="odkryj" data-slowo="zapamiętać">do zapamiętania</span></div>
+    </div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="13-podsumowanie" id="s13">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pomysł">💡 pomysł + działanie = przedsiębiorczość</div>
+      <div class="linia pop" data-slowo="przymiotnik">👑 przymiotnik: nazywa cechy, odmienia się, stopniuje na 3 sposoby</div>
+      <div class="linia pop" data-slowo="opis">📝 opis: wstęp · rozwinięcie · zakończenie</div>
+      <div class="linia pop" data-slowo="ogłoszenie">📢 ogłoszenie: nagłówek · informacje · kontakt · podpis</div>
+      <div class="linia pop" data-slowo="rodzina">🌳 rodzina wyrazów podpowiada pisownię</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="powodzenia">Powodzenia na sprawdzianie! 🍀</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

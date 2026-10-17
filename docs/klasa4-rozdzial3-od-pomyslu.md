@@ -204,11 +204,14 @@ Przebieg lekcji: przygotuj się → koło z poprzedniego tematu (3 pytania) → 
 - 3 zadania mieszane, inne niż w filmach tematycznych: ZADANIE 1 przymiotnik (forma i stopień, wybór),
   ZADANIE 2 ó / u i nie razem (litera / razem-osobno), ZADANIE 3 ogłoszenie i opis (czego brakuje, wybór).
 
-## Do zrobienia po akceptacji
+## Stan (2026-10-17)
 
-1. JPG stron 99-123 i ramki zadań przez API multibooka (Chrome `tmp/chrome-gwo`, port 9224), screeny
-   `r3-sNN-*` tylko przed filmem.
-2. Czytanki: Grabarczyk (s. 99-101) i Vestly (s. 120-122).
-3. Lekcje 30-39 w `src/data/textbook4rozdzial3.ts` (wzór `textbook4rozdzial2.ts`), karty w `cwiczenia4.ts`.
-4. 10 filmów, porty renderu 9410-9419. Kredyty: ok. 1600 na film.
-5. Zeszyt powtórzeniowy PDF + sprawdzian A-D.
+- Lekcje 30-39 w `src/data/textbook4rozdzial3.ts`, karty „Ćwiczymy razem” w `src/data/cwiczenia4rozdzial3.ts`
+  (2-3 na lekcję, zmierzone przy 1280x720 - nic nie wchodzi na „Sprawdź”).
+- Przebieg każdej lekcji: temat -> koło z poprzedniej lekcji (3 pytania) -> [czytanka] -> film -> karty -> notatka na końcu.
+- 10 filmów (7-9 min, porty renderu 9410-9419) wyrenderowanych i wysłanych do bucketu `filmiki`.
+- Czytanki z lektorem: `i-ty-mozesz-zmienic-swiat` (Grabarczyk, lekcja 30) i `8-plus-2-i-domek-w-lesie` (Vestly, lekcja 39),
+  z podświetlaniem słów, w buckecie `czytanki`.
+- Bez screenów z podręcznika: dostęp do multibooka „Między nami 4” zniknął z konta GWO (jest tylko „Moim zdaniem 2026”).
+- Do zrobienia: zeszyt powtórzeniowy PDF, sprawdzian A-D, karta pracy i kahoot do rozdziału (`materialy/klasa4-rozdzial3/`),
+  lekcja 40 - sprawdzian.

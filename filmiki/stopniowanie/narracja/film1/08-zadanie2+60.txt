@@ -1,0 +1,1 @@
+Zadanie drugie. Na ekranie jest sześć przymiotników w trzech stopniach. Który to sposób: regularny, nieregularny czy opisowy? Wystarczy, że zapiszesz pierwszą literę nazwy sposobu. Masz minutę. Start!

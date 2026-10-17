@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Odmiana przymiotnika - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s01 .cien { font-size: 70px; margin-top: 6px; }
+.trzy { display: flex; gap: 18px; justify-content: center; margin-top: 24px; }
+.trzy .karta { flex: 0 0 340px; padding: 16px; }
+.trzy .ten { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; color: var(--roz); }
+.trzy .nazwa { font-size: 40px; }
+.trzy .nazwa span { color: var(--zielony); }
+.wsk.ten-ta { background: var(--pomarancz); font-size: 30px; margin-top: 26px; }
+.szesc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px auto 0; width: 1080px; }
+.szesc .karta { padding: 10px; }
+.szesc .karta .nazwa { font-size: 36px; }
+.szesc .opcje { font-size: 24px; font-weight: 800; color: var(--szary); }
+.szesc .odkryj { font-size: 30px; }
+#s05 .rzad .karta .nazwa { font-size: 40px; }
+#s05 .rzad .karta .opis { font-size: 26px; color: var(--ciemny); }
+#s05 .ci { border-color: var(--niebieski); } #s05 .ci .nazwa { color: var(--niebieski); }
+#s05 .te { border-color: var(--fiolet); } #s05 .te .nazwa { color: var(--fiolet); }
+#s05 .przyk { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; margin-top: 6px; }
+#s05 .psy { margin-top: 18px; font-size: 28px; background: var(--roz); }
+.cztery { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px auto 0; width: 1000px; }
+.cztery .karta .nazwa { font-size: 38px; }
+.cztery .odkryj { font-size: 28px; }
+#s08 .lista { width: 900px; margin-top: 18px; }
+#s08 .linia { font-size: 32px; }
+#s08 .linia b { color: var(--roz); }
+#s08 .przyp { font-size: 22px; color: var(--szary); margin-right: 10px; }
+#s09 .tab { margin: 12px auto 0; width: 880px; border-collapse: separate; border-spacing: 0 5px; }
+#s09 .tab td { font-size: 27px; font-weight: 800; background: var(--bialy); padding: 3px 16px; border-top: 3px solid var(--ramka); border-bottom: 3px solid var(--ramka); text-align: left; }
+#s09 .tab td:first-child { border-left: 3px solid var(--ramka); border-radius: 14px 0 0 14px; color: var(--szary); font-size: 22px; width: 300px; }
+#s09 .tab td:last-child { border-right: 3px solid var(--ramka); border-radius: 0 14px 14px 0; font-family: 'Baloo 2'; font-size: 30px; }
+#s09 .tab b { color: var(--roz); }
+#s09 .blad { margin-top: 10px; font-size: 26px; background: var(--roz); }
+#s10 .lista, #s11 .lista { width: 1000px; margin-top: 16px; }
+#s10 .linia, #s11 .linia { font-size: 32px; }
+#s10 .pyt, #s11 .pyt { font-size: 22px; color: var(--szary); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="cien pop" data-slowo="cień">🐈 👣 🐈‍⬛</div>
+    <div class="tytul pop" data-slowo="odmienia">Odmiana<br><span>przymiotnika</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="rodzaje">👦👧👶 rodzaje</span>
+      <span class="chip pop" data-slowo="liczby">1️⃣ ➜ 🔢 liczby</span>
+      <span class="chip pop" data-slowo="przypadki">🚌 przypadki</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-rodzaje" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · RODZAJE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Przymiotnik i rodzaj 👦👧👶</h2>
+    <div class="trzy">
+      <div class="karta pop" data-slowo="męski"><div class="emo">👦</div><div class="ten">ten</div><div class="nazwa">mądr<span>y</span> chłopiec</div><div class="opis">rodzaj męski</div></div>
+      <div class="karta pop" data-slowo="żeński"><div class="emo">👧</div><div class="ten">ta</div><div class="nazwa">mądr<span>a</span> dziewczynka</div><div class="opis">rodzaj żeński</div></div>
+      <div class="karta pop" data-slowo="nijaki"><div class="emo">👶</div><div class="ten">to</div><div class="nazwa">mądr<span>e</span> dziecko</div><div class="opis">rodzaj nijaki</div></div>
+    </div>
+    <div><span class="chip wsk ten-ta pop" data-slowo="myślach">💭 powiedz w myślach: ten · ta · to</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="03-zadanie1+60" id="s03">
+    <span class="czesc c1">1 · RODZAJE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wybierz">Nowy, nowa czy nowe? Zapisz całą parę.</div>
+    <div class="szesc">
+      <div class="karta pop" data-slowo="sześć"><div class="nazwa">🚲 rower</div><div class="opcje">nowy · nowa · nowe</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.15"><div class="nazwa">🛴 hulajnoga</div><div class="opcje">nowy · nowa · nowe</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.3"><div class="nazwa">🚗 auto</div><div class="opcje">nowy · nowa · nowe</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.45"><div class="nazwa">🎒 plecak</div><div class="opcje">nowy · nowa · nowe</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.6"><div class="nazwa">🧥 kurtka</div><div class="opcje">nowy · nowa · nowe</div></div>
+      <div class="karta pop" data-slowo="sześć" data-po="0.75"><div class="nazwa">🪑 krzesło</div><div class="opcje">nowy · nowa · nowe</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="pomoże" style="background:var(--pomarancz)">💭 ten · ta · to</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <span class="czesc c1">1 · RODZAJE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Nowy, nowa czy nowe? Zapisz całą parę.</div>
+    <div class="szesc">
+      <div class="karta"><div class="nazwa">🚲 rower</div><span class="odkryj" data-slowo="rower">ten ➜ nowy rower</span></div>
+      <div class="karta"><div class="nazwa">🛴 hulajnoga</div><span class="odkryj" data-slowo="hulajnoga">ta ➜ nowa hulajnoga</span></div>
+      <div class="karta"><div class="nazwa">🚗 auto</div><span class="odkryj" data-slowo="auto">to ➜ nowe auto</span></div>
+      <div class="karta"><div class="nazwa">🎒 plecak</div><span class="odkryj" data-slowo="plecak">ten ➜ nowy plecak</span></div>
+      <div class="karta"><div class="nazwa">🧥 kurtka</div><span class="odkryj" data-slowo="kurtka">ta ➜ nowa kurtka</span></div>
+      <div class="karta"><div class="nazwa">🪑 krzesło</div><span class="odkryj" data-slowo="krzesło">to ➜ nowe krzesło</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="05-liczby" id="s05">
+    <span class="czesc c2 zjaw" data-t="0">2 · LICZBY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Liczba mnoga: ci czy te? 🔢</h2>
+    <div class="rzad">
+      <div class="karta ci pop" data-slowo="męskoosobowy"><div class="emo">👦👨</div><div class="nazwa">ci</div><div class="opis">męskoosobowy: jest choć jeden chłopiec lub mężczyzna</div><div class="przyk pop" data-slowo="chłopcy">mądrzy chłopcy</div></div>
+      <div class="karta te pop" data-slowo="niemęskoosobowy"><div class="emo">👧👶🐕</div><div class="nazwa">te</div><div class="opis">niemęskoosobowy: cała reszta</div><div class="przyk pop" data-slowo="dziewczynki">mądre dziewczynki</div><div class="przyk pop" data-slowo="psy">mądre dzieci · mądre psy</div></div>
+    </div>
+    <div><span class="chip psy pop" data-slowo="uwaga">⚠️ psy to nie osoby ➜ te psy</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="06-zadanie2+60" id="s06">
+    <span class="czesc c2">2 · LICZBY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wybierz">Wybierz dobrą formę i zapisz całą parę.</div>
+    <div class="cztery">
+      <div class="karta pop" data-slowo="cztery"><div class="nazwa"><span class="nr">1</span>(wesołe / weseli) uczniowie</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.2"><div class="nazwa"><span class="nr">2</span>(wysokie / wysocy) wieże</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.4"><div class="nazwa"><span class="nr">3</span>(dobrzy / dobre) koledzy</div></div>
+      <div class="karta pop" data-slowo="cztery" data-po="0.6"><div class="nazwa"><span class="nr">4</span>(głośne / głośni) psy</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="myślach" style="background:var(--fiolet)">💭 ci czy te?</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="07-odpowiedz2" id="s07">
+    <span class="czesc c2">2 · LICZBY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Wybierz dobrą formę i zapisz całą parę.</div>
+    <div class="cztery">
+      <div class="karta"><div class="nazwa"><span class="nr">1</span>(wesołe / weseli) uczniowie</div><span class="odkryj" data-slowo="uczniowie">ci ➜ weseli uczniowie</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">2</span>(wysokie / wysocy) wieże</div><span class="odkryj" data-slowo="wieże">te ➜ wysokie wieże</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">3</span>(dobrzy / dobre) koledzy</div><span class="odkryj" data-slowo="koledzy">ci ➜ dobrzy koledzy</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">4</span>(głośne / głośni) psy</div><span class="odkryj" data-slowo="psy">te ➜ głośne psy</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="osoba" style="background:var(--roz)">🐕 pies to nie osoba ➜ <s>głośni psy</s></span></div>
+  </section>
+
+  <section class="scena" data-id="08-przypadki" id="s08">
+    <span class="czesc c3 zjaw" data-t="0">3 · PRZYPADKI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Przymiotnik zmienia przypadek 🚌</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="jest"><span class="przyp">M</span>To jest <b>czerwony</b> autobus.</div>
+      <div class="linia pop" data-slowo="nie"><span class="przyp">D</span>Nie ma <b>czerwonego</b> autobusu.</div>
+      <div class="linia pop" data-slowo="jadę"><span class="przyp">N</span>Jadę <b>czerwonym</b> autobusem.</div>
+      <div class="linia pop" data-slowo="myślę"><span class="przyp">Ms</span>Myślę o <b>czerwonym</b> autobusie.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="też" style="background:var(--niebieski)">rzeczownik się zmienia ➜ przymiotnik też 👣</span></div>
+  </section>
+
+  <section class="scena" data-id="09-maly-kot" id="s09">
+    <span class="czesc c3">3 · PRZYPADKI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Odmieniamy: mały kot 🐈</h2>
+    <table class="tab">
+      <tr class="pop" data-slowo="kto"><td>M · kto? co?</td><td><b>mały</b> kot</td></tr>
+      <tr class="pop" data-slowo="kogo"><td>D · kogo? czego?</td><td><b>małego</b> kota</td></tr>
+      <tr class="pop" data-slowo="komu"><td>C · komu? czemu?</td><td><b>małemu</b> kotu</td></tr>
+      <tr class="pop" data-slowo="widzę"><td>B · kogo? co?</td><td><b>małego</b> kota</td></tr>
+      <tr class="pop" data-slowo="kim"><td>N · z kim? z czym?</td><td>z <b>małym</b> kotem</td></tr>
+      <tr class="pop" data-slowo="mówię"><td>Ms · o kim? o czym?</td><td>o <b>małym</b> kocie</td></tr>
+      <tr class="pop" data-slowo="wołacz"><td>W · o!</td><td><b>mały</b> kocie!</td></tr>
+    </table>
+    <div><span class="chip blad pop" data-slowo="koleżanką">❌ z moim koleżanką ➜ ✅ z moją koleżanką</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="10-zadanie3+60" id="s10">
+    <span class="czesc c3">3 · PRZYPADKI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dopisz">Dopisz cały wyraz <span class="n">zielony</span> w dobrej formie.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="zdań"><span class="nr">1</span>Nie mam zielon. . . kredki.</div>
+      <div class="linia pop" data-slowo="zdań" data-po="0.2"><span class="nr">2</span>Bawię się zielon. . . piłką.</div>
+      <div class="linia pop" data-slowo="zdań" data-po="0.4"><span class="nr">3</span>Na drzewie siedzi zielon. . . papuga.</div>
+      <div class="linia pop" data-slowo="zdań" data-po="0.6"><span class="nr">4</span>Myślę o zielon. . . ogrodzie.</div>
+      <div class="linia pop" data-slowo="zdań" data-po="0.8"><span class="nr">5</span>Daję sałatę zielon. . . żółwiowi.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · PRZYPADKI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Dopisz cały wyraz <span class="n">zielony</span> w dobrej formie.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Nie mam zielon. . . kredki. <span class="odkryj" data-slowo="zielonej">➜ zielonej</span> <span class="pyt">czego?</span></div>
+      <div class="linia"><span class="nr">2</span>Bawię się zielon. . . piłką. <span class="odkryj" data-slowo="zieloną">➜ zieloną</span> <span class="pyt">czym?</span></div>
+      <div class="linia"><span class="nr">3</span>Na drzewie siedzi zielon. . . papuga. <span class="odkryj" data-slowo="zielona">➜ zielona</span> <span class="pyt">kto?</span></div>
+      <div class="linia"><span class="nr">4</span>Myślę o zielon. . . ogrodzie. <span class="odkryj" data-slowo="zielonym">➜ zielonym</span> <span class="pyt">o czym?</span></div>
+      <div class="linia"><span class="nr">5</span>Daję sałatę zielon. . . żółwiowi. <span class="odkryj" data-slowo="zielonemu">➜ zielonemu</span> <span class="pyt">komu?</span></div>
+    </div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="12-podsumowanie" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="odmienia">👣 Przymiotnik <b>odmienia się</b> razem z rzeczownikiem</div>
+      <div class="linia pop" data-slowo="rodzaje">👦👧👶 rodzaje: mądry chłopiec · mądra dziewczynka · mądre dziecko (ten · ta · to)</div>
+      <div class="linia pop" data-slowo="liczby">🔢 liczby: ci mądrzy chłopcy · te mądre dziewczynki, dzieci, psy</div>
+      <div class="linia pop" data-slowo="przypadki">🚌 przypadki: nie ma czerwonego autobusu · jadę czerwonym autobusem</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

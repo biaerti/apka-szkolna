@@ -1,0 +1,1 @@
+Zadanie trzecie. Na ekranie są trzy wyrazy z trudnymi literami: róg, dąb i ząb. Do każdego podaj wyraz z rodziny, który podpowiada pisownię. Masz minutę. Start!

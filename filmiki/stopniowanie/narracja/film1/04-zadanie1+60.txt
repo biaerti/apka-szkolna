@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest tabela z czterema przymiotnikami. W każdym wierszu brakuje jednego stopnia. Zapisz w zeszycie tylko brakujące słowa. Masz minutę. Jeśli potrzebujesz więcej czasu, zatrzymaj film. Start!

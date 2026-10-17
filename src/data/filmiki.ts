@@ -58,6 +58,17 @@ export const FILMIKI: Filmik[] = [
   { id: 'wielka-litera-film1', lekcja: '27', title: 'Wielka czy mała litera? (3 zadania)' },
   { id: 'nie-rzeczownik-film1', lekcja: '28', title: 'Nie z rzeczownikami (3 zadania)' },
   { id: 'podsumowanie4-dzial2-film1', lekcja: '29', title: 'Podsumowanie rozdziału II - Pośród słów i znaczeń (3 zadania)' },
+  // Klasa 4, rozdzial III "Od pomysłu do działania" - nowy format: ok. 8 min, 3 zadania z minuta na kazde.
+  { id: 'przedsiebiorczy-film1', lekcja: '30', title: 'Przedsiębiorczy, czyli jaki? Cechy i przysłowia (3 zadania)' },
+  { id: 'przymiotnik-film1', lekcja: '31', title: 'Przymiotnik - król opisu (3 zadania)' },
+  { id: 'przymiotnik-odmiana-film1', lekcja: '32', title: 'Odmiana przymiotnika (3 zadania)' },
+  { id: 'stopniowanie-film1', lekcja: '33', title: 'Stopniowanie przymiotników i „nie” razem (3 zadania)' },
+  { id: 'opis-przedmiotu-film1', lekcja: '34', title: 'Opis przedmiotu (3 zadania)' },
+  { id: 'ogloszenie-film1', lekcja: '35', title: 'Ogłoszenie (3 zadania)' },
+  { id: 'rodzina-wyrazow-film1', lekcja: '36', title: 'Rodzina wyrazów (3 zadania)' },
+  { id: 'o-u-film1', lekcja: '37', title: 'Pisownia ó i u (3 zadania)' },
+  { id: 'opis-postaci-film1', lekcja: '38', title: 'Opis postaci (3 zadania)' },
+  { id: 'podsumowanie4-dzial3-film1', lekcja: '39', title: 'Podsumowanie rozdziału III - Od pomysłu do działania (3 zadania)' },
   // Klasa 4, lektura „Chłopcy z Placu Broni” (lekturaChlopcy.ts): ok. 8 min, 3 zadania z minuta na kazde.
   { id: 'placu-broni-film1', lekcja: 'L1', title: 'Plac Broni - czas i miejsce akcji (3 zadania)' },
   { id: 'placu-broni-film2', lekcja: 'L2', title: 'Dwie drużyny - bohater główny, drugoplanowy, zbiorowy (3 zadania)' },

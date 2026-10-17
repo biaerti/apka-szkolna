@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Opis przedmiotu - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+#s01 .zagadka { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; max-width: 1060px; }
+#s01 .zagadka .chip { font-size: 25px; background: var(--fiolet); }
+#s01 .budzik { font-size: 90px; line-height: 1.1; margin-top: 6px; }
+#s01 .tytul { font-size: 84px; }
+.plan { display: flex; gap: 16px; margin-top: 22px; }
+.plan .karta { flex: 1; text-align: left; }
+.plan .karta .nazwa { font-size: 34px; }
+.plan .karta .opis { font-size: 24px; color: var(--ciemny); }
+.plan .w { border-color: var(--pomarancz); } .plan .w .nazwa { color: var(--pomarancz); }
+.plan .r { border-color: var(--fiolet); flex: 1.5; } .plan .r .nazwa { color: var(--fiolet); }
+.plan .z { border-color: var(--zielony); } .plan .z .nazwa { color: var(--zielony); }
+#s02 .wsk { margin-top: 26px; background: var(--ciemny); font-size: 26px; }
+#s03 .lis { margin: 14px auto 0; width: 1120px; text-align: left; }
+#s03 .lis .akap { font-size: 26px; font-weight: 800; line-height: 1.4; padding: 6px 14px; border-radius: 14px; margin-top: 6px; }
+#s03 .lis .akap b { font-family: 'Baloo 2'; color: #fff; border-radius: 8px; padding: 0 10px; margin-right: 8px; font-size: 22px; }
+#s03 .aw { background: #fff1e3; } #s03 .aw b { background: var(--pomarancz); }
+#s03 .ar { background: #f1e8fb; } #s03 .ar b { background: var(--fiolet); }
+#s03 .az { background: #e3f5ea; } #s03 .az b { background: var(--zielony); }
+.lit3 { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+.lit3 .chip { font-size: 24px; }
+.lit3 .w { background: var(--pomarancz); } .lit3 .r { background: var(--fiolet); } .lit3 .z { background: var(--zielony); }
+#s04 .linia, #s05 .linia { font-size: 26px; padding: 3px 16px; }
+#s04 .lista, #s05 .lista { gap: 6px; margin-top: 10px; }
+#s06 .kamera { display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 30px; }
+#s06 .kamera .karta { flex: 0 0 300px; }
+#s06 .kamera .nazwa { font-size: 32px; color: var(--fiolet); }
+#s06 .strz { font-size: 50px; color: var(--szary); font-weight: 800; }
+#s06 .wsk { margin-top: 30px; background: var(--fiolet); font-size: 28px; }
+#s07 .rzad .karta .nazwa { font-size: 34px; }
+#s07 .rzad .karta .opis { font-size: 25px; color: var(--ciemny); }
+.szesc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px auto 0; width: 1000px; }
+.szesc .karta { padding: 10px; }
+.szesc .karta .nazwa { font-size: 34px; }
+.szesc .odkryj { font-size: 28px; }
+.zmysly { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+.zmysly .chip { font-size: 26px; background: var(--niebieski); }
+#s10 .rzad .karta { text-align: left; }
+#s10 .rzad .karta .opis { font-size: 30px; color: var(--ciemny); line-height: 1.45; }
+#s10 .zle-k { border-color: var(--roz); } #s10 .dobrze-k { border-color: var(--zielony); }
+#s10 .zle-k .nazwa { color: var(--roz); } #s10 .dobrze-k .nazwa { color: var(--zielony); }
+#s10 .pow { color: var(--roz); text-decoration: underline wavy; }
+#s11 .linia, #s12 .linia { font-size: 29px; }
+#s11 .lista, #s12 .lista { width: 1100px; margin-top: 16px; }
+#s12 .kolej { margin-top: 14px; font-size: 32px; background: var(--zielony); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="zagadka">
+      <span class="chip pop" data-slowo="szafce">🛏️ na szafce przy łóżku</span>
+      <span class="chip pop" data-slowo="okrągły">⚪ okrągły i mały</span>
+      <span class="chip pop" data-slowo="srebrną">🩶 srebrna obudowa</span>
+      <span class="chip pop" data-slowo="dzwonki">🔔🔔 dwa dzwonki</span>
+      <span class="chip pop" data-slowo="tyka">🎵 cicho tyka</span>
+    </div>
+    <div class="budzik pop" data-slowo="budzik">⏰</div>
+    <div class="tytul pop" data-slowo="opis">Opis<br><span>przedmiotu</span></div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-plan" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · PLAN OPISU</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Trzy części opisu 📝</h2>
+    <div class="plan">
+      <div class="karta w pop" data-slowo="wstępie"><div class="nazwa">W · wstęp</div><div class="opis">co to jest?<br>skąd to mam?</div></div>
+      <div class="karta r pop" data-slowo="rozwinięciu"><div class="nazwa">R · rozwinięcie</div><div class="opis">wygląd: wielkość, kształt, kolor, materiał, części, coś szczególnego</div></div>
+      <div class="karta z pop" data-slowo="zakończeniu"><div class="nazwa">Z · zakończenie</div><div class="opis">do czego służy?<br>co o nim myślę?</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="linijki">↩️ każda część od nowej linijki</span></div>
+  </section>
+
+  <section class="scena" data-id="03-lis" id="s03">
+    <span class="czesc c1">1 · PLAN OPISU</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Mój pluszowy lis 🦊</h2>
+    <div class="lis">
+      <div class="akap aw pop" data-slowo="wstęp"><b>W</b>Moim ulubionym przedmiotem jest pluszowy lis od cioci.</div>
+      <div class="akap ar pop" data-slowo="rozwinięcie"><b>R</b>Lis jest niewielki, ma rudą sierść, biały brzuszek i puszysty ogon. <span class="pop" data-slowo="oczy">Jego oczy to czarne, błyszczące guziki.</span> <span class="pop" data-slowo="ucho">Jedno ucho jest przetarte, bo zawsze trzymam go właśnie za nie.</span></div>
+      <div class="akap az pop" data-slowo="zakończenie"><b>Z</b>Lis śpi ze mną każdej nocy. Jest dla mnie ważny, bo przypomina mi ciocię.</div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc c1">1 · PLAN OPISU</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="której">Do której części opisu pasuje zdanie? Zapisz: W, R albo Z.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="sześć"><span class="nr">1</span>Kubek ma ucho w kształcie kociego ogona.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.15"><span class="nr">2</span>Opiszę kubek, który kupiłem na wycieczce do Zakopanego.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.3"><span class="nr">3</span>Codziennie piję z niego kakao i zawsze poprawia mi humor.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.45"><span class="nr">4</span>Jest biały, a na boku ma namalowanego szarego kota.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.6"><span class="nr">5</span>Nie oddałbym go za nic na świecie.</div>
+      <div class="linia pop" data-slowo="sześć" data-po="0.75"><span class="nr">6</span>Został zrobiony z grubej porcelany.</div>
+    </div>
+    <div class="lit3"><span class="chip w">W · wstęp</span><span class="chip r">R · rozwinięcie</span><span class="chip z">Z · zakończenie</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc c1">1 · PLAN OPISU</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Do której części opisu pasuje zdanie? Zapisz: W, R albo Z.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Kubek ma ucho w kształcie kociego ogona. <span class="odkryj" data-slowo="ucho">R</span> <span class="odkryj dlaczego" data-slowo="ucho">część kubka</span></div>
+      <div class="linia"><span class="nr">2</span>Opiszę kubek, który kupiłem na wycieczce do Zakopanego. <span class="odkryj" data-slowo="wstęp">W</span> <span class="odkryj dlaczego" data-slowo="skąd">co i skąd</span></div>
+      <div class="linia"><span class="nr">3</span>Codziennie piję z niego kakao i zawsze poprawia mi humor. <span class="odkryj" data-slowo="kakao">Z</span> <span class="odkryj dlaczego" data-slowo="służy">do czego służy</span></div>
+      <div class="linia"><span class="nr">4</span>Jest biały, a na boku ma namalowanego szarego kota. <span class="odkryj" data-slowo="wygląd">R</span> <span class="odkryj dlaczego" data-slowo="wygląd">wygląd</span></div>
+      <div class="linia"><span class="nr">5</span>Nie oddałbym go za nic na świecie. <span class="odkryj" data-slowo="oddałbym">Z</span> <span class="odkryj dlaczego" data-slowo="myślę">co o nim myślę</span></div>
+      <div class="linia"><span class="nr">6</span>Został zrobiony z grubej porcelany. <span class="odkryj" data-slowo="porcelany">R</span> <span class="odkryj dlaczego" data-slowo="materiał">materiał</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="06-kolejnosc" id="s06">
+    <span class="czesc c2 zjaw" data-t="0">2 · ROZWINIĘCIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Od ogółu do szczegółu 🎥</h2>
+    <div class="kamera">
+      <div class="karta pop" data-slowo="cały"><div class="emo">🦊</div><div class="nazwa">cały przedmiot</div><div class="opis">wielkość, kształt, kolor</div></div>
+      <div class="strz pop" data-slowo="materiał">➜</div>
+      <div class="karta pop" data-slowo="materiał"><div class="emo">🧶</div><div class="nazwa">materiał</div><div class="opis">z czego jest?</div></div>
+      <div class="strz pop" data-slowo="szczegóły">➜</div>
+      <div class="karta pop" data-slowo="szczegóły"><div class="emo">🔍</div><div class="nazwa">szczegóły</div><div class="opis">części i drobiazgi</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="kamera">🎥 jak kamera, która robi zbliżenie</span></div>
+  </section>
+
+  <section class="scena" data-id="07-zmysly" id="s07">
+    <span class="czesc c3 zjaw" data-t="0">3 · ZMYSŁY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Nie tylko „widzę” 👀✋👂👃</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="dotyk"><div class="emo">✋</div><div class="nazwa">dotyk</div><div class="opis">gładki · chropowaty · puszysty</div></div>
+      <div class="karta pop" data-slowo="słuch"><div class="emo">👂</div><div class="nazwa">słuch</div><div class="opis">skrzypi · szeleści · tyka</div></div>
+      <div class="karta pop" data-slowo="węch"><div class="emo">👃</div><div class="nazwa">węch</div><div class="opis">pachnie wanilią</div></div>
+      <div class="karta pop" data-slowo="wzrok"><div class="emo">👀</div><div class="nazwa">wzrok</div><div class="opis">lśniący · kolorowy</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="ożywa" style="background:var(--niebieski)">✨ ze zmysłami opis ożywa</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc c3">3 · ZMYSŁY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zmysłem">Jakim zmysłem to poznajemy? Zapisz numer i zmysł.</div>
+    <div class="szesc">
+      <div class="karta pop" data-slowo="słów"><div class="nazwa"><span class="nr">1</span>gładki</div></div>
+      <div class="karta pop" data-slowo="słów" data-po="0.15"><div class="nazwa"><span class="nr">2</span>skrzypi</div></div>
+      <div class="karta pop" data-slowo="słów" data-po="0.3"><div class="nazwa"><span class="nr">3</span>pachnie cynamonem</div></div>
+      <div class="karta pop" data-slowo="słów" data-po="0.45"><div class="nazwa"><span class="nr">4</span>lśniący</div></div>
+      <div class="karta pop" data-slowo="słów" data-po="0.6"><div class="nazwa"><span class="nr">5</span>szorstki</div></div>
+      <div class="karta pop" data-slowo="słów" data-po="0.75"><div class="nazwa"><span class="nr">6</span>dzwoni</div></div>
+    </div>
+    <div class="zmysly pop" data-slowo="wzrokiem"><span class="chip">👀 wzrok</span><span class="chip">✋ dotyk</span><span class="chip">👂 słuch</span><span class="chip">👃 węch</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc c3">3 · ZMYSŁY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jakim zmysłem to poznajemy? Zapisz numer i zmysł.</div>
+    <div class="szesc">
+      <div class="karta"><div class="nazwa"><span class="nr">1</span>gładki</div><span class="odkryj" data-slowo="gładki">✋ dotyk</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">2</span>skrzypi</div><span class="odkryj" data-slowo="skrzypi">👂 słuch</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">3</span>pachnie cynamonem</div><span class="odkryj" data-slowo="nosem">👃 węch</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">4</span>lśniący</div><span class="odkryj" data-slowo="lśniący">👀 wzrok</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">5</span>szorstki</div><span class="odkryj" data-slowo="szorstki">✋ dotyk</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">6</span>dzwoni</div><span class="odkryj" data-slowo="dzwoni">👂 słuch</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="10-powtorzenia" id="s10">
+    <span class="czesc c4 zjaw" data-t="0">4 · BEZ POWTÓRZEŃ</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--zielony)">Unikaj powtórzeń 🔁❌</h2>
+    <div class="rzad">
+      <div class="karta zle-k pop" data-slowo="posłuchajcie"><div class="nazwa">😴 nudno</div><div class="opis"><span class="pow">Piórnik jest</span> niebieski. <span class="pow">Piórnik jest</span> duży. <span class="pow">Piórnik ma</span> zamek.</div></div>
+      <div class="karta dobrze-k pop" data-slowo="połączyć"><div class="nazwa">✨ lepiej</div><div class="opis">Mój piórnik jest duży i niebieski. Zapina się na zamek.</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="połącz" style="background:var(--zielony)">🔗 połącz zdania albo użyj innego wyrazu</span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="11-zadanie3+60" id="s11">
+    <span class="czesc c2">2 · ROZWINIĘCIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="ułóż">Ułóż zdania od ogółu do szczegółu. Zapisz numery w dobrej kolejności.</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>🏀 Na jednym boku ma podpis znanego koszykarza.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.2"><span class="nr">2</span>🏀 To duża, okrągła piłka do koszykówki w pomarańczowym kolorze.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.4"><span class="nr">3</span>🏀 Jest zrobiona z grubej, chropowatej gumy.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">4</span>🏀 Całą piłkę przecinają czarne paski.</div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="ogółu" style="background:var(--fiolet)">🎥 całość ➜ materiał ➜ części ➜ drobny szczegół</span></div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc c2">2 · ROZWINIĘCIE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Ułóż zdania od ogółu do szczegółu. Zapisz numery w dobrej kolejności.</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>🏀 Na jednym boku ma podpis znanego koszykarza. <span class="odkryj" data-slowo="koszykarza">➜ czwarte · drobny szczegół</span></div>
+      <div class="linia"><span class="nr">2</span>🏀 To duża, okrągła piłka do koszykówki w pomarańczowym kolorze. <span class="odkryj" data-slowo="całość">➜ pierwsze · całość</span></div>
+      <div class="linia"><span class="nr">3</span>🏀 Jest zrobiona z grubej, chropowatej gumy. <span class="odkryj" data-slowo="materiał">➜ drugie · materiał</span></div>
+      <div class="linia"><span class="nr">4</span>🏀 Całą piłkę przecinają czarne paski. <span class="odkryj" data-slowo="części">➜ trzecie · części</span></div>
+    </div>
+    <div><span class="chip kolej pop" data-slowo="kolejność">2 ➜ 3 ➜ 4 ➜ 1</span></div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="13-podsumowanie" id="s13">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="wstęp">📝 <b>Wstęp:</b> co to jest i skąd to mam</div>
+      <div class="linia pop" data-slowo="rozwinięcie">🎥 <b>Rozwinięcie:</b> wygląd od ogółu do szczegółu - wielkość, kształt, kolor, materiał, części</div>
+      <div class="linia pop" data-slowo="zakończenie">💭 <b>Zakończenie:</b> do czego służy i co o nim myślę</div>
+      <div class="linia pop" data-slowo="zmysłów">👀✋👂👃 używaj zmysłów · 🔁❌ unikaj powtórzeń</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

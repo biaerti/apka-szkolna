@@ -10,6 +10,7 @@
 //   komorce tekst podany albo luka; "Następny wyraz" przewija zestaw.
 
 import { CWICZENIA4 } from './cwiczenia4';
+import { CWICZENIA4_ROZDZIAL3 } from './cwiczenia4rozdzial3';
 import { CWICZENIA5 } from './cwiczenia5';
 
 export interface CwiczenieLuki {
@@ -45,7 +46,7 @@ export interface CwiczenieTabela {
 
 export type Cwiczenie = CwiczenieLuki | CwiczenieTabela;
 
-export const CWICZENIA: Cwiczenie[] = [...CWICZENIA4, ...CWICZENIA5];
+export const CWICZENIA: Cwiczenie[] = [...CWICZENIA4, ...CWICZENIA4_ROZDZIAL3, ...CWICZENIA5];
 
 export function cwiczenieById(id: string): Cwiczenie | undefined {
   return CWICZENIA.find((c) => c.id === id);

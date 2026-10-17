@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Pisownia ó i u - klasa 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). Klocki w wspolne.css. */
+/* W narracji "o z kreską" i "zwykłe u" - same litery tylko na ekranie. */
+.o { color: var(--roz); } .u { color: var(--niebieski); }
+#s01 .dwa { display: flex; gap: 40px; justify-content: center; margin-top: 10px; }
+#s01 .dwa div { font-family: 'Baloo 2'; font-size: 60px; font-weight: 800; }
+#s01 .tytul { font-size: 100px; }
+.pary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin: 22px auto 0; width: 1000px; }
+.pary .karta .nazwa { font-size: 40px; }
+.pary .karta .nazwa b { color: var(--roz); }
+.pary .karta .nazwa i { font-style: normal; color: var(--zielony); }
+#s02 .wsk { margin-top: 22px; background: var(--roz); font-size: 28px; }
+.piec { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 22px auto 0; width: 1100px; }
+.piec .karta .nazwa { font-size: 44px; }
+.piec .karta .nazwa b { color: var(--roz); }
+.piec .odkryj { font-size: 30px; }
+.zasady { display: flex; flex-direction: column; gap: 14px; margin: 26px auto 0; width: 1140px; }
+.zasady .linia { font-size: 31px; padding: 10px 20px; }
+#s09 h2 { margin-top: 12px; }
+.zasady .linia .t { display: inline-block; font-family: 'Baloo 2'; color: #fff; border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.zasady .to { background: var(--roz); } .zasady .tu { background: var(--niebieski); }
+.zasady .wyj { font-size: 24px; color: var(--szary); }
+.szesc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px auto 0; width: 1000px; }
+.szesc .karta .nazwa { font-size: 42px; }
+.szesc .luka { color: var(--roz); }
+.szesc .odkryj { font-size: 25px; }
+#s09 .slowa { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px auto 0; width: 1100px; }
+#s09 .slowa .chip { font-size: 32px; background: var(--roz); }
+#s09 .slowa.uu .chip { background: var(--niebieski); }
+#s09 .sposoby { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+#s09 .sposoby .chip { font-size: 26px; background: var(--fiolet); }
+#s09 .orto { font-size: 70px; margin-top: 8px; }
+.tekst { margin: 16px auto 0; width: 1080px; text-align: left; border-color: var(--pomarancz); }
+.tekst .nazwa { font-family: 'Nunito'; font-size: 34px; line-height: 1.7; }
+.tekst .luka { color: var(--roz); font-family: 'Baloo 2'; }
+.tekst .odkryj { font-size: 34px; }
+#s11 .lista-slow .chip { font-size: 23px; background: var(--zielony); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scena intro" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Rozdział III · Od pomysłu do działania</div>
+    <div class="dwa">
+      <div class="pop" data-slowo="góra">⛰️ g<span class="o">ó</span>ra</div>
+      <div class="pop" data-slowo="ul">🐝 <span class="u">u</span>l</div>
+    </div>
+    <div class="tytul pop" data-slowo="kreską">Pisownia <span class="o">ó</span> i <span class="u">u</span></div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="zasady">📏 zasady</span>
+      <span class="chip pop" data-slowo="sposoby">💡 sprytne sposoby</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <section class="scena" data-id="02-wymienne" id="s02">
+    <span class="czesc c1 zjaw" data-t="0">1 · Ó WYMIENNE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0"><span class="o">ó</span> ➜ o, e, a 🔄</h2>
+    <div class="pary">
+      <div class="karta pop" data-slowo="stół"><div class="nazwa">st<b>ó</b>ł ➜ st<i>o</i>ły</div></div>
+      <div class="karta pop" data-slowo="kółko"><div class="nazwa">k<b>ó</b>łko ➜ k<i>o</i>ło</div></div>
+      <div class="karta pop" data-slowo="wiózł"><div class="nazwa">wi<b>ó</b>zł ➜ wi<i>e</i>zie</div></div>
+      <div class="karta pop" data-slowo="skrócić"><div class="nazwa">skr<b>ó</b>cić ➜ skr<i>a</i>cać</div></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="krewnego">🔎 zmień formę albo poszukaj krewnego ➜ słyszysz o, e, a? ➜ <span style="color:#fff">ó</span></span></div>
+  </section>
+
+  <section class="scena zadanie" data-id="03-zadanie1+60" id="s03">
+    <span class="czesc c1">1 · Ó WYMIENNE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="uzasadnia">Uzasadnij <span class="o">ó</span>: dopisz jeden wyraz, w którym słychać o albo e.</div>
+    <div class="piec">
+      <div class="karta pop" data-slowo="pięć"><div class="emo">🧊</div><div class="nazwa">l<b>ó</b>d</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.15"><div class="emo">🥶</div><div class="nazwa">mr<b>ó</b>z</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.3"><div class="emo">🕳️</div><div class="nazwa">d<b>ó</b>ł</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.45"><div class="emo">🪶</div><div class="nazwa">pi<b>ó</b>ro</div></div>
+      <div class="karta pop" data-slowo="pięć" data-po="0.6"><div class="emo">🧂</div><div class="nazwa">s<b>ó</b>l</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="04-odpowiedz1" id="s04">
+    <span class="czesc c1">1 · Ó WYMIENNE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Uzasadnij <span class="o">ó</span>: dopisz jeden wyraz, w którym słychać o albo e.</div>
+    <div class="piec">
+      <div class="karta"><div class="emo">🧊</div><div class="nazwa">l<b>ó</b>d</div><span class="odkryj" data-slowo="lody">lody</span></div>
+      <div class="karta"><div class="emo">🥶</div><div class="nazwa">mr<b>ó</b>z</div><span class="odkryj" data-slowo="mrozy">mrozy</span></div>
+      <div class="karta"><div class="emo">🕳️</div><div class="nazwa">d<b>ó</b>ł</div><span class="odkryj" data-slowo="doły">doły</span></div>
+      <div class="karta"><div class="emo">🪶</div><div class="nazwa">pi<b>ó</b>ro</div><span class="odkryj" data-slowo="pierze">pierze</span></div>
+      <div class="karta"><div class="emo">🧂</div><div class="nazwa">s<b>ó</b>l</div><span class="odkryj" data-slowo="solić">solić</span></div>
+    </div>
+    <div><span class="chip wsk pop" data-slowo="dowód" style="background:var(--roz)">o albo e w innej formie = dowód na <span style="color:#fff">ó</span> ✅</span></div>
+  </section>
+
+  <section class="scena" data-id="05-zakonczenia" id="s05">
+    <span class="czesc c2 zjaw" data-t="0">2 · ZAKOŃCZENIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--fiolet)">Kiedy piszemy <span class="o">ó</span>? 🏙️</h2>
+    <div class="zasady">
+      <div class="linia pop" data-slowo="kraków"><span class="t to">-ów</span>Krak<span class="o">ów</span> · Rzesz<span class="o">ów</span> · kot<span class="o">ów</span> · dom<span class="o">ów</span></div>
+      <div class="linia pop" data-slowo="pocztówka"><span class="t to">-ówka</span>poczt<span class="o">ówka</span> · temper<span class="o">ówka</span></div>
+      <div class="linia pop" data-slowo="wyjątków"><span class="wyj">⚠️ wyjątki ze zwykłym <span class="u">u</span>: skuwka · zasuwka · wsuwka</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="06-u" id="s06">
+    <span class="czesc c2">2 · ZAKOŃCZENIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Kiedy piszemy <span class="u">u</span>? ✏️</h2>
+    <div class="zasady">
+      <div class="linia pop" data-slowo="rachunek"><span class="t tu">-unek -uszek -utki -uchny -uś -usia</span>rach<span class="u">u</span>nek · koż<span class="u">u</span>szek · mal<span class="u">u</span>tki · syn<span class="u">u</span>ś · mam<span class="u">u</span>sia</div>
+      <div class="linia pop" data-slowo="czasownikach"><span class="t tu">-uj-</span>mal<span class="u">u</span>je · rys<span class="u">u</span>ję · kopi<span class="u">u</span>ją</div>
+      <div class="linia pop" data-slowo="początku"><span class="t tu">na początku</span><span class="u">u</span>cho · <span class="u">u</span>lica · <span class="u">u</span>śmiech <span class="wyj">(wyjątki: ósmy, ósemka)</span></div>
+      <div class="linia pop" data-slowo="końcu"><span class="t tu">na końcu</span>dom<span class="u">u</span> · po cich<span class="u">u</span></div>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="07-zadanie2+60" id="s07">
+    <span class="czesc c2">2 · ZAKOŃCZENIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="brakuje"><span class="o">ó</span> czy <span class="u">u</span>? Zapisz całe wyrazy.</div>
+    <div class="szesc">
+      <div class="karta pop" data-slowo="sześciu"><div class="nazwa"><span class="nr">1</span>Krak<span class="luka">_</span>w</div></div>
+      <div class="karta pop" data-slowo="sześciu" data-po="0.15"><div class="nazwa"><span class="nr">2</span>poczt<span class="luka">_</span>wka</div></div>
+      <div class="karta pop" data-slowo="sześciu" data-po="0.3"><div class="nazwa"><span class="nr">3</span>mal<span class="luka">_</span>tki</div></div>
+      <div class="karta pop" data-slowo="sześciu" data-po="0.45"><div class="nazwa"><span class="nr">4</span>rys<span class="luka">_</span>nek</div></div>
+      <div class="karta pop" data-slowo="sześciu" data-po="0.6"><div class="nazwa"><span class="nr">5</span>mal<span class="luka">_</span>je</div></div>
+      <div class="karta pop" data-slowo="sześciu" data-po="0.75"><div class="nazwa"><span class="nr">6</span><span class="luka">_</span>cho</div></div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc c2">2 · ZAKOŃCZENIA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie"><span class="o">ó</span> czy <span class="u">u</span>? Zapisz całe wyrazy.</div>
+    <div class="szesc">
+      <div class="karta"><div class="nazwa"><span class="nr">1</span>Krak<span class="o">ó</span>w</div><span class="odkryj" data-slowo="miast">-ów jak w nazwach miast</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">2</span>poczt<span class="o">ó</span>wka</div><span class="odkryj" data-slowo="temperówce">-ówka jak temperówka</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">3</span>mal<span class="u">u</span>tki</div><span class="odkryj" data-slowo="słodziutki">-utki jak słodziutki</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">4</span>rys<span class="u">u</span>nek</div><span class="odkryj" data-slowo="rachunek">-unek jak rachunek</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">5</span>mal<span class="u">u</span>je</div><span class="odkryj" data-slowo="uj">-uj- w czasowniku</span></div>
+      <div class="karta"><div class="nazwa"><span class="nr">6</span><span class="u">u</span>cho</div><span class="odkryj" data-slowo="początku">na początku wyrazu</span></div>
+    </div>
+  </section>
+
+  <section class="scena" data-id="09-niewymienne" id="s09">
+    <span class="czesc c3 zjaw" data-t="0">3 · DO ZAPAMIĘTANIA</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Tych słów uczymy się na pamięć 🧠</h2>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="góra">g<b>ó</b>ra</span><span class="chip pop" data-slowo="ogórek">og<b>ó</b>rek</span><span class="chip pop" data-slowo="żółw">ż<b>ó</b>łw</span><span class="chip pop" data-slowo="róża">r<b>ó</b>ża</span><span class="chip pop" data-slowo="wróbel">wr<b>ó</b>bel</span><span class="chip pop" data-slowo="który">kt<b>ó</b>ry</span>
+    </div>
+    <div class="slowa uu">
+      <span class="chip pop" data-slowo="brzuch">brz<b>u</b>ch</span><span class="chip pop" data-slowo="komputer">komp<b>u</b>ter</span><span class="chip pop" data-slowo="burza">b<b>u</b>rza</span>
+    </div>
+    <div class="orto pop" data-slowo="ortoobrazki">🐢 🌹 🐦</div>
+    <div class="sposoby">
+      <span class="chip pop" data-slowo="ortoobrazki">🎨 ortoobrazki</span><span class="chip pop" data-slowo="rymowanki">🎵 rymowanki</span><span class="chip pop" data-slowo="lodówce">📝 karteczki na lodówce</span>
+    </div>
+  </section>
+
+  <section class="scena zadanie" data-id="10-zadanie3+60" id="s10">
+    <span class="czesc c3">3 · DO ZAPAMIĘTANIA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="wpisz"><span class="o">ó</span> czy <span class="u">u</span>? Zapisz tylko uzupełnione wyrazy.</div>
+    <div class="karta tekst pop" data-slowo="tekst">
+      <div class="nazwa">⛰️ Na g<span class="luka">_</span>rze stoi dom babci. W ogr<span class="luka">_</span>dku rosną r<span class="luka">_</span>że. Mój brat narysował tam ż<span class="luka">_</span>łwia. Za ten rys<span class="luka">_</span>nek dostał sz<span class="luka">_</span>stkę!</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+    <div class="minuta pop" data-slowo="minutę">⏱ masz minutę · możesz zatrzymać film</div>
+  </section>
+
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc c3">3 · DO ZAPAMIĘTANIA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie"><span class="o">ó</span> czy <span class="u">u</span>? Zapisz tylko uzupełnione wyrazy.</div>
+    <div class="karta tekst">
+      <div class="nazwa">⛰️ Na <span class="odkryj" data-slowo="górze">górze</span> stoi dom babci. W <span class="odkryj" data-slowo="ogródku">ogródku</span> rosną <span class="odkryj" data-slowo="róże">róże</span>. Mój brat narysował tam <span class="odkryj" data-slowo="żółwia">żółwia</span>. Za ten <span class="odkryj" data-slowo="rysunek">rysunek</span> dostał <span class="odkryj" data-slowo="szóstkę">szóstkę</span>!</div>
+    </div>
+    <div class="lista-slow">
+      <span class="chip pop" data-slowo="górze">górze - zapamiętaj</span><span class="chip pop" data-slowo="ogrody">ogródek - ogrody</span><span class="chip pop" data-slowo="róże">róża - zapamiętaj</span><span class="chip pop" data-slowo="żółwia">żółw - zapamiętaj</span><span class="chip pop" data-slowo="rysunek">-unek</span><span class="chip pop" data-slowo="sześć">szóstka - sześć</span>
+    </div>
+  </section>
+
+  <section class="scena zapamietaj" data-id="12-podsumowanie" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="wymienia"><span class="o">ó</span> wymienne na o, e, a: stół - stoły · sól - solić</div>
+      <div class="linia pop" data-slowo="kraków"><span class="o">ó</span> w zakończeniach: Kraków · pocztówka</div>
+      <div class="linia pop" data-slowo="rachunek"><span class="u">u</span> w zakończeniach: rachunek · malutki · synuś · w czasownikach z -uj-: maluje</div>
+      <div class="linia pop" data-slowo="początku"><span class="u">u</span> na początku i na końcu wyrazu: ucho · domu</div>
+      <div class="linia pop" data-slowo="pamięć">🧠 na pamięć: góra · żółw · brzuch</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
