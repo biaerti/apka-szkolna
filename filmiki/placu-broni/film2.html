@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Dwie drużyny - bohaterowie - lektura kl. 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<link rel="stylesheet" href="lektura.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s01 .ikona { font-size: 110px; line-height: 1.1; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 92px; font-weight: 800; line-height: 1; color: var(--plac); margin-top: 8px; }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; white-space: nowrap; background: var(--pomarancz); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 40px; font-weight: 800; }
+
+.ludzie { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; margin: 22px auto 0; width: 1120px; text-align: left; }
+.ludzie .linia { font-size: 30px; padding: 8px 20px; }
+.ludzie .linia small { display: block; font-family: 'Nunito'; font-size: 24px; color: var(--szary); }
+.ludzie .duzy { grid-column: 1 / span 2; }
+
+#s04 .drabina { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 20px; }
+#s04 .szczebel { font-family: 'Baloo 2'; font-size: 36px; font-weight: 800; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; padding: 4px 30px; }
+#s04 .s1 { width: 520px; border-color: var(--plac); }
+#s04 .s2 { width: 760px; }
+#s04 .s3 { width: 420px; border-color: var(--pomarancz); background: #fff4e6; }
+#s04 .gwiazda { margin-top: 16px; font-size: 36px; background: var(--pomarancz); }
+
+#s05 .kafel, #s06 .kafel { font-size: 34px; }
+#s05 .kafle, #s06 .kafle { gap: 10px 22px; margin-top: 14px; }
+.e-kosz { background: var(--koszule) !important; }
+
+#s07 .rzad { margin-top: 22px; align-items: stretch; }
+#s07 .karta .nazwa { font-size: 36px; }
+#s07 .karta .emo { font-size: 60px; }
+#s07 .karta .opis { font-size: 26px; }
+
+#s08 .lista { width: 1080px; margin-top: 22px; }
+#s08 .linia { font-size: 32px; }
+#s08 .linia .chip { font-size: 26px; padding: 2px 18px; margin-left: 8px; }
+
+#s09 .lista, #s10 .lista { width: 900px; gap: 10px; margin-top: 12px; }
+#s09 .linia, #s10 .linia { font-family: 'Baloo 2'; font-size: 34px; padding: 4px 22px; }
+#s09 .slowa .chip, #s10 .slowa .chip { background: var(--niebieski); }
+
+.siec { display: block; width: 1140px; height: 540px; margin: 0 auto; }
+.siec text { font-family: 'Baloo 2'; font-weight: 800; text-anchor: middle; }
+.siec .imie { font-size: 30px; fill: var(--ciemny); }
+.siec .stopien { font-size: 20px; fill: var(--szary); }
+.siec .emo { font-size: 44px; }
+.siec .etykieta { font-size: 26px; }
+.siec .grupa { font-size: 28px; }
+
+#s12 .lista, #s13 .lista { width: 1080px; gap: 12px; }
+#s12 .linia, #s13 .linia { font-size: 31px; padding: 7px 20px; }
+#s14 .lista { width: 1100px; gap: 14px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Lektura · lekcja 2</div>
+    <div class="ikona pop" data-t="0.3">👦👦👦 ⚔️ 👕</div>
+    <div class="tytul pop" data-slowo="bohaterów">Dwie drużyny</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="drużyny">🟩 kto w której drużynie?</span>
+      <span class="chip pop" data-slowo="rządzi">👑 kto rządzi?</span>
+      <span class="chip pop" data-slowo="rodzaje">🧑‍🤝‍🧑 trzy rodzaje bohaterów</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 chlopcy z placu ===== -->
+  <section class="scena" data-id="02-plac" id="s02">
+    <span class="czesc zjaw" data-t="0" style="background:var(--plac)">DRUŻYNA 1</span>
+    <h2 class="naglowek wjazd-dol c-plac" data-t="0">Chłopcy z Placu Broni 🟩</h2>
+    <div class="ludzie">
+      <div class="linia b-plac wjazd-lewo" data-slowo="boka">👑 Boka<small class="zjaw" data-slowo="spokojny">wódz, 14 lat · spokojny, rozsądny, sprawiedliwy</small></div>
+      <div class="linia wjazd-prawo" data-slowo="czonakosz">💪 Czonakosz<small>silny i wesoły</small></div>
+      <div class="linia wjazd-lewo" data-slowo="gereb">😒 Gereb<small>chciałby sam zostać wodzem</small></div>
+      <div class="linia wjazd-prawo" data-slowo="czele">👦 Czele, Kolnay, Barabasz, Weiss…<small>i inni oficerowie</small></div>
+      <div class="linia duzy pop" data-slowo="nemeczek" style="border-color:var(--pomarancz); text-align:center">🧒 Ernest Nemeczek<small>najmniejszy, jasnowłosy</small></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 czerwone koszule ===== -->
+  <section class="scena" data-id="03-koszule" id="s03">
+    <span class="czesc zjaw" data-t="0" style="background:var(--koszule)">DRUŻYNA 2</span>
+    <h2 class="naglowek wjazd-dol c-kosz" data-t="0">Czerwone Koszule 🟥</h2>
+    <div class="slowa"><span class="chip pop" data-slowo="wyspie" style="background:var(--koszule)">🏝️ kryjówka: wyspa w Ogrodzie Botanicznym</span></div>
+    <div class="ludzie">
+      <div class="linia b-kosz wjazd-lewo duzy" data-slowo="feri">👑 Feri Acz<small class="zjaw" data-slowo="surowy">wódz · wysoki, silny, surowy</small></div>
+      <div class="linia wjazd-lewo" data-slowo="pastorowie">💪💪 bracia Pastorowie<small>najsilniejsi i najgroźniejsi</small></div>
+      <div class="linia wjazd-prawo" data-slowo="sebenicz">👕 Sebenicz i Wendauer<small>członkowie drużyny</small></div>
+    </div>
+    <div class="slowa"><span class="chip pop" data-slowo="palanta" style="background:var(--koszule)">🎯 chcą plac, żeby grać w palanta</span></div>
+  </section>
+
+  <!-- ===== 04 stopnie ===== -->
+  <section class="scena" data-id="04-stopnie" id="s04">
+    <span class="czesc zjaw" data-t="0" style="background:var(--plac)">DRUŻYNA 1</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Jak w prawdziwym wojsku 🎖️</h2>
+    <div class="drabina">
+      <div class="szczebel s1 pop" data-slowo="wodzem">👑 wódz (generał): Boka</div>
+      <div class="szczebel s2 pop" data-slowo="kapitanowie">🎖️ kapitanowie · <span class="zjaw" data-slowo="porucznicy">porucznicy</span> · <span class="zjaw" data-slowo="podporucznicy">podporucznicy</span></div>
+      <div class="slowa"><span class="chip pop" data-slowo="oficerami">wszyscy są oficerami… oprócz jednego</span></div>
+      <div class="szczebel s3 pop" data-slowo="szeregowcem">🧒 szeregowiec: Nemeczek</div>
+    </div>
+    <div><span class="chip gwiazda pop" data-slowo="najważniejszy">⭐ a to on okaże się najważniejszy!</span></div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+60" id="s05">
+    <span class="czesc">DWIE DRUŻYNY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="której">Do której drużyny należą?</div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="osiem"><b>1</b>Boka</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="0.2"><b>2</b>Feri Acz</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="0.4"><b>3</b>Nemeczek</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="0.6"><b>4</b>bracia Pastorowie</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="0.8"><b>5</b>Czonakosz</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="1"><b>6</b>Sebenicz</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="1.2"><b>7</b>Czele</div>
+      <div class="kafel pop" data-slowo="osiem" data-po="1.4"><b>8</b>Wendauer</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="plac" style="background:var(--plac)">plac</span>
+      <span class="chip pop" data-slowo="koszule" style="background:var(--koszule)">koszule</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc">DWIE DRUŻYNY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Do której drużyny należą?</div>
+    <div class="kafle">
+      <div class="kafel"><b>1</b>Boka <span class="etyk o-znak" data-slowo="boka">plac</span></div>
+      <div class="kafel"><b>2</b>Feri Acz <span class="etyk e-kosz o-znak" data-slowo="feri">koszule</span></div>
+      <div class="kafel"><b>3</b>Nemeczek <span class="etyk o-znak" data-slowo="nemeczek">plac</span></div>
+      <div class="kafel"><b>4</b>bracia Pastorowie <span class="etyk e-kosz o-znak" data-slowo="pastorowie">koszule</span></div>
+      <div class="kafel"><b>5</b>Czonakosz <span class="etyk o-znak" data-slowo="czonakosz">plac</span></div>
+      <div class="kafel"><b>6</b>Sebenicz <span class="etyk e-kosz o-znak" data-slowo="sebenicz">koszule</span></div>
+      <div class="kafel"><b>7</b>Czele <span class="etyk o-znak" data-slowo="czele">plac</span></div>
+      <div class="kafel"><b>8</b>Wendauer <span class="etyk e-kosz o-znak" data-slowo="wendauer">koszule</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 07 rodzaje bohaterow ===== -->
+  <section class="scena" data-id="07-rodzaje" id="s07">
+    <span class="czesc zjaw" data-t="0">RODZAJE BOHATERÓW</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Trzy ważne słowa 🧑‍🤝‍🧑</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="główny" style="border-color:var(--pomarancz)"><div class="emo">⭐</div><div class="nazwa" style="color:var(--pomarancz)">bohater główny</div><div class="opis zjaw" data-slowo="akcja">najważniejszy, wokół niego toczy się akcja</div></div>
+      <div class="karta pop" data-slowo="drugoplanowy" style="border-color:var(--niebieski)"><div class="emo">🤝</div><div class="nazwa" style="color:var(--niebieski)">bohater drugoplanowy</div><div class="opis zjaw" data-slowo="pomaga">często jest, pomaga albo przeszkadza głównemu</div></div>
+      <div class="karta pop" data-slowo="grupa" style="border-color:var(--plac)"><div class="emo">👥</div><div class="nazwa" style="color:var(--plac)">bohater zbiorowy</div><div class="opis zjaw" data-slowo="drużyna">grupa, która działa razem: drużyna, klasa, rodzina</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 08 w ksiazce ===== -->
+  <section class="scena" data-id="08-w-ksiazce" id="s08">
+    <span class="czesc zjaw" data-t="0">RODZAJE BOHATERÓW</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">A w naszej książce? 📖</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="zbiorowym" style="border-color:var(--plac)">👥 zbiorowy: <span class="chip" style="background:var(--plac)">chłopcy z Placu Broni</span><span class="chip zjaw" data-slowo="drugim" style="background:var(--koszule)">Czerwone Koszule</span></div>
+      <div class="linia wjazd-lewo" data-slowo="głównymi" style="border-color:var(--pomarancz)">⭐ główni: <span class="chip" style="background:var(--pomarancz)">Nemeczek</span><span class="chip" style="background:var(--pomarancz)">Boka</span></div>
+      <div class="linia wjazd-lewo" data-slowo="drugoplanowi" style="border-color:var(--niebieski)">🤝 drugoplanowi: <span class="chip" style="background:var(--niebieski)">Feri Acz</span><span class="chip" style="background:var(--niebieski)">Gereb</span><span class="chip" style="background:var(--niebieski)">Czonakosz</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 09 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="09-zadanie2+60" id="s09">
+    <span class="czesc">RODZAJE BOHATERÓW</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="główny">Bohater główny, drugoplanowy czy zbiorowy?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="zbiorowy"><span class="nr">1</span>Nemeczek</div>
+      <div class="linia pop" data-slowo="zbiorowy" data-po="0.25"><span class="nr">2</span>chłopcy z Placu Broni</div>
+      <div class="linia pop" data-slowo="zbiorowy" data-po="0.5"><span class="nr">3</span>Czonakosz</div>
+      <div class="linia pop" data-slowo="zbiorowy" data-po="0.75"><span class="nr">4</span>Czerwone Koszule</div>
+      <div class="linia pop" data-slowo="zbiorowy" data-po="1"><span class="nr">5</span>Feri Acz</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="numerze">główny</span>
+      <span class="chip pop" data-slowo="numerze" data-po="0.2">drugoplanowy</span>
+      <span class="chip pop" data-slowo="numerze" data-po="0.4">zbiorowy</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 10 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="10-odpowiedz2" id="s10">
+    <span class="czesc">RODZAJE BOHATERÓW</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Bohater główny, drugoplanowy czy zbiorowy?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Nemeczek <span class="etyk o-znak" data-slowo="nemeczek" style="background:var(--pomarancz)">główny</span></div>
+      <div class="linia"><span class="nr">2</span>chłopcy z Placu Broni <span class="etyk o-znak" data-slowo="chłopcy">zbiorowy</span></div>
+      <div class="linia"><span class="nr">3</span>Czonakosz <span class="etyk o-znak" data-slowo="czonakosz" style="background:var(--niebieski)">drugoplanowy</span></div>
+      <div class="linia"><span class="nr">4</span>Czerwone Koszule <span class="etyk o-znak" data-slowo="koszule">zbiorowy</span></div>
+      <div class="linia"><span class="nr">5</span>Feri Acz <span class="etyk o-znak" data-slowo="feri" style="background:var(--niebieski)">drugoplanowy</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 11 siec bohaterow ===== -->
+  <section class="scena" data-id="11-siec" id="s11" style="padding-top:20px">
+    <span class="czesc zjaw" data-t="0">SIEĆ BOHATERÓW</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="font-size:46px">Kto z kim? 🕸️</h2>
+    <svg class="siec" viewBox="0 0 1140 540" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="20" width="560" height="500" rx="30" fill="#E6F4EA" stroke="#2E9E5B" stroke-width="4"/>
+      <text x="290" y="58" class="grupa" fill="#2E9E5B">CHŁOPCY Z PLACU BRONI</text>
+      <rect x="720" y="20" width="410" height="500" rx="30" fill="#FBE7E5" stroke="#D6453D" stroke-width="4"/>
+      <text x="925" y="58" class="grupa" fill="#D6453D">CZERWONE KOSZULE</text>
+      <!-- linie -->
+      <line x1="170" y1="200" x2="400" y2="350" stroke="#2E9E5B" stroke-width="8" pathLength="1" class="rysuj" data-slowo="przyjaciele"/>
+      <text x="250" y="348" class="etykieta m-zjaw" fill="#2E9E5B" data-slowo="przyjaciele">przyjaciele</text>
+      <line x1="230" y1="190" x2="870" y2="190" stroke="#F58220" stroke-width="8" pathLength="1" class="rysuj" data-slowo="rywale"/>
+      <text x="600" y="226" class="etykieta m-zjaw" fill="#F58220" data-slowo="rywale">rywale (z szacunkiem)</text>
+      <line x1="850" y1="410" x2="450" y2="370" stroke="#D6453D" stroke-width="8" pathLength="1" class="rysuj" data-slowo="dokuczają"/>
+      <text x="640" y="430" class="etykieta m-zjaw" fill="#D6453D" data-slowo="dokuczają">dokuczają</text>
+      <path d="M 446 100 C 580 60, 680 60, 780 110" fill="none" stroke="#D6453D" stroke-width="7" stroke-dasharray="16 12" class="m-zjaw" data-slowo="przerywana"/>
+      <text x="625" y="68" class="etykieta m-zjaw" fill="#D6453D" data-slowo="zdrada">⚠️ zdrada!</text>
+      <!-- wezly -->
+      <g><circle cx="170" cy="200" r="62" fill="#fff" stroke="#2E9E5B" stroke-width="6"/><text x="170" y="215" class="emo">👑</text><text x="170" y="292" class="imie">Boka</text></g>
+      <g><circle cx="400" cy="350" r="44" fill="#fff" stroke="#F58220" stroke-width="6"/><text x="400" y="364" class="emo" style="font-size:34px">🧒</text><text x="400" y="430" class="imie">Nemeczek</text><text x="400" y="456" class="stopien">jedyny szeregowiec</text></g>
+      <g><circle cx="140" cy="420" r="50" fill="#fff" stroke="#2E9E5B" stroke-width="5"/><text x="140" y="434" class="emo" style="font-size:36px">💪</text><text x="140" y="500" class="imie">Czonakosz</text></g>
+      <g><circle cx="400" cy="112" r="44" fill="#fff" stroke="#2E9E5B" stroke-width="5"/><text x="400" y="125" class="emo" style="font-size:34px">😒</text><text x="300" y="122" class="imie">Gereb</text></g>
+      <g><circle cx="930" cy="200" r="62" fill="#fff" stroke="#D6453D" stroke-width="6"/><text x="930" y="215" class="emo">👑</text><text x="930" y="292" class="imie">Feri Acz</text></g>
+      <g><circle cx="900" cy="410" r="52" fill="#fff" stroke="#D6453D" stroke-width="5"/><text x="900" y="424" class="emo" style="font-size:36px">💪💪</text><text x="900" y="492" class="imie">Pastorowie</text></g>
+    </svg>
+  </section>
+
+  <!-- ===== 12 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="12-zadanie3+60" id="s12">
+    <span class="czesc">RODZAJE BOHATERÓW</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dlaczego">Dlaczego Nemeczek jest bohaterem głównym?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="czterech"><span class="nr">1</span>Bo jest najstarszy z chłopców.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.3"><span class="nr">2</span>Bo historia kręci się wokół niego - jego odwaga decyduje o losie placu.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.6"><span class="nr">3</span>Bo ma najwyższy stopień w drużynie.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.9"><span class="nr">4</span>Bo jest wodzem Czerwonych Koszul.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="numer">Zapisz numer 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 13 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="13-odpowiedz3" id="s13">
+    <span class="czesc">RODZAJE BOHATERÓW</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Dlaczego Nemeczek jest bohaterem głównym?</div>
+    <div class="lista">
+      <div class="linia o-zla" data-slowo="pierwsza"><span class="nr">1</span>Bo jest najstarszy z chłopców.<span class="dl o-wpis-blok o-razem">jest najmniejszy, a nie najstarszy</span></div>
+      <div class="linia o-dobra" data-slowo="druga"><span class="nr">2</span>Bo historia kręci się wokół niego - jego odwaga decyduje o losie placu.<span class="dl o-wpis-blok o-razem">✅ o nim myślimy, kiedy zamykamy książkę</span></div>
+      <div class="linia o-zla" data-slowo="trzecia"><span class="nr">3</span>Bo ma najwyższy stopień w drużynie.<span class="dl o-wpis-blok o-razem">ma najniższy - jest szeregowcem</span></div>
+      <div class="linia o-zla" data-slowo="czwarta"><span class="nr">4</span>Bo jest wodzem Czerwonych Koszul.<span class="dl o-wpis-blok o-razem">ich wodzem jest Feri Acz</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 14 zapamietaj ===== -->
+  <section class="scena zapamietaj" data-id="14-zapamietaj" id="s14">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="główny" style="border-color:var(--pomarancz)">⭐ <b>Bohater główny</b> - najważniejszy, wokół niego toczy się akcja: Nemeczek, Boka</div>
+      <div class="linia pop" data-slowo="drugoplanowy" style="border-color:var(--niebieski)">🤝 <b>Bohater drugoplanowy</b> - towarzyszy głównemu: Feri Acz, Czonakosz</div>
+      <div class="linia pop b-plac" data-slowo="zbiorowy">👥 <b>Bohater zbiorowy</b> - grupa, która działa razem: chłopcy z Placu Broni, Czerwone Koszule</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film2-sciezka.mp3';</script>
+<script src="timeline-film2.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

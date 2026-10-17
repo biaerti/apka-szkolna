@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie jest osiem imion. Do której drużyny należą ci bohaterowie? Przy każdym numerze zapisz jedno słowo: plac albo koszule. Macie minutę. Start!

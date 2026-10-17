@@ -58,6 +58,13 @@ export const FILMIKI: Filmik[] = [
   { id: 'wielka-litera-film1', lekcja: '27', title: 'Wielka czy mała litera? (3 zadania)' },
   { id: 'nie-rzeczownik-film1', lekcja: '28', title: 'Nie z rzeczownikami (3 zadania)' },
   { id: 'podsumowanie4-dzial2-film1', lekcja: '29', title: 'Podsumowanie rozdziału II - Pośród słów i znaczeń (3 zadania)' },
+  // Klasa 4, lektura „Chłopcy z Placu Broni” (lekturaChlopcy.ts): ok. 8 min, 3 zadania z minuta na kazde.
+  { id: 'placu-broni-film1', lekcja: 'L1', title: 'Plac Broni - czas i miejsce akcji (3 zadania)' },
+  { id: 'placu-broni-film2', lekcja: 'L2', title: 'Dwie drużyny - bohater główny, drugoplanowy, zbiorowy (3 zadania)' },
+  { id: 'placu-broni-film3', lekcja: 'L3', title: 'Nemeczek - cechy bohatera i dowody (3 zadania)' },
+  { id: 'placu-broni-film4', lekcja: 'L4', title: 'Gereb - czyn, motyw i ocena bohatera (3 zadania)' },
+  { id: 'placu-broni-film5', lekcja: 'L5', title: 'Bitwa o Plac Broni - przyczyna, skutek, punkt kulminacyjny (3 zadania)' },
+  { id: 'placu-broni-film6', lekcja: 'L6', title: 'Przesłanie i wartości - podsumowanie lektury (3 zadania)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

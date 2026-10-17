@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Przesłanie i wartości - lektura kl. 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<link rel="stylesheet" href="lektura.css">
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s01 .ikona { font-size: 110px; line-height: 1.1; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 84px; font-weight: 800; line-height: 1.05; color: var(--plac); margin-top: 8px; }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; white-space: nowrap; background: var(--szary); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 40px; font-weight: 800; }
+
+#s02 .lista { width: 1040px; margin-top: 20px; gap: 12px; }
+#s02 .linia { font-size: 32px; }
+
+#s03 .wartosci { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin: 26px auto 0; width: 1140px; }
+#s03 .karta { padding: 12px 10px; }
+#s03 .karta .emo { font-size: 58px; }
+#s03 .karta .nazwa { font-size: 32px; }
+#s03 .karta .opis { font-size: 22px; }
+#s03 .czyny { margin-top: 26px; font-size: 32px; background: var(--plac); }
+
+#s04 .lista, #s05 .lista { width: 1060px; gap: 12px; margin-top: 16px; }
+#s04 .linia, #s05 .linia { font-size: 32px; }
+#s04 .slowa .chip, #s05 .slowa .chip { background: var(--plac); }
+
+#s06 .def { margin-top: 8px; font-size: 30px; background: var(--fiolet); }
+#s06 .pyt { margin-top: 10px; font-size: 32px; font-weight: 800; color: var(--szary); }
+#s06 svg { display: block; width: 900px; height: 360px; margin: 0 auto; }
+#s06 svg text { font-family: 'Baloo 2'; font-weight: 800; text-anchor: middle; }
+#s06 .wniosek { font-size: 32px; background: var(--pomarancz); }
+
+#s07 .lista, #s08 .lista { width: 1080px; gap: 12px; margin-top: 16px; }
+#s07 .linia, #s08 .linia { font-size: 31px; padding: 8px 20px; }
+#s08 .linia { font-size: 29px; padding: 6px 18px; }
+
+#s09 .lista, #s10 .lista { width: 1060px; gap: 10px; margin-top: 14px; }
+#s09 .linia, #s10 .linia { font-size: 31px; padding: 6px 20px; }
+#s09 .slowa .chip { background: var(--niebieski); }
+.e-f { background: var(--koszule) !important; }
+
+#s11 .lista { width: 1100px; gap: 12px; }
+#s11 .pojecia { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px auto 0; width: 1100px; }
+#s11 .pojecia .chip { font-size: 27px; background: var(--niebieski); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Lektura · lekcja 6</div>
+    <div class="ikona pop" data-t="0.3">❤️🦁🤝</div>
+    <div class="tytul pop" data-slowo="ostatnia">Co zostaje po Nemeczku<br>i po placu?</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="wartości">💎 wartości</span>
+      <span class="chip pop" data-slowo="przekazać">✉️ przesłanie</span>
+      <span class="chip pop" data-slowo="pamiętacie" style="background:var(--pomarancz)">📖 sprawdzamy całą książkę</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 zakonczenie ===== -->
+  <section class="scena" data-id="02-koniec" id="s02">
+    <span class="czesc zjaw" data-t="0">PRZYPOMNIENIE · rozdz. IX-X</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Zakończenie 📖</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="mama">🏠 Po bitwie mama zabiera Nemeczka do domu.</div>
+      <div class="linia wjazd-lewo" data-slowo="słowa">👑 👑 Boka i Feri Acz pod jego domem - bez słowa.</div>
+      <div class="linia wjazd-lewo b-plac" data-slowo="wielkimi">📒 W księdze: <b>ERNEST NEMECZEK</b> - wielkimi literami.</div>
+      <div class="linia wjazd-lewo" data-slowo="umiera">🕯️ Nemeczek wkrótce umiera.</div>
+      <div class="linia wjazd-lewo b-kosz" data-slowo="budowa">🏗️ Na placu ma stanąć dom - plac i tak przepadnie.</div>
+    </div>
+  </section>
+
+  <!-- ===== 03 wartosci ===== -->
+  <section class="scena" data-id="03-wartosci" id="s03">
+    <span class="czesc zjaw" data-t="0">WARTOŚCI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co jest dla nich najważniejsze? 💎</h2>
+    <div class="wartosci">
+      <div class="karta pop" data-slowo="przyjaźń"><div class="emo">❤️</div><div class="nazwa">przyjaźń</div><div class="opis">trzymają się razem</div></div>
+      <div class="karta pop" data-slowo="odwaga"><div class="emo">🦁</div><div class="nazwa">odwaga</div><div class="opis">mały, a się nie boi</div></div>
+      <div class="karta pop" data-slowo="wierność"><div class="emo">🤝</div><div class="nazwa">wierność</div><div class="opis">nie zdradza kolegów</div></div>
+      <div class="karta pop" data-slowo="szacunek"><div class="emo">🫡</div><div class="nazwa">szacunek</div><div class="opis">nawet dla wroga</div></div>
+      <div class="karta pop" data-slowo="przebaczenie"><div class="emo">🕊️</div><div class="nazwa">przebaczenie</div><div class="opis">druga szansa dla Gereba</div></div>
+    </div>
+    <div><span class="chip czyny pop" data-slowo="czynach">wartości widać w czynach bohaterów</span></div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc">WARTOŚCI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="scenie">Jaką wartość widać w każdej scenie?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="numerze"><span class="nr">1</span>Feri Acz każe swoim chłopcom salutować Nemeczkowi.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.3"><span class="nr">2</span>Boka przyjmuje Gereba z powrotem.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.6"><span class="nr">3</span>Chory Nemeczek biegnie bronić placu.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.9"><span class="nr">4</span>Boka płacze pod domem Nemeczka.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="przyjaźń">przyjaźń</span>
+      <span class="chip pop" data-slowo="odwaga">odwaga</span>
+      <span class="chip pop" data-slowo="szacunek">szacunek</span>
+      <span class="chip pop" data-slowo="przebaczenie">przebaczenie</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="raz">Każde słowo tylko raz 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc">WARTOŚCI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jaką wartość widać w każdej scenie?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Feri Acz każe swoim chłopcom salutować Nemeczkowi. <span class="etyk o-znak" data-slowo="szacunek">szacunek</span><span class="dl o-wpis-blok o-razem">docenia odwagę wroga</span></div>
+      <div class="linia"><span class="nr">2</span>Boka przyjmuje Gereba z powrotem. <span class="etyk o-znak" data-slowo="przebaczenie">przebaczenie</span></div>
+      <div class="linia"><span class="nr">3</span>Chory Nemeczek biegnie bronić placu. <span class="etyk o-znak" data-slowo="odwaga">odwaga</span></div>
+      <div class="linia"><span class="nr">4</span>Boka płacze pod domem Nemeczka. <span class="etyk o-znak" data-slowo="przyjaźń">przyjaźń</span><span class="dl o-wpis-blok o-razem">martwi się o małego przyjaciela</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 06 przeslanie ===== -->
+  <section class="scena" data-id="06-przeslanie" id="s06">
+    <span class="czesc zjaw" data-t="0">PRZESŁANIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co chce nam powiedzieć pisarz? ✉️</h2>
+    <div><span class="chip def pop" data-slowo="przesłanie">PRZESŁANIE = myśl, którą autor chce nam przekazać</span></div>
+    <div class="pyt zjaw" data-slowo="marne">Plac przepada, Nemeczek nie żyje… Wszystko na marne?</div>
+    <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg">
+      <g class="m-zjaw" data-slowo="pomyślmy">
+        <line x1="450" y1="70" x2="450" y2="330" stroke="#8B6A3E" stroke-width="12"/>
+        <rect x="380" y="320" width="140" height="22" rx="8" fill="#8B6A3E"/>
+        <line x1="190" y1="40" x2="710" y2="120" stroke="#8B6A3E" stroke-width="12" stroke-linecap="round"/>
+        <circle cx="450" cy="80" r="14" fill="#F58220"/>
+        <line x1="190" y1="40" x2="150" y2="150" stroke="#7a6a5c" stroke-width="3"/><line x1="190" y1="40" x2="230" y2="150" stroke="#7a6a5c" stroke-width="3"/>
+        <path d="M 110 150 L 270 150 Q 190 200 110 150 z" fill="#d9c9b2"/>
+        <line x1="710" y1="120" x2="670" y2="230" stroke="#7a6a5c" stroke-width="3"/><line x1="710" y1="120" x2="750" y2="230" stroke="#7a6a5c" stroke-width="3"/>
+        <path d="M 610 230 L 810 230 Q 710 290 610 230 z" fill="#d9c9b2"/>
+      </g>
+      <g class="m-pop" data-slowo="przepada"><text x="190" y="140" font-size="44">🏗️</text><text x="190" y="226" font-size="26" fill="#7a6a5c">plac przepada</text></g>
+      <g class="m-pop" data-slowo="pamięć"><text x="710" y="222" font-size="44">❤️🦁🫡</text><text x="710" y="318" font-size="26" fill="#2E9E5B">pamięć, przyjaźń, szacunek</text></g>
+    </svg>
+    <div><span class="chip wniosek pop" data-slowo="czynami">⭐ najmniejszy okazał się największy - czynami, nie wzrostem</span></div>
+  </section>
+
+  <!-- ===== 07 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie2+60" id="s07">
+    <span class="czesc">PRZESŁANIE</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="oddaje">Które zdanie najlepiej oddaje przesłanie książki?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="czterech"><span class="nr">1</span>Nie warto bawić się na podwórku.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.3"><span class="nr">2</span>Wartość człowieka nie zależy od wzrostu ani stopnia, tylko od jego czynów.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.6"><span class="nr">3</span>Zawsze trzeba słuchać starszych braci.</div>
+      <div class="linia pop" data-slowo="czterech" data-po="0.9"><span class="nr">4</span>Kto jest silniejszy, ten ma rację.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="numer">Zapisz numer 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz2" id="s08">
+    <span class="czesc">PRZESŁANIE</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Które zdanie najlepiej oddaje przesłanie książki?</div>
+    <div class="lista">
+      <div class="linia o-zla" data-slowo="pierwsze"><span class="nr">1</span>Nie warto bawić się na podwórku.<span class="dl o-wpis-blok o-razem">książka wcale tak nie mówi</span></div>
+      <div class="linia o-dobra" data-slowo="drugie"><span class="nr">2</span>Wartość człowieka nie zależy od wzrostu ani stopnia, tylko od jego czynów.<span class="dl o-wpis-blok" data-slowo="nemeczkiem">✅ tak było z Nemeczkiem</span></div>
+      <div class="linia o-zla" data-slowo="trzecie"><span class="nr">3</span>Zawsze trzeba słuchać starszych braci.<span class="dl o-wpis-blok o-razem">bracia Pastorowie to zły przykład</span></div>
+      <div class="linia o-zla" data-slowo="czwarte"><span class="nr">4</span>Kto jest silniejszy, ten ma rację.<span class="dl o-wpis-blok" data-slowo="najsłabszy">bitwę wygrał najsłabszy</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 09 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="09-zadanie3+60" id="s09">
+    <span class="czesc">CAŁA KSIĄŻKA</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="pamiętacie">Prawda czy fałsz?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="pięć"><span class="nr">1</span>Akcja dzieje się w Budapeszcie.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.25"><span class="nr">2</span>Wodzem Czerwonych Koszul jest Boka.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.5"><span class="nr">3</span>Gereb zdradza kolegów, a potem prosi o powrót.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="0.75"><span class="nr">4</span>Chłopcy zostawili w Ogrodzie Botanicznym kartkę.</div>
+      <div class="linia pop" data-slowo="pięć" data-po="1"><span class="nr">5</span>Na końcu chłopcy dostają plac na zawsze.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="prawda" style="background:var(--plac)">P - prawda</span>
+      <span class="chip pop" data-slowo="fałsz" style="background:var(--koszule)">F - fałsz</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 10 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="10-odpowiedz3" id="s10">
+    <span class="czesc">CAŁA KSIĄŻKA</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Prawda czy fałsz?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Akcja dzieje się w Budapeszcie. <span class="etyk o-znak" data-slowo="prawda">prawda</span></div>
+      <div class="linia"><span class="nr">2</span>Wodzem Czerwonych Koszul jest Boka. <span class="etyk e-f o-znak" data-slowo="fałsz">fałsz</span><span class="dl o-wpis-blok" data-slowo="dowodzi">wodzem Koszul jest Feri Acz, Boka dowodzi chłopcami z placu</span></div>
+      <div class="linia"><span class="nr">3</span>Gereb zdradza kolegów, a potem prosi o powrót. <span class="etyk o-znak" data-slowo="prawda">prawda</span></div>
+      <div class="linia"><span class="nr">4</span>Chłopcy zostawili w Ogrodzie Botanicznym kartkę. <span class="etyk o-znak" data-slowo="prawda">prawda</span><span class="dl o-wpis-blok" data-slowo="czerwoną">„Tu byli chłopcy z Placu Broni!”</span></div>
+      <div class="linia"><span class="nr">5</span>Na końcu chłopcy dostają plac na zawsze. <span class="etyk e-f o-znak" data-slowo="fałsz">fałsz</span><span class="dl o-wpis-blok" data-slowo="stanie">na placu stanie dom</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 11 zapamietaj ===== -->
+  <section class="scena zapamietaj" data-id="11-zapamietaj" id="s11">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="przesłanie" style="border-color:var(--fiolet)">✉️ <b>Przesłanie</b> - myśl, którą autor chce nam przekazać. Szukamy jej w zakończeniu i w ważnych decyzjach.</div>
+      <div class="linia b-plac pop" data-slowo="wartości">💎 <b>Wartości</b> - to, co dla bohaterów najważniejsze: przyjaźń, odwaga, wierność.</div>
+    </div>
+    <div class="pojecia">
+      <span class="chip pop" data-slowo="miejsce">📍 miejsce i czas akcji</span>
+      <span class="chip pop" data-slowo="bohater">⭐ bohater główny i zbiorowy</span>
+      <span class="chip pop" data-slowo="cecha">🔎 cecha + dowód</span>
+      <span class="chip pop" data-slowo="czyn">⚖️ czyn i motyw</span>
+      <span class="chip pop" data-slowo="przyczyna">🔗 przyczyna i skutek</span>
+      <span class="chip pop" data-slowo="kulminacyjny">⛰️ punkt kulminacyjny</span>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film6-sciezka.mp3';</script>
+<script src="timeline-film6.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

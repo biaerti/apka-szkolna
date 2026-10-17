@@ -1,0 +1,1 @@
+Zadanie pierwsze. W łańcuchu są dwie luki. Wybierzcie, które kafelki do nich pasują. Uwaga, dwa kafelki są zbędne. Zapiszcie numer kafelka do pierwszej luki i do drugiej. Start!

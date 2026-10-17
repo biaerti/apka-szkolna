@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Plac Broni - czas i miejsce akcji - lektura kl. 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<link rel="stylesheet" href="lektura.css">
+<script src="mapa.js"></script>
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s01 .ikona { font-size: 110px; line-height: 1.1; margin-top: 4px; }
+#s01 .autor { font-size: 32px; background: var(--brazowy); margin-top: 8px; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 96px; font-weight: 800; line-height: 1; color: var(--plac); margin-top: 10px; }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; white-space: nowrap; background: var(--pomarancz); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 40px; font-weight: 800; }
+
+#s02 .lista { width: 1000px; margin-top: 24px; gap: 16px; }
+#s02 .linia { font-size: 34px; }
+#s03 .rzad { margin-top: 30px; }
+#s03 .karta .nazwa { font-size: 46px; }
+#s03 .karta .pyt { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: var(--szary); }
+#s03 .przyk { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; }
+#s03 .przyk .chip { font-size: 28px; background: var(--szary); }
+#s03 .k-m { border-color: var(--plac); } #s03 .k-m .nazwa { color: var(--plac); }
+#s03 .k-c { border-color: var(--niebieski); } #s03 .k-c .nazwa { color: var(--niebieski); }
+#s04 .rok { font-family: 'Baloo 2'; font-size: 150px; font-weight: 800; line-height: 1; color: var(--niebieski); margin-top: 10px; }
+#s04 .kafle { width: 1060px; margin-top: 20px; }
+#s04 .kafel { text-align: center; font-size: 34px; }
+#s05 .miasto { font-family: 'Baloo 2'; font-size: 64px; font-weight: 800; color: var(--plac); margin-top: 8px; }
+#s05 .slowa .chip { background: var(--plac); font-size: 30px; }
+#s05 .rzad { margin-top: 26px; }
+#s05 .karta .nazwa { font-size: 36px; }
+#s05 .etyk { font-size: 30px; }
+#s06 h2 { font-size: 44px; }
+#s06 .mapa { margin-top: 4px; }
+#s07 .lista, #s08 .lista { width: 1060px; gap: 12px; margin-top: 14px; }
+#s07 .linia, #s08 .linia { font-size: 32px; padding: 6px 20px; }
+#s07 .slowa .chip, #s08 .slowa .chip { background: var(--brazowy); }
+#s09 .kafel, #s10 .kafel { text-align: center; font-size: 36px; }
+#s09 .slowa .chip, #s10 .slowa .chip { background: var(--niebieski); }
+#s11 .rzad { margin-top: 22px; align-items: stretch; }
+#s11 .karta { text-align: left; }
+#s11 .karta .nazwa { text-align: center; margin-bottom: 8px; }
+#s11 .poz { font-size: 30px; font-weight: 800; padding: 4px 0; }
+#s11 .dorosli { flex: .7; }
+#s11 .ojczyzna { margin-top: 18px; font-size: 36px; background: var(--plac); }
+#s12 .lista, #s13 .lista { width: 1080px; gap: 12px; }
+#s12 .linia, #s13 .linia { font-size: 31px; padding: 7px 20px; }
+#s14 .lista { width: 1100px; gap: 14px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Lektura · lekcja 1</div>
+    <div class="ikona pop" data-t="0.3">🏚️🚩</div>
+    <div><span class="chip autor pop" data-slowo="molnar">Ferenc Molnár</span></div>
+    <div class="tytul pop" data-slowo="chłopcy">Chłopcy z Placu Broni</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="gdzie">📍 gdzie?</span>
+      <span class="chip pop" data-slowo="kiedy">🕰️ kiedy?</span>
+      <span class="chip pop" data-slowo="ważny">❓ po co walczyć o pusty plac?</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 przypomnienie ===== -->
+  <section class="scena" data-id="02-przypomnienie" id="s02">
+    <span class="czesc zjaw" data-t="0">PRZYPOMNIENIE · rozdz. I-II</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Jak to się zaczyna? 📖</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="zebranie">🏫 Na lekcji wiadomość: po południu <b>zebranie na placu</b>.</div>
+      <div class="linia wjazd-lewo" data-slowo="kulki">🔮 Bracia Pastorowie zabierają Nemeczkowi <b>szklane kulki</b>.</div>
+      <div class="linia wjazd-lewo b-kosz" data-slowo="chorągiewkę">🚩 Feri Acz, wódz Czerwonych Koszul, zabiera <b>chorągiewkę</b> z placu.</div>
+      <div class="linia wjazd-lewo b-plac" data-slowo="boka">👑 Chłopcy wybierają wodza. Zostaje nim <b>Boka</b>.</div>
+    </div>
+  </section>
+
+  <!-- ===== 03 pojecia ===== -->
+  <section class="scena" data-id="03-pojecia" id="s03">
+    <span class="czesc zjaw" data-t="0">1 · CZAS I MIEJSCE AKCJI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Gdzie i kiedy? 🧭</h2>
+    <div class="rzad">
+      <div class="karta k-m pop" data-slowo="miejscem">
+        <div class="nazwa">📍 MIEJSCE AKCJI</div>
+        <div class="pyt zjaw" data-slowo="gdzie">gdzie?</div>
+        <div class="przyk">
+          <span class="chip pop" data-slowo="mieście">w mieście</span>
+          <span class="chip pop" data-slowo="szkole">w szkole</span>
+          <span class="chip pop" data-slowo="lesie">w lesie</span>
+          <span class="chip pop" data-slowo="podwórku">na podwórku</span>
+        </div>
+      </div>
+      <div class="karta k-c pop" data-slowo="czasem">
+        <div class="nazwa">🕰️ CZAS AKCJI</div>
+        <div class="pyt zjaw" data-slowo="kiedy">kiedy?</div>
+        <div class="przyk">
+          <span class="chip pop" data-slowo="zimie">zimą</span>
+          <span class="chip pop" data-slowo="poniedziałek">w poniedziałek</span>
+          <span class="chip pop" data-slowo="wieczorem">wieczorem</span>
+          <span class="chip pop" data-slowo="dawno">dawno temu</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 czas ===== -->
+  <section class="scena" data-id="04-czas" id="s04">
+    <span class="czesc zjaw" data-t="0">1 · CZAS I MIEJSCE AKCJI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--niebieski)">Kiedy? 🕰️</h2>
+    <div class="rok pop" data-slowo="tysiąc">1889</div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="telefonów">📵 bez telefonów i aut</div>
+      <div class="kafel pop" data-slowo="tramwaj">🐴 tramwaj ciągnięty przez konie</div>
+      <div class="kafel pop" data-slowo="marzec">🌱 wiosna, marzec</div>
+      <div class="kafel pop" data-slowo="kilka">⏱️ tylko kilka dni</div>
+    </div>
+    <div class="slowa"><span class="chip pop" data-slowo="lekcjach">🏫 rano szkoła ➜ po lekcjach plac ⚽</span></div>
+  </section>
+
+  <!-- ===== 05 miasto ===== -->
+  <section class="scena" data-id="05-miasto" id="s05">
+    <span class="czesc zjaw" data-t="0">1 · CZAS I MIEJSCE AKCJI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0" style="color:var(--plac)">Gdzie? 📍</h2>
+    <div class="miasto pop" data-slowo="budapeszcie">🏙️ Budapeszt, stolica Węgier</div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="ulica">ulica Pawła</span>
+      <span class="chip pop" data-slowo="marii">ulica Marii</span>
+      <span class="chip pop" data-slowo="ogród">Ogród Botaniczny</span>
+      <span class="chip pop" data-slowo="muzeum">Muzeum Narodowe</span>
+    </div>
+    <div class="rzad">
+      <div class="karta b-plac pop" data-slowo="mówimy"><div class="nazwa">✅ istnieją naprawdę<span class="etyk o-znak o-razem">PRAWDZIWE</span></div><div class="opis">miejsce akcji tej książki</div></div>
+      <div class="karta pop" data-slowo="baśniach" style="border-color:var(--fiolet)"><div class="nazwa">🏰 za siedmioma górami<span class="etyk zjaw" data-slowo="wymyślonym" style="background:var(--fiolet)">WYMYŚLONE</span></div><div class="opis">jak w baśni</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 06 mapa ===== -->
+  <section class="scena" data-id="06-mapa" id="s06" style="padding-top:22px">
+    <span class="czesc zjaw" data-t="0">1 · CZAS I MIEJSCE AKCJI</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Mapa okolicy placu 🗺️ <span style="font-size:24px;color:var(--szary)">(schemat, nie w skali)</span></h2>
+    <script>wstawMape(
+      { plac: 'plac', ulice: 'ulicy', drewno: 'drewna', fortece: 'fortece', budka: 'budka', botaniczny: 'botaniczny', wyspa: 'wyspą', muzeum: 'muzeum', dom: { t: 0 } },
+      '<g class="m-zjaw" data-slowo="koszul"><text x="977" y="396" class="m-pod m-male m-cz">kryjówka</text><text x="977" y="414" class="m-pod m-male m-cz">Czerwonych Koszul</text></g>' +
+      '<g class="m-zjaw" data-slowo="kulki"><text x="135" y="290" class="m-pod m-male m-cz">🔮 tu giną kulki</text></g>'
+    )</script>
+  </section>
+
+  <!-- ===== 07 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="07-zadanie1+60" id="s07">
+    <span class="czesc">1 · CZAS I MIEJSCE AKCJI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dzieją">Gdzie to się dzieje?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Bracia Pastorowie zabierają młodszym szklane kulki.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.3"><span class="nr">2</span>Chłopcy budują fortece na sągach drewna.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">3</span>Czerwone Koszule naradzają się na wyspie.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.9"><span class="nr">4</span>Chłopcy wybierają swojego wodza.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="plac">plac</span>
+      <span class="chip pop" data-slowo="ogród">ogród</span>
+      <span class="chip pop" data-slowo="muzeum">muzeum</span>
+    </div>
+    <div class="pisz zjaw" data-slowo="minutę">Zapisz: 1 - …, 2 - … 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 08 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="08-odpowiedz1" id="s08">
+    <span class="czesc">1 · CZAS I MIEJSCE AKCJI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Gdzie to się dzieje?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Bracia Pastorowie zabierają młodszym szklane kulki. <span class="etyk o-znak" data-slowo="czyli">muzeum</span></div>
+      <div class="linia"><span class="nr">2</span>Chłopcy budują fortece na sągach drewna. <span class="etyk o-znak" data-slowo="placu">plac</span><span class="dl o-wpis-blok o-razem">plac sąsiaduje ze składem drewna</span></div>
+      <div class="linia"><span class="nr">3</span>Czerwone Koszule naradzają się na wyspie. <span class="etyk o-znak" data-slowo="botanicznym">ogród</span><span class="dl o-wpis-blok o-razem">wyspa w Ogrodzie Botanicznym to ich kryjówka</span></div>
+      <div class="linia"><span class="nr">4</span>Chłopcy wybierają swojego wodza. <span class="etyk o-znak" data-slowo="zebraniu">plac</span><span class="dl o-wpis-blok o-razem">na zebraniu, na swoim placu</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 09 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="09-zadanie2+60" id="s09">
+    <span class="czesc">1 · CZAS I MIEJSCE AKCJI</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="które">Czas akcji czy miejsce akcji?</div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="sześć"><b>1</b>w marcu</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.25"><b>2</b>w Budapeszcie</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.5"><b>3</b>po lekcjach</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="0.75"><b>4</b>na wyspie</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1"><b>5</b>w 1889 roku</div>
+      <div class="kafel pop" data-slowo="sześć" data-po="1.25"><b>6</b>przy ulicy Pawła</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="czas">czas · kiedy?</span>
+      <span class="chip pop" data-slowo="miejsce" style="background:var(--plac)">miejsce · gdzie?</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 10 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="10-odpowiedz2" id="s10">
+    <span class="czesc">1 · CZAS I MIEJSCE AKCJI</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Czas akcji czy miejsce akcji?</div>
+    <div class="kafle">
+      <div class="kafel"><b>1</b>w marcu <span class="etyk o-znak" data-slowo="marcu" style="background:var(--niebieski)">czas</span></div>
+      <div class="kafel"><b>2</b>w Budapeszcie <span class="etyk o-znak" data-slowo="budapeszcie">miejsce</span></div>
+      <div class="kafel"><b>3</b>po lekcjach <span class="etyk o-znak" data-slowo="lekcjach" style="background:var(--niebieski)">czas</span></div>
+      <div class="kafel"><b>4</b>na wyspie <span class="etyk o-znak" data-slowo="wyspie">miejsce</span></div>
+      <div class="kafel"><b>5</b>w 1889 roku <span class="etyk o-znak" data-slowo="tysiąc" style="background:var(--niebieski)">czas</span></div>
+      <div class="kafel"><b>6</b>przy ulicy Pawła <span class="etyk o-znak" data-slowo="pawła">miejsce</span></div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="kiedy" style="background:var(--niebieski)">kiedy? ➜ czas</span>
+      <span class="chip pop" data-slowo="gdzie" style="background:var(--plac)">gdzie? ➜ miejsce</span>
+    </div>
+  </section>
+
+  <!-- ===== 11 dlaczego plac ===== -->
+  <section class="scena" data-id="11-dlaczego" id="s11">
+    <span class="czesc zjaw" data-t="0">2 · PO CO WALCZYĆ O PLAC?</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Pusty plac? Nie dla nich! 🏚️</h2>
+    <div class="rzad">
+      <div class="karta dorosli pop" data-slowo="dorosłych">
+        <div class="nazwa">👨‍💼 dla dorosłych</div>
+        <div class="poz" style="text-align:center">🟫 zwykły kawałek ziemi</div>
+      </div>
+      <div class="karta b-plac pop" data-slowo="chłopców">
+        <div class="nazwa c-plac">👦 dla chłopców</div>
+        <div class="poz zjaw" data-slowo="biegać">🏃 bieganie i palant</div>
+        <div class="poz zjaw" data-slowo="fortece">🏰 fortece i zabawa w wojsko</div>
+        <div class="poz zjaw" data-slowo="wolność">🕊️ wolność wśród kamienic</div>
+        <div class="poz zjaw" data-slowo="furtkę">📜 zasady: kto wchodzi, zamyka furtkę</div>
+        <div class="poz zjaw" data-slowo="stopnie">🎖️ stopnie jak w wojsku</div>
+      </div>
+    </div>
+    <div><span class="chip ojczyzna pop" data-slowo="ojczyzna">❤️ plac = ich mała ojczyzna</span></div>
+  </section>
+
+  <!-- ===== 12 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="12-zadanie3+60" id="s12">
+    <span class="czesc">2 · PO CO WALCZYĆ O PLAC?</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="dlaczego">Dlaczego plac jest dla chłopców taki ważny?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Bo leży na nim dużo cennych rzeczy.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.3"><span class="nr">2</span>Bo to jedyne wolne miejsce do zabawy - ich własny świat z zasadami.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">3</span>Bo dostali go w prezencie od dyrektora szkoły.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.9"><span class="nr">4</span>Bo na placu odbywają się lekcje.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="numer">Zapisz numer najlepszej odpowiedzi 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 13 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="13-odpowiedz3" id="s13">
+    <span class="czesc">2 · PO CO WALCZYĆ O PLAC?</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Dlaczego plac jest dla chłopców taki ważny?</div>
+    <div class="lista">
+      <div class="linia o-zla" data-slowo="pierwsza"><span class="nr">1</span>Bo leży na nim dużo cennych rzeczy.<span class="dl o-wpis-blok o-razem">plac jest pusty - żadnych skarbów</span></div>
+      <div class="linia o-dobra" data-slowo="druga"><span class="nr">2</span>Bo to jedyne wolne miejsce do zabawy - ich własny świat z zasadami.<span class="dl o-wpis-blok o-razem">✅ miasto pełne kamienic, a tu ich wolność</span></div>
+      <div class="linia o-zla" data-slowo="trzecia"><span class="nr">3</span>Bo dostali go w prezencie od dyrektora szkoły.<span class="dl o-wpis-blok o-razem">nikt im placu nie podarował</span></div>
+      <div class="linia o-zla" data-slowo="czwarta"><span class="nr">4</span>Bo na placu odbywają się lekcje.<span class="dl o-wpis-blok o-razem">lekcje są w szkole, plac jest po lekcjach</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 14 zapamietaj ===== -->
+  <section class="scena zapamietaj" data-id="14-zapamietaj" id="s14">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia b-plac pop" data-slowo="miejsce">📍 <b>Miejsce akcji</b> - gdzie dzieją się wydarzenia? (gdzie?)</div>
+      <div class="linia pop" data-slowo="czas" style="border-color:var(--niebieski)">🕰️ <b>Czas akcji</b> - kiedy się dzieją? (kiedy?)</div>
+      <div class="linia pop" data-slowo="prawdziwe">✅ mogą być <b>prawdziwe</b> - Budapeszt, wiosna 1889 roku</div>
+      <div class="linia pop" data-slowo="wymyślone" style="border-color:var(--fiolet)">🏰 albo <b>wymyślone</b> - jak w baśni</div>
+      <div class="linia pop" data-slowo="walczyć">🚩 O Plac Broni chłopcy będą walczyć!</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

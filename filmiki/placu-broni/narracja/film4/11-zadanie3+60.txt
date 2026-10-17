@@ -1,0 +1,1 @@
+Zadanie trzecie. Na ekranie są cztery oceny. Które dwie są dobrze uzasadnione? Zapiszcie dwa numery. Start!

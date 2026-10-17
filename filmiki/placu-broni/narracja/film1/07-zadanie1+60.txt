@@ -1,0 +1,1 @@
+Zadanie pierwsze. Na ekranie są cztery wydarzenia z książki. Gdzie się dzieją? Przy każdym numerze zapisz jedno słowo: plac, ogród albo muzeum. Plac to Plac Broni, ogród to Ogród Botaniczny, a muzeum to ogród przy Muzeum. Macie minutę. Start!

@@ -1,0 +1,1 @@
+Zadanie pierwsze. Jaką wartość widać w każdej scenie? Przy każdym numerze zapiszcie jedno słowo: przyjaźń, odwaga, szacunek albo przebaczenie. Każde słowo pasuje tylko raz. Start!

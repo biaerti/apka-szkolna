@@ -1,0 +1,79 @@
+/* Wspolne klocki filmow o lekturze (film1-film6). Styl jak filmiki/zlosc/. */
+:root {
+  --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2;
+  --plac: #2E9E5B; --koszule: #D6453D; --brazowy: #8B6A3E; --fiolet: #8A4FD0;
+}
+
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 56px; line-height: 1.05; color: var(--pomarancz); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 14px 22px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; line-height: 1.1; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.chip {
+  display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff;
+  border-radius: 999px; padding: 6px 28px; background: var(--ciemny);
+}
+.rzad { display: flex; gap: 22px; justify-content: center; }
+.rzad > * { flex: 1; }
+.c-plac { color: var(--plac); } .c-kosz { color: var(--koszule); }
+.b-plac { border-color: var(--plac) !important; } .b-kosz { border-color: var(--koszule) !important; }
+
+.czesc {
+  position: absolute; top: 14px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800;
+  color: #fff; border-radius: 999px; padding: 2px 18px; background: var(--szary);
+}
+.lektura-tag {
+  position: absolute; top: 14px; right: 20px; font-family: 'Baloo 2'; font-size: 20px; font-weight: 800;
+  color: var(--szary);
+}
+
+.zadanie .badge, .odp .badge {
+  display: inline-block; font-family: 'Baloo 2'; font-size: 42px; font-weight: 800;
+  color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 40px;
+}
+.odp .badge { background: var(--zielony); }
+.zadanie .polecenie, .odp .polecenie { margin-top: 12px; font-size: 34px; font-weight: 800; line-height: 1.25; }
+.pisz { margin-top: 14px; font-size: 28px; font-weight: 800; color: var(--szary); }
+.zadanie .odliczanie { margin: 16px auto 0; width: 860px; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 20px; border: 4px solid var(--ramka); padding: 8px 22px; text-align: left; }
+.lista { display: flex; flex-direction: column; gap: 12px; margin: 18px auto 0; width: 1080px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 12px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 26px; font-weight: 800; color: #fff; border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; background: var(--zielony); }
+.dl { display: block; font-family: 'Nunito'; font-size: 23px; color: var(--szary); margin-top: 2px; }
+.kafle { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin: 18px auto 0; width: 1120px; text-align: left; }
+.kafel { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; line-height: 1.2; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 20px; padding: 8px 18px; }
+.kafel b { color: #fff; background: var(--pomarancz); border-radius: 10px; padding: 0 12px; margin-right: 10px; font-size: 28px; vertical-align: 3px; }
+.slowa { display: flex; gap: 14px; justify-content: center; margin-top: 14px; }
+.slowa .chip { font-size: 28px; background: var(--szary); }
+
+/* Zapamietaj */
+.zapamietaj .linia { font-size: 35px; line-height: 1.3; }
+.zapamietaj .brawo { margin-top: 16px; font-size: 42px; background: var(--roz); padding: 4px 44px; }
+
+/* Mapa (mapa.js) */
+.mapa { display: block; width: 1140px; height: 520px; margin: 10px auto 0; overflow: visible; }
+.mapa text { font-family: 'Baloo 2'; font-weight: 800; text-anchor: middle; }
+.m-ulica { font-size: 26px; fill: #fff; text-anchor: start !important; }
+.m-nazwa { font-size: 52px; fill: var(--brazowy); letter-spacing: 3px; }
+.m-pod { font-size: 27px; fill: var(--ciemny); }
+.m-male { font-size: 22px; }
+.m-emo { font-size: 54px; }
+.m-male-emo { font-size: 30px; }
+.m-flaga { font-size: 30px; }
+.m-cz { fill: var(--koszule); }
+.m-obrys { paint-order: stroke; stroke: #FFF7EA; stroke-width: 7px; stroke-linejoin: round; }
+.m-zjaw { opacity: 0; animation: zjaw .6s ease-out both; }
+.m-pop { opacity: 0; transform-box: fill-box; transform-origin: center; animation: pop .5s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes rysuj { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.m-trasa { fill: none; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: rysuj 2.2s ease-in-out both; }
+
+/* Sciezka rysowana w SVG (krzywe, laczenia) */
+.rysuj { stroke-dasharray: 1; stroke-dashoffset: 1; animation: rysuj 1.6s ease-in-out both; }
+
+/* Krzywa (krzywa.js) */
+.krzywa { display: block; width: 1140px; height: 470px; margin: 8px auto 0; overflow: visible; }
+.krzywa text { font-family: 'Baloo 2'; font-weight: 800; text-anchor: middle; }
+.k-os { font-size: 22px; fill: var(--szary); }
+.k-nr { font-size: 26px; fill: var(--ciemny); }
+.k-pod { font-size: 23px; fill: var(--ciemny); paint-order: stroke; stroke: #FFF7EA; stroke-width: 6px; stroke-linejoin: round; }
+.k-znak { font-size: 24px; fill: #fff; }

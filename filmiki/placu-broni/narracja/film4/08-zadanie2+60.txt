@@ -1,0 +1,1 @@
+Zadanie drugie. Na krzywej jest pięć punktów. W którym momencie Gereb zaczyna się zmieniać? To jest moment przełomu. Zapiszcie numer punktu. Start!

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Nemeczek - cechy bohatera i dowody - lektura kl. 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<link rel="stylesheet" href="lektura.css">
+<script src="mapa.js"></script>
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s01 .ikona { font-size: 120px; line-height: 1.1; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 92px; font-weight: 800; line-height: 1; color: var(--pomarancz); margin-top: 8px; }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; white-space: nowrap; background: var(--szary); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 40px; font-weight: 800; }
+
+#s02 h2 { font-size: 40px; }
+.znacznik { font-size: 26px; }
+
+#s03 .rzad { margin-top: 18px; align-items: stretch; }
+#s03 .karta { text-align: left; }
+#s03 .karta .nazwa { text-align: center; }
+#s03 .poz { font-size: 29px; font-weight: 800; padding: 4px 0; }
+#s03 .ksiega { flex: .9; background: #FFF9EC; border-color: var(--brazowy); text-align: center !important; }
+#s03 .wpis { font-family: 'Nunito'; font-size: 40px; font-weight: 800; color: var(--szary); margin-top: 26px; }
+#s03 .male-lit { font-size: 30px; color: var(--koszule); margin-top: 10px; }
+
+#s04 .lista { width: 1000px; margin-top: 24px; gap: 14px; }
+#s04 .linia { font-size: 34px; }
+
+#s05 .lista, #s06 .lista { width: 1000px; gap: 12px; margin-top: 16px; }
+#s05 .linia, #s06 .linia { font-size: 34px; padding: 8px 22px; }
+#s06 .slowa { flex-wrap: wrap; }
+#s06 .slowa .chip { font-size: 27px; }
+
+#s07 .karta-postaci { width: 1100px; margin: 16px auto 0; text-align: left; border-color: var(--pomarancz); }
+#s07 .cechy { display: flex; gap: 12px; justify-content: center; margin: 4px 0 10px; }
+#s07 .cechy .chip { font-size: 30px; background: var(--pomarancz); }
+#s07 .wiersz { display: grid; grid-template-columns: 330px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-top: 3px dashed var(--ramka); }
+#s07 .rodzaj { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; }
+#s07 .rodzaj small { display: block; font-family: 'Nunito'; font-size: 22px; color: var(--szary); }
+#s07 .przyklad { font-size: 30px; font-weight: 800; }
+
+#s08 .lista, #s09 .lista { width: 1060px; gap: 12px; margin-top: 16px; }
+#s08 .linia, #s09 .linia { font-size: 32px; }
+#s08 .slowa .chip, #s09 .slowa .chip { background: var(--pomarancz); }
+
+#s10 .os { display: grid; grid-template-columns: 1fr 90px 1fr; gap: 10px; align-items: center; margin: 26px auto 0; width: 1120px; }
+#s10 .os .karta { font-size: 32px; font-weight: 800; padding: 12px 18px; }
+#s10 .strz { font-family: 'Baloo 2'; font-size: 56px; font-weight: 800; color: var(--pomarancz); }
+#s10 .mala { font-family: 'Nunito'; color: var(--szary); font-size: 34px; }
+#s10 .wielka { font-family: 'Baloo 2'; color: var(--plac); font-size: 44px; letter-spacing: 1px; }
+#s10 .srodek { margin-top: 20px; }
+#s10 .srodek .chip { font-size: 30px; background: var(--niebieski); }
+#s10 .wniosek { margin-top: 20px; font-size: 32px; background: var(--pomarancz); }
+
+#s11 .lista, #s12 .lista { width: 1100px; gap: 12px; margin-top: 14px; }
+#s11 .linia, #s12 .linia { font-size: 31px; padding: 7px 20px; }
+#s11 .slowa .chip, #s12 .slowa .chip { background: var(--niebieski); }
+#s13 .lista { width: 1100px; gap: 14px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Lektura · lekcja 3</div>
+    <div class="ikona pop" data-t="0.3">🧒🎖️</div>
+    <div class="tytul pop" data-slowo="ernest">Nemeczek - mały, ale wielki</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="najmniej">📏 najmniejszy</span>
+      <span class="chip pop" data-slowo="stopień">🎖️ najniższy stopień</span>
+      <span class="chip pop" data-slowo="udowodnić" style="background:var(--pomarancz)">🔎 cecha + dowód</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 wyprawa ===== -->
+  <section class="scena" data-id="02-wyprawa" id="s02" style="padding-top:22px">
+    
+    <h2 class="naglowek wjazd-dol" data-t="0">Wyprawa do Ogrodu Botanicznego 🌙 <span style="font-size:22px;color:var(--szary)">(rozdz. III)</span></h2>
+    <script>wstawMape({},
+      '<path d="M 450 100 Q 720 -40 985 100 L 1000 285" pathLength="1" class="m-trasa" stroke="#3C7DD9" data-slowo="wyprawę"/>' +
+      '<g class="m-zjaw" data-slowo="wyprawę"><text x="720" y="28" class="m-pod m-male m-obrys" fill="#3C7DD9">Boka, Czonakosz, Nemeczek</text></g>' +
+      '<g class="m-pop" data-slowo="kartkę"><rect x="1040" y="226" width="80" height="44" rx="6" fill="#E8425A"/><text x="1080" y="256" class="m-pod m-male" fill="#fff">📜</text></g>' +
+      '<g class="m-zjaw" data-slowo="gereb"><text x="1062" y="196" class="m-pod m-male m-cz">😒 Gereb!</text></g>' +
+      '<g class="m-pop" data-slowo="stawu"><text x="930" y="350" class="m-pod znacznik">💦 1</text></g>' +
+      '<g class="m-pop" data-slowo="szklarni"><text x="910" y="236" class="m-pod znacznik">💦 2</text></g>' +
+      '<path d="M 900 415 Q 520 590 175 400" pathLength="1" class="m-trasa" stroke="#7a6a5c" data-slowo="wraca"/>' +
+      '<g class="m-zjaw" data-slowo="przemoczony"><text x="520" y="512" class="m-pod m-male m-obrys" fill="#3C7DD9">🥶 do domu przemoczony</text></g>'
+    )</script>
+  </section>
+
+  <!-- ===== 03 kitowcy ===== -->
+  <section class="scena" data-id="03-kitowcy" id="s03">
+    <span class="czesc zjaw" data-t="0">PRZYPOMNIENIE · rozdz. IV</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Związek Kitowców 📒</h2>
+    <div class="rzad">
+      <div class="karta b-plac pop" data-slowo="kitowców">
+        <div class="nazwa c-plac">klub chłopców</div>
+        <div class="poz zjaw" data-slowo="kitu">🟤 dbają o kit (żeby nie wysechł)</div>
+        <div class="poz zjaw" data-slowo="prezesa">👔 prezes · 🔏 pieczęć · 📒 księga</div>
+        <div class="poz zjaw" data-slowo="wychodzi">🚪 Nemeczek wychodzi z zebrania…</div>
+        <div class="poz zjaw" data-slowo="skrada">👀 …bo śledzi Gereba</div>
+        <div class="poz zjaw" data-slowo="zawiódł" style="color:var(--koszule)">😠 koledzy: „zawiódł nas!”</div>
+      </div>
+      <div class="karta ksiega pop" data-slowo="księgi">
+        <div class="nazwa">📒 KSIĘGA</div>
+        <div class="wpis zjaw" data-slowo="małymi">ernest nemeczek</div>
+        <div class="male-lit zjaw" data-slowo="małymi" data-po="0.5">⬆ małymi literami - za karę</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 sam ===== -->
+  <section class="scena" data-id="04-sam" id="s04">
+    <span class="czesc zjaw" data-t="0">PRZYPOMNIENIE · rozdz. V</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co robi Nemeczek? 🧒</h2>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="płacze">😶 nie płacze, nie obraża się</div>
+      <div class="linia wjazd-lewo" data-slowo="sam">🚶 sam idzie do Ogrodu Botanicznego</div>
+      <div class="linia wjazd-lewo" data-slowo="zabiera">🚩 zabiera chorągiewkę chłopców z kryjówki</div>
+      <div class="linia wjazd-lewo" data-slowo="drzewie">🌳 chowa się z nią na drzewie</div>
+      <div class="linia wjazd-lewo b-kosz" data-slowo="podejrzewać">❓ Czerwone Koszule szukają winnego wśród swoich</div>
+      <div class="linia wjazd-lewo" data-slowo="słyszy">👂 Nemeczek wszystko słyszy…</div>
+    </div>
+  </section>
+
+  <!-- ===== 05 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="05-zadanie1+60" id="s05">
+    <span class="czesc">CECHA I DOWÓD</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="zrobi">Co teraz zrobi Nemeczek? 🌳</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzech"><span class="nr">1</span>Ucieknie po cichu z chorągiewką.</div>
+      <div class="linia pop" data-slowo="trzech" data-po="0.3"><span class="nr">2</span>Zejdzie z drzewa i powie: „To ja ją zabrałem”.</div>
+      <div class="linia pop" data-slowo="trzech" data-po="0.6"><span class="nr">3</span>Przejdzie do Czerwonych Koszul.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="numer">Zapisz numer 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 06 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="06-odpowiedz1" id="s06">
+    <span class="czesc">CECHA I DOWÓD</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Co teraz zrobi Nemeczek? 🌳</div>
+    <div class="lista">
+      <div class="linia o-zla" data-slowo="druga" data-po="0.4"><span class="nr">1</span>Ucieknie po cichu z chorągiewką.</div>
+      <div class="linia o-dobra" data-slowo="druga"><span class="nr">2</span>Zejdzie z drzewa i powie: „To ja ją zabrałem”.<span class="dl o-wpis-blok" data-slowo="złodziej">nie chce chować się jak złodziej ani żeby ktoś cierpiał za niego</span></div>
+      <div class="linia o-zla" data-slowo="druga" data-po="0.8"><span class="nr">3</span>Przejdzie do Czerwonych Koszul.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="odmawia" style="background:var(--koszule)">👑 „Przejdź do nas!” ➜ NIE</span>
+      <span class="chip pop" data-slowo="kąpiel" style="background:var(--niebieski)">💦 trzecia kąpiel</span>
+      <span class="chip pop" data-slowo="salutują" style="background:var(--plac)">🫡 honory od wroga</span>
+    </div>
+  </section>
+
+  <!-- ===== 07 karta postaci ===== -->
+  <section class="scena" data-id="07-cecha" id="s07">
+    <span class="czesc zjaw" data-t="0">CECHA I DOWÓD</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Karta postaci: Nemeczek 🗂️</h2>
+    <div class="karta karta-postaci pop" data-t="0.3">
+      <div class="cechy">
+        <span class="chip pop" data-slowo="odważny">odważny</span>
+        <span class="chip pop" data-slowo="wierny">wierny</span>
+        <span class="chip pop" data-slowo="honorowy">honorowy</span>
+      </div>
+      <div class="wiersz zjaw" data-slowo="czyn"><div class="rodzaj">🏃 CZYN<small>co robi</small></div><div class="przyklad zjaw" data-slowo="kryjówki">sam idzie do kryjówki wrogów</div></div>
+      <div class="wiersz zjaw" data-slowo="słowa"><div class="rodzaj">💬 SŁOWA<small>co mówi</small></div><div class="przyklad zjaw" data-slowo="zimną">„Wolę zimną wodę niż zdradę”</div></div>
+      <div class="wiersz zjaw" data-slowo="opinia"><div class="rodzaj">👥 OPINIA INNYCH<small>co mówią i robią inni</small></div><div class="przyklad zjaw" data-slowo="salutować">wróg, Feri Acz, każe mu salutować</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc">CECHA I DOWÓD</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="cechę">Jaką cechę pokazuje dowód?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="trzy"><span class="nr">1</span>Sam idzie do kryjówki Czerwonych Koszul.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.3"><span class="nr">2</span>Nie przechodzi do Czerwonych Koszul, choć go zapraszają.</div>
+      <div class="linia pop" data-slowo="trzy" data-po="0.6"><span class="nr">3</span>Schodzi z drzewa i przyznaje się: „To ja”.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="odważny">odważny</span>
+      <span class="chip pop" data-slowo="wierny">wierny</span>
+      <span class="chip pop" data-slowo="prawdomówny">prawdomówny</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc">CECHA I DOWÓD</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jaką cechę pokazuje dowód?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Sam idzie do kryjówki Czerwonych Koszul. <span class="etyk o-znak" data-slowo="odważny">odważny</span><span class="dl o-wpis-blok o-razem">wie, że może być groźnie, a mimo to idzie</span></div>
+      <div class="linia"><span class="nr">2</span>Nie przechodzi do Czerwonych Koszul, choć go zapraszają. <span class="etyk o-znak" data-slowo="wierny">wierny</span><span class="dl o-wpis-blok o-razem">nawet kolegom, którzy go skrzywdzili</span></div>
+      <div class="linia"><span class="nr">3</span>Schodzi z drzewa i przyznaje się: „To ja”. <span class="etyk o-znak" data-slowo="prawdomówny">prawdomówny</span><span class="dl o-wpis-blok o-razem">mógł siedzieć cicho, a powiedział prawdę</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 10 drabinka ===== -->
+  <section class="scena" data-id="10-drabinka" id="s10">
+    <span class="czesc zjaw" data-t="0">CECHA I DOWÓD</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Jak zmienia się los Nemeczka? 📈</h2>
+    <div class="os">
+      <div class="karta wjazd-lewo" data-slowo="szeregowcem">🧒 szeregowiec</div>
+      <div class="strz zjaw" data-slowo="kapitanem">➜</div>
+      <div class="karta b-plac wjazd-prawo" data-slowo="kapitanem">🎖️ kapitan</div>
+      <div class="karta wjazd-lewo" data-slowo="małymi"><span class="mala">ernest nemeczek</span></div>
+      <div class="strz zjaw" data-slowo="wielkimi">➜</div>
+      <div class="karta b-plac wjazd-prawo" data-slowo="wielkimi"><span class="wielka">ERNEST NEMECZEK</span></div>
+    </div>
+    <div class="srodek"><span class="chip pop" data-slowo="ogrodu">🌳 wyprawa do Ogrodu · 🫡 honory od wroga</span></div>
+    <div><span class="chip wniosek pop" data-slowo="opinia">👥 tak zmienia się opinia innych</span></div>
+  </section>
+
+  <!-- ===== 11 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="11-zadanie3+60" id="s11">
+    <span class="czesc">CECHA I DOWÓD</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="rodzaj">Jaki to rodzaj dowodu?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="numerze"><span class="nr">1</span>Feri Acz każe oddać Nemeczkowi honory.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.25"><span class="nr">2</span>Nemeczek mówi, że woli zimną wodę niż zdradę.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.5"><span class="nr">3</span>Chory ucieka z łóżka, żeby bronić placu.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.75"><span class="nr">4</span>Koledzy wpisują jego nazwisko wielkimi literami.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="czyn">czyn</span>
+      <span class="chip pop" data-slowo="słowa">słowa</span>
+      <span class="chip pop" data-slowo="opinia">opinia innych</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 12 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="12-odpowiedz3" id="s12">
+    <span class="czesc">CECHA I DOWÓD</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Jaki to rodzaj dowodu?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Feri Acz każe oddać Nemeczkowi honory. <span class="etyk o-znak" data-slowo="opinia">opinia innych</span></div>
+      <div class="linia"><span class="nr">2</span>Nemeczek mówi, że woli zimną wodę niż zdradę. <span class="etyk o-znak" data-slowo="słowa">słowa</span></div>
+      <div class="linia"><span class="nr">3</span>Chory ucieka z łóżka, żeby bronić placu. <span class="etyk o-znak" data-slowo="czyn">czyn</span></div>
+      <div class="linia"><span class="nr">4</span>Koledzy wpisują jego nazwisko wielkimi literami. <span class="etyk o-znak" data-slowo="znowu">opinia innych</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 13 zapamietaj ===== -->
+  <section class="scena zapamietaj" data-id="13-zapamietaj" id="s13">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="czynach">🏃 Cechy bohatera poznajemy po jego <b>czynach</b>,</div>
+      <div class="linia pop" data-slowo="słowach">💬 po jego <b>słowach</b></div>
+      <div class="linia pop" data-slowo="inni">👥 i po tym, co mówią o nim <b>inni</b>.</div>
+      <div class="linia b-plac pop" data-slowo="dowodem">🔎 Każdą cechę popieramy <b>dowodem</b>: Nemeczek jest odważny, <b>bo</b> sam poszedł do kryjówki wrogów.</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film3-sciezka.mp3';</script>
+<script src="timeline-film3.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

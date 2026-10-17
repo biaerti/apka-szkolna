@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Bitwa o Plac Broni - przyczyna i skutek - lektura kl. 4</title>
+<link rel="stylesheet" href="wspolne.css">
+<link rel="stylesheet" href="lektura.css">
+<script src="mapa.js"></script>
+<script src="krzywa.js"></script>
+<script>
+// Szesc wydarzen do krzywej napiecia: w zadaniu na jednej wysokosci, w odpowiedzi z prawdziwym napieciem.
+window.ZDARZENIA = ['kulki|zabrane', 'Feri zabiera|chorągiewkę', 'wyprawa|do Ogrodu', 'wypowiedzenie|wojny', 'Nemeczek przewraca|Feriego Acza', 'Nemeczek|kapitanem'];
+window.EMO = ['🔮', '🚩', '🌙', '🏳️', '💥', '🎖️'];
+window.XS = [110, 300, 490, 680, 870, 1050];
+window.punkty = function (ys, nad, dx) {
+  return ZDARZENIA.map(function (t, i) { return { x: XS[i], y: ys[i], emo: EMO[i], tekst: t, nad: nad[i], dx: dx[i] || 0 }; });
+};
+</script>
+<style>
+/* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+#s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#s01 .male { font-size: 32px; font-weight: 800; color: var(--szary); }
+#s01 .ikona { font-size: 110px; line-height: 1.1; }
+#s01 .tytul { font-family: 'Baloo 2'; font-size: 96px; font-weight: 800; line-height: 1; color: var(--koszule); margin-top: 8px; }
+#s01 .grupy { margin-top: 22px; display: flex; gap: 16px; }
+#s01 .grupy .chip { font-size: 30px; white-space: nowrap; background: var(--szary); }
+#s01 .zapowiedz { margin-top: 24px; font-size: 40px; font-weight: 800; }
+
+.ogniwa { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 18px auto 0; width: 1160px; }
+.ogniwo { flex: 1; font-family: 'Baloo 2'; font-size: 28px; font-weight: 800; line-height: 1.15; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; padding: 10px 12px; min-height: 110px; display: flex; align-items: center; justify-content: center; }
+.lacznik { font-family: 'Baloo 2'; font-size: 26px; font-weight: 800; color: #fff; background: var(--niebieski); border-radius: 999px; padding: 2px 12px; white-space: nowrap; }
+.lacznik.bo { background: var(--fiolet); }
+.luka { border-style: dashed; border-color: var(--pomarancz); color: var(--pomarancz); font-size: 40px; }
+
+#s02 .rzad { margin-top: 20px; }
+#s02 .karta .nazwa { font-size: 42px; }
+#s02 .karta .pyt { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; color: var(--szary); }
+#s02 .karta .slowo { font-family: 'Baloo 2'; font-size: 44px; font-weight: 800; }
+
+#s03 .wojna { margin: 22px auto 0; width: 1100px; text-align: left; border-color: var(--koszule); }
+#s03 .wojna .poz { font-size: 29px; font-weight: 800; padding: 3px 0; }
+
+#s04 .kafle, #s05 .kafle { margin-top: 16px; }
+#s04 .kafel, #s05 .kafel { font-size: 30px; }
+
+#s06 h2 { font-size: 40px; }
+
+#s07 svg { display: block; width: 1100px; height: 440px; margin: 10px auto 0; }
+#s07 svg text { font-family: 'Baloo 2'; font-weight: 800; text-anchor: middle; }
+
+#s08 .krzywa, #s09 .krzywa { margin-top: 0; height: 450px; }
+
+#s10 .lista, #s11 .lista { width: 1120px; gap: 12px; margin-top: 14px; }
+#s10 .linia, #s11 .linia { font-size: 30px; padding: 8px 20px; }
+.puste { display: inline-block; min-width: 80px; border-bottom: 4px solid var(--szary); }
+#s10 .slowa .chip, #s11 .slowa .chip { background: var(--niebieski); }
+#s12 .lista { width: 1100px; gap: 14px; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== 01 intro ===== -->
+  <section class="scena" data-id="01-intro" id="s01">
+    <div class="male zjaw" data-t="0">Klasa 4 · Lektura · lekcja 5</div>
+    <div class="ikona pop" data-t="0.3">💣⚔️🚩</div>
+    <div class="tytul pop" data-slowo="bitwa">Bitwa o Plac Broni</div>
+    <div class="grupy">
+      <span class="chip pop" data-slowo="łańcuchu">🔗 łańcuch: bo i więc</span>
+      <span class="chip pop" data-slowo="największe" style="background:var(--pomarancz)">⛰️ moment największego napięcia</span>
+    </div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+  </section>
+
+  <!-- ===== 02 lancuch ===== -->
+  <section class="scena" data-id="02-lancuch" id="s02">
+    <span class="czesc zjaw" data-t="0">PRZYCZYNA I SKUTEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Nic nie dzieje się przypadkiem 🔗</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="przyczyna" style="border-color:var(--fiolet)"><div class="nazwa" style="color:var(--fiolet)">PRZYCZYNA</div><div class="pyt">dlaczego?</div><div class="slowo zjaw" data-slowo="bo" style="color:var(--fiolet)">… bo …</div></div>
+      <div class="karta pop" data-slowo="skutek" style="border-color:var(--niebieski)"><div class="nazwa" style="color:var(--niebieski)">SKUTEK</div><div class="pyt">co z tego wynikło?</div><div class="slowo zjaw" data-slowo="więc" style="color:var(--niebieski)">… więc …</div></div>
+    </div>
+    <div class="ogniwa wjazd-dol" data-slowo="posłuchajcie">
+      <div class="ogniwo b-kosz">🟥 Czerwone Koszule chcą zabrać plac</div>
+      <span class="lacznik">więc ➜</span>
+      <div class="ogniwo b-plac">🟩 chłopcy szykują się do obrony</div>
+      <span class="lacznik bo zjaw" data-slowo="odwrotnie">⬅ bo</span>
+    </div>
+  </section>
+
+  <!-- ===== 03 przed bitwa ===== -->
+  <section class="scena" data-id="03-przed" id="s03">
+    <span class="czesc zjaw" data-t="0">PRZYCZYNA I SKUTEK</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Łańcuch, który prowadzi do bitwy ⛓️</h2>
+    <div class="ogniwa">
+      <div class="ogniwo b-kosz pop" data-slowo="placu">🟥 Koszule chcą placu</div>
+      <span class="lacznik zjaw" data-slowo="chorągiewkę">➜</span>
+      <div class="ogniwo pop" data-slowo="chorągiewkę">🚩 Feri Acz zabiera chorągiewkę</div>
+      <span class="lacznik zjaw" data-slowo="wyprawiają">➜</span>
+      <div class="ogniwo pop" data-slowo="wyprawiają">🌙 wyprawa do Ogrodu</div>
+      <span class="lacznik zjaw" data-slowo="ląduje">➜</span>
+      <div class="ogniwo pop" data-slowo="choruje">💦 3 kąpiele ➜ 🤒 Nemeczek choruje</div>
+    </div>
+    <div class="karta wojna pop" data-slowo="wypowiedzenie">
+      <div class="poz">🏳️ posłańcy pod białą flagą: <b>wypowiedzenie wojny</b> - bitwa jutro</div>
+      <div class="poz zjaw" data-slowo="bombami">💣 bomby z piasku · 🤼 zapasy · 🔱 dzidy</div>
+      <div class="poz zjaw" data-slowo="uczciwie">🤝 obie strony: walczymy uczciwie</div>
+      <div class="poz zjaw" data-slowo="przeprosić">🙇 jeden z braci Pastorów przeprasza Nemeczka</div>
+    </div>
+  </section>
+
+  <!-- ===== 04 zadanie 1 ===== -->
+  <section class="scena zadanie" data-id="04-zadanie1+60" id="s04">
+    <span class="czesc">PRZYCZYNA I SKUTEK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="luki">Które kafelki pasują do luk? Dwa są zbędne.</div>
+    <div class="ogniwa">
+      <div class="ogniwo">🚩 Feri Acz zabiera chorągiewkę</div>
+      <span class="lacznik">więc ➜</span>
+      <div class="ogniwo luka">luka 1</div>
+      <span class="lacznik">➜</span>
+      <div class="ogniwo">💦 Nemeczek 3 razy ląduje w zimnej wodzie</div>
+      <span class="lacznik">więc ➜</span>
+      <div class="ogniwo luka">luka 2</div>
+    </div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="kafelki"><b>1</b>Boka zostaje wodzem.</div>
+      <div class="kafel pop" data-slowo="kafelki" data-po="0.25"><b>2</b>Chłopcy wyprawiają się do Ogrodu Botanicznego.</div>
+      <div class="kafel pop" data-slowo="kafelki" data-po="0.5"><b>3</b>Janosz kopie rowy.</div>
+      <div class="kafel pop" data-slowo="kafelki" data-po="0.75"><b>4</b>Nemeczek ciężko choruje.</div>
+    </div>
+    <div class="pisz zjaw" data-slowo="numer">Zapisz: luka 1 - …, luka 2 - … 📓</div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 05 odpowiedz 1 ===== -->
+  <section class="scena odp" data-id="05-odpowiedz1" id="s05">
+    <span class="czesc">PRZYCZYNA I SKUTEK</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Które kafelki pasują do luk? Dwa są zbędne.</div>
+    <div class="ogniwa">
+      <div class="ogniwo">🚩 Feri Acz zabiera chorągiewkę</div>
+      <span class="lacznik">więc ➜</span>
+      <div class="ogniwo luka o-dobra" data-slowo="drugi" style="font-size:26px;color:var(--ciemny)">2 · wyprawa do Ogrodu</div>
+      <span class="lacznik">➜</span>
+      <div class="ogniwo">💦 Nemeczek 3 razy ląduje w zimnej wodzie</div>
+      <span class="lacznik">więc ➜</span>
+      <div class="ogniwo luka o-dobra" data-slowo="czwarty" style="font-size:26px;color:var(--ciemny)">4 · ciężko choruje</div>
+    </div>
+    <div class="kafle">
+      <div class="kafel o-zla" data-slowo="pierwszy"><b>1</b>Boka zostaje wodzem.</div>
+      <div class="kafel o-dobra" data-slowo="drugi"><b>2</b>Chłopcy wyprawiają się do Ogrodu Botanicznego.<span class="dl o-wpis-blok" data-slowo="wroga">chcą pokazać, że też wejdą na teren wroga</span></div>
+      <div class="kafel o-zla" data-slowo="trzeci"><b>3</b>Janosz kopie rowy.</div>
+      <div class="kafel o-dobra" data-slowo="czwarty"><b>4</b>Nemeczek ciężko choruje.</div>
+    </div>
+  </section>
+
+  <!-- ===== 06 bitwa na mapie ===== -->
+  <section class="scena" data-id="06-bitwa" id="s06" style="padding-top:22px">
+    <h2 class="naglowek wjazd-dol" data-t="0">Dzień bitwy ⚔️ <span style="font-size:22px;color:var(--szary)">(rozdz. VIII)</span></h2>
+    <script>wstawMape({ bezNapisu: true },
+      '<defs><marker id="grot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#D6453D"/></marker></defs>' +
+      '<g class="m-zjaw" data-slowo="rowy"><line x1="636" y1="112" x2="636" y2="316" stroke="#5A3D1E" stroke-width="9" stroke-dasharray="22 10"/><text x="590" y="140" class="m-pod m-male m-obrys">rowy</text></g>' +
+      '<g class="m-pop" data-slowo="rozstawia"><text x="370" y="200" class="m-pod m-obrys">👑 Boka</text></g>' +
+      '<line x1="400" y1="515" x2="400" y2="402" stroke="#D6453D" stroke-width="12" marker-end="url(#grot)" pathLength="1" class="m-trasa" data-slowo="marii"/>' +
+      '<g class="m-pop" data-slowo="wygrywają"><text x="420" y="388" class="m-pod m-male m-obrys" fill="#2E9E5B">💣 tu wygrywają!</text></g>' +
+      '<line x1="560" y1="0" x2="560" y2="200" stroke="#D6453D" stroke-width="12" marker-end="url(#grot)" pathLength="1" class="m-trasa" data-slowo="tyłu"/>' +
+      '<g class="m-pop" data-slowo="tyłu"><text x="520" y="232" class="m-pod m-male m-obrys m-cz">Feri Acz od tyłu!</text></g>' +
+      '<g class="m-pop" data-slowo="kolnay"><text x="370" y="290" class="m-pod m-male m-obrys">⚡ Kolnay na ziemi</text></g>' +
+      '<g class="m-pop" data-slowo="chatce"><text x="520" y="335" class="m-emo m-male-emo">🛖</text><text x="520" y="362" class="m-pod m-male m-obrys">chatka</text></g>' +
+      '<g class="m-pop" data-slowo="przepadnie"><circle cx="520" cy="325" r="48" fill="none" stroke="#D6453D" stroke-width="6"/></g>'
+    )</script>
+  </section>
+
+  <!-- ===== 07 punkt kulminacyjny ===== -->
+  <section class="scena" data-id="07-kulminacja" id="s07">
+    <span class="czesc zjaw" data-t="0">PUNKT KULMINACYJNY</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Napięcie rośnie… ⛰️</h2>
+    <svg viewBox="0 0 1100 440" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="410" x2="1070" y2="410" stroke="#d9c9b2" stroke-width="4"/>
+      <line x1="40" y1="410" x2="40" y2="20" stroke="#d9c9b2" stroke-width="4"/>
+      <text x="150" y="40" font-size="24" fill="#7a6a5c">⬆ napięcie</text>
+      <text x="1010" y="436" font-size="24" fill="#7a6a5c">czas ➜</text>
+      <path d="M 60 390 C 300 370, 500 260, 700 80" fill="none" stroke="#F58220" stroke-width="10" stroke-linecap="round" pathLength="1" class="rysuj" data-slowo="rośnie"/>
+      <text x="200" y="270" font-size="30" fill="#F58220" class="m-zjaw" data-slowo="niepokój">😟 niepokój, ciekawość</text>
+      <g class="m-pop" data-slowo="największe"><circle cx="700" cy="80" r="26" fill="#E8425A"/><text x="700" y="92" font-size="30" fill="#fff">!</text></g>
+      <g class="m-pop" data-slowo="kulminacyjny"><rect x="520" y="10" width="360" height="46" rx="23" fill="#E8425A"/><text x="700" y="43" font-size="28" fill="#fff">PUNKT KULMINACYJNY</text></g>
+      <path d="M 700 80 C 800 200, 900 330, 1050 370" fill="none" stroke="#3C7DD9" stroke-width="10" stroke-linecap="round" pathLength="1" class="rysuj" data-slowo="opada"/>
+      <text x="985" y="225" font-size="30" fill="#3C7DD9" class="m-zjaw" data-slowo="końca">opada ➜ koniec</text>
+    </svg>
+  </section>
+
+  <!-- ===== 08 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08" style="padding-top:24px">
+    <span class="czesc">PUNKT KULMINACYJNY</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="które">Które wydarzenie to punkt kulminacyjny? Zapisz numer.</div>
+    <script>wstawKrzywa({ punkty: punkty([300, 300, 300, 300, 300, 300], [true, false, true, false, true, false], []), os: '⬆ napięcie', plaska: true, statyczna: true, kolor: '#d9c9b2' })</script>
+    <div class="odliczanie" style="margin-top:0"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 09 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09" style="padding-top:24px">
+    <span class="czesc">PUNKT KULMINACYJNY</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Które wydarzenie to punkt kulminacyjny? Zapisz numer.</div>
+    <script>wstawKrzywa({ punkty: punkty([380, 320, 260, 200, 70, 250], [true, false, true, false, true, false], [0, 0, -30, 0, -170, 0]), os: '⬆ napięcie', statyczna: true, wyroznij: { nr: 5, slowo: 'piąte', napis: 'KULMINACJA' } })</script>
+  </section>
+
+  <!-- ===== 10 zadanie 3 ===== -->
+  <section class="scena zadanie" data-id="10-zadanie3+60" id="s10">
+    <span class="czesc">PRZYCZYNA I SKUTEK</span>
+    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div class="polecenie wjazd-dol" data-slowo="więc">Bo czy więc?</div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Nemeczek przewraca Feriego Acza, <span class="puste"></span> Czerwone Koszule tracą wodza i uciekają.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.3"><span class="nr">2</span>Nemeczek ucieka chory z domu, <span class="puste"></span> chce bronić placu razem z kolegami.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">3</span>Boka mianuje Nemeczka kapitanem, <span class="puste"></span> to dzięki niemu wygrali.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.9"><span class="nr">4</span>Nemeczek długo był w mokrym ubraniu, <span class="puste"></span> zachorował.</div>
+    </div>
+    <div class="slowa">
+      <span class="chip pop" data-slowo="numerze" style="background:var(--fiolet)">bo</span>
+      <span class="chip pop" data-slowo="numerze" data-po="0.2">więc</span>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
+  </section>
+
+  <!-- ===== 11 odpowiedz 3 ===== -->
+  <section class="scena odp" data-id="11-odpowiedz3" id="s11">
+    <span class="czesc">PRZYCZYNA I SKUTEK</span>
+    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
+    <div class="polecenie">Bo czy więc?</div>
+    <div class="lista">
+      <div class="linia"><span class="nr">1</span>Nemeczek przewraca Feriego Acza, <span class="etyk o-znak" data-slowo="pierwsze" style="background:var(--niebieski)">więc</span> Czerwone Koszule tracą wodza i uciekają.<span class="dl o-wpis-blok" data-slowo="ucieczka">ucieczka to skutek</span></div>
+      <div class="linia"><span class="nr">2</span>Nemeczek ucieka chory z domu, <span class="etyk o-znak" data-slowo="drugie" style="background:var(--fiolet)">bo</span> chce bronić placu razem z kolegami.<span class="dl o-wpis-blok" data-slowo="przyczyna">to przyczyna</span></div>
+      <div class="linia"><span class="nr">3</span>Boka mianuje Nemeczka kapitanem, <span class="etyk o-znak" data-slowo="trzecie" style="background:var(--fiolet)">bo</span> to dzięki niemu wygrali.</div>
+      <div class="linia"><span class="nr">4</span>Nemeczek długo był w mokrym ubraniu, <span class="etyk o-znak" data-slowo="czwarte" style="background:var(--niebieski)">więc</span> zachorował.</div>
+    </div>
+  </section>
+
+  <!-- ===== 12 zapamietaj ===== -->
+  <section class="scena zapamietaj" data-id="12-zapamietaj" id="s12">
+    <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
+    <div class="lista">
+      <div class="linia pop" data-slowo="łańcuch">🔗 Wydarzenia łączą się jak <b>łańcuch</b>.</div>
+      <div class="linia pop" data-slowo="przyczyna" style="border-color:var(--fiolet)">❓ <b>Przyczyna</b> - dlaczego? Łączymy ją słowem <b>bo</b>.</div>
+      <div class="linia pop" data-slowo="skutek" style="border-color:var(--niebieski)">➜ <b>Skutek</b> - co z tego wynikło? Łączymy go słowem <b>więc</b>.</div>
+      <div class="linia pop" data-slowo="kulminacyjny" style="border-color:var(--roz)">⛰️ <b>Punkt kulminacyjny</b> - moment największego napięcia.</div>
+      <div class="linia b-plac pop" data-slowo="przewraca">💥 W tej książce: chory Nemeczek przewraca Feriego Acza.</div>
+    </div>
+    <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
+  </section>
+
+  <button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film5-sciezka.mp3';</script>
+<script src="timeline-film5.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

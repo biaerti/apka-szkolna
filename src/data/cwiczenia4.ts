@@ -13,6 +13,7 @@
 
 import type { Cwiczenie } from './cwiczenia';
 import { odmiana, osoby, OSOBY, PRZYPADKI, przeszly, przeszlyRegularny, wybor } from './cwiczeniaKlocki';
+import { CWICZENIA_CHLOPCY } from './cwiczeniaChlopcy';
 
 const TAK_NIE = ['tak', 'nie'];
 const FAKT = ['fakt', 'opinia'];
@@ -720,4 +721,6 @@ export const CWICZENIA4: Cwiczenie[] = [
       odmiana('wieś', 'wieś, wsi, wsi, wieś, wsią, wsi, wsi', 'wsie, wsi, wsiom, wsie, wsiami, wsiach, wsie'),
     ],
   },
+  // ---------- Lektura: Chłopcy z Placu Broni (cwiczeniaChlopcy.ts) ----------
+  ...CWICZENIA_CHLOPCY,
 ];
