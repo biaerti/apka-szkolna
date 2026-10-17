@@ -12,6 +12,7 @@
 import { CWICZENIA4 } from './cwiczenia4';
 import { CWICZENIA4_ROZDZIAL3 } from './cwiczenia4rozdzial3';
 import { CWICZENIA5 } from './cwiczenia5';
+import { CWICZENIA5_DZIAL3 } from './cwiczenia5dzial3';
 
 export interface CwiczenieLuki {
   id: string;
@@ -46,7 +47,7 @@ export interface CwiczenieTabela {
 
 export type Cwiczenie = CwiczenieLuki | CwiczenieTabela;
 
-export const CWICZENIA: Cwiczenie[] = [...CWICZENIA4, ...CWICZENIA4_ROZDZIAL3, ...CWICZENIA5];
+export const CWICZENIA: Cwiczenie[] = [...CWICZENIA4, ...CWICZENIA4_ROZDZIAL3, ...CWICZENIA5, ...CWICZENIA5_DZIAL3];
 
 export function cwiczenieById(id: string): Cwiczenie | undefined {
   return CWICZENIA.find((c) => c.id === id);

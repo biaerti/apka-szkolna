@@ -76,6 +76,19 @@ export const FILMIKI: Filmik[] = [
   { id: 'placu-broni-film4', lekcja: 'L4', title: 'Gereb - czyn, motyw i ocena bohatera (3 zadania)' },
   { id: 'placu-broni-film5', lekcja: 'L5', title: 'Bitwa o Plac Broni - przyczyna, skutek, punkt kulminacyjny (3 zadania)' },
   { id: 'placu-broni-film6', lekcja: 'L6', title: 'Przesłanie i wartości - podsumowanie lektury (3 zadania)' },
+  // Klasa 5, dzial 3 "Ideały, autorytety, idole" (textbook5dzial3.ts) - nowy format: ok. 8 min, 3 zadania z minuta na kazde.
+  { id: 'epitet5-film1', lekcja: 'V.30', title: 'Epitet - obraz, nastrój, trafne słowo (3 zadania)' },
+  { id: 'autorytet-film1', lekcja: 'V.31', title: 'Autorytet czy idol? Dedykacja (3 zadania)' },
+  { id: 'publicystyka-film1', lekcja: 'V.32', title: 'Tekst publicystyczny - informacja czy opinia? (3 zadania)' },
+  { id: 'przymiotnik5-film1', lekcja: 'V.33', title: 'Przymiotnik - odmiana, oni i one, pułapka -cy (3 zadania)' },
+  { id: 'stopniowanie5-film1', lekcja: 'V.34', title: 'Stopniowanie przymiotników (3 zadania)' },
+  { id: 'ludzie-filmu-film1', lekcja: 'V.35', title: 'Ludzie filmu, rodzaje i gatunki filmów (3 zadania)' },
+  { id: 'sprawozdanie-film-film1', lekcja: 'V.36', title: 'Sprawozdanie z filmu lub spektaklu (3 zadania)' },
+  { id: 'liczebnik-film1', lekcja: 'V.37', title: 'Liczebnik główny i porządkowy (3 zadania)' },
+  { id: 'liczebnik-zbiorowy-film1', lekcja: 'V.38', title: 'Liczebnik zbiorowy i lata (3 zadania)' },
+  { id: 'daty-film1', lekcja: 'V.39', title: 'Kropka a liczby. Zapisywanie dat (3 zadania)' },
+  { id: 'o-u5-film1', lekcja: 'V.40', title: 'Ó czy u? Zdrobnienia, lód i lud (3 zadania)' },
+  { id: 'podsumowanie5-dzial3-film1', lekcja: 'V.41', title: 'Podsumowanie działu 3 - To wiem! To potrafię! (3 zadania)' },
 ];
 
 export function filmikById(id: string): Filmik | undefined {

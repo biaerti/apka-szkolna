@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Tekst publicystyczny - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #2F6DB5; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">📰🎙️💬</div><div class="tytul pop" data-t="0.6">Tekst publicystyczny</div><div class="grupy"><span class="chip pop" data-slowo="publicystyczny">📰 co to jest</span><span class="chip pop" data-slowo="informację">ℹ️ informacja</span><span class="chip pop" data-slowo="opinii">💬 opinia</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-co-to"><span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST</span><h2 class="naglowek wjazd-dol" data-t="0">Tekst publicystyczny 📰</h2><div class="chipy"><span class="chip pop" data-slowo="gazecie" style="background:var(--ak)">📰 gazeta</span><span class="chip pop" data-slowo="radiu" style="background:var(--ak)">📻 radio</span><span class="chip pop" data-slowo="telewizji" style="background:var(--ak)">📺 telewizja</span><span class="chip pop" data-slowo="internecie" style="background:var(--ak)">💻 internet</span></div><div class="karta pop" data-slowo="aktualnych" style="border-color:var(--fiolet);width:820px;margin:18px auto 0"><div class="nazwa" style="color:var(--fiolet)">aktualne wydarzenia</div><div class="opis">sport · nauka · kultura · szkoła · miasto</div></div><div class="rzad"><div class="karta pop" data-slowo="informuje" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">ℹ️ informuje</div><div class="opis">podaje fakty</div></div><div class="karta pop" data-slowo="komentuje" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">💬 komentuje</div><div class="opis">autor mówi, co myśli, i przekonuje</div></div></div><div class="chipy"><span class="chip pop" data-slowo="artykuł" style="background:var(--zielony)">artykuł</span><span class="chip pop" data-slowo="wywiad" style="background:var(--zielony)">wywiad</span></div></section>
+<section class="scena" data-id="03-artykul-wywiad"><span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST</span><h2 class="naglowek wjazd-dol" data-t="0">Artykuł i wywiad 🎙️</h2><div class="rzad"><div class="karta pop" data-slowo="dziennikarz" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">📰 ARTYKUŁ</div><div class="opis">dziennikarz sam opowiada o sprawie i komentuje</div></div><div class="karta pop" data-slowo="rozmowa" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">🎙️ WYWIAD</div><div class="opis">rozmowa: pytania dziennikarza i odpowiedzi rozmówcy</div></div></div><div class="lista" style="width:820px"><div class="linia pop" data-slowo="pytania"><b class="ak">– Ile godzin dziennie trenujesz?</b></div><div class="linia pop" data-slowo="odpowiedzi">– Około trzech. Szachy to dla mnie przygoda.</div></div></section>
+<section class="scena zadanie" data-id="04-zadanie1+60"><span class="czesc c1">1 · CO TO JEST</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Czy to tekst publicystyczny?</div><div class="opcje"><span class="chip pop" data-slowo="opisów" style="background:var(--zielony)">✅ tak</span><span class="chip pop" data-slowo="opisów" data-po="0.25" style="background:var(--roz)">❌ nie</span></div><div class="lista" style="width:1100px"><div class="linia pop" data-slowo="opisów"><span class="nr">1</span>Artykuł w gazecie o remoncie szkolnego boiska</div><div class="linia pop" data-slowo="opisów" data-po="0.2"><span class="nr">2</span>Wywiad z mistrzynią szachów w radiu</div><div class="linia pop" data-slowo="opisów" data-po="0.4"><span class="nr">3</span>Baśń o smoku i odważnej księżniczce</div><div class="linia pop" data-slowo="opisów" data-po="0.6"><span class="nr">4</span>Przepis na naleśniki z jagodami</div><div class="linia pop" data-slowo="opisów" data-po="0.8"><span class="nr">5</span>Komentarz na portalu o nowym planie lekcji</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="05-odpowiedz1"><span class="czesc c1">1 · CO TO JEST</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Czy to tekst publicystyczny?</div><div class="opcje"><span class="chip" style="background:var(--zielony)">✅ tak</span><span class="chip" style="background:var(--roz)">❌ nie</span></div><div class="lista" style="width:1100px"><div class="linia" data-slowo="tak"><span class="nr">1</span>Artykuł w gazecie o remoncie szkolnego boiska<span class="etyk o-znak o-razem" style="background:var(--zielony)">tak</span></div><div class="linia" data-slowo="tak"><span class="nr">2</span>Wywiad z mistrzynią szachów w radiu<span class="etyk o-znak o-razem" style="background:var(--zielony)">tak</span></div><div class="linia" data-slowo="nie"><span class="nr">3</span>Baśń o smoku i odważnej księżniczce<span class="etyk o-znak o-razem" style="background:var(--roz)">nie</span><span class="dlaczego o-wpis o-razem">zmyślona</span></div><div class="linia" data-slowo="nie"><span class="nr">4</span>Przepis na naleśniki z jagodami<span class="etyk o-znak o-razem" style="background:var(--roz)">nie</span><span class="dlaczego o-wpis o-razem">instrukcja</span></div><div class="linia" data-slowo="tak"><span class="nr">5</span>Komentarz na portalu o nowym planie lekcji<span class="etyk o-znak o-razem" style="background:var(--zielony)">tak</span></div></div></section>
+<section class="scena" data-id="06-info-opinia"><span class="czesc c2 zjaw" data-t="0">2 · INFORMACJA I OPINIA</span><h2 class="naglowek wjazd-dol" data-t="0">Informacja czy opinia? 🤔</h2><div class="rzad"><div class="karta pop" data-slowo="fakt" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">ℹ️ INFORMACJA</div><div class="opis">fakt - da się sprawdzić: data, liczba, miejsce</div></div><div class="karta pop" data-slowo="zdanie" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">💬 OPINIA</div><div class="opis">czyjeś zdanie - można się nie zgodzić</div></div></div><div class="lista" style="width:820px"><div class="linia pop" data-slowo="wynikiem">ℹ️ Mecz zakończył się wynikiem 2:1.</div><div class="linia pop" data-slowo="najnudniejszy">💬 To był <span class="hl">najnudniejszy</span> mecz sezonu.</div></div></section>
+<section class="scena zadanie" data-id="07-zadanie2+60"><span class="czesc c2">2 · INFORMACJA I OPINIA</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Nowy skatepark 🛹 Informacja czy opinia?</div><div class="opcje"><span class="chip pop" data-slowo="zdań" style="background:var(--ak)">ℹ️ informacja</span><span class="chip pop" data-slowo="zdań" data-po="0.25" style="background:var(--fiolet)">💬 opinia</span></div><div class="lista" style="width:1100px"><div class="linia pop" data-slowo="zdań"><span class="nr">1</span>Skatepark otwarto w sobotę o 10.00.</div><div class="linia pop" data-slowo="zdań" data-po="0.2"><span class="nr">2</span>Moim zdaniem to najlepsze miejsce w dzielnicy.</div><div class="linia pop" data-slowo="zdań" data-po="0.4"><span class="nr">3</span>Na otwarcie przyszło około 200 osób.</div><div class="linia pop" data-slowo="zdań" data-po="0.6"><span class="nr">4</span>Wydaje mi się, że rampa jest za niska.</div><div class="linia pop" data-slowo="zdań" data-po="0.8"><span class="nr">5</span>Budowa trwała pół roku.</div><div class="linia pop" data-slowo="zdań" data-po="1.0"><span class="nr">6</span>Wszyscy nastolatkowie będą tu przychodzić codziennie.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="08-odpowiedz2"><span class="czesc c2">2 · INFORMACJA I OPINIA</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Nowy skatepark 🛹 Informacja czy opinia?</div><div class="opcje"><span class="chip" style="background:var(--ak)">ℹ️ informacja</span><span class="chip" style="background:var(--fiolet)">💬 opinia</span></div><div class="lista" style="width:1100px"><div class="linia" data-slowo="informacja"><span class="nr">1</span>Skatepark otwarto w sobotę o 10.00.<span class="etyk o-znak o-razem" style="background:var(--ak)">informacja</span></div><div class="linia" data-slowo="opinia"><span class="nr">2</span>Moim zdaniem to najlepsze miejsce w dzielnicy.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">opinia</span></div><div class="linia" data-slowo="informacja"><span class="nr">3</span>Na otwarcie przyszło około 200 osób.<span class="etyk o-znak o-razem" style="background:var(--ak)">informacja</span></div><div class="linia" data-slowo="opinia"><span class="nr">4</span>Wydaje mi się, że rampa jest za niska.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">opinia</span></div><div class="linia" data-slowo="informacja"><span class="nr">5</span>Budowa trwała pół roku.<span class="etyk o-znak o-razem" style="background:var(--ak)">informacja</span></div><div class="linia" data-slowo="opinia"><span class="nr">6</span>Wszyscy nastolatkowie będą tu przychodzić codziennie.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">opinia</span></div></div></section>
+<section class="scena" data-id="09-slowa"><span class="czesc c3 zjaw" data-t="0">3 · SŁOWA OPINII</span><h2 class="naglowek wjazd-dol" data-t="0">Słowa, które zdradzają opinię 🔎</h2><div class="rzad"><div class="karta pop" data-slowo="przekonanie" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">🙋 przekonanie</div><div class="opis">sądzę, że · moim zdaniem · według mnie</div></div><div class="karta pop" data-slowo="wątpliwość" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">🤔 wątpliwość</div><div class="opis">chyba · zapewne · najprawdopodobniej · wydaje mi się</div></div></div><div class="rzad"><div class="karta pop" data-slowo="oceniają" style="border-color:var(--zielony);"><div class="nazwa" style="color:var(--zielony)">⭐ ocena</div><div class="opis">dobry · kultowy · najlepszy · najgorszy</div></div><div class="karta pop" data-slowo="uogólniają" style="border-color:var(--roz);"><div class="nazwa" style="color:var(--roz)">👥 uogólnienie</div><div class="opis">wszyscy · zawsze · nikt · nigdy</div></div></div></section>
+<section class="scena zadanie" data-id="10-zadanie3+60"><span class="czesc c3">3 · SŁOWA OPINII</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Które słowo zdradza opinię? Zapisz je.</div><div class="lista" style="width:1100px"><div class="linia pop" data-slowo="zdaniu"><span class="nr">1</span>Sądzę, że zawody były dobrze przygotowane.</div><div class="linia pop" data-slowo="zdaniu" data-po="0.2"><span class="nr">2</span>To kultowy serial dla całej rodziny.</div><div class="linia pop" data-slowo="zdaniu" data-po="0.4"><span class="nr">3</span>Zapewne mecz zostanie przełożony.</div><div class="linia pop" data-slowo="zdaniu" data-po="0.6"><span class="nr">4</span>Nikt nie lubi poniedziałków.</div><div class="linia pop" data-slowo="zdaniu" data-po="0.8"><span class="nr">5</span>To najgorszy pomysł w historii szkoły.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="11-odpowiedz3"><span class="czesc c3">3 · SŁOWA OPINII</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Które słowo zdradza opinię? Zapisz je.</div><div class="lista" style="width:1100px"><div class="linia" data-slowo="sądzę"><span class="nr">1</span><span class="o-podsw o-razem">Sądzę</span>, że zawody były dobrze przygotowane.<span class="etyk o-znak o-razem" style="background:var(--ak)">przekonanie</span></div><div class="linia" data-slowo="kultowy"><span class="nr">2</span>To <span class="o-podsw o-razem">kultowy</span> serial dla całej rodziny.<span class="etyk o-znak o-razem" style="background:var(--zielony)">ocena</span></div><div class="linia" data-slowo="zapewne"><span class="nr">3</span><span class="o-podsw o-razem">Zapewne</span> mecz zostanie przełożony.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">wątpliwość</span></div><div class="linia" data-slowo="nikt"><span class="nr">4</span><span class="o-podsw o-razem">Nikt</span> nie lubi poniedziałków.<span class="etyk o-znak o-razem" style="background:var(--roz)">uogólnienie</span></div><div class="linia" data-slowo="najgorszy"><span class="nr">5</span>To <span class="o-podsw o-razem">najgorszy</span> pomysł w historii szkoły.<span class="etyk o-znak o-razem" style="background:var(--zielony)">ocena</span></div></div></section>
+<section class="scena zapamietaj" data-id="12-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="prasie">📰 prasa, radio, telewizja, internet - aktualne wydarzenia</div><div class="linia pop" data-slowo="komentuje">💬 informuje i komentuje: artykuł, wywiad</div><div class="linia pop" data-slowo="fakt">ℹ️ informacja = fakt, który da się sprawdzić</div><div class="linia pop" data-slowo="opinia">🗣️ opinia = czyjeś zdanie: moim zdaniem, chyba, najlepszy, wszyscy</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

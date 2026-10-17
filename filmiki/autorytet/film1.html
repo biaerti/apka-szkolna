@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Autorytet czy idol? - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #1B8A8F; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">🧭⭐💌</div><div class="tytul pop" data-t="0.6">Autorytet czy idol?</div><div class="grupy"><span class="chip pop" data-slowo="autorytet">🧭 autorytet</span><span class="chip pop" data-slowo="idola">⭐ idol</span><span class="chip pop" data-slowo="dedykację">💌 dedykacja</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-autorytet"><span class="czesc c1 zjaw" data-t="0">1 · AUTORYTET</span><h2 class="naglowek wjazd-dol" data-t="0">Kto to jest autorytet? 🧭</h2><div class="karta pop" data-slowo="szanujemy" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">AUTORYTET</div><div class="opis">osoba, którą szanujemy i której ufamy - chcemy postępować tak jak ona</div></div><div class="chipy"><span class="chip pop" data-slowo="wiedzę" style="background:var(--fiolet)">📚 wiedza</span><span class="chip pop" data-slowo="mądrość" style="background:var(--fiolet)">🦉 mądrość</span><span class="chip pop" data-slowo="uczciwość" style="background:var(--fiolet)">🤝 uczciwość</span></div><div class="rzad"><div class="karta pop" data-slowo="babcia"><div class="emo">👵</div><div class="nazwa">babcia</div></div><div class="karta pop" data-slowo="trener"><div class="emo">⚽</div><div class="nazwa">trener</div></div><div class="karta pop" data-slowo="lekarka"><div class="emo">🩺</div><div class="nazwa">lekarka</div></div><div class="karta pop" data-slowo="muzyki"><div class="emo">🎻</div><div class="nazwa">pani od muzyki</div></div></div><div class="chipy"><span class="chip pop" data-slowo="wzór" style="background:var(--ak)">🧭 nie musi być sławny · wzór na co dzień</span></div></section>
+<section class="scena" data-id="03-idol"><span class="czesc c2 zjaw" data-t="0">2 · IDOL</span><h2 class="naglowek wjazd-dol" data-t="0">Kto to jest idol? ⭐</h2><div class="karta pop" data-slowo="podziwiamy" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">IDOL</div><div class="opis">ktoś, kogo podziwiamy - często za sławę, talent, wygląd</div></div><div class="chipy"><span class="chip pop" data-slowo="muzyki" style="background:var(--fiolet)">🎤 gwiazda muzyki</span><span class="chip pop" data-slowo="aktor" style="background:var(--fiolet)">🎬 aktor</span><span class="chip pop" data-slowo="sportowiec" style="background:var(--fiolet)">🏅 sportowiec</span><span class="chip pop" data-slowo="influencer" style="background:var(--fiolet)">📱 influencer</span></div><div class="lista" style="width:900px"><div class="linia pop" data-slowo="ubrania">👕 takie same ubrania, podobna fryzura</div><div class="linia pop" data-slowo="ekranu">📺 znamy go zwykle tylko z ekranu</div><div class="linia pop" data-slowo="postępuje">⭐ + 🧭 idol bywa autorytetem, gdy dobrze <b class="ak">postępuje</b></div></div></section>
+<section class="scena zadanie" data-id="04-zadanie1+60"><span class="czesc c2">2 · IDOL</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Autorytet czy idol?</div><div class="opcje"><span class="chip pop" data-slowo="sytuacji" style="background:var(--ak)">🧭 autorytet</span><span class="chip pop" data-slowo="sytuacji" data-po="0.25" style="background:var(--fiolet)">⭐ idol</span></div><div class="lista" style="width:1140px"><div class="linia pop" data-slowo="sytuacji"><span class="nr">1</span>Kuba ściął włosy tak jak jego ulubiony raper.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.2"><span class="nr">2</span>Ola pyta babcię o radę, bo babcia zawsze mówi prawdę.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.4"><span class="nr">3</span>Tłum fanów czeka pod hotelem na piosenkarkę.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.6"><span class="nr">4</span>Trener uczy, jak przegrywać z klasą, i sam tak robi.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.8"><span class="nr">5</span>Maja kupiła taką samą bluzę jak jej ulubiona youtuberka.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="05-odpowiedz1"><span class="czesc c2">2 · IDOL</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Autorytet czy idol?</div><div class="opcje"><span class="chip" style="background:var(--ak)">🧭 autorytet</span><span class="chip" style="background:var(--fiolet)">⭐ idol</span></div><div class="lista" style="width:1140px"><div class="linia" data-slowo="idol"><span class="nr">1</span>Kuba ściął włosy tak jak jego ulubiony raper.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">idol</span></div><div class="linia" data-slowo="autorytet"><span class="nr">2</span>Ola pyta babcię o radę, bo babcia zawsze mówi prawdę.<span class="etyk o-znak o-razem" style="background:var(--ak)">autorytet</span></div><div class="linia" data-slowo="idol"><span class="nr">3</span>Tłum fanów czeka pod hotelem na piosenkarkę.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">idol</span></div><div class="linia" data-slowo="autorytet"><span class="nr">4</span>Trener uczy, jak przegrywać z klasą, i sam tak robi.<span class="etyk o-znak o-razem" style="background:var(--ak)">autorytet</span></div><div class="linia" data-slowo="idol"><span class="nr">5</span>Maja kupiła taką samą bluzę jak jej ulubiona youtuberka.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">idol</span></div></div></section>
+<section class="scena" data-id="06-test"><span class="czesc c2 zjaw" data-t="0">2 · IDOL</span><h2 class="naglowek wjazd-dol" data-t="0">Test na autorytet ✅</h2><div class="lista" style="width:760px"><div class="linia pop" data-slowo="prawdę">✅ Czy mówi prawdę?</div><div class="linia pop" data-slowo="szanuje">✅ Czy szanuje innych ludzi?</div><div class="linia pop" data-slowo="robi">✅ Czy robi to, co mówi?</div><div class="linia pop" data-slowo="lepszy">✅ Czy przy niej staję się lepszy?</div></div><div class="chipy"><span class="chip pop" data-slowo="sława" style="background:var(--roz)">⭐ sława nie ma znaczenia</span><span class="chip pop" data-slowo="liczy" style="background:var(--ak)">🧭 liczy się, jak postępuje</span></div></section>
+<section class="scena zadanie" data-id="07-zadanie2+60"><span class="czesc c2">2 · IDOL</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Prawda czy fałsz?</div><div class="opcje"><span class="chip pop" data-slowo="zdań" style="background:var(--zielony)">✅ prawda</span><span class="chip pop" data-slowo="zdań" data-po="0.25" style="background:var(--roz)">❌ fałsz</span></div><div class="lista" style="width:1140px"><div class="linia pop" data-slowo="zdań"><span class="nr">1</span>Autorytet musi być sławny.</div><div class="linia pop" data-slowo="zdań" data-po="0.2"><span class="nr">2</span>Autorytetem może być ktoś z rodziny.</div><div class="linia pop" data-slowo="zdań" data-po="0.4"><span class="nr">3</span>Idola często podziwiamy za sławę i wygląd.</div><div class="linia pop" data-slowo="zdań" data-po="0.6"><span class="nr">4</span>Autorytet zachęca nas, żeby być lepszym.</div><div class="linia pop" data-slowo="zdań" data-po="0.8"><span class="nr">5</span>Idol zawsze jest złym wzorem.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="08-odpowiedz2"><span class="czesc c2">2 · IDOL</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Prawda czy fałsz?</div><div class="opcje"><span class="chip" style="background:var(--zielony)">✅ prawda</span><span class="chip" style="background:var(--roz)">❌ fałsz</span></div><div class="lista" style="width:1140px"><div class="linia" data-slowo="fałsz"><span class="nr">1</span>Autorytet musi być sławny.<span class="etyk o-znak o-razem" style="background:var(--roz)">fałsz</span><span class="dlaczego o-wpis o-razem">może to być babcia</span></div><div class="linia" data-slowo="prawda"><span class="nr">2</span>Autorytetem może być ktoś z rodziny.<span class="etyk o-znak o-razem">prawda</span></div><div class="linia" data-slowo="prawda"><span class="nr">3</span>Idola często podziwiamy za sławę i wygląd.<span class="etyk o-znak o-razem">prawda</span></div><div class="linia" data-slowo="prawda"><span class="nr">4</span>Autorytet zachęca nas, żeby być lepszym.<span class="etyk o-znak o-razem">prawda</span></div><div class="linia" data-slowo="fałsz"><span class="nr">5</span>Idol zawsze jest złym wzorem.<span class="etyk o-znak o-razem" style="background:var(--roz)">fałsz</span><span class="dlaczego o-wpis o-razem">może dobrze postępować</span></div></div></section>
+<section class="scena" data-id="09-dedykacja"><span class="czesc c3 zjaw" data-t="0">3 · DEDYKACJA</span><h2 class="naglowek wjazd-dol" data-t="0">Dedykacja 💌</h2><div class="karta pop" data-slowo="Zosi" style="border-color:var(--fiolet);width:720px;margin:14px auto 0"><div class="emo">📖</div><div class="nazwa" style="color:var(--fiolet)"><i>Dla mojej siostry Zosi,<br>która zawsze we mnie wierzyła</i></div></div><div class="karta pop" data-slowo="poświęca" style="border-color:var(--ak);margin-top:16px"><div class="nazwa" style="color:var(--ak)">DEDYKACJA = zapis przed tekstem utworu</div><div class="opis">mówi, komu autor poświęca swoje dzieło</div></div><div class="chipy"><span class="chip pop" data-slowo="poprzedzający" style="background:var(--ak)">📖 przed tekstem</span><span class="chip pop" data-slowo="ważne" style="background:var(--fiolet)">💝 dla ważnej osoby</span><span class="chip pop" data-slowo="prezencie" style="background:var(--zielony)">🎁 w książce na prezent</span></div></section>
+<section class="scena zadanie" data-id="10-zadanie3+60"><span class="czesc c3">3 · DEDYKACJA</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Które napisy to dedykacje? Zapisz numery.</div><div class="lista" style="width:1140px"><div class="linia pop" data-slowo="napisów"><span class="nr">1</span>Rozdział pierwszy. Tajemnicza paczka</div><div class="linia pop" data-slowo="napisów" data-po="0.2"><span class="nr">2</span><i>Dla Antka, który nauczył mnie jeździć na rowerze</i></div><div class="linia pop" data-slowo="napisów" data-po="0.4"><span class="nr">3</span>Była zimna, listopadowa noc.</div><div class="linia pop" data-slowo="napisów" data-po="0.6"><span class="nr">4</span><i>Mojemu dziadkowi - pierwszemu bohaterowi mojego życia</i></div><div class="linia pop" data-slowo="napisów" data-po="0.8"><span class="nr">5</span>Spis treści</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="11-odpowiedz3"><span class="czesc c3">3 · DEDYKACJA</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Które napisy to dedykacje? Zapisz numery.</div><div class="lista" style="width:1140px"><div class="linia" data-slowo="jeden"><span class="nr">1</span>Rozdział pierwszy. Tajemnicza paczka<span class="etyk o-znak o-razem" style="background:var(--szary)">nie</span><span class="dlaczego o-wpis o-razem">tytuł rozdziału</span></div><div class="linia" data-slowo="dwa"><span class="nr">2</span><i>Dla Antka, który nauczył mnie jeździć na rowerze</i><span class="etyk o-znak o-razem" style="background:var(--ak)">dedykacja</span></div><div class="linia" data-slowo="trzy"><span class="nr">3</span>Była zimna, listopadowa noc.<span class="etyk o-znak o-razem" style="background:var(--szary)">nie</span><span class="dlaczego o-wpis o-razem">początek opowieści</span></div><div class="linia" data-slowo="cztery"><span class="nr">4</span><i>Mojemu dziadkowi - pierwszemu bohaterowi mojego życia</i><span class="etyk o-znak o-razem" style="background:var(--ak)">dedykacja</span></div><div class="linia" data-slowo="pięć"><span class="nr">5</span>Spis treści<span class="etyk o-znak o-razem" style="background:var(--szary)">nie</span></div></div></section>
+<section class="scena zapamietaj" data-id="12-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="szanujemy">🧭 autorytet - szanujemy go i ufamy mu, bierzemy z niego przykład</div><div class="linia pop" data-slowo="podziwiamy">⭐ idol - podziwiamy go, często za sławę, talent, wygląd</div><div class="linia pop" data-slowo="wzorem">🤝 idol, który jest dobrym wzorem, bywa autorytetem</div><div class="linia pop" data-slowo="dedykacja">💌 dedykacja - zapis przed tekstem: komu autor poświęca dzieło</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

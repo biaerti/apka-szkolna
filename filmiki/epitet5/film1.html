@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Epitet - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #D9572B; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">✋🎨👀</div><div class="tytul pop" data-t="0.6">Epitet</div><div class="grupy"><span class="chip pop" data-slowo="czym">🔍 co to jest</span><span class="chip pop" data-slowo="znaleźć">🎯 jak go znaleźć</span><span class="chip pop" data-slowo="poeci">🎨 po co</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-co-to"><span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST</span><h2 class="naglowek wjazd-dol" data-t="0">Co to jest epitet? 🔍</h2><div class="karta pop" data-slowo="określenie" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">EPITET = określenie rzeczownika</div><div class="opis">mówi, jaki jest człowiek, przedmiot albo zjawisko</div></div><div class="chipy"><span class="chip pop" data-slowo="pytania" style="background:var(--fiolet)">jaki?</span><span class="chip pop" data-slowo="pytania" data-po="0.3" style="background:var(--fiolet)">jaka?</span><span class="chip pop" data-slowo="pytania" data-po="0.6" style="background:var(--fiolet)">jakie?</span></div><div class="lista" style="width:900px"><div class="linia pop" data-slowo="deszczowy">🌧️ jaki dzień? ➜ <b class="ak">deszczowy</b> dzień</div><div class="linia pop" data-slowo="gorąca">🍵 jaka herbata? ➜ <b class="ak">gorąca</b> herbata</div><div class="linia pop" data-slowo="wesołe">😄 jakie oczy? ➜ <b class="ak">wesołe</b> oczy · oczy <b class="ak">wesołe</b></div></div></section>
+<section class="scena" data-id="03-obraz"><span class="czesc c1 zjaw" data-t="0">1 · CO TO JEST</span><h2 class="naglowek wjazd-dol" data-t="0">Po co są epitety? 🎨</h2><div class="rzad"><div class="karta pop" data-slowo="pierwsze" style="border-color:var(--szary);"><div class="nazwa" style="color:var(--szary)">bez epitetów</div><div class="opis">Na stole stała zupa.</div></div><div class="karta pop" data-slowo="drugie" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">z epitetami</div><div class="opis">Na <span class="hl">starym, drewnianym</span> stole stała <span class="hl">gorąca, pachnąca</span> zupa.</div></div></div><div class="chipy"><span class="chip pop" data-slowo="obraz" style="background:var(--ak)">👀 budują obraz</span><span class="chip pop" data-slowo="nastrój" style="background:var(--fiolet)">🎭 tworzą nastrój</span></div><div class="lista" style="width:760px"><div class="linia pop" data-slowo="szare">☁️ <span class="hl">szare, zimne</span> popołudnie</div><div class="linia pop" data-slowo="złote">☀️ <span class="hl">złote, słoneczne</span> popołudnie</div></div></section>
+<section class="scena zadanie" data-id="04-zadanie1+60"><span class="czesc c1">1 · CO TO JEST</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Znajdź w każdym zdaniu epitet. Zapisz tylko epitety.</div><div class="lista" style="width:1100px"><div class="linia pop" data-slowo="pięć"><span class="nr">1</span>Mama upiekła kruche ciasteczka.</div><div class="linia pop" data-slowo="pięć" data-po="0.2"><span class="nr">2</span>Za oknem szumi jesienny wiatr.</div><div class="linia pop" data-slowo="pięć" data-po="0.4"><span class="nr">3</span>Dziadek ma siwą brodę.</div><div class="linia pop" data-slowo="pięć" data-po="0.6"><span class="nr">4</span>Ola nosi plecak czerwony.</div><div class="linia pop" data-slowo="pięć" data-po="0.8"><span class="nr">5</span>Usłyszałam cichy szept.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="05-odpowiedz1"><span class="czesc c1">1 · CO TO JEST</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Znajdź w każdym zdaniu epitet. Zapisz tylko epitety.</div><div class="lista" style="width:1100px"><div class="linia" data-slowo="kruche"><span class="nr">1</span>Mama upiekła <span class="o-podsw o-razem">kruche</span> ciasteczka.<span class="dlaczego o-wpis o-razem">jakie ciasteczka?</span></div><div class="linia" data-slowo="jesienny"><span class="nr">2</span>Za oknem szumi <span class="o-podsw o-razem">jesienny</span> wiatr.<span class="dlaczego o-wpis o-razem">jaki wiatr?</span></div><div class="linia" data-slowo="siwą"><span class="nr">3</span>Dziadek ma <span class="o-podsw o-razem">siwą</span> brodę.<span class="dlaczego o-wpis o-razem">jaką brodę?</span></div><div class="linia" data-slowo="czerwony"><span class="nr">4</span>Ola nosi plecak <span class="o-podsw o-razem">czerwony</span>.<span class="dlaczego o-wpis o-razem">jaki plecak? - za rzeczownikiem</span></div><div class="linia" data-slowo="cichy"><span class="nr">5</span>Usłyszałam <span class="o-podsw o-razem">cichy</span> szept.<span class="dlaczego o-wpis o-razem">jaki szept?</span></div></div></section>
+<section class="scena" data-id="06-kim-jest"><span class="czesc c2 zjaw" data-t="0">2 · EPITET O CZŁOWIEKU</span><h2 class="naglowek wjazd-dol" data-t="0">Jakie są ręce? ✋</h2><div class="rzad"><div class="karta pop" data-slowo="zręczne" style="border-color:var(--ak);"><div class="emo">🔧</div><div class="nazwa" style="color:var(--ak)">zręczne</div><div class="opis">umie wszystko naprawić</div></div><div class="karta pop" data-slowo="spracowane" style="border-color:var(--fiolet);"><div class="emo">🧱</div><div class="nazwa" style="color:var(--fiolet)">spracowane</div><div class="opis">dużo i ciężko pracuje</div></div></div><div class="rzad"><div class="karta pop" data-slowo="troskliwe" style="border-color:var(--zielony);"><div class="emo">🩹</div><div class="nazwa" style="color:var(--zielony)">troskliwe</div><div class="opis">opiekuje się innymi</div></div><div class="karta pop" data-slowo="delikatne" style="border-color:var(--niebieski);"><div class="emo">🤲</div><div class="nazwa" style="color:var(--niebieski)">delikatne</div><div class="opis">głaszcze i pociesza</div></div></div><div class="chipy"><span class="chip pop" data-slowo="człowieku" style="background:var(--ciemny)">jedno słowo = coś o człowieku</span></div></section>
+<section class="scena zadanie" data-id="07-zadanie2+60"><span class="czesc c2">2 · EPITET O CZŁOWIEKU</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Który epitet pasuje do sytuacji?</div><div class="lista" style="width:1100px"><div class="linia pop" data-slowo="sytuacji"><span class="nr">1</span>Babcia zrobiła mi sweter na drutach. Ma <span class="wyb">zręczne</span><span class="sl">/</span><span class="wyb">leniwe</span> ręce.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.2"><span class="nr">2</span>Tata cały dzień nosił cegły. Ma <span class="wyb">gładkie</span><span class="sl">/</span><span class="wyb">spracowane</span> ręce.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.4"><span class="nr">3</span>Pielęgniarka ostrożnie zmienia opatrunek. Ma <span class="wyb">ciężkie</span><span class="sl">/</span><span class="wyb">delikatne</span> ręce.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.6"><span class="nr">4</span>Kot długo leżał na słońcu. Ma <span class="wyb">ciepłe</span><span class="sl">/</span><span class="wyb">lodowate</span> futro.</div><div class="linia pop" data-slowo="sytuacji" data-po="0.8"><span class="nr">5</span>Po spacerze w mrozie mam <span class="wyb">gorące</span><span class="sl">/</span><span class="wyb">zmarznięte</span> dłonie.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="08-odpowiedz2"><span class="czesc c2">2 · EPITET O CZŁOWIEKU</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Który epitet pasuje do sytuacji?</div><div class="lista" style="width:1100px"><div class="linia" data-slowo="zręczne"><span class="nr">1</span>Babcia zrobiła mi sweter na drutach. Ma <span class="wyb o-podsw o-razem">zręczne</span><span class="sl">/</span><span class="wyb o-skresl o-razem">leniwe</span> ręce.</div><div class="linia" data-slowo="spracowane"><span class="nr">2</span>Tata cały dzień nosił cegły. Ma <span class="wyb o-skresl o-razem">gładkie</span><span class="sl">/</span><span class="wyb o-podsw o-razem">spracowane</span> ręce.</div><div class="linia" data-slowo="delikatne"><span class="nr">3</span>Pielęgniarka ostrożnie zmienia opatrunek. Ma <span class="wyb o-skresl o-razem">ciężkie</span><span class="sl">/</span><span class="wyb o-podsw o-razem">delikatne</span> ręce.</div><div class="linia" data-slowo="ciepłe"><span class="nr">4</span>Kot długo leżał na słońcu. Ma <span class="wyb o-podsw o-razem">ciepłe</span><span class="sl">/</span><span class="wyb o-skresl o-razem">lodowate</span> futro.</div><div class="linia" data-slowo="zmarznięte"><span class="nr">5</span>Po spacerze w mrozie mam <span class="wyb o-skresl o-razem">gorące</span><span class="sl">/</span><span class="wyb o-podsw o-razem">zmarznięte</span> dłonie.</div></div></section>
+<section class="scena" data-id="09-trafne"><span class="czesc c3 zjaw" data-t="0">3 · TRAFNY EPITET</span><h2 class="naglowek wjazd-dol" data-t="0">Trafny epitet 🎯</h2><div class="lista" style="width:980px"><div class="linia pop" data-slowo="ogród">🌷 <span class="skr">ładny</span> ogród ➜ <b class="ak">kolorowy, pachnący</b></div><div class="linia pop" data-slowo="dzień">☀️ <span class="skr">ładny</span> dzień ➜ <b class="ak">słoneczny, ciepły</b></div><div class="linia pop" data-slowo="piosenka">🎵 <span class="skr">ładna</span> piosenka ➜ <b class="ak">wesoła, melodyjna</b></div><div class="linia pop" data-slowo="malutki">🐱 <span class="skr">mały, malutki, drobny, niewielki</span> kotek ➜ za dużo!</div></div><div class="chipy"><span class="chip pop" data-slowo="wystarczą" style="background:var(--zielony)">1-2 dobre epitety wystarczą</span></div></section>
+<section class="scena zadanie" data-id="10-zadanie3+60"><span class="czesc c3">3 · TRAFNY EPITET</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Zamień „fajny” na dokładniejszy epitet. Jedno słowo.</div><div class="lista" style="width:1000px"><div class="linia pop" data-slowo="wyrażeniu"><span class="nr">1</span><span class="skr">fajny</span> film ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="wyrażeniu" data-po="0.2"><span class="nr">2</span><span class="skr">fajna</span> kurtka ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="wyrażeniu" data-po="0.4"><span class="nr">3</span><span class="skr">fajny</span> kolega ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="wyrażeniu" data-po="0.6"><span class="nr">4</span><span class="skr">fajne</span> wakacje ➜ <span class="luka"></span></div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="11-odpowiedz3"><span class="czesc c3">3 · TRAFNY EPITET</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Zamień „fajny” na dokładniejszy epitet. Jedno słowo.</div><div class="lista" style="width:1000px"><div class="linia" data-slowo="ciekawy"><span class="nr">1</span><span class="skr">fajny</span> film ➜ <b class="wpis o-wpis o-razem">ciekawy</b><span class="dlaczego o-wpis o-razem">albo: zabawny, wzruszający</span></div><div class="linia" data-slowo="ciepła"><span class="nr">2</span><span class="skr">fajna</span> kurtka ➜ <b class="wpis o-wpis o-razem">ciepła</b><span class="dlaczego o-wpis o-razem">albo: wygodna, kolorowa</span></div><div class="linia" data-slowo="koleżeński"><span class="nr">3</span><span class="skr">fajny</span> kolega ➜ <b class="wpis o-wpis o-razem">koleżeński</b><span class="dlaczego o-wpis o-razem">albo: wesoły, uczynny</span></div><div class="linia" data-slowo="słoneczne"><span class="nr">4</span><span class="skr">fajne</span> wakacje ➜ <b class="wpis o-wpis o-razem">słoneczne</b><span class="dlaczego o-wpis o-razem">albo: udane, niezapomniane</span></div></div></section>
+<section class="scena zapamietaj" data-id="12-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="określenie">✋ epitet = określenie rzeczownika, najczęściej przymiotnik</div><div class="linia pop" data-slowo="pytania">❓ odpowiada na pytania: jaki? jaka? jakie?</div><div class="linia pop" data-slowo="obraz">🎨 buduje obraz i nastrój</div><div class="linia pop" data-slowo="człowiek">🧑 mówi, jaki jest człowiek: zręczne, troskliwe ręce</div><div class="linia pop" data-slowo="trafne">🎯 trafny epitet zamiast „ładny” i „fajny”</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

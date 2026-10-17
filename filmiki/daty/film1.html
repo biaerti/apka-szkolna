@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Kropka a liczby. Daty - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #0E7490; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 6px; }
+.zadanie .wyb { background: #EFE7FB; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 6px; }
+.zadanie .wyb { background: #EFE7FB; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">📅🏛️⚫</div><div class="tytul pop" data-t="0.6">Kropka a liczby. Daty</div><div class="grupy"><span class="chip pop" data-slowo="datę">📅 daty</span><span class="chip pop" data-slowo="rzymskimi">🏛️ cyfry rzymskie</span><span class="chip pop" data-slowo="kropkę">⚫ kropka</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-trzy-sposoby"><span class="czesc c1 zjaw" data-t="0">1 · DATY</span><h2 class="naglowek wjazd-dol" data-t="0">Trzy sposoby zapisu daty 📅</h2><div class="rzad"><div class="karta pop" data-slowo="arabskie" style="border-color:var(--ak);"><div class="emo">🔢</div><div class="nazwa" style="color:var(--ak)">17<b class="zle">.</b>10<b class="zle">.</b>2026</div><div class="opis">cyfry arabskie: kropki</div></div><div class="karta pop" data-slowo="rzymską" style="border-color:var(--fiolet);"><div class="emo">🏛️</div><div class="nazwa" style="color:var(--fiolet)">17 X 2026</div><div class="opis">miesiąc rzymski: odstępy, bez kropek</div></div><div class="karta pop" data-slowo="słowami" style="border-color:var(--zielony);"><div class="emo">🔤</div><div class="nazwa" style="color:var(--zielony)">17 października 2026&nbsp;r<b class="zle">.</b></div><div class="opis">miesiąc słowami: bez kropki po dniu</div></div></div><div class="chipy"><span class="chip pop" data-slowo="skrót" style="background:var(--ciemny)">r. = rok - zawsze z kropką</span></div></section>
+<section class="scena" data-id="03-rzymskie"><span class="czesc c1 zjaw" data-t="0">1 · DATY</span><h2 class="naglowek wjazd-dol" data-t="0">Miesiące po rzymsku 🏛️</h2><table class="tab" style="width:980px"><tr><th>styczeń - kwiecień</th><th>maj - sierpień</th><th>wrzesień - grudzień</th></tr><tr class="zjaw" data-slowo="styczeń"><td><b class="ak">I</b> styczeń</td><td><b class="ak">V</b> maj</td><td><b class="ak">IX</b> wrzesień</td></tr><tr class="zjaw" data-slowo="luty"><td><b class="ak">II</b> luty</td><td><b class="ak">VI</b> czerwiec</td><td><b class="ak">X</b> październik</td></tr><tr class="zjaw" data-slowo="marzec"><td><b class="ak">III</b> marzec</td><td><b class="ak">VII</b> lipiec</td><td><b class="ak">XI</b> listopad</td></tr><tr class="zjaw" data-slowo="kwiecień"><td><b class="ak">IV</b> kwiecień</td><td><b class="ak">VIII</b> sierpień</td><td><b class="ak">XII</b> grudzień</td></tr></table></section>
+<section class="scena zadanie" data-id="04-zadanie1+60"><span class="czesc c1">1 · DATY</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Dobrze czy źle zapisana data?</div><div class="opcje"><span class="chip pop" data-slowo="datom" style="background:var(--zielony)">✅ dobrze</span><span class="chip pop" data-slowo="datom" data-po="0.25" style="background:var(--roz)">❌ źle</span></div><div class="lista" style="width:820px"><div class="linia pop" data-slowo="datom"><span class="nr">1</span>3.05.2026</div><div class="linia pop" data-slowo="datom" data-po="0.2"><span class="nr">2</span>3. maja 2026 r.</div><div class="linia pop" data-slowo="datom" data-po="0.4"><span class="nr">3</span>11 XI 1918</div><div class="linia pop" data-slowo="datom" data-po="0.6"><span class="nr">4</span>1.IX.2026</div><div class="linia pop" data-slowo="datom" data-po="0.8"><span class="nr">5</span>24 grudnia 2025 r.</div><div class="linia pop" data-slowo="datom" data-po="1.0"><span class="nr">6</span>1. września 2026 r.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="05-odpowiedz1"><span class="czesc c1">1 · DATY</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Dobrze czy źle zapisana data?</div><div class="opcje"><span class="chip" style="background:var(--zielony)">✅ dobrze</span><span class="chip" style="background:var(--roz)">❌ źle</span></div><div class="lista" style="width:820px"><div class="linia" data-slowo="pierwsza"><span class="nr">1</span>3.05.2026<span class="etyk o-znak o-razem" style="background:var(--zielony)">dobrze</span></div><div class="linia" data-slowo="druga"><span class="nr">2</span>3. maja 2026 r.<span class="etyk o-znak o-razem" style="background:var(--roz)">źle</span><span class="dlaczego o-wpis o-razem">bez kropki po dniu</span></div><div class="linia" data-slowo="trzecia"><span class="nr">3</span>11 XI 1918<span class="etyk o-znak o-razem" style="background:var(--zielony)">dobrze</span></div><div class="linia" data-slowo="czwarta"><span class="nr">4</span>1.IX.2026<span class="etyk o-znak o-razem" style="background:var(--roz)">źle</span><span class="dlaczego o-wpis o-razem">przy rzymskich bez kropek</span></div><div class="linia" data-slowo="piąta"><span class="nr">5</span>24 grudnia 2025 r.<span class="etyk o-znak o-razem" style="background:var(--zielony)">dobrze</span></div><div class="linia" data-slowo="szósta"><span class="nr">6</span>1. września 2026 r.<span class="etyk o-znak o-razem" style="background:var(--roz)">źle</span><span class="dlaczego o-wpis o-razem">bez kropki po dniu</span></div></div></section>
+<section class="scena" data-id="06-kropka-porzadkowa"><span class="czesc c2 zjaw" data-t="0">2 · KROPKA PO LICZBIE</span><h2 class="naglowek wjazd-dol" data-t="0">Kropka po liczebniku porządkowym ⚫</h2><div class="lista" style="width:960px"><div class="linia pop" data-slowo="ósmym">🏢 na 8<b class="zle">.</b> piętrze = na <b class="ak">ósmym</b> piętrze</div><div class="linia pop" data-slowo="drugie">🥈 2<b class="zle">.</b> miejsce = <b class="ak">drugie</b> miejsce</div><div class="linia pop" data-slowo="rzymskiej">🏛️ XX wiek · Jan Paweł II ➜ po cyfrze rzymskiej bez kropki</div></div></section>
+<section class="scena" data-id="07-bez-kropki"><span class="czesc c2 zjaw" data-t="0">2 · KROPKA PO LICZBIE</span><h2 class="naglowek wjazd-dol" data-t="0">Kiedy bez kropki? 🚫</h2><div class="lista" style="width:960px"><div class="linia pop" data-slowo="godziny">🕔 o godzinie 17 ➜ bez kropki</div><div class="linia pop" data-slowo="dzień">📅 23 października ➜ bez kropki</div><div class="linia pop" data-slowo="wiadomo">🎒 chodzę do 5 klasy ➜ wiadomo, że piątej</div></div></section>
+<section class="scena zadanie" data-id="08-zadanie2+60"><span class="czesc c2">2 · KROPKA PO LICZBIE</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Z kropką czy bez kropki?</div><div class="opcje"><span class="chip pop" data-slowo="kropka" style="background:var(--ak)">z kropką</span><span class="chip pop" data-slowo="kropka" data-po="0.25" style="background:var(--fiolet)">bez kropki</span></div><div class="lista" style="width:900px"><div class="linia pop" data-slowo="kropka"><span class="nr">1</span>Mieszkam na <span class="wyb">4.</span><span class="sl">/</span><span class="wyb">4</span> piętrze.</div><div class="linia pop" data-slowo="kropka" data-po="0.2"><span class="nr">2</span>Film zaczyna się o godzinie <span class="wyb">18.</span><span class="sl">/</span><span class="wyb">18</span></div><div class="linia pop" data-slowo="kropka" data-po="0.4"><span class="nr">3</span>Wycieczka będzie <span class="wyb">12.</span><span class="sl">/</span><span class="wyb">12</span> czerwca.</div><div class="linia pop" data-slowo="kropka" data-po="0.6"><span class="nr">4</span>Ola zajęła <span class="wyb">3.</span><span class="sl">/</span><span class="wyb">3</span> miejsce w konkursie.</div><div class="linia pop" data-slowo="kropka" data-po="0.8"><span class="nr">5</span>Król Zygmunt <span class="wyb">III.</span><span class="sl">/</span><span class="wyb">III</span> Waza</div><div class="linia pop" data-slowo="kropka" data-po="1.0"><span class="nr">6</span>Gol padł w <span class="wyb">15.</span><span class="sl">/</span><span class="wyb">15</span> minucie meczu.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="09-odpowiedz2"><span class="czesc c2">2 · KROPKA PO LICZBIE</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Z kropką czy bez kropki?</div><div class="opcje"><span class="chip" style="background:var(--ak)">z kropką</span><span class="chip" style="background:var(--fiolet)">bez kropki</span></div><div class="lista" style="width:900px"><div class="linia" data-slowo="piętrze"><span class="nr">1</span>Mieszkam na <span class="wyb o-podsw o-razem">4.</span><span class="sl">/</span><span class="wyb o-skresl o-razem">4</span> piętrze.<span class="dlaczego o-wpis o-razem">czwartym</span></div><div class="linia" data-slowo="godzinie"><span class="nr">2</span>Film zaczyna się o godzinie <span class="wyb o-skresl o-razem">18.</span><span class="sl">/</span><span class="wyb o-podsw o-razem">18</span><span class="dlaczego o-wpis o-razem">godzina</span></div><div class="linia" data-slowo="czerwca"><span class="nr">3</span>Wycieczka będzie <span class="wyb o-skresl o-razem">12.</span><span class="sl">/</span><span class="wyb o-podsw o-razem">12</span> czerwca.<span class="dlaczego o-wpis o-razem">miesiąc słowami</span></div><div class="linia" data-slowo="miejsce"><span class="nr">4</span>Ola zajęła <span class="wyb o-podsw o-razem">3.</span><span class="sl">/</span><span class="wyb o-skresl o-razem">3</span> miejsce w konkursie.<span class="dlaczego o-wpis o-razem">trzecie</span></div><div class="linia" data-slowo="zygmunt"><span class="nr">5</span>Król Zygmunt <span class="wyb o-skresl o-razem">III.</span><span class="sl">/</span><span class="wyb o-podsw o-razem">III</span> Waza<span class="dlaczego o-wpis o-razem">cyfra rzymska</span></div><div class="linia" data-slowo="minucie"><span class="nr">6</span>Gol padł w <span class="wyb o-podsw o-razem">15.</span><span class="sl">/</span><span class="wyb o-skresl o-razem">15</span> minucie meczu.<span class="dlaczego o-wpis o-razem">piętnastej</span></div></div></section>
+<section class="scena zadanie" data-id="10-zadanie3+60"><span class="czesc c3">3 · ZAPISUJEMY</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Zapisz datę w inny sposób.</div><div class="lista" style="width:1000px"><div class="linia pop" data-slowo="inny"><span class="nr">1</span>1 maja 2026 r. ➜ miesiąc rzymski: <span class="luka"></span></div><div class="linia pop" data-slowo="inny" data-po="0.2"><span class="nr">2</span>15.08.2025 ➜ miesiąc słowami: <span class="luka"></span></div><div class="linia pop" data-slowo="inny" data-po="0.4"><span class="nr">3</span>6 XII 2026 ➜ same cyfry arabskie: <span class="luka"></span></div><div class="linia pop" data-slowo="inny" data-po="0.6"><span class="nr">4</span>11 listopada 1918 r. ➜ miesiąc rzymski: <span class="luka"></span></div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="11-odpowiedz3"><span class="czesc c3">3 · ZAPISUJEMY</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Zapisz datę w inny sposób.</div><div class="lista" style="width:1000px"><div class="linia" data-slowo="maja"><span class="nr">1</span>1 maja 2026 r. ➜ miesiąc rzymski: <b class="wpis o-wpis o-razem">1 V 2026</b></div><div class="linia" data-slowo="sierpnia"><span class="nr">2</span>15.08.2025 ➜ miesiąc słowami: <b class="wpis o-wpis o-razem">15 sierpnia 2025 r.</b></div><div class="linia" data-slowo="grudnia"><span class="nr">3</span>6 XII 2026 ➜ same cyfry arabskie: <b class="wpis o-wpis o-razem">6.12.2026</b></div><div class="linia" data-slowo="listopada"><span class="nr">4</span>11 listopada 1918 r. ➜ miesiąc rzymski: <b class="wpis o-wpis o-razem">11 XI 1918</b></div></div></section>
+<section class="scena zapamietaj" data-id="12-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="arabskich">📅 17.10.2026 - cyfry arabskie, kropki</div><div class="linia pop" data-slowo="rzymską">🏛️ 17 X 2026 · 17 października 2026 r. - bez kropki po dniu</div><div class="linia pop" data-slowo="ósmym">🏢 na 8. piętrze - kropka po liczebniku porządkowym</div><div class="linia pop" data-slowo="godzinach">🚫 o godzinie 17 · 23 października · XX wiek - bez kropki</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Zadanie drugie. Przeczytaj opisy pięciu filmów. Przy każdym numerze zapisz rodzaj filmu: fabularny, dokumentalny albo animowany. Masz minutę. Jeśli potrzebujesz więcej czasu, zatrzymaj film. Start!

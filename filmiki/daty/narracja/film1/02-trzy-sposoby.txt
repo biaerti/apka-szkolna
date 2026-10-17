@@ -1,0 +1,1 @@
+Datę możemy zapisać na trzy sposoby. Pierwszy: same cyfry arabskie, czyli takie jak w matematyce. Wtedy dzień, miesiąc i rok oddzielamy kropkami. Drugi sposób: miesiąc cyfrą rzymską. Wtedy nie stawiamy kropek, tylko odstępy. Trzeci sposób: miesiąc słowami. Po dniu też nie ma kropki. Na końcu możemy dodać skrót słowa rok, i ten skrót zawsze ma kropkę.

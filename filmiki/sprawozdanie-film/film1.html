@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Sprawozdanie z filmu lub spektaklu - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #0F766E; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 4px; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">🎟️🎭📝</div><div class="tytul pop" data-t="0.6">Sprawozdanie z filmu lub spektaklu</div><div class="grupy"><span class="chip pop" data-slowo="wstępie">🎟️ wstęp</span><span class="chip pop" data-slowo="rozwinięciu">🎞️ rozwinięcie</span><span class="chip pop" data-slowo="ocenić">⭐ ocena</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-przypomnienie"><span class="czesc c1 zjaw" data-t="0">1 · PLAN</span><h2 class="naglowek wjazd-dol" data-t="0">Sprawozdanie - przypomnienie 📝</h2><div class="karta pop" data-slowo="relacja" style="border-color:var(--ak);width:1000px;margin:18px auto 0"><div class="nazwa" style="color:var(--ak)">rzeczowa relacja z wydarzenia, w którym braliśmy udział</div><div class="opis">czas przeszły · tylko fakty</div></div><div class="rzad"><div class="karta pop" data-slowo="wstęp" style="border-color:var(--ak);"><div class="emo">🎟️</div><div class="nazwa" style="color:var(--ak)">1. wstęp</div></div><div class="karta pop" data-slowo="rozwinięcie" style="border-color:var(--fiolet);"><div class="emo">🎞️</div><div class="nazwa" style="color:var(--fiolet)">2. rozwinięcie</div></div><div class="karta pop" data-slowo="zakończenie" style="border-color:var(--zielony);"><div class="emo">⭐</div><div class="nazwa" style="color:var(--zielony)">3. zakończenie</div></div></div></section>
+<section class="scena" data-id="03-wstep"><span class="czesc c1 zjaw" data-t="0">1 · PLAN</span><h2 class="naglowek wjazd-dol" data-t="0">1. Wstęp 🎟️</h2><div class="chipy"><span class="chip pop" data-slowo="kiedy" style="background:var(--ak)">kiedy?</span><span class="chip pop" data-slowo="gdzie" style="background:var(--ak)">gdzie?</span><span class="chip pop" data-slowo="kim" style="background:var(--ak)">z kim?</span></div><div class="chipy"><span class="chip pop" data-slowo="tytuł" style="background:var(--fiolet)">tytuł</span><span class="chip pop" data-slowo="reżysera" style="background:var(--fiolet)">reżyser</span><span class="chip pop" data-slowo="gatunek" style="background:var(--fiolet)">gatunek</span></div><div class="karta pop" data-slowo="piątek" style="border-color:var(--szary);width:1000px;margin:20px auto 0"><div class="nazwa" style="color:var(--szary)"><i><span class="hl">W piątek</span> razem <span class="hl">z klasą</span> obejrzałam <span class="hl">w kinie Mewa</span> <span class="hl">komedię przygodową</span> pod tytułem <span class="hl">„Wyspa kota Feliksa”</span> w reżyserii <span class="hl">Anny Nowak</span>.</i></div></div></section>
+<section class="scena" data-id="04-rozwiniecie"><span class="czesc c1 zjaw" data-t="0">1 · PLAN</span><h2 class="naglowek wjazd-dol" data-t="0">2. Rozwinięcie 🎞️</h2><div class="lista" style="width:760px"><div class="linia pop" data-slowo="krótko">📝 o czym jest film? - tylko 2-3 zdania</div><div class="linia pop" data-slowo="zakończenia">🤫 bez zakończenia!</div></div><div class="chipy"><span class="chip pop" data-slowo="aktorów" style="background:var(--fiolet)">🎭 gra aktorów</span><span class="chip pop" data-slowo="muzyka" style="background:var(--fiolet)">🎵 muzyka</span><span class="chip pop" data-slowo="scenografia" style="background:var(--fiolet)">🏰 scenografia</span><span class="chip pop" data-slowo="kostiumy" style="background:var(--fiolet)">👗 kostiumy</span><span class="chip pop" data-slowo="efekty" style="background:var(--fiolet)">💥 efekty specjalne</span></div><div class="karta pop" data-slowo="napięcie" style="border-color:var(--szary);width:1000px;margin:18px auto 0"><div class="nazwa" style="color:var(--szary)"><i>Największe wrażenie zrobiła na mnie <span class="hl">muzyka</span>, która w scenie burzy budowała napięcie.</i></div></div></section>
+<section class="scena" data-id="05-zakonczenie"><span class="czesc c1 zjaw" data-t="0">1 · PLAN</span><h2 class="naglowek wjazd-dol" data-t="0">3. Zakończenie ⭐</h2><div class="rzad"><div class="karta pop" data-slowo="oceniamy" style="border-color:var(--zielony);"><div class="emo">⭐</div><div class="nazwa" style="color:var(--zielony)">ocena</div><div class="opis">czy warto?</div></div><div class="karta pop" data-slowo="uzasadniamy" style="border-color:var(--zielony);"><div class="emo">💬</div><div class="nazwa" style="color:var(--zielony)">uzasadnienie</div><div class="opis">dlaczego?</div></div><div class="karta pop" data-slowo="polecić" style="border-color:var(--zielony);"><div class="emo">👍</div><div class="nazwa" style="color:var(--zielony)">polecenie</div><div class="opis">komu?</div></div></div><div class="karta pop" data-slowo="uważam" style="border-color:var(--szary);width:1000px;margin:20px auto 0"><div class="nazwa" style="color:var(--szary)"><i>Uważam, że <span class="hl">warto</span> obejrzeć ten film, <span class="hl">bo</span> uczy, że przyjaźń jest ważniejsza niż wygrana. <span class="hl">Polecam</span> go wszystkim, którzy lubią przygody.</i></div></div></section>
+<section class="scena zadanie" data-id="06-zadanie1+60"><span class="czesc c1">1 · PLAN</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Do której części pasuje to zdanie?</div><div class="opcje"><span class="chip pop" data-slowo="zdanie" style="background:var(--ak)">1. wstęp</span><span class="chip pop" data-slowo="zdanie" data-po="0.25" style="background:var(--fiolet)">2. rozwinięcie</span><span class="chip pop" data-slowo="zdanie" data-po="0.5" style="background:var(--zielony)">3. zakończenie</span></div><div class="lista" style="width:1140px"><div class="linia pop" data-slowo="zdanie"><span class="nr">1</span>Najbardziej podobały mi się kostiumy z dawnych czasów.</div><div class="linia pop" data-slowo="zdanie" data-po="0.2"><span class="nr">2</span>W sobotę z tatą byłam w teatrze na „Zaczarowanym młynie”.</div><div class="linia pop" data-slowo="zdanie" data-po="0.4"><span class="nr">3</span>Polecam ten spektakl, bo jest zabawny i mądry.</div><div class="linia pop" data-slowo="zdanie" data-po="0.6"><span class="nr">4</span>Film opowiada o chłopcu, który znajduje mapę pirata.</div><div class="linia pop" data-slowo="zdanie" data-po="0.8"><span class="nr">5</span>Film wyreżyserował Jan Lis.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="07-odpowiedz1"><span class="czesc c1">1 · PLAN</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Do której części pasuje to zdanie?</div><div class="opcje"><span class="chip" style="background:var(--ak)">1. wstęp</span><span class="chip" style="background:var(--fiolet)">2. rozwinięcie</span><span class="chip" style="background:var(--zielony)">3. zakończenie</span></div><div class="lista" style="width:1140px"><div class="linia" data-slowo="rozwinięcia"><span class="nr">1</span>Najbardziej podobały mi się kostiumy z dawnych czasów.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">rozwinięcie</span></div><div class="linia" data-slowo="wstęp"><span class="nr">2</span>W sobotę z tatą byłam w teatrze na „Zaczarowanym młynie”.<span class="etyk o-znak o-razem" style="background:var(--ak)">wstęp</span></div><div class="linia" data-slowo="zakończenie"><span class="nr">3</span>Polecam ten spektakl, bo jest zabawny i mądry.<span class="etyk o-znak o-razem" style="background:var(--zielony)">zakończenie</span></div><div class="linia" data-slowo="rozwinięcie"><span class="nr">4</span>Film opowiada o chłopcu, który znajduje mapę pirata.<span class="etyk o-znak o-razem" style="background:var(--fiolet)">rozwinięcie</span></div><div class="linia" data-slowo="wstęp"><span class="nr">5</span>Film wyreżyserował Jan Lis.<span class="etyk o-znak o-razem" style="background:var(--ak)">wstęp</span></div></div></section>
+<section class="scena" data-id="08-czego-nie"><span class="czesc c2 zjaw" data-t="0">2 · CZEGO NIE PISAĆ</span><h2 class="naglowek wjazd-dol" data-t="0">Czego nie piszemy? 🚫</h2><div class="lista" style="width:1080px"><div class="linia pop" data-slowo="streszczamy">❌ cała historia scena po scenie</div><div class="linia pop" data-slowo="zdradzamy">❌ zakończenie - spoiler! 🤫</div><div class="linia pop" data-slowo="popcorn">❌ popcorn, kolejka do kasy 🍿</div><div class="linia pop" data-slowo="zabawny">❌ <span class="skr">fajny, super</span> ➜ zabawny · wzruszający · widowiskowy</div></div></section>
+<section class="scena zadanie" data-id="09-zadanie2+60"><span class="czesc c2">2 · CZEGO NIE PISAĆ</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Które zdania nie pasują do sprawozdania? Zapisz numery.</div><div class="opcje"><span class="chip pop" data-slowo="zdania" style="background:var(--zielony)">✅ pasuje</span><span class="chip pop" data-slowo="zdania" data-po="0.25" style="background:var(--roz)">❌ nie pasuje</span></div><div class="lista" style="width:1140px"><div class="linia pop" data-slowo="zdania"><span class="nr">1</span>Spektakl trwał półtorej godziny z przerwą.</div><div class="linia pop" data-slowo="zdania" data-po="0.2"><span class="nr">2</span>Na końcu okazuje się, że złodziejem był ogrodnik!</div><div class="linia pop" data-slowo="zdania" data-po="0.4"><span class="nr">3</span>Muzyka grana na żywo przez orkiestrę zachwyciła widzów.</div><div class="linia pop" data-slowo="zdania" data-po="0.6"><span class="nr">4</span>W przerwie kupiłem colę i dwa batoniki.</div><div class="linia pop" data-slowo="zdania" data-po="0.8"><span class="nr">5</span>Aktorka grająca królową wspaniale zmieniała głos.</div><div class="linia pop" data-slowo="zdania" data-po="1.0"><span class="nr">6</span>Potem bohater szedł do lasu, potem do zamku...</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="10-odpowiedz2"><span class="czesc c2">2 · CZEGO NIE PISAĆ</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Które zdania nie pasują do sprawozdania? Zapisz numery.</div><div class="opcje"><span class="chip" style="background:var(--zielony)">✅ pasuje</span><span class="chip" style="background:var(--roz)">❌ nie pasuje</span></div><div class="lista" style="width:1140px"><div class="linia" data-slowo="długość"><span class="nr">1</span>Spektakl trwał półtorej godziny z przerwą.<span class="etyk o-znak o-razem">pasuje</span></div><div class="linia" data-slowo="drugie"><span class="nr">2</span>Na końcu okazuje się, że złodziejem był ogrodnik!<span class="etyk o-znak o-razem" style="background:var(--roz)">nie pasuje</span><span class="dlaczego o-wpis o-razem">spoiler</span></div><div class="linia" data-slowo="muzyka"><span class="nr">3</span>Muzyka grana na żywo przez orkiestrę zachwyciła widzów.<span class="etyk o-znak o-razem">pasuje</span></div><div class="linia" data-slowo="czwarte"><span class="nr">4</span>W przerwie kupiłem colę i dwa batoniki.<span class="etyk o-znak o-razem" style="background:var(--roz)">nie pasuje</span><span class="dlaczego o-wpis o-razem">nie o spektaklu</span></div><div class="linia" data-slowo="aktorki"><span class="nr">5</span>Aktorka grająca królową wspaniale zmieniała głos.<span class="etyk o-znak o-razem">pasuje</span></div><div class="linia" data-slowo="szóste"><span class="nr">6</span>Potem bohater szedł do lasu, potem do zamku...<span class="etyk o-znak o-razem" style="background:var(--roz)">nie pasuje</span><span class="dlaczego o-wpis o-razem">streszcza</span></div></div></section>
+<section class="scena" data-id="11-slowa"><span class="czesc c3 zjaw" data-t="0">3 · SŁOWNICZEK</span><h2 class="naglowek wjazd-dol" data-t="0">Słowniczek widza 📚</h2><div class="rzad"><div class="karta pop" data-slowo="seans" style="border-color:var(--ak);"><div class="emo">🎦</div><div class="nazwa" style="color:var(--ak)">seans</div><div class="opis">pokaz filmu w kinie</div></div><div class="karta pop" data-slowo="spektakl" style="border-color:var(--ak);"><div class="emo">🎭</div><div class="nazwa" style="color:var(--ak)">spektakl</div><div class="opis">przedstawienie w teatrze</div></div><div class="karta pop" data-slowo="premiera" style="border-color:var(--ak);"><div class="emo">🥂</div><div class="nazwa" style="color:var(--ak)">premiera</div><div class="opis">pierwszy pokaz</div></div><div class="karta pop" data-slowo="obsada" style="border-color:var(--ak);"><div class="emo">👥</div><div class="nazwa" style="color:var(--ak)">obsada</div><div class="opis">wszyscy aktorzy filmu</div></div></div><div class="rzad"><div class="karta pop" data-slowo="dekoracje" style="border-color:var(--fiolet);"><div class="emo">🏰</div><div class="nazwa" style="color:var(--fiolet)">scenografia</div><div class="opis">dekoracje</div></div><div class="karta pop" data-slowo="makijaż" style="border-color:var(--fiolet);"><div class="emo">💄</div><div class="nazwa" style="color:var(--fiolet)">charakteryzacja</div><div class="opis">makijaż i fryzury</div></div><div class="karta pop" data-slowo="wybuchy" style="border-color:var(--fiolet);"><div class="emo">💥</div><div class="nazwa" style="color:var(--fiolet)">efekty specjalne</div><div class="opis">wybuchy, latające smoki</div></div></div></section>
+<section class="scena zadanie" data-id="12-zadanie3+60"><span class="czesc c3">3 · SŁOWNICZEK</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Co chwali to zdanie? Zapisz nazwę środka wyrazu.</div><div class="opcje"><span class="chip pop" data-slowo="zdanie">gra aktorów</span><span class="chip pop" data-slowo="zdanie" data-po="0.25">muzyka</span><span class="chip pop" data-slowo="zdanie" data-po="0.5">scenografia</span><span class="chip pop" data-slowo="zdanie" data-po="0.75">kostiumy</span><span class="chip pop" data-slowo="zdanie" data-po="1.0">efekty specjalne</span><span class="chip pop" data-slowo="zdanie" data-po="1.25">charakteryzacja</span></div><div class="lista" style="width:1140px"><div class="linia pop" data-slowo="zdanie"><span class="nr">1</span>Zamek na scenie miał prawdziwe wieże i most. ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="zdanie" data-po="0.2"><span class="nr">2</span>Smok ział ogniem jak żywy. ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="zdanie" data-po="0.4"><span class="nr">3</span>Suknie dworskie lśniły od cekinów. ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="zdanie" data-po="0.6"><span class="nr">4</span>Czarownica miała zielony nos i splątane włosy. ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="zdanie" data-po="0.8"><span class="nr">5</span>W cichych scenach grały skrzypce, a w pościgu bębny. ➜ <span class="luka"></span></div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="13-odpowiedz3"><span class="czesc c3">3 · SŁOWNICZEK</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Co chwali to zdanie? Zapisz nazwę środka wyrazu.</div><div class="opcje"><span class="chip">gra aktorów</span><span class="chip">muzyka</span><span class="chip">scenografia</span><span class="chip">kostiumy</span><span class="chip">efekty specjalne</span><span class="chip">charakteryzacja</span></div><div class="lista" style="width:1140px"><div class="linia" data-slowo="scenografia"><span class="nr">1</span>Zamek na scenie miał prawdziwe wieże i most. ➜ <b class="wpis o-wpis o-razem">scenografia</b></div><div class="linia" data-slowo="efekty"><span class="nr">2</span>Smok ział ogniem jak żywy. ➜ <b class="wpis o-wpis o-razem">efekty specjalne</b></div><div class="linia" data-slowo="kostiumy"><span class="nr">3</span>Suknie dworskie lśniły od cekinów. ➜ <b class="wpis o-wpis o-razem">kostiumy</b></div><div class="linia" data-slowo="charakteryzacja"><span class="nr">4</span>Czarownica miała zielony nos i splątane włosy. ➜ <b class="wpis o-wpis o-razem">charakteryzacja</b></div><div class="linia" data-slowo="muzyka"><span class="nr">5</span>W cichych scenach grały skrzypce, a w pościgu bębny. ➜ <b class="wpis o-wpis o-razem">muzyka</b></div></div></section>
+<section class="scena zapamietaj" data-id="14-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="wstępie">🎟️ wstęp: kiedy? gdzie? z kim? · tytuł, reżyser, gatunek</div><div class="linia pop" data-slowo="rozwinięciu">🎞️ rozwinięcie: krótko o czym + środki wyrazu</div><div class="linia pop" data-slowo="oceniamy">⭐ zakończenie: ocena i uzasadnienie</div><div class="linia pop" data-slowo="zdradzamy">🤫 nie zdradzam zakończenia, nie streszczam wszystkiego</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Stopniowanie pokazuje, ile jest danej cechy. Stopień równy to podstawowa forma: szybki. Stopień wyższy porównuje dwie rzeczy: szybszy. Stopień najwyższy mówi, że czegoś jest najwięcej ze wszystkich: najszybszy. Rower jest szybki. Samochód jest szybszy. A samolot jest najszybszy.

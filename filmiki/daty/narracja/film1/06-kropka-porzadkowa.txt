@@ -1,0 +1,1 @@
+Kropka ma jeszcze jedno zadanie. Stawiamy ją po cyfrze arabskiej, która oznacza liczebnik porządkowy. Mieszkam na ósmym piętrze. Jeśli zapiszemy ósemkę cyfrą, stawiamy po niej kropkę. Dzięki kropce wiemy, że czytamy: ósmym, a nie: osiem. Zająłem drugie miejsce: dwójka z kropką. A po cyfrze rzymskiej? Tam kropki nie stawiamy: dwudziesty wiek, Jan Paweł drugi.

@@ -139,10 +139,10 @@ describe('buildTextbook5', () => {
 
   it('dzial 2 idzie po dziale 1 jako osobna grupa na liscie lekcji', () => {
     const dzialy = [...new Set(bundle.lessons.map((l) => l.dzial))];
-    expect(dzialy).toEqual(['Dział 1 - W poszukiwaniu przyjaźni', 'Dział 2 - Uwaga, uczucia!']);
+    expect(dzialy).toEqual(['Dział 1 - W poszukiwaniu przyjaźni', 'Dział 2 - Uwaga, uczucia!', 'Dział 3 - Ideały, autorytety, idole']);
     const pierwsza = bundle.lessons.findIndex((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
     expect(bundle.lessons[pierwsza].title).toBe('17. Przenośnia - słowa nie wprost');
-    expect(bundle.lessons.slice(pierwsza).every((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!')).toBe(true);
+    expect(bundle.lessons.slice(pierwsza, pierwsza + 13).every((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!')).toBe(true);
   });
 
   it('dzial 2: kazdy screen zadania to jedno zadanie z numerem strony i kodem dla kola', () => {
@@ -193,5 +193,24 @@ describe('buildTextbook5', () => {
 
   it('wycofane tematy nie wracaja w materiale', () => {
     for (const lesson of bundle.lessons) expect(RETIRED_TEXTBOOK5_TITLES.has(lesson.title)).toBe(false);
+  });
+
+  it('dzial 3 w nowym formacie: kolo z 3 pytaniami, film, 2-3 karty, notatka na koncu', () => {
+    const dzial3 = bundle.lessons.filter((l) => l.dzial === 'Dział 3 - Ideały, autorytety, idole');
+    expect(dzial3.map((l) => l.title.split('.')[0])).toEqual(['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41']);
+    for (const lesson of dzial3) {
+      const kinds = lesson.slides.map((s) => s.kind);
+      expect(lesson.slides[1], lesson.title).toMatchObject({ kind: 'recap', questionCount: 3 });
+      expect(kinds.filter((k) => k === 'video'), lesson.title).toHaveLength(1);
+      expect(kinds[kinds.length - 1], lesson.title).toBe('note');
+      const karty = lesson.slides.filter((s) => s.kind === 'cwiczenie');
+      expect(karty.length, lesson.title).toBeGreaterThanOrEqual(2);
+      expect(karty.length, lesson.title).toBeLessThanOrEqual(3);
+      for (const k of karty) expect(k.kind === 'cwiczenie' && cwiczenieById(k.cwiczenieId), lesson.title).toBeTruthy();
+      // screeny z podrecznika tylko przed filmem
+      const film = kinds.indexOf('video');
+      expect(kinds.slice(film).includes('image'), lesson.title).toBe(false);
+      expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId), lesson.title).toHaveLength(6);
+    }
   });
 });

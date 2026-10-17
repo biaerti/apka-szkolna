@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Ó czy u? - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #A21CAF; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.luka.mala { min-width: 30px; margin: 0 2px; }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 6px; }
+.zadanie .wyb { background: #EFE7FB; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.luka.mala { min-width: 30px; margin: 0 2px; }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 6px; }
+.zadanie .wyb { background: #EFE7FB; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">✏️🐱🧊</div><div class="tytul pop" data-t="0.6">Ó czy u?</div><div class="grupy"><span class="chip pop" data-slowo="zasady">📏 zasady</span><span class="chip pop" data-slowo="zdrobnieniach">🐱 zdrobnienia</span><span class="chip pop" data-slowo="znaczenie">🧊 lód czy lud?</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-o-kreskowane"><span class="czesc c1 zjaw" data-t="0">1 · PRZYPOMNIENIE</span><h2 class="naglowek wjazd-dol" data-t="0">Kiedy ó? ✏️</h2><div class="lista" style="width:860px"><div class="linia pop" data-slowo="stół">🔄 st<b class="ak">ó</b>ł - st<b class="ok">o</b>ły · l<b class="ak">ó</b>d - l<b class="ok">o</b>dy</div><div class="linia pop" data-slowo="niósł">🔄 ni<b class="ak">ó</b>sł - ni<b class="ok">e</b>sie · powr<b class="ak">ó</b>t - powr<b class="ok">a</b>cać</div></div><div class="chipy"><span class="chip pop" data-slowo="zakończeniach" style="background:var(--fiolet)">-ów</span><span class="chip pop" data-slowo="zakończeniach" data-po="0.2" style="background:var(--fiolet)">-ówka</span><span class="chip pop" data-slowo="zakończeniach" data-po="0.4" style="background:var(--fiolet)">-ówna</span></div><div class="lista" style="width:860px"><div class="linia pop" data-slowo="kraków">🏙️ Krak<b class="ak">ów</b> · żar<b class="ak">ówka</b> · sąsiad<b class="ak">ówna</b></div><div class="linia pop" data-slowo="góra">📌 do zapamiętania: g<b class="ak">ó</b>ra · m<b class="ak">ó</b>zg · og<b class="ak">ó</b>rek · wr<b class="ak">ó</b>bel</div></div></section>
+<section class="scena" data-id="03-u-otwarte"><span class="czesc c1 zjaw" data-t="0">1 · PRZYPOMNIENIE</span><h2 class="naglowek wjazd-dol" data-t="0">Kiedy u? 🅤</h2><div class="chipy"><span class="chip pop" data-slowo="zakończeniach" style="background:var(--ak)">-unek</span><span class="chip pop" data-slowo="zakończeniach" data-po="0.2" style="background:var(--ak)">-us</span><span class="chip pop" data-slowo="zakończeniach" data-po="0.4" style="background:var(--ak)">-usz</span><span class="chip pop" data-slowo="zakończeniach" data-po="0.6" style="background:var(--ak)">-uch</span><span class="chip pop" data-slowo="zakończeniach" data-po="0.8" style="background:var(--ak)">-ura</span><span class="chip pop" data-slowo="zakończeniach" data-po="1.0" style="background:var(--ak)">-ulec</span></div><div class="lista" style="width:1000px"><div class="linia pop" data-slowo="rachunek">rach<b class="ak">unek</b> · autob<b class="ak">us</b> · kapel<b class="ak">usz</b> · brz<b class="ak">uch</b> · kult<b class="ak">ura</b> · bud<b class="ak">ulec</b></div><div class="linia pop" data-slowo="maluj">🖌️ czasowniki: mal<b class="ak">uj</b> · rys<b class="ak">uje</b></div><div class="linia pop" data-slowo="ulica">🔚 początek i koniec: <b class="ak">u</b>lica · <b class="ak">u</b>cho · kakad<b class="ak">u</b></div><div class="linia pop" data-slowo="ósmy">⚠️ wyjątek: <b class="zle">ó</b>smy</div></div></section>
+<section class="scena" data-id="04-slownik"><span class="czesc c1 zjaw" data-t="0">1 · PRZYPOMNIENIE</span><h2 class="naglowek wjazd-dol" data-t="0">Bez zasady? Słownik! 📖</h2><div class="rzad"><div class="karta pop" data-slowo="góra" style="border-color:var(--ak);"><div class="emo">⛰️</div><div class="nazwa" style="color:var(--ak)">ó bez wymiany</div><div class="opis">g<b>ó</b>ra · m<b>ó</b>zg · og<b>ó</b>rek · ch<b>ó</b>r</div></div><div class="karta pop" data-slowo="arbuz" style="border-color:var(--fiolet);"><div class="emo">🍉</div><div class="nazwa" style="color:var(--fiolet)">u bez zasady</div><div class="opis">arb<b>u</b>z · c<b>u</b>kier · k<b>u</b>ra · tr<b>u</b>dny · b<b>u</b>rza</div></div></div><div class="chipy"><span class="chip pop" data-slowo="słownika" style="background:var(--zielony)">📖 słownik ortograficzny</span><span class="chip pop" data-slowo="lista" style="background:var(--niebieski)">📝 lista trudnych wyrazów</span></div></section>
+<section class="scena zadanie" data-id="05-zadanie1+60"><span class="czesc c1">1 · PRZYPOMNIENIE</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Ó czy u? Zapisz całe wyrazy.</div><div class="siatka" style="width:900px"><div class="linia pop" data-slowo="uzupełnij"><span class="nr">1</span>ogr<span class="luka mala"></span>d</div><div class="linia pop" data-slowo="uzupełnij" data-po="0.2"><span class="nr">2</span>mal<span class="luka mala"></span>nek</div><div class="linia pop" data-slowo="uzupełnij" data-po="0.4"><span class="nr">3</span>n<span class="luka mala"></span>żka</div><div class="linia pop" data-slowo="uzupełnij" data-po="0.6"><span class="nr">4</span>zapis<span class="luka mala"></span>je</div><div class="linia pop" data-slowo="uzupełnij" data-po="0.8"><span class="nr">5</span>Krak<span class="luka mala"></span>w</div><div class="linia pop" data-slowo="uzupełnij" data-po="1.0"><span class="nr">6</span><span class="luka mala"></span>rodziny</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="06-odpowiedz1"><span class="czesc c1">1 · PRZYPOMNIENIE</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Ó czy u? Zapisz całe wyrazy.</div><div class="siatka" style="width:900px"><div class="linia" data-slowo="ogród"><span class="nr">1</span>ogr<b class="wpis o-wpis o-razem">ó</b>d<span class="dlaczego o-wpis o-razem">ogrody</span></div><div class="linia" data-slowo="malunek"><span class="nr">2</span>mal<b class="wpis o-wpis o-razem">u</b>nek<span class="dlaczego o-wpis o-razem">-unek</span></div><div class="linia" data-slowo="nóżka"><span class="nr">3</span>n<b class="wpis o-wpis o-razem">ó</b>żka<span class="dlaczego o-wpis o-razem">noga</span></div><div class="linia" data-slowo="zapisuje"><span class="nr">4</span>zapis<b class="wpis o-wpis o-razem">u</b>je<span class="dlaczego o-wpis o-razem">-uje</span></div><div class="linia" data-slowo="kraków"><span class="nr">5</span>Krak<b class="wpis o-wpis o-razem">ó</b>w<span class="dlaczego o-wpis o-razem">-ów</span></div><div class="linia" data-slowo="urodziny"><span class="nr">6</span><b class="wpis o-wpis o-razem">u</b>rodziny<span class="dlaczego o-wpis o-razem">na początku</span></div></div></section>
+<section class="scena" data-id="07-zdrobnienia"><span class="czesc c2 zjaw" data-t="0">2 · ZDROBNIENIA</span><h2 class="naglowek wjazd-dol" data-t="0">Zdrobnienia: zawsze u 🐱</h2><div class="chipy"><span class="chip pop" data-slowo="zdrobnieniach" style="background:var(--fiolet)">-uś</span><span class="chip pop" data-slowo="zdrobnieniach" data-po="0.2" style="background:var(--fiolet)">-usia</span><span class="chip pop" data-slowo="zdrobnieniach" data-po="0.4" style="background:var(--fiolet)">-utki</span><span class="chip pop" data-slowo="zdrobnieniach" data-po="0.6" style="background:var(--fiolet)">-uszek</span><span class="chip pop" data-slowo="zdrobnieniach" data-po="0.8" style="background:var(--fiolet)">-unio</span><span class="chip pop" data-slowo="zdrobnieniach" data-po="1.0" style="background:var(--fiolet)">-ulek</span><span class="chip pop" data-slowo="zdrobnieniach" data-po="1.2" style="background:var(--fiolet)">-uchny</span></div><div class="lista" style="width:900px"><div class="linia pop" data-slowo="kotuś">🐱 kot ➜ kot<b class="ak">uś</b> · mama ➜ mam<b class="ak">usia</b></div><div class="linia pop" data-slowo="malutki">🤏 mały ➜ mal<b class="ak">utki</b> · cichy ➜ cich<b class="ak">utki</b></div><div class="linia pop" data-slowo="synuś">🐶 syn ➜ syn<b class="ak">uś</b> · pies ➜ pies<b class="ak">unio</b></div><div class="linia pop" data-slowo="kwiatuszek">🌸 kwiat ➜ kwiat<b class="ak">uszek</b></div></div></section>
+<section class="scena zadanie" data-id="08-zadanie2+60"><span class="czesc c2">2 · ZDROBNIENIA</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Utwórz zdrobnienie. Pamiętaj o u!</div><div class="lista" style="width:760px"><div class="linia pop" data-slowo="słów"><span class="nr">1</span>tata ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="słów" data-po="0.2"><span class="nr">2</span>babcia ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="słów" data-po="0.4"><span class="nr">3</span>cienki ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="słów" data-po="0.6"><span class="nr">4</span>dziadek ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="słów" data-po="0.8"><span class="nr">5</span>ciepły ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="słów" data-po="1.0"><span class="nr">6</span>serce ➜ <span class="luka"></span></div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="09-odpowiedz2"><span class="czesc c2">2 · ZDROBNIENIA</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Utwórz zdrobnienie. Pamiętaj o u!</div><div class="lista" style="width:760px"><div class="linia" data-slowo="tatuś"><span class="nr">1</span>tata ➜ <b class="wpis o-wpis o-razem">tatuś</b></div><div class="linia" data-slowo="babunia"><span class="nr">2</span>babcia ➜ <b class="wpis o-wpis o-razem">babunia</b><span class="dlaczego o-wpis o-razem">albo: babusia</span></div><div class="linia" data-slowo="cieniutki"><span class="nr">3</span>cienki ➜ <b class="wpis o-wpis o-razem">cieniutki</b></div><div class="linia" data-slowo="dziadziuś"><span class="nr">4</span>dziadek ➜ <b class="wpis o-wpis o-razem">dziadziuś</b><span class="dlaczego o-wpis o-razem">albo: dziadunio</span></div><div class="linia" data-slowo="cieplutki"><span class="nr">5</span>ciepły ➜ <b class="wpis o-wpis o-razem">cieplutki</b></div><div class="linia" data-slowo="serduszko"><span class="nr">6</span>serce ➜ <b class="wpis o-wpis o-razem">serduszko</b></div></div></section>
+<section class="scena" data-id="10-pary"><span class="czesc c3 zjaw" data-t="0">3 · BRZMI TAK SAMO</span><h2 class="naglowek wjazd-dol" data-t="0">Brzmi tak samo, znaczy co innego 🧊👥</h2><div class="rzad"><div class="karta pop" data-slowo="lód" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">🧊 l<b class="ak">ó</b>d</div><div class="opis">zamarznięta woda - lody</div></div><div class="karta pop" data-slowo="lud" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">👥 l<b class="ak">u</b>d</div><div class="opis">mieszkańcy kraju - ludowy</div></div></div><div class="rzad"><div class="karta pop" data-slowo="łódź" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">⛵ ł<b class="ak">ó</b>dź</div><div class="opis">statek - łodzie</div></div><div class="karta pop" data-slowo="łudź" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">💭 ł<b class="ak">u</b>dź się</div><div class="opis">od: łudzić się</div></div></div><div class="rzad"><div class="karta pop" data-slowo="kórnik" style="border-color:var(--ak);"><div class="nazwa" style="color:var(--ak)">🏰 K<b class="ak">ó</b>rnik</div><div class="opis">miasto z zamkiem</div></div><div class="karta pop" data-slowo="kurnik" style="border-color:var(--fiolet);"><div class="nazwa" style="color:var(--fiolet)">🐔 k<b class="ak">u</b>rnik</div><div class="opis">dom dla kur</div></div></div></section>
+<section class="scena zadanie" data-id="11-zadanie3+60"><span class="czesc c3">3 · BRZMI TAK SAMO</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Które słowo pasuje do zdania?</div><div class="lista" style="width:900px"><div class="linia pop" data-slowo="zdania"><span class="nr">1</span>Na stawie leży gruby <span class="wyb">lód</span><span class="sl">/</span><span class="wyb">lud</span>.</div><div class="linia pop" data-slowo="zdania" data-po="0.2"><span class="nr">2</span>Król przemówił do swojego <span class="wyb">lodu</span><span class="sl">/</span><span class="wyb">ludu</span>.</div><div class="linia pop" data-slowo="zdania" data-po="0.4"><span class="nr">3</span>Płynęliśmy <span class="wyb">łodzią</span><span class="sl">/</span><span class="wyb">łudzią</span> po jeziorze.</div><div class="linia pop" data-slowo="zdania" data-po="0.6"><span class="nr">4</span>Nie <span class="wyb">łódź</span><span class="sl">/</span><span class="wyb">łudź</span> się, że zdążysz bez biegu.</div><div class="linia pop" data-slowo="zdania" data-po="0.8"><span class="nr">5</span>Kury śpią w <span class="wyb">Kórniku</span><span class="sl">/</span><span class="wyb">kurniku</span>.</div><div class="linia pop" data-slowo="zdania" data-po="1.0"><span class="nr">6</span>Zwiedziliśmy zamek w <span class="wyb">Kórniku</span><span class="sl">/</span><span class="wyb">kurniku</span>.</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="12-odpowiedz3"><span class="czesc c3">3 · BRZMI TAK SAMO</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Które słowo pasuje do zdania?</div><div class="lista" style="width:900px"><div class="linia" data-slowo="lód"><span class="nr">1</span>Na stawie leży gruby <span class="wyb o-podsw o-razem">lód</span><span class="sl">/</span><span class="wyb o-skresl o-razem">lud</span>.</div><div class="linia" data-slowo="ludu"><span class="nr">2</span>Król przemówił do swojego <span class="wyb o-skresl o-razem">lodu</span><span class="sl">/</span><span class="wyb o-podsw o-razem">ludu</span>.</div><div class="linia" data-slowo="łodzią"><span class="nr">3</span>Płynęliśmy <span class="wyb o-podsw o-razem">łodzią</span><span class="sl">/</span><span class="wyb o-skresl o-razem">łudzią</span> po jeziorze.</div><div class="linia" data-slowo="łudź"><span class="nr">4</span>Nie <span class="wyb o-skresl o-razem">łódź</span><span class="sl">/</span><span class="wyb o-podsw o-razem">łudź</span> się, że zdążysz bez biegu.</div><div class="linia" data-slowo="kurniku"><span class="nr">5</span>Kury śpią w <span class="wyb o-skresl o-razem">Kórniku</span><span class="sl">/</span><span class="wyb o-podsw o-razem">kurniku</span>.</div><div class="linia" data-slowo="kórniku"><span class="nr">6</span>Zwiedziliśmy zamek w <span class="wyb o-podsw o-razem">Kórniku</span><span class="sl">/</span><span class="wyb o-skresl o-razem">kurniku</span>.</div></div></section>
+<section class="scena zapamietaj" data-id="13-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="stół">🔄 ó wymienne: stół - stoły · niósł - niesie</div><div class="linia pop" data-slowo="ówka">🏙️ -ów, -ówka, -ówna: Kraków, żarówka</div><div class="linia pop" data-slowo="unek">🅤 u: -unek, -us, -usz, -uch, -ura, -ulec · -uj, -uje</div><div class="linia pop" data-slowo="zdrobnieniach">🐱 u w zdrobnieniach: kotuś, malutki, serduszko</div><div class="linia pop" data-slowo="lud">🧊 lód ≠ 👥 lud</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

@@ -52,6 +52,9 @@ export const CZYTANKI: Czytanka[] = [
   // Klasa 4, rozdzial III "Od pomysłu do działania" (src/data/textbook4rozdzial3.ts).
   { id: 'i-ty-mozesz-zmienic-swiat', lekcja: '30', temat: 'Przedsiębiorczy, czyli jaki?', title: 'I ty możesz zmienić świat (fragmenty)', author: 'Karolina Grabarczyk', pages: '99-101' },
   { id: '8-plus-2-i-domek-w-lesie', lekcja: '39', temat: 'Co już wiesz? Co umiesz?', title: '8 + 2 i domek w lesie (fragment)', author: 'Anne-Catharina Vestly', pages: '120-122' },
+  // Klasa 5, dzial 3 "Ideały, autorytety, idole" (src/data/textbook5dzial3.ts).
+  { id: 'rece', lekcja: 'V.30', temat: 'Epitet', title: 'Ręce', author: 'Jan Twardowski', pages: '108' },
+  { id: 'lewy', lekcja: 'V.31', temat: 'Autorytet czy idol? Dedykacja', title: 'Lewy. Chłopak, który zachwycił świat (fragmenty)', author: 'Yvette Żółtowska-Darska', pages: '110-113' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Stopniowanie przymiotników - klasa 5</title>
+<link rel="stylesheet" href="wspolne.css">
+<style>
+/* Wygenerowane przez filmiki/kl5d3/zbuduj.py ze scenariusz.py - poprawki rob w scenariuszu. */
+:root { --ak: #C2410C; }
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 6px; }
+.zadanie .wyb { background: #EFE7FB; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+
+:root { --niebieski: #3C7DD9; --zielony: #2E9E5B; --szary: #7a6a5c; --ramka: #d9c9b2; --fiolet: #8A4FD0; --morski: #1B8A8F; }
+.scena { padding: 46px 70px 30px; text-align: center; }
+h2.naglowek { font-family: 'Baloo 2'; font-size: 52px; line-height: 1.05; color: var(--ak); }
+.karta { background: var(--bialy); border: 5px solid var(--ramka); border-radius: 26px; padding: 12px 18px; }
+.karta .nazwa { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; line-height: 1.15; }
+.karta .opis { font-size: 27px; font-weight: 800; color: var(--szary); margin-top: 6px; line-height: 1.3; }
+.karta .emo { font-size: 54px; line-height: 1.1; }
+.chip { display: inline-block; font-family: 'Baloo 2'; font-weight: 800; color: #fff; border-radius: 999px; padding: 5px 26px; background: var(--ciemny); font-size: 28px; }
+.chipy { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.rzad { display: flex; gap: 18px; justify-content: center; margin-top: 22px; align-items: stretch; }
+.rzad > * { flex: 1; }
+.czesc { position: absolute; top: 12px; left: 20px; font-family: 'Baloo 2'; font-size: 22px; font-weight: 800; color: #fff; border-radius: 999px; padding: 2px 18px; }
+.c1 { background: var(--ak); } .c2 { background: var(--fiolet); } .c3 { background: var(--niebieski); } .c4 { background: var(--zielony); }
+.hl { background: #ffe066; border-radius: 8px; padding: 0 4px; }
+.ak { color: var(--ak); } .ok { color: var(--zielony); } .zle { color: var(--roz); }
+.skr { color: var(--szary); text-decoration: line-through; text-decoration-color: var(--roz); text-decoration-thickness: 4px; }
+.zadanie .badge, .odp .badge { display: inline-block; font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: #fff; background: var(--roz); border-radius: 999px; padding: 4px 38px; }
+.odp .badge { background: var(--zielony); }
+.polecenie { margin-top: 8px; font-size: 33px; font-weight: 800; line-height: 1.25; }
+.opcje { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.opcje .chip { font-size: 26px; background: var(--fiolet); }
+.odliczanie { margin: 12px auto 0; width: 860px; }
+.minuta { margin-top: 6px; font-size: 21px; font-weight: 800; color: var(--szary); }
+.lista { display: flex; flex-direction: column; gap: 8px; margin: 12px auto 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px auto 0; }
+.linia { font-size: 30px; font-weight: 800; background: var(--bialy); border-radius: 18px; border: 4px solid var(--ramka); padding: 6px 20px; text-align: left; line-height: 1.3; }
+.odp .linia { padding: 4px 18px; }
+.nr { display: inline-block; font-family: 'Baloo 2'; color: #fff; background: var(--ak); border-radius: 10px; padding: 0 12px; margin-right: 10px; }
+.dlaczego { color: var(--szary); font-size: 22px; margin-left: 10px; }
+.etyk { display: inline-block; font-family: 'Baloo 2'; font-size: 23px; font-weight: 800; color: #fff; background: var(--zielony); border-radius: 999px; padding: 0 16px; margin-left: 10px; vertical-align: 3px; }
+.luka { display: inline-block; min-width: 130px; border-bottom: 4px dashed var(--roz); }
+.wpis { color: var(--zielony); font-family: 'Baloo 2'; }
+.wyb { display: inline-block; border-radius: 8px; padding: 0 6px; }
+.zadanie .wyb { background: #EFE7FB; }
+.sl { color: var(--szary); margin: 0 4px; }
+.tab { margin: 18px auto 0; border-collapse: separate; border-spacing: 0; background: var(--bialy); border: 4px solid var(--ramka); border-radius: 18px; overflow: hidden; font-size: 28px; font-weight: 800; }
+.tab th { font-family: 'Baloo 2'; background: var(--ak); color: #fff; padding: 6px 14px; font-size: 26px; }
+.tab td { padding: 6px 14px; border-top: 2px solid var(--ramka); }
+.intro { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.intro .male { font-size: 30px; font-weight: 800; color: var(--szary); }
+.intro .emo { font-size: 80px; line-height: 1.1; margin-top: 6px; }
+.intro .tytul { font-family: 'Baloo 2'; font-size: 88px; font-weight: 800; line-height: 1.02; color: var(--ak); }
+.intro .grupy { margin-top: 20px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.intro .grupy .chip:nth-child(1) { background: var(--ak); }
+.intro .grupy .chip:nth-child(2) { background: var(--fiolet); }
+.intro .grupy .chip:nth-child(3) { background: var(--zielony); }
+.intro .grupy .chip:nth-child(4) { background: var(--niebieski); }
+.intro .zapowiedz { margin-top: 22px; font-size: 38px; font-weight: 800; }
+.zapamietaj .lista { margin-top: 16px; gap: 9px; width: 1120px; }
+.zapamietaj .linia { font-size: 30px; padding: 6px 22px; }
+.brawo { margin-top: 12px; font-size: 40px; background: var(--roz); padding: 4px 44px; }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scena intro" data-id="01-intro"><div class="male zjaw" data-t="0">Klasa 5 · Dział 3 · Ideały, autorytety, idole</div><div class="emo pop" data-t="0.3">📶🏔️🏆</div><div class="tytul pop" data-t="0.6">Stopniowanie przymiotników</div><div class="grupy"><span class="chip pop" data-slowo="stopnie">📶 trzy stopnie</span><span class="chip pop" data-slowo="sposoby">🛠️ trzy sposoby</span><span class="chip pop" data-slowo="stopniują">🚫 bez stopniowania</span></div><div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div></section>
+<section class="scena" data-id="02-stopnie"><span class="czesc c1 zjaw" data-t="0">1 · STOPNIE</span><h2 class="naglowek wjazd-dol" data-t="0">Trzy stopnie 📶</h2><div class="rzad"><div class="karta pop" data-slowo="równy" style="border-color:var(--zielony);"><div class="emo">🚲</div><div class="nazwa" style="color:var(--zielony)">równy</div><div class="opis">szybki</div></div><div class="karta pop" data-slowo="wyższy" style="border-color:var(--fiolet);"><div class="emo">🚗</div><div class="nazwa" style="color:var(--fiolet)">wyższy</div><div class="opis">szybszy</div></div><div class="karta pop" data-slowo="najwyższy" style="border-color:var(--ak);"><div class="emo">✈️</div><div class="nazwa" style="color:var(--ak)">najwyższy</div><div class="opis">najszybszy</div></div></div><div class="lista" style="width:700px"><div class="linia pop" data-slowo="rower">🚲 Rower jest <b class="ok">szybki</b>.</div><div class="linia pop" data-slowo="samochód">🚗 Samochód jest <b style="color:var(--fiolet)">szybszy</b>.</div><div class="linia pop" data-slowo="samolot">✈️ Samolot jest <b class="ak">najszybszy</b>.</div></div></section>
+<section class="scena" data-id="03-regularne"><span class="czesc c1 zjaw" data-t="0">1 · STOPNIE</span><h2 class="naglowek wjazd-dol" data-t="0">Prosto i regularnie 1️⃣</h2><div class="chipy"><span class="chip pop" data-slowo="końcówkę" style="background:var(--fiolet)">stopień wyższy: -szy / -ejszy</span><span class="chip pop" data-slowo="cząstkę" style="background:var(--ak)">stopień najwyższy: naj- + stopień wyższy</span></div><table class="tab" style="width:900px"><tr><th>stopień równy</th><th>stopień wyższy</th><th>stopień najwyższy</th></tr><tr class="zjaw" data-slowo="miły"><td>miły</td><td>mil<b class="ak">szy</b></td><td><b class="ak">naj</b>milszy</td></tr><tr class="zjaw" data-slowo="jasny"><td>jasny</td><td>jaśni<b class="ak">ejszy</b></td><td><b class="ak">naj</b>jaśniejszy</td></tr><tr class="zjaw" data-slowo="wysoki"><td>wysoki</td><td>wyż<b class="ak">szy</b></td><td><b class="ak">naj</b>wyższy</td></tr><tr class="zjaw" data-slowo="biały"><td>biały</td><td>biel<b class="ak">szy</b></td><td><b class="ak">naj</b>bielszy</td></tr></table></section>
+<section class="scena zadanie" data-id="04-zadanie1+60"><span class="czesc c1">1 · STOPNIE</span><div><span class="badge pop" data-t="0">ZADANIE 1 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Brakuje jednego stopnia. Zapisz tylko brakujące formy.</div><div class="lista" style="width:1000px"><div class="linia pop" data-slowo="rzędzie"><span class="nr">1</span>zimny ➜ <span class="luka"></span> ➜ najzimniejszy</div><div class="linia pop" data-slowo="rzędzie" data-po="0.2"><span class="nr">2</span>krótki ➜ krótszy ➜ <span class="luka"></span></div><div class="linia pop" data-slowo="rzędzie" data-po="0.4"><span class="nr">3</span>tani ➜ <span class="luka"></span> ➜ najtańszy</div><div class="linia pop" data-slowo="rzędzie" data-po="0.6"><span class="nr">4</span><span class="luka"></span> ➜ słodszy ➜ najsłodszy</div><div class="linia pop" data-slowo="rzędzie" data-po="0.8"><span class="nr">5</span>głośny ➜ <span class="luka"></span> ➜ najgłośniejszy</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="05-odpowiedz1"><span class="czesc c1">1 · STOPNIE</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Brakuje jednego stopnia. Zapisz tylko brakujące formy.</div><div class="lista" style="width:1000px"><div class="linia" data-slowo="zimniejszy"><span class="nr">1</span>zimny ➜ <b class="wpis o-wpis o-razem">zimniejszy</b> ➜ najzimniejszy</div><div class="linia" data-slowo="najkrótszy"><span class="nr">2</span>krótki ➜ krótszy ➜ <b class="wpis o-wpis o-razem">najkrótszy</b></div><div class="linia" data-slowo="tańszy"><span class="nr">3</span>tani ➜ <b class="wpis o-wpis o-razem">tańszy</b> ➜ najtańszy<span class="dlaczego o-wpis o-razem">zmiana głoski</span></div><div class="linia" data-slowo="słodki"><span class="nr">4</span><b class="wpis o-wpis o-razem">słodki</b> ➜ słodszy ➜ najsłodszy<span class="dlaczego o-wpis o-razem">forma podstawowa</span></div><div class="linia" data-slowo="głośniejszy"><span class="nr">5</span>głośny ➜ <b class="wpis o-wpis o-razem">głośniejszy</b> ➜ najgłośniejszy</div></div></section>
+<section class="scena" data-id="06-nieregularne"><span class="czesc c2 zjaw" data-t="0">2 · NIEREGULARNIE I OPISOWO</span><h2 class="naglowek wjazd-dol" data-t="0">Nieregularnie 2️⃣</h2><table class="tab" style="width:900px"><tr><th>stopień równy</th><th>stopień wyższy</th><th>stopień najwyższy</th></tr><tr class="zjaw" data-slowo="dobry"><td>dobry</td><td><b class="ak">lepszy</b></td><td>najlepszy</td></tr><tr class="zjaw" data-slowo="zły"><td>zły</td><td><b class="ak">gorszy</b></td><td>najgorszy</td></tr><tr class="zjaw" data-slowo="duży"><td>duży</td><td><b class="ak">większy</b></td><td>największy</td></tr><tr class="zjaw" data-slowo="mały"><td>mały</td><td><b class="ak">mniejszy</b></td><td>najmniejszy</td></tr></table><div class="chipy"><span class="chip pop" data-slowo="dobrzejszy" style="background:var(--roz)">❌ <span style="text-decoration:line-through">dobrzejszy</span></span></div></section>
+<section class="scena" data-id="07-opisowe"><span class="czesc c2 zjaw" data-t="0">2 · NIEREGULARNIE I OPISOWO</span><h2 class="naglowek wjazd-dol" data-t="0">Opisowo 3️⃣</h2><table class="tab" style="width:1140px"><tr><th>stopień równy</th><th>stopień wyższy</th><th>stopień najwyższy</th></tr><tr class="zjaw" data-slowo="interesujący"><td>interesujący</td><td><b class="ak">bardziej</b> interesujący</td><td><b class="ak">najbardziej</b> interesujący</td></tr><tr class="zjaw" data-slowo="zmęczony"><td>zmęczony</td><td><b class="ak">bardziej</b> zmęczony</td><td><b class="ak">najbardziej</b> zmęczony</td></tr><tr class="zjaw" data-slowo="wygodny"><td>wygodny</td><td><b class="ak">mniej</b> wygodny</td><td><b class="ak">najmniej</b> wygodny</td></tr><tr class="zjaw" data-slowo="miękki"><td>miękki</td><td>miększy / bardziej miękki</td><td>najmiększy / najbardziej miękki</td></tr></table></section>
+<section class="scena zadanie" data-id="08-zadanie2+60"><span class="czesc c2">2 · NIEREGULARNIE I OPISOWO</span><div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Jak stopniujemy te przymiotniki?</div><div class="opcje"><span class="chip pop" data-slowo="przymiotniki" style="background:var(--ak)">1️⃣ regularnie</span><span class="chip pop" data-slowo="przymiotniki" data-po="0.25" style="background:var(--fiolet)">2️⃣ nieregularnie</span><span class="chip pop" data-slowo="przymiotniki" data-po="0.5" style="background:var(--niebieski)">3️⃣ opisowo</span></div><div class="lista" style="width:820px"><div class="linia pop" data-slowo="przymiotniki"><span class="nr">1</span>zły</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.2"><span class="nr">2</span>cichy</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.4"><span class="nr">3</span>zachwycony</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.6"><span class="nr">4</span>mały</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.8"><span class="nr">5</span>gęsty</div><div class="linia pop" data-slowo="przymiotniki" data-po="1.0"><span class="nr">6</span>zaskoczony</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="09-odpowiedz2"><span class="czesc c2">2 · NIEREGULARNIE I OPISOWO</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Jak stopniujemy te przymiotniki?</div><div class="opcje"><span class="chip" style="background:var(--ak)">1️⃣ regularnie</span><span class="chip" style="background:var(--fiolet)">2️⃣ nieregularnie</span><span class="chip" style="background:var(--niebieski)">3️⃣ opisowo</span></div><div class="lista" style="width:820px"><div class="linia" data-slowo="zły"><span class="nr">1</span>zły<span class="etyk o-znak o-razem" style="background:var(--fiolet)">nieregularnie</span><span class="dlaczego o-wpis o-razem">gorszy, najgorszy</span></div><div class="linia" data-slowo="cichy"><span class="nr">2</span>cichy<span class="etyk o-znak o-razem" style="background:var(--ak)">regularnie</span><span class="dlaczego o-wpis o-razem">cichszy, najcichszy</span></div><div class="linia" data-slowo="zachwycony"><span class="nr">3</span>zachwycony<span class="etyk o-znak o-razem" style="background:var(--niebieski)">opisowo</span><span class="dlaczego o-wpis o-razem">bardziej zachwycony</span></div><div class="linia" data-slowo="mały"><span class="nr">4</span>mały<span class="etyk o-znak o-razem" style="background:var(--fiolet)">nieregularnie</span><span class="dlaczego o-wpis o-razem">mniejszy, najmniejszy</span></div><div class="linia" data-slowo="gęsty"><span class="nr">5</span>gęsty<span class="etyk o-znak o-razem" style="background:var(--ak)">regularnie</span><span class="dlaczego o-wpis o-razem">gęstszy, najgęstszy</span></div><div class="linia" data-slowo="zaskoczony"><span class="nr">6</span>zaskoczony<span class="etyk o-znak o-razem" style="background:var(--niebieski)">opisowo</span><span class="dlaczego o-wpis o-razem">najbardziej zaskoczony</span></div></div></section>
+<section class="scena" data-id="10-bez-stopniowania"><span class="czesc c3 zjaw" data-t="0">3 · BEZ STOPNIOWANIA</span><h2 class="naglowek wjazd-dol" data-t="0">Tych nie stopniujemy 🚫</h2><div class="karta pop" data-slowo="czego" style="border-color:var(--roz);width:900px;margin:16px auto 0"><div class="nazwa" style="color:var(--roz)">z czego? · skąd? · czyje?</div><div class="opis">drewniany · szklany · metalowa · polski · kocia</div></div><div class="lista" style="width:760px"><div class="linia pop" data-slowo="drewniańszy">🪵 drewniany stół ➜ <span class="skr">drewniańszy</span></div><div class="linia pop" data-slowo="szklany">🥛 szklany kubek · 🖼️ metalowa rama</div><div class="linia pop" data-slowo="polski">🎬 polski film · 🐱 kocia miska</div></div><div class="chipy"><span class="chip pop" data-slowo="więcej" style="background:var(--zielony)">❓ czy tej cechy może być więcej?</span></div></section>
+<section class="scena zadanie" data-id="11-zadanie3+60"><span class="czesc c3">3 · BEZ STOPNIOWANIA</span><div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div><div class="polecenie wjazd-dol" data-t="0.4">Czy ten przymiotnik się stopniuje?</div><div class="opcje"><span class="chip pop" data-slowo="przymiotniki" style="background:var(--zielony)">✅ tak</span><span class="chip pop" data-slowo="przymiotniki" data-po="0.25" style="background:var(--roz)">❌ nie</span></div><div class="lista" style="width:760px"><div class="linia pop" data-slowo="przymiotniki"><span class="nr">1</span>wełniany sweter</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.2"><span class="nr">2</span>zabawny film</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.4"><span class="nr">3</span>krakowski rynek</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.6"><span class="nr">4</span>smutna piosenka</div><div class="linia pop" data-slowo="przymiotniki" data-po="0.8"><span class="nr">5</span>psia buda</div><div class="linia pop" data-slowo="przymiotniki" data-po="1.0"><span class="nr">6</span>ostry nóż</div></div><div class="odliczanie"><div class="odliczanie-pasek"></div></div><div class="minuta">⏸ Masz minutę. Potrzebujesz więcej? Zatrzymaj film.</div></section>
+<section class="scena odp" data-id="12-odpowiedz3"><span class="czesc c3">3 · BEZ STOPNIOWANIA</span><div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div><div class="polecenie">Czy ten przymiotnik się stopniuje?</div><div class="opcje"><span class="chip" style="background:var(--zielony)">✅ tak</span><span class="chip" style="background:var(--roz)">❌ nie</span></div><div class="lista" style="width:760px"><div class="linia" data-slowo="wełniany"><span class="nr">1</span>wełniany sweter<span class="etyk o-znak o-razem" style="background:var(--roz)">nie</span><span class="dlaczego o-wpis o-razem">z czego?</span></div><div class="linia" data-slowo="zabawny"><span class="nr">2</span>zabawny film<span class="etyk o-znak o-razem" style="background:var(--zielony)">tak</span><span class="dlaczego o-wpis o-razem">zabawniejszy</span></div><div class="linia" data-slowo="krakowski"><span class="nr">3</span>krakowski rynek<span class="etyk o-znak o-razem" style="background:var(--roz)">nie</span><span class="dlaczego o-wpis o-razem">skąd?</span></div><div class="linia" data-slowo="smutna"><span class="nr">4</span>smutna piosenka<span class="etyk o-znak o-razem" style="background:var(--zielony)">tak</span><span class="dlaczego o-wpis o-razem">smutniejsza</span></div><div class="linia" data-slowo="psia"><span class="nr">5</span>psia buda<span class="etyk o-znak o-razem" style="background:var(--roz)">nie</span><span class="dlaczego o-wpis o-razem">czyja?</span></div><div class="linia" data-slowo="ostry"><span class="nr">6</span>ostry nóż<span class="etyk o-znak o-razem" style="background:var(--zielony)">tak</span><span class="dlaczego o-wpis o-razem">ostrzejszy</span></div></div></section>
+<section class="scena zapamietaj" data-id="13-podsumowanie"><h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2><div class="lista"><div class="linia pop" data-slowo="stopnie">📶 stopnie: równy · wyższy · najwyższy</div><div class="linia pop" data-slowo="regularnie">1️⃣ regularnie: miły - milszy - najmilszy</div><div class="linia pop" data-slowo="nieregularnie">2️⃣ nieregularnie: dobry - lepszy - najlepszy</div><div class="linia pop" data-slowo="opisowo">3️⃣ opisowo: bardziej, najbardziej zmęczony</div><div class="linia pop" data-slowo="czego">🚫 z czego? skąd? czyje? - nie stopniujemy: drewniany, polski, kocia</div></div><div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div></section>
+<button id="playBtn">▶ Odtwórz</button>
+</div>
+<script>window.AUDIO_SRC = 'audio/film1-sciezka.mp3';</script>
+<script src="timeline-film1.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

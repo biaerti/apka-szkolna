@@ -12,6 +12,7 @@ import type { Lesson, Question, QuestionSet, Slide } from './types';
 import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterials';
 import { newId } from './id';
 import { DZIAL2_TOPICS } from './textbook5dzial2';
+import { DZIAL3_TOPICS } from './textbook5dzial3';
 import {
   plan, recap, slideCzytanka, slideNote, slideRead, slideRecap, slideTask, slideText, slideTextbookImage,
   slideTextbookTask, slideTopic, slideVideo, type Topic,
@@ -578,7 +579,7 @@ const TOPICS: Topic[] = [
   },
 ];
 
-const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? DZIAL })), ...DZIAL2_TOPICS];
+const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? DZIAL })), ...DZIAL2_TOPICS, ...DZIAL3_TOPICS];
 
 export function buildTextbook5(grade: string, classIds: string[]): FreshMaterialsBundle {
   if (grade.toUpperCase() !== 'V') throw new Error('Materiał jest przygotowany dla klasy V.');

@@ -1,0 +1,1 @@
+Sprawdzamy. Pierwsza dobrze: same cyfry arabskie i kropki. Druga źle, bo gdy miesiąc jest słowami, po dniu nie stawiamy kropki. Trzecia dobrze: miesiąc rzymski i odstępy. Czwarta źle, bo przy cyfrze rzymskiej nie ma kropek. Piąta dobrze. Szósta znowu źle: kropka po dniu, a miesiąc jest słowami.
