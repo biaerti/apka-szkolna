@@ -71,179 +71,144 @@ Notatki (tylko wiedza): 30 - przysłowie (definicja + przykłady) i słowniczek 
 34 - plan opisu przedmiotu; 35 - części ogłoszenia; 36 - rodzina wyrazów, wymiana głosek; 37 - zasady ó i u;
 38 - plan opisu postaci; 39 - sam temat.
 
-## Scenariusze filmów (4 klasa: wolniej, prościej, krótkie zdania, dużo powtórek)
+## Scenariusze filmów - NOWY FORMAT (Bartek, 2026-10-17)
 
-Każdy film ma 7-9 minut i 4 zadania z pauzą 20-25 s, a po każdym SPRAWDZAMY z wyjaśnieniem „dlaczego”.
-Na końcu scena „Zapamiętaj!”. Przykłady są własne, nie z podręcznika, a zadania nie powtarzają zadań
-z podręcznika.
+Każdy film ok. 8 minut: ok. 5 minut treści + **najwyżej 3 zadania**, każde z pauzą **60 s** (sufiks `+60`),
+po każdym SPRAWDZAMY z wyjaśnieniem „dlaczego”, na końcu scena „Zapamiętaj!”. Lektor w naturalnym tempie,
+bez przyspieszania. 4 klasa: wolniej, prościej, krótkie zdania, dużo powtórek.
+Zadania na **mało pisania** (wybór, litera, jedno słowo, końcówka), do zrobienia w minutę.
+Treść z dawnych zadań 4 zostaje w filmie jako przykład pokazany przez lektora, a „dużo przykładów
+do uzupełniania” idzie do kart „Ćwiczymy razem” po filmie. Przykłady własne, nie z podręcznika.
+
+Przebieg lekcji: przygotuj się → koło z poprzedniego tematu (3 pytania) → film → karty „Ćwiczymy razem”
+(2-3, dużo przykładów) → krótka notatka do przepisania (ok. 2 zdania, tylko wiedza) na końcu.
 
 ### 1. `przedsiebiorczy` - Przedsiębiorczy, czyli jaki? Przysłowia
-- Intro: Zuza ma 10 lat i dwie lewe ręce do rysowania, ale świetnie piecze. Na szkolnym kiermaszu
-  sprzedaje muffinki, w drugim tygodniu pisze kartkę z ceną, w trzecim dokłada muffinki bez cukru,
-  bo ktoś pytał. To jest przedsiębiorczość: pomysł + działanie.
-- Część 1: osoba przedsiębiorcza ma pomysł i doprowadza go do końca. Nie trzeba mieć firmy:
-  zorganizować zbiórkę karmy dla schroniska, wymyślić, jak szybciej sprzątać pokój, naprawić rower
-  zamiast kupować nowy.
-- ZADANIE 1: kto tu jest przedsiębiorczy? Cztery krótkie historyjki (Olek ma pomysł, ale nic nie robi;
-  Maja zbiera nakrętki i organizuje klasę; Kuba narzeka, że nudno; Ania pyta sąsiadów, czy wyprowadzić
-  im psa za drobne). Dwie tak, dwie nie, z wyjaśnieniem dlaczego.
-- Część 2: cechy, każda na własnym przykładzie (inne niż w podręczniku): zaradny (zepsuł się zamek
-  w plecaku, więc spina go agrafką), kreatywny (z kartonu robi domek dla kota), wytrwały (pięćdziesiąty
-  raz ćwiczy kartę w kosza, aż wejdzie), odważny (pierwszy zgłasza się do apelu), pracowity, odpowiedzialny.
-- ZADANIE 2: jaka to cecha? Pięć zachowań do nazwania jednym przymiotnikiem.
-- Część 3: przysłowie, czyli krótkie mądre zdanie, często z rymem, które ludzie powtarzają od dawna.
-  Przykłady (inne niż w podręczniku): Kto rano wstaje, temu Pan Bóg daje. Bez pracy nie ma kołaczy.
-  Kto pyta, nie błądzi. Co nagle, to po diable. Lepszy wróbel w garści niż gołąb na dachu.
-  Przy każdym: co znaczy dosłownie, a co naprawdę.
-- ZADANIE 3: połącz przysłowie z sytuacją (Tomek robi pracę domową w trzy minuty i ma dziesięć błędów:
-  Co nagle, to po diable).
-- Część 4: przysłowie czy zwykłe zdanie? Przysłowie mówi o życiu wszystkich ludzi, nie o jednej sytuacji.
-- ZADANIE 4: dokończ przysłowia: Bez pracy nie ma..., Kto pyta, ten nie...
+- Intro: Zuza świetnie piecze. Na kiermaszu sprzedaje muffinki, potem pisze kartkę z ceną, potem dokłada
+  muffinki bez cukru, bo ktoś pytał. Przedsiębiorczość = pomysł + działanie. Nie trzeba mieć firmy:
+  zbiórka karmy dla schroniska, naprawa roweru zamiast kupowania nowego.
+- ZADANIE 1 (tak / nie): kto jest przedsiębiorczy? Olek ma pomysł, ale nic nie robi; Maja zbiera nakrętki
+  i organizuje klasę; Kuba narzeka, że nudno; Ania pyta sąsiadów, czy wyprowadzić im psa. Sprawdzamy:
+  Maja i Ania - bo zrobiły coś ze swoim pomysłem.
+- Cechy osoby przedsiębiorczej na własnych przykładach: zaradny (agrafka w zepsutym zamku), kreatywny
+  (domek dla kota z kartonu), wytrwały (pięćdziesiąty rzut do kosza), odważny, odpowiedzialny.
+- ZADANIE 2 (jedno słowo z listy na ekranie): jaka to cecha? Cztery zachowania.
+- Przysłowie: krótkie mądre zdanie, często z rymem, powtarzane od dawna, mówi o życiu wszystkich ludzi,
+  nie o jednej sytuacji. Przykłady (inne niż w podręczniku): Kto pyta, nie błądzi. Co nagle, to po diable.
+  Bez pracy nie ma kołaczy. Lepszy wróbel w garści niż gołąb na dachu. Przy każdym: co znaczy naprawdę.
+- ZADANIE 3 (cyfra + litera): połącz trzy sytuacje z trzema przysłowiami (Tomek robi pracę domową
+  w trzy minuty i ma dziesięć błędów - Co nagle, to po diable).
 - Zapamiętaj!
 
 ### 2. `przymiotnik` - Przymiotnik - król opisu
-- Intro: „Mam psa” i „Mam małego, rudego, wesołego psa”. Które zdanie widzicie w głowie? Te nowe
-  słowa to przymiotniki.
-- Część 1: przymiotnik nazywa cechy (wesoły, mądry, szybki) i właściwości (drewniany, czekoladowy,
-  szkolny). Pytania: jaki? jaka? jakie? Pytamy od rzeczownika: pies - jaki? rudy.
-- ZADANIE 1: znajdź przymiotniki w krótkim tekście o lodziarni (pięć przymiotników).
-- Część 2: przymiotnik prawie zawsze stoi przy rzeczowniku i do niego pasuje: zielone jabłko,
-  zielony ogórek, zielona żaba. Jeden przymiotnik, trzy różne końcówki, bo rzeczownik decyduje.
-- ZADANIE 2: dobierz przymiotnik do rzeczownika (kolumny: zimowy, kolorowy, mokry / parasol, kurtka, tęcza...).
-- Część 3: grupy przymiotników: kolor, kształt, wielkość, z czego coś jest, jaki ktoś jest
-  (charakter). Na jednym przedmiocie, np. plecak: duży, granatowy, materiałowy, ciężki.
-- ZADANIE 3: podaj po dwa przymiotniki do: zupa, wakacje, nauczyciel WF-u (inne niż ćwiczenia
-  z podręcznika).
-- Część 4: pułapka - to nie przymiotnik, jeśli nie odpowiada na „jaki?”: szybko (jak?), biega (co robi?),
-  szybkość (co?). Porównanie trzech słów z tej samej rodziny.
-- ZADANIE 4: przymiotnik czy nie? Sześć wyrazów: wesoły, wesoło, śmiać się, piękny, piękno, pięknie.
+- Intro: „Mam psa” i „Mam małego, rudego, wesołego psa”. Które zdanie widzicie w głowie?
+- Przymiotnik nazywa cechy (wesoły, szybki) i właściwości (drewniany, czekoladowy). Pytania: jaki? jaka?
+  jakie? Pytamy od rzeczownika: pies - jaki? rudy.
+- ZADANIE 1 (wskaż): w krótkim tekście o lodziarni znajdź pięć przymiotników.
+- Przymiotnik stoi przy rzeczowniku i do niego pasuje: zielone jabłko, zielony ogórek, zielona żaba.
+  Grupy: kolor, kształt, wielkość, z czego coś jest, jaki ktoś jest - na jednym plecaku.
+- ZADANIE 2 (cyfra + litera): dobierz przymiotnik do rzeczownika (zimowy, kolorowy, mokry, wesoła /
+  kurtka, tęcza, parasol, piosenka).
+- Pułapka: to nie przymiotnik, jeśli nie odpowiada na „jaki?”: szybko (jak?), biega (co robi?),
+  szybkość (co?).
+- ZADANIE 3 (tak / nie): przymiotnik czy nie? wesoły, wesoło, śmiać się, piękny, piękno, pięknie.
 - Zapamiętaj!
 
 ### 3. `przymiotnik-odmiana` - Odmiana przymiotnika
-- Intro: przypomnienie przypadków z rozdziału II w 30 sekund. Przymiotnik też się odmienia i idzie
-  krok w krok za rzeczownikiem, jak cień.
-- Część 1: odmiana przez **rodzaje**: mądry chłopiec, mądra dziewczynka, mądre dziecko. Test ten / ta / to.
-- ZADANIE 1: wstaw „nowy” w dobrej formie: rower, hulajnoga, auto, buty, koledzy.
-- Część 2: odmiana przez **liczby** i dwa rodzaje w liczbie mnogiej: mądrzy chłopcy (ci), mądre
-  dziewczynki / dzieci / psy (te).
-- ZADANIE 2: zmień na liczbę mnogą: wesoły uczeń, wysoka wieża, głośny pies, dobry kolega.
-- Część 3: odmiana przez **przypadki** - przymiotnik zadaje to samo pytanie co rzeczownik:
-  nie ma czerwonego autobusu, jadę czerwonym autobusem, myślę o czerwonym autobusie. Odmiana całej
-  pary „mały kot” przez siedem przypadków (inna niż „ciekawa książka” z zad. 8).
-- ZADANIE 3: wstaw „zielony” w odpowiedniej formie w pięć zdań.
-- Część 4: najczęstsze błędy - przymiotnik nie pasuje do rzeczownika („ta zielony liść”, „z moim
-  koleżanką”) - poprawiamy.
-- ZADANIE 4: znajdź i popraw trzy błędy w krótkim liście do babci.
+- Intro: przymiotnik idzie krok w krok za rzeczownikiem, jak cień.
+- Rodzaje: mądry chłopiec, mądra dziewczynka, mądre dziecko. Test ten / ta / to.
+- ZADANIE 1 (wybór z trzech): nowy / nowa / nowe: rower, hulajnoga, auto, plecak, kurtka.
+- Liczby: liczba mnoga, dwa rodzaje: mądrzy chłopcy (ci), mądre dziewczynki, dzieci, psy (te).
+- ZADANIE 2 (wybór z dwóch): wesołe / weseli uczniowie, wysokie / wysocy wieże, dobrzy / dobre koledzy,
+  głośne / głośni psy.
+- Przypadki: przymiotnik zmienia się razem z rzeczownikiem: nie ma czerwonego autobusu, jadę czerwonym
+  autobusem, myślę o czerwonym autobusie. Odmiana pary „mały kot” przez siedem przypadków.
+  Najczęstsze błędy („ta zielony liść”, „z moim koleżanką”) - lektor pokazuje i poprawia.
+- ZADANIE 3 (końcówka): zielon... w pięciu zdaniach (Nie mam zielon... kredki. Bawię się zielon... piłką...).
 - Zapamiętaj!
 
 ### 4. `stopniowanie` - Stopniowanie przymiotników i „nie” z przymiotnikami
-- Intro: trzy plecaki obok siebie: ciężki, cięższy, najcięższy. Przymiotnik może pokazać, ile jest cechy.
-- Część 1: trzy stopnie: równy, wyższy, najwyższy. Przykłady: szybki - szybszy - najszybszy;
-  miły, ładny, cichy.
-- ZADANIE 1: stopniuj: wysoki, młody, długi (tylko regularne).
-- Część 2: sposób regularny (-szy / -ejszy, naj-), opisowy (bardziej, najbardziej: bardziej kolorowy,
-  bardziej zmęczony) i nieregularny, którego trzeba się nauczyć: dobry - lepszy - najlepszy,
-  zły - gorszy, duży - większy, mały - mniejszy.
-- ZADANIE 2: który to sposób? Sześć przykładów.
-- Część 3: nie wszystko się stopniuje - coś nie może być „bardziej drewniane” ani „bardziej
-  wtorkowe”: drewniany, papierowy, wczorajszy, krakowski (inne niż w ramce).
-- ZADANIE 3: skreśl przymiotniki, których nie da się stopniować (z ośmiu).
-- Część 4: „nie” z przymiotnikami piszemy razem: niemiły, niewysoki, nieciekawy, i tak samo w stopniach:
-  nieładny - nieładniejszy. Przypomnienie: z rzeczownikami też razem, z czasownikami osobno.
-- ZADANIE 4: razem czy osobno? niegrzeczny, nie wiem, niebezpieczny, nie śpię, nieduży.
+- Intro: trzy plecaki: ciężki, cięższy, najcięższy. Przymiotnik może pokazać, ile jest cechy.
+- Trzy stopnie: równy, wyższy, najwyższy. Sposób regularny (szybki - szybszy - najszybszy).
+- ZADANIE 1 (jedno słowo): uzupełnij brakujący stopień w tabeli: wysoki, młody, długi.
+- Sposób nieregularny (dobry - lepszy, zły - gorszy, duży - większy, mały - mniejszy) i opisowy
+  (bardziej kolorowy, najbardziej zmęczony). Nie wszystko się stopniuje: drewniany, papierowy, wczorajszy.
+- ZADANIE 2 (litera R / N / O): który to sposób? Sześć przykładów.
+- „Nie” z przymiotnikami razem: niemiły, niewysoki, także w stopniach. Z czasownikami osobno.
+- ZADANIE 3 (razem / osobno): niegrzeczny, nie wiem, niebezpieczny, nie śpię, nieduży.
 - Zapamiętaj!
 
 ### 5. `opis-przedmiotu` - Opis przedmiotu
-- Intro: zagadka - opisujemy przedmiot bez nazwy, a widz zgaduje (stary budzik dziadka). Opis to
-  malowanie słowami.
-- Część 1: plan opisu: wstęp (co to jest, skąd go mam), rozwinięcie (wielkość, kształt, kolor,
-  materiał, części, zmysły, coś szczególnego), zakończenie (do czego służy, co o nim myślę).
-  Pokazujemy na opisie własnego przedmiotu, np. pluszowego lisa (inny niż świnka-skarbonka).
-- ZADANIE 1: do której części opisu pasuje zdanie? Sześć zdań: wstęp / rozwinięcie / zakończenie.
-- Część 2: kolejność w rozwinięciu - od ogółu do szczegółu: najpierw cały przedmiot, potem części.
-- ZADANIE 2: ułóż w dobrej kolejności zdania z rozwinięcia opisu kubka.
-- Część 3: zmysły - nie tylko „widzę”: w dotyku miękki, pachnie wanilią, skrzypi, szeleści.
-  Słówka: gładki, chropowaty, puszysty, lśniący.
-- ZADANIE 3: dopisz po jednym zdaniu „czuję” i „słyszę” do opisu piłki do kosza.
-- Część 4: akapity - każda część opisu od nowej linii, z wcięciem. Unikamy „jest, jest, ma, ma”.
-- ZADANIE 4: popraw zdania z powtórzeniami („Piórnik jest niebieski. Piórnik jest duży. Piórnik ma zamek.”).
+- Intro: zagadka - opisujemy przedmiot bez nazwy (stary budzik dziadka), widz zgaduje. Opis to malowanie słowami.
+- Plan: wstęp (co to, skąd go mam), rozwinięcie (wielkość, kształt, kolor, materiał, części, coś szczególnego),
+  zakończenie (do czego służy, co o nim myślę). Na opisie pluszowego lisa.
+- ZADANIE 1 (litera W / R / Z): do której części pasuje zdanie? Sześć zdań.
+- Kolejność w rozwinięciu: od ogółu do szczegółu. Pokazujemy na opisie kubka.
+  Zmysły: nie tylko „widzę”: gładki, chropowaty, puszysty, pachnie wanilią, skrzypi, szeleści.
+- ZADANIE 2 (wybór zmysłu): wzrok, dotyk, słuch czy węch? gładki, skrzypi, pachnie, lśniący, puszysty, dzwoni.
+- Akapity i powtórzenia: „Piórnik jest niebieski. Piórnik jest duży. Piórnik ma zamek.” - jak to połączyć.
+- ZADANIE 3 (cyfry): ułóż w kolejności cztery zdania rozwinięcia opisu piłki (od ogółu do szczegółu).
 - Zapamiętaj!
 
 ### 6. `ogloszenie` - Ogłoszenie
-- Intro: na drzwiach sklepu wisi kartka „Zgubiłem psa. Kuba”. Jakiego psa? Gdzie? Jak oddać? Ogłoszenie,
-  w którym czegoś brakuje, nie zadziała.
-- Część 1: ogłoszenie to krótka informacja dla wielu ludzi. Rodzaje: sprzedam, kupię, zgubiono,
-  znaleziono, zapraszamy.
-- ZADANIE 1: co to za ogłoszenie? Pięć nagłówków do dopasowania (np. „Oddam kotki w dobre ręce”).
-- Część 2: części: nagłówek, co, gdzie, kiedy, kontakt, podpis. Pytania kontrolne.
-  Pokazujemy własne ogłoszenie o zgubionej czapce.
-- ZADANIE 2: czego brakuje w ogłoszeniu o szkolnym kiermaszu (brak daty i miejsca)?
-- Część 3: krótko i konkretnie. Bez historii życia przedmiotu. Przykład: rozgadane ogłoszenie o sprzedaży
-  hulajnogi i jego krótka wersja (nie dubluje zad. 3 z rowerem).
-- ZADANIE 3: które zdania wyrzucić z ogłoszenia o znalezionych kluczach?
-- Część 4: ogłoszenie o wydarzeniu: kto zaprasza, na co, kiedy, gdzie, co zabrać.
-- ZADANIE 4: ułóż w głowie (i zapisz) ogłoszenie o klasowym turnieju planszówek, sprawdzamy listą.
+- Intro: kartka „Zgubiłem psa. Kuba”. Jakiego psa? Gdzie? Jak oddać? Ogłoszenie, w którym czegoś brakuje,
+  nie zadziała.
+- Ogłoszenie to krótka informacja dla wielu ludzi. Rodzaje: sprzedam, kupię, zgubiono, znaleziono, zapraszamy.
+- ZADANIE 1 (litera): co to za ogłoszenie? Pięć nagłówków do dopasowania.
+- Części: nagłówek, co, gdzie, kiedy, kontakt, podpis. Własne ogłoszenie o zgubionej czapce.
+- ZADANIE 2 (wybór z listy): czego brakuje w ogłoszeniu o szkolnym kiermaszu? (kiedy i gdzie)
+- Krótko i konkretnie: rozgadane ogłoszenie o hulajnodze i jego krótka wersja. Ogłoszenie o wydarzeniu
+  (turniej planszówek): kto zaprasza, na co, kiedy, gdzie, co zabrać.
+- ZADANIE 3 (numery zdań): które zdania wyrzucić z ogłoszenia o znalezionych kluczach?
 - Zapamiętaj!
 
 ### 7. `rodzina-wyrazow` - Rodzina wyrazów
-- Intro: rodzina Lasów: las, lasek, leśny, leśniczy, zalesić. Co mają wspólnego? Tę samą cząstkę i to samo
-  znaczenie, jak rodzina - to samo nazwisko i wspólny dom.
-- Część 1: wyrazy pokrewne mają wspólną cząstkę i są powiązane znaczeniem. Przykłady: szkoła, szkolny,
-  szkolić; ryba, rybak, rybka, rybny.
-- ZADANIE 1: dopisz po trzy wyrazy pokrewne do: kwiat, zima, pies.
-- Część 2: pułapka - wspólne litery to za mało: kot i kotlet, morze i mors, lis i list nie są rodziną,
-  bo nie łączy ich znaczenie.
-- ZADANIE 2: który wyraz nie należy do rodziny? (cztery rzędy po cztery wyrazy).
-- Część 3: wymiana głosek w rodzinie: ó na o (stół - stoły), ę na ą (ręka - rączka), ł na l, rz na r
-  (morze - morski). Wymiana podpowiada, jak coś napisać - most do następnej lekcji.
-- ZADANIE 3: znajdź w rodzinie wyraz, który podpowiada pisownię: róg, dąb, ząb (rogi, dęby, zęby).
-- Część 4: gra - budujemy drzewo rodziny „mleko” w 30 sekund.
-- ZADANIE 4: ułóż jedno zdanie z trzema wyrazami z jednej rodziny.
+- Intro: rodzina „las”: las, lasek, leśny, leśniczy, zalesić. Wspólna cząstka i wspólne znaczenie.
+- Wyrazy pokrewne: szkoła, szkolny, szkolić; ryba, rybak, rybka, rybny.
+- ZADANIE 1 (jedno słowo): dopisz po jednym wyrazie pokrewnym do: kwiat, zima, pies.
+- Pułapka: wspólne litery to za mało: kot i kotlet, morze i mors, lis i list.
+- ZADANIE 2 (wskaż): który wyraz nie należy do rodziny? Trzy rzędy po cztery wyrazy.
+- Wymiana głosek w rodzinie: ó - o (stół - stoły), ę - ą (ręka - rączka), rz - r (morze - morski).
+  Wymiana podpowiada pisownię (most do lekcji o ó i u). Drzewo rodziny „mleko”.
+- ZADANIE 3 (jedno słowo): podaj wyraz z rodziny, który podpowiada pisownię: róg, dąb, ząb.
 - Zapamiętaj!
 
 ### 8. `o-u` - Pisownia ó i u
-(w narracji „o z kreską” i „u zwykłe”, same litery tylko na ekranie)
-- Intro: ten sam dźwięk, dwie litery. Jak wiedzieć, którą wybrać? Są reguły i sprytne sztuczki.
-- Część 1: ó wymienne - szukamy w rodzinie albo w innej formie wyrazu: o, e, a (stół - stoły,
-  wiózł - wiezie, skrócić - skracać). Sztuczka: „zamień, a zobaczysz o”.
-- ZADANIE 1: uzasadnij ó: lód, kółko, pióro, mróz, dół (wpisz wyraz z o).
-- Część 2: ó na końcu: -ów (Kraków, kotów), -ówka, -ówna (pocztówka, królówna). Wyjątki z u
-  (wsuwka, zasuwka) tylko na ekranie.
-- ZADANIE 2: dopisz ó lub u: dom...w, ulic...wka, chłopc...w.
-- Część 3: u piszemy w końcówkach -uj-, -unek, -uszek, -uchny, -utki, -usia, -uś (maluje, rysunek,
-  kożuszek, malutki, mamusia, synuś) i na początku wyrazu (ucho, ulica, uśmiech). Wyjątki: ósmy, ów, ówczesny.
-- ZADANIE 3: wpisz brakującą literę i podaj regułę (pięć wyrazów).
-- Część 4: ó niewymienne - trzeba się nauczyć (żółw, góra, król, ogórek, róża, wróbel, który). Sposób:
-  rysunek, rymowanka, karteczka na lodówce.
-- ZADANIE 4: krótkie dyktando z lukami (sześć wyrazów, mieszane reguły).
+(w narracji „o z kreską” i „u zwykłe”, same litery tylko na ekranie; zasady zgodne z ramką s. 115)
+- Intro: ten sam dźwięk, dwie litery. Są reguły i sprytne sztuczki.
+- Ó wymienne na o, e, a (stół - stoły, wiózł - wiezie, skrócić - skracać). „Zamień, a zobaczysz o”.
+- ZADANIE 1 (jedno słowo): uzasadnij: lód, kółko, mróz, dół, pióro - wyraz z o.
+- Ó w zakończeniach -ów, -ówka, -ówna (Kraków, kotów, pocztówka). U w -uj-, -unek, -uszek, -utki, -uś, -usia
+  (maluje, rysunek, malutki, synuś) i na początku wyrazu (ucho, ulica). Wyjątki na ekranie.
+- ZADANIE 2 (litera): ó czy u? dom_w, ulic_wka, mal_tki, rys_nek, maluj_, kotk_w.
+- Ó niewymienne trzeba zapamiętać (żółw, góra, król, ogórek, róża, wróbel, który): rysunek, rymowanka.
+- ZADANIE 3 (litera, reguły mieszane): krótkie dyktando z sześcioma lukami.
 - Zapamiętaj!
-(Uwaga: zasady sprawdzić z ramką s. 115 przed pisaniem narracji, żeby film mówił to samo co podręcznik.)
 
 ### 9. `opis-postaci` - Opis postaci
-- Intro: „Mój tata jest normalny” - i co, poznalibyście go na dworcu? Opis musi pomóc zobaczyć człowieka.
-- Część 1: plan: wstęp (kto to, ile ma lat, skąd go znam), wygląd (wzrost, sylwetka, twarz, włosy, ubiór,
-  coś charakterystycznego), zakończenie (co o nim myślę i dlaczego). Pokazujemy na opisie wymyślonego
-  dziadka Stefana (inny niż Helenka).
-- ZADANIE 1: kolejność - rozsypane zdania z opisu: co jest wstępem, co wyglądem, co zakończeniem.
-- Część 2: od góry do dołu: najpierw cała postać (wzrost), potem twarz, włosy, ubiór. Słówka zamiast
-  „ładny” i „normalny”: piegowaty, zadarty nos, kręcone włosy, sportowy styl.
-- ZADANIE 2: zamień „zwykłe” słowa na ciekawsze w trzech zdaniach.
-- Część 3: zgadywanka - opisujemy postać z bajki (np. Czerwony Kapturek, Pippi), klasa zgaduje, kto to.
-- ZADANIE 3: opisz w trzech zdaniach wygląd postaci z bajki, którą wybierzesz - klasa zgaduje (na głos).
-- Część 4: opinia na końcu zawsze z „dlaczego” + unikanie powtórzeń (ma, ma, ma; jest, jest).
-- ZADANIE 4: dokończ zakończenie: „Lubię moją siostrę, ponieważ...”, i popraw zdanie z powtórzeniem.
+- Intro: „Mój tata jest normalny” - poznalibyście go na dworcu? Opis ma pomóc zobaczyć człowieka.
+- Plan: wstęp (kto to, skąd go znam), wygląd (wzrost, sylwetka, twarz, włosy, ubiór, coś charakterystycznego),
+  zakończenie (co o nim myślę i dlaczego). Na opisie wymyślonego dziadka Stefana.
+- ZADANIE 1 (litera W / R / Z): rozsypane zdania z opisu - wstęp, wygląd czy zakończenie?
+- Od góry do dołu. Słówka zamiast „ładny” i „normalny”: piegowaty, zadarty nos, kręcone włosy, sportowy styl.
+  Unikamy powtórzeń „ma, ma, ma”.
+- ZADANIE 2 (wybór z dwóch): które słowo mówi więcej? „ma (ładne / kręcone) włosy”, ... cztery zdania.
+- Zgadywanka: opisujemy postać z bajki, klasa zgaduje.
+- ZADANIE 3 (jedno słowo): kto to? Trzy krótkie opisy postaci z bajek (Czerwony Kapturek, Pinokio, Smerf).
+  Zakończenie opisu zawsze z „dlaczego”.
 - Zapamiętaj!
 
 ### 10. `podsumowanie4-dzial3` - Podsumowanie rozdziału III
-- Przegląd: przedsiębiorczość i przysłowia, przymiotnik (co nazywa, odmiana, stopniowanie, nie razem),
-  opis przedmiotu i postaci, ogłoszenie, rodzina wyrazów, ó i u. Po jednej scenie na temat, 4 zadania
-  mieszane.
+- Przegląd po jednej scenie na temat: przedsiębiorczość i przysłowia, przymiotnik (co nazywa, odmiana,
+  stopniowanie, nie razem), opis przedmiotu i postaci, ogłoszenie, rodzina wyrazów, ó i u.
+- 3 zadania mieszane, inne niż w filmach tematycznych: ZADANIE 1 przymiotnik (forma i stopień, wybór),
+  ZADANIE 2 ó / u i nie razem (litera / razem-osobno), ZADANIE 3 ogłoszenie i opis (czego brakuje, wybór).
 
 ## Do zrobienia po akceptacji
 
-1. Bartek loguje się w oknie GWO (Chrome `tmp/chrome-gwo`, port 9224) - pobieramy JPG stron 99-123
-   i ramki zadań (`action-triggers`), wycinamy screeny `r3-sNN-*`.
-2. Czytanki: Grabarczyk (s. 99-101) i Vestly (s. 120-122) - tekst do `audio-czytanki`, audio ElevenLabs.
-3. Lekcje 30-39 w `src/data/textbook4rozdzial3.ts` (wzór `textbook4rozdzial2.ts`), zakładka „Rozdział III”.
-4. 10 filmów (porty renderu od 9374). Kredyty ElevenLabs: ok. 1100 na film, razem ok. 11 000 + czytanki.
+1. JPG stron 99-123 i ramki zadań przez API multibooka (Chrome `tmp/chrome-gwo`, port 9224), screeny
+   `r3-sNN-*` tylko przed filmem.
+2. Czytanki: Grabarczyk (s. 99-101) i Vestly (s. 120-122).
+3. Lekcje 30-39 w `src/data/textbook4rozdzial3.ts` (wzór `textbook4rozdzial2.ts`), karty w `cwiczenia4.ts`.
+4. 10 filmów, porty renderu 9410-9419. Kredyty: ok. 1600 na film.
 5. Zeszyt powtórzeniowy PDF + sprawdzian A-D.
