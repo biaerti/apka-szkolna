@@ -30,39 +30,19 @@ export function dutyStatus(duties: Duty[], periods: LessonPeriod[], now: Date): 
   return { kind: 'none' };
 }
 
-/** Ile przed koncem lekcji dzwoni alarm dyzuru. */
-export const DUTY_ALARM_LEAD_SEC = 3 * 60;
-
 export interface DutyAlarm {
   /** Jeden alarm na dyzur: data + numer lekcji, po ktorej jest przerwa. */
   key: string;
   duty: Duty;
-  /** 'soon' - koncowka lekcji przed dyzurem; 'now' - przerwa z dyzurem trwa. */
-  phase: 'soon' | 'now';
-  /** Do dzwonka (soon) albo do konca przerwy (now). */
+  /** Do konca przerwy. */
   remainingSec: number;
 }
 
-/**
- * Alarm dyzuru: ostatnie minuty lekcji, po ktorej jest dyzur, i cala przerwa
- * z dyzurem (jesli apka zostala otwarta dopiero na przerwie).
- */
-export function dutyAlarm(
-  duties: Duty[],
-  periods: LessonPeriod[],
-  now: Date,
-  leadSec = DUTY_ALARM_LEAD_SEC,
-): DutyAlarm | null {
+/** Alarm dyzuru: od dzwonka do konca przerwy z dyzurem. */
+export function dutyAlarm(duties: Duty[], periods: LessonPeriod[], now: Date): DutyAlarm | null {
   const status = dutyStatus(duties, periods, now);
-  if (status.kind === 'none') return null;
   const period = periodStatus(periods, now);
-  if (period.kind === 'none') return null;
-  if (status.kind === 'after-lesson' && period.remainingSec > leadSec) return null;
+  if (status.kind !== 'now' || period.kind !== 'break') return null;
   const day = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  return {
-    key: `${day}-${status.duty.afterPeriod}`,
-    duty: status.duty,
-    phase: status.kind === 'after-lesson' ? 'soon' : 'now',
-    remainingSec: period.remainingSec,
-  };
+  return { key: `${day}-${status.duty.afterPeriod}`, duty: status.duty, remainingSec: period.remainingSec };
 }

@@ -58,21 +58,19 @@ describe('nextRoom', () => {
 });
 
 describe('dutyAlarm', () => {
-  // 2026-10-05 to poniedzialek: dyzur po 4. lekcji (koniec 11:20).
-  it('dzwoni w ostatnich 3 minutach lekcji przed dyzurem', () => {
-    expect(dutyAlarm(dyzuryNa(at(5, 11, 16)), DEFAULT_PERIODS, at(5, 11, 16))).toBeNull();
-    expect(dutyAlarm(dyzuryNa(at(5, 11, 17)), DEFAULT_PERIODS, at(5, 11, 17))).toMatchObject({
+  // 2026-10-05 to poniedzialek: dyzur po 4. lekcji (11:20-11:25).
+  it('w trakcie lekcji przed dyzurem jeszcze cisza', () => {
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 19)), DEFAULT_PERIODS, at(5, 11, 19))).toBeNull();
+  });
+  it('od dzwonka do konca przerwy alarm trwa', () => {
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 20)), DEFAULT_PERIODS, at(5, 11, 20))).toMatchObject({
       key: '2026-10-05-4',
-      phase: 'soon',
-      remainingSec: 180,
+      remainingSec: 300,
       duty: { place: 'Pawilon 3, parter' },
     });
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 25)), DEFAULT_PERIODS, at(5, 11, 25))).toBeNull();
   });
-  it('na przerwie z dyzurem alarm trwa, po przerwie gasnie', () => {
-    expect(dutyAlarm(dyzuryNa(at(5, 11, 22)), DEFAULT_PERIODS, at(5, 11, 22))).toMatchObject({ key: '2026-10-05-4', phase: 'now' });
-    expect(dutyAlarm(dyzuryNa(at(5, 11, 40)), DEFAULT_PERIODS, at(5, 11, 40))).toBeNull();
-  });
-  it('bez dyzuru po lekcji cisza', () => {
-    expect(dutyAlarm(dyzuryNa(at(5, 9, 33)), DEFAULT_PERIODS, at(5, 9, 33))).toBeNull();
+  it('na przerwie bez dyzuru cisza', () => {
+    expect(dutyAlarm(dyzuryNa(at(5, 9, 37)), DEFAULT_PERIODS, at(5, 9, 37))).toBeNull();
   });
 });

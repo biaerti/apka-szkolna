@@ -87,6 +87,16 @@ export default {
   theme: {
     extend: {
       colors,
+      // Alarm dyzuru (DutyAlarm): pasek miga jaskrawo, zeby zlapac wzrok.
+      keyframes: {
+        miga: {
+          '0%, 49%': { backgroundColor: '#fbbf24', borderColor: '#b45309' },
+          '50%, 100%': { backgroundColor: '#fef3c7', borderColor: '#f59e0b' },
+        },
+      },
+      animation: {
+        miga: 'miga 1s step-end infinite',
+      },
     },
   },
   plugins: [
