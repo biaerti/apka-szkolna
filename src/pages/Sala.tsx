@@ -89,6 +89,7 @@ export function Sala() {
   const [flashId, setFlashId] = useState<string | null>(null);
   const [undo, setUndo] = useState<{ event: RecapEvent; label: string } | null>(null);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [search, setSearch] = useState('');
 
   const classmates = useMemo(
     () =>
@@ -97,6 +98,7 @@ export function Sala() {
         .sort((a, b) => a.lastName.localeCompare(b.lastName, 'pl') || a.firstName.localeCompare(b.firstName, 'pl')),
     [students, classId],
   );
+  const listStudents = useMemo(() => filterStudents(classmates, search), [classmates, search]);
   const grid = useMemo(() => (classId ? buildDeskGrid(seats, students, classId) : []), [seats, students, classId]);
   const labels = useMemo(() => (classId ? seatLabelByStudent(seats, classId) : new Map<string, string>()), [seats, classId]);
   const unseated = useMemo(() => (classId ? unseatedStudents(seats, students, classId) : []), [seats, students, classId]);
@@ -211,6 +213,7 @@ export function Sala() {
           value={classId}
           onChange={(e) => {
             selection.clear();
+            setSearch('');
             navigate(`/sala/${e.target.value}`);
           }}
           aria-label="Klasa"
@@ -276,14 +279,18 @@ export function Sala() {
           onTapPlace={handleTapPlace}
         />
       ) : (
-        <StudentList
-          students={classmates}
-          labels={labels}
-          ostrzezenia={ostrzezenia}
-          absentSet={absentSet}
-          flashId={flashId}
-          onTap={handleTapListed}
-        />
+        <>
+          <StudentSearch value={search} total={classmates.length} visible={listStudents.length} onChange={setSearch} />
+          <StudentList
+            students={listStudents}
+            labels={labels}
+            ostrzezenia={ostrzezenia}
+            absentSet={absentSet}
+            flashId={flashId}
+            emptyText={search.trim() ? 'Nikogo nie pasuje do szukania.' : undefined}
+            onTap={handleTapListed}
+          />
+        </>
       )}
 
       {(editing || view === 'lawki') && unseated.length > 0 && (
@@ -364,6 +371,7 @@ function StudentList({
   absentSet,
   flashId,
   selectedId,
+  emptyText = 'Brak uczniów w tej klasie.',
   onTap,
 }: {
   students: Student[];
@@ -372,10 +380,11 @@ function StudentList({
   absentSet: Set<string>;
   flashId: string | null;
   selectedId?: string;
+  emptyText?: string;
   onTap: (student: Student) => void;
 }) {
   if (students.length === 0) {
-    return <p className="text-sm text-gray-500">Brak uczniów w tej klasie.</p>;
+    return <p className="rounded-lg border border-dashed border-gray-300 bg-white px-3 py-4 text-center text-sm text-gray-500">{emptyText}</p>;
   }
   return (
     <ul className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
@@ -412,4 +421,66 @@ function StudentList({
       })}
     </ul>
   );
+}
+
+function StudentSearch({
+  value,
+  total,
+  visible,
+  onChange,
+}: {
+  value: string;
+  total: number;
+  visible: number;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="mb-3 rounded-lg border border-gray-200 bg-white px-3 py-2">
+      <label className="flex items-center gap-2">
+        <span className="shrink-0 text-base text-gray-400" aria-hidden="true">
+          ⌕
+        </span>
+        <input
+          type="search"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Szukaj po imieniu albo nazwisku"
+          aria-label="Szukaj ucznia"
+          className="min-w-0 flex-1 border-0 bg-transparent p-0 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none"
+        />
+        {value && (
+          <button type="button" onClick={() => onChange('')} className="shrink-0 rounded px-2 py-1 text-sm font-medium text-gray-500 active:bg-gray-100">
+            Wyczyść
+          </button>
+        )}
+      </label>
+      {value.trim() && (
+        <p className="mt-1 text-xs text-gray-500">
+          {visible} z {total}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function filterStudents(students: Student[], query: string): Student[] {
+  const needle = normalizeSearch(query);
+  if (!needle) return students;
+  return students.filter((st) =>
+    [
+      st.firstName,
+      st.lastName,
+      `${st.firstName} ${st.lastName}`,
+      `${st.lastName} ${st.firstName}`,
+      String(st.number),
+    ].some((part) => normalizeSearch(part).includes(needle)),
+  );
+}
+
+function normalizeSearch(value: string): string {
+  return value
+    .toLocaleLowerCase('pl')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim();
 }
