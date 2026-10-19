@@ -34,6 +34,7 @@ import { TablicaDzialu } from './pages/TablicaDzialu';
 import { AutoVulcanUwaga } from './components/uwagi/AutoVulcanUwaga';
 import { AutoRefreshMaterials } from './components/lessons/AutoRefreshMaterials';
 import { RemoveRemedialLessons } from './components/lessons/RemoveRemedialLessons';
+import { DutyAlarm } from './components/timetable/DutyAlarm';
 
 export default function App() {
   return (
@@ -45,6 +46,8 @@ export default function App() {
       {/* Gotowe materialy odswiezaja sie same po zmianie w kodzie. */}
       <AutoRefreshMaterials />
       <RemoveRemedialLessons />
+      {/* Alarm dyzuru - na kazdym ekranie, tez w prezentacji. */}
+      <DutyAlarm />
       <Routes>
       {/* Ekrany projektora - bez paska bocznego, pelny ekran */}
       {/* Trasa zostaje: uruchamia ja slajd "recap" w prezentacji lekcji (LessonPresent) */}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { dyzuryNa } from '../data/dyzury';
 import { DEFAULT_PERIODS } from '../data/timetableSeed';
-import { dutyStatus } from './dyzury';
+import { dutyAlarm, dutyStatus } from './dyzury';
 import { nextRoom } from './timetable';
 import type { TimetableEntry } from '../data/types';
 
@@ -54,5 +54,25 @@ describe('nextRoom', () => {
   it('w okienku i na przerwie - sala najblizszej lekcji', () => {
     expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 10, 0))).toEqual({ kind: 'next', room: '35' });
     expect(nextRoom(tt, DEFAULT_PERIODS, at(6, 11, 22))).toEqual({ kind: 'next', room: '30' });
+  });
+});
+
+describe('dutyAlarm', () => {
+  // 2026-10-05 to poniedzialek: dyzur po 4. lekcji (koniec 11:20).
+  it('dzwoni w ostatnich 3 minutach lekcji przed dyzurem', () => {
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 16)), DEFAULT_PERIODS, at(5, 11, 16))).toBeNull();
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 17)), DEFAULT_PERIODS, at(5, 11, 17))).toMatchObject({
+      key: '2026-10-05-4',
+      phase: 'soon',
+      remainingSec: 180,
+      duty: { place: 'Pawilon 3, parter' },
+    });
+  });
+  it('na przerwie z dyzurem alarm trwa, po przerwie gasnie', () => {
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 22)), DEFAULT_PERIODS, at(5, 11, 22))).toMatchObject({ key: '2026-10-05-4', phase: 'now' });
+    expect(dutyAlarm(dyzuryNa(at(5, 11, 40)), DEFAULT_PERIODS, at(5, 11, 40))).toBeNull();
+  });
+  it('bez dyzuru po lekcji cisza', () => {
+    expect(dutyAlarm(dyzuryNa(at(5, 9, 33)), DEFAULT_PERIODS, at(5, 9, 33))).toBeNull();
   });
 });
