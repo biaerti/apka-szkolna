@@ -13,6 +13,8 @@ export type MaterialyDzialu = {
   folder: string;
   /** Jest karta pracy na 2 strony (materialy/karta.mjs) - wersja do druku i z rozwiazaniami. */
   karta?: boolean;
+  /** Sprawdzian ma wersje na projektor do omowienia (materialy/karta.mjs <folder> sprawdzian-karta.mjs). */
+  sprawdzianProjektor?: boolean;
   /** false = dzial nie ma zeszytu powtorzeniowego (np. tylko karta pracy i sprawdzian). */
   zeszyt?: boolean;
 };
@@ -20,7 +22,7 @@ export type MaterialyDzialu = {
 export const MATERIALY_DZIALOW: MaterialyDzialu[] = [
   { grade: 'IV', dzial: 'Rozdział I. Poznajemy siebie i innych', folder: 'klasa4-rozdzial1', karta: true },
   { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2' },
-  { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszyt: false },
+  { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszyt: false, sprawdzianProjektor: true },
   { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2' },
 ];
 
@@ -48,4 +50,15 @@ export async function prywatnyUrl(folder: string, rodzaj: PrywatnyPlik): Promise
   const { data, error } = await getSupabase().storage.from('materialy').createSignedUrl(`${folder}-${rodzaj}.pdf`, 60 * 60);
   if (error || !data) throw new Error('Brak pliku w chmurze albo nie jesteś zalogowany.');
   return data.signedUrl;
+}
+
+/** Sprawdzian na projektor: HTML z prywatnego bucketu. Storage nie serwuje HTML jako strony,
+ * wiec pobieramy tresc i otwieramy ja jako blob (localStorage dziala wtedy jak na karcie). */
+export async function sprawdzianNaProjektorUrl(folder: string): Promise<string> {
+  if (!isSupabaseConfigured()) throw new Error('Plik jest w chmurze - zaloguj się.');
+  const { data, error } = await getSupabase().storage.from('materialy').createSignedUrl(`${folder}-sprawdzian-projektor.html`, 60);
+  if (error || !data) throw new Error('Brak pliku w chmurze albo nie jesteś zalogowany.');
+  const res = await fetch(data.signedUrl);
+  if (!res.ok) throw new Error('Nie udało się pobrać sprawdzianu.');
+  return URL.createObjectURL(new Blob([await res.text()], { type: 'text/html;charset=utf-8' }));
 }

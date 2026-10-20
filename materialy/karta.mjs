@@ -8,6 +8,8 @@
 // plik z treścią jest w .gitignore, bo repo jest publiczne).
 // Karta (nie sprawdzian) dostaje też wersję na projektor: public/materialy/karty/<plik>.html -
 // luki do wpisywania, klikane zakreślanie i podkreślanie, przycisk „Odpowiedź” przy każdym zadaniu.
+// Sprawdzian dostaje taką samą wersję do omówienia na projektorze, ale tylko w output/materialy/
+// (<plik>-projektor.html -> prywatny bucket przez wyslij.py), z przełącznikiem grup.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -117,7 +119,7 @@ function arkusz(tematyDanych, rozw, grupa) {
         : '';
       // Na sprawdzianie dla ucznia kratka na zdobyte punkty: [  ] / 3 pkt.
       const pkt = !zad.punkty ? ''
-        : grupa && !rozw ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
+        : grupa && !rozw && !ekran ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
         : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
         <div class="pol">${ekran ? '<button type="button" class="pokaz">Odpowiedź</button>' : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
@@ -146,10 +148,10 @@ function arkusz(tematyDanych, rozw, grupa) {
   const prawa = rozw
     ? '<div class="rozw">Rozwiązania</div>'
     : grupa || ekran ? '' : `<div class="imie">Imię i nazwisko: ..........................................</div>`;
-  return `<section class="arkusz${grupa ? ' sprawdzian' : ''}">
+  return `<section class="arkusz${grupa ? ' sprawdzian' : ''}"${grupa && ekran ? ` data-grupa="${grupa}"` : ''}>
 <div class="gora"><h1>${z(KARTA.tytul)}</h1><div class="pod">${z(KARTA.klasa)} · ${z(KARTA.podtytul)}</div>
 ${prawa}${grupa ? `<div class="grupa">Grupa ${grupa}</div>` : ''}</div>
-${grupa && !rozw ? `<div class="dane"><span>Imię i nazwisko:</span><span>Data:</span><span class="wynik">Wynik: ……… / ${suma} pkt</span></div>` : ''}
+${grupa && !rozw && !ekran ? `<div class="dane"><span>Imię i nazwisko:</span><span>Data:</span><span class="wynik">Wynik: ……… / ${suma} pkt</span></div>` : ''}
 ${tematy}
 </section>`;
 }
@@ -224,7 +226,7 @@ body { font-size: 10pt; line-height: 1.3; }
 :root { --czerw: #D62828; }
 ${ekran ? STYL_EKRAN : ''}
 </style></head><body${ekran ? ' class="ekran"' : ''}>
-${ekran ? `<div class="pasek"><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
+${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="button" class="grupa-btn" data-grupa="${w.grupa}">Grupa ${w.grupa}</button>`).join('')}<span class="odstep"></span><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">${KARTA.wersje ? 'Wyczyść' : 'Wyczyść kartę'}</button></div>
 <main id="karta">${tresc}</main>
 <script>${SKRYPT_EKRAN.replace('__KLUCZ__', `karta:${KARTA.plik}:${tresc.length}`)}</script>` : tresc}
 </body></html>`;
@@ -258,6 +260,9 @@ body.ekran { background: #e9e3d8; }
 .pasek { width: 210mm; margin: 3mm auto 0; display: flex; justify-content: flex-end; gap: 2mm; }
 .pasek button { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; cursor: pointer; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
 .pasek button.wl { background: var(--ziel); border-color: var(--ziel); color: #fff; }
+.pasek .odstep { flex: 1; }
+.pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
+.ekran .arkusz[hidden] { display: none; }
 @media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
 `;
 
@@ -307,8 +312,17 @@ document.getElementById('wszystko').onclick = function () {
   this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
   karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
 };
+// Sprawdzian: na ekranie jedna grupa naraz.
+var grupy = document.querySelectorAll('.grupa-btn');
+function grupa(g) {
+  grupy.forEach(function (b) { b.classList.toggle('wl', b.getAttribute('data-grupa') === g); });
+  karta.querySelectorAll('.arkusz[data-grupa]').forEach(function (a) { a.hidden = a.getAttribute('data-grupa') !== g; });
+  try { localStorage.setItem(KLUCZ_ZAPISU + ':grupa', g); } catch (e) {}
+}
+grupy.forEach(function (b) { b.onclick = function () { grupa(b.getAttribute('data-grupa')); window.scrollTo(0, 0); }; });
+if (grupy.length) { var g0 = null; try { g0 = localStorage.getItem(KLUCZ_ZAPISU + ':grupa'); } catch (e) {} grupa(g0 || grupy[0].getAttribute('data-grupa')); }
 document.getElementById('wyczysc').onclick = function () {
-  if (!confirm('Wyczyścić wszystko, co jest wpisane na karcie?')) return;
+  if (!confirm('Wyczyścić wszystko, co jest wpisane?')) return;
   try { localStorage.removeItem(KLUCZ_ZAPISU); } catch (e) {}
   location.reload();
 };
@@ -331,6 +345,13 @@ if (!KARTA.wersje) {
   writeFileSync(join(dir, `${KARTA.plik}.html`), strona(false), 'utf-8');
   ekran = false;
   console.log('Gotowe:', join(dir, `${KARTA.plik}.html`));
+}
+// Sprawdzian na projektor (do omówienia) - tylko output/, do prywatnego bucketu, nigdy public/.
+if (KARTA.wersje) {
+  ekran = true;
+  writeFileSync(join(outDir, `${KARTA.plik}-projektor.html`), strona(false), 'utf-8');
+  ekran = false;
+  console.log('Gotowe:', join(outDir, `${KARTA.plik}-projektor.html`));
 }
 // Sprawdzian: dodatkowo osobny PDF dla każdej grupy (łatwiej drukować).
 for (const w of KARTA.wersje ?? []) {

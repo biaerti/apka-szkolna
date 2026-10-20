@@ -4,6 +4,8 @@ Uzycie:
   python materialy/wyslij.py klasa4-rozdzial1     # <folder>-sprawdzian(-klucz).pdf, <folder>-karta(-rozwiazania).pdf
   python materialy/wyslij.py --zaloz-bucket       # jednorazowo: utworz bucket
 
+Sprawdzian w szacie karty ma tez wersje na projektor: <folder>-sprawdzian-projektor.html
+(apka pobiera ja przez podpisany URL i otwiera jako blob, bo Storage nie serwuje HTML jako strony).
 Pliki bierze z output/materialy/ (po node materialy/sprawdzian.mjs i karta.mjs <folder>).
 Apka otwiera je przez podpisany URL (pasek "Po dziale" nad lista lekcji,
 src/data/materialyDzialow.ts). Odczyt dla zalogowanych daje polityka z
@@ -47,10 +49,15 @@ def main() -> None:
     key = e.get("SUPABASE_SERVICE_ROLE_KEY") or sys.exit("Brak SUPABASE_SERVICE_ROLE_KEY w .env.local")
     if "--zaloz-bucket" in sys.argv:
         body = json.dumps({"id": "materialy", "name": "materialy", "public": False,
-                           "file_size_limit": 52428800, "allowed_mime_types": ["application/pdf"]}).encode()
+                           "file_size_limit": 52428800, "allowed_mime_types": ["application/pdf", "text/html"]}).encode()
         print(zapytanie(f"{url}/storage/v1/bucket", key, body, "application/json"))
         return
     for folder in sys.argv[1:]:
+        projektor = PDF / f"{folder}-sprawdzian-projektor.html"
+        if projektor.exists():
+            wynik = zapytanie(f"{url}/storage/v1/object/materialy/{projektor.name}", key, projektor.read_bytes(),
+                              "text/html", {"x-upsert": "true"})
+            print(("ok  " if not wynik.startswith("BLAD") else "") + projektor.name + ("" if not wynik.startswith("BLAD") else f" {wynik}"))
         for nazwa in (f"{folder}-sprawdzian.pdf", f"{folder}-sprawdzian-klucz.pdf",
                       f"{folder}-karta.pdf", f"{folder}-karta-rozwiazania.pdf"):
             plik = PDF / nazwa

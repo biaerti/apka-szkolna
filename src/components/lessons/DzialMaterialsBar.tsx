@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { kartaNaProjektorUrl, materialyDzialu, prywatnyUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
+import { kartaNaProjektorUrl, materialyDzialu, prywatnyUrl, sprawdzianNaProjektorUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
 
 export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: string }) {
   const [info, setInfo] = useState<string | null>(null);
@@ -21,12 +21,14 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
     }
   }
 
-  async function otworz(rodzaj: PrywatnyPlik) {
+  async function otworz(rodzaj: PrywatnyPlik | 'sprawdzian-projektor') {
     if (!materialy) return;
     // Okno otwieramy od razu (w kliknieciu), bo po await przegladarka blokuje popup.
     const okno = window.open('', '_blank');
     try {
-      const url = await prywatnyUrl(materialy.folder, rodzaj);
+      const url = rodzaj === 'sprawdzian-projektor'
+        ? await sprawdzianNaProjektorUrl(materialy.folder)
+        : await prywatnyUrl(materialy.folder, rodzaj);
       if (okno) okno.location.href = url;
       else window.location.href = url;
       setInfo(null);
@@ -60,6 +62,9 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
             </>
           )}
           <button type="button" onClick={() => otworz('sprawdzian')} className={btn}>Sprawdzian</button>
+          {materialy.sprawdzianProjektor && (
+            <button type="button" onClick={() => otworz('sprawdzian-projektor')} className={btn}>Sprawdzian na projektor</button>
+          )}
           <button type="button" onClick={() => otworz('sprawdzian-klucz')} className={btn}>Klucz</button>
         </>
       )}
