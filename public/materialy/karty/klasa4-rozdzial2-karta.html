@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>Przypadki</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap&subset=latin-ext');
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap&subset=latin-ext');
+:root { --krem: #FFF7EA; --pom: #F58220; --roz: #E8425A; --ciemny: #4A3B32; --szary: #7a6a5c; --ramka: #e2d3bd; --ziel: #2E9E5B; --nieb: #3C7DD9; --fiol: #8A4FD0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; color: var(--ciemny); font-size: 11.5pt; line-height: 1.4; }
+h1, h2, h3 { font-family: 'Baloo 2', sans-serif; line-height: 1.1; }
+mark { background: #ffe066; border-radius: 3px; padding: 0 2px; color: inherit; }
+s { color: var(--roz); }
+
+@page { size: A4; margin: 9mm 10mm 9mm; }
+body { font-size: 10pt; line-height: 1.3; }
+.gora { display: flex; align-items: flex-end; gap: 5mm; border-bottom: 2.5px solid var(--ciemny); padding-bottom: 1.5mm; }
+.gora h1 { font-size: 19pt; }
+.gora .pod { font-family: 'Baloo 2'; font-size: 12pt; color: var(--szary); }
+.gora h1, .gora .pod { white-space: nowrap; }
+.gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; overflow: hidden; min-width: 0; }
+.gora .rozw { margin-left: auto; font-family: 'Caveat'; font-size: 20pt; color: var(--czerw); }
+.temat { display: grid; grid-template-columns: 58mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.wiedza { background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
+.wiedza h2 { font-size: 12.5pt; color: var(--k); margin-bottom: 1mm; display: flex; align-items: center; gap: 1.8mm; }
+.wiedza h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.wiedza p + p { margin-top: 1mm; }
+.zad + .zad { margin-top: 1.8mm; }
+.pol { font-weight: 800; }
+.pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.linie { margin: .6mm 0 0 2mm; line-height: 2; }
+.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid var(--k45); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
+.wiersz .przerwa { height: 2mm; }
+.pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
+.pyt .p { font-weight: 700; }
+.pyt .o .luka { display: block; min-width: 0 !important; max-width: 95mm; margin: 0; }
+.linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
+.linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
+.linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }
+.luka { display: inline-block; border-bottom: 1.3px dotted #8d7b6b; height: 5.2mm; vertical-align: -1.2mm; text-align: center; margin: 0 .8mm; position: relative; }
+.luka.dluga { min-width: 0 !important; display: block; margin: .3mm 0 0 0; }
+.l:has(.luka.dluga) { margin-bottom: .6mm; }
+.pis { font-family: 'Caveat'; font-weight: 700; font-size: 14.5pt; color: var(--czerw); line-height: 1; white-space: nowrap; padding: 0 1mm; }
+.luka.dluga .pis { white-space: normal; }
+.wybor { display: inline-flex; flex-wrap: wrap; gap: 1.2mm 1.5mm; margin-left: .5mm; }
+.opc { white-space: nowrap; padding: 0 1.6mm; border: 1.5px solid transparent; border-radius: 99px; background: #f6efe4; line-height: 1.5; }
+.opc.zakr { border-color: var(--czerw); background: #fff; }
+.podkr { text-decoration: underline 2px var(--czerw); text-underline-offset: 2px; }
+.tab { margin: 1mm 0 0 2mm; border-collapse: collapse; }
+.tab th { background: var(--k); color: #fff; font-family: 'Baloo 2'; font-size: 9.5pt; padding: .4mm 2.5mm; text-align: left; }
+.tab td { border: 1px solid var(--ramka); padding: .3mm 1.5mm; height: 7mm; }
+.tab:not(:has(thead)) td { min-width: 28mm; }
+.tab:not(:has(thead)) tr:first-child td { background: var(--k12); }
+.tab td .luka { border-bottom: none; }
+.tab .wybor { flex-wrap: nowrap; }
+.tab .opc { font-size: 9pt; padding: 0 1.3mm; }
+.tab td:first-child { white-space: nowrap; }
+.stopka { margin-top: 2mm; text-align: center; font-size: 8.5pt; color: var(--szary); }
+.arkusz + .arkusz { break-before: page; }
+.gora .grupa { margin-left: auto; font-family: 'Baloo 2'; font-weight: 800; font-size: 15pt; color: #fff; background: var(--roz); border-radius: 2mm; padding: 0 3mm; line-height: 1.35; align-self: center; white-space: nowrap; }
+.gora .rozw + .grupa { margin-left: 0; }
+.dane { display: grid; grid-template-columns: 3fr 1.2fr 1.3fr; gap: 6mm; margin-top: 2mm; font-size: 9.5pt; color: var(--szary); }
+.dane span { border-bottom: 1px dotted var(--szary); padding-bottom: .5mm; }
+.temat.bez-wiedzy { display: block; break-inside: auto; padding: 1.8mm 0; }
+.sprawdzian .linie { line-height: 1.8; }
+.temat.bez-wiedzy .zad { break-inside: avoid; }
+.temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
+.temat.bez-wiedzy > h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.pol .pkt.ocena { display: inline-flex; align-items: center; gap: 1mm; font-size: 9.5pt; color: var(--ciemny); border: 0; padding: 0; line-height: 1.2; }
+.pol .pkt .kratka { display: inline-block; width: 8mm; height: 4.4mm; border: 1.3px solid var(--ciemny); border-radius: 1mm; background: #fff; }
+.pol .pkt { float: right; font-weight: 700; font-size: 8.5pt; color: var(--szary); border: 1px solid var(--ramka); border-radius: 2mm; padding: 0 1.5mm; margin-left: 2mm; }
+.lin { border-bottom: 1px solid #b9a894; height: 8mm; margin-left: 2mm; }
+.sprawdzian .tab td { height: 6.5mm; }
+.wzor { margin: 1mm 0 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--czerw); line-height: 1.35; }
+.kryt { margin: 1mm 0 0 2mm; font-size: 9pt; color: var(--szary); }
+.kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
+.dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
+:root { --czerw: #D62828; }
+
+body.ekran { background: #e9e3d8; }
+.ekran .arkusz { width: 210mm; margin: 4mm auto 10mm; background: #fff; padding: 8mm 10mm; box-shadow: 0 1mm 4mm rgba(0,0,0,.15); }
+.ekran .temat { break-inside: auto; }
+.ekran .zadania { min-width: 0; }
+.ekran .tab .wybor { flex-wrap: wrap; }
+.ekran .luka { cursor: text; outline: none; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--nieb); line-height: 1; padding: 0 1mm; white-space: nowrap; }
+.ekran .luka.dluga { white-space: normal; height: auto; min-height: 5.2mm; }
+.ekran .luka:focus { background: #fff6cf; }
+.ekran .luka.odp { color: var(--ziel); }
+.ekran .podp { font-family: 'Caveat'; font-weight: 700; font-size: 14pt; color: var(--ziel); margin-left: 1.5mm; }
+.ekran .opc, .ekran .sl { cursor: pointer; user-select: none; }
+.ekran .opc.zakr { border-color: var(--nieb); background: #fff; }
+.ekran .sl.podkr { text-decoration: underline 2px var(--nieb); text-underline-offset: 2px; }
+.ekran .opc.dobrze { border-color: var(--ziel); background: #fff; }
+.ekran .opc.zle { border-color: var(--czerw); text-decoration: line-through; }
+.ekran .sl.dobrze { text-decoration: underline 2px var(--ziel); text-underline-offset: 2px; }
+.ekran .sl.zle { text-decoration: line-through 2px var(--czerw); }
+.ekran .pisz { margin-left: 2mm; outline: none; padding: 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 17pt; color: var(--nieb); line-height: 8mm; overflow: hidden;
+  background: repeating-linear-gradient(transparent 0, transparent calc(8mm - 1px), #b9a894 calc(8mm - 1px), #b9a894 8mm); }
+.ekran .wzor { color: var(--ziel); }
+.ekran .wzor .podkr { text-decoration-color: var(--ziel); }
+.ekran .wzor .kolko { border-color: var(--ziel); }
+.ekran .pokaz { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--szary); background: #fff; border: 1px solid var(--ramka); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .pokaz.wl { color: #fff; background: var(--ziel); border-color: var(--ziel); }
+.pasek { width: 210mm; margin: 3mm auto 0; display: flex; justify-content: flex-end; gap: 2mm; }
+.pasek button { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; cursor: pointer; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+.pasek button.wl { background: var(--ziel); border-color: var(--ziel); color: #fff; }
+.pasek .odstep { flex: 1; }
+.pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
+.ekran .arkusz[hidden] { display: none; }
+@media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+
+</style></head><body class="ekran">
+<div class="pasek"><span class="odstep"></span><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
+<main id="karta"><section class="arkusz">
+<div class="gora"><h1>Przypadki</h1><div class="pod">Klasa 4 · Odmiana i rozpoznawanie</div>
+</div>
+
+<section class="temat" style="--k:#8A4FD0;--k9:#f4effb;--k12:#f1eaf9;--k45:#cab0ea">
+      <div class="wiedza"><h2><span>1</span>Odmiana przez przypadki</h2><p>Rzeczownik zmienia formę: <mark>jeż</mark>, nie ma <mark>jeża</mark>, idę z <mark>jeżem</mark>. To <b>odmiana przez przypadki</b>. Jest ich siedem:</p><p><b>M</b> mianownik - kto? co? (jest)</p><p><b>D</b> dopełniacz - kogo? czego? (nie ma)</p><p><b>C</b> celownik - komu? czemu? (przyglądam się)</p><p><b>B</b> biernik - kogo? co? (widzę)</p><p><b>N</b> narzędnik - z kim? z czym? (idę z)</p><p><b>Ms</b> miejscownik - o kim? o czym? (mówię o)</p><p><b>W</b> wołacz - o!</p><p>Kolejność: <b>M</b>ama <b>D</b>aje <b>C</b>ukierki, <b>B</b>asia <b>N</b>ajpierw <b>M</b>amie <b>W</b>ręcza.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">1.1</span> Odmień wyrazy przez przypadki. Pomoże ci słowo w nawiasie.</div>
+        
+        
+        <table class="tab"><thead><tr><th>przypadek</th><th>jeż</th><th>żaba</th><th>jajko</th></tr></thead>
+  <tbody><tr><td><b>M</b> (jest)</td><td>jeż</td><td>żaba</td><td>jajko</td></tr><tr><td><b>D</b> (nie ma)</td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jeża"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="żaby"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jajka"></span></td></tr><tr><td><b>C</b> (przyglądam się)</td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jeżowi"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="żabie"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jajku"></span></td></tr><tr><td><b>B</b> (widzę)</td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jeża"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="żabę"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jajko"></span></td></tr><tr><td><b>N</b> (idę z)</td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jeżem"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="żabą"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jajkiem"></span></td></tr><tr><td><b>Ms</b> (mówię o)</td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jeżu"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="żabie"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jajku"></span></td></tr><tr><td><b>W</b> (o!)</td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jeżu!"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="żabo!"></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="jajko!"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">1.2</span> Dopisz pytania przypadków.</div>
+        
+        <div class="linie k2"><div class="l">dopełniacz ➜ <span class="luka" style="min-width:32mm" contenteditable="true" spellcheck="false" data-odp="kogo? czego?"></span></div><div class="l">biernik ➜ <span class="luka" style="min-width:32mm" contenteditable="true" spellcheck="false" data-odp="kogo? co?"></span></div><div class="l">celownik ➜ <span class="luka" style="min-width:32mm" contenteditable="true" spellcheck="false" data-odp="komu? czemu?"></span></div><div class="l">narzędnik ➜ <span class="luka" style="min-width:32mm" contenteditable="true" spellcheck="false" data-odp="z kim? z czym?"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#1FA58A;--k9:#ebf7f4;--k12:#e4f4f1;--k45:#9ad7ca">
+      <div class="wiedza"><h2><span>2</span>Rozpoznaj przypadek</h2><p>Znajdź słowo, od którego zależy rzeczownik (najczęściej czasownik), i <b>zadaj od niego pytanie</b>: Czekam na (kogo? co?) <mark>autobus</mark> - biernik.</p><p>Uważaj na podobne pytania. <b>Kto? co?</b> - mianownik, ten, kto coś robi: <mark>Kot</mark> śpi. <b>Kogo? co?</b> - biernik: Głaszczę <mark>kota</mark>.</p><p>Po <b>nie</b> często jest dopełniacz: mam kanapkę ➜ nie mam <mark>kanapki</mark>.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">2.1</span> W jakim przypadku jest podkreślony wyraz? Wpisz skrót: M, D, C, B, N, Ms, W.</div>
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="M"></span> <u>Wiewiórka</u> zbiera orzechy.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="D"></span> Nie lubię <u>szpinaku</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="C"></span> Pomagam <u>dziadkowi</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="B"></span> Zbudowaliśmy <u>szałas</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="N"></span> Kroję chleb <u>nożem</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="Ms"></span> Śnię o <u>wakacjach</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="W"></span> <u>Piotrze</u>, zamknij okno!</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="N"></span> Rower stoi przed <u>domem</u>.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">2.2</span> Zakreśl formę, która pasuje do zdania.</div>
+        
+        <div class="linie"><div class="l">Jutro jadę nad jezioro z <span class="wybor"><span class="opc">kuzyn</span><span class="opc">kuzyna</span><span class="opc" data-ok="1">kuzynem</span></span>.</div><div class="l">Nigdzie nie widzę <span class="wybor"><span class="opc">kot</span><span class="opc" data-ok="1">kota</span><span class="opc">kotem</span></span>.</div><div class="l">Daję kość <span class="wybor"><span class="opc">psa</span><span class="opc" data-ok="1">psu</span><span class="opc">psem</span></span>.</div><div class="l">Na ławce siedzi <span class="wybor"><span class="opc" data-ok="1">sąsiadka</span><span class="opc">sąsiadkę</span><span class="opc">sąsiadce</span></span>.</div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#E0679A;--k9:#fcf1f6;--k12:#fbedf3;--k45:#f1bbd2">
+      <div class="wiedza"><h2><span>3</span>Liczba mnoga i wołacz</h2><p>W liczbie mnogiej pytania są te same: <mark>koty</mark>, (nie ma) <mark>kotów</mark>, <mark>kotom</mark>, (widzę) <mark>koty</mark>, z <mark>kotami</mark>, o <mark>kotach</mark>, <mark>koty</mark>!</p><p>W dopełniaczu bywa <b>bez końcówki</b>: nie ma <mark>gruszek</mark> (nie: gruszków).</p><p>Wołaczem <b>zwracamy się</b> do kogoś: Zosia ➜ <mark>Zosiu</mark>!</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">3.1</span> Wpisz wyraz z nawiasu w odpowiedniej formie.</div>
+        
+        <div class="linie"><div class="l">W koszyku nie ma <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="gruszek"></span> (gruszki).</div><div class="l">Idę na spacer z <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="psami"></span> (psy).</div><div class="l">Czytam o <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="dinozaurach"></span> (dinozaury).</div><div class="l">Zgubiłem parę <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="rękawiczek"></span> (rękawiczki).</div><div class="l">Przyglądam się <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="mrówkom"></span> (mrówki).</div><div class="l">Kupię kilo <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="ziemniaków"></span> (ziemniaki).</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">3.2</span> Zawołaj poprawnie.</div>
+        
+        <div class="linie k2"><div class="l">Kasia ➜ <span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="Kasiu!"></span></div><div class="l">Wojtek ➜ <span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="Wojtku!"></span></div><div class="l">pies ➜ <span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="psie!"></span></div><div class="l">kot ➜ <span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="kocie!"></span></div><div class="l">pani Ewa ➜ <span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="pani Ewo!"></span></div><div class="l">pan Marek ➜ <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="panie Marku!"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section>
+</section></main>
+<script>
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial2-karta:10451';
+// Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
+function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
+window.addEventListener('resize', dopasuj); dopasuj();
+try { var zapis = localStorage.getItem(KLUCZ_ZAPISU); if (zapis) karta.innerHTML = zapis; } catch (e) {}
+var czas;
+function zapisz() { clearTimeout(czas); czas = setTimeout(function () { try { localStorage.setItem(KLUCZ_ZAPISU, karta.innerHTML); } catch (e) {} }, 300); }
+function norm(t) { return t.replace(/^np\.\s*/i, '').replace(/[\s.,!?…]+/g, ' ').trim().toLowerCase(); }
+function pokaz(zad, wl) {
+  zad.querySelector('.pokaz').classList.toggle('wl', wl);
+  zad.querySelectorAll('.luka').forEach(function (l) {
+    var nast = l.nextSibling;
+    if (nast && nast.classList && nast.classList.contains('podp')) nast.remove();
+    if (l.classList.contains('odp')) { l.textContent = ''; l.classList.remove('odp'); }
+    if (!wl) return;
+    var odp = l.getAttribute('data-odp'), wpis = l.textContent.trim();
+    if (!wpis) { l.textContent = odp; l.classList.add('odp'); }
+    else if (norm(wpis) !== norm(odp)) { var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s); }
+  });
+  zad.querySelectorAll('.opc, .sl').forEach(function (o) {
+    var ok = o.hasAttribute('data-ok'), wybrane = o.classList.contains('zakr') || o.classList.contains('podkr');
+    o.classList.toggle('dobrze', wl && ok);
+    o.classList.toggle('zle', wl && !ok && wybrane);
+  });
+  var w = zad.querySelector(':scope > .wzor');
+  if (w) w.remove();
+  var t = zad.querySelector('template');
+  if (wl && t) zad.appendChild(t.content.cloneNode(true));
+}
+karta.addEventListener('click', function (e) {
+  var b = e.target.closest('.pokaz');
+  if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var o = e.target.closest('.opc');
+  if (o) { o.classList.toggle('zakr'); zapisz(); return; }
+  var s = e.target.closest('.sl');
+  if (s) { s.classList.toggle('podkr'); zapisz(); }
+});
+karta.addEventListener('input', zapisz);
+karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
+document.getElementById('wszystko').onclick = function () {
+  var wl = !this.classList.contains('wl');
+  this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
+  karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
+};
+// Sprawdzian: na ekranie jedna grupa naraz.
+var grupy = document.querySelectorAll('.grupa-btn');
+function grupa(g) {
+  grupy.forEach(function (b) { b.classList.toggle('wl', b.getAttribute('data-grupa') === g); });
+  karta.querySelectorAll('.arkusz[data-grupa]').forEach(function (a) { a.hidden = a.getAttribute('data-grupa') !== g; });
+  try { localStorage.setItem(KLUCZ_ZAPISU + ':grupa', g); } catch (e) {}
+}
+grupy.forEach(function (b) { b.onclick = function () { grupa(b.getAttribute('data-grupa')); window.scrollTo(0, 0); }; });
+if (grupy.length) { var g0 = null; try { g0 = localStorage.getItem(KLUCZ_ZAPISU + ':grupa'); } catch (e) {} grupa(g0 || grupy[0].getAttribute('data-grupa')); }
+document.getElementById('wyczysc').onclick = function () {
+  if (!confirm('Wyczyścić wszystko, co jest wpisane?')) return;
+  try { localStorage.removeItem(KLUCZ_ZAPISU); } catch (e) {}
+  location.reload();
+};
+</script>
+</body></html>
