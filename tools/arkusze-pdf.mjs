@@ -17,7 +17,7 @@ const linie = (n) => '<div class="linia"></div>'.repeat(n);
 
 function zadanie([n, prompt, lines, options]) {
   let html = `<p class="zad">${n ? `<b class="nr">${n}.</b> ` : ''}${nl(prompt)}</p>`;
-  if (Array.isArray(options)) html += options.map((o) => `<p class="opcja">□ ${esc(o)}</p>`).join('');
+  if (Array.isArray(options)) html += `<div class="opcje">${options.map((o) => `<p class="opcja"><span class="kratka"></span>${esc(o)}</p>`).join('')}</div>`;
   if (options && options.table) {
     const [naglowek, wiersze] = options.table;
     html += `<table class="siatka"><tr>${naglowek.map((h) => `<th class="${h ? 'kol' : ''}">${esc(h)}</th>`).join('')}</tr>`
@@ -26,6 +26,20 @@ function zadanie([n, prompt, lines, options]) {
   }
   return html + linie(lines || 0);
 }
+
+const NUMERY = Array.from({ length: 12 }, (_, i) => i + 1);
+
+// Koniec arkusza robimy razem po sprawdzeniu - wyraznie oddzielony, zeby nikt nie robil go w trakcie.
+const PO_SPRAWDZENIU = `
+  <div class="koniec">
+    <p class="koniec-tytul">Po wspólnym sprawdzeniu <span>- tę część robimy razem na końcu lekcji</span></p>
+    <p class="koniec-pol"><b>1. Policz plusy.</b> Przy sprawdzaniu postaw + pod numerem każdego dobrze zrobionego zadania.</p>
+    <table class="plusy"><tr><th>zadanie</th>${NUMERY.map((n) => `<td class="n">${n}</td>`).join('')}<th class="razem">razem</th></tr>
+      <tr><th>+</th>${NUMERY.map(() => '<td></td>').join('')}<td class="wynik">&nbsp;&nbsp;&nbsp;&nbsp;/ 12</td></tr></table>
+    <p class="progi">4-8 zadań = <b>+</b>     9-10 zadań = <b>++</b>     11-12 zadań = <b>+++</b>          Moje plusy: <span class="wpisz"></span></p>
+    <p class="koniec-pol"><b>2. Zamaluj numer zadania, które teraz rozumiem lepiej.</b></p>
+    <p class="kolka">${NUMERY.map((n) => `<span>${n}</span>`).join('')}</p>
+  </div>`;
 
 function strona(ark) {
   const poziom = ark.level ? `${ark.level}  |  ` : '';
@@ -52,13 +66,7 @@ function strona(ark) {
   <h2>Napisz krótko</h2>
   <p class="zad"><b class="nr">12.</b> ${esc(ark.writing)}</p>
   ${linie(ark.writing_lines)}
-  <h3>Popraw jedno zadanie</h3>
-  <p class="zad">Po wspólnym sprawdzeniu wybierz jedno zadanie, w którym był błąd. Zapisz poprawną odpowiedź i krótkie wyjaśnienie.</p>
-  ${linie(3)}
-  <h3>Na koniec</h3>
-  <p class="zad"><b>Zaznacz:</b> □ pracowałem samodzielnie   □ potrzebowałem podpowiedzi   □ chcę przećwiczyć to jeszcze raz</p>
-  <p class="zad"><b>Jedno zadanie, które teraz rozumiem lepiej:</b></p>
-  ${linie(2)}
+  ${PO_SPRAWDZENIU}
   <p class="stopka">${esc(stopka)}</p>
 </section>`;
 }
@@ -80,7 +88,23 @@ h3 { font-size: 11.5pt; color: #000; margin: 7pt 0 3pt; }
 .tekst { text-indent: 5.5mm; margin-bottom: 4pt; line-height: 1.3; white-space: normal; text-align: justify; }
 .zad { margin: 3pt 0 2pt; font-size: 10.3pt; white-space: pre-wrap; }
 .nr { color: #1F4E78; }
-.opcja { margin-left: 5.5mm; font-size: 10.1pt; margin-bottom: 1pt; white-space: pre-wrap; }
+.opcje { margin-bottom: 7pt; }
+.opcja { margin-left: 5.5mm; font-size: 10.1pt; margin-bottom: 2pt; white-space: pre-wrap; display: flex; align-items: center; }
+.kratka { display: inline-block; flex: none; width: 4mm; height: 4mm; border: 1.3px solid #374151; border-radius: 0.6mm; margin-right: 2.2mm; }
+.koniec { margin-top: 10pt; border: 1.5px dashed #1F4E78; border-radius: 2.5mm; background: #F4F8FB; padding: 6pt 9pt 8pt; }
+.koniec-tytul { font-size: 11.5pt; font-weight: 700; color: #1F4E78; margin-bottom: 4pt; }
+.koniec-tytul span { font-weight: 400; font-size: 9.5pt; color: #4B5563; }
+.koniec-pol { font-size: 10pt; margin: 4pt 0 3pt; }
+.plusy { border-collapse: collapse; margin: 2pt 0 4pt; background: #fff; }
+.plusy th, .plusy td { border: 1px solid #9CA3AF; font-size: 9.5pt; text-align: center; }
+.plusy th { padding: 0 5pt; font-weight: 600; color: #374151; background: #EAF3F8; }
+.plusy td { width: 9mm; height: 6mm; }
+.plusy td.n { height: 5mm; font-weight: 700; color: #1F4E78; }
+.plusy td.wynik { width: 20mm; text-align: right; padding-right: 4pt; font-weight: 700; }
+.progi { font-size: 9.8pt; white-space: pre-wrap; }
+.wpisz { display: inline-block; width: 22mm; border-bottom: 1.2px solid #374151; }
+.kolka { display: flex; gap: 3.2mm; margin-top: 2pt; }
+.kolka span { width: 8mm; height: 8mm; border: 1.3px solid #374151; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10pt; background: #fff; }
 .linia { height: 7.2mm; border-bottom: 1.2px dotted #9CA3AF; }
 .siatka { border-collapse: collapse; margin: 3pt auto 4pt; }
 .siatka th, .siatka td { border: 1px solid #D9D9D9; padding: 4pt 6pt; height: 9.5mm; font-size: 9.8pt; text-align: left; }

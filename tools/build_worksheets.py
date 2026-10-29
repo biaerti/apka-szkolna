@@ -208,11 +208,12 @@ def add_task(doc, number, prompt, lines=0, options=None, compact=False):
         add_text(p, f"{number}. ", size=10.3, bold=True, color=BLUE)
     add_text(p, prompt, size=10.3)
     if options:
-        for option in options:
+        for i, option in enumerate(options):
             op = doc.add_paragraph()
             op.paragraph_format.left_indent = Cm(0.55)
-            set_paragraph(op, after=1, line=1.0)
-            add_text(op, f"□ {option}", size=10.1)
+            set_paragraph(op, after=7 if i == len(options) - 1 else 1.5, line=1.0)
+            add_text(op, "☐ ", size=13)
+            add_text(op, option, size=10.1)
     for _ in range(lines):
         lp = doc.add_paragraph()
         set_paragraph(lp, after=2, line=1.0)
@@ -262,21 +263,65 @@ def add_page_two_header(doc, number, title):
     add_text(p, f"Arkusz {number}  {title}  |  strona 2", size=9, bold=True, color="4B5563")
 
 
-def add_reflection(doc):
-    add_subsection(doc, "Na koniec")
-    p = doc.add_paragraph()
-    set_paragraph(p, after=3)
-    add_text(p, "Zaznacz: ", size=9.8, bold=True)
-    add_text(p, "□ pracowałem samodzielnie   □ potrzebowałem podpowiedzi   □ chcę przećwiczyć to jeszcze raz", size=9.8)
-    p = doc.add_paragraph()
-    set_paragraph(p, after=1)
-    add_text(p, "Jedno zadanie, które teraz rozumiem lepiej:", size=9.8, bold=True)
-    p = doc.add_paragraph()
-    set_paragraph(p, after=0)
-    add_text(p, "................................................................................................................................", size=9, color="9CA3AF")
-    p = doc.add_paragraph()
-    set_paragraph(p, after=0)
-    add_text(p, "................................................................................................................................", size=9, color="9CA3AF")
+def add_after_check(doc):
+    """Koniec arkusza robimy razem po sprawdzeniu - w osobnej ramce, zeby nikt nie robil go w trakcie."""
+    box = doc.add_table(rows=1, cols=1)
+    box.alignment = WD_TABLE_ALIGNMENT.CENTER
+    cell = box.rows[0].cells[0]
+    cell.width = Cm(17.6)
+    set_cell_shading(cell, "F4F8FB")
+    set_cell_borders(cell, color=BLUE, size="10")
+    for edge in cell._tc.tcPr.find(qn("w:tcBorders")):
+        edge.set(qn("w:val"), "dashed")
+    set_cell_margins(cell, top=120, start=180, bottom=140, end=180)
+
+    p = cell.paragraphs[0]
+    set_paragraph(p, after=4)
+    add_text(p, "Po wspólnym sprawdzeniu ", size=11.5, bold=True, color=BLUE)
+    add_text(p, "- tę część robimy razem na końcu lekcji", size=9.5, color="4B5563")
+
+    p = cell.add_paragraph()
+    set_paragraph(p, after=2)
+    add_text(p, "1. Policz plusy. ", size=10, bold=True)
+    add_text(p, "Przy sprawdzaniu postaw + pod numerem każdego dobrze zrobionego zadania.", size=10)
+    grid = cell.add_table(rows=2, cols=14)
+    grid.autofit = False
+    for r_idx, row in enumerate([["zadanie"] + [str(n) for n in range(1, 13)] + ["razem"], ["+"] + [""] * 12 + ["    / 12"]]):
+        for c_idx, txt in enumerate(row):
+            c = grid.rows[r_idx].cells[c_idx]
+            c.width = Cm(1.7 if c_idx == 0 else 1.9 if c_idx == 13 else 0.95)
+            set_cell_borders(c, color="9CA3AF")
+            set_cell_margins(c, top=40 if r_idx == 0 else 110, start=40, bottom=40 if r_idx == 0 else 110, end=40)
+            set_cell_shading(c, PALE_BLUE if c_idx in (0, 13) and r_idx == 0 or c_idx == 0 else "FFFFFF")
+            cp = c.paragraphs[0]
+            cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            set_paragraph(cp, after=0, line=1.0)
+            add_text(cp, txt, size=9.5, bold=r_idx == 0 and 0 < c_idx < 13 or c_idx == 13 and r_idx == 1, color=BLUE if r_idx == 0 and 0 < c_idx < 13 else INK)
+
+    p = cell.add_paragraph()
+    set_paragraph(p, before=4, after=4)
+    for label, plus in (("4-8 zadań = ", "+"), ("     9-10 zadań = ", "++"), ("     11-12 zadań = ", "+++")):
+        add_text(p, label, size=9.8)
+        add_text(p, plus, size=9.8, bold=True)
+    add_text(p, "          Moje plusy: ", size=9.8)
+    add_text(p, "..............", size=9.8, color="9CA3AF")
+
+    p = cell.add_paragraph()
+    set_paragraph(p, after=2)
+    add_text(p, "2. Zamaluj numer zadania, które teraz rozumiem lepiej.", size=10, bold=True)
+    circles = cell.add_table(rows=1, cols=12)
+    circles.autofit = False
+    for n in range(12):
+        c = circles.rows[0].cells[n]
+        c.width = Cm(1.05)
+        set_cell_borders(c, color="374151")
+        set_cell_shading(c, "FFFFFF")
+        set_cell_margins(c, top=90, start=40, bottom=90, end=40)
+        cp = c.paragraphs[0]
+        cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        set_paragraph(cp, after=0, line=1.0)
+        add_text(cp, str(n + 1), size=10, bold=True)
+    cell.add_paragraph().paragraph_format.space_after = Pt(0)
 
 
 WORKSHEETS = [
@@ -562,15 +607,7 @@ def build_worksheet(ws):
         set_paragraph(p, after=2, line=1.0)
         add_text(p, "................................................................................................................................", size=9, color="9CA3AF")
 
-    add_subsection(doc, "Popraw jedno zadanie")
-    p = doc.add_paragraph()
-    set_paragraph(p, after=2)
-    add_text(p, "Po wspólnym sprawdzeniu wybierz jedno zadanie, w którym był błąd. Zapisz poprawną odpowiedź i krótkie wyjaśnienie.", size=9.8)
-    for _ in range(3):
-        p = doc.add_paragraph()
-        set_paragraph(p, after=2)
-        add_text(p, "................................................................................................................................", size=9, color="9CA3AF")
-    add_reflection(doc)
+    add_after_check(doc)
 
     path = OUT / f"{file_stem(ws)}.docx"
     doc.save(path)
