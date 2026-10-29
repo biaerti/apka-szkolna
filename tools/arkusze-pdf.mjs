@@ -15,8 +15,11 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const nl = (s) => esc(s).replace(/\n/g, '<br>');
 const linie = (n) => '<div class="linia"></div>'.repeat(n);
 
+// Przy sprawdzaniu uczen sam zakresla + albo - przy kazdym zadaniu.
+const OCENA = '<span class="ocena"><i>+</i><i>−</i></span>';
+
 function zadanie([n, prompt, lines, options]) {
-  let html = `<p class="zad">${n ? `<b class="nr">${n}.</b> ` : ''}${nl(prompt)}</p>`;
+  let html = `<p class="zad">${n ? `${OCENA}<b class="nr">${n}.</b> ` : ''}${nl(prompt)}</p>`;
   if (Array.isArray(options)) html += `<div class="opcje">${options.map((o) => `<p class="opcja"><span class="kratka"></span>${esc(o)}</p>`).join('')}</div>`;
   if (options && options.table) {
     const [naglowek, wiersze] = options.table;
@@ -33,10 +36,8 @@ const NUMERY = Array.from({ length: 12 }, (_, i) => i + 1);
 const PO_SPRAWDZENIU = `
   <div class="koniec">
     <p class="koniec-tytul">Po wspólnym sprawdzeniu <span>- tę część robimy razem na końcu lekcji</span></p>
-    <p class="koniec-pol"><b>1. Policz plusy.</b> Przy sprawdzaniu postaw + pod numerem każdego dobrze zrobionego zadania.</p>
-    <table class="plusy"><tr><th>zadanie</th>${NUMERY.map((n) => `<td class="n">${n}</td>`).join('')}<th class="razem">razem</th></tr>
-      <tr><th>+</th>${NUMERY.map(() => '<td></td>').join('')}<td class="wynik">&nbsp;&nbsp;&nbsp;&nbsp;/ 12</td></tr></table>
-    <p class="progi">4-8 zadań = <b>+</b>     9-10 zadań = <b>++</b>     11-12 zadań = <b>+++</b>          Moje plusy: <span class="wpisz"></span></p>
+    <p class="koniec-pol"><b>1. Policz swoje plusy.</b> Przy sprawdzaniu zakreśl obok każdego zadania <b>+</b> (dobrze) albo <b>−</b> (do poprawy). Policz plusy i wpisz wynik.</p>
+    <p class="progi">Moje plusy: <span class="wpisz"></span> / 12          4-8 = <b>+</b>     9-10 = <b>++</b>     11-12 = <b>+++</b></p>
     <p class="koniec-pol"><b>2. Zamaluj numer zadania, które teraz rozumiem lepiej.</b></p>
     <p class="kolka">${NUMERY.map((n) => `<span>${n}</span>`).join('')}</p>
   </div>`;
@@ -64,7 +65,7 @@ function strona(ark) {
   <h2>Poćwicz język</h2>
   ${ark.language.map(zadanie).join('')}
   <h2>Napisz krótko</h2>
-  <p class="zad"><b class="nr">12.</b> ${esc(ark.writing)}</p>
+  <p class="zad">${OCENA}<b class="nr">12.</b> ${esc(ark.writing)}</p>
   ${linie(ark.writing_lines)}
   ${PO_SPRAWDZENIU}
   <p class="stopka">${esc(stopka)}</p>
@@ -88,6 +89,8 @@ h3 { font-size: 11.5pt; color: #000; margin: 7pt 0 3pt; }
 .tekst { text-indent: 5.5mm; margin-bottom: 4pt; line-height: 1.3; white-space: normal; text-align: justify; }
 .zad { margin: 3pt 0 2pt; font-size: 10.3pt; white-space: pre-wrap; }
 .nr { color: #1F4E78; }
+.ocena { float: right; display: flex; gap: 1.5mm; margin: 0 0 0 3mm; height: 4.6mm; }
+.ocena i { font-style: normal; width: 4.6mm; height: 4.6mm; border: 1px solid #9CA3AF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9.5pt; font-weight: 700; color: #6B7280; line-height: 1; }
 .opcje { margin-bottom: 7pt; }
 .opcja { margin-left: 5.5mm; font-size: 10.1pt; margin-bottom: 2pt; white-space: pre-wrap; display: flex; align-items: center; }
 .kratka { display: inline-block; flex: none; width: 4mm; height: 4mm; border: 1.3px solid #374151; border-radius: 0.6mm; margin-right: 2.2mm; }
@@ -95,12 +98,6 @@ h3 { font-size: 11.5pt; color: #000; margin: 7pt 0 3pt; }
 .koniec-tytul { font-size: 11.5pt; font-weight: 700; color: #1F4E78; margin-bottom: 4pt; }
 .koniec-tytul span { font-weight: 400; font-size: 9.5pt; color: #4B5563; }
 .koniec-pol { font-size: 10pt; margin: 4pt 0 3pt; }
-.plusy { border-collapse: collapse; margin: 2pt 0 4pt; background: #fff; }
-.plusy th, .plusy td { border: 1px solid #9CA3AF; font-size: 9.5pt; text-align: center; }
-.plusy th { padding: 0 5pt; font-weight: 600; color: #374151; background: #EAF3F8; }
-.plusy td { width: 9mm; height: 6mm; }
-.plusy td.n { height: 5mm; font-weight: 700; color: #1F4E78; }
-.plusy td.wynik { width: 20mm; text-align: right; padding-right: 4pt; font-weight: 700; }
 .progi { font-size: 9.8pt; white-space: pre-wrap; }
 .wpisz { display: inline-block; width: 22mm; border-bottom: 1.2px solid #374151; }
 .kolka { display: flex; gap: 3.2mm; margin-top: 2pt; }

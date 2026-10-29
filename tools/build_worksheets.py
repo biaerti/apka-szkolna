@@ -3,7 +3,7 @@ from pathlib import Path
 from docx import Document
 from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_LINE_SPACING
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_LINE_SPACING, WD_TAB_ALIGNMENT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
@@ -201,12 +201,20 @@ def add_reading_text(doc, paragraphs):
         add_text(p, text, size=10.5)
 
 
+def add_self_check(p):
+    """Przy sprawdzaniu uczen sam zakresla + albo - przy zadaniu (prawy margines)."""
+    p.paragraph_format.tab_stops.add_tab_stop(Cm(17.9), WD_TAB_ALIGNMENT.RIGHT)
+    add_text(p, "	( + )  ( − )", size=10, bold=True, color="6B7280")
+
+
 def add_task(doc, number, prompt, lines=0, options=None, compact=False):
     p = doc.add_paragraph()
     set_paragraph(p, before=2 if not compact else 0, after=2, line=1.03, keep=bool(options))
     if number:
         add_text(p, f"{number}. ", size=10.3, bold=True, color=BLUE)
     add_text(p, prompt, size=10.3)
+    if number:
+        add_self_check(p)
     if options:
         for i, option in enumerate(options):
             op = doc.add_paragraph()
@@ -282,29 +290,17 @@ def add_after_check(doc):
 
     p = cell.add_paragraph()
     set_paragraph(p, after=2)
-    add_text(p, "1. Policz plusy. ", size=10, bold=True)
-    add_text(p, "Przy sprawdzaniu postaw + pod numerem każdego dobrze zrobionego zadania.", size=10)
-    grid = cell.add_table(rows=2, cols=14)
-    grid.autofit = False
-    for r_idx, row in enumerate([["zadanie"] + [str(n) for n in range(1, 13)] + ["razem"], ["+"] + [""] * 12 + ["    / 12"]]):
-        for c_idx, txt in enumerate(row):
-            c = grid.rows[r_idx].cells[c_idx]
-            c.width = Cm(1.7 if c_idx == 0 else 1.9 if c_idx == 13 else 0.95)
-            set_cell_borders(c, color="9CA3AF")
-            set_cell_margins(c, top=40 if r_idx == 0 else 110, start=40, bottom=40 if r_idx == 0 else 110, end=40)
-            set_cell_shading(c, PALE_BLUE if c_idx in (0, 13) and r_idx == 0 or c_idx == 0 else "FFFFFF")
-            cp = c.paragraphs[0]
-            cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            set_paragraph(cp, after=0, line=1.0)
-            add_text(cp, txt, size=9.5, bold=r_idx == 0 and 0 < c_idx < 13 or c_idx == 13 and r_idx == 1, color=BLUE if r_idx == 0 and 0 < c_idx < 13 else INK)
+    add_text(p, "1. Policz swoje plusy. ", size=10, bold=True)
+    add_text(p, "Przy sprawdzaniu zakreśl obok każdego zadania + (dobrze) albo − (do poprawy). Policz plusy i wpisz wynik.", size=10)
 
     p = cell.add_paragraph()
-    set_paragraph(p, before=4, after=4)
-    for label, plus in (("4-8 zadań = ", "+"), ("     9-10 zadań = ", "++"), ("     11-12 zadań = ", "+++")):
+    set_paragraph(p, before=2, after=5)
+    add_text(p, "Moje plusy: ", size=9.8)
+    add_text(p, "..............", size=9.8, color="9CA3AF")
+    add_text(p, " / 12          ", size=9.8)
+    for label, plus in (("4-8 = ", "+"), ("     9-10 = ", "++"), ("     11-12 = ", "+++")):
         add_text(p, label, size=9.8)
         add_text(p, plus, size=9.8, bold=True)
-    add_text(p, "          Moje plusy: ", size=9.8)
-    add_text(p, "..............", size=9.8, color="9CA3AF")
 
     p = cell.add_paragraph()
     set_paragraph(p, after=2)
@@ -394,7 +390,7 @@ WORKSHEETS = [
             ("1", "Co mózg robi z informacjami podczas snu?", 1, None),
             ("2", "Podaj dwie trudności, które mogą pojawić się po zbyt krótkim śnie.", 1, None),
             ("3", "Zaznacz trzy czynności, które pomagają przygotować się do snu.", 0, ["przewietrzenie pokoju", "długa gra na tablecie", "przygotowanie rzeczy na rano", "podobna pora zasypiania"]),
-            ("4", "Uzupełnij związek przyczyny i skutku: Ktoś kładzie się bardzo późno, dlatego rano ....................................................", 1, None),
+            ("4", "Uzupełnij związek przyczyny i skutku: Ktoś kładzie się bardzo późno, dlatego rano ...................................", 1, None),
             ("5", "Które zdanie jest główną myślą tekstu?", 0, ["Regularny sen pomaga w nauce i codziennym funkcjonowaniu.", "Każdy powinien spać dokładnie tyle samo godzin.", "Wieczorem trzeba przygotować tylko tornister."]),
             ("6", "Zdanie Spokojny wieczór jest najlepszą częścią dnia to fakt czy opinia? Uzasadnij krótko.", 1, None),
         ],
@@ -427,7 +423,7 @@ WORKSHEETS = [
             ("6", "Wyjaśnij własnymi słowami wyrażenie dotarła bez błądzenia.", 1, None),
         ],
         "language": [
-            ("7", "Dopisz po jednym przymiotniku do rzeczowników: dąb - .......................   alejka - .......................   instrukcja - .......................", 0, None),
+            ("7", "Dopisz po jednym przymiotniku do rzeczowników.\ndąb - ..................   alejka - ..................   instrukcja - ..................", 0, None),
             ("8", "Ułóż w kolejności alfabetycznej: brama, mostek, dąb, fontanna.", 1, None),
             ("9", "Wybierz poprawny zapis: drużyna / drurzyna, ścieżka / ścieszka, wiewiórka / wiewjurka.", 1, None),
             ("10", "Zmień zdanie Idź prosto do fontanny na zdanie grzecznej prośby.", 1, None),
@@ -466,7 +462,7 @@ WORKSHEETS += [
             ("6", "Jak zmienia się nastrój Antka od początku do końca historii? Podaj dowód z tekstu.", 2, None),
         ],
         "language": [
-            ("7", "Wpisz wyraz komiks w odpowiedniej formie.\nNa liście nie było jego ......................... na pierwszym miejscu.  Antek długo przyglądał się swojemu .........................\nIga zachwyciła się jego .........................  Następnego dnia rozmawiali o nowym .........................", 0, None),
+            ("7", "Wpisz wyraz komiks w odpowiedniej formie.\nNa liście nie było jego ......................... na pierwszym miejscu.\nAntek długo przyglądał się swojemu .........................  Iga zachwyciła się jego .........................\nNastępnego dnia rozmawiali o nowym .........................", 0, None),
             ("8", "Dopisz wyraz, który wyjaśnia pisownię ó albo rz.\nwróciła - .........................   szkółka - .........................   w kolorze - .........................   malarz - .........................", 0, None),
             ("9", "Wstaw brakujące przecinki (są trzy): Antek wiedział że jego kot dobrze wyszedł ale wciąż było mu przykro bo marzył o pierwszym miejscu.", 0, None),
             ("10", "Jak zmieni się sens zdania, jeśli zamiast Antek mruknął napiszemy Antek krzyknął?", 1, None),
@@ -602,6 +598,7 @@ def build_worksheet(ws):
     set_paragraph(p, after=2)
     add_text(p, "12. ", size=10.3, bold=True, color=BLUE)
     add_text(p, ws["writing"], size=10.3)
+    add_self_check(p)
     for _ in range(ws["writing_lines"]):
         p = doc.add_paragraph()
         set_paragraph(p, after=2, line=1.0)
