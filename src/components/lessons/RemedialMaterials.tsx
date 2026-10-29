@@ -1,5 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DownloadIcon } from '../ui/icons';
+import { useStore } from '../../data/store';
+import { toDateKey } from '../../lib/dates';
+import {
+  kluczPostepu,
+  ustawPostepArkusza,
+  wczytajPostepArkuszy,
+  type PostepArkuszy,
+} from '../../data/arkuszePostep';
 import {
   POLSKI_OD_ZERA,
   REMEDIAL_KEY_HREF,
@@ -87,7 +95,57 @@ export function PolskiOdZeraMaterials() {
 
 type Worksheet = (typeof REMEDIAL_WORKSHEETS)[number];
 
-function WorksheetList({ items }: { items: ReadonlyArray<{ worksheet: Worksheet; number: number }> }) {
+/** Nazwa pliku bez rozszerzenia - klucz arkusza w arkusze_postep. */
+const worksheetId = (worksheet: Worksheet) => worksheet.href.split('/').pop()!.replace(/\.docx$/, '');
+
+const krotkaData = (key: string) => {
+  const [, m, d] = key.split('-');
+  return `${Number(d)}.${m}`;
+};
+
+interface PostepProps {
+  postep: PostepArkuszy;
+  onToggle: (arkusz: string, classId: string) => void;
+}
+
+/** Odhaczanie, z ktora klasa arkusz byl juz robiony (klasy nie ida tym samym tempem). */
+function ClassProgress({ worksheet, title, postep, onToggle }: PostepProps & { worksheet: Worksheet; title: string }) {
+  const classes = useStore((s) => s.classes);
+  if (classes.length === 0) return null;
+  const id = worksheetId(worksheet);
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-1.5" role="group" aria-label={`Z którymi klasami zrobiony: ${title}`}>
+      {[...classes]
+        .sort((a, b) => a.order - b.order)
+        .map((c) => {
+          const done = postep[kluczPostepu(id, c.id)];
+          return (
+            <button
+              key={c.id}
+              type="button"
+              aria-pressed={Boolean(done)}
+              onClick={() => onToggle(id, c.id)}
+              aria-label={done ? `${c.name}, zrobione ${krotkaData(done)}` : `${c.name}, jeszcze nie`}
+              title={done ? `Zrobione ${krotkaData(done)} - kliknij, żeby odznaczyć` : 'Kliknij, gdy zrobisz ten arkusz z klasą'}
+              className={
+                done
+                  ? 'inline-flex min-h-8 items-center gap-1 rounded-full border border-green-600 bg-green-50 px-2.5 text-xs font-semibold text-green-800 transition-colors hover:bg-green-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500'
+                  : 'inline-flex min-h-8 items-center rounded-full border border-dashed border-gray-300 px-2.5 text-xs font-medium text-gray-500 transition-colors hover:border-gray-400 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500'
+              }
+            >
+              {done ? `✓ ${c.name} · ${krotkaData(done)}` : c.name}
+            </button>
+          );
+        })}
+    </div>
+  );
+}
+
+function WorksheetList({
+  items,
+  postep,
+  onToggle,
+}: PostepProps & { items: ReadonlyArray<{ worksheet: Worksheet; number: number }> }) {
   return (
     <ol className="overflow-hidden rounded-xl border border-gray-200 bg-white">
       {items.map(({ worksheet, number }) => (
@@ -102,6 +160,7 @@ function WorksheetList({ items }: { items: ReadonlyArray<{ worksheet: Worksheet;
             <div className="min-w-0">
               <h3 className="font-semibold text-gray-900">{worksheet.title}</h3>
               <p className="mt-0.5 text-sm leading-5 text-gray-600">{worksheet.description}</p>
+              <ClassProgress worksheet={worksheet} title={worksheet.title} postep={postep} onToggle={onToggle} />
             </div>
           </div>
           <div className="flex shrink-0 flex-wrap gap-2">
@@ -131,6 +190,29 @@ export function RemedialMaterials() {
   const numbered = REMEDIAL_WORKSHEETS.map((worksheet, index) => ({ worksheet, number: index + 1 }));
   const base = numbered.filter(({ worksheet }) => !('levelUp' in worksheet));
   const levelUp = numbered.filter(({ worksheet }) => 'levelUp' in worksheet);
+  const [postep, setPostep] = useState<PostepArkuszy>({});
+  const [tylkoTu, setTylkoTu] = useState(false);
+
+  useEffect(() => {
+    let aktualne = true;
+    void wczytajPostepArkuszy().then((p) => aktualne && setPostep(p));
+    return () => {
+      aktualne = false;
+    };
+  }, []);
+
+  function toggle(arkusz: string, classId: string) {
+    const key = kluczPostepu(arkusz, classId);
+    const doneOn = postep[key] ? null : toDateKey(new Date());
+    setPostep((p) => {
+      const next = { ...p };
+      if (doneOn) next[key] = doneOn;
+      else delete next[key];
+      return next;
+    });
+    void ustawPostepArkusza(arkusz, classId, doneOn).then((gdzie) => setTylkoTu(gdzie === 'przegladarka'));
+  }
+
   return (
     <section aria-labelledby="remedial-heading" className="max-w-4xl">
       <div className="mb-5 max-w-3xl">
@@ -138,11 +220,14 @@ export function RemedialMaterials() {
           Arkusze na zajęcia wyrównawcze
         </h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
-          Każdy arkusz to czytanie ze zrozumieniem, ćwiczenia językowe i krótka wypowiedź. DOCX to kartka A4 drukowana dwustronnie, PDF 2×A5 mieści obie strony obok siebie na jednej stronie A4 (druk jednostronny, poziomo).
+          Każdy arkusz to czytanie ze zrozumieniem, ćwiczenia językowe i krótka wypowiedź. DOCX to kartka A4 drukowana dwustronnie, PDF 2×A5 mieści obie strony obok siebie na jednej stronie A4 (druk jednostronny, poziomo). Pod tytułem odhaczasz klasy, z którymi arkusz jest już zrobiony.
         </p>
+        {tylkoTu && (
+          <p className="mt-1 text-sm text-amber-700">Odhaczenie zapisane tylko w tej przeglądarce - chmura jeszcze go nie przyjęła.</p>
+        )}
       </div>
 
-      <WorksheetList items={base} />
+      <WorksheetList items={base} postep={postep} onToggle={toggle} />
 
       <div className="mb-3 mt-8 max-w-3xl">
         <h3 className="font-semibold text-gray-900">Poziom wyżej</h3>
@@ -150,7 +235,7 @@ export function RemedialMaterials() {
           Dla tych, którym podstawowe arkusze idą łatwo: odpowiedzi trzeba wywnioskować, a nie przepisać z tekstu.
         </p>
       </div>
-      <WorksheetList items={levelUp} />
+      <WorksheetList items={levelUp} postep={postep} onToggle={toggle} />
 
       <div className="mt-6 flex flex-col gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
         <div>

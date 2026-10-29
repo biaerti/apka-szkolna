@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arkusz 3 - Sen pomaga się uczyć</title><style>
-:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; }
+:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; --sk: #B45309; --skbg: #FEF3E2; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; color: var(--ink); background: #F8FAFC; font-size: var(--fs); line-height: 1.45; display: flex; flex-direction: column; }
@@ -37,17 +37,124 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 .siatka { border-collapse: collapse; margin: 8px 0 0 calc(1.6em + 12px); font-size: .85em; }
 .siatka th, .siatka td { border: 1px solid #CBD5E1; padding: 6px 12px; text-align: left; min-width: 7em; height: 2em; }
 .siatka tr:first-child th { background: var(--pale); }
-.pokaz { display: block; margin: 10px 0 0 calc(1.6em + 12px); border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.akcje { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0 calc(1.6em + 12px); }
+.pokaz, .na-ekran { border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.na-ekran { border-color: var(--blue); color: var(--blue); }
+.na-ekran:hover { background: var(--pale); }
 .zad.otw .pokaz { background: var(--ok); color: #fff; }
 .odp { display: none; margin: 8px 0 0 calc(1.6em + 12px); padding: 10px 14px; background: var(--okbg); border-left: 4px solid var(--ok); border-radius: 0 8px 8px 0; color: #14532D; }
 .zad.otw .odp { display: block; }
 @media (max-width: 900px) { #czytanie { grid-template-columns: 1fr; } .widok.on { height: auto; } .kol { overflow: visible; } }
+
+/* Slajd na caly ekran */
+.slajd { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; display: none; flex-direction: column; padding: 3vh 4vw; font-size: clamp(20px, 2.5vw, 56px); line-height: 1.3; }
+.slajd.on { display: flex; }
+.s-gora { display: flex; align-items: baseline; gap: .8em; border-bottom: 2px solid var(--line); padding-bottom: .4em; }
+.s-gora h2 { font-size: 1.5em; margin: 0; color: var(--blue); }
+.s-nr { font-size: .65em; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: .05em; }
+.s-zamknij { margin-left: auto; border: 0; background: none; color: #6B7280; font-size: 1em; padding: 0 .3em; }
+.s-zamknij:hover { color: var(--ink); }
+.s-tresc { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4vh; padding: 3vh 0; }
+.s-zap { background: #FFF7D6; border-left: .3em solid #F59E0B; padding: .5em .9em; border-radius: 0 .4em .4em 0; font-size: .85em; }
+.s-zap b:first-child { color: #92400E; margin-right: .3em; }
+.slajd mark { background: var(--mark); color: inherit; padding: 0 .1em; border-radius: .15em; }
+.slajd s { color: #B91C1C; }
+.v-wynik { font-size: 1em; text-align: center; }
+.strz { display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; color: #6B7280; font-size: .8em; min-width: 4em; }
+.strz svg { width: 3.5em; height: 1em; }
+.strz path { stroke: #94A3B8; stroke-width: 4; fill: none; }
+.strz path.grot { fill: #94A3B8; stroke: none; }
+.v-para { display: flex; flex-direction: column; gap: 3vh; width: 100%; }
+.v-para-w { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; align-items: stretch; }
+.box { border-radius: .5em; padding: .6em .9em; border: 3px solid; display: flex; flex-direction: column; justify-content: center; }
+.box .etyk { font-size: .6em; font-weight: 800; letter-spacing: .08em; margin-bottom: .2em; }
+.b-pr { border-color: var(--blue); background: var(--pale); }
+.b-pr .etyk { color: var(--blue); }
+.b-sk { border-color: var(--sk); background: var(--skbg); }
+.b-sk .etyk { color: var(--sk); }
+.v-czasy { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; width: 100%; }
+.v-czasy .os { position: absolute; left: 4%; right: 4%; top: 2.05em; height: 4px; background: #CBD5E1; }
+.czas { display: flex; flex-direction: column; align-items: center; position: relative; }
+.kiedy { font-weight: 800; color: #6B7280; font-size: .8em; height: 1.6em; }
+.kropka { width: .9em; height: .9em; border-radius: 50%; background: #94A3B8; margin: .2em 0 .7em; position: relative; z-index: 1; }
+.karta { width: 100%; border: 2px solid var(--line); border-radius: .5em; padding: .6em .8em; text-align: center; position: relative; }
+.karta .nazwa { font-weight: 800; color: var(--blue); }
+.karta .opis { font-size: .75em; color: #4B5563; }
+.karta .przyklad { margin-top: .4em; }
+.tag { position: absolute; top: -.75em; left: 50%; transform: translateX(-50%); font-size: .55em; font-weight: 800; text-transform: uppercase; background: #64748B; color: #fff; padding: .15em .6em; border-radius: 99px; white-space: nowrap; }
+.odp-c .karta { border-color: var(--ok); background: var(--okbg); border-width: 4px; }
+.odp-c .kropka { background: var(--ok); }
+.odp-c .tag { background: var(--ok); }
+.zad-c .karta { border-style: dashed; }
+.v-kolumny { display: flex; gap: 1em; width: 100%; justify-content: center; }
+.kolumna { flex: 1; max-width: 30em; border-radius: .5em; border-top: .35em solid; background: #F8FAFC; padding: .6em .8em; display: flex; flex-direction: column; gap: .4em; }
+.k-tyt { font-size: 1.3em; font-weight: 800; text-align: center; }
+.k-tyt .znak { display: inline-block; min-width: 1em; color: #fff; border-radius: .2em; padding: 0 .2em; }
+.k-opis { font-size: .7em; color: #4B5563; text-align: center; margin-bottom: .2em; }
+.k-item { background: #fff; border: 1px solid var(--line); border-radius: .35em; padding: .35em .6em; }
+.k-item small { display: block; font-size: .65em; color: #6B7280; }
+.k-item.ok { border: 3px solid var(--ok); }
+.k-niebieski { border-color: var(--blue); } .k-niebieski .k-tyt { color: var(--blue); } .k-niebieski .znak { background: var(--blue); }
+.k-pomaranczowy { border-color: var(--sk); } .k-pomaranczowy .k-tyt { color: var(--sk); } .k-pomaranczowy .znak { background: var(--sk); }
+.k-zielony { border-color: var(--ok); } .k-zielony .k-tyt { color: var(--ok); }
+.k-czerwony { border-color: #B91C1C; } .k-czerwony .k-tyt { color: #B91C1C; }
+.k-szary { border-color: #64748B; } .k-szary .k-tyt { color: #64748B; }
+.v-kroki { display: flex; justify-content: center; align-items: stretch; width: 100%; }
+.v-kroki.dlugie { font-size: .8em; }
+.krok { display: flex; flex-direction: column; align-items: center; gap: .3em; border: 2px solid var(--line); border-radius: .5em; padding: .5em .7em; flex: 1 1 0; min-width: 0; max-width: 9em; text-align: center; background: #F8FAFC; }
+.krok .nr { margin: 0; font-size: .7em; min-width: 1.8em; height: 1.8em; padding: 0 .5em; }
+.krok.hl { border: 3px solid var(--ok); background: var(--okbg); }
+.v-kroki .strz { min-width: 2em; flex: none; }
+.v-kroki .strz svg { width: 2em; }
+.pierwsza { color: #fff; background: var(--blue); border-radius: .15em; padding: 0 .1em; }
+.alfabet { display: flex; justify-content: center; gap: .1em; font-size: .6em; }
+.alfabet span { width: 1.3em; text-align: center; color: #94A3B8; border-bottom: 2px solid #E2E8F0; }
+.alfabet span.on { color: #fff; background: var(--blue); border-radius: .2em; font-weight: 800; }
+.v-tabela { border-collapse: collapse; font-size: .9em; }
+.v-tabela th, .v-tabela td { border: 2px solid #CBD5E1; padding: .35em .8em; text-align: left; }
+.v-tabela tr:first-child th { background: var(--pale); color: var(--blue); }
+.v-wybor { display: grid; grid-template-columns: auto auto 1fr; gap: .5em 1.2em; align-items: center; }
+.v-wybor .dobrze { font-weight: 800; color: var(--ok); font-size: 1.2em; }
+.v-wybor .zle { color: #B91C1C; font-size: 1em; }
+.v-wybor .czemu { font-size: .75em; color: #4B5563; }
+.v-mapa { display: flex; flex-direction: column; align-items: center; gap: 1.2em; }
+.srodek { font-size: 1.5em; font-weight: 800; color: #fff; background: var(--blue); border-radius: 99px; padding: .2em 1em; position: relative; }
+.galezie { display: flex; flex-wrap: wrap; justify-content: center; gap: .6em; max-width: 34em; }
+.galaz { border: 2px solid var(--blue); border-radius: 99px; padding: .25em .8em; background: var(--pale); }
+.v-sylaby { font-size: 3em; font-weight: 800; letter-spacing: .02em; }
+.v-sylaby .syl { background: #F1F5F9; border-radius: .2em; padding: 0 .2em; }
+.v-sylaby b, .sam { color: #DC2626; }
+.v-sylaby .kreska { color: #94A3B8; margin: 0 .1em; }
+.v-notatka { font-size: 1.1em; min-width: 18em; max-width: 34em; background: #fff repeating-linear-gradient(#fff 0 1.55em, #BFDBFE 1.55em calc(1.55em + 2px)); border: 2px solid var(--line); border-left: .3em solid #F87171; border-radius: .3em; padding: .4em 1em 1em 1.4em; line-height: calc(1.55em + 2px); }
+.n-tyt { font-weight: 800; text-align: center; color: var(--blue); }
+.v-notatka ol { padding-left: 1.4em; }
+.v-zdanie { font-size: 1.4em; line-height: 2.6; text-align: center; }
+.v-przed { font-size: 1.1em; color: #6B7280; }
+.t { position: relative; display: inline-block; line-height: 1.3; }
+.t-lab { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: .45em; font-weight: 800; color: var(--sk); white-space: nowrap; }
+.t-p { text-decoration: underline; text-decoration-thickness: .1em; text-underline-offset: .15em; text-decoration-color: var(--blue); }
+.t-o { border: .08em solid var(--sk); border-radius: 50%; padding: 0 .25em; }
+.t-f { text-decoration: underline wavy var(--ok); text-decoration-thickness: .07em; text-underline-offset: .15em; }
+.t-h { background: var(--mark); border-radius: .15em; padding: 0 .15em; }
+.t-k { color: #DC2626; font-weight: 800; transform: scale(1.3); margin: 0 .1em; }
+.legenda { display: flex; flex-wrap: wrap; justify-content: center; gap: .5em 2em; font-size: .9em; }
+.legenda small { color: #6B7280; font-size: .8em; }
+.pkt-wybor { display: flex; flex-wrap: wrap; justify-content: center; gap: .3em; }
+.pkt-wybor button { width: 2.2em; height: 2.2em; border: 2px solid #CBD5E1; border-radius: .4em; background: #fff; font-weight: 800; color: var(--ink); }
+.pkt-wybor button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pkt-progi { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8em; width: 100%; max-width: 40em; }
+.prog { border: 2px solid var(--line); border-radius: .5em; padding: .5em; text-align: center; transition: transform .15s; }
+.prog .zakres { font-size: .75em; font-weight: 700; color: #6B7280; }
+.prog .plusy { font-size: 2.2em; font-weight: 800; color: var(--ok); line-height: 1.1; letter-spacing: .05em; }
+.prog .opis { font-size: .7em; color: #4B5563; }
+.prog.on { border: 4px solid var(--ok); background: var(--okbg); transform: scale(1.06); }
 </style></head><body>
 <header>
   <h1>Arkusz 3  Sen pomaga się uczyć</h1>
   <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
   <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
   <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
+  <button type="button" class="przyc" id="punkty">Punktacja</button>
   <button type="button" class="przyc" id="wyczysc">Wyczyść</button>
   <button type="button" class="przyc" id="mniej" aria-label="Mniejsze litery">A−</button>
   <button type="button" class="przyc" id="wiecej" aria-label="Większe litery">A+</button>
@@ -55,12 +162,106 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 <main>
   <section class="widok on" id="czytanie">
     <div class="kol tekst"><h2>Przeczytaj tekst</h2><p><span class="zd">Sen nie jest przerwą w pracy organizmu.</span> <span class="zd">Kiedy śpimy, mózg porządkuje informacje z całego dnia.</span> <span class="zd">Dzięki temu łatwiej zapamiętujemy nowe wiadomości i sprawniej rozwiązujemy zadania.</span> <span class="zd">Odpoczynek pomaga też zachować uwagę podczas lekcji.</span></p><p><span class="zd">Dzieci w wieku szkolnym zwykle potrzebują więcej snu niż dorośli.</span> <span class="zd">Jeśli ktoś kładzie się bardzo późno, rano może być senny, rozdrażniony i mniej skupiony.</span> <span class="zd">Jedna długa noc nie naprawi od razu kilku dni zbyt krótkiego snu.</span> <span class="zd">Najlepiej odpoczywać regularnie.</span></p><p><span class="zd">Dobrym przygotowaniem do snu jest spokojny wieczór.</span> <span class="zd">Warto odłożyć telefon lub tablet, przewietrzyć pokój i przygotować rzeczy na następny dzień.</span> <span class="zd">Pomaga także podobna pora zasypiania.</span> <span class="zd">Każdy może sprawdzić, po jakim wieczornym zwyczaju budzi się bardziej wypoczęty.</span></p></div>
-    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Co mózg robi z informacjami podczas snu?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Porządkuje informacje z całego dnia.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Podaj dwie trudności, które mogą pojawić się po zbyt krótkim śnie.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dwie spośród: senność, rozdrażnienie, mniejsze skupienie.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Zaznacz trzy czynności, które pomagają przygotować się do snu.</span></div><ul class="opcje"><li class="dobra">przewietrzenie pokoju</li><li>długa gra na tablecie</li><li class="dobra">przygotowanie rzeczy na rano</li><li class="dobra">podobna pora zasypiania</li></ul><button type="button" class="pokaz">Odpowiedź</button><div class="odp">przewietrzenie pokoju; przygotowanie rzeczy na rano; podobna pora zasypiania</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Uzupełnij związek przyczyny i skutku: Ktoś kładzie się bardzo późno, dlatego rano ....................................................</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Na przykład: może być senny, rozdrażniony i mniej skupiony.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Które zdanie jest główną myślą tekstu?</span></div><ul class="opcje"><li class="dobra">Regularny sen pomaga w nauce i codziennym funkcjonowaniu.</li><li>Każdy powinien spać dokładnie tyle samo godzin.</li><li>Wieczorem trzeba przygotować tylko tornister.</li></ul><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Regularny sen pomaga w nauce i codziennym funkcjonowaniu.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Zdanie Spokojny wieczór jest najlepszą częścią dnia to fakt czy opinia? Uzasadnij krótko.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Opinia, ponieważ wyraża osobistą ocenę i nie można jej sprawdzić tak samo u wszystkich.</div></div></div>
+    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Co mózg robi z informacjami podczas snu?</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Porządkuje informacje z całego dnia.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Podaj dwie trudności, które mogą pojawić się po zbyt krótkim śnie.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Dwie spośród: senność, rozdrażnienie, mniejsze skupienie.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Zaznacz trzy czynności, które pomagają przygotować się do snu.</span></div><ul class="opcje"><li class="dobra">przewietrzenie pokoju</li><li>długa gra na tablecie</li><li class="dobra">przygotowanie rzeczy na rano</li><li class="dobra">podobna pora zasypiania</li></ul><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">przewietrzenie pokoju; przygotowanie rzeczy na rano; podobna pora zasypiania</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Uzupełnij związek przyczyny i skutku: Ktoś kładzie się bardzo późno, dlatego rano ....................................................</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-4">Slajd ⛶</button></div><div class="odp">Na przykład: może być senny, rozdrażniony i mniej skupiony.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Które zdanie jest główną myślą tekstu?</span></div><ul class="opcje"><li class="dobra">Regularny sen pomaga w nauce i codziennym funkcjonowaniu.</li><li>Każdy powinien spać dokładnie tyle samo godzin.</li><li>Wieczorem trzeba przygotować tylko tornister.</li></ul><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Regularny sen pomaga w nauce i codziennym funkcjonowaniu.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Zdanie Spokojny wieczór jest najlepszą częścią dnia to fakt czy opinia? Uzasadnij krótko.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-6">Slajd ⛶</button></div><div class="odp">Opinia, ponieważ wyraża osobistą ocenę i nie można jej sprawdzić tak samo u wszystkich.</div></div></div>
   </section>
   <section class="widok" id="jezyk">
-    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Wypisz z drugiego akapitu trzy czasowniki.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Przykładowo: potrzebują, kładzie się, może, być, naprawi, odpoczywać.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Zmień zdanie na czas przeszły: Mózg porządkuje informacje.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Mózg porządkował informacje.</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wybierz poprawny zapis: mózg / musk, późno / puźno, przygotować / pszygotować.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">mózg, późno, przygotować</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Ułóż jedno zdanie oznajmujące i jedno pytające o odpoczynku.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dowolne dwa poprawne zdania zgodne z wymaganym typem.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Podziel wyraz wypoczęty na sylaby i zaznacz samogłoski.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">wy-po-czę-ty; samogłoski: y, o, ę, y</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz krótką notatkę pod tytułem Mój sposób na dobry wieczór. Podaj trzy czynności w sensownej kolejności.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Notatka ma tytuł, trzy czynności i zachowuje logiczną kolejność.</div></div></div>
+    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Wypisz z drugiego akapitu trzy czasowniki.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-7">Slajd ⛶</button></div><div class="odp">Przykładowo: potrzebują, kładzie się, może, być, naprawi, odpoczywać.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Zmień zdanie na czas przeszły: Mózg porządkuje informacje.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-8">Slajd ⛶</button></div><div class="odp">Mózg porządkował informacje.</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wybierz poprawny zapis: mózg / musk, późno / puźno, przygotować / pszygotować.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-9">Slajd ⛶</button></div><div class="odp">mózg, późno, przygotować</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Ułóż jedno zdanie oznajmujące i jedno pytające o odpoczynku.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-10">Slajd ⛶</button></div><div class="odp">Dowolne dwa poprawne zdania zgodne z wymaganym typem.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Podziel wyraz wypoczęty na sylaby i zaznacz samogłoski.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-11">Slajd ⛶</button></div><div class="odp">wy-po-czę-ty; samogłoski: y, o, ę, y</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz notatkę punktową pod tytułem Mój sposób na dobry wieczór. Wypisz trzy czynności w sensownej kolejności - każdą w osobnym punkcie.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-12">Slajd ⛶</button></div><div class="odp">Notatka ma tytuł i trzy ponumerowane punkty w sensownej kolejności. Każdy punkt to krótkie hasło, np. 1. Odkładam telefon. 2. Pakuję plecak na jutro. 3. Wietrzę pokój i kładę się o stałej porze.</div></div></div>
   </section>
 </main>
+<div class="slajd" id="slajd-4" role="dialog" aria-label="Przyczyna i skutek">
+  <div class="s-gora"><span class="s-nr">Zadanie 4</span><h2>Przyczyna i skutek</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-para">
+    <div class="v-para-w">
+      <div class="box b-pr"><div class="etyk">PRZYCZYNA</div><div>Ktoś kładzie się bardzo późno.</div></div>
+      <div class="strz"><span>dlatego</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-sk"><div class="etyk">SKUTEK</div><div>Rano jest senny, rozdrażniony i mniej skupiony.</div></div>
+    </div></div><p class="v-wynik">Ktoś kładzie się bardzo późno<span class="t t-k">,</span> <b>dlatego</b> rano może być senny.</p></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> <b>Przyczyna</b> - to, co dzieje się najpierw (dlaczego?). <b>Skutek</b> - to, co z tego wynika. Łączą je: dlatego, więc, bo, ponieważ.</div>
+</div>
+<div class="slajd" id="slajd-6" role="dialog" aria-label="Fakt czy opinia?">
+  <div class="s-gora"><span class="s-nr">Zadanie 6</span><h2>Fakt czy opinia?</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kolumny">
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">FAKT</div>
+      <div class="k-opis">można sprawdzić, dla każdego taki sam</div>
+      <div class="k-item">Dzieci potrzebują więcej snu niż dorośli.</div>
+    </div>
+    <div class="kolumna k-pomaranczowy">
+      <div class="k-tyt">OPINIA</div>
+      <div class="k-opis">czyjeś zdanie, ocena</div>
+      <div class="k-item ok">Spokojny wieczór jest <mark>najlepszą</mark> częścią dnia.</div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Opinię zdradzają oceny: <b>najlepszy, ładny, nudny, wspaniały</b>.</div>
+</div>
+<div class="slajd" id="slajd-7" role="dialog" aria-label="Czasownik">
+  <div class="s-gora"><span class="s-nr">Zadanie 7</span><h2>Czasownik</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><p class="v-zdanie">Jeśli ktoś <span class="t t-o">kładzie się</span> bardzo późno, rano <span class="t t-o">może</span> <span class="t t-o">być</span> senny.</p><div class="legenda"><span><span class="t t-o">czasownik</span> <small>co robi? co się z nim dzieje?</small></span></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Czasownik mówi, <b>co ktoś robi</b> albo <b>co się z nim dzieje</b>.</div>
+</div>
+<div class="slajd" id="slajd-8" role="dialog" aria-label="Czasy czasownika">
+  <div class="s-gora"><span class="s-nr">Zadanie 8</span><h2>Czasy czasownika</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-czasy"><div class="os"></div>
+    <div class="czas odp-c">
+      <div class="kiedy">wczoraj</div><div class="kropka"></div>
+      <div class="karta"><span class="tag">odpowiedź</span>
+        <div class="nazwa">czas przeszły</div><div class="opis">to, co już się wydarzyło</div>
+        <div class="przyklad">Mózg <mark>porządkował</mark> informacje.</div></div>
+    </div>
+    <div class="czas zad-c">
+      <div class="kiedy">teraz</div><div class="kropka"></div>
+      <div class="karta"><span class="tag">w zadaniu</span>
+        <div class="nazwa">czas teraźniejszy</div><div class="opis">to, co dzieje się teraz</div>
+        <div class="przyklad">Mózg <mark>porządkuje</mark> informacje.</div></div>
+    </div>
+    <div class="czas">
+      <div class="kiedy">jutro</div><div class="kropka"></div>
+      <div class="karta">
+        <div class="nazwa">czas przyszły</div><div class="opis">to, co dopiero się wydarzy</div>
+        <div class="przyklad">Mózg <mark>będzie porządkował</mark> informacje.</div></div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Czas przeszły często poznasz po <b>-ł-</b>: porządkował, spała, czytali.</div>
+</div>
+<div class="slajd" id="slajd-9" role="dialog" aria-label="Poprawny zapis">
+  <div class="s-gora"><span class="s-nr">Zadanie 9</span><h2>Poprawny zapis</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-wybor">
+    <div class="dobrze">✔ mózg</div><div class="zle">✘ <s>musk</s></div><div class="czemu">ó i g - zapamiętaj (mózgu, mózgi)</div>
+    <div class="dobrze">✔ późno</div><div class="zle">✘ <s>puźno</s></div><div class="czemu">ó - zapamiętaj (późny, później)</div>
+    <div class="dobrze">✔ przygotować</div><div class="zle">✘ <s>pszygotować</s></div><div class="czemu">po p piszemy rz</div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Po <b>p, b, t, d, k, g, ch, j, w</b> piszemy zwykle <b>rz</b>.</div>
+</div>
+<div class="slajd" id="slajd-10" role="dialog" aria-label="Rodzaje zdań">
+  <div class="s-gora"><span class="s-nr">Zadanie 10</span><h2>Rodzaje zdań</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kolumny">
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">oznajmujące <span class="znak">.</span></div>
+      <div class="k-opis">coś stwierdza</div>
+      <div class="k-item">Po dobrym śnie łatwiej się uczę.</div>
+    </div>
+    <div class="kolumna k-pomaranczowy">
+      <div class="k-tyt">pytające <span class="znak">?</span></div>
+      <div class="k-opis">o coś pyta</div>
+      <div class="k-item">Ile godzin śpisz w nocy?</div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Zdanie oznajmujące kończy <b>kropka</b>, pytające - <b>pytajnik</b>.</div>
+</div>
+<div class="slajd" id="slajd-11" role="dialog" aria-label="Sylaby i samogłoski">
+  <div class="s-gora"><span class="s-nr">Zadanie 11</span><h2>Sylaby i samogłoski</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-sylaby"><span class="syl">w<b>y</b></span><span class="kreska">-</span><span class="syl">p<b>o</b></span><span class="kreska">-</span><span class="syl">cz<b>ę</b></span><span class="kreska">-</span><span class="syl">t<b>y</b></span></div>
+    <p class="v-wynik">samogłoski: <b class="sam">y</b>, <b class="sam">o</b>, <b class="sam">ę</b>, <b class="sam">y</b></p></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> W każdej sylabie jest <b>jedna samogłoska</b>: a, ą, e, ę, i, o, ó, u, y.</div>
+</div>
+<div class="slajd" id="slajd-12" role="dialog" aria-label="Notatka punktowa">
+  <div class="s-gora"><span class="s-nr">Zadanie 12</span><h2>Notatka punktowa</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-notatka"><div class="n-tyt">Mój sposób na dobry wieczór</div><ol><li>Odkładam telefon.</li><li>Pakuję plecak na jutro.</li><li>Wietrzę pokój i kładę się o stałej porze.</li></ol></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Notatka punktowa: <b>tytuł</b>, <b>numery</b>, w każdym punkcie <b>jedna krótka myśl</b>.</div>
+</div>
+<div class="slajd" id="punktacja" role="dialog" aria-label="Punktacja">
+  <div class="s-gora"><span class="s-nr">12 zadań · każde dobrze = 1 punkt</span><h2>Punktacja</h2><button type="button" class="s-zamknij" aria-label="Zamknij">✕</button></div>
+  <div class="s-tresc">
+    <div class="pkt-wybor" role="group" aria-label="Ile zadań dobrze?"><button type="button" data-pkt="0">0</button><button type="button" data-pkt="1">1</button><button type="button" data-pkt="2">2</button><button type="button" data-pkt="3">3</button><button type="button" data-pkt="4">4</button><button type="button" data-pkt="5">5</button><button type="button" data-pkt="6">6</button><button type="button" data-pkt="7">7</button><button type="button" data-pkt="8">8</button><button type="button" data-pkt="9">9</button><button type="button" data-pkt="10">10</button><button type="button" data-pkt="11">11</button><button type="button" data-pkt="12">12</button></div>
+    <div class="pkt-progi"><div class="prog" data-od="0" data-do="3"><div class="zakres">0-3 pkt</div><div class="plusy">–</div><div class="opis">bez plusa</div></div><div class="prog" data-od="4" data-do="8"><div class="zakres">4-8 pkt</div><div class="plusy">+</div><div class="opis">jeden plus</div></div><div class="prog" data-od="9" data-do="10"><div class="zakres">9-10 pkt</div><div class="plusy">++</div><div class="opis">2 plusy</div></div><div class="prog" data-od="11" data-do="12"><div class="zakres">11-12 pkt</div><div class="plusy">+++</div><div class="opis">3 plusy</div></div></div>
+  </div>
+</div>
 <script>
 (function () {
   var root = document.documentElement;
@@ -77,9 +278,45 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
     document.querySelectorAll('.widok').forEach(function (w) { w.classList.toggle('on', w.id === id); });
   }
   zakladki.forEach(function (b) { b.onclick = function () { pokazWidok(b.dataset.widok); }; });
+
+  // Slajdy: strzalki przechodza do sasiedniego slajdu, Esc zamyka.
+  var otwarty = null;
+  function otworz(id) {
+    if (otwarty) otwarty.classList.remove('on');
+    otwarty = document.getElementById(id);
+    if (otwarty) otwarty.classList.add('on');
+  }
+  function zamknij() { if (otwarty) otwarty.classList.remove('on'); otwarty = null; }
+  function sasiedni(krok) {
+    var lista = Array.prototype.map.call(document.querySelectorAll('.na-ekran'), function (b) { return b.dataset.slajd; });
+    var i = lista.indexOf(otwarty && otwarty.id);
+    if (i < 0 || !lista[i + krok]) return;
+    otworz(lista[i + krok]);
+  }
+  document.addEventListener('keydown', function (e) {
+    if (!otwarty) return;
+    if (e.key === 'Escape') zamknij();
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowRight' || e.key === 'PageDown')) sasiedni(1);
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowLeft' || e.key === 'PageUp')) sasiedni(-1);
+  });
+
+  function ustawPunkty(n) {
+    document.querySelectorAll('[data-pkt]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.pkt === n)); });
+    document.querySelectorAll('.prog').forEach(function (p) { p.classList.toggle('on', n >= +p.dataset.od && n <= +p.dataset.do); });
+  }
+  document.getElementById('punkty').onclick = function () { otworz('punktacja'); };
+  // #slajd-4 w adresie otwiera slajd od razu (podglad zrzutow, zakladka w przegladarce).
+  var start = location.hash && document.getElementById(location.hash.slice(1));
+  if (start && start.classList.contains('slajd')) otworz(start.id);
+
   document.addEventListener('click', function (e) {
     var p = e.target.closest('.pokaz');
-    if (p) p.parentElement.classList.toggle('otw');
+    if (p) p.closest('.zad').classList.toggle('otw');
+    var s = e.target.closest('.na-ekran');
+    if (s) otworz(s.dataset.slajd);
+    if (e.target.closest('.s-zamknij')) zamknij();
+    var pkt = e.target.closest('[data-pkt]');
+    if (pkt) ustawPunkty(+pkt.dataset.pkt);
     var z = e.target.closest('.zd');
     if (z) z.classList.toggle('zazn');
   });
@@ -92,6 +329,7 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
   document.getElementById('wyczysc').onclick = function () {
     document.querySelectorAll('.zazn').forEach(function (z) { z.classList.remove('zazn'); });
     document.querySelectorAll('.otw').forEach(function (z) { z.classList.remove('otw'); });
+    ustawPunkty(-1);
   };
 })();
 </script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arkusz 4 - Droga do starego dębu</title><style>
-:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; }
+:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; --sk: #B45309; --skbg: #FEF3E2; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; color: var(--ink); background: #F8FAFC; font-size: var(--fs); line-height: 1.45; display: flex; flex-direction: column; }
@@ -37,17 +37,124 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 .siatka { border-collapse: collapse; margin: 8px 0 0 calc(1.6em + 12px); font-size: .85em; }
 .siatka th, .siatka td { border: 1px solid #CBD5E1; padding: 6px 12px; text-align: left; min-width: 7em; height: 2em; }
 .siatka tr:first-child th { background: var(--pale); }
-.pokaz { display: block; margin: 10px 0 0 calc(1.6em + 12px); border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.akcje { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0 calc(1.6em + 12px); }
+.pokaz, .na-ekran { border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.na-ekran { border-color: var(--blue); color: var(--blue); }
+.na-ekran:hover { background: var(--pale); }
 .zad.otw .pokaz { background: var(--ok); color: #fff; }
 .odp { display: none; margin: 8px 0 0 calc(1.6em + 12px); padding: 10px 14px; background: var(--okbg); border-left: 4px solid var(--ok); border-radius: 0 8px 8px 0; color: #14532D; }
 .zad.otw .odp { display: block; }
 @media (max-width: 900px) { #czytanie { grid-template-columns: 1fr; } .widok.on { height: auto; } .kol { overflow: visible; } }
+
+/* Slajd na caly ekran */
+.slajd { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; display: none; flex-direction: column; padding: 3vh 4vw; font-size: clamp(20px, 2.5vw, 56px); line-height: 1.3; }
+.slajd.on { display: flex; }
+.s-gora { display: flex; align-items: baseline; gap: .8em; border-bottom: 2px solid var(--line); padding-bottom: .4em; }
+.s-gora h2 { font-size: 1.5em; margin: 0; color: var(--blue); }
+.s-nr { font-size: .65em; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: .05em; }
+.s-zamknij { margin-left: auto; border: 0; background: none; color: #6B7280; font-size: 1em; padding: 0 .3em; }
+.s-zamknij:hover { color: var(--ink); }
+.s-tresc { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4vh; padding: 3vh 0; }
+.s-zap { background: #FFF7D6; border-left: .3em solid #F59E0B; padding: .5em .9em; border-radius: 0 .4em .4em 0; font-size: .85em; }
+.s-zap b:first-child { color: #92400E; margin-right: .3em; }
+.slajd mark { background: var(--mark); color: inherit; padding: 0 .1em; border-radius: .15em; }
+.slajd s { color: #B91C1C; }
+.v-wynik { font-size: 1em; text-align: center; }
+.strz { display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; color: #6B7280; font-size: .8em; min-width: 4em; }
+.strz svg { width: 3.5em; height: 1em; }
+.strz path { stroke: #94A3B8; stroke-width: 4; fill: none; }
+.strz path.grot { fill: #94A3B8; stroke: none; }
+.v-para { display: flex; flex-direction: column; gap: 3vh; width: 100%; }
+.v-para-w { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; align-items: stretch; }
+.box { border-radius: .5em; padding: .6em .9em; border: 3px solid; display: flex; flex-direction: column; justify-content: center; }
+.box .etyk { font-size: .6em; font-weight: 800; letter-spacing: .08em; margin-bottom: .2em; }
+.b-pr { border-color: var(--blue); background: var(--pale); }
+.b-pr .etyk { color: var(--blue); }
+.b-sk { border-color: var(--sk); background: var(--skbg); }
+.b-sk .etyk { color: var(--sk); }
+.v-czasy { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; width: 100%; }
+.v-czasy .os { position: absolute; left: 4%; right: 4%; top: 2.05em; height: 4px; background: #CBD5E1; }
+.czas { display: flex; flex-direction: column; align-items: center; position: relative; }
+.kiedy { font-weight: 800; color: #6B7280; font-size: .8em; height: 1.6em; }
+.kropka { width: .9em; height: .9em; border-radius: 50%; background: #94A3B8; margin: .2em 0 .7em; position: relative; z-index: 1; }
+.karta { width: 100%; border: 2px solid var(--line); border-radius: .5em; padding: .6em .8em; text-align: center; position: relative; }
+.karta .nazwa { font-weight: 800; color: var(--blue); }
+.karta .opis { font-size: .75em; color: #4B5563; }
+.karta .przyklad { margin-top: .4em; }
+.tag { position: absolute; top: -.75em; left: 50%; transform: translateX(-50%); font-size: .55em; font-weight: 800; text-transform: uppercase; background: #64748B; color: #fff; padding: .15em .6em; border-radius: 99px; white-space: nowrap; }
+.odp-c .karta { border-color: var(--ok); background: var(--okbg); border-width: 4px; }
+.odp-c .kropka { background: var(--ok); }
+.odp-c .tag { background: var(--ok); }
+.zad-c .karta { border-style: dashed; }
+.v-kolumny { display: flex; gap: 1em; width: 100%; justify-content: center; }
+.kolumna { flex: 1; max-width: 30em; border-radius: .5em; border-top: .35em solid; background: #F8FAFC; padding: .6em .8em; display: flex; flex-direction: column; gap: .4em; }
+.k-tyt { font-size: 1.3em; font-weight: 800; text-align: center; }
+.k-tyt .znak { display: inline-block; min-width: 1em; color: #fff; border-radius: .2em; padding: 0 .2em; }
+.k-opis { font-size: .7em; color: #4B5563; text-align: center; margin-bottom: .2em; }
+.k-item { background: #fff; border: 1px solid var(--line); border-radius: .35em; padding: .35em .6em; }
+.k-item small { display: block; font-size: .65em; color: #6B7280; }
+.k-item.ok { border: 3px solid var(--ok); }
+.k-niebieski { border-color: var(--blue); } .k-niebieski .k-tyt { color: var(--blue); } .k-niebieski .znak { background: var(--blue); }
+.k-pomaranczowy { border-color: var(--sk); } .k-pomaranczowy .k-tyt { color: var(--sk); } .k-pomaranczowy .znak { background: var(--sk); }
+.k-zielony { border-color: var(--ok); } .k-zielony .k-tyt { color: var(--ok); }
+.k-czerwony { border-color: #B91C1C; } .k-czerwony .k-tyt { color: #B91C1C; }
+.k-szary { border-color: #64748B; } .k-szary .k-tyt { color: #64748B; }
+.v-kroki { display: flex; justify-content: center; align-items: stretch; width: 100%; }
+.v-kroki.dlugie { font-size: .8em; }
+.krok { display: flex; flex-direction: column; align-items: center; gap: .3em; border: 2px solid var(--line); border-radius: .5em; padding: .5em .7em; flex: 1 1 0; min-width: 0; max-width: 9em; text-align: center; background: #F8FAFC; }
+.krok .nr { margin: 0; font-size: .7em; min-width: 1.8em; height: 1.8em; padding: 0 .5em; }
+.krok.hl { border: 3px solid var(--ok); background: var(--okbg); }
+.v-kroki .strz { min-width: 2em; flex: none; }
+.v-kroki .strz svg { width: 2em; }
+.pierwsza { color: #fff; background: var(--blue); border-radius: .15em; padding: 0 .1em; }
+.alfabet { display: flex; justify-content: center; gap: .1em; font-size: .6em; }
+.alfabet span { width: 1.3em; text-align: center; color: #94A3B8; border-bottom: 2px solid #E2E8F0; }
+.alfabet span.on { color: #fff; background: var(--blue); border-radius: .2em; font-weight: 800; }
+.v-tabela { border-collapse: collapse; font-size: .9em; }
+.v-tabela th, .v-tabela td { border: 2px solid #CBD5E1; padding: .35em .8em; text-align: left; }
+.v-tabela tr:first-child th { background: var(--pale); color: var(--blue); }
+.v-wybor { display: grid; grid-template-columns: auto auto 1fr; gap: .5em 1.2em; align-items: center; }
+.v-wybor .dobrze { font-weight: 800; color: var(--ok); font-size: 1.2em; }
+.v-wybor .zle { color: #B91C1C; font-size: 1em; }
+.v-wybor .czemu { font-size: .75em; color: #4B5563; }
+.v-mapa { display: flex; flex-direction: column; align-items: center; gap: 1.2em; }
+.srodek { font-size: 1.5em; font-weight: 800; color: #fff; background: var(--blue); border-radius: 99px; padding: .2em 1em; position: relative; }
+.galezie { display: flex; flex-wrap: wrap; justify-content: center; gap: .6em; max-width: 34em; }
+.galaz { border: 2px solid var(--blue); border-radius: 99px; padding: .25em .8em; background: var(--pale); }
+.v-sylaby { font-size: 3em; font-weight: 800; letter-spacing: .02em; }
+.v-sylaby .syl { background: #F1F5F9; border-radius: .2em; padding: 0 .2em; }
+.v-sylaby b, .sam { color: #DC2626; }
+.v-sylaby .kreska { color: #94A3B8; margin: 0 .1em; }
+.v-notatka { font-size: 1.1em; min-width: 18em; max-width: 34em; background: #fff repeating-linear-gradient(#fff 0 1.55em, #BFDBFE 1.55em calc(1.55em + 2px)); border: 2px solid var(--line); border-left: .3em solid #F87171; border-radius: .3em; padding: .4em 1em 1em 1.4em; line-height: calc(1.55em + 2px); }
+.n-tyt { font-weight: 800; text-align: center; color: var(--blue); }
+.v-notatka ol { padding-left: 1.4em; }
+.v-zdanie { font-size: 1.4em; line-height: 2.6; text-align: center; }
+.v-przed { font-size: 1.1em; color: #6B7280; }
+.t { position: relative; display: inline-block; line-height: 1.3; }
+.t-lab { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: .45em; font-weight: 800; color: var(--sk); white-space: nowrap; }
+.t-p { text-decoration: underline; text-decoration-thickness: .1em; text-underline-offset: .15em; text-decoration-color: var(--blue); }
+.t-o { border: .08em solid var(--sk); border-radius: 50%; padding: 0 .25em; }
+.t-f { text-decoration: underline wavy var(--ok); text-decoration-thickness: .07em; text-underline-offset: .15em; }
+.t-h { background: var(--mark); border-radius: .15em; padding: 0 .15em; }
+.t-k { color: #DC2626; font-weight: 800; transform: scale(1.3); margin: 0 .1em; }
+.legenda { display: flex; flex-wrap: wrap; justify-content: center; gap: .5em 2em; font-size: .9em; }
+.legenda small { color: #6B7280; font-size: .8em; }
+.pkt-wybor { display: flex; flex-wrap: wrap; justify-content: center; gap: .3em; }
+.pkt-wybor button { width: 2.2em; height: 2.2em; border: 2px solid #CBD5E1; border-radius: .4em; background: #fff; font-weight: 800; color: var(--ink); }
+.pkt-wybor button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pkt-progi { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8em; width: 100%; max-width: 40em; }
+.prog { border: 2px solid var(--line); border-radius: .5em; padding: .5em; text-align: center; transition: transform .15s; }
+.prog .zakres { font-size: .75em; font-weight: 700; color: #6B7280; }
+.prog .plusy { font-size: 2.2em; font-weight: 800; color: var(--ok); line-height: 1.1; letter-spacing: .05em; }
+.prog .opis { font-size: .7em; color: #4B5563; }
+.prog.on { border: 4px solid var(--ok); background: var(--okbg); transform: scale(1.06); }
 </style></head><body>
 <header>
   <h1>Arkusz 4  Droga do starego dębu</h1>
   <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
   <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
   <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
+  <button type="button" class="przyc" id="punkty">Punktacja</button>
   <button type="button" class="przyc" id="wyczysc">Wyczyść</button>
   <button type="button" class="przyc" id="mniej" aria-label="Mniejsze litery">A−</button>
   <button type="button" class="przyc" id="wiecej" aria-label="Większe litery">A+</button>
@@ -55,12 +162,107 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 <main>
   <section class="widok on" id="czytanie">
     <div class="kol tekst"><h2>Przeczytaj tekst</h2><p><span class="zd">Klasa IV wybrała się do parku na grę terenową.</span> <span class="zd">Każda drużyna otrzymała mapę i krótką instrukcję.</span> <span class="zd">Celem było odnalezienie starego dębu, a przy nim koperty z ostatnim zadaniem.</span> <span class="zd">Uczniowie mieli poruszać się razem i zaznaczać na mapie wszystkie mijane miejsca.</span></p><p><span class="zd">Instrukcja drużyny Mai brzmiała: Od bramy idź prosto do fontanny.</span> <span class="zd">Skręć w lewo i przejdź obok dwóch ławek.</span> <span class="zd">Za małym mostkiem wybierz ścieżkę po prawej stronie.</span> <span class="zd">Idź nią aż do tablicy z rysunkiem wiewiórki.</span> <span class="zd">Stary dąb rośnie dziesięć kroków za tablicą.</span></p><p><span class="zd">Przy mostku Tomek chciał skręcić w lewo, bo zobaczył szeroką alejkę.</span> <span class="zd">Maja ponownie przeczytała instrukcję i wskazała właściwą drogę.</span> <span class="zd">Drużyna dotarła do dębu bez błądzenia.</span> <span class="zd">W kopercie znalazła pytanie: Co było ważniejsze - szybki marsz czy uważne czytanie?</span> <span class="zd">Wszyscy zgodnie zapisali drugą odpowiedź.</span></p></div>
-    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Jaki był cel gry terenowej?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Odnalezienie starego dębu i koperty z ostatnim zadaniem.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Co uczniowie mieli zaznaczać na mapie?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Wszystkie mijane miejsca.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Wpisz brakujące miejsca w planie drogi.</span></div><p class="extra">brama → ........................ → dwie ławki → ........................ → tablica z wiewiórką → stary dąb</p><button type="button" class="pokaz">Odpowiedź</button><div class="odp">fontanna; mały mostek</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Dlaczego Maja przeczytała instrukcję ponownie?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Tomek chciał wybrać niewłaściwą drogę, więc Maja sprawdziła instrukcję.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Która umiejętność pomogła drużynie dotrzeć do celu? Podaj odpowiedź i dowód z tekstu.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Uważne czytanie - Maja ponownie przeczytała instrukcję i wskazała właściwą drogę.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Wyjaśnij własnymi słowami wyrażenie dotarła bez błądzenia.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Drużyna dotarła do celu, nie gubiąc drogi i nie wybierając złych ścieżek.</div></div></div>
+    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Jaki był cel gry terenowej?</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Odnalezienie starego dębu i koperty z ostatnim zadaniem.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Co uczniowie mieli zaznaczać na mapie?</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Wszystkie mijane miejsca.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Wpisz brakujące miejsca w planie drogi.</span></div><p class="extra">brama → ........................ → dwie ławki → ........................ → tablica z wiewiórką → stary dąb</p><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-3">Slajd ⛶</button></div><div class="odp">fontanna; mały mostek</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Dlaczego Maja przeczytała instrukcję ponownie?</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-4">Slajd ⛶</button></div><div class="odp">Tomek chciał wybrać niewłaściwą drogę, więc Maja sprawdziła instrukcję.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Która umiejętność pomogła drużynie dotrzeć do celu? Podaj odpowiedź i dowód z tekstu.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-5">Slajd ⛶</button></div><div class="odp">Uważne czytanie - Maja ponownie przeczytała instrukcję i wskazała właściwą drogę.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Wyjaśnij własnymi słowami wyrażenie dotarła bez błądzenia.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Drużyna dotarła do celu, nie gubiąc drogi i nie wybierając złych ścieżek.</div></div></div>
   </section>
   <section class="widok" id="jezyk">
-    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Dopisz po jednym przymiotniku do rzeczowników: dąb - .......................   alejka - .......................   instrukcja - .......................</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dowolne poprawne połączenia, na przykład: stary dąb, szeroka alejka, krótka instrukcja.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Ułóż w kolejności alfabetycznej: brama, mostek, dąb, fontanna.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">brama, dąb, fontanna, mostek</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wybierz poprawny zapis: drużyna / drurzyna, ścieżka / ścieszka, wiewiórka / wiewjurka.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">drużyna, ścieżka, wiewiórka</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Zmień zdanie Idź prosto do fontanny na zdanie grzecznej prośby.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Na przykład: Proszę, idź prosto do fontanny.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Rozwiń zdanie Drużyna dotarła, dodając co najmniej cztery wyrazy.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dowolne poprawne rozwinięcie o co najmniej cztery wyrazy, na przykład: Drużyna szybko dotarła do starego dębu w parku.</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz instrukcję dojścia od drzwi sali do wybranego miejsca w szkole. Użyj co najmniej trzech określeń kierunku, na przykład prosto, w lewo, obok.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Instrukcja prowadzi od drzwi sali do wybranego miejsca i zawiera co najmniej trzy określenia kierunku.</div></div></div>
+    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Dopisz po jednym przymiotniku do rzeczowników: dąb - .......................   alejka - .......................   instrukcja - .......................</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-7">Slajd ⛶</button></div><div class="odp">Dowolne poprawne połączenia, na przykład: stary dąb, szeroka alejka, krótka instrukcja.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Ułóż w kolejności alfabetycznej: brama, mostek, dąb, fontanna.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-8">Slajd ⛶</button></div><div class="odp">brama, dąb, fontanna, mostek</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wybierz poprawny zapis: drużyna / drurzyna, ścieżka / ścieszka, wiewiórka / wiewjurka.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-9">Slajd ⛶</button></div><div class="odp">drużyna, ścieżka, wiewiórka</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Zmień zdanie Idź prosto do fontanny na zdanie grzecznej prośby.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-10">Slajd ⛶</button></div><div class="odp">Na przykład: Proszę, idź prosto do fontanny.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Rozwiń zdanie Drużyna dotarła, dodając co najmniej cztery wyrazy.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Dowolne poprawne rozwinięcie o co najmniej cztery wyrazy, na przykład: Drużyna szybko dotarła do starego dębu w parku.</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz instrukcję dojścia od drzwi sali do wybranego miejsca w szkole. Użyj co najmniej trzech określeń kierunku, na przykład prosto, w lewo, obok.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-12">Slajd ⛶</button></div><div class="odp">Instrukcja prowadzi od drzwi sali do wybranego miejsca i zawiera co najmniej trzy określenia kierunku.</div></div></div>
   </section>
 </main>
+<div class="slajd" id="slajd-3" role="dialog" aria-label="Plan drogi">
+  <div class="s-gora"><span class="s-nr">Zadanie 3</span><h2>Plan drogi</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kroki dlugie">
+      <div class="krok"><div class="nr">1</div><div>brama</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok hl"><div class="nr">2</div><div>fontanna</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">3</div><div>dwie ławki</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok hl"><div class="nr">4</div><div>mały mostek</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">5</div><div>tablica z wiewiórką</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">6</div><div>stary dąb</div></div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Plan drogi to miejsca <b>po kolei</b> - tak, jak je mijamy.</div>
+</div>
+<div class="slajd" id="slajd-4" role="dialog" aria-label="Przyczyna i skutek">
+  <div class="s-gora"><span class="s-nr">Zadanie 4</span><h2>Przyczyna i skutek</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-para">
+    <div class="v-para-w">
+      <div class="box b-pr"><div class="etyk">PRZYCZYNA</div><div>Tomek chciał skręcić w złą stronę.</div></div>
+      <div class="strz"><span>dlatego</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-sk"><div class="etyk">SKUTEK</div><div>Maja ponownie przeczytała instrukcję.</div></div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Pytanie <b>dlaczego?</b> to pytanie o przyczynę.</div>
+</div>
+<div class="slajd" id="slajd-5" role="dialog" aria-label="Umiejętność i dowód">
+  <div class="s-gora"><span class="s-nr">Zadanie 5</span><h2>Umiejętność i dowód</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-para">
+    <div class="v-para-w">
+      <div class="box b-pr"><div class="etyk">UMIEJĘTNOŚĆ</div><div>uważne czytanie</div></div>
+      <div class="strz"><span>bo</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-sk"><div class="etyk">DOWÓD Z TEKSTU</div><div>Maja ponownie przeczytała instrukcję i wskazała właściwą drogę.</div></div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Dowód to <b>fragment tekstu</b>, który potwierdza odpowiedź.</div>
+</div>
+<div class="slajd" id="slajd-7" role="dialog" aria-label="Przymiotnik">
+  <div class="s-gora"><span class="s-nr">Zadanie 7</span><h2>Przymiotnik</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><table class="v-tabela"><tr><th>rzeczownik</th><th>pytanie</th><th>przymiotnik</th></tr><tr><th>dąb</th><td>jaki?</td><td><mark>stary</mark></td></tr><tr><th>alejka</th><td>jaka?</td><td><mark>szeroka</mark></td></tr><tr><th>instrukcja</th><td>jaka?</td><td><mark>krótka</mark></td></tr></table></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Przymiotnik mówi, <b>jaki</b> jest ktoś albo coś.</div>
+</div>
+<div class="slajd" id="slajd-8" role="dialog" aria-label="Kolejność alfabetyczna">
+  <div class="s-gora"><span class="s-nr">Zadanie 8</span><h2>Kolejność alfabetyczna</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="alfabet"><span>a</span><span>ą</span><span class="on">b</span><span>c</span><span>ć</span><span class="on">d</span><span>e</span><span>ę</span><span class="on">f</span><span>g</span><span>h</span><span>i</span><span>j</span><span>k</span><span>l</span><span>ł</span><span class="on">m</span><span>n</span><span>ń</span><span>o</span><span>ó</span><span>p</span><span>r</span><span>s</span><span>ś</span><span>t</span><span>u</span><span>w</span><span>y</span><span>z</span><span>ź</span><span>ż</span></div><div class="v-kroki">
+      <div class="krok"><div class="nr">1</div><div><b class="pierwsza">b</b>rama</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">2</div><div><b class="pierwsza">d</b>ąb</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">3</div><div><b class="pierwsza">f</b>ontanna</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">4</div><div><b class="pierwsza">m</b>ostek</div></div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Patrzymy na <b>pierwszą literę</b>. Gdy jest taka sama - na drugą.</div>
+</div>
+<div class="slajd" id="slajd-9" role="dialog" aria-label="Poprawny zapis">
+  <div class="s-gora"><span class="s-nr">Zadanie 9</span><h2>Poprawny zapis</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-wybor">
+    <div class="dobrze">✔ drużyna</div><div class="zle">✘ <s>drurzyna</s></div><div class="czemu">ż, bo druh (h wymienia się na ż)</div>
+    <div class="dobrze">✔ ścieżka</div><div class="zle">✘ <s>ścieszka</s></div><div class="czemu">ż - zapamiętaj (ścieżki)</div>
+    <div class="dobrze">✔ wiewiórka</div><div class="zle">✘ <s>wiewjurka</s></div><div class="czemu">wiewiórka - zapamiętaj</div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Gdy nie ma reguły - sprawdź w słowniku i <b>zapamiętaj</b>.</div>
+</div>
+<div class="slajd" id="slajd-10" role="dialog" aria-label="Polecenie i prośba">
+  <div class="s-gora"><span class="s-nr">Zadanie 10</span><h2>Polecenie i prośba</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-para">
+    <div class="v-para-w">
+      <div class="box b-pr"><div class="etyk">POLECENIE</div><div>Idź prosto do fontanny.</div></div>
+      <div class="strz"><span>grzeczniej</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-sk"><div class="etyk">PROŚBA</div><div><mark>Proszę</mark>, idź prosto do fontanny.</div></div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Prośbę tworzą słowa: <b>proszę, czy możesz, bądź tak miły</b>.</div>
+</div>
+<div class="slajd" id="slajd-12" role="dialog" aria-label="Określenia kierunku">
+  <div class="s-gora"><span class="s-nr">Zadanie 12</span><h2>Określenia kierunku</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kolumny">
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">↑</div>
+      <div class="k-opis">prosto</div>
+      
+    </div>
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">←</div>
+      <div class="k-opis">w lewo</div>
+      
+    </div>
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">→</div>
+      <div class="k-opis">w prawo</div>
+      
+    </div>
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">↷</div>
+      <div class="k-opis">obok, za, przed</div>
+      
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Instrukcja: <b>kolejne kroki</b>, każdy z kierunkiem i miejscem.</div>
+</div>
+<div class="slajd" id="punktacja" role="dialog" aria-label="Punktacja">
+  <div class="s-gora"><span class="s-nr">12 zadań · każde dobrze = 1 punkt</span><h2>Punktacja</h2><button type="button" class="s-zamknij" aria-label="Zamknij">✕</button></div>
+  <div class="s-tresc">
+    <div class="pkt-wybor" role="group" aria-label="Ile zadań dobrze?"><button type="button" data-pkt="0">0</button><button type="button" data-pkt="1">1</button><button type="button" data-pkt="2">2</button><button type="button" data-pkt="3">3</button><button type="button" data-pkt="4">4</button><button type="button" data-pkt="5">5</button><button type="button" data-pkt="6">6</button><button type="button" data-pkt="7">7</button><button type="button" data-pkt="8">8</button><button type="button" data-pkt="9">9</button><button type="button" data-pkt="10">10</button><button type="button" data-pkt="11">11</button><button type="button" data-pkt="12">12</button></div>
+    <div class="pkt-progi"><div class="prog" data-od="0" data-do="3"><div class="zakres">0-3 pkt</div><div class="plusy">–</div><div class="opis">bez plusa</div></div><div class="prog" data-od="4" data-do="8"><div class="zakres">4-8 pkt</div><div class="plusy">+</div><div class="opis">jeden plus</div></div><div class="prog" data-od="9" data-do="10"><div class="zakres">9-10 pkt</div><div class="plusy">++</div><div class="opis">2 plusy</div></div><div class="prog" data-od="11" data-do="12"><div class="zakres">11-12 pkt</div><div class="plusy">+++</div><div class="opis">3 plusy</div></div></div>
+  </div>
+</div>
 <script>
 (function () {
   var root = document.documentElement;
@@ -77,9 +279,45 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
     document.querySelectorAll('.widok').forEach(function (w) { w.classList.toggle('on', w.id === id); });
   }
   zakladki.forEach(function (b) { b.onclick = function () { pokazWidok(b.dataset.widok); }; });
+
+  // Slajdy: strzalki przechodza do sasiedniego slajdu, Esc zamyka.
+  var otwarty = null;
+  function otworz(id) {
+    if (otwarty) otwarty.classList.remove('on');
+    otwarty = document.getElementById(id);
+    if (otwarty) otwarty.classList.add('on');
+  }
+  function zamknij() { if (otwarty) otwarty.classList.remove('on'); otwarty = null; }
+  function sasiedni(krok) {
+    var lista = Array.prototype.map.call(document.querySelectorAll('.na-ekran'), function (b) { return b.dataset.slajd; });
+    var i = lista.indexOf(otwarty && otwarty.id);
+    if (i < 0 || !lista[i + krok]) return;
+    otworz(lista[i + krok]);
+  }
+  document.addEventListener('keydown', function (e) {
+    if (!otwarty) return;
+    if (e.key === 'Escape') zamknij();
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowRight' || e.key === 'PageDown')) sasiedni(1);
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowLeft' || e.key === 'PageUp')) sasiedni(-1);
+  });
+
+  function ustawPunkty(n) {
+    document.querySelectorAll('[data-pkt]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.pkt === n)); });
+    document.querySelectorAll('.prog').forEach(function (p) { p.classList.toggle('on', n >= +p.dataset.od && n <= +p.dataset.do); });
+  }
+  document.getElementById('punkty').onclick = function () { otworz('punktacja'); };
+  // #slajd-4 w adresie otwiera slajd od razu (podglad zrzutow, zakladka w przegladarce).
+  var start = location.hash && document.getElementById(location.hash.slice(1));
+  if (start && start.classList.contains('slajd')) otworz(start.id);
+
   document.addEventListener('click', function (e) {
     var p = e.target.closest('.pokaz');
-    if (p) p.parentElement.classList.toggle('otw');
+    if (p) p.closest('.zad').classList.toggle('otw');
+    var s = e.target.closest('.na-ekran');
+    if (s) otworz(s.dataset.slajd);
+    if (e.target.closest('.s-zamknij')) zamknij();
+    var pkt = e.target.closest('[data-pkt]');
+    if (pkt) ustawPunkty(+pkt.dataset.pkt);
     var z = e.target.closest('.zd');
     if (z) z.classList.toggle('zazn');
   });
@@ -92,6 +330,7 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
   document.getElementById('wyczysc').onclick = function () {
     document.querySelectorAll('.zazn').forEach(function (z) { z.classList.remove('zazn'); });
     document.querySelectorAll('.otw').forEach(function (z) { z.classList.remove('otw'); });
+    ustawPunkty(-1);
   };
 })();
 </script>

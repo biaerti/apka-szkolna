@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arkusz 1 - Kiermasz dobrych pomysłów</title><style>
-:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; }
+:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; --sk: #B45309; --skbg: #FEF3E2; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; color: var(--ink); background: #F8FAFC; font-size: var(--fs); line-height: 1.45; display: flex; flex-direction: column; }
@@ -37,17 +37,124 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 .siatka { border-collapse: collapse; margin: 8px 0 0 calc(1.6em + 12px); font-size: .85em; }
 .siatka th, .siatka td { border: 1px solid #CBD5E1; padding: 6px 12px; text-align: left; min-width: 7em; height: 2em; }
 .siatka tr:first-child th { background: var(--pale); }
-.pokaz { display: block; margin: 10px 0 0 calc(1.6em + 12px); border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.akcje { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0 calc(1.6em + 12px); }
+.pokaz, .na-ekran { border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.na-ekran { border-color: var(--blue); color: var(--blue); }
+.na-ekran:hover { background: var(--pale); }
 .zad.otw .pokaz { background: var(--ok); color: #fff; }
 .odp { display: none; margin: 8px 0 0 calc(1.6em + 12px); padding: 10px 14px; background: var(--okbg); border-left: 4px solid var(--ok); border-radius: 0 8px 8px 0; color: #14532D; }
 .zad.otw .odp { display: block; }
 @media (max-width: 900px) { #czytanie { grid-template-columns: 1fr; } .widok.on { height: auto; } .kol { overflow: visible; } }
+
+/* Slajd na caly ekran */
+.slajd { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; display: none; flex-direction: column; padding: 3vh 4vw; font-size: clamp(20px, 2.5vw, 56px); line-height: 1.3; }
+.slajd.on { display: flex; }
+.s-gora { display: flex; align-items: baseline; gap: .8em; border-bottom: 2px solid var(--line); padding-bottom: .4em; }
+.s-gora h2 { font-size: 1.5em; margin: 0; color: var(--blue); }
+.s-nr { font-size: .65em; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: .05em; }
+.s-zamknij { margin-left: auto; border: 0; background: none; color: #6B7280; font-size: 1em; padding: 0 .3em; }
+.s-zamknij:hover { color: var(--ink); }
+.s-tresc { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4vh; padding: 3vh 0; }
+.s-zap { background: #FFF7D6; border-left: .3em solid #F59E0B; padding: .5em .9em; border-radius: 0 .4em .4em 0; font-size: .85em; }
+.s-zap b:first-child { color: #92400E; margin-right: .3em; }
+.slajd mark { background: var(--mark); color: inherit; padding: 0 .1em; border-radius: .15em; }
+.slajd s { color: #B91C1C; }
+.v-wynik { font-size: 1em; text-align: center; }
+.strz { display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; color: #6B7280; font-size: .8em; min-width: 4em; }
+.strz svg { width: 3.5em; height: 1em; }
+.strz path { stroke: #94A3B8; stroke-width: 4; fill: none; }
+.strz path.grot { fill: #94A3B8; stroke: none; }
+.v-para { display: flex; flex-direction: column; gap: 3vh; width: 100%; }
+.v-para-w { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; align-items: stretch; }
+.box { border-radius: .5em; padding: .6em .9em; border: 3px solid; display: flex; flex-direction: column; justify-content: center; }
+.box .etyk { font-size: .6em; font-weight: 800; letter-spacing: .08em; margin-bottom: .2em; }
+.b-pr { border-color: var(--blue); background: var(--pale); }
+.b-pr .etyk { color: var(--blue); }
+.b-sk { border-color: var(--sk); background: var(--skbg); }
+.b-sk .etyk { color: var(--sk); }
+.v-czasy { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; width: 100%; }
+.v-czasy .os { position: absolute; left: 4%; right: 4%; top: 2.05em; height: 4px; background: #CBD5E1; }
+.czas { display: flex; flex-direction: column; align-items: center; position: relative; }
+.kiedy { font-weight: 800; color: #6B7280; font-size: .8em; height: 1.6em; }
+.kropka { width: .9em; height: .9em; border-radius: 50%; background: #94A3B8; margin: .2em 0 .7em; position: relative; z-index: 1; }
+.karta { width: 100%; border: 2px solid var(--line); border-radius: .5em; padding: .6em .8em; text-align: center; position: relative; }
+.karta .nazwa { font-weight: 800; color: var(--blue); }
+.karta .opis { font-size: .75em; color: #4B5563; }
+.karta .przyklad { margin-top: .4em; }
+.tag { position: absolute; top: -.75em; left: 50%; transform: translateX(-50%); font-size: .55em; font-weight: 800; text-transform: uppercase; background: #64748B; color: #fff; padding: .15em .6em; border-radius: 99px; white-space: nowrap; }
+.odp-c .karta { border-color: var(--ok); background: var(--okbg); border-width: 4px; }
+.odp-c .kropka { background: var(--ok); }
+.odp-c .tag { background: var(--ok); }
+.zad-c .karta { border-style: dashed; }
+.v-kolumny { display: flex; gap: 1em; width: 100%; justify-content: center; }
+.kolumna { flex: 1; max-width: 30em; border-radius: .5em; border-top: .35em solid; background: #F8FAFC; padding: .6em .8em; display: flex; flex-direction: column; gap: .4em; }
+.k-tyt { font-size: 1.3em; font-weight: 800; text-align: center; }
+.k-tyt .znak { display: inline-block; min-width: 1em; color: #fff; border-radius: .2em; padding: 0 .2em; }
+.k-opis { font-size: .7em; color: #4B5563; text-align: center; margin-bottom: .2em; }
+.k-item { background: #fff; border: 1px solid var(--line); border-radius: .35em; padding: .35em .6em; }
+.k-item small { display: block; font-size: .65em; color: #6B7280; }
+.k-item.ok { border: 3px solid var(--ok); }
+.k-niebieski { border-color: var(--blue); } .k-niebieski .k-tyt { color: var(--blue); } .k-niebieski .znak { background: var(--blue); }
+.k-pomaranczowy { border-color: var(--sk); } .k-pomaranczowy .k-tyt { color: var(--sk); } .k-pomaranczowy .znak { background: var(--sk); }
+.k-zielony { border-color: var(--ok); } .k-zielony .k-tyt { color: var(--ok); }
+.k-czerwony { border-color: #B91C1C; } .k-czerwony .k-tyt { color: #B91C1C; }
+.k-szary { border-color: #64748B; } .k-szary .k-tyt { color: #64748B; }
+.v-kroki { display: flex; justify-content: center; align-items: stretch; width: 100%; }
+.v-kroki.dlugie { font-size: .8em; }
+.krok { display: flex; flex-direction: column; align-items: center; gap: .3em; border: 2px solid var(--line); border-radius: .5em; padding: .5em .7em; flex: 1 1 0; min-width: 0; max-width: 9em; text-align: center; background: #F8FAFC; }
+.krok .nr { margin: 0; font-size: .7em; min-width: 1.8em; height: 1.8em; padding: 0 .5em; }
+.krok.hl { border: 3px solid var(--ok); background: var(--okbg); }
+.v-kroki .strz { min-width: 2em; flex: none; }
+.v-kroki .strz svg { width: 2em; }
+.pierwsza { color: #fff; background: var(--blue); border-radius: .15em; padding: 0 .1em; }
+.alfabet { display: flex; justify-content: center; gap: .1em; font-size: .6em; }
+.alfabet span { width: 1.3em; text-align: center; color: #94A3B8; border-bottom: 2px solid #E2E8F0; }
+.alfabet span.on { color: #fff; background: var(--blue); border-radius: .2em; font-weight: 800; }
+.v-tabela { border-collapse: collapse; font-size: .9em; }
+.v-tabela th, .v-tabela td { border: 2px solid #CBD5E1; padding: .35em .8em; text-align: left; }
+.v-tabela tr:first-child th { background: var(--pale); color: var(--blue); }
+.v-wybor { display: grid; grid-template-columns: auto auto 1fr; gap: .5em 1.2em; align-items: center; }
+.v-wybor .dobrze { font-weight: 800; color: var(--ok); font-size: 1.2em; }
+.v-wybor .zle { color: #B91C1C; font-size: 1em; }
+.v-wybor .czemu { font-size: .75em; color: #4B5563; }
+.v-mapa { display: flex; flex-direction: column; align-items: center; gap: 1.2em; }
+.srodek { font-size: 1.5em; font-weight: 800; color: #fff; background: var(--blue); border-radius: 99px; padding: .2em 1em; position: relative; }
+.galezie { display: flex; flex-wrap: wrap; justify-content: center; gap: .6em; max-width: 34em; }
+.galaz { border: 2px solid var(--blue); border-radius: 99px; padding: .25em .8em; background: var(--pale); }
+.v-sylaby { font-size: 3em; font-weight: 800; letter-spacing: .02em; }
+.v-sylaby .syl { background: #F1F5F9; border-radius: .2em; padding: 0 .2em; }
+.v-sylaby b, .sam { color: #DC2626; }
+.v-sylaby .kreska { color: #94A3B8; margin: 0 .1em; }
+.v-notatka { font-size: 1.1em; min-width: 18em; max-width: 34em; background: #fff repeating-linear-gradient(#fff 0 1.55em, #BFDBFE 1.55em calc(1.55em + 2px)); border: 2px solid var(--line); border-left: .3em solid #F87171; border-radius: .3em; padding: .4em 1em 1em 1.4em; line-height: calc(1.55em + 2px); }
+.n-tyt { font-weight: 800; text-align: center; color: var(--blue); }
+.v-notatka ol { padding-left: 1.4em; }
+.v-zdanie { font-size: 1.4em; line-height: 2.6; text-align: center; }
+.v-przed { font-size: 1.1em; color: #6B7280; }
+.t { position: relative; display: inline-block; line-height: 1.3; }
+.t-lab { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: .45em; font-weight: 800; color: var(--sk); white-space: nowrap; }
+.t-p { text-decoration: underline; text-decoration-thickness: .1em; text-underline-offset: .15em; text-decoration-color: var(--blue); }
+.t-o { border: .08em solid var(--sk); border-radius: 50%; padding: 0 .25em; }
+.t-f { text-decoration: underline wavy var(--ok); text-decoration-thickness: .07em; text-underline-offset: .15em; }
+.t-h { background: var(--mark); border-radius: .15em; padding: 0 .15em; }
+.t-k { color: #DC2626; font-weight: 800; transform: scale(1.3); margin: 0 .1em; }
+.legenda { display: flex; flex-wrap: wrap; justify-content: center; gap: .5em 2em; font-size: .9em; }
+.legenda small { color: #6B7280; font-size: .8em; }
+.pkt-wybor { display: flex; flex-wrap: wrap; justify-content: center; gap: .3em; }
+.pkt-wybor button { width: 2.2em; height: 2.2em; border: 2px solid #CBD5E1; border-radius: .4em; background: #fff; font-weight: 800; color: var(--ink); }
+.pkt-wybor button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pkt-progi { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8em; width: 100%; max-width: 40em; }
+.prog { border: 2px solid var(--line); border-radius: .5em; padding: .5em; text-align: center; transition: transform .15s; }
+.prog .zakres { font-size: .75em; font-weight: 700; color: #6B7280; }
+.prog .plusy { font-size: 2.2em; font-weight: 800; color: var(--ok); line-height: 1.1; letter-spacing: .05em; }
+.prog .opis { font-size: .7em; color: #4B5563; }
+.prog.on { border: 4px solid var(--ok); background: var(--okbg); transform: scale(1.06); }
 </style></head><body>
 <header>
   <h1>Arkusz 1  Kiermasz dobrych pomysłów</h1>
   <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
   <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
   <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
+  <button type="button" class="przyc" id="punkty">Punktacja</button>
   <button type="button" class="przyc" id="wyczysc">Wyczyść</button>
   <button type="button" class="przyc" id="mniej" aria-label="Mniejsze litery">A−</button>
   <button type="button" class="przyc" id="wiecej" aria-label="Większe litery">A+</button>
@@ -55,12 +162,82 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 <main>
   <section class="widok on" id="czytanie">
     <div class="kol tekst"><h2>Przeczytaj tekst</h2><p><span class="zd">W piątek klasa IV a miała przygotować stoisko na szkolny kiermasz.</span> <span class="zd">Pani poprosiła uczniów, aby przynieśli drobiazgi wykonane własnoręcznie.</span> <span class="zd">Lena zrobiła zakładki do książek, Olek ulepił małe figurki z masy solnej, a Sara zaproponowała, że przygotuje karteczki z cenami.</span></p><p><span class="zd">Po lekcjach dzieci spotkały się w sali.</span> <span class="zd">Szybko zauważyły, że na jednej ławce nie zmieszczą się wszystkie przedmioty.</span> <span class="zd">Olek chciał schować część rzeczy do pudełka, lecz Lena miała inny pomysł.</span> <span class="zd">Uczniowie połączyli dwie ławki, przykryli je jasnym obrusem i ustawili wyroby grupami.</span> <span class="zd">Najmniejsze rzeczy położyli z przodu, żeby każdy mógł je zobaczyć.</span></p><p><span class="zd">Następnego dnia ich stoisko odwiedziło wiele osób.</span> <span class="zd">Najpierw sprzedały się zakładki, a potem figurki.</span> <span class="zd">Pod koniec kiermaszu została tylko jedna kartka z napisem: Dziękujemy za pomoc.</span> <span class="zd">Uczniowie byli zmęczeni, ale dumni, bo wspólnie rozwiązali problem i zebrali pieniądze na nowe książki do biblioteki.</span></p></div>
-    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Po co klasa przygotowała stoisko?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Klasa przygotowała stoisko na szkolny kiermasz, aby sprzedać własnoręcznie wykonane przedmioty i zebrać pieniądze na książki do biblioteki.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Kto przygotował karteczki z cenami?</span></div><ul class="opcje"><li>Lena</li><li>Olek</li><li class="dobra">Sara</li></ul><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Sara.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Ponumeruj wydarzenia od 1 do 4.</span></div><p class="extra">□ Uczniowie połączyli dwie ławki.   □ Sprzedały się zakładki.<br>□ Dzieci przyniosły własne wyroby.   □ Klasa zebrała pieniądze na książki.</p><button type="button" class="pokaz">Odpowiedź</button><div class="odp">3, 2, 1, 4 - w kolejności pozycji zapisanych w zadaniu.</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Dlaczego najmniejsze rzeczy ustawiono z przodu? Odpowiedz pełnym zdaniem.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Ustawiono je z przodu, żeby każdy mógł je zobaczyć.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Które zdanie najlepiej mówi, czego uczy ta historia?</span></div><ul class="opcje"><li class="dobra">Warto działać wspólnie, gdy pojawia się problem.</li><li>Na kiermaszu należy sprzedawać tylko książki.</li><li>Najlepiej pracuje się bez planu.</li></ul><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Warto działać wspólnie, gdy pojawia się problem.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Znajdź w tekście słowo, które znaczy prawie to samo co przedmioty niewielkiej wartości.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">drobiazgi</div></div></div>
+    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Po co klasa przygotowała stoisko?</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Klasa przygotowała stoisko na szkolny kiermasz, aby sprzedać własnoręcznie wykonane przedmioty i zebrać pieniądze na książki do biblioteki.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Kto przygotował karteczki z cenami?</span></div><ul class="opcje"><li>Lena</li><li>Olek</li><li class="dobra">Sara</li></ul><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Sara.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Ponumeruj wydarzenia od 1 do 4.</span></div><p class="extra">□ Uczniowie połączyli dwie ławki.   □ Sprzedały się zakładki.<br>□ Dzieci przyniosły własne wyroby.   □ Klasa zebrała pieniądze na książki.</p><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-3">Slajd ⛶</button></div><div class="odp">2, 3, 1, 4 - w kolejności pozycji zapisanych w zadaniu.</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Dlaczego najmniejsze rzeczy ustawiono z przodu? Odpowiedz pełnym zdaniem.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Ustawiono je z przodu, żeby każdy mógł je zobaczyć.</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Które zdanie najlepiej mówi, czego uczy ta historia?</span></div><ul class="opcje"><li class="dobra">Warto działać wspólnie, gdy pojawia się problem.</li><li>Na kiermaszu należy sprzedawać tylko książki.</li><li>Najlepiej pracuje się bez planu.</li></ul><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Warto działać wspólnie, gdy pojawia się problem.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Znajdź w tekście słowo, które znaczy prawie to samo co przedmioty niewielkiej wartości.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">drobiazgi</div></div></div>
   </section>
   <section class="widok" id="jezyk">
-    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Wypisz z pierwszego akapitu trzy rzeczowniki.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Przykładowo: klasa, stoisko, kiermasz, pani, uczniowie, drobiazgi, Lena, zakładki, książki, Olek, figurki, masa, Sara, karteczki, ceny.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Uzupełnij zdanie właściwą formą wyrazu książka: Uczniowie zebrali pieniądze na nowe ....................... do biblioteki.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">książki</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Ułóż wyrazy w kolejności alfabetycznej: stoisko, zakładka, obrus, figurka.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">figurka, obrus, stoisko, zakładka</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Połącz dwa zdania wyrazem ponieważ: Uczniowie byli dumni. Wspólnie rozwiązali problem.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Uczniowie byli dumni, ponieważ wspólnie rozwiązali problem.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Popraw zdanie. Zapisz wielką literę i potrzebny znak na końcu: czy sara przygotowała ceny</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Czy Sara przygotowała ceny?</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz krótką wiadomość do kolegi lub koleżanki. Zaproś tę osobę na szkolny kiermasz. Podaj miejsce, dzień i jedną zachętę.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Wypowiedź zawiera zaproszenie, miejsce, dzień i zachętę. Jest zrozumiała i poprawnie zakończona.</div></div></div>
+    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Wypisz z pierwszego akapitu trzy rzeczowniki.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-7">Slajd ⛶</button></div><div class="odp">Przykładowo: klasa, stoisko, kiermasz, pani, uczniowie, drobiazgi, Lena, zakładki, książki, Olek, figurki, masa, Sara, karteczki, ceny.</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Uzupełnij zdanie właściwą formą wyrazu książka: Uczniowie zebrali pieniądze na nowe ....................... do biblioteki.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">książki</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Ułóż wyrazy w kolejności alfabetycznej: stoisko, zakładka, obrus, figurka.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-9">Slajd ⛶</button></div><div class="odp">figurka, obrus, stoisko, zakładka</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Połącz dwa zdania wyrazem ponieważ: Uczniowie byli dumni. Wspólnie rozwiązali problem.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-10">Slajd ⛶</button></div><div class="odp">Uczniowie byli dumni, ponieważ wspólnie rozwiązali problem.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>Popraw zdanie. Zapisz wielką literę i potrzebny znak na końcu: czy sara przygotowała ceny</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-11">Slajd ⛶</button></div><div class="odp">Czy Sara przygotowała ceny?</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Napisz krótką wiadomość do kolegi lub koleżanki. Zaproś tę osobę na szkolny kiermasz. Podaj miejsce, dzień i jedną zachętę.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-12">Slajd ⛶</button></div><div class="odp">Wypowiedź zawiera zaproszenie, miejsce, dzień i zachętę. Jest zrozumiała i poprawnie zakończona.</div></div></div>
   </section>
 </main>
+<div class="slajd" id="slajd-3" role="dialog" aria-label="Kolejność wydarzeń">
+  <div class="s-gora"><span class="s-nr">Zadanie 3</span><h2>Kolejność wydarzeń</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kroki">
+      <div class="krok"><div class="nr">1</div><div>Dzieci przyniosły własne wyroby.</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">2</div><div>Uczniowie połączyli dwie ławki.</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">3</div><div>Sprzedały się zakładki.</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">4</div><div>Klasa zebrała pieniądze na książki.</div></div></div><p class="v-wynik">W zadaniu: <b>2, 3, 1, 4</b></p></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Kolejność zdradzają słowa: <b>najpierw, potem, następnego dnia, pod koniec</b>.</div>
+</div>
+<div class="slajd" id="slajd-7" role="dialog" aria-label="Rzeczownik">
+  <div class="s-gora"><span class="s-nr">Zadanie 7</span><h2>Rzeczownik</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><p class="v-zdanie">W <span class="t t-p">piątek</span> <span class="t t-p">klasa</span> IV a miała przygotować <span class="t t-p">stoisko</span> na szkolny <span class="t t-p">kiermasz</span>.</p><div class="legenda"><span><span class="t t-p">rzeczownik</span> <small>kto? co?</small></span></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Rzeczownik nazywa osoby, zwierzęta, rzeczy i zjawiska. Odpowiada na pytania <b>kto? co?</b></div>
+</div>
+<div class="slajd" id="slajd-9" role="dialog" aria-label="Kolejność alfabetyczna">
+  <div class="s-gora"><span class="s-nr">Zadanie 9</span><h2>Kolejność alfabetyczna</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="alfabet"><span>a</span><span>ą</span><span>b</span><span>c</span><span>ć</span><span>d</span><span>e</span><span>ę</span><span class="on">f</span><span>g</span><span>h</span><span>i</span><span>j</span><span>k</span><span>l</span><span>ł</span><span>m</span><span>n</span><span>ń</span><span class="on">o</span><span>ó</span><span>p</span><span>r</span><span class="on">s</span><span>ś</span><span>t</span><span>u</span><span>w</span><span>y</span><span class="on">z</span><span>ź</span><span>ż</span></div><div class="v-kroki">
+      <div class="krok"><div class="nr">1</div><div><b class="pierwsza">f</b>igurka</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">2</div><div><b class="pierwsza">o</b>brus</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">3</div><div><b class="pierwsza">s</b>toisko</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">4</div><div><b class="pierwsza">z</b>akładka</div></div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Patrzymy na <b>pierwszą literę</b>. Gdy jest taka sama - na drugą.</div>
+</div>
+<div class="slajd" id="slajd-10" role="dialog" aria-label="Łączymy zdania wyrazem ponieważ">
+  <div class="s-gora"><span class="s-nr">Zadanie 10</span><h2>Łączymy zdania wyrazem ponieważ</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-para">
+    <div class="v-para-w">
+      <div class="box b-sk"><div class="etyk">SKUTEK</div><div>Uczniowie byli dumni.</div></div>
+      <div class="strz"><span>ponieważ</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-pr"><div class="etyk">PRZYCZYNA</div><div>Wspólnie rozwiązali problem.</div></div>
+    </div></div><p class="v-wynik">Uczniowie byli dumni<span class="t t-k">,</span> <b>ponieważ</b> wspólnie rozwiązali problem.</p></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Po <b>ponieważ</b> stoi przyczyna. Przed ponieważ stawiamy <b>przecinek</b>.</div>
+</div>
+<div class="slajd" id="slajd-11" role="dialog" aria-label="Wielka litera i znak na końcu">
+  <div class="s-gora"><span class="s-nr">Zadanie 11</span><h2>Wielka litera i znak na końcu</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><p class="v-przed">było: <s>czy sara przygotowała ceny</s></p><p class="v-zdanie"><span class="t t-k">C</span>zy <span class="t t-k">S</span>ara przygotowała ceny<span class="t t-k">?</span></p></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Zdanie i imię zaczynamy <b>wielką literą</b>. Pytanie kończymy <b>pytajnikiem</b>.</div>
+</div>
+<div class="slajd" id="slajd-12" role="dialog" aria-label="Co musi mieć zaproszenie?">
+  <div class="s-gora"><span class="s-nr">Zadanie 12</span><h2>Co musi mieć zaproszenie?</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kolumny">
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">Na co?</div>
+      
+      <div class="k-item">Zapraszam Cię na szkolny kiermasz!</div>
+    </div>
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">Gdzie?</div>
+      
+      <div class="k-item">w sali 12</div>
+    </div>
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">Kiedy?</div>
+      
+      <div class="k-item">w sobotę o 10.00</div>
+    </div>
+    <div class="kolumna k-niebieski">
+      <div class="k-tyt">Zachęta</div>
+      
+      <div class="k-item">Będą zakładki i figurki!</div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Sprawdź, czy odbiorca wie: <b>na co, gdzie i kiedy</b> ma przyjść.</div>
+</div>
+<div class="slajd" id="punktacja" role="dialog" aria-label="Punktacja">
+  <div class="s-gora"><span class="s-nr">12 zadań · każde dobrze = 1 punkt</span><h2>Punktacja</h2><button type="button" class="s-zamknij" aria-label="Zamknij">✕</button></div>
+  <div class="s-tresc">
+    <div class="pkt-wybor" role="group" aria-label="Ile zadań dobrze?"><button type="button" data-pkt="0">0</button><button type="button" data-pkt="1">1</button><button type="button" data-pkt="2">2</button><button type="button" data-pkt="3">3</button><button type="button" data-pkt="4">4</button><button type="button" data-pkt="5">5</button><button type="button" data-pkt="6">6</button><button type="button" data-pkt="7">7</button><button type="button" data-pkt="8">8</button><button type="button" data-pkt="9">9</button><button type="button" data-pkt="10">10</button><button type="button" data-pkt="11">11</button><button type="button" data-pkt="12">12</button></div>
+    <div class="pkt-progi"><div class="prog" data-od="0" data-do="3"><div class="zakres">0-3 pkt</div><div class="plusy">–</div><div class="opis">bez plusa</div></div><div class="prog" data-od="4" data-do="8"><div class="zakres">4-8 pkt</div><div class="plusy">+</div><div class="opis">jeden plus</div></div><div class="prog" data-od="9" data-do="10"><div class="zakres">9-10 pkt</div><div class="plusy">++</div><div class="opis">2 plusy</div></div><div class="prog" data-od="11" data-do="12"><div class="zakres">11-12 pkt</div><div class="plusy">+++</div><div class="opis">3 plusy</div></div></div>
+  </div>
+</div>
 <script>
 (function () {
   var root = document.documentElement;
@@ -77,9 +254,45 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
     document.querySelectorAll('.widok').forEach(function (w) { w.classList.toggle('on', w.id === id); });
   }
   zakladki.forEach(function (b) { b.onclick = function () { pokazWidok(b.dataset.widok); }; });
+
+  // Slajdy: strzalki przechodza do sasiedniego slajdu, Esc zamyka.
+  var otwarty = null;
+  function otworz(id) {
+    if (otwarty) otwarty.classList.remove('on');
+    otwarty = document.getElementById(id);
+    if (otwarty) otwarty.classList.add('on');
+  }
+  function zamknij() { if (otwarty) otwarty.classList.remove('on'); otwarty = null; }
+  function sasiedni(krok) {
+    var lista = Array.prototype.map.call(document.querySelectorAll('.na-ekran'), function (b) { return b.dataset.slajd; });
+    var i = lista.indexOf(otwarty && otwarty.id);
+    if (i < 0 || !lista[i + krok]) return;
+    otworz(lista[i + krok]);
+  }
+  document.addEventListener('keydown', function (e) {
+    if (!otwarty) return;
+    if (e.key === 'Escape') zamknij();
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowRight' || e.key === 'PageDown')) sasiedni(1);
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowLeft' || e.key === 'PageUp')) sasiedni(-1);
+  });
+
+  function ustawPunkty(n) {
+    document.querySelectorAll('[data-pkt]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.pkt === n)); });
+    document.querySelectorAll('.prog').forEach(function (p) { p.classList.toggle('on', n >= +p.dataset.od && n <= +p.dataset.do); });
+  }
+  document.getElementById('punkty').onclick = function () { otworz('punktacja'); };
+  // #slajd-4 w adresie otwiera slajd od razu (podglad zrzutow, zakladka w przegladarce).
+  var start = location.hash && document.getElementById(location.hash.slice(1));
+  if (start && start.classList.contains('slajd')) otworz(start.id);
+
   document.addEventListener('click', function (e) {
     var p = e.target.closest('.pokaz');
-    if (p) p.parentElement.classList.toggle('otw');
+    if (p) p.closest('.zad').classList.toggle('otw');
+    var s = e.target.closest('.na-ekran');
+    if (s) otworz(s.dataset.slajd);
+    if (e.target.closest('.s-zamknij')) zamknij();
+    var pkt = e.target.closest('[data-pkt]');
+    if (pkt) ustawPunkty(+pkt.dataset.pkt);
     var z = e.target.closest('.zd');
     if (z) z.classList.toggle('zazn');
   });
@@ -92,6 +305,7 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
   document.getElementById('wyczysc').onclick = function () {
     document.querySelectorAll('.zazn').forEach(function (z) { z.classList.remove('zazn'); });
     document.querySelectorAll('.otw').forEach(function (z) { z.classList.remove('otw'); });
+    ustawPunkty(-1);
   };
 })();
 </script>

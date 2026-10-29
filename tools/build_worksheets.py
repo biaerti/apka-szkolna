@@ -360,7 +360,7 @@ WORKSHEETS = [
             ("10", "Ułóż jedno zdanie oznajmujące i jedno pytające o odpoczynku.", 2, None),
             ("11", "Podziel wyraz wypoczęty na sylaby i zaznacz samogłoski.", 1, None),
         ],
-        "writing": "Napisz krótką notatkę pod tytułem Mój sposób na dobry wieczór. Podaj trzy czynności w sensownej kolejności.",
+        "writing": "Napisz notatkę punktową pod tytułem Mój sposób na dobry wieczór. Wypisz trzy czynności w sensownej kolejności - każdą w osobnym punkcie.",
         "writing_lines": 8,
     },
     {
@@ -581,7 +581,7 @@ ANSWERS = {
     1: [
         ("1", "Klasa przygotowała stoisko na szkolny kiermasz, aby sprzedać własnoręcznie wykonane przedmioty i zebrać pieniądze na książki do biblioteki."),
         ("2", "Sara."),
-        ("3", "3, 2, 1, 4 - w kolejności pozycji zapisanych w zadaniu."),
+        ("3", "2, 3, 1, 4 - w kolejności pozycji zapisanych w zadaniu."),
         ("4", "Ustawiono je z przodu, żeby każdy mógł je zobaczyć."),
         ("5", "Warto działać wspólnie, gdy pojawia się problem."),
         ("6", "drobiazgi"),
@@ -618,7 +618,7 @@ ANSWERS = {
         ("9", "mózg, późno, przygotować"),
         ("10", "Dowolne dwa poprawne zdania zgodne z wymaganym typem."),
         ("11", "wy-po-czę-ty; samogłoski: y, o, ę, y"),
-        ("12", "Notatka ma tytuł, trzy czynności i zachowuje logiczną kolejność."),
+        ("12", "Notatka ma tytuł i trzy ponumerowane punkty w sensownej kolejności. Każdy punkt to krótkie hasło, np. 1. Odkładam telefon. 2. Pakuję plecak na jutro. 3. Wietrzę pokój i kładę się o stałej porze."),
     ],
     4: [
         ("1", "Odnalezienie starego dębu i koperty z ostatnim zadaniem."),
@@ -663,7 +663,7 @@ ANSWERS = {
         ("12", "Wyjaśnienie zawiera przyczynę (ciężki ptak, szybowanie, brak prądów nad morzem) i skutek (droga nad lądem). Uczeń pisze własnymi słowami."),
     ],
     7: [
-        ("1", "Pies. Dowody, np.: trzyma piłkę w zębach, chodzi na spacery, obwąchuje krzaki, ma miskę, pan złapał go za ucho, je skarpetkę."),
+        ("1", "Pies. Dowody, np.: trzyma piłkę w zębach, chodzi na spacery, obwąchuje krzaki, ma miskę, Nowy złapał go za ucho, je skarpetkę."),
         ("2", "Niemowlę, nowe dziecko w rodzinie: jest małe, płacze, pachnie mlekiem, leży na kocu, pierwszy raz się śmieje."),
         ("3", "Był zły albo zazdrosny, bo wszyscy zajmowali się dzieckiem, a spacery były krótsze. Pani odgadła częściowo - nazwała to samotnością."),
         ("4", "F (od trzech miesięcy), F, ?"),

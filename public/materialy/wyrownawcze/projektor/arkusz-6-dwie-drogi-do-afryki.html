@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arkusz 6 - Dwie drogi do Afryki</title><style>
-:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; }
+:root { --fs: 22px; --ink: #1F2937; --blue: #1F4E78; --pale: #EAF3F8; --line: #D9DEE5; --ok: #15803D; --okbg: #E8F6EC; --mark: #FFE066; --sk: #B45309; --skbg: #FEF3E2; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; color: var(--ink); background: #F8FAFC; font-size: var(--fs); line-height: 1.45; display: flex; flex-direction: column; }
@@ -37,17 +37,124 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 .siatka { border-collapse: collapse; margin: 8px 0 0 calc(1.6em + 12px); font-size: .85em; }
 .siatka th, .siatka td { border: 1px solid #CBD5E1; padding: 6px 12px; text-align: left; min-width: 7em; height: 2em; }
 .siatka tr:first-child th { background: var(--pale); }
-.pokaz { display: block; margin: 10px 0 0 calc(1.6em + 12px); border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.akcje { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0 calc(1.6em + 12px); }
+.pokaz, .na-ekran { border: 1px solid var(--ok); color: var(--ok); background: #fff; border-radius: 8px; padding: 3px 12px; font-size: .7em; font-weight: 700; }
+.na-ekran { border-color: var(--blue); color: var(--blue); }
+.na-ekran:hover { background: var(--pale); }
 .zad.otw .pokaz { background: var(--ok); color: #fff; }
 .odp { display: none; margin: 8px 0 0 calc(1.6em + 12px); padding: 10px 14px; background: var(--okbg); border-left: 4px solid var(--ok); border-radius: 0 8px 8px 0; color: #14532D; }
 .zad.otw .odp { display: block; }
 @media (max-width: 900px) { #czytanie { grid-template-columns: 1fr; } .widok.on { height: auto; } .kol { overflow: visible; } }
+
+/* Slajd na caly ekran */
+.slajd { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; display: none; flex-direction: column; padding: 3vh 4vw; font-size: clamp(20px, 2.5vw, 56px); line-height: 1.3; }
+.slajd.on { display: flex; }
+.s-gora { display: flex; align-items: baseline; gap: .8em; border-bottom: 2px solid var(--line); padding-bottom: .4em; }
+.s-gora h2 { font-size: 1.5em; margin: 0; color: var(--blue); }
+.s-nr { font-size: .65em; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: .05em; }
+.s-zamknij { margin-left: auto; border: 0; background: none; color: #6B7280; font-size: 1em; padding: 0 .3em; }
+.s-zamknij:hover { color: var(--ink); }
+.s-tresc { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4vh; padding: 3vh 0; }
+.s-zap { background: #FFF7D6; border-left: .3em solid #F59E0B; padding: .5em .9em; border-radius: 0 .4em .4em 0; font-size: .85em; }
+.s-zap b:first-child { color: #92400E; margin-right: .3em; }
+.slajd mark { background: var(--mark); color: inherit; padding: 0 .1em; border-radius: .15em; }
+.slajd s { color: #B91C1C; }
+.v-wynik { font-size: 1em; text-align: center; }
+.strz { display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; color: #6B7280; font-size: .8em; min-width: 4em; }
+.strz svg { width: 3.5em; height: 1em; }
+.strz path { stroke: #94A3B8; stroke-width: 4; fill: none; }
+.strz path.grot { fill: #94A3B8; stroke: none; }
+.v-para { display: flex; flex-direction: column; gap: 3vh; width: 100%; }
+.v-para-w { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; align-items: stretch; }
+.box { border-radius: .5em; padding: .6em .9em; border: 3px solid; display: flex; flex-direction: column; justify-content: center; }
+.box .etyk { font-size: .6em; font-weight: 800; letter-spacing: .08em; margin-bottom: .2em; }
+.b-pr { border-color: var(--blue); background: var(--pale); }
+.b-pr .etyk { color: var(--blue); }
+.b-sk { border-color: var(--sk); background: var(--skbg); }
+.b-sk .etyk { color: var(--sk); }
+.v-czasy { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; width: 100%; }
+.v-czasy .os { position: absolute; left: 4%; right: 4%; top: 2.05em; height: 4px; background: #CBD5E1; }
+.czas { display: flex; flex-direction: column; align-items: center; position: relative; }
+.kiedy { font-weight: 800; color: #6B7280; font-size: .8em; height: 1.6em; }
+.kropka { width: .9em; height: .9em; border-radius: 50%; background: #94A3B8; margin: .2em 0 .7em; position: relative; z-index: 1; }
+.karta { width: 100%; border: 2px solid var(--line); border-radius: .5em; padding: .6em .8em; text-align: center; position: relative; }
+.karta .nazwa { font-weight: 800; color: var(--blue); }
+.karta .opis { font-size: .75em; color: #4B5563; }
+.karta .przyklad { margin-top: .4em; }
+.tag { position: absolute; top: -.75em; left: 50%; transform: translateX(-50%); font-size: .55em; font-weight: 800; text-transform: uppercase; background: #64748B; color: #fff; padding: .15em .6em; border-radius: 99px; white-space: nowrap; }
+.odp-c .karta { border-color: var(--ok); background: var(--okbg); border-width: 4px; }
+.odp-c .kropka { background: var(--ok); }
+.odp-c .tag { background: var(--ok); }
+.zad-c .karta { border-style: dashed; }
+.v-kolumny { display: flex; gap: 1em; width: 100%; justify-content: center; }
+.kolumna { flex: 1; max-width: 30em; border-radius: .5em; border-top: .35em solid; background: #F8FAFC; padding: .6em .8em; display: flex; flex-direction: column; gap: .4em; }
+.k-tyt { font-size: 1.3em; font-weight: 800; text-align: center; }
+.k-tyt .znak { display: inline-block; min-width: 1em; color: #fff; border-radius: .2em; padding: 0 .2em; }
+.k-opis { font-size: .7em; color: #4B5563; text-align: center; margin-bottom: .2em; }
+.k-item { background: #fff; border: 1px solid var(--line); border-radius: .35em; padding: .35em .6em; }
+.k-item small { display: block; font-size: .65em; color: #6B7280; }
+.k-item.ok { border: 3px solid var(--ok); }
+.k-niebieski { border-color: var(--blue); } .k-niebieski .k-tyt { color: var(--blue); } .k-niebieski .znak { background: var(--blue); }
+.k-pomaranczowy { border-color: var(--sk); } .k-pomaranczowy .k-tyt { color: var(--sk); } .k-pomaranczowy .znak { background: var(--sk); }
+.k-zielony { border-color: var(--ok); } .k-zielony .k-tyt { color: var(--ok); }
+.k-czerwony { border-color: #B91C1C; } .k-czerwony .k-tyt { color: #B91C1C; }
+.k-szary { border-color: #64748B; } .k-szary .k-tyt { color: #64748B; }
+.v-kroki { display: flex; justify-content: center; align-items: stretch; width: 100%; }
+.v-kroki.dlugie { font-size: .8em; }
+.krok { display: flex; flex-direction: column; align-items: center; gap: .3em; border: 2px solid var(--line); border-radius: .5em; padding: .5em .7em; flex: 1 1 0; min-width: 0; max-width: 9em; text-align: center; background: #F8FAFC; }
+.krok .nr { margin: 0; font-size: .7em; min-width: 1.8em; height: 1.8em; padding: 0 .5em; }
+.krok.hl { border: 3px solid var(--ok); background: var(--okbg); }
+.v-kroki .strz { min-width: 2em; flex: none; }
+.v-kroki .strz svg { width: 2em; }
+.pierwsza { color: #fff; background: var(--blue); border-radius: .15em; padding: 0 .1em; }
+.alfabet { display: flex; justify-content: center; gap: .1em; font-size: .6em; }
+.alfabet span { width: 1.3em; text-align: center; color: #94A3B8; border-bottom: 2px solid #E2E8F0; }
+.alfabet span.on { color: #fff; background: var(--blue); border-radius: .2em; font-weight: 800; }
+.v-tabela { border-collapse: collapse; font-size: .9em; }
+.v-tabela th, .v-tabela td { border: 2px solid #CBD5E1; padding: .35em .8em; text-align: left; }
+.v-tabela tr:first-child th { background: var(--pale); color: var(--blue); }
+.v-wybor { display: grid; grid-template-columns: auto auto 1fr; gap: .5em 1.2em; align-items: center; }
+.v-wybor .dobrze { font-weight: 800; color: var(--ok); font-size: 1.2em; }
+.v-wybor .zle { color: #B91C1C; font-size: 1em; }
+.v-wybor .czemu { font-size: .75em; color: #4B5563; }
+.v-mapa { display: flex; flex-direction: column; align-items: center; gap: 1.2em; }
+.srodek { font-size: 1.5em; font-weight: 800; color: #fff; background: var(--blue); border-radius: 99px; padding: .2em 1em; position: relative; }
+.galezie { display: flex; flex-wrap: wrap; justify-content: center; gap: .6em; max-width: 34em; }
+.galaz { border: 2px solid var(--blue); border-radius: 99px; padding: .25em .8em; background: var(--pale); }
+.v-sylaby { font-size: 3em; font-weight: 800; letter-spacing: .02em; }
+.v-sylaby .syl { background: #F1F5F9; border-radius: .2em; padding: 0 .2em; }
+.v-sylaby b, .sam { color: #DC2626; }
+.v-sylaby .kreska { color: #94A3B8; margin: 0 .1em; }
+.v-notatka { font-size: 1.1em; min-width: 18em; max-width: 34em; background: #fff repeating-linear-gradient(#fff 0 1.55em, #BFDBFE 1.55em calc(1.55em + 2px)); border: 2px solid var(--line); border-left: .3em solid #F87171; border-radius: .3em; padding: .4em 1em 1em 1.4em; line-height: calc(1.55em + 2px); }
+.n-tyt { font-weight: 800; text-align: center; color: var(--blue); }
+.v-notatka ol { padding-left: 1.4em; }
+.v-zdanie { font-size: 1.4em; line-height: 2.6; text-align: center; }
+.v-przed { font-size: 1.1em; color: #6B7280; }
+.t { position: relative; display: inline-block; line-height: 1.3; }
+.t-lab { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: .45em; font-weight: 800; color: var(--sk); white-space: nowrap; }
+.t-p { text-decoration: underline; text-decoration-thickness: .1em; text-underline-offset: .15em; text-decoration-color: var(--blue); }
+.t-o { border: .08em solid var(--sk); border-radius: 50%; padding: 0 .25em; }
+.t-f { text-decoration: underline wavy var(--ok); text-decoration-thickness: .07em; text-underline-offset: .15em; }
+.t-h { background: var(--mark); border-radius: .15em; padding: 0 .15em; }
+.t-k { color: #DC2626; font-weight: 800; transform: scale(1.3); margin: 0 .1em; }
+.legenda { display: flex; flex-wrap: wrap; justify-content: center; gap: .5em 2em; font-size: .9em; }
+.legenda small { color: #6B7280; font-size: .8em; }
+.pkt-wybor { display: flex; flex-wrap: wrap; justify-content: center; gap: .3em; }
+.pkt-wybor button { width: 2.2em; height: 2.2em; border: 2px solid #CBD5E1; border-radius: .4em; background: #fff; font-weight: 800; color: var(--ink); }
+.pkt-wybor button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pkt-progi { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8em; width: 100%; max-width: 40em; }
+.prog { border: 2px solid var(--line); border-radius: .5em; padding: .5em; text-align: center; transition: transform .15s; }
+.prog .zakres { font-size: .75em; font-weight: 700; color: #6B7280; }
+.prog .plusy { font-size: 2.2em; font-weight: 800; color: var(--ok); line-height: 1.1; letter-spacing: .05em; }
+.prog .opis { font-size: .7em; color: #4B5563; }
+.prog.on { border: 4px solid var(--ok); background: var(--okbg); transform: scale(1.06); }
 </style></head><body>
 <header>
   <h1>Arkusz 6  Dwie drogi do Afryki<small>Poziom wyżej</small></h1>
   <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
   <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
   <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
+  <button type="button" class="przyc" id="punkty">Punktacja</button>
   <button type="button" class="przyc" id="wyczysc">Wyczyść</button>
   <button type="button" class="przyc" id="mniej" aria-label="Mniejsze litery">A−</button>
   <button type="button" class="przyc" id="wiecej" aria-label="Większe litery">A+</button>
@@ -55,12 +162,98 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
 <main>
   <section class="widok on" id="czytanie">
     <div class="kol tekst"><h2>Przeczytaj tekst</h2><p><span class="zd">Każdej jesieni nad Polską odbywa się wielka wędrówka.</span> <span class="zd">Ptaki, które latem karmiły pisklęta na naszych łąkach, odlatują do Afryki.</span> <span class="zd">Nie robią tego z powodu zimna, jak często się sądzi.</span> <span class="zd">Wiele z nich zniosłoby niską temperaturę, ale zimą brakuje im pokarmu: owadów, żab czy dżdżownic.</span></p><p><span class="zd">Bocian biały to ciężki ptak o szerokich skrzydłach.</span> <span class="zd">Gdyby przez całą drogę nimi machał, szybko by się zmęczył.</span> <span class="zd">Dlatego szybuje na prądach ciepłego powietrza, które unoszą się nad nagrzaną ziemią.</span> <span class="zd">Nad morzem takich prądów prawie nie ma, więc bociany lecą dłuższą drogą nad lądem: z Polski przez Turcję i Bliski Wschód.</span> <span class="zd">Wyruszają w sierpniu, a młode ptaki często startują przed dorosłymi i same muszą odnaleźć kierunek.</span></p><p><span class="zd">Jaskółka dymówka jest lekka i zwinna.</span> <span class="zd">Leci, machając skrzydłami, a po drodze łapie owady w locie, więc nie musi robić długich przerw na posiłek.</span> <span class="zd">Przelatuje nad Morzem Śródziemnym i nad pustynią.</span> <span class="zd">Zanim ruszy na południe, zbiera się z innymi jaskółkami na przewodach elektrycznych.</span></p><p><span class="zd">Naukowcy wciąż badają, jak ptaki nie gubią drogi.</span> <span class="zd">Wiadomo, że pomagają im słońce, gwiazdy i ukształtowanie terenu, a niektóre gatunki wyczuwają pole magnetyczne Ziemi, tak jak igła kompasu.</span> <span class="zd">Mimo to wędrówka jest niebezpieczna i nie wszystkie ptaki wracają wiosną do swoich gniazd.</span></p></div>
-    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Z jakiego powodu ptaki naprawdę odlatują? Jakie błędne przekonanie prostuje autor?</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Zimą brakuje im pokarmu (owadów, żab, dżdżownic). Autor prostuje przekonanie, że ptaki odlatują z powodu zimna.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Porównaj oba ptaki. Uzupełnij tabelę.</span></div><table class="siatka"><tr><th></th><th>bocian biały</th><th>jaskółka dymówka</th></tr><tr><th>budowa</th><td></td><td></td></tr><tr><th>sposób lotu</th><td></td><td></td></tr><tr><th>lot nad morzem</th><td></td><td></td></tr></table><button type="button" class="pokaz">Odpowiedź</button><div class="odp">budowa: bocian ciężki, szerokie skrzydła / jaskółka lekka, zwinna; lot: bocian szybuje na prądach ciepłego powietrza / jaskółka macha skrzydłami; nad morzem: bocian omija morze / jaskółka przelatuje nad morzem.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Dlaczego bociany nie lecą nad morzem? Połącz dwie informacje z tekstu.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Bocian jest ciężki i musi szybować na prądach ciepłego powietrza, a nad morzem takich prądów prawie nie ma (informacje z 2. akapitu).</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Zaznacz P (prawda), F (fałsz) albo ? (tekst o tym nie mówi).</span></div><p class="extra">Bociany odlatują, bo nie znoszą zimna.  P / F / ?<br>Młode bociany zawsze lecą razem z rodzicami.  P / F / ?<br>Jaskółki żyją dłużej niż bociany.  P / F / ?</p><button type="button" class="pokaz">Odpowiedź</button><div class="odp">F, F (młode często startują przed dorosłymi), ?</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Po co autor napisał, że ptaki wyczuwają pole magnetyczne tak jak igła kompasu?</span></div><ul class="opcje"><li class="dobra">Żeby wyjaśnić trudną rzecz czymś, co czytelnik zna.</li><li>Żeby pokazać, że ptaki noszą ze sobą kompasy.</li><li>Żeby opisać, jak wygląda bocian.</li></ul><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Żeby wyjaśnić trudną rzecz czymś, co czytelnik zna.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Podaj dwa zagrożenia w czasie wędrówki, o których można wnioskować z tekstu.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Dwa spośród: zmęczenie, brak pokarmu, zgubienie drogi, przelot nad pustynią lub morzem, samotna droga młodych bocianów.</div></div></div>
+    <div class="kol"><h2>Sprawdź, co rozumiesz</h2><div class="zad"><div class="pol"><span class="nr">1</span><span>Z jakiego powodu ptaki naprawdę odlatują? Jakie błędne przekonanie prostuje autor?</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-1">Slajd ⛶</button></div><div class="odp">Zimą brakuje im pokarmu (owadów, żab, dżdżownic). Autor prostuje przekonanie, że ptaki odlatują z powodu zimna.</div></div><div class="zad"><div class="pol"><span class="nr">2</span><span>Porównaj oba ptaki. Uzupełnij tabelę.</span></div><table class="siatka"><tr><th></th><th>bocian biały</th><th>jaskółka dymówka</th></tr><tr><th>budowa</th><td></td><td></td></tr><tr><th>sposób lotu</th><td></td><td></td></tr><tr><th>lot nad morzem</th><td></td><td></td></tr></table><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-2">Slajd ⛶</button></div><div class="odp">budowa: bocian ciężki, szerokie skrzydła / jaskółka lekka, zwinna; lot: bocian szybuje na prądach ciepłego powietrza / jaskółka macha skrzydłami; nad morzem: bocian omija morze / jaskółka przelatuje nad morzem.</div></div><div class="zad"><div class="pol"><span class="nr">3</span><span>Dlaczego bociany nie lecą nad morzem? Połącz dwie informacje z tekstu.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-3">Slajd ⛶</button></div><div class="odp">Bocian jest ciężki i musi szybować na prądach ciepłego powietrza, a nad morzem takich prądów prawie nie ma (informacje z 2. akapitu).</div></div><div class="zad"><div class="pol"><span class="nr">4</span><span>Zaznacz P (prawda), F (fałsz) albo ? (tekst o tym nie mówi).</span></div><p class="extra">Bociany odlatują, bo nie znoszą zimna.  P / F / ?<br>Młode bociany zawsze lecą razem z rodzicami.  P / F / ?<br>Jaskółki żyją dłużej niż bociany.  P / F / ?</p><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-4">Slajd ⛶</button></div><div class="odp">F, F (młode często startują przed dorosłymi), ?</div></div><div class="zad"><div class="pol"><span class="nr">5</span><span>Po co autor napisał, że ptaki wyczuwają pole magnetyczne tak jak igła kompasu?</span></div><ul class="opcje"><li class="dobra">Żeby wyjaśnić trudną rzecz czymś, co czytelnik zna.</li><li>Żeby pokazać, że ptaki noszą ze sobą kompasy.</li><li>Żeby opisać, jak wygląda bocian.</li></ul><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Żeby wyjaśnić trudną rzecz czymś, co czytelnik zna.</div></div><div class="zad"><div class="pol"><span class="nr">6</span><span>Podaj dwa zagrożenia w czasie wędrówki, o których można wnioskować z tekstu.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Dwa spośród: zmęczenie, brak pokarmu, zgubienie drogi, przelot nad pustynią lub morzem, samotna droga młodych bocianów.</div></div></div>
   </section>
   <section class="widok" id="jezyk">
-    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Utwórz przymiotniki od rzeczowników. Uważaj na pisownię.<br>zima - ....................   ptak - ....................   Afryka - ....................   morze - ....................   słońce - ....................</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">zimowy, ptasi, afrykański (mała litera), morski, słoneczny</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Wpisz ż, rz albo sz:  ..aby   d..d..ownice   pr..ewody   wyru..ają   mo..e   ..ółty dziób</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">żaby, dżdżownice, przewody, wyruszają, morze, żółty</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wpisz wyraz ptak w odpowiedniej formie.<br>Nad łąką krążyło pięć .........................  Naukowcy przyglądają się ......................... przez lornetkę.<br>W książce przeczytałem o ......................... wędrownych.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">ptaków, ptakom, ptakach</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Połącz zdania na dwa sposoby: raz wyrazem więc, raz wyrazem ponieważ. Zimą brakuje owadów. Jaskółki odlatują do Afryki.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Zimą brakuje owadów, więc jaskółki odlatują do Afryki. Jaskółki odlatują do Afryki, ponieważ zimą brakuje owadów. Zwrócić uwagę na odwrotną kolejność zdań.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>W tekście igła to igła kompasu. Ułóż dwa zdania, w których wyraz igła ma dwa inne znaczenia.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Na przykład: igła do szycia, igła sosny lub świerku, igła strzykawki.</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Wyjaśnij młodszemu koledze albo koleżance, dlaczego bocian leci do Afryki okrężną drogą. Napisz 4-5 zdań własnymi słowami - nie przepisuj zdań z tekstu.</span></div><button type="button" class="pokaz">Odpowiedź</button><div class="odp">Wyjaśnienie zawiera przyczynę (ciężki ptak, szybowanie, brak prądów nad morzem) i skutek (droga nad lądem). Uczeń pisze własnymi słowami.</div></div></div>
+    <div class="kol"><h2>Poćwicz język</h2><div class="zad"><div class="pol"><span class="nr">7</span><span>Utwórz przymiotniki od rzeczowników. Uważaj na pisownię.<br>zima - ....................   ptak - ....................   Afryka - ....................   morze - ....................   słońce - ....................</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-7">Slajd ⛶</button></div><div class="odp">zimowy, ptasi, afrykański (mała litera), morski, słoneczny</div></div><div class="zad"><div class="pol"><span class="nr">8</span><span>Wpisz ż, rz albo sz:  ..aby   d..d..ownice   pr..ewody   wyru..ają   mo..e   ..ółty dziób</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-8">Slajd ⛶</button></div><div class="odp">żaby, dżdżownice, przewody, wyruszają, morze, żółty</div></div><div class="zad"><div class="pol"><span class="nr">9</span><span>Wpisz wyraz ptak w odpowiedniej formie.<br>Nad łąką krążyło pięć .........................  Naukowcy przyglądają się ......................... przez lornetkę.<br>W książce przeczytałem o ......................... wędrownych.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-9">Slajd ⛶</button></div><div class="odp">ptaków, ptakom, ptakach</div></div><div class="zad"><div class="pol"><span class="nr">10</span><span>Połącz zdania na dwa sposoby: raz wyrazem więc, raz wyrazem ponieważ. Zimą brakuje owadów. Jaskółki odlatują do Afryki.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-10">Slajd ⛶</button></div><div class="odp">Zimą brakuje owadów, więc jaskółki odlatują do Afryki. Jaskółki odlatują do Afryki, ponieważ zimą brakuje owadów. Zwrócić uwagę na odwrotną kolejność zdań.</div></div><div class="zad"><div class="pol"><span class="nr">11</span><span>W tekście igła to igła kompasu. Ułóż dwa zdania, w których wyraz igła ma dwa inne znaczenia.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="na-ekran" data-slajd="slajd-11">Slajd ⛶</button></div><div class="odp">Na przykład: igła do szycia, igła sosny lub świerku, igła strzykawki.</div></div><div class="zad"><div class="pol"><span class="nr">12</span><span>Wyjaśnij młodszemu koledze albo koleżance, dlaczego bocian leci do Afryki okrężną drogą. Napisz 4-5 zdań własnymi słowami - nie przepisuj zdań z tekstu.</span></div><div class="akcje"><button type="button" class="pokaz">Odpowiedź</button></div><div class="odp">Wyjaśnienie zawiera przyczynę (ciężki ptak, szybowanie, brak prądów nad morzem) i skutek (droga nad lądem). Uczeń pisze własnymi słowami.</div></div></div>
   </section>
 </main>
+<div class="slajd" id="slajd-1" role="dialog" aria-label="Dlaczego ptaki odlatują?">
+  <div class="s-gora"><span class="s-nr">Zadanie 1</span><h2>Dlaczego ptaki odlatują?</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kolumny">
+    <div class="kolumna k-czerwony">
+      <div class="k-tyt">Często się sądzi</div>
+      
+      <div class="k-item"><s>bo jest im zimno</s></div>
+    </div>
+    <div class="kolumna k-zielony">
+      <div class="k-tyt">Naprawdę</div>
+      
+      <div class="k-item ok">bo zimą <b>brakuje pokarmu</b>: owadów, żab, dżdżownic</div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Autor <b>prostuje</b> błędne przekonanie: "Nie robią tego z powodu zimna".</div>
+</div>
+<div class="slajd" id="slajd-2" role="dialog" aria-label="Porównanie">
+  <div class="s-gora"><span class="s-nr">Zadanie 2</span><h2>Porównanie</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><table class="v-tabela"><tr><th></th><th>bocian biały</th><th>jaskółka dymówka</th></tr><tr><th>budowa</th><td>ciężki, szerokie skrzydła</td><td>lekka, zwinna</td></tr><tr><th>sposób lotu</th><td>szybuje na ciepłym powietrzu</td><td>macha skrzydłami</td></tr><tr><th>lot nad morzem</th><td>omija morze, leci nad lądem</td><td>przelatuje nad morzem</td></tr></table></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Porównujemy <b>tę samą cechę</b> u obu ptaków.</div>
+</div>
+<div class="slajd" id="slajd-3" role="dialog" aria-label="Łańcuch przyczyn">
+  <div class="s-gora"><span class="s-nr">Zadanie 3</span><h2>Łańcuch przyczyn</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kroki">
+      <div class="krok"><div class="nr">1</div><div>Bocian jest ciężki.</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">2</div><div>Musi szybować na ciepłym powietrzu.</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok"><div class="nr">3</div><div>Nad morzem nie ma ciepłych prądów.</div></div><div class="strz"><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="krok hl"><div class="nr">4</div><div>Leci dłuższą drogą nad lądem.</div></div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Jedna przyczyna wywołuje skutek, który staje się <b>kolejną przyczyną</b>.</div>
+</div>
+<div class="slajd" id="slajd-4" role="dialog" aria-label="P, F czy ?">
+  <div class="s-gora"><span class="s-nr">Zadanie 4</span><h2>P, F czy ?</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-kolumny">
+    <div class="kolumna k-czerwony">
+      <div class="k-tyt">F</div>
+      <div class="k-opis">fałsz - tekst mówi inaczej</div>
+      <div class="k-item">Bociany odlatują, bo nie znoszą zimna.<small>brakuje im pokarmu</small></div><div class="k-item">Młode bociany zawsze lecą z rodzicami.<small>często startują przed dorosłymi</small></div>
+    </div>
+    <div class="kolumna k-szary">
+      <div class="k-tyt">?</div>
+      <div class="k-opis">tekst o tym nie mówi</div>
+      <div class="k-item">Jaskółki żyją dłużej niż bociany.</div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> <b>F</b> - tekst mówi coś innego. <b>?</b> - tekst w ogóle o tym nie mówi.</div>
+</div>
+<div class="slajd" id="slajd-7" role="dialog" aria-label="Od rzeczownika do przymiotnika">
+  <div class="s-gora"><span class="s-nr">Zadanie 7</span><h2>Od rzeczownika do przymiotnika</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><table class="v-tabela"><tr><th>rzeczownik</th><th>przymiotnik (jaki?)</th></tr><tr><th>zima</th><td><mark>zimowy</mark></td></tr><tr><th>ptak</th><td><mark>ptasi</mark></td></tr><tr><th>Afryka</th><td><mark>afrykański</mark> (mała litera!)</td></tr><tr><th>morze</th><td><mark>morski</mark></td></tr><tr><th>słońce</th><td><mark>słoneczny</mark></td></tr></table></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Przymiotniki od nazw krajów i kontynentów piszemy <b>małą literą</b>.</div>
+</div>
+<div class="slajd" id="slajd-8" role="dialog" aria-label="ż, rz czy sz?">
+  <div class="s-gora"><span class="s-nr">Zadanie 8</span><h2>ż, rz czy sz?</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><table class="v-tabela"><tr><th>wyraz</th><th>dlaczego?</th></tr><tr><th><mark>ż</mark>aby</th><td>zapamiętaj</td></tr><tr><th>d<mark>ż</mark>d<mark>ż</mark>ownice</th><td>zapamiętaj</td></tr><tr><th>p<mark>rz</mark>ewody</th><td>po p piszemy rz</td></tr><tr><th>wyru<mark>sz</mark>ają</th><td>ruszać - słychać sz</td></tr><tr><th>mo<mark>rz</mark>e</th><td>bo morski (rz wymienia się na r)</td></tr><tr><th><mark>ż</mark>ółty</th><td>zapamiętaj</td></tr></table></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> <b>rz</b> wymienia się na <b>r</b> (morze - morski), <b>ż</b> na <b>g, h, z, s</b> (drużyna - druh).</div>
+</div>
+<div class="slajd" id="slajd-9" role="dialog" aria-label="Odmiana: ptak">
+  <div class="s-gora"><span class="s-nr">Zadanie 9</span><h2>Odmiana: ptak</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><table class="v-tabela"><tr><th>pytanie</th><th>forma</th><th>zdanie</th></tr><tr><th>kogo? czego?</th><td><mark>ptaków</mark></td><td>krążyło pięć ptaków</td></tr><tr><th>komu? czemu?</th><td><mark>ptakom</mark></td><td>przyglądają się ptakom</td></tr><tr><th>o kim? o czym?</th><td><mark>ptakach</mark></td><td>przeczytałem o ptakach</td></tr></table></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Zadaj <b>pytanie</b> od słowa przed luką: pięć (kogo? czego?) - ptaków.</div>
+</div>
+<div class="slajd" id="slajd-10" role="dialog" aria-label="Więc czy ponieważ?">
+  <div class="s-gora"><span class="s-nr">Zadanie 10</span><h2>Więc czy ponieważ?</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-para">
+    <div class="v-para-w">
+      <div class="box b-pr"><div class="etyk">PRZYCZYNA</div><div>Zimą brakuje owadów,</div></div>
+      <div class="strz"><span>więc</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-sk"><div class="etyk">SKUTEK</div><div>jaskółki odlatują do Afryki.</div></div>
+    </div>
+    <div class="v-para-w">
+      <div class="box b-sk"><div class="etyk">SKUTEK</div><div>Jaskółki odlatują do Afryki,</div></div>
+      <div class="strz"><span>ponieważ</span><svg viewBox="0 0 100 24" aria-hidden="true"><path d="M2 12h82" /><path d="M80 3l16 9-16 9z" class="grot" /></svg></div>
+      <div class="box b-pr"><div class="etyk">PRZYCZYNA</div><div>zimą brakuje owadów.</div></div>
+    </div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Po <b>więc</b> jest skutek, po <b>ponieważ</b> - przyczyna. Przed obydwoma przecinek.</div>
+</div>
+<div class="slajd" id="slajd-11" role="dialog" aria-label="Jeden wyraz, wiele znaczeń">
+  <div class="s-gora"><span class="s-nr">Zadanie 11</span><h2>Jeden wyraz, wiele znaczeń</h2><button type="button" class="s-zamknij" aria-label="Zamknij slajd">✕</button></div>
+  <div class="s-tresc"><div class="v-mapa"><div class="srodek">igła</div><div class="galezie"><div class="galaz">igła kompasu</div><div class="galaz">igła do szycia</div><div class="galaz">igła sosny</div><div class="galaz">igła strzykawki</div></div></div></div>
+  <div class="s-zap"><b>Zapamiętaj!</b> Znaczenie wyrazu poznajemy <b>z całego zdania</b>.</div>
+</div>
+<div class="slajd" id="punktacja" role="dialog" aria-label="Punktacja">
+  <div class="s-gora"><span class="s-nr">12 zadań · każde dobrze = 1 punkt</span><h2>Punktacja</h2><button type="button" class="s-zamknij" aria-label="Zamknij">✕</button></div>
+  <div class="s-tresc">
+    <div class="pkt-wybor" role="group" aria-label="Ile zadań dobrze?"><button type="button" data-pkt="0">0</button><button type="button" data-pkt="1">1</button><button type="button" data-pkt="2">2</button><button type="button" data-pkt="3">3</button><button type="button" data-pkt="4">4</button><button type="button" data-pkt="5">5</button><button type="button" data-pkt="6">6</button><button type="button" data-pkt="7">7</button><button type="button" data-pkt="8">8</button><button type="button" data-pkt="9">9</button><button type="button" data-pkt="10">10</button><button type="button" data-pkt="11">11</button><button type="button" data-pkt="12">12</button></div>
+    <div class="pkt-progi"><div class="prog" data-od="0" data-do="3"><div class="zakres">0-3 pkt</div><div class="plusy">–</div><div class="opis">bez plusa</div></div><div class="prog" data-od="4" data-do="8"><div class="zakres">4-8 pkt</div><div class="plusy">+</div><div class="opis">jeden plus</div></div><div class="prog" data-od="9" data-do="10"><div class="zakres">9-10 pkt</div><div class="plusy">++</div><div class="opis">2 plusy</div></div><div class="prog" data-od="11" data-do="12"><div class="zakres">11-12 pkt</div><div class="plusy">+++</div><div class="opis">3 plusy</div></div></div>
+  </div>
+</div>
 <script>
 (function () {
   var root = document.documentElement;
@@ -77,9 +270,45 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
     document.querySelectorAll('.widok').forEach(function (w) { w.classList.toggle('on', w.id === id); });
   }
   zakladki.forEach(function (b) { b.onclick = function () { pokazWidok(b.dataset.widok); }; });
+
+  // Slajdy: strzalki przechodza do sasiedniego slajdu, Esc zamyka.
+  var otwarty = null;
+  function otworz(id) {
+    if (otwarty) otwarty.classList.remove('on');
+    otwarty = document.getElementById(id);
+    if (otwarty) otwarty.classList.add('on');
+  }
+  function zamknij() { if (otwarty) otwarty.classList.remove('on'); otwarty = null; }
+  function sasiedni(krok) {
+    var lista = Array.prototype.map.call(document.querySelectorAll('.na-ekran'), function (b) { return b.dataset.slajd; });
+    var i = lista.indexOf(otwarty && otwarty.id);
+    if (i < 0 || !lista[i + krok]) return;
+    otworz(lista[i + krok]);
+  }
+  document.addEventListener('keydown', function (e) {
+    if (!otwarty) return;
+    if (e.key === 'Escape') zamknij();
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowRight' || e.key === 'PageDown')) sasiedni(1);
+    else if (otwarty.id !== 'punktacja' && (e.key === 'ArrowLeft' || e.key === 'PageUp')) sasiedni(-1);
+  });
+
+  function ustawPunkty(n) {
+    document.querySelectorAll('[data-pkt]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.pkt === n)); });
+    document.querySelectorAll('.prog').forEach(function (p) { p.classList.toggle('on', n >= +p.dataset.od && n <= +p.dataset.do); });
+  }
+  document.getElementById('punkty').onclick = function () { otworz('punktacja'); };
+  // #slajd-4 w adresie otwiera slajd od razu (podglad zrzutow, zakladka w przegladarce).
+  var start = location.hash && document.getElementById(location.hash.slice(1));
+  if (start && start.classList.contains('slajd')) otworz(start.id);
+
   document.addEventListener('click', function (e) {
     var p = e.target.closest('.pokaz');
-    if (p) p.parentElement.classList.toggle('otw');
+    if (p) p.closest('.zad').classList.toggle('otw');
+    var s = e.target.closest('.na-ekran');
+    if (s) otworz(s.dataset.slajd);
+    if (e.target.closest('.s-zamknij')) zamknij();
+    var pkt = e.target.closest('[data-pkt]');
+    if (pkt) ustawPunkty(+pkt.dataset.pkt);
     var z = e.target.closest('.zd');
     if (z) z.classList.toggle('zazn');
   });
@@ -92,6 +321,7 @@ h2 { font-size: 1.05em; color: var(--blue); margin-bottom: 12px; }
   document.getElementById('wyczysc').onclick = function () {
     document.querySelectorAll('.zazn').forEach(function (z) { z.classList.remove('zazn'); });
     document.querySelectorAll('.otw').forEach(function (z) { z.classList.remove('otw'); });
+    ustawPunkty(-1);
   };
 })();
 </script>
