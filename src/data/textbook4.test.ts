@@ -5,6 +5,7 @@ import { ROZDZIAL_3 } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY } from './lekturaChlopcy';
 import { filmikById } from './filmiki';
 import { cwiczenieById } from './cwiczenia';
+import { przypomnienieById } from './przypomnienia';
 import { estimateTextHeight, fitFontSize } from '../components/slides/fitText';
 
 describe('buildTextbook4', () => {
@@ -173,9 +174,12 @@ describe('buildTextbook4', () => {
 
   it('rozdzial II: film bez powtornego kola, notatka, potem 2-3 karty Ćwiczymy razem', () => {
     const bundle = buildTextbook4('IV', ['4a']);
-    const r2 = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_2);
-    expect(r2).toHaveLength(12);
-    expect(r2[0].title.startsWith('18.')).toBe(true);
+    const caly = bundle.lessons.filter((l) => l.dzial === ROZDZIAL_2);
+    expect(caly).toHaveLength(12);
+    expect(caly[0].title.startsWith('18.')).toBe(true);
+    // Lekcja 29 to powtorka z nauczycielem - ma osobny test ponizej.
+    const r2 = caly.filter((l) => !l.title.startsWith('29.'));
+    expect(r2).toHaveLength(11);
     const filmy = r2.map((l) => l.slides.find((s) => s.kind === 'video'));
     expect(filmy.every((s) => s?.kind === 'video' && Boolean(filmikById(s.videoId)))).toBe(true);
     for (const lesson of r2) {
@@ -199,6 +203,19 @@ describe('buildTextbook4', () => {
     }
     // Cztery czytanki na rozdzial: dwa teksty z planu + wiersz do porownania i Michalak do asertywnosci (Bartek, 2026-10-13).
     expect(r2.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(4);
+  });
+
+  it('powtorka rozdzialu II: 5 przypomnien, po kazdym 2 karty z Info, bez filmu i notatki', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const lesson = bundle.lessons.find((l) => l.title === '29. Powtórzenie rozdziału II')!;
+    const blok = ['przypomnienie', 'cwiczenie', 'cwiczenie'];
+    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', ...blok, ...blok, ...blok, ...blok, ...blok]);
+    expect(lesson.slides[1]).not.toMatchObject({ questionSetId: lesson.questionSetId });
+    for (const s of lesson.slides) {
+      if (s.kind === 'przypomnienie') expect(przypomnienieById(s.przypomnienieId), s.przypomnienieId).toBeTruthy();
+      if (s.kind === 'cwiczenie') expect(cwiczenieById(s.cwiczenieId)?.info, s.cwiczenieId).toBeTruthy();
+    }
+    expect(lesson.teacherPlan).toContain('klasa4-rozdzial2-domowe.html');
   });
 
   it('lektura Chłopcy z Placu Broni: osobna zakladka, film, 2 karty i notatka na koniec', () => {

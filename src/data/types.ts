@@ -445,7 +445,10 @@ export type Slide =
   | { id: ID; kind: 'czytanka'; czytankaId: string }
   // Cwiczenie robione wspolnie na projektorze (src/data/cwiczenia.ts): wiele
   // przykladow do wpisania albo klikniecia, "Sprawdź", kolejne zestawy.
-  | { id: ID; kind: 'cwiczenie'; cwiczenieId: string };
+  | { id: ID; kind: 'cwiczenie'; cwiczenieId: string }
+  // Przypomnienie na lekcji powtorkowej (src/data/przypomnienia.ts): nauczyciel
+  // mowi, a slajd odslania kroki strzalka - regula, przyklad z animacja.
+  | { id: ID; kind: 'przypomnienie'; przypomnienieId: string };
 
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki

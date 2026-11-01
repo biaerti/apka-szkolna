@@ -62,6 +62,8 @@ const TITLE_ALIASES: Record<string, string> = {
   [titleMatchKey('11. Czas na czasownik')]: titleMatchKey('11-13. Czas na czasownik'),
   // Klasa 5: lekcja o rymie przerobiona z filmu na materialy Bartka (teoria + karta pracy).
   [titleMatchKey('15a. Rym - wers, zwrotka i układ rymów')]: titleMatchKey('15a. Rym - schematy i rodzaje rymów'),
+  // Klasa 4: podsumowanie rozdzialu II z filmem -> powtorka prowadzona przez nauczyciela.
+  [titleMatchKey('29. Co już wiesz? Co umiesz? Podsumowanie rozdziału II')]: titleMatchKey('29. Powtórzenie rozdziału II'),
 };
 
 /**

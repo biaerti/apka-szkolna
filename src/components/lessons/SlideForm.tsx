@@ -10,6 +10,7 @@ import { ImageSlideForm } from './ImageSlideForm';
 import { VideoSlideForm } from './VideoSlideForm';
 import { CzytankaSlideForm } from './CzytankaSlideForm';
 import { CwiczenieSlideForm } from './CwiczenieSlideForm';
+import { PrzypomnienieSlideForm } from './PrzypomnienieSlideForm';
 
 export function SlideForm({
   slide,
@@ -51,6 +52,8 @@ export function SlideForm({
       return <CzytankaSlideForm slide={slide} onChange={onChange} />;
     case 'cwiczenie':
       return <CwiczenieSlideForm slide={slide} onChange={onChange} />;
+    case 'przypomnienie':
+      return <PrzypomnienieSlideForm slide={slide} onChange={onChange} />;
     default:
       return null;
   }

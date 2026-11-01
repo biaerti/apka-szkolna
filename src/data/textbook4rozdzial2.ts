@@ -54,6 +54,11 @@ function razem(...ids: string[]): Slide[] {
   return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
 }
 
+/** Przypomnienie na lekcji powtorkowej (src/data/przypomnienia.ts) - kroki odslaniane strzalka. */
+function przypomnienie(przypomnienieId: string): Slide {
+  return { id: newId(), kind: 'przypomnienie', przypomnienieId };
+}
+
 /** Film bez drugiego kola. Nowe pytania wracaja jako powtorka na kolejnej lekcji. */
 function film(videoId: string): Slide[] {
   return [slideVideo(videoId)];
@@ -530,19 +535,29 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     ],
   },
   {
-    title: '29. Co już wiesz? Co umiesz? Podsumowanie rozdziału II',
+    // Powtorka, ktora prowadzi nauczyciel (Bartek 2026-11-01: zamiast filmu
+    // podsumowujacego). 5 zagadnien: przypomnienie z krokami na strzalke
+    // (src/data/przypomnienia.ts) i od razu 2 krotkie karty "Ćwiczymy razem".
+    // Film podsumowania zostaje w rejestrze filmikow, ale lekcja go nie uzywa.
+    title: '29. Powtórzenie rozdziału II',
     dzial: ROZDZIAL_2,
-    topic: 'Pośród słów i znaczeń - podsumowanie',
+    topic: 'Pośród słów i znaczeń - powtórzenie',
     textbookPage: 89,
     teacherPlan: plan(
-      ['Co dziś', 'Podsumowanie rozdziału przed sprawdzianem. Mapa ze s. 89 pokazuje wszystkie pojęcia, film powtarza każde z nich. Tekst Justyny Bednarek „Wnuczka antykwariusza” (s. 89-90) pomijamy. Na koniec powtórka w kartach „Ćwiczymy razem” i odmiana na sprawdzian.'],
+      ['Co dziś', 'Pierwsza z czterech lekcji powtórki przed sprawdzianem. Ty mówisz, slajd tylko pomaga: przy każdym zagadnieniu krótko przypominasz regułę na przykładach, a potem robicie razem dwie krótkie karty. Bez filmu i bez notatki - zeszyty już to mają.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (5 min) - nie z rzeczownikami.',
-        '2. **Mapa s. 89** (2 min) - co już znamy?',
-        '3. **Film „Podsumowanie rozdziału II”** (6:25, 3 zadania).',
-        '4. **Notatka** (5 min).',
-        '5. **Ćwiczymy razem** (reszta lekcji, 2 karty): „Powtórka rozdziału”, „Odmiana na sprawdzian”. Wpisujecie albo klikacie na slajdzie, potem „Sprawdź”; na każdy przykład koło (K) losuje osobę.',
-        '6. Do domu: zeszyt powtórzeniowy PDF (link w VULCANIE) przed sprawdzianem.',
+        '2. **5 zagadnień po ok. 8 minut**: słowa (potoczne, porównanie, synonimy) · list · rzeczownik · przypadki · pisownia (wielka litera, „nie”).',
+        '3. Przy każdym: **Przypomnienie** - strzałka (albo klik w prawą połowę) odsłania kolejny krok, w lewo chowa. Mów do każdego kroku, pokaż przykład. Gdy widać wszystko, strzałka idzie dalej.',
+        '4. Potem **2 karty Ćwiczymy razem** (4-6 przykładów). **Info** obok „Sprawdź” wyświetla regułę do zadania - pokaż ją przed sprawdzaniem. Na każdy przykład koło (K) losuje osobę.',
+        '5. Brakuje czasu? Opinia, argument i asertywność są w kahoocie i w ćwiczeniach do domu.',
+      ].join('\n')],
+      ['Tydzień powtórki', [
+        '1. Ta lekcja - powtórka z Tobą.',
+        '2. Karta pracy (podobna do sprawdzianu).',
+        '3. Sprawdzanie karty na projektorze.',
+        '4. Kahoot.',
+        'Do domu (VULCAN, z zapowiedzią sprawdzianu): ćwiczenia w przeglądarce https://szkola.klippi.pl/materialy/karty/klasa4-rozdzial2-domowe.html',
       ].join('\n')],
     ),
     questions: [
@@ -556,12 +571,18 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       { text: 'Fakt czy opinia: „Najlepsza pora roku to lato”?', answer: 'Opinia.' },
     ],
     makeSlides: (previousSetId, _ownSetId) => [
-      slideTopic('Pośród słów i znaczeń - podsumowanie'),
+      slideTopic('Pośród słów i znaczeń - powtórzenie'),
       ...recap(previousSetId),
-      ramka('r2-s89-mapa', 89, 'Pośród słów i znaczeń - mapa rozdziału'),
-      ...film('podsumowanie4-dzial2-film1'),
-      slideNote('Pośród słów i znaczeń - podsumowanie', '**SŁOWA:** wyrazy potoczne tylko na luzie (nie w wypracowaniu). Porównanie: jak, jakby, niczym, niby. Synonimy - podobne znaczenie, antonimy - przeciwne.\n**LIST:** miejscowość i data, nagłówek, wstęp, rozwinięcie, zakończenie, pozdrowienie, podpis, PS. Ty, Ciebie, Twój - wielką literą.\n**RZECZOWNIK:** kto? co?; liczba i rodzaj; 7 przypadków: M, D, C, B, N, Ms, W. Nazwy własne wielką literą. **Nie** z rzeczownikami razem.\n**ROZMOWA:** opinia + argument (ponieważ...). Asertywność: „Nie, bo... Ale mogę...”.'),
-      ...razem('k4-podsumowanie-r2', 'k4-podsumowanie-odmiana'),
+      przypomnienie('p4-r2-slowa'),
+      ...razem('k4-powt2-potoczne', 'k4-powt2-porownanie-syn'),
+      przypomnienie('p4-r2-list'),
+      ...razem('k4-powt2-list-czesci', 'k4-powt2-list-litera'),
+      przypomnienie('p4-r2-rzeczownik'),
+      ...razem('k4-powt2-rzeczownik', 'k4-powt2-rodzaj'),
+      przypomnienie('p4-r2-przypadki'),
+      ...razem('k4-powt2-przypadek', 'k4-powt2-odmiana'),
+      przypomnienie('p4-r2-pisownia'),
+      ...razem('k4-powt2-wielka', 'k4-powt2-nie'),
     ],
   },
 ];

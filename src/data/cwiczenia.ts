@@ -31,6 +31,8 @@ export interface CwiczenieLuki {
   kolumny?: 1 | 2;
   /** Luki sprawdzane z wielkoscia liter (cwiczenia o wielkiej literze). */
   wielkoscLiter?: boolean;
+  /** Regula do zadania - przycisk "Info" obok "Sprawdź" (nauczyciel pokazuje ja przed sprawdzaniem). */
+  info?: string;
 }
 
 export interface CwiczenieTabela {
@@ -43,6 +45,8 @@ export interface CwiczenieTabela {
   kolumny: string[];
   /** Kazdy wyraz to osobny zestaw: komorki[wiersz][kolumna] w znacznikach. */
   wyrazy: Array<{ haslo: string; komorki: string[][] }>;
+  /** Jak w CwiczenieLuki. */
+  info?: string;
 }
 
 export type Cwiczenie = CwiczenieLuki | CwiczenieTabela;

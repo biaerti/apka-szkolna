@@ -59,6 +59,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
   const [wpisy, setWpisy] = useState<Record<string, string>>({});
   const [wybory, setWybory] = useState<Record<string, number>>({});
   const [wyniki, setWyniki] = useState<Record<string, Stan> | null>(null);
+  const [info, setInfo] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const naRaz = cw.typ === 'luki' ? (cw.naRaz ?? 6) : 0;
@@ -91,6 +92,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
   }
 
   function sprawdz() {
+    setInfo(false);
     setWyniki(Object.fromEntries(pola.map(({ klucz, k }) => [klucz, ocen(klucz, k)])));
   }
 
@@ -277,12 +279,24 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
         )}
       </div>
 
+      {info && cw.info && (
+        // Regula nad przykladami - nauczyciel omawia ja przed sprawdzaniem; klik zamyka.
+        <div
+          className="absolute inset-x-12 top-36 z-10 rounded-2xl bg-gray-900/95 px-8 py-6 text-[32px] leading-snug text-gray-100 shadow-2xl ring-2 ring-accent-400/70"
+          onClick={() => setInfo(false)}
+        >
+          <span className="mb-2 block text-lg font-bold uppercase tracking-wider text-accent-200">Jak to zrobić?</span>
+          <Tekst v={cw.info} />
+        </div>
+      )}
+
       <footer className="flex items-center gap-2 whitespace-nowrap pr-28 text-xl">
         {!wlasny && (
           <>
             <Przycisk glowny onClick={sprawdz}>
               Sprawdź
             </Przycisk>
+            {cw.info && <Przycisk onClick={() => setInfo(!info)} wlaczony={info}>Info</Przycisk>}
             <Przycisk onClick={pokazOdpowiedzi}>Pokaż odpowiedzi</Przycisk>
           </>
         )}
@@ -481,14 +495,14 @@ function Tekst({ v }: { v: string }) {
   );
 }
 
-function Przycisk({ children, onClick, glowny = false }: { children: ReactNode; onClick: () => void; glowny?: boolean }) {
+function Przycisk({ children, onClick, glowny = false, wlaczony = false }: { children: ReactNode; onClick: () => void; glowny?: boolean; wlaczony?: boolean }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={clsx(
         'rounded-xl px-4 py-2 font-semibold transition-colors',
-        glowny ? 'bg-accent-500 text-white hover:bg-accent-400' : 'bg-white/10 text-gray-200 hover:bg-white/20',
+        glowny ? 'bg-accent-500 text-white hover:bg-accent-400' : wlaczony ? 'bg-accent-200 text-gray-900' : 'bg-white/10 text-gray-200 hover:bg-white/20',
       )}
     >
       {children}
