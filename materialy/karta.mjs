@@ -124,7 +124,8 @@ function arkusz(tematyDanych, rozw, grupa) {
         : grupa && !rozw && !ekran ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
         : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
-        <div class="pol">${ekran ? `<button type="button" class="pokaz">${KARTA.domowa ? 'Sprawdź' : 'Odpowiedź'}</button>` : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
+        <div class="pol">${ekran ? `<button type="button" class="pokaz">${KARTA.domowa ? 'Sprawdź' : 'Odpowiedź'}</button>` : ''}${ekran && zad.info ? '<button type="button" class="info-btn">Info</button>' : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
+        ${ekran && zad.info ? `<div class="info" hidden>${z(zad.info)}</div>` : ''}
         ${wiersz}${pytania}
         ${linie ? `<div class="linie${zad.kolumny ? ` k${zad.kolumny}` : ''}">${linie}</div>` : ''}
         ${zad.tabela ? tabela(zad.tabela, rozw) : ''}
@@ -268,6 +269,10 @@ body.ekran { background: #e9e3d8; }
 .pasek .odstep { flex: 1; }
 .pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
 .ekran .arkusz[hidden] { display: none; }
+.ekran .info-btn { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--k); background: #fff; border: 1px solid var(--k45); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .info-btn.wl { color: #fff; background: var(--k); border-color: var(--k); }
+.ekran .info { margin: 1mm 0 1mm 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
+.ekran .info[hidden] { display: none; }
 .ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
 .ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
 .ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
@@ -284,7 +289,7 @@ body.ekran { background: #e9e3d8; }
   .ekran .opc { white-space: normal; }
   .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
 }
-@media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+@media print { .pasek, .pokaz, .info-btn, .info { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
 `;
 
 // Wersja na projektor: klikanie, wpisywanie, odpowiedzi, stan zapisany w przeglądarce.
@@ -329,6 +334,8 @@ function pokaz(zad, wl) {
 karta.addEventListener('click', function (e) {
   var b = e.target.closest('.pokaz');
   if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var ib = e.target.closest('.info-btn');
+  if (ib) { var inf = ib.closest('.zad').querySelector('.info'); inf.hidden = !inf.hidden; ib.classList.toggle('wl', !inf.hidden); return; }
   var o = e.target.closest('.opc');
   if (o) { o.classList.toggle('zakr'); zapisz(); return; }
   var s = e.target.closest('.sl');

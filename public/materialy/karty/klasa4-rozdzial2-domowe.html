@@ -104,6 +104,10 @@ body.ekran { background: #e9e3d8; }
 .pasek .odstep { flex: 1; }
 .pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
 .ekran .arkusz[hidden] { display: none; }
+.ekran .info-btn { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--k); background: #fff; border: 1px solid var(--k45); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .info-btn.wl { color: #fff; background: var(--k); border-color: var(--k); }
+.ekran .info { margin: 1mm 0 1mm 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
+.ekran .info[hidden] { display: none; }
 .ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
 .ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
 .ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
@@ -120,26 +124,28 @@ body.ekran { background: #e9e3d8; }
   .ekran .opc { white-space: normal; }
   .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
 }
-@media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+@media print { .pasek, .pokaz, .info-btn, .info { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
 
 </style></head><body class="ekran">
 <div class="pasek"><span class="odstep"></span><a class="druk" href="../klasa4-rozdzial2-domowe.pdf" target="_blank" rel="noreferrer">Wersja do druku (PDF)</a><button type="button" id="wyczysc">Wyczyść kartę</button></div>
 <main id="karta"><section class="arkusz">
 <div class="gora"><h1>Poćwicz przed sprawdzianem</h1><div class="pod">Klasa 4 · Rozdział II</div>
 </div>
-<p class="wstep">Przy każdym temacie najpierw przeczytaj kolorową ramkę z regułą, potem zrób zadania. Wpisuj w luki i klikaj odpowiedzi. Kiedy skończysz zadanie, kliknij <b>Sprawdź</b>: zielone jest dobrze, czerwone pokaże poprawną odpowiedź. Na sprawdzianie będą bardzo podobne zadania!</p>
+<p class="wstep">Przy każdym temacie najpierw przeczytaj kolorową ramkę z regułą, potem zrób zadania. Wpisuj w luki i klikaj odpowiedzi. Nie wiesz, jak zacząć? Kliknij <b>Info</b> przy zadaniu. Kiedy skończysz zadanie, kliknij <b>Sprawdź</b>: zielone jest dobrze, czerwone pokaże poprawną odpowiedź. Na sprawdzianie będą bardzo podobne zadania!</p>
 
 <section class="temat" style="--k:#8A4FD0;--k9:#f4effb;--k12:#f1eaf9;--k45:#cab0ea">
       <div class="wiedza"><h2><span>1</span>Wyrazy potoczne</h2><p><b>Wyrazy potoczne</b> to słowa „na luzie”: spoko, kumać, obciach. Pasują do rozmowy z kolegami.</p><p>Nie używamy ich przy tablicy, w rozmowie z dorosłymi i <b>w wypracowaniu</b>. Każdy ma oficjalny odpowiednik: kumać - <mark>rozumieć</mark>.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">1.1</span> Zamień wyróżniony wyraz potoczny na oficjalny.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">1.1</span> Zamień wyróżniony wyraz potoczny na oficjalny.</div>
+        <div class="info" hidden>Wyraz <b>potoczny</b> mówimy na luzie, do kolegów. <b>Oficjalny</b> znaczy to samo, ale pasuje do szkoły i do dorosłych. Zapytaj siebie: jak powiedziałbym to pani dyrektor? Sens zdania się nie zmienia.</div>
         
         <div class="linie"><div class="l">Nie <b>kumam</b>, o co chodzi w tym zadaniu. ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="rozumiem"></span></div><div class="l">Siostra <b>gada</b> przez telefon cały wieczór. ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="rozmawia"></span></div><div class="l">Ale <b>obciach</b>, pomyliłem drzwi! ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="wstyd"></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">1.2</span> Podkreśl trzy wyrazy potoczne w wypracowaniu Kuby.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">1.2</span> Podkreśl trzy wyrazy potoczne w wypracowaniu Kuby.</div>
+        <div class="info" hidden>Szukaj słów, których nie powiesz przy tablicy ani w wypracowaniu - takich „z podwórka”. Sprawdź, czy dla każdego znajdziesz poważny odpowiednik.</div>
         
         <div class="linie"><div class="l"><span class="sl">Na</span> <span class="sl">urodzinach</span> <span class="sl">u</span> <span class="sl">Oli</span> <span class="sl">było</span> <span class="sl" data-ok="1">spoko</span>. <span class="sl">Najpierw</span> <span class="sl">zjedliśmy</span> <span class="sl">tort</span>, <span class="sl">a</span> <span class="sl">potem</span> <span class="sl" data-ok="1">cisnęliśmy</span> <span class="sl">w</span> <span class="sl">gry</span> <span class="sl">do</span> <span class="sl">wieczora</span>. <span class="sl">Do</span> <span class="sl">domu</span> <span class="sl">wróciłem</span> <span class="sl" data-ok="1">padnięty</span>.</div></div>
         
@@ -149,14 +155,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#1FA58A;--k9:#ebf7f4;--k12:#e4f4f1;--k45:#9ad7ca">
       <div class="wiedza"><h2><span>2</span>Porównanie</h2><p><b>Porównanie</b> zestawia dwie rzeczy, które są w czymś podobne: oczy błyszczą <mark>jak gwiazdy</mark>.</p><p>Słówka: <b>jak, jakby, niczym, niby</b>. Samo „jak” w pytaniu („Jak masz na imię?”) to <b>nie</b> porównanie.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">2.1</span> Czy w zdaniu jest porównanie? Zakreśl.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">2.1</span> Czy w zdaniu jest porównanie? Zakreśl.</div>
+        <div class="info" hidden>Porównanie ma <b>trzy części</b>: co opisuję + słówko (<b>jak, jakby, niczym, niby</b>) + do czego porównuję. Jeśli „jak” zaczyna pytanie albo nic z niczym nie zestawia - to nie porównanie.</div>
         
         <div class="linie"><div class="l">Lód na stawie błyszczał jak lustro. <span class="wybor"><span class="opc" data-ok="1">porównanie</span><span class="opc">brak porównania</span></span></div><div class="l">Jak długo jedzie się do babci? <span class="wybor"><span class="opc">porównanie</span><span class="opc" data-ok="1">brak porównania</span></span></div><div class="l">Tata chrapał, jakby piłował drewno. <span class="wybor"><span class="opc" data-ok="1">porównanie</span><span class="opc">brak porównania</span></span></div><div class="l">Na stole leży kolorowy obrus. <span class="wybor"><span class="opc">porównanie</span><span class="opc" data-ok="1">brak porównania</span></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">2.2</span> Dokończ porównania.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">2.2</span> Dokończ porównania.</div>
+        <div class="info" hidden>Pomyśl, co <b>najbardziej</b> ma tę cechę. Uparty jak... kto jest bardzo uparty? Wiele z tych porównań to znane powiedzenia.</div>
         
         <div class="linie k2"><div class="l">uparty jak <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="osioł"></span></div><div class="l">dumny jak <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="paw"></span></div><div class="l">pracowity jak <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="pszczoła / mrówka"></span></div><div class="l">biały jak <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="śnieg"></span></div></div>
         
@@ -166,14 +174,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#E0679A;--k9:#fcf1f6;--k12:#fbedf3;--k45:#f1bbd2">
       <div class="wiedza"><h2><span>3</span>Synonimy i antonimy</h2><p><b>Synonimy</b> mają podobne znaczenie: krzyczeć - wrzeszczeć.</p><p><b>Antonimy</b> mają przeciwne znaczenie: ciężki - lekki.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">3.1</span> Synonimy czy antonimy? Zakreśl.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">3.1</span> Synonimy czy antonimy? Zakreśl.</div>
+        <div class="info" hidden><b>Synonimy</b> znaczą prawie to samo (możesz jeden wstawić za drugi). <b>Antonimy</b> znaczą coś przeciwnego (jedno wyklucza drugie).</div>
         
         <div class="linie"><div class="l">krzyczeć - wrzeszczeć <span class="wybor"><span class="opc" data-ok="1">synonimy</span><span class="opc">antonimy</span></span></div><div class="l">zgubić - znaleźć <span class="wybor"><span class="opc">synonimy</span><span class="opc" data-ok="1">antonimy</span></span></div><div class="l">rozmawiać - gawędzić <span class="wybor"><span class="opc" data-ok="1">synonimy</span><span class="opc">antonimy</span></span></div><div class="l">tchórzliwy - odważny <span class="wybor"><span class="opc">synonimy</span><span class="opc" data-ok="1">antonimy</span></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">3.2</span> Dopisz synonim i antonim.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">3.2</span> Dopisz synonim i antonim.</div>
+        <div class="info" hidden><b>Synonim</b> - inne słowo o podobnym znaczeniu (zamień w zdaniu i sprawdź, czy sens został). <b>Antonim</b> - słowo przeciwne. Dobrych synonimów jest kilka.</div>
         
         
         <table class="tab"><thead><tr><th>wyraz</th><th>synonim</th><th>antonim</th></tr></thead>
@@ -184,14 +194,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#D98A1F;--k9:#fcf4eb;--k12:#faf1e4;--k45:#eeca9a">
       <div class="wiedza"><h2><span>4</span>List</h2><p>Po kolei: <b>miejscowość i data</b> · <b>nagłówek</b> · wstęp · rozwinięcie · zakończenie · <b>pozdrowienia</b> · <b>podpis</b>.</p><p><b>Ty, Ciebie, Ci, Tobie, Twój</b> - wielką literą. <b>ja, mnie, mój</b> - małą.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">4.1</span> Ponumeruj części listu po kolei.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">4.1</span> Ponumeruj części listu po kolei.</div>
+        <div class="info" hidden>List czytamy od góry: najpierw <b>miejscowość i data</b> w prawym rogu, potem <b>nagłówek</b> (Droga Ciociu!), treść (wstęp, rozwinięcie, zakończenie), a na końcu <b>pozdrowienia</b> i <b>podpis</b>.</div>
         
         <div class="linie k2"><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="6"></span> pozdrowienia</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="2"></span> nagłówek</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="4"></span> rozwinięcie</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="1"></span> miejscowość i data</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="7"></span> podpis</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="3"></span> wstęp</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="5"></span> zakończenie</div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">4.2</span> Wpisz wyrazy z nawiasów poprawną literą.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">4.2</span> Wpisz wyrazy z nawiasów poprawną literą.</div>
+        <div class="info" hidden>W liście słowa o adresacie piszemy <b>wielką</b> literą z szacunku: <b>Ty, Ciebie, Ci, Tobie, Twój</b>. Słowa o sobie - <b>małą</b>: ja, mnie, mój (chyba że zaczynają zdanie).</div>
         
         <div class="linie"><div class="l">Bardzo <span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="Ci"></span> (ty) dziękuję za paczkę. Książka od <span class="luka" style="min-width:18mm" contenteditable="true" spellcheck="false" data-odp="Ciebie"></span> (ty) jest super!</div><div class="l">Jutro pokażę ją <span class="luka" style="min-width:16mm" contenteditable="true" spellcheck="false" data-odp="mojej"></span> (moja) siostrze. Czy <span class="luka" style="min-width:16mm" contenteditable="true" spellcheck="false" data-odp="Twoja"></span> (twoja) mama już wróciła?</div></div>
         
@@ -201,14 +213,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#2A8C9E;--k9:#ecf5f6;--k12:#e5f1f3;--k45:#9fcbd3">
       <div class="wiedza"><h2><span>5</span>Rzeczownik</h2><p><b>Rzeczownik</b> odpowiada na pytania <b>kto? co?</b> Nazywa osoby, zwierzęta, rzeczy, rośliny, zjawiska, miejsca i uczucia (radość).</p><p>Rodzaj: <b>ten</b> - męski, <b>ta</b> - żeński, <b>to</b> - nijaki.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">5.1</span> Podkreśl rzeczowniki (jest ich pięć).</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">5.1</span> Podkreśl rzeczowniki (jest ich pięć).</div>
+        <div class="info" hidden>Przy każdym wyrazie zapytaj: <b>kto? co?</b> Jeśli pytanie pasuje, to rzeczownik. Uczucia też są rzeczownikami (radość, strach).</div>
         
         <div class="linie"><div class="l"><span class="sl">Mała</span> <span class="sl" data-ok="1">wiewiórka</span> <span class="sl">schowała</span> <span class="sl" data-ok="1">orzechy</span> <span class="sl">pod</span> <span class="sl">starym</span> <span class="sl" data-ok="1">dębem</span>, <span class="sl">a</span> <span class="sl">jej</span> <span class="sl" data-ok="1">radość</span> <span class="sl">z</span> <span class="sl" data-ok="1">zapasów</span> <span class="sl">trwała</span> <span class="sl">długo</span>.</div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">5.2</span> Dopisz ten, ta albo to i nazwij rodzaj.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">5.2</span> Dopisz ten, ta albo to i nazwij rodzaj.</div>
+        <div class="info" hidden>Powiedz przed wyrazem <b>ten, ta albo to</b>. <b>Ten</b> - rodzaj męski, <b>ta</b> - żeński, <b>to</b> - nijaki. Nie patrz na końcówkę, tylko na to, co brzmi dobrze: ta kość, nie ten kość.</div>
         
         
         <table class="tab"><thead><tr><th>rzeczownik</th><th>ten / ta / to</th><th>rodzaj</th></tr></thead>
@@ -219,14 +233,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#B5562B;--k9:#f8f0ec;--k12:#f6ebe6;--k45:#deb3a0">
       <div class="wiedza"><h2><span>6</span>Przypadki</h2><p><b>M</b> kto? co? · <b>D</b> kogo? czego? (nie ma) · <b>C</b> komu? czemu? · <b>B</b> kogo? co? (widzę) · <b>N</b> z kim? z czym? · <b>Ms</b> o kim? o czym? · <b>W</b> o!</p><p>Jak rozpoznać? Zadaj pytanie od czasownika: Boję się (kogo? czego?) <mark>burzy</mark> - dopełniacz.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">6.1</span> W jakim przypadku jest podkreślony wyraz? Wpisz skrót.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">6.1</span> W jakim przypadku jest podkreślony wyraz? Wpisz skrót.</div>
+        <div class="info" hidden>Znajdź czasownik i zadaj od niego pytanie o podkreślony wyraz: Ufam (komu?) - celownik. Pytania: M kto? co? · D kogo? czego? · C komu? czemu? · B kogo? co? · N z kim? z czym? · Ms o kim? o czym? · W o!</div>
         
         <div class="linie k2"><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="D"></span> Boję się <u>burzy</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="C"></span> Ufam <u>przyjacielowi</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="B"></span> Czytam <u>komiks</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="N"></span> Jeżdżę <u>tramwajem</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="Ms"></span> Mieszkam w <u>Krakowie</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="M"></span> Za oknem śpiewa <u>kos</u>.</div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">6.2</span> Odmień rzeczowniki przez przypadki.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">6.2</span> Odmień rzeczowniki przez przypadki.</div>
+        <div class="info" hidden>Wstawiaj wyraz po pomocniku z lewej kolumny: nie ma (kogo?) ..., przyglądam się (komu?) ..., widzę (kogo?) ... i tak dalej. Powiedz całe zdanie na głos.</div>
         
         
         <table class="tab"><thead><tr><th>przypadek</th><th>chomik</th><th>książka</th></tr></thead>
@@ -237,14 +253,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#D6336C;--k9:#fbedf2;--k12:#fae7ed;--k45:#eda3bd">
       <div class="wiedza"><h2><span>7</span>Trudne formy i wołacz</h2><p>W dopełniaczu liczby mnogiej często <b>nie ma końcówki</b>: nie mam <mark>kredek</mark> (nie: kredków).</p><p>Wołaczem <b>zwracamy się</b> do kogoś: Ania ➜ <mark>Aniu</mark>! Tomek ➜ <mark>Tomku</mark>!</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">7.1</span> Popraw źle odmieniony wyraz.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">7.1</span> Popraw źle odmieniony wyraz.</div>
+        <div class="info" hidden>W dopełniaczu liczby mnogiej (nie ma kogo? czego?) wiele wyrazów <b>nie ma końcówki</b>: nie ma <mark>kredek</mark>, nie: kredków. Policz: jedna kredka - wiele kredek.</div>
         
         <div class="linie"><div class="l">Nie mam już kolorowych kredków. ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="kredek"></span></div><div class="l">Kupiłem kilo truskawków. ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="truskawek"></span></div><div class="l">W autobusie było dużo ludziów. ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="ludzi"></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">7.2</span> Zawołaj poprawnie.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">7.2</span> Zawołaj poprawnie.</div>
+        <div class="info" hidden><b>Wołacz</b> to forma, gdy do kogoś wołamy: Zosia - <mark>Zosiu</mark>! Wyobraź sobie, że wołasz tę osobę przez okno.</div>
         
         <div class="linie k2"><div class="l">Ania ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="Aniu!"></span></div><div class="l">Tomek ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="Tomku!"></span></div><div class="l">dziadek ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="dziadku!"></span></div><div class="l">ciocia ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="ciociu!"></span></div><div class="l">Paweł ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="Pawle!"></span></div><div class="l">pani Basia ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="pani Basiu!"></span></div></div>
         
@@ -254,14 +272,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#2F7D5B;--k9:#ecf3f0;--k12:#e6efeb;--k45:#a1c5b5">
       <div class="wiedza"><h2><span>8</span>Fakt, opinia, argument</h2><p><b>Fakt</b> można sprawdzić. <b>Opinia</b> to czyjeś zdanie - ktoś może myśleć inaczej.</p><p><b>Argument</b> mówi, dlaczego tak myślę: ...<mark>ponieważ</mark> / <mark>bo</mark> ... „Bo tak” to nie argument.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">8.1</span> Fakt czy opinia? Zakreśl.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">8.1</span> Fakt czy opinia? Zakreśl.</div>
+        <div class="info" hidden><b>Fakt</b> można sprawdzić (w książce, na mapie, liczeniem). <b>Opinia</b> to czyjeś zdanie - ktoś inny może myśleć inaczej. Słowa „najlepszy”, „najciekawszy”, „powinno” zdradzają opinię.</div>
         
         <div class="linie"><div class="l">Wieloryb jest ssakiem. <span class="wybor"><span class="opc" data-ok="1">fakt</span><span class="opc">opinia</span></span></div><div class="l">Piłka nożna to najciekawszy sport. <span class="wybor"><span class="opc">fakt</span><span class="opc" data-ok="1">opinia</span></span></div><div class="l">Polska leży w Europie. <span class="wybor"><span class="opc" data-ok="1">fakt</span><span class="opc">opinia</span></span></div><div class="l">Szkoła powinna zaczynać się później. <span class="wybor"><span class="opc">fakt</span><span class="opc" data-ok="1">opinia</span></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">8.2</span> Dokończ zdanie, podając argument.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">8.2</span> Dokończ zdanie, podając argument.</div>
+        <div class="info" hidden><b>Argument</b> odpowiada na pytanie <b>dlaczego?</b> Podaj prawdziwy powód, który przekona innych. „Bo tak” albo „bo lubię” nie wystarczy.</div>
         
         <div class="linie"><div class="l">Na przerwach powinniśmy wychodzić na boisko, ponieważ <span class="luka dluga" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="np. ruch na świeżym powietrzu dodaje energii do nauki"></span></div></div>
         
@@ -271,14 +291,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#1B6E8F;--k9:#eaf2f5;--k12:#e4eef2;--k45:#98becd">
       <div class="wiedza"><h2><span>9</span>Asertywność</h2><p><b>Asertywnie</b> to spokojnie i bez obrażania: mówię „nie”, mówię <b>dlaczego</b> i proponuję coś innego.</p><p>Wzór: <b>Nie, bo... Ale mogę...</b></p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">9.1</span> Kolega chce, żebyś zamiast niego sprzątnął po plastyce. Zakreśl odpowiedź asertywną.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">9.1</span> Kolega chce, żebyś zamiast niego sprzątnął po plastyce. Zakreśl odpowiedź asertywną.</div>
+        <div class="info" hidden>Odpowiedź <b>asertywna</b> jest spokojna: mówię „nie”, mówię <b>dlaczego</b> i proponuję coś innego. Obrażanie to agresja, a „no dobra” wbrew sobie to uleganie.</div>
         
         <div class="linie"><div class="l"><span class="wybor"><span class="opc">„Sam sprzątaj, leniu!”</span><span class="opc">„No dobra...”</span><span class="opc" data-ok="1">„Nie, bo każdy sprząta po sobie. Ale mogę ci pomóc z pędzlami.”</span></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">9.2</span> Odmów asertywnie: koleżanka chce pożyczyć twój nowy piórnik na cały tydzień.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">9.2</span> Odmów asertywnie: koleżanka chce pożyczyć twój nowy piórnik na cały tydzień.</div>
+        <div class="info" hidden>Użyj wzoru: <b>Nie, bo...</b> (powód) <b>Ale mogę...</b> (coś w zamian). Mów grzecznie, bez obrażania.</div>
         
         
         
@@ -288,14 +310,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#C2410C;--k9:#faeee9;--k12:#f8e8e2;--k45:#e4aa92">
       <div class="wiedza"><h2><span>10</span>Wielka czy mała litera?</h2><p><b>Wielką</b>: imiona i nazwiska, imiona zwierząt (Azor), miasta, państwa, rzeki, jeziora, góry, planety.</p><p><b>Małą</b>: nazwy pospolite (pies, rzeka, jezioro), dni tygodnia i miesiące.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">10.1</span> Zakreśl poprawny zapis.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">10.1</span> Zakreśl poprawny zapis.</div>
+        <div class="info" hidden>Wielką literą piszemy <b>nazwy własne</b> - imię jednej rzeczy (Bałtyk, Saturn, Hiszpania). Dni tygodnia, miesiące i zwykłe słowa (rzeka, morze) - małą.</div>
         
         <div class="linie k2"><div class="l"><span class="wybor"><span class="opc" data-ok="1">Bałtyk</span><span class="opc">bałtyk</span></span></div><div class="l"><span class="wybor"><span class="opc">Poniedziałek</span><span class="opc" data-ok="1">poniedziałek</span></span></div><div class="l"><span class="wybor"><span class="opc" data-ok="1">Saturn</span><span class="opc">saturn</span></span></div><div class="l"><span class="wybor"><span class="opc">Listopad</span><span class="opc" data-ok="1">listopad</span></span></div><div class="l"><span class="wybor"><span class="opc" data-ok="1">Hiszpania</span><span class="opc">hiszpania</span></span></div><div class="l"><span class="wybor"><span class="opc">Rzeka</span><span class="opc" data-ok="1">rzeka</span></span> Warta</div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">10.2</span> Znajdź trzy błędy i wypisz te wyrazy poprawnie.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">10.2</span> Znajdź trzy błędy i wypisz te wyrazy poprawnie.</div>
+        <div class="info" hidden>Szukaj imion ludzi, imion zwierząt i nazw miejsc - one zawsze wielką literą. Słowo „jezioro” jest zwykłe, ale nazwa jeziora już nie.</div>
         
         <div class="linie"><div class="l">W lipcu kuba z psem azorem pojechał nad jezioro śniardwy.</div><div class="l">➜ <span class="luka dluga" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="Kuba, Azorem, Śniardwy"></span></div></div>
         
@@ -305,14 +329,16 @@ body.ekran { background: #e9e3d8; }
     </section><section class="temat" style="--k:#8A4FD0;--k9:#f4effb;--k12:#f1eaf9;--k45:#cab0ea">
       <div class="wiedza"><h2><span>11</span>„Nie” z rzeczownikami</h2><p><b>Nie</b> z rzeczownikiem (kto? co?) piszemy <b>razem</b>: nieszczęście.</p><p><b>Nie</b> z czasownikiem (co robi?) piszemy <b>osobno</b>: nie rozumiem.</p></div>
       <div class="zadania"><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">11.1</span> Zapisz poprawnie: razem czy osobno?</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">11.1</span> Zapisz poprawnie: razem czy osobno?</div>
+        <div class="info" hidden>Zapytaj o wyraz bez „nie”: <b>kto? co?</b> - rzeczownik, piszemy <b>razem</b> (nieszczęście). <b>Co robi?</b> - czasownik, piszemy <b>osobno</b> (nie rozumiem).</div>
         
         <div class="linie k2"><div class="l">(nie)szczęście ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="nieszczęście"></span></div><div class="l">(nie)rozumiem ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="nie rozumiem"></span></div><div class="l">(nie)ład ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="nieład"></span></div><div class="l">(nie)skacz ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="nie skacz"></span></div><div class="l">(nie)przyjaciel ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="nieprzyjaciel"></span></div><div class="l">(nie)bój się ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="nie bój się"></span></div></div>
         
         
         
       </div><div class="zad">
-        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><span class="nr">11.2</span> Zakreśl dobry zapis.</div>
+        <div class="pol"><button type="button" class="pokaz">Sprawdź</button><button type="button" class="info-btn">Info</button><span class="nr">11.2</span> Zakreśl dobry zapis.</div>
+        <div class="info" hidden>Sprawdź, czy wyraz po „nie” to rzeczownik (kto? co?) - wtedy <b>razem</b>, czy czasownik (co robi? co zrobił?) - wtedy <b>osobno</b>.</div>
         
         <div class="linie"><div class="l">Przez <span class="wybor"><span class="opc" data-ok="1">nieuwagę</span><span class="opc">nie uwagę</span></span> rozlałem sok.</div><div class="l">Tata <span class="wybor"><span class="opc">niezdążył</span><span class="opc" data-ok="1">nie zdążył</span></span> na pociąg.</div><div class="l">To było zwykłe <span class="wybor"><span class="opc" data-ok="1">nieporozumienie</span><span class="opc">nie porozumienie</span></span>.</div></div>
         
@@ -322,7 +348,7 @@ body.ekran { background: #e9e3d8; }
     </section>
 </section></main>
 <script>
-var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial2-domowe:25211';
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial2-domowe:30736';
 // Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
 function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
 window.addEventListener('resize', dopasuj); dopasuj();
@@ -362,6 +388,8 @@ function pokaz(zad, wl) {
 karta.addEventListener('click', function (e) {
   var b = e.target.closest('.pokaz');
   if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var ib = e.target.closest('.info-btn');
+  if (ib) { var inf = ib.closest('.zad').querySelector('.info'); inf.hidden = !inf.hidden; ib.classList.toggle('wl', !inf.hidden); return; }
   var o = e.target.closest('.opc');
   if (o) { o.classList.toggle('zakr'); zapisz(); return; }
   var s = e.target.closest('.sl');
