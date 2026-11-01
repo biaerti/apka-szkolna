@@ -1,117 +1,218 @@
-// Karta pracy - klasa 4, rozdział II: przypadki (odmiana i rozpoznawanie). 1 strona A4 do rozdania.
-// Nie powtarza filmików ani kart „Ćwiczymy razem”: własne wyrazy i zdania.
+// Karta pracy - klasa 4, rozdział II „Pośród słów i znaczeń”. 2 strony A4 do rozdania.
+// Lekcja 2 tygodnia powtórki: zadania jak na sprawdzianie, ale własne przykłady - inne niż w puli
+// sprawdzianu, filmikach, zeszycie, kartach „Ćwiczymy razem”, ćwiczeniach do domu i prezentacji powtórkowej.
+// Lekcja 3: sprawdzanie na projektorze (public/materialy/karty/klasa4-rozdzial2-karta.html), przy każdym
+// zadaniu „Info” z regułą i „Odpowiedź”.
 // Generator: node materialy/karta.mjs klasa4-rozdzial2 -> karta (dla uczniów) i karta-rozwiazania (do wyświetlenia).
-// Znaczniki jak w materialy/klasa4-rozdzial1/karta.mjs.
+// Znaczniki jak w materialy/klasa4-rozdzial1/karta.mjs; w luce „a / b” = obie odpowiedzi dobre.
 
 export const KARTA = {
   plik: 'klasa4-rozdzial2-karta',
   klasa: 'Klasa 4',
-  tytul: 'Przypadki',
-  podtytul: 'Odmiana i rozpoznawanie',
+  tytul: 'Karta pracy - rozdział II',
+  podtytul: 'Pośród słów i znaczeń',
   tematy: [
     {
-      tytul: 'Odmiana przez przypadki',
-      wiedza: [
-        'Rzeczownik zmienia formę: ==jeż==, nie ma ==jeża==, idę z ==jeżem==. To **odmiana przez przypadki**. Jest ich siedem:',
-        '**M** mianownik - kto? co? (jest)',
-        '**D** dopełniacz - kogo? czego? (nie ma)',
-        '**C** celownik - komu? czemu? (przyglądam się)',
-        '**B** biernik - kogo? co? (widzę)',
-        '**N** narzędnik - z kim? z czym? (idę z)',
-        '**Ms** miejscownik - o kim? o czym? (mówię o)',
-        '**W** wołacz - o!',
-        'Kolejność: **M**ama **D**aje **C**ukierki, **B**asia **N**ajpierw **M**amie **W**ręcza.',
-      ],
+      tytul: 'Wyrazy potoczne',
+      wiedza: ['**Potoczne** mówimy na luzie, do kolegów. W szkole, do dorosłych i w wypracowaniu - **oficjalne**: ściema - ==kłamstwo==.'],
       zadania: [
         {
-          polecenie: 'Odmień wyrazy przez przypadki. Pomoże ci słowo w nawiasie.',
+          polecenie: 'Zamień wyróżniony wyraz potoczny na oficjalny.',
+          info: 'Zapytaj siebie: jak powiedziałbym to pani dyrektor? Wyraz oficjalny znaczy to samo, zmienia się tylko styl.',
+          linie: [
+            'Kuzyn **ściemnia**, że był w Paryżu. ➜ [[kłamie|30]]',
+            '**Spoko**, pomogę ci. ➜ [[dobrze / w porządku|30]]',
+            'Ola **wkręciła** mnie, że nie ma lekcji. ➜ [[oszukała / okłamała|30]]',
+          ],
+        },
+      ],
+    },
+    {
+      tytul: 'Porównanie',
+      wiedza: ['Porównanie: **co opisuję + jak, jakby, niczym, niby + do czego porównuję**. Samo „jak” w pytaniu to nie porównanie.'],
+      zadania: [
+        {
+          polecenie: 'Czy w zdaniu jest porównanie? Zakreśl.',
+          info: 'Szukaj trzech części: co opisuję, słówko porównania i to, do czego porównuję. „Jak” na początku pytania niczego nie porównuje.',
+          linie: [
+            'Jego głos brzmiał jak dzwon. {{*tak|nie}}',
+            'Jak zrobić latawiec? {{tak|*nie}}',
+            'Szła powoli, niczym żółw. {{*tak|nie}}',
+            'Mama robi pyszne pierogi. {{tak|*nie}}',
+          ],
+        },
+      ],
+    },
+    {
+      tytul: 'Synonimy i antonimy',
+      wiedza: ['**Synonimy** - podobne znaczenie (smutny - markotny). **Antonimy** - przeciwne (wysoki - niski).'],
+      zadania: [
+        {
+          polecenie: 'Dopisz synonim i antonim.',
+          info: 'Synonim wstaw za wyraz w zdaniu - sens musi zostać ten sam. Antonim to słowo o przeciwnym znaczeniu. Dobrych synonimów jest kilka.',
           tabela: {
-            naglowki: ['przypadek', 'jeż', 'żaba', 'jajko'],
+            naglowki: ['wyraz', 'synonim', 'antonim'],
             wiersze: [
-              ['**M** (jest)', 'jeż', 'żaba', 'jajko'],
-              ['**D** (nie ma)', '[[jeża|22]]', '[[żaby|22]]', '[[jajka|22]]'],
-              ['**C** (przyglądam się)', '[[jeżowi|22]]', '[[żabie|22]]', '[[jajku|22]]'],
-              ['**B** (widzę)', '[[jeża|22]]', '[[żabę|22]]', '[[jajko|22]]'],
-              ['**N** (idę z)', '[[jeżem|22]]', '[[żabą|22]]', '[[jajkiem|22]]'],
-              ['**Ms** (mówię o)', '[[jeżu|22]]', '[[żabie|22]]', '[[jajku|22]]'],
-              ['**W** (o!)', '[[jeżu!|22]]', '[[żabo!|22]]', '[[jajko!|22]]'],
+              ['**mądry**', '[[np. bystry|28]]', '[[głupi|28]]'],
+              ['**szybko**', '[[np. prędko|28]]', '[[wolno / powoli|28]]'],
+              ['**smutek**', '[[np. żal|28]]', '[[radość|28]]'],
             ],
           },
         },
+      ],
+    },
+    {
+      tytul: 'List',
+      wiedza: ['W liście o adresacie wielką literą: **Ty, Ciebie, Ci, Tobie, Twój**. O sobie małą: **ja, mnie, mój**.'],
+      zadania: [
         {
-          polecenie: 'Dopisz pytania przypadków.',
-          kolumny: 2,
+          polecenie: 'Wpisz wyrazy z nawiasów poprawną literą.',
+          info: 'Czy to słowo o osobie, do której piszesz (ty, twój)? Wtedy wielką literą - z szacunku. O sobie (ja, mój) - małą, chyba że zaczyna zdanie.',
           linie: [
-            'dopełniacz ➜ [[kogo? czego?|32]]',
-            'biernik ➜ [[kogo? co?|32]]',
-            'celownik ➜ [[komu? czemu?|32]]',
-            'narzędnik ➜ [[z kim? z czym?|32]]',
+            'Przesyłam [[Ci|12]] (ty) zdjęcia. Jestem na nich [[ja|12]] (ja) z psem.',
+            'Czy [[Twój|16]] (twój) brat pływa? Buziaki dla [[Ciebie|18]] (ty)!',
           ],
         },
       ],
     },
     {
-      tytul: 'Rozpoznaj przypadek',
+      tytul: 'Rzeczownik',
       wiedza: [
-        'Znajdź słowo, od którego zależy rzeczownik (najczęściej czasownik), i **zadaj od niego pytanie**: Czekam na (kogo? co?) ==autobus== - biernik.',
-        'Uważaj na podobne pytania. **Kto? co?** - mianownik, ten, kto coś robi: ==Kot== śpi. **Kogo? co?** - biernik: Głaszczę ==kota==.',
-        'Po **nie** często jest dopełniacz: mam kanapkę ➜ nie mam ==kanapki==.',
+        'Rodzaj: **ten** - męski, **ta** - żeński, **to** - nijaki.',
+        'W liczbie mnogiej: **ci** - męskoosobowy (tylko mężczyźni), **te** - niemęskoosobowy.',
       ],
       zadania: [
         {
-          polecenie: 'W jakim przypadku jest podkreślony wyraz? Wpisz skrót: M, D, C, B, N, Ms, W.',
+          polecenie: 'Dopisz ten, ta, to, ci albo te i nazwij rodzaj.',
+          info: 'Powiedz wyraz z ten, ta, to (liczba pojedyncza) albo z ci, te (liczba mnoga) i posłuchaj, co brzmi dobrze. „Ci” tylko przy mężczyznach.',
+          tabela: {
+            naglowki: ['rzeczownik', 'ten / ta / to / ci / te', 'rodzaj'],
+            wiersze: [
+              ['**koń**', '[[ten|16]]', '[[męski|30]]'],
+              ['**kawa**', '[[ta|16]]', '[[żeński|30]]'],
+              ['**zdjęcie**', '[[to|16]]', '[[nijaki|30]]'],
+              ['**lekarze**', '[[ci|16]]', '[[męskoosobowy|30]]'],
+              ['**myszy**', '[[te|16]]', '[[niemęskoosobowy|30]]'],
+            ],
+          },
+        },
+      ],
+    },
+    {
+      tytul: 'Przypadki',
+      wiedza: [
+        '**M** kto? co? · **D** kogo? czego? · **C** komu? czemu? · **B** kogo? co? · **N** z kim? z czym? · **Ms** o kim? o czym? · **W** o!',
+        'Zadaj pytanie od czasownika: Rysuję (czym?) ==kredką== - narzędnik.',
+      ],
+      zadania: [
+        {
+          polecenie: 'W jakim przypadku jest podkreślony wyraz? Wpisz skrót.',
+          info: 'Znajdź czasownik i zadaj od niego pytanie o podkreślony wyraz. Pytanie podpowie przypadek: nie ma (czego?) mleka - dopełniacz.',
           kolumny: 2,
           linie: [
-            '[[M|9]] __Wiewiórka__ zbiera orzechy.',
-            '[[D|9]] Nie lubię __szpinaku__.',
-            '[[C|9]] Pomagam __dziadkowi__.',
-            '[[B|9]] Zbudowaliśmy __szałas__.',
-            '[[N|9]] Kroję chleb __nożem__.',
-            '[[Ms|9]] Śnię o __wakacjach__.',
-            '[[W|9]] __Piotrze__, zamknij okno!',
-            '[[N|9]] Rower stoi przed __domem__.',
+            '[[D|9]] Nie ma __mleka__.',
+            '[[C|9]] Przyglądam się __mrówce__.',
+            '[[N|9]] Rysuję __kredką__.',
+            '[[W|9]] __Piotrusiu__, pomóż!',
           ],
         },
         {
-          polecenie: 'Zakreśl formę, która pasuje do zdania.',
+          polecenie: 'Odmień rzeczowniki przez przypadki.',
+          info: 'Wstawiaj wyraz po pomocniku z lewej kolumny i powiedz całe zdanie na głos: nie ma (kogo? czego?) pszczoły...',
+          tabela: {
+            naglowki: ['przypadek', 'pszczoła', 'ząb'],
+            wiersze: [
+              ['**D** (nie ma)', '[[pszczoły|24]]', '[[zęba|24]]'],
+              ['**C** (przyglądam się)', '[[pszczole|24]]', '[[zębowi|24]]'],
+              ['**B** (widzę)', '[[pszczołę|24]]', '[[ząb|24]]'],
+              ['**N** (z)', '[[pszczołą|24]]', '[[zębem|24]]'],
+              ['**Ms** (o)', '[[pszczole|24]]', '[[zębie|24]]'],
+              ['**W** (o!)', '[[pszczoło!|24]]', '[[zębie!|24]]'],
+            ],
+          },
+        },
+      ],
+    },
+    {
+      tytul: 'Trudne formy i wołacz',
+      wiedza: ['Dopełniacz liczby mnogiej często bez końcówki: nie ma ==kartek==. **Wołacz** - gdy wołamy: Ela - ==Elu==!'],
+      zadania: [
+        {
+          polecenie: 'Popraw źle użyty wyraz.',
+          info: 'Policz: jedna książka - pięć... (nie ma końcówki -ów). Przy wołaniu kogoś po imieniu użyj wołacza: Jacek - Jacku!',
           linie: [
-            'Jutro jadę nad jezioro z {{kuzyn|kuzyna|*kuzynem}}.',
-            'Nigdzie nie widzę {{kot|*kota|kotem}}.',
-            'Daję kość {{psa|*psu|psem}}.',
-            'Na ławce siedzi {{*sąsiadka|sąsiadkę|sąsiadce}}.',
+            'Na półce stało pięć książków. ➜ [[książek|24]]',
+            'Zjadłem kilka śliwków. ➜ [[śliwek|24]]',
+            'Ela, chodź na obiad! ➜ [[Elu|24]]',
+            'Jacek, oddaj piłkę! ➜ [[Jacku|24]]',
           ],
         },
       ],
     },
     {
-      tytul: 'Liczba mnoga i wołacz',
-      wiedza: [
-        'W liczbie mnogiej pytania są te same: ==koty==, (nie ma) ==kotów==, ==kotom==, (widzę) ==koty==, z ==kotami==, o ==kotach==, ==koty==!',
-        'W dopełniaczu bywa **bez końcówki**: nie ma ==gruszek== (nie: gruszków).',
-        'Wołaczem **zwracamy się** do kogoś: Zosia ➜ ==Zosiu==!',
-      ],
+      tytul: 'Fakt, opinia, argument',
+      wiedza: ['**Fakt** da się sprawdzić, **opinia** to czyjeś zdanie. **Argument** mówi, dlaczego tak myślę: ...ponieważ...'],
       zadania: [
         {
-          polecenie: 'Wpisz wyraz z nawiasu w odpowiedniej formie.',
+          polecenie: 'Fakt czy opinia? Zakreśl.',
+          info: 'Czy można to sprawdzić w książce, na mapie albo licząc? To fakt. Czy ktoś mógłby się nie zgodzić? To opinia.',
+          kolumny: 2,
           linie: [
-            'W koszyku nie ma [[gruszek|22]] (gruszki).',
-            'Idę na spacer z [[psami|22]] (psy).',
-            'Czytam o [[dinozaurach|24]] (dinozaury).',
-            'Zgubiłem parę [[rękawiczek|24]] (rękawiczki).',
-            'Przyglądam się [[mrówkom|22]] (mrówki).',
-            'Kupię kilo [[ziemniaków|24]] (ziemniaki).',
+            'W Polsce są cztery pory roku. {{*fakt|opinia}}',
+            'Pizza jest lepsza od zupy. {{fakt|*opinia}}',
+            'Słoń to największe zwierzę lądowe. {{*fakt|opinia}}',
+            'Zima to najgorsza pora roku. {{fakt|*opinia}}',
           ],
         },
         {
-          polecenie: 'Zawołaj poprawnie.',
+          polecenie: 'Dokończ zdanie, podając argument.',
+          info: 'Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument.',
+          linie: ['W szkole powinno być więcej wycieczek, ponieważ [[np. najlepiej uczymy się, oglądając rzeczy na żywo|90]]'],
+        },
+      ],
+    },
+    {
+      tytul: 'Asertywność',
+      wiedza: ['**Asertywnie**: spokojnie mówię „nie”, mówię dlaczego i proponuję coś innego. **Nie, bo... Ale mogę...**'],
+      zadania: [
+        {
+          polecenie: 'Kolega chce zjeść twój deser. Jaka to reakcja? Zakreśl.',
+          info: 'Agresywna rani albo obraża. Uległa to zgoda wbrew sobie. Asertywna jest spokojna: „nie”, powód i propozycja.',
+          linie: [
+            '„Spadaj, to moje!” {{uległa|*agresywna|asertywna}}',
+            '„No dobra, weź...” {{*uległa|agresywna|asertywna}}',
+            '„Nie, bo jestem głodny. Dam ci jabłko.” {{uległa|agresywna|*asertywna}}',
+          ],
+        },
+      ],
+    },
+    {
+      tytul: 'Wielka czy mała litera?',
+      wiedza: ['**Wielką** - nazwy własne (imiona, miasta, rzeki, morza). **Małą** - dni, miesiące.'],
+      zadania: [
+        {
+          polecenie: 'Znajdź trzy błędy i wypisz te wyrazy poprawnie.',
+          info: 'Szukaj imion ludzi i nazw miejsc - one zawsze wielką literą. Nazwa morza ma dwa wyrazy i oba piszemy wielką.',
+          wLinii: true,
+          linie: ['W maju jedziemy z ciocią basią nad morze bałtyckie, do gdyni.', '➜ [[Basią, Morze Bałtyckie, Gdyni|90]]'],
+        },
+      ],
+    },
+    {
+      tytul: '„Nie” z rzeczownikami',
+      wiedza: ['Pytam o wyraz bez „nie”: **kto? co?** - razem (niepamięć), **co robi?** - osobno (nie patrz).'],
+      zadania: [
+        {
+          polecenie: 'Zapisz poprawnie: razem czy osobno?',
+          info: 'Zakryj „nie” i zapytaj o resztę wyrazu: kto? co? - rzeczownik, piszemy razem. Co robi? - czasownik, piszemy osobno.',
           kolumny: 2,
           linie: [
-            'Kasia ➜ [[Kasiu!|20]]',
-            'Wojtek ➜ [[Wojtku!|20]]',
-            'pies ➜ [[psie!|20]]',
-            'kot ➜ [[kocie!|20]]',
-            'pani Ewa ➜ [[pani Ewo!|20]]',
-            'pan Marek ➜ [[panie Marku!|24]]',
+            '(nie)uwaga ➜ [[nieuwaga|26]]',
+            '(nie)patrz ➜ [[nie patrz|26]]',
+            '(nie)chęć ➜ [[niechęć|26]]',
+            '(nie)chcą ➜ [[nie chcą|26]]',
+            '(nie)pamięć ➜ [[niepamięć|26]]',
+            '(nie)gadaj ➜ [[nie gadaj|26]]',
           ],
         },
       ],
