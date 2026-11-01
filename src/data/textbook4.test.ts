@@ -205,11 +205,16 @@ describe('buildTextbook4', () => {
     expect(r2.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(4);
   });
 
-  it('powtorka rozdzialu II: 5 przypomnien, po kazdym 2 karty z Info, bez filmu i notatki', () => {
+  it('powtorka rozdzialu II: 9 przypomnien, po kazdym 1-2 karty z Info, bez filmu i notatki', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const lesson = bundle.lessons.find((l) => l.title === '29. Powtórzenie rozdziału II')!;
-    const blok = ['przypomnienie', 'cwiczenie', 'cwiczenie'];
-    expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', ...blok, ...blok, ...blok, ...blok, ...blok]);
+    const kinds = lesson.slides.map((s) => s.kind);
+    expect(kinds.slice(0, 2)).toEqual(['topic', 'recap']);
+    expect(kinds.filter((k) => k === 'przypomnienie')).toHaveLength(9);
+    // Jedno zagadnienie = przypomnienie i zaraz po nim 1-2 karty, nic wiecej.
+    const bloki = kinds.slice(2).join(' ').split('przypomnienie').slice(1).map((b) => b.trim().split(' '));
+    for (const b of bloki) expect(b.length === 1 || b.length === 2, b.join()).toBe(true);
+    expect(bloki.flat().every((k) => k === 'cwiczenie')).toBe(true);
     expect(lesson.slides[1]).not.toMatchObject({ questionSetId: lesson.questionSetId });
     for (const s of lesson.slides) {
       if (s.kind === 'przypomnienie') expect(przypomnienieById(s.przypomnienieId), s.przypomnienieId).toBeTruthy();

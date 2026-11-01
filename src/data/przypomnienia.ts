@@ -33,25 +33,47 @@ export interface Przypomnienie {
   kroki: KrokPrzypomnienia[];
 }
 
-const R2 = (n: number) => `Powtórka rozdziału II · ${n}/5`;
+// Jedno zagadnienie na slajd (Bartek 2026-11-01: "rozdzielilbym, bo sa na 1 slajdzie oba zagadnienia").
+const R2 = (n: number) => `Powtórka rozdziału II · ${n}/9`;
 
 export const PRZYPOMNIENIA: Przypomnienie[] = [
   // ---------- Klasa 4, rozdzial II - lekcja 29 (powtorka z nauczycielem) ----------
   {
-    id: 'p4-r2-slowa',
+    id: 'p4-r2-potoczne',
     naglowek: R2(1),
-    tytul: 'Słowa: potoczne, porównanie, synonimy',
+    tytul: 'Wyrazy potoczne',
     kroki: [
-      { typ: 'regula', tekst: '**Wyraz potoczny** mówimy na luzie, do kolegów. W wypracowaniu i do dorosłych - ==oficjalny==.' },
+      { typ: 'regula', tekst: '**Wyraz potoczny** mówimy na luzie, do kolegów. W szkole, do dorosłych i w wypracowaniu - ==oficjalny==.' },
+      { typ: 'czesci', czesci: [['Siema! Nara!', 'do kolegi'], ['Dzień dobry! Do widzenia!', 'do pani dyrektor']] },
       { typ: 'zamiana', pary: [['kasa', 'pieniądze'], ['gadać', 'rozmawiać'], ['kumpel', 'kolega']], podpis: 'sens ten sam, zmienia się tylko styl' },
-      { typ: 'czesci', czesci: [['plecak ciężki', 'co opisuję'], ['jak', 'słówko: jak, jakby, niczym, niby'], ['kamień', 'do czego porównuję']] },
+      { typ: 'regula', tekst: 'W słowniku przy wyrazie potocznym stoi skrót ==pot.==' },
+    ],
+  },
+  {
+    id: 'p4-r2-porownanie',
+    naglowek: R2(2),
+    tytul: 'Porównanie',
+    kroki: [
+      { typ: 'regula', tekst: '**Porównanie** zestawia dwie rzeczy, które są w czymś ==podobne==.' },
+      { typ: 'czesci', czesci: [['plecak ciężki', 'co opisuję'], ['jak', 'słówko'], ['kamień', 'do czego porównuję']] },
+      { typ: 'regula', tekst: 'Słówka porównania: ==jak, jakby, niczym, niby==.' },
+      { typ: 'regula', tekst: 'Uwaga! „**Jak** masz na imię?” to pytanie - nic z niczym nie zestawiamy, więc ==to nie porównanie==.' },
+    ],
+  },
+  {
+    id: 'p4-r2-synonimy',
+    naglowek: R2(3),
+    tytul: 'Synonimy i antonimy',
+    kroki: [
       { typ: 'para', a: 'szybki', b: 'prędki', znak: '=', podpis: 'synonimy - podobne znaczenie' },
       { typ: 'para', a: 'otwierać', b: 'zamykać', znak: '↔', podpis: 'antonimy - przeciwne znaczenie' },
+      { typ: 'regula', tekst: 'Synonimy pomagają **unikać powtórzeń**: zamiast ciągle „powiedział” - ==zapytał, krzyknął, szepnął==.' },
+      { typ: 'regula', tekst: 'Nie każdy wyraz ma antonim: ==dom, niebieski, czytać==.' },
     ],
   },
   {
     id: 'p4-r2-list',
-    naglowek: R2(2),
+    naglowek: R2(4),
     tytul: 'List',
     kroki: [
       { typ: 'kolejnosc', elementy: ['miejscowość i data', 'nagłówek', 'wstęp', 'rozwinięcie', 'zakończenie', 'pozdrowienia', 'podpis'] },
@@ -62,7 +84,7 @@ export const PRZYPOMNIENIA: Przypomnienie[] = [
   },
   {
     id: 'p4-r2-rzeczownik',
-    naglowek: R2(3),
+    naglowek: R2(5),
     tytul: 'Rzeczownik',
     kroki: [
       { typ: 'regula', tekst: 'Rzeczownik odpowiada na pytania ==kto? co?== Nazywa też uczucia i zjawiska: radość, burza.' },
@@ -73,24 +95,46 @@ export const PRZYPOMNIENIA: Przypomnienie[] = [
   },
   {
     id: 'p4-r2-przypadki',
-    naglowek: R2(4),
+    naglowek: R2(6),
     tytul: 'Przypadki',
     kroki: [
       { typ: 'czesci', czesci: [['M', 'kto? co?'], ['D', 'kogo? czego?'], ['C', 'komu? czemu?'], ['B', 'kogo? co?'], ['N', 'z kim? z czym?'], ['Ms', 'o kim? o czym?'], ['W', 'o!']] },
       { typ: 'pytanie', zdanie: 'Idę do kina z bratem.', od: 'Idę', do: 'bratem', pytanie: 'z kim?', wynik: 'narzędnik' },
+      { typ: 'pytanie', zdanie: 'Nie widzę tablicy.', od: 'widzę', do: 'tablicy', pytanie: 'kogo? czego?', wynik: 'dopełniacz' },
       { typ: 'pytanie', zdanie: 'Pomagam babci w ogrodzie.', od: 'Pomagam', do: 'babci', pytanie: 'komu?', wynik: 'celownik' },
-      { typ: 'zamiana', pary: [['nie ma zabawków', 'zabawek'], ['Kasia!', 'Kasiu!']], podpis: 'dopełniacz l. mnogiej często bez końcówki · wołacz, gdy wołamy' },
     ],
   },
   {
-    id: 'p4-r2-pisownia',
-    naglowek: R2(5),
-    tytul: 'Pisownia: wielka litera i „nie”',
+    id: 'p4-r2-trudne',
+    naglowek: R2(7),
+    tytul: 'Trudne formy i wołacz',
     kroki: [
-      { typ: 'regula', tekst: '**Wielką** literą nazwy własne: imiona, zwierzęta, miasta, państwa, rzeki, góry, planety. **Małą**: ==dni tygodnia, miesiące==, zwykłe słowa.' },
+      { typ: 'regula', tekst: 'Dopełniacz liczby mnogiej (nie ma kogo? czego?) często ==nie ma końcówki==.' },
+      { typ: 'zamiana', pary: [['kredków', 'kredek'], ['zabawków', 'zabawek'], ['spodniów', 'spodni']], podpis: 'jedna kredka - nie ma kredek' },
+      { typ: 'regula', tekst: '**Wołacz** - forma, gdy do kogoś ==wołamy== albo się zwracamy.' },
+      { typ: 'zamiana', pary: [['Kasia!', 'Kasiu!'], ['Tomek!', 'Tomku!'], ['pani Ewa!', 'pani Ewo!']] },
+    ],
+  },
+  {
+    id: 'p4-r2-wielka',
+    naglowek: R2(8),
+    tytul: 'Wielka czy mała litera?',
+    kroki: [
+      { typ: 'regula', tekst: '**Wielką** literą piszemy ==nazwy własne== - imię jednej osoby, zwierzęcia, miejsca.' },
+      { typ: 'czesci', czesci: [['Burek', 'imię psa'], ['Wisła', 'rzeka'], ['Tatry', 'góry'], ['Mars', 'planeta']] },
+      { typ: 'regula', tekst: '**Małą**: ==dni tygodnia, miesiące== i zwykłe słowa: pies, rzeka, miasto.' },
       { typ: 'zamiana', pary: [['ola', 'Ola'], ['wisła', 'Wisła'], ['Poniedziałek', 'poniedziałek']] },
+    ],
+  },
+  {
+    id: 'p4-r2-nie',
+    naglowek: R2(9),
+    tytul: '„Nie” z rzeczownikami',
+    kroki: [
+      { typ: 'regula', tekst: 'Pytam o wyraz bez „nie”: **kto? co?** - piszemy ==razem==, **co robi?** - piszemy osobno.' },
       { typ: 'pytanie', zdanie: 'Ola czuje niepokój.', od: 'czuje', do: 'niepokój', pytanie: 'co?', wynik: 'rzeczownik - razem' },
-      { typ: 'zamiana', pary: [['nie porządek', 'nieporządek'], ['niewiem', 'nie wiem']], podpis: '„nie” z rzeczownikiem razem, z czasownikiem osobno' },
+      { typ: 'pytanie', zdanie: 'Kuba nie śpi.', od: 'Kuba', do: 'śpi', pytanie: 'co robi?', wynik: 'czasownik - osobno' },
+      { typ: 'zamiana', pary: [['nie porządek', 'nieporządek'], ['niewiem', 'nie wiem']] },
     ],
   },
 ];

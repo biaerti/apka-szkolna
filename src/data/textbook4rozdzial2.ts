@@ -536,20 +536,20 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
   },
   {
     // Powtorka, ktora prowadzi nauczyciel (Bartek 2026-11-01: zamiast filmu
-    // podsumowujacego). 5 zagadnien: przypomnienie z krokami na strzalke
-    // (src/data/przypomnienia.ts) i od razu 2 krotkie karty "Ćwiczymy razem".
+    // podsumowujacego). 9 zagadnien, jedno na slajd: przypomnienie z krokami na
+    // strzalke (src/data/przypomnienia.ts) i od razu 1-2 krotkie karty "Ćwiczymy razem".
     // Film podsumowania zostaje w rejestrze filmikow, ale lekcja go nie uzywa.
     title: '29. Powtórzenie rozdziału II',
     dzial: ROZDZIAL_2,
     topic: 'Pośród słów i znaczeń - powtórzenie',
     textbookPage: 89,
     teacherPlan: plan(
-      ['Co dziś', 'Pierwsza z czterech lekcji powtórki przed sprawdzianem. Ty mówisz, slajd tylko pomaga: przy każdym zagadnieniu krótko przypominasz regułę na przykładach, a potem robicie razem dwie krótkie karty. Bez filmu i bez notatki - zeszyty już to mają.'],
+      ['Co dziś', 'Pierwsza z czterech lekcji powtórki przed sprawdzianem. Ty mówisz, slajd tylko pomaga: jedno zagadnienie na slajd, krótko przypominasz regułę na przykładach, a potem od razu robicie razem kartę. Bez filmu i bez notatki - zeszyty już to mają.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (5 min) - nie z rzeczownikami.',
-        '2. **5 zagadnień po ok. 8 minut**: słowa (potoczne, porównanie, synonimy) · list · rzeczownik · przypadki · pisownia (wielka litera, „nie”).',
+        '2. **9 zagadnień po ok. 4 minuty**: potoczne · porównanie · synonimy i antonimy · list · rzeczownik · przypadki · trudne formy i wołacz · wielka litera · „nie”.',
         '3. Przy każdym: **Przypomnienie** - strzałka (albo klik w prawą połowę) odsłania kolejny krok, w lewo chowa. Mów do każdego kroku, pokaż przykład. Gdy widać wszystko, strzałka idzie dalej.',
-        '4. Potem **2 karty Ćwiczymy razem** (4-6 przykładów). **Info** obok „Sprawdź” wyświetla regułę do zadania - pokaż ją przed sprawdzaniem. Na każdy przykład koło (K) losuje osobę.',
+        '4. Potem **karta Ćwiczymy razem** (przy liście, rzeczowniku i przypadkach dwie). **Info** obok „Sprawdź” wyświetla regułę do zadania - pokaż ją przed sprawdzaniem. Na każdy przykład koło (K) losuje osobę.',
         '5. Brakuje czasu? Opinia, argument i asertywność są w kahoocie i w ćwiczeniach do domu.',
       ].join('\n')],
       ['Tydzień powtórki', [
@@ -573,16 +573,24 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
     makeSlides: (previousSetId, _ownSetId) => [
       slideTopic('Pośród słów i znaczeń - powtórzenie'),
       ...recap(previousSetId),
-      przypomnienie('p4-r2-slowa'),
-      ...razem('k4-powt2-potoczne', 'k4-powt2-porownanie-syn'),
+      przypomnienie('p4-r2-potoczne'),
+      ...razem('k4-powt2-potoczne'),
+      przypomnienie('p4-r2-porownanie'),
+      ...razem('k4-powt2-porownanie'),
+      przypomnienie('p4-r2-synonimy'),
+      ...razem('k4-powt2-synonimy'),
       przypomnienie('p4-r2-list'),
       ...razem('k4-powt2-list-czesci', 'k4-powt2-list-litera'),
       przypomnienie('p4-r2-rzeczownik'),
       ...razem('k4-powt2-rzeczownik', 'k4-powt2-rodzaj'),
       przypomnienie('p4-r2-przypadki'),
       ...razem('k4-powt2-przypadek', 'k4-powt2-odmiana'),
-      przypomnienie('p4-r2-pisownia'),
-      ...razem('k4-powt2-wielka', 'k4-powt2-nie'),
+      przypomnienie('p4-r2-trudne'),
+      ...razem('k4-powt2-trudne'),
+      przypomnienie('p4-r2-wielka'),
+      ...razem('k4-powt2-wielka'),
+      przypomnienie('p4-r2-nie'),
+      ...razem('k4-powt2-nie'),
     ],
   },
 ];
