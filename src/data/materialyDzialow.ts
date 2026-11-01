@@ -17,11 +17,13 @@ export type MaterialyDzialu = {
   sprawdzianProjektor?: boolean;
   /** false = dzial nie ma zeszytu powtorzeniowego (np. tylko karta pracy i sprawdzian). */
   zeszyt?: boolean;
+  /** Sa cwiczenia do domu przed sprawdzianem (materialy/<folder>/domowe.mjs) - link dla uczniow do VULCANA. */
+  domowe?: boolean;
 };
 
 export const MATERIALY_DZIALOW: MaterialyDzialu[] = [
   { grade: 'IV', dzial: 'Rozdział I. Poznajemy siebie i innych', folder: 'klasa4-rozdzial1', karta: true },
-  { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2', karta: true },
+  { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2', karta: true, domowe: true },
   { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszyt: false, sprawdzianProjektor: true },
   { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2' },
 ];
@@ -34,6 +36,11 @@ export function materialyDzialu(grade: string, dzial: string | undefined): Mater
 /** Publiczny link do zeszytu - ten wklejamy w VULCANIE. */
 export function zeszytUrl(folder: string): string {
   return `https://szkola.klippi.pl/materialy/${folder}-powtorka.pdf`;
+}
+
+/** Cwiczenia do domu: wypelniane w przegladarce (tez na telefonie), z linkiem do PDF-u do druku. */
+export function domoweUrl(folder: string): string {
+  return `https://szkola.klippi.pl/materialy/karty/${folder}-domowe.html`;
 }
 
 /** Karta pracy do wypelniania na projektorze (materialy/karta.mjs -> public/materialy/karty/). */

@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { kartaNaProjektorUrl, materialyDzialu, prywatnyUrl, sprawdzianNaProjektorUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
+import { domoweUrl, kartaNaProjektorUrl, materialyDzialu, prywatnyUrl, sprawdzianNaProjektorUrl, zeszytUrl, type PrywatnyPlik } from '../../data/materialyDzialow';
 
 export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: string }) {
   const [info, setInfo] = useState<string | null>(null);
@@ -50,6 +50,13 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
             <>
               <a href={zeszytUrl(materialy.folder)} target="_blank" rel="noreferrer" className={btn}>Zeszyt powtórzeniowy</a>
               <button type="button" onClick={() => kopiuj(zeszytUrl(materialy.folder))} className={btn}>Kopiuj link do VULCANA</button>
+              <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
+            </>
+          )}
+          {materialy.domowe && (
+            <>
+              <a href={domoweUrl(materialy.folder)} target="_blank" rel="noreferrer" className={btn}>Ćwiczenia do domu</a>
+              <button type="button" onClick={() => kopiuj(domoweUrl(materialy.folder))} className={btn}>Kopiuj link do ćwiczeń</button>
               <span className="mx-1 h-4 w-px bg-gray-300" aria-hidden="true" />
             </>
           )}

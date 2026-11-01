@@ -10,7 +10,9 @@
 // luki do wpisywania, klikane zakreślanie i podkreślanie, przycisk „Odpowiedź” przy każdym zadaniu.
 // Sprawdzian dostaje taką samą wersję do omówienia na projektorze, ale tylko w output/materialy/
 // (<plik>-projektor.html -> prywatny bucket przez wyslij.py), z przełącznikiem grup.
-import { writeFileSync, mkdirSync } from 'node:fs';
+// Ćwiczenia do domu (KARTA.domowa, np. domowe.mjs): ta sama wersja HTML jest linkiem dla uczniów
+// do VULCANA - „Sprawdź” zamiast „Odpowiedź”, układ na telefon, a PDF do druku też w public/materialy/.
+import { writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { drukujPdf, znaczniki as z, STYL_BAZOWY, ROOT } from './pdf.mjs';
@@ -122,7 +124,7 @@ function arkusz(tematyDanych, rozw, grupa) {
         : grupa && !rozw && !ekran ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
         : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
-        <div class="pol">${ekran ? '<button type="button" class="pokaz">Odpowiedź</button>' : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
+        <div class="pol">${ekran ? `<button type="button" class="pokaz">${KARTA.domowa ? 'Sprawdź' : 'Odpowiedź'}</button>` : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
         ${wiersz}${pytania}
         ${linie ? `<div class="linie${zad.kolumny ? ` k${zad.kolumny}` : ''}">${linie}</div>` : ''}
         ${zad.tabela ? tabela(zad.tabela, rozw) : ''}
@@ -151,13 +153,14 @@ function arkusz(tematyDanych, rozw, grupa) {
   return `<section class="arkusz${grupa ? ' sprawdzian' : ''}"${grupa && ekran ? ` data-grupa="${grupa}"` : ''}>
 <div class="gora"><h1>${z(KARTA.tytul)}</h1><div class="pod">${z(KARTA.klasa)} · ${z(KARTA.podtytul)}</div>
 ${prawa}${grupa ? `<div class="grupa">Grupa ${grupa}</div>` : ''}</div>
+${ekran && KARTA.wstep ? `<p class="wstep">${z(KARTA.wstep)}</p>` : ''}
 ${grupa && !rozw && !ekran ? `<div class="dane"><span>Imię i nazwisko:</span><span>Data:</span><span class="wynik">Wynik: ……… / ${suma} pkt</span></div>` : ''}
 ${tematy}
 </section>`;
 }
 
 function dokument(tresc) {
-  return `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>${z(KARTA.tytul)}</title><style>
+  return `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${z(KARTA.tytul)}</title><style>
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap&subset=latin-ext');
 ${STYL_BAZOWY}
 @page { size: A4; margin: 9mm 10mm 9mm; }
@@ -226,7 +229,9 @@ body { font-size: 10pt; line-height: 1.3; }
 :root { --czerw: #D62828; }
 ${ekran ? STYL_EKRAN : ''}
 </style></head><body${ekran ? ' class="ekran"' : ''}>
-${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="button" class="grupa-btn" data-grupa="${w.grupa}">Grupa ${w.grupa}</button>`).join('')}<span class="odstep"></span><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">${KARTA.wersje ? 'Wyczyść' : 'Wyczyść kartę'}</button></div>
+${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="button" class="grupa-btn" data-grupa="${w.grupa}">Grupa ${w.grupa}</button>`).join('')}<span class="odstep"></span>${KARTA.domowa
+    ? `<a class="druk" href="../${KARTA.plik}.pdf" target="_blank" rel="noreferrer">Wersja do druku (PDF)</a>`
+    : '<button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button>'}<button type="button" id="wyczysc">${KARTA.wersje ? 'Wyczyść' : 'Wyczyść kartę'}</button></div>
 <main id="karta">${tresc}</main>
 <script>${SKRYPT_EKRAN.replace('__KLUCZ__', `karta:${KARTA.plik}:${tresc.length}`)}</script>` : tresc}
 </body></html>`;
@@ -263,6 +268,22 @@ body.ekran { background: #e9e3d8; }
 .pasek .odstep { flex: 1; }
 .pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
 .ekran .arkusz[hidden] { display: none; }
+.ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
+.ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
+.ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
+.pasek a.druk { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; text-decoration: none; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+/* Telefon (ćwiczenia do domu): kartka bez szerokości A4, jedna kolumna, nic nie wystaje w bok. */
+@media (max-width: 760px) {
+  .ekran .arkusz { width: auto; margin: 2mm 0 6mm; padding: 4mm 3mm; }
+  .pasek { width: auto; margin: 2mm 2mm 0; flex-wrap: wrap; }
+  .ekran .gora { flex-wrap: wrap; }
+  .ekran .gora h1, .ekran .gora .pod { white-space: normal; }
+  .ekran .temat { grid-template-columns: 1fr; gap: 2mm; }
+  .ekran .linie.k2, .ekran .linie.k3, .ekran .linie.k4 { grid-template-columns: 1fr; }
+  .ekran .tab { display: block; overflow-x: auto; margin-left: 0; }
+  .ekran .opc { white-space: normal; }
+  .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
+}
 @media print { .pasek, .pokaz { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
 `;
 
@@ -276,16 +297,24 @@ try { var zapis = localStorage.getItem(KLUCZ_ZAPISU); if (zapis) karta.innerHTML
 var czas;
 function zapisz() { clearTimeout(czas); czas = setTimeout(function () { try { localStorage.setItem(KLUCZ_ZAPISU, karta.innerHTML); } catch (e) {} }, 300); }
 function norm(t) { return t.replace(/^np\.\s*/i, '').replace(/[\s.,!?…]+/g, ' ').trim().toLowerCase(); }
+// „pszczoła / mrówka” - każda z odpowiedzi jest dobra.
+function pasuje(wpis, odp) { return odp.split(' / ').concat([odp]).some(function (o) { return norm(wpis) === norm(o); }); }
 function pokaz(zad, wl) {
   zad.querySelector('.pokaz').classList.toggle('wl', wl);
   zad.querySelectorAll('.luka').forEach(function (l) {
     var nast = l.nextSibling;
     if (nast && nast.classList && nast.classList.contains('podp')) nast.remove();
     if (l.classList.contains('odp')) { l.textContent = ''; l.classList.remove('odp'); }
+    l.classList.remove('dobrze', 'zle');
     if (!wl) return;
     var odp = l.getAttribute('data-odp'), wpis = l.textContent.trim();
     if (!wpis) { l.textContent = odp; l.classList.add('odp'); }
-    else if (norm(wpis) !== norm(odp)) { var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s); }
+    else if (pasuje(wpis, odp)) l.classList.add('dobrze');
+    else {
+      // Przy „np. ...” wpis nie jest błędem - obok tylko przykładowa odpowiedź do porównania.
+      if (!/^np\./i.test(odp)) l.classList.add('zle');
+      var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s);
+    }
   });
   zad.querySelectorAll('.opc, .sl').forEach(function (o) {
     var ok = o.hasAttribute('data-ok'), wybrane = o.classList.contains('zakr') || o.classList.contains('podkr');
@@ -307,7 +336,8 @@ karta.addEventListener('click', function (e) {
 });
 karta.addEventListener('input', zapisz);
 karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
-document.getElementById('wszystko').onclick = function () {
+var wszystko = document.getElementById('wszystko');
+if (wszystko) wszystko.onclick = function () {
   var wl = !this.classList.contains('wl');
   this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
   karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
@@ -345,6 +375,11 @@ if (!KARTA.wersje) {
   writeFileSync(join(dir, `${KARTA.plik}.html`), strona(false), 'utf-8');
   ekran = false;
   console.log('Gotowe:', join(dir, `${KARTA.plik}.html`));
+}
+// Ćwiczenia do domu: wersja do druku też publiczna (link z paska karty, ../<plik>.pdf).
+if (KARTA.domowa) {
+  copyFileSync(join(outDir, `${KARTA.plik}.pdf`), join(ROOT, 'public', 'materialy', `${KARTA.plik}.pdf`));
+  console.log('Gotowe:', join(ROOT, 'public', 'materialy', `${KARTA.plik}.pdf`));
 }
 // Sprawdzian na projektor (do omówienia) - tylko output/, do prywatnego bucketu, nigdy public/.
 if (KARTA.wersje) {
