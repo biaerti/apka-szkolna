@@ -87,10 +87,11 @@ export const PRZYPOMNIENIA: Przypomnienie[] = [
     naglowek: R2(5),
     tytul: 'Rzeczownik',
     kroki: [
-      { typ: 'regula', tekst: 'Rzeczownik odpowiada na pytania ==kto? co?== Nazywa też uczucia i zjawiska: radość, burza.' },
+      { typ: 'regula', tekst: 'Rzeczownik odpowiada na pytania ==kto? co?== (też uczucia: radość).' },
       { typ: 'pytanie', zdanie: 'Na parapecie śpi kot.', od: 'śpi', do: 'kot', pytanie: 'kto?', wynik: 'rzeczownik' },
       { typ: 'czesci', czesci: [['ten stół', 'rodzaj męski'], ['ta lampa', 'rodzaj żeński'], ['to okno', 'rodzaj nijaki']] },
       { typ: 'regula', tekst: 'Liczba: **pojedyncza** (kot) i **mnoga** (koty). Tylko mnogą mają: ==drzwi, nożyczki, spodnie==.' },
+      { typ: 'czesci', czesci: [['ci chłopcy, panowie', 'męskoosobowy - tylko mężczyźni'], ['te dziewczynki, psy, stoły', 'niemęskoosobowy - cała reszta']] },
     ],
   },
   {
