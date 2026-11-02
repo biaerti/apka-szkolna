@@ -423,7 +423,7 @@ export const DZIAL2_TOPICS: Topic[] = [
       ramka('d2-s85-ramka', 85, 'Kiedy piszemy ą?'),
       slideVideo('ogonki-film1'),
       ramka('d2-s86-87-plansza', 86, 'Plansza - rymowanki i frazeologizmy'),
-      slideNote('Ę i ą na końcu wyrazu', '**-ę:** widzę kogo? co? - mamę, tęczę; małe istoty - kocię, źrebię; ja - piszę, zrobię.\n**-ą:** z kim? z czym? - z mamą, łyżką; oni - piszą, zrobią.\n**Wyjątki:** wiem, jem, umiem, rozumiem.'),
+      { ...slideNote('Ę i ą na końcu wyrazu', '**-ę:** widzę kogo? co? - mamę, tęczę; małe istoty - kocię, źrebię; ja - piszę, zrobię.\n**-ą:** z kim? z czym? - z mamą, łyżką; oni - piszą, zrobią.\n**Wyjątki:** wiem, jem, umiem, rozumiem.'), image: '/notatki/ogonki-na-koncu.webp' },
       ...razem('k5-ea-koncowka', 'k5-ea-dlaczego'),
     ],
   },

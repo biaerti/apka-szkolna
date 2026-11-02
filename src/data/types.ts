@@ -374,6 +374,8 @@ export type Slide =
       timerSec?: number;
       /** Graficzny schemat do przerysowania zamiast zwyklej listy punktow. */
       diagram?: 'wypowiedzenia' | 'planRamowy' | 'formyCzasownika' | 'trybyCzasownika';
+      /** Gotowa notatka graficzna (np. /notatki/x.webp) na slajdzie zamiast tekstu - body zostaje do druku. */
+      image?: string;
     }
   // slajd uruchamia kolo fortuny; variant 'demo' = pierwsze pokazanie kola w
   // lekcji zapoznawczej - dziala jak zwykla runda (bez naglowka "Przedstaw się"

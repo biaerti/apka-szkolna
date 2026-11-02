@@ -222,6 +222,21 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
     );
   }
 
+  if (slide.image) {
+    return (
+      <div className="flex h-full flex-col bg-white px-10 py-6">
+        <img src={slide.image} alt={slide.body} className="min-h-0 flex-1 object-contain" />
+        <div className="mt-3 flex items-center justify-center gap-8">
+          <p className="flex items-center gap-3 text-3xl font-semibold text-gray-500">
+            <ZeszytIcon className="h-10 w-10 text-amber-600" />
+            Przerysuj do zeszytu
+          </p>
+          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+        </div>
+      </div>
+    );
+  }
+
   function save() {
     if (draft !== null && onEdit && draft.trim() !== slide.body.trim()) onEdit(draft.trim());
     setDraft(null);
