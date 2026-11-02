@@ -229,7 +229,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
         <div className="mt-3 flex items-center justify-center gap-8">
           <p className="flex items-center gap-3 text-3xl font-semibold text-gray-500">
             <ZeszytIcon className="h-10 w-10 text-amber-600" />
-            Przerysuj do zeszytu
+            Przepisz do zeszytu
           </p>
           {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
         </div>

@@ -530,7 +530,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       zad('r2-s87-zad1', 87, '1', 'ustnie'),
       ramka('r2-s87-ramka', 87, 'Nie z rzeczownikami'),
       ...film('nie-rzeczownik-film1'),
-      slideNote('Pisownia nie z rzeczownikami', '1. **Nie** z rzeczownikami piszemy **łącznie**: niepokój, nieporządek, niepogoda.\n2. **Nie** z czasownikami piszemy **osobno**: nie wiem, nie lubię.\n3. Jak sprawdzić? Pytam: **kto? co?** - rzeczownik (razem). **Co robi?** - czasownik (osobno).'),
+      { ...slideNote('Pisownia nie z rzeczownikami', '1. **Nie** z rzeczownikami piszemy **łącznie**: niepokój, nieporządek, niepogoda.\n2. **Nie** z czasownikami piszemy **osobno**: nie wiem, nie lubię.\n3. Jak sprawdzić? Pytam: **kto? co?** - rzeczownik (razem). **Co robi?** - czasownik (osobno).'), image: '/notatki/nie-z-rzeczownikami.webp' },
       ...razem('k4-nie-rzeczownik', 'k4-nie-dopisz'),
     ],
   },
