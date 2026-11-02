@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os'
 import { czesc1, czesc2, notatkiStrona } from './tresc.mjs'
 import { czesc3 } from './tresc3.mjs'
 import { czesc4 } from './tresc4.mjs'
+import { czesc5 } from './tresc5.mjs'
 
 const DIR = dirname(fileURLToPath(import.meta.url))
 const OUT = join(DIR, 'pdf')
@@ -23,6 +24,7 @@ const czesci = [
   { plik: 'czesc-2', tytul: 'Mój polski od zera - część 2', strony: czesc2() },
   { plik: 'czesc-3', tytul: 'Mój polski od zera - część 3', strony: czesc3() },
   { plik: 'czesc-4', tytul: 'Mój polski od zera - część 4', strony: czesc4() },
+  { plik: 'czesc-5', tytul: 'Mój polski od zera - część 5', strony: czesc5() },
 ]
 
 // Uklada klocki stron "cont" na wolnym miejscu poprzedniej strony, dopycha notatkami do

@@ -75,6 +75,7 @@ export const POLSKI_OD_ZERA = [
   { czesc: 2, tematy: 'Dni tygodnia, jedzenie, ciało, dom, mój dzień' },
   { czesc: 3, tematy: 'Pogoda, ubrania, zwierzęta, miasto, czas wolny, Kto? Co? Jaki?' },
   { czesc: 4, tematy: 'Godziny, wczoraj i jutro, zakupy, opis osoby, uczucia' },
+  { czesc: 5, tematy: 'Kl. 4: rzeczownik, wielka litera, przymiotnik, opis przedmiotu, ó i u, ogłoszenie' },
 ] as const;
 
 export type PolskiOdZeraWersja = 'A4' | 'A5';
