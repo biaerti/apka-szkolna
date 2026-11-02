@@ -488,7 +488,7 @@ export const ROZDZIAL2_TOPICS: Topic[] = [
       ...recap(previousSetId),
       ramka('r2-s85-ramka', 85, 'Nazwy własne i pospolite'),
       ...film('wielka-litera-film1'),
-      slideNote('Pisownia rzeczowników wielką i małą literą', '1. **Nazwy własne** - jedna konkretna osoba, zwierzę, miejsce: piszemy **wielką literą**.\n2. Wielką literą: imiona i nazwiska, imiona zwierząt, miasta, państwa, rzeki, góry, kontynenty, planety, święta.\n3. **Nazwy pospolite** - cała grupa (pies, rzeka, miasto): piszemy **małą literą**.\n4. Przykład: rzeka - Wisła, pies - Burek, planeta - Ziemia.'),
+      { ...slideNote('Pisownia rzeczowników wielką i małą literą', '1. **Nazwy własne** - jedna konkretna osoba, zwierzę, miejsce: piszemy **wielką literą**.\n2. Wielką literą: imiona i nazwiska, imiona zwierząt, miasta, państwa, rzeki, góry, kontynenty, planety, święta.\n3. **Nazwy pospolite** - cała grupa (pies, rzeka, miasto): piszemy **małą literą**.\n4. Przykład: rzeka - Wisła, pies - Burek, planeta - Ziemia.'), image: '/notatki/wielka-mala-litera.webp' },
       ...razem('k4-wielka-litera', 'k4-nazwy-wlasne'),
     ],
   },

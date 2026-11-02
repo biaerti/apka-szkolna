@@ -50,7 +50,23 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
   const scale = useSlideFontScale();
   const onEdit = useContext(NoteEditContext);
   const [draft, setDraft] = useState<string | null>(null);
+  // Notatka z grafika ma tez wersje tekstowa - klasa wybiera, ktora przepisuje.
+  const [asText, setAsText] = useState(false);
   const body = withLessonCode(slide.body, code);
+
+  const versionToggle = slide.image ? (
+    <button
+      type="button"
+      onClick={(e) => {
+        // Klik w slajd = nastepny/poprzedni slajd - przycisk nie moze go przepuscic.
+        e.stopPropagation();
+        setAsText((v) => !v);
+      }}
+      className="relative z-30 rounded-xl border-2 border-gray-300 px-5 py-2 text-2xl font-semibold text-gray-500 hover:border-amber-500 hover:text-amber-700"
+    >
+      {asText ? 'Wersja z ramkami' : 'Wersja tekstowa'}
+    </button>
+  ) : null;
   // Notatka jest przepisywana z tablicy, wiec ma byc tak duza, jak sie da -
   // rozmiar dobieramy do dlugosci tresci (fitText.ts), w pikselach kartki 1280x720.
   const bodySize = fitFontSize(body, { width: 1120, height: 480, min: 28, max: 72, scale, lineHeight: 1.6 });
@@ -222,7 +238,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
     );
   }
 
-  if (slide.image) {
+  if (slide.image && !asText) {
     return (
       <div className="flex h-full flex-col bg-white px-10 py-6">
         <img src={slide.image} alt={slide.body} className="min-h-0 flex-1 object-contain" />
@@ -232,6 +248,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             Przepisz do zeszytu
           </p>
           {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+          {versionToggle}
         </div>
       </div>
     );
@@ -304,6 +321,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
           Przepisz do zeszytu
         </p>
         {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+        {versionToggle}
       </div>
     </div>
   );
