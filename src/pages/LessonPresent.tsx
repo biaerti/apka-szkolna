@@ -15,6 +15,7 @@ import { PresentProgressBar } from '../components/lessons/PresentProgressBar';
 import { PresentClassPanel } from '../components/lessons/PresentClassPanel';
 import { PresentClock } from '../components/lessons/PresentClock';
 import { TaskWheelDrawer } from '../components/lessons/TaskWheelDrawer';
+import { PinnedNotePane, PinnedNoteTab } from '../components/lessons/PinnedNotePane';
 import { useTaskWheel } from '../components/lessons/useTaskWheel';
 import { usePresentKeys } from '../components/lessons/usePresentKeys';
 import { Button } from '../components/ui/Button';
@@ -80,6 +81,9 @@ export function LessonPresent() {
   // ale dziala tylko na slajdach zadan i tekstowych.
   const [writePane, setWritePane] = useState(false);
   const [classPanelOpen, setClassPanelOpen] = useState(false);
+  // Notatka obok slajdow po notatce - zostaje otwarta przy przechodzeniu dalej,
+  // az nauczyciel ja zwinie (wszyscy juz przepisali).
+  const [noteOpen, setNoteOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [globalTimerVisible, setGlobalTimerVisible] = useState(false);
   const startedRef = useRef(false);
@@ -111,6 +115,17 @@ export function LessonPresent() {
 
   const currentStep = presentation.steps[index];
   const currentSlide = currentStep?.kind === 'slide' ? currentStep.slide : undefined;
+  // Ostatnia notatka przed biezacym slajdem - ta, ktora klasa jeszcze przepisuje.
+  // Kolo powtorzeniowe ma wlasny uklad na caly ekran, wiec notatki obok nie ma.
+  const noteBehind = (() => {
+    if (boardOpen || !currentSlide || currentSlide.kind === 'recap' || currentSlide.kind === 'note') return undefined;
+    for (let i = index - 1; i >= 0; i--) {
+      const step = presentation.steps[i];
+      if (step.kind === 'slide' && step.slide.kind === 'note') return step.slide;
+    }
+    return undefined;
+  })();
+  const notePaneOn = noteOpen && !!noteBehind;
   // Klik w plakietke "Do zeszytu / Ustnie" przestawia ja na tym slajdzie na stale.
   const changeStudentAction = lesson && currentSlide
     ? (action: StudentAction, text: string) =>
@@ -171,6 +186,7 @@ export function LessonPresent() {
       if (next && ann.tool === 'off') ann.setTool('pen');
       if (!next) ann.setTool('off');
     },
+    onToggleNote: noteBehind ? () => setNoteOpen((open) => !open) : undefined,
   });
 
   function toggleFullscreen() {
@@ -236,6 +252,11 @@ export function LessonPresent() {
 
   return (
     <div ref={rootRef} className="relative flex flex-row bg-gray-950" style={{ height: '100vh' }}>
+      {notePaneOn && noteBehind && (
+        <PinnedNotePane slide={noteBehind} lessonCode={lessonCode} onClose={() => setNoteOpen(false)} />
+      )}
+      {noteBehind && !notePaneOn && <PinnedNoteTab onOpen={() => setNoteOpen(true)} />}
+
       <div
         className="h-full min-w-0 flex-1"
         onClick={(e) => {
@@ -298,6 +319,8 @@ export function LessonPresent() {
         // przycisk idzie pod zegar w prawym gornym rogu.
         <div
           className={currentSlide?.kind === 'cwiczenie' ? 'absolute right-4 top-24' : 'absolute bottom-4 left-4'}
+          // Przy notatce obok lewy dol nalezy do notatki - przycisk idzie na slajd.
+          style={notePaneOn && currentSlide?.kind !== 'cwiczenie' ? { left: 'calc(45% + 1rem)' } : undefined}
           onClick={(e) => e.stopPropagation()}
         >
           <Button size="sm" onClick={finishLesson}>

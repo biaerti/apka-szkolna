@@ -12,7 +12,8 @@
 //    przy wlaczonym rysowaniu Esc najpierw chowa pasek (klikanie w slajd
 //    wraca do przewijania),
 // 6. P wlacza tryb pisania: tresc w lewej kolumnie, z prawej puste pole do
-//    pisania i rysowania (jak P na pokazie kartkowki).
+//    pisania i rysowania (jak P na pokazie kartkowki),
+// 7. N (na slajdach po notatce) pokazuje lub zwija notatke obok slajdu.
 
 import { useEffect } from 'react';
 
@@ -50,6 +51,8 @@ export interface PresentKeysArgs {
   onToggleGlobalTimer: () => void;
   /** P - tryb pisania obok tresci slajdu. */
   onToggleWritePane: () => void;
+  /** N - notatka obok slajdu; brak, gdy notatki nie ma za soba. */
+  onToggleNote?: () => void;
 }
 
 export function usePresentKeys(args: PresentKeysArgs) {
@@ -106,6 +109,11 @@ export function usePresentKeys(args: PresentKeysArgs) {
       if (!args.onRecap && (e.key === 'p' || e.key === 'P')) {
         e.preventDefault();
         args.onToggleWritePane();
+        return;
+      }
+      if (args.onToggleNote && (e.key === 'n' || e.key === 'N')) {
+        e.preventDefault();
+        args.onToggleNote();
         return;
       }
       if (e.key === 's' || e.key === 'S') {

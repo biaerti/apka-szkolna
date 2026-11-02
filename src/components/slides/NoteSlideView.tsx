@@ -46,8 +46,22 @@ export function withLessonCode(body: string, code?: string): string {
   return `${TEMAT_PREFIX}${code}. ${rest}`;
 }
 
-export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: 'note' }>; code?: string }) {
+export function NoteSlideView({
+  slide,
+  code,
+  pinnedHeight,
+}: {
+  slide: Extract<Slide, { kind: 'note' }>;
+  code?: string;
+  /**
+   * Notatka przypieta obok kolejnych slajdow (PinnedNotePane) - kartka ma
+   * szerokosc 1280, ale wysokosc wieksza niz 720, bo polowa ekranu jest wyzsza
+   * niz szeroka. Bez stopera: czas na przepisanie juz minal na slajdzie notatki.
+   */
+  pinnedHeight?: number;
+}) {
   const scale = useSlideFontScale();
+  const timer = slide.timerSec && !pinnedHeight ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null;
   const onEdit = useContext(NoteEditContext);
   const [draft, setDraft] = useState<string | null>(null);
   // Notatka z grafika ma tez wersje tekstowa - klasa wybiera, ktora przepisuje.
@@ -69,7 +83,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
   ) : null;
   // Notatka jest przepisywana z tablicy, wiec ma byc tak duza, jak sie da -
   // rozmiar dobieramy do dlugosci tresci (fitText.ts), w pikselach kartki 1280x720.
-  const bodySize = fitFontSize(body, { width: 1120, height: 480, min: 28, max: 72, scale, lineHeight: 1.6 });
+  const bodySize = fitFontSize(body, { width: 1120, height: (pinnedHeight ?? 720) - 240, min: 28, max: 72, scale, lineHeight: 1.6 });
 
   if (slide.diagram === 'wypowiedzenia') {
     return (
@@ -106,7 +120,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             <ZeszytIcon className="h-10 w-10 text-amber-600" />
             Przerysuj do zeszytu
           </p>
-          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+          {timer}
         </div>
       </div>
     );
@@ -147,7 +161,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             <ZeszytIcon className="h-10 w-10 text-amber-600" />
             Przerysuj do zeszytu
           </p>
-          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+          {timer}
         </div>
       </div>
     );
@@ -198,7 +212,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             <ZeszytIcon className="h-10 w-10 text-amber-600" />
             Przerysuj do zeszytu
           </p>
-          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+          {timer}
         </div>
       </div>
     );
@@ -232,7 +246,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             <ZeszytIcon className="h-10 w-10 text-amber-600" />
             Przerysuj do zeszytu
           </p>
-          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+          {timer}
         </div>
       </div>
     );
@@ -247,7 +261,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
             <ZeszytIcon className="h-10 w-10 text-amber-600" />
             Przepisz do zeszytu
           </p>
-          {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+          {timer}
           {versionToggle}
         </div>
       </div>
@@ -320,7 +334,7 @@ export function NoteSlideView({ slide, code }: { slide: Extract<Slide, { kind: '
           <ZeszytIcon className="h-10 w-10 text-amber-600" />
           Przepisz do zeszytu
         </p>
-        {slide.timerSec ? <StopwatchBar key={slide.id} timerSec={slide.timerSec} compact autoStart /> : null}
+        {timer}
         {versionToggle}
       </div>
     </div>
