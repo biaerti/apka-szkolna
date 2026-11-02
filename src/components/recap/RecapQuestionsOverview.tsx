@@ -231,14 +231,21 @@ export function RecapQuestionsOverview({
                     </div>
                   ) : (
                     <div className="flex min-w-0 flex-1 flex-col justify-center overflow-hidden">
-                      <p
-                        className={clsx('font-semibold text-white', compactPractice ? 'leading-[1.12]' : 'leading-tight', completed && 'line-through opacity-55')}
-                        style={{ fontSize: overviewFontSize(question.text, compactPractice) }}
-                      >
-                        {question.text}
-                      </p>
-                      {answerOpen.has(question.id) && question.answer && (
-                        <p className="mt-2 text-xl leading-snug text-accent-200">{question.answer}</p>
+                      {/* Odpowiedz zakrywa pytanie w calosci - ta sama wielkosc, zeby bylo ja widac z konca sali. */}
+                      {answerOpen.has(question.id) && question.answer ? (
+                        <p
+                          className={clsx('font-semibold text-accent-200', compactPractice ? 'leading-[1.12]' : 'leading-tight')}
+                          style={{ fontSize: overviewFontSize(question.answer, compactPractice) }}
+                        >
+                          {question.answer}
+                        </p>
+                      ) : (
+                        <p
+                          className={clsx('font-semibold text-white', compactPractice ? 'leading-[1.12]' : 'leading-tight', completed && 'line-through opacity-55')}
+                          style={{ fontSize: overviewFontSize(question.text, compactPractice) }}
+                        >
+                          {question.text}
+                        </p>
                       )}
                     </div>
                   )}
