@@ -132,7 +132,10 @@ export function WeekPlanner(props: Props) {
         const isToday = dateKey === todayKey;
         const dayTasks = zadaniaDnia(zadania, dateKey);
         const entries = dayEntries(date, props.vulcanLessons, props.timetable);
-        const lastPeriod = Math.max(0, ...entries.map((entry) => entry.period));
+        // Dyzur po ostatniej lekcji albo po okienku za nia tez musi byc widac:
+        // wiersze ida do ostatniej lekcji albo ostatniego dyzuru.
+        const dayDuties = entries.length > 0 ? dyzuryNa(date).filter((d) => d.weekday === date.getDay()) : [];
+        const lastPeriod = Math.max(0, ...entries.map((entry) => entry.period), ...dayDuties.map((d) => d.afterPeriod));
         const gaps = Array.from({ length: lastPeriod }, (_, index) => index + 1).filter(
           (no) => !entries.some((entry) => entry.period === no),
         );
@@ -205,7 +208,7 @@ export function WeekPlanner(props: Props) {
                         </div>
                         <p className="pt-0.5 text-xs text-gray-300">okienko</p>
                       </div>
-                      {no < lastPeriod && (
+                      {(no < lastPeriod || gapDuty) && (
                         <BreakRow minutes={breakMinutes(no)} nowAt={isToday ? nowIn(periodByNo.get(no)?.end, periodByNo.get(no + 1)?.start) : undefined}>
                           {gapDuty && (
                             <BreakNote teraz={gapDutyTeraz} tone="amber" title={`Przerwa po ${no}. lekcji: dyżur`}>
@@ -345,7 +348,7 @@ export function WeekPlanner(props: Props) {
                       </div>
                     </article>
 
-                    {entry.period < lastPeriod && (
+                    {(entry.period < lastPeriod || duty) && (
                       <BreakRow minutes={breakMinutes(entry.period)} nowAt={isToday ? nowIn(period?.end, periodByNo.get(entry.period + 1)?.start) : undefined}>
                         {duty && (
                           <BreakNote teraz={dutyTeraz} tone="amber" title={`Przerwa po ${entry.period}. lekcji: dyżur`}>

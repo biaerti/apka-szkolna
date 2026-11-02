@@ -34,6 +34,12 @@ export function TodayTimetableBar() {
   const highlighted = currentOrNextEntry(timetable, periods, now);
   const status = periodStatus(periods, now);
   const classById = new Map(classes.map((c) => [c.id, c]));
+  // Dyzur po godzinie bez lekcji (np. po ostatniej) - osobny znaczek w kolejnosci godzin.
+  const loneDuties = dyzuryNa(now).filter((d) => d.weekday === weekday && !entries.some((e) => e.period === d.afterPeriod));
+  const items = [
+    ...entries.map((e) => ({ period: e.period, entry: e, duty: undefined })),
+    ...loneDuties.map((d) => ({ period: d.afterPeriod, entry: undefined, duty: d })),
+  ].sort((a, b) => a.period - b.period);
 
   // Dopisek przy podswietlonej lekcji: "do końca 12 min" gdy trwa, "za 5 min"
   // gdy dopiero bedzie; po ostatniej lekcji dnia - nic.
@@ -54,7 +60,20 @@ export function TodayTimetableBar() {
   return (
     <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">
       <span className="font-medium text-gray-500">Dziś:</span>
-      {entries.map((e, i) => {
+      {items.map(({ entry: e, duty: lone }, i) => {
+        if (!e) {
+          return (
+            <span key={`dyzur-${lone.afterPeriod}`} className="flex items-center gap-2">
+              {i > 0 && <span className="text-gray-300">·</span>}
+              <span
+                className="rounded border border-amber-300 bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-800"
+                title={`Po ${lone.afterPeriod}. lekcji dyżur: ${lone.place}`}
+              >
+                po {lone.afterPeriod}. dyżur
+              </span>
+            </span>
+          );
+        }
         const cls = e.classId ? classById.get(e.classId) : undefined;
         const isHighlighted = highlighted?.id === e.id;
         const duty = dutyAfter(dyzuryNa(now), weekday, e.period);
