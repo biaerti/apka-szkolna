@@ -628,6 +628,37 @@ export const CWICZENIA4: Cwiczenie[] = [
 
   // ---------- 28. Nie z rzeczownikami ----------
   {
+    // Bartek (2026-11-02): klasa myli czesci mowy, a bez tego "nie" razem/osobno
+    // nie ma sensu. Jedno zdanie, trzy wyrazy po kolei - zawsze to samo pytanie.
+    id: 'k4-czesci-mowy',
+    typ: 'luki',
+    tytul: 'Rzeczownik, czasownik czy przymiotnik?',
+    polecenie: 'Zapytaj o zaznaczony wyraz: kto? co? - co robi? - jaki? jaka? jakie?',
+    naglowki: ['zdanie', 'zaznaczony wyraz to'],
+    naRaz: 6,
+    info: '**Rzeczownik** odpowiada na pytanie **kto? co?** (kot, Ola, ciasto). **Czasownik** - **co robi? co się z nim dzieje?** (śpi, rysuje). **Przymiotnik** - **jaki? jaka? jakie?** (rudy, pyszne). Pytanie zadajemy w zdaniu: Rudy kot śpi. Co robi? - śpi.',
+    przyklady: [
+      'Rudy kot **śpi** na parapecie. | {{rzeczownik|*czasownik|przymiotnik}}',
+      'Rudy **kot** śpi na parapecie. | {{*rzeczownik|czasownik|przymiotnik}}',
+      '**Rudy** kot śpi na parapecie. | {{rzeczownik|czasownik|*przymiotnik}}',
+      'Ola rysuje **kolorowe** kwiaty. | {{rzeczownik|czasownik|*przymiotnik}}',
+      'Ola **rysuje** kolorowe kwiaty. | {{rzeczownik|*czasownik|przymiotnik}}',
+      '**Ola** rysuje kolorowe kwiaty. | {{*rzeczownik|czasownik|przymiotnik}}',
+      'Straszna **niepogoda** trwała tydzień. | {{*rzeczownik|czasownik|przymiotnik}}',
+      '**Straszna** niepogoda trwała tydzień. | {{rzeczownik|czasownik|*przymiotnik}}',
+      'Straszna niepogoda **trwała** tydzień. | {{rzeczownik|*czasownik|przymiotnik}}',
+      'Wysoki chłopiec **biegnie** po boisku. | {{rzeczownik|*czasownik|przymiotnik}}',
+      '**Wysoki** chłopiec biegnie po boisku. | {{rzeczownik|czasownik|*przymiotnik}}',
+      'Wysoki **chłopiec** biegnie po boisku. | {{*rzeczownik|czasownik|przymiotnik}}',
+      'Babcia piecze **pyszne** ciasto. | {{rzeczownik|czasownik|*przymiotnik}}',
+      'Babcia piecze pyszne **ciasto**. | {{*rzeczownik|czasownik|przymiotnik}}',
+      'Babcia **piecze** pyszne ciasto. | {{rzeczownik|*czasownik|przymiotnik}}',
+      'Tomek nie **lubi** zimnej zupy. | {{rzeczownik|*czasownik|przymiotnik}}',
+      'Tomek nie lubi zimnej **zupy**. | {{*rzeczownik|czasownik|przymiotnik}}',
+      'Tomek nie lubi **zimnej** zupy. | {{rzeczownik|czasownik|*przymiotnik}}',
+    ],
+  },
+  {
     id: 'k4-nie-rzeczownik',
     typ: 'luki',
     tytul: 'Razem czy osobno?',
