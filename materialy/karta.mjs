@@ -92,11 +92,11 @@ function tabela(t, rozw) {
 }
 
 function strona(rozw) {
-  if (KARTA.wersje) return dokument(KARTA.wersje.map((w) => arkusz(w.tematy, rozw, w.grupa)).join(''));
+  if (KARTA.wersje) return dokument(KARTA.wersje.map((w) => arkusz(w.tematy, rozw, w.grupa, w.duza)).join(''));
   return dokument(arkusz(KARTA.tematy, rozw));
 }
 
-function arkusz(tematyDanych, rozw, grupa) {
+function arkusz(tematyDanych, rozw, grupa, duza = KARTA.duza) {
   const suma = tematyDanych.reduce((s, t) => s + t.zadania.reduce((s2, zad) => s2 + (zad.punkty ?? 0), 0), 0);
   const tematy = tematyDanych.map((t, i) => {
     let nr = 0;
@@ -157,7 +157,7 @@ function arkusz(tematyDanych, rozw, grupa) {
   const prawa = rozw
     ? '<div class="rozw">Rozwiązania</div>'
     : grupa || ekran ? '' : `<div class="imie">Imię i nazwisko: ..........................................</div>`;
-  return `<section class="arkusz${grupa ? ' sprawdzian' : ''}"${grupa && ekran ? ` data-grupa="${grupa}"` : ''}>
+  return `<section class="arkusz${grupa ? ' sprawdzian' : ''}${duza ? ' duza' : ''}"${grupa && ekran ? ` data-grupa="${grupa}"` : ''}>
 <div class="gora"><h1>${z(KARTA.tytul)}</h1><div class="pod">${z(KARTA.klasa)} · ${z(KARTA.podtytul)}</div>
 ${prawa}${grupa ? `<div class="grupa">Grupa ${grupa}</div>` : ''}</div>
 ${ekran && KARTA.wstep ? `<p class="wstep">${z(KARTA.wstep)}</p>` : ''}
@@ -236,7 +236,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
 .dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
 :root { --czerw: #D62828; }
-${KARTA.duza ? STYL_DUZA : ''}
+${STYL_DUZA}
 ${ekran ? STYL_EKRAN : ''}
 </style></head><body${ekran ? ' class="ekran"' : ''}>
 ${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="button" class="grupa-btn" data-grupa="${w.grupa}">Grupa ${w.grupa}</button>`).join('')}<span class="odstep"></span>${KARTA.domowa
@@ -247,17 +247,17 @@ ${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="b
 </body></html>`;
 }
 
-// Sprawdzian dostosowany: większe litery i więcej miejsca na wpisywanie.
+// Sprawdzian dostosowany (KARTA.duza albo grupa z duza: true): większe litery i więcej miejsca na wpisywanie.
 const STYL_DUZA = `
-body { font-size: 12.5pt; line-height: 1.4; }
-.sprawdzian .linie { line-height: 2.1; }
-.temat.bez-wiedzy { padding: 3mm 0; break-inside: avoid; }
-.temat.bez-wiedzy > h2 { font-size: 14pt; }
-.sprawdzian .tab td { height: 9mm; }
-.tab th { font-size: 11pt; }
-.tab .opc, .pol .pkt { font-size: 10.5pt; }
-.luka { height: 6.5mm; }
-.zad + .zad { margin-top: 3mm; }
+.duza { font-size: 12pt; line-height: 1.35; }
+.duza.sprawdzian .linie { line-height: 1.95; }
+.duza .temat.bez-wiedzy { padding: 2.4mm 0; break-inside: avoid; }
+.duza .temat.bez-wiedzy > h2 { font-size: 14pt; }
+.duza.sprawdzian .tab td { height: 9mm; }
+.duza .tab th { font-size: 11pt; }
+.duza .tab .opc, .duza .pol .pkt { font-size: 10.5pt; }
+.duza .luka { height: 6.5mm; }
+.duza .zad + .zad { margin-top: 3mm; }
 `;
 
 const STYL_EKRAN = `
@@ -421,7 +421,7 @@ if (KARTA.wersje) {
 for (const w of KARTA.wersje ?? []) {
   const nazwa = `${KARTA.plik}-${w.grupa}`;
   const htmlPath = join(outDir, `${nazwa}.html`);
-  writeFileSync(htmlPath, dokument(arkusz(w.tematy, false, w.grupa)), 'utf-8');
+  writeFileSync(htmlPath, dokument(arkusz(w.tematy, false, w.grupa, w.duza)), 'utf-8');
   await drukujPdf(htmlPath, join(outDir, `${nazwa}.pdf`));
   console.log('Gotowe:', join(outDir, `${nazwa}.pdf`));
 }
