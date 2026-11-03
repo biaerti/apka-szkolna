@@ -2,6 +2,7 @@
 
 Uzycie:
   python materialy/wyslij.py klasa4-rozdzial1     # <folder>-sprawdzian(-klucz).pdf, <folder>-karta(-rozwiazania).pdf
+                                                  # i <folder>-sprawdzian-dostosowany(-klucz).pdf, jesli jest
   python materialy/wyslij.py --zaloz-bucket       # jednorazowo: utworz bucket
 
 Sprawdzian w szacie karty ma tez wersje na projektor: <folder>-sprawdzian-projektor.html
@@ -59,8 +60,11 @@ def main() -> None:
                               "text/html", {"x-upsert": "true"})
             print(("ok  " if not wynik.startswith("BLAD") else "") + projektor.name + ("" if not wynik.startswith("BLAD") else f" {wynik}"))
         for nazwa in (f"{folder}-sprawdzian.pdf", f"{folder}-sprawdzian-klucz.pdf",
-                      f"{folder}-karta.pdf", f"{folder}-karta-rozwiazania.pdf"):
+                      f"{folder}-karta.pdf", f"{folder}-karta-rozwiazania.pdf",
+                      f"{folder}-sprawdzian-dostosowany.pdf", f"{folder}-sprawdzian-dostosowany-klucz.pdf"):
             plik = PDF / nazwa
+            if not plik.exists() and "dostosowany" in nazwa:
+                continue  # wersja dla uczniow z orzeczeniem jest tylko w niektorych dzialach
             if not plik.exists():
                 skrypt = "karta" if "-karta" in nazwa else "sprawdzian"
                 print(f"brak {plik} - najpierw node materialy/{skrypt}.mjs {folder}")

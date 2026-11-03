@@ -17,13 +17,15 @@ export type MaterialyDzialu = {
   sprawdzianProjektor?: boolean;
   /** false = dzial nie ma zeszytu powtorzeniowego (np. tylko karta pracy i sprawdzian). */
   zeszyt?: boolean;
+  /** Jest sprawdzian dostosowany dla uczniow z orzeczeniem (node materialy/sprawdzian.mjs <folder> --dostosowany). */
+  sprawdzianDostosowany?: boolean;
   /** Sa cwiczenia do domu przed sprawdzianem (materialy/<folder>/domowe.mjs) - link dla uczniow do VULCANA. */
   domowe?: boolean;
 };
 
 export const MATERIALY_DZIALOW: MaterialyDzialu[] = [
   { grade: 'IV', dzial: 'Rozdział I. Poznajemy siebie i innych', folder: 'klasa4-rozdzial1', karta: true },
-  { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2', karta: true, domowe: true },
+  { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2', karta: true, domowe: true, sprawdzianDostosowany: true },
   { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszyt: false, sprawdzianProjektor: true },
   { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2' },
 ];
@@ -49,7 +51,7 @@ export function kartaNaProjektorUrl(folder: string): string {
 }
 
 /** Pliki w prywatnym buckecie: <folder>-<rodzaj>.pdf */
-export type PrywatnyPlik = 'sprawdzian' | 'sprawdzian-klucz' | 'karta' | 'karta-rozwiazania';
+export type PrywatnyPlik = 'sprawdzian' | 'sprawdzian-klucz' | 'karta' | 'karta-rozwiazania' | 'sprawdzian-dostosowany' | 'sprawdzian-dostosowany-klucz';
 
 /** Podpisany adres sprawdzianu, klucza albo karty pracy z prywatnego bucketu. */
 export async function prywatnyUrl(folder: string, rodzaj: PrywatnyPlik): Promise<string> {

@@ -10,8 +10,28 @@ import { drukujPdf, znaczniki as z, STYL_BAZOWY, ROOT } from './pdf.mjs';
 
 const folder = process.argv[2] || 'klasa5-dzial2';
 const { SPRAWDZIAN } = await import(pathToFileURL(join(ROOT, 'materialy', folder, 'sprawdzian-pula.mjs')).href);
+// Wersja dostosowana (uczniowie z orzeczeniem, ktorzy nie napisza duzo): --dostosowany bierze
+// SPRAWDZIAN.dostosowany z puli - wybrane zadania (nr = kolejnosc w `zadania`, od 1), mniej
+// pozycji w zadaniu, wieksza czcionka i wiecej miejsca. Pliki: <plik>-dostosowany(-klucz).pdf.
+const DOSTOSOWANY = process.argv.includes('--dostosowany');
+function dostosuj(sp) {
+  const d = sp.dostosowany;
+  if (!d) throw new Error('Brak SPRAWDZIAN.dostosowany w puli');
+  return {
+    ...sp,
+    plik: `${sp.plik}-dostosowany`,
+    tytul: d.tytul ?? sp.tytul,
+    grupy: d.grupy ?? sp.grupy,
+    // `pozycje` zaweza pule do wybranych przykladow (np. tylko zdania z 3 bledami).
+    zadania: d.zadania.map(({ nr, pozycje, ...zmiany }) => {
+      const zad = sp.zadania[nr - 1];
+      return { ...zad, ...(pozycje ? { pula: pozycje.map((i) => zad.pula[i]) } : {}), ...zmiany };
+    }),
+  };
+}
+const SP = DOSTOSOWANY ? dostosuj(SPRAWDZIAN) : SPRAWDZIAN;
 const argGrupy = process.argv.indexOf('--grupy');
-const GRUPY = argGrupy > 0 ? process.argv[argGrupy + 1].split(',') : SPRAWDZIAN.grupy;
+const GRUPY = argGrupy > 0 ? process.argv[argGrupy + 1].split(',') : SP.grupy;
 
 // Deterministyczny generator (mulberry32) z ziarnem z nazwy grupy.
 function rng(ziarno) {
@@ -33,11 +53,11 @@ function losuj(pula, ile, los) {
   return kopia.slice(0, ile);
 }
 
-const suma = SPRAWDZIAN.zadania.reduce((s, zad) => s + zad.punkty, 0);
+const suma = SP.zadania.reduce((s, zad) => s + zad.punkty, 0);
 
 function wylosujGrupe(grupa) {
-  const los = rng(`${SPRAWDZIAN.plik}-${grupa}`);
-  return SPRAWDZIAN.zadania.map((zad) => ({
+  const los = rng(`${SP.plik}-${grupa}`);
+  return SP.zadania.map((zad) => ({
     ...zad,
     wybrane: zad.stale
       ? zad.pula.slice(0, zad.ile ?? 1)
@@ -88,7 +108,7 @@ function arkuszeKartowe(grupa, zadania) {
       .join('');
     const ostatnia = strona === liczbaStron;
     return `<section class="arkusz karta-arkusz">
-      <div class="glowa${strona > 1 ? ' druga' : ''}"><h1>${z(SPRAWDZIAN.tytul)}</h1><span class="grupa">Grupa ${grupa}</span></div>
+      <div class="glowa${strona > 1 ? ' druga' : ''}"><h1>${z(SP.tytul)}</h1><span class="grupa">Grupa ${grupa}</span></div>
       ${strona === 1 ? '<div class="dane"><span>Imię i nazwisko:</span><span>Klasa:</span><span>Data:</span></div>' : ''}
       ${sekcje}
       <div class="stopka"><span>Strona ${strona} z ${liczbaStron}</span>${ostatnia ? `<strong>Wynik: ……… / ${suma} pkt</strong>` : ''}</div>
@@ -144,6 +164,14 @@ body { font-size: 11pt; }
 .karta-arkusz .lin { height: 8.3mm; }
 .karta-arkusz .stopka { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 3mm; font-size: 9pt; color: var(--szary); }
 .karta-arkusz .stopka strong { color: var(--ciemny); font-size: 13pt; }
+body.duzy { font-size: 13.5pt; line-height: 1.45; }
+body.duzy .zad { margin-top: 7mm; }
+body.duzy .zad h3 { font-size: 13pt; }
+body.duzy .poz li { margin: 3.5mm 0; }
+body.duzy .poz .t { min-width: 70mm; }
+body.duzy .poz .opcje { font-size: 13pt; margin-left: 8mm; }
+body.duzy .linia.krotka { width: 70mm; }
+body.duzy .lin { height: 11mm; }
 .klucz h2 { font-size: 16pt; margin: 4mm 0 1mm; color: var(--roz); }
 .klucz ol { margin-left: 6mm; font-size: 10.5pt; }
 .klucz li { margin: .8mm 0; }
@@ -152,10 +180,10 @@ body { font-size: 11pt; }
 
 const wylosowane = GRUPY.map((g) => ({ grupa: g, zadania: wylosujGrupe(g) }));
 
-const arkusze = SPRAWDZIAN.uklad === 'karta'
+const arkusze = SP.uklad === 'karta'
   ? wylosowane.map(({ grupa, zadania }) => arkuszeKartowe(grupa, zadania)).join('')
   : wylosowane.map(({ grupa, zadania }) => `<section class="arkusz">
-  <div class="glowa"><h1>${z(SPRAWDZIAN.tytul)}</h1><span class="grupa">Grupa ${grupa}</span></div>
+  <div class="glowa"><h1>${z(SP.tytul)}</h1><span class="grupa">Grupa ${grupa}</span></div>
   <div class="dane"><span>Imię i nazwisko:</span><span>Klasa:</span><span>Data:</span></div>
   ${zadania.map((zad, i) => zadanieHtml(zad, i + 1)).join('')}
   <div class="stopka">Wynik: ……… / ${suma} pkt</div>
@@ -168,9 +196,9 @@ const klucz = wylosowane.map(({ grupa, zadania }) => `<section class="klucz arku
 
 const outDir = join(ROOT, 'output', 'materialy');
 mkdirSync(outDir, { recursive: true });
-for (const [nazwa, tresc] of [[SPRAWDZIAN.plik, arkusze], [`${SPRAWDZIAN.plik}-klucz`, klucz]]) {
+for (const [nazwa, tresc] of [[SP.plik, arkusze], [`${SP.plik}-klucz`, klucz]]) {
   const htmlPath = join(outDir, `${nazwa}.html`);
-  writeFileSync(htmlPath, `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>${z(SPRAWDZIAN.tytul)}</title><style>${STYL}</style></head><body>${tresc}</body></html>`, 'utf-8');
+  writeFileSync(htmlPath, `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>${z(SP.tytul)}</title><style>${STYL}</style></head><body${DOSTOSOWANY ? ' class="duzy"' : ''}>${tresc}</body></html>`, 'utf-8');
   await drukujPdf(htmlPath, join(outDir, `${nazwa}.pdf`), 9361);
   console.log('Gotowe:', join(outDir, `${nazwa}.pdf`));
 }

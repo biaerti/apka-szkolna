@@ -73,6 +73,12 @@ export function DzialMaterialsBar({ grade, dzial }: { grade: string; dzial?: str
             <button type="button" onClick={() => otworz('sprawdzian-projektor')} className={btn}>Sprawdzian na projektor</button>
           )}
           <button type="button" onClick={() => otworz('sprawdzian-klucz')} className={btn}>Klucz</button>
+          {materialy.sprawdzianDostosowany && (
+            <>
+              <button type="button" onClick={() => otworz('sprawdzian-dostosowany')} className={btn}>Sprawdzian dostosowany</button>
+              <button type="button" onClick={() => otworz('sprawdzian-dostosowany-klucz')} className={btn}>Klucz (dostosowany)</button>
+            </>
+          )}
         </>
       )}
       {info && <span className="ml-auto text-xs text-gray-500">{info}</span>}
