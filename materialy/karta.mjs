@@ -19,7 +19,9 @@ import { drukujPdf, znaczniki as z, STYL_BAZOWY, ROOT } from './pdf.mjs';
 
 const folder = process.argv[2] || 'klasa4-rozdzial1';
 const plikDanych = process.argv[3] || 'karta.mjs';
-const { KARTA } = await import(pathToFileURL(join(ROOT, 'materialy', folder, plikDanych)).href);
+// --dostosowany: sprawdzian dla uczniów z orzeczeniem z KARTA_DOSTOSOWANY (KARTA.duza = większa czcionka).
+const dane = await import(pathToFileURL(join(ROOT, 'materialy', folder, plikDanych)).href);
+const KARTA = process.argv.includes('--dostosowany') ? dane.KARTA_DOSTOSOWANY : dane.KARTA;
 
 /** Na projektorze (wersja HTML do klikania) zamiast druku. */
 let ekran = false;
@@ -145,7 +147,11 @@ function arkusz(tematyDanych, rozw, grupa) {
       <div class="wiedza"><h2><span>${i + 1}</span>${z(t.tytul)}</h2>${t.wiedza.map((w) => `<p>${z(w)}</p>`).join('')}</div>
       <div class="zadania">${zadania}</div>
     </section>`;
-  }).join('');
+  }).reduce((html, sekcja, i) => {
+    // obok: temat stoi w prawej kolumnie obok poprzedniego (dwa wąskie tematy w jednym rzędzie).
+    if (!tematyDanych[i].obok) return [...html, sekcja];
+    return [...html.slice(0, -1), `<div class="para">${html.at(-1)}${sekcja}</div>`];
+  }, []).join('');
 
   // Sprawdzian (grupa): imię, klasa i data w osobnym wierszu, bo w nagłówku jest jeszcze litera grupy.
   const prawa = rozw
@@ -214,6 +220,8 @@ body { font-size: 10pt; line-height: 1.3; }
 .dane { display: grid; grid-template-columns: 3fr 1.2fr 1.3fr; gap: 6mm; margin-top: 2mm; font-size: 9.5pt; color: var(--szary); }
 .dane span { border-bottom: 1px dotted var(--szary); padding-bottom: .5mm; }
 .temat.bez-wiedzy { display: block; break-inside: auto; padding: 1.8mm 0; }
+.para { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.para > .temat { border-bottom: 0; min-width: 0; }
 .sprawdzian .linie { line-height: 1.8; }
 .temat.bez-wiedzy .zad { break-inside: avoid; }
 .temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
@@ -228,6 +236,7 @@ body { font-size: 10pt; line-height: 1.3; }
 .kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
 .dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
 :root { --czerw: #D62828; }
+${KARTA.duza ? STYL_DUZA : ''}
 ${ekran ? STYL_EKRAN : ''}
 </style></head><body${ekran ? ' class="ekran"' : ''}>
 ${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="button" class="grupa-btn" data-grupa="${w.grupa}">Grupa ${w.grupa}</button>`).join('')}<span class="odstep"></span>${KARTA.domowa
@@ -237,6 +246,19 @@ ${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="b
 <script>${SKRYPT_EKRAN.replace('__KLUCZ__', `karta:${KARTA.plik}:${tresc.length}`)}</script>` : tresc}
 </body></html>`;
 }
+
+// Sprawdzian dostosowany: większe litery i więcej miejsca na wpisywanie.
+const STYL_DUZA = `
+body { font-size: 12.5pt; line-height: 1.4; }
+.sprawdzian .linie { line-height: 2.1; }
+.temat.bez-wiedzy { padding: 3mm 0; break-inside: avoid; }
+.temat.bez-wiedzy > h2 { font-size: 14pt; }
+.sprawdzian .tab td { height: 9mm; }
+.tab th { font-size: 11pt; }
+.tab .opc, .pol .pkt { font-size: 10.5pt; }
+.luka { height: 6.5mm; }
+.zad + .zad { margin-top: 3mm; }
+`;
 
 const STYL_EKRAN = `
 body.ekran { background: #e9e3d8; }
