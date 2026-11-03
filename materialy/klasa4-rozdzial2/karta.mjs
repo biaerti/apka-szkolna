@@ -106,16 +106,26 @@ export const KARTA = {
       ],
       zadania: [
         {
-          polecenie: 'W jakim przypadku jest podkreślony wyraz? Wpisz skrót.',
+          polecenie: 'Zadaj pytanie o podkreślony wyraz i nazwij przypadek.',
           info: 'Znajdź czasownik i zadaj od niego pytanie o podkreślony wyraz. Pytanie podpowie przypadek: nie ma (czego?) mleka - dopełniacz.',
-          kolumny: 2,
-          linie: [
-            '[[D|9]] Nie ma __mleka__.',
-            '[[C|9]] Przyglądam się __mrówce__.',
-            '[[N|9]] Rysuję __kredką__.',
-            '[[W|9]] __Piotrusiu__, pomóż!',
-          ],
+          tabela: {
+            naglowki: ['zdanie', 'pytanie', 'przypadek'],
+            wiersze: [
+              ['Nie ma __mleka__.', '[[czego?|18]]', '[[dopełniacz|24]]'],
+              ['Przyglądam się __mrówce__.', '[[komu? / czemu?|18]]', '[[celownik|24]]'],
+              ['Rysuję __kredką__.', '[[czym?|18]]', '[[narzędnik|24]]'],
+              ['Marzę o __rowerze__.', '[[o czym?|18]]', '[[miejscownik|24]]'],
+              ['Na niebie widzę __tęczę__.', '[[co?|18]]', '[[biernik|24]]'],
+              ['__Piotrusiu__, pomóż!', '[[o!|18]]', '[[wołacz|24]]'],
+            ],
+          },
         },
+      ],
+    },
+    {
+      tytul: 'Odmiana przez przypadki',
+      wiedza: ['Wstaw wyraz po pomocniku: nie ma ==pszczoły==, przyglądam się ==pszczole==. Mianownik to forma ze słownika.'],
+      zadania: [
         {
           polecenie: 'Odmień rzeczowniki przez przypadki.',
           info: 'Wstawiaj wyraz po pomocniku z lewej kolumny i powiedz całe zdanie na głos: nie ma (kogo? czego?) pszczoły...',
@@ -165,9 +175,12 @@ export const KARTA = {
           ],
         },
         {
-          polecenie: 'Dokończ zdanie, podając argument.',
-          info: 'Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument.',
-          linie: ['W szkole powinno być więcej wycieczek, ponieważ [[np. najlepiej uczymy się, oglądając rzeczy na żywo|90]]'],
+          polecenie: 'Dokończ zdania, podając dwa różne argumenty.',
+          info: 'Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument. Drugi argument musi mówić o czymś innym niż pierwszy.',
+          linie: [
+            'W szkole powinno być więcej wycieczek, ponieważ [[np. najlepiej uczymy się, oglądając rzeczy na żywo|90]]',
+            'Poza tym [[np. na wycieczce klasa lepiej się poznaje i zaprzyjaźnia|90]]',
+          ],
         },
       ],
     },
@@ -191,10 +204,15 @@ export const KARTA = {
       wiedza: ['**Wielką** - nazwy własne (imiona, miasta, rzeki, morza). **Małą** - dni, miesiące.'],
       zadania: [
         {
-          polecenie: 'Znajdź trzy błędy i wypisz te wyrazy poprawnie.',
-          info: 'Szukaj imion ludzi i nazw miejsc - one zawsze wielką literą. Nazwa morza ma dwa wyrazy i oba piszemy wielką.',
+          polecenie: 'W każdym zdaniu znajdź trzy błędy i wypisz te wyrazy poprawnie.',
+          info: 'Szukaj imion ludzi i nazw miejsc - one zawsze wielką literą. Nazwa morza ma dwa wyrazy i oba piszemy wielką. Dni tygodnia i miesiące piszemy małą.',
           wLinii: true,
-          linie: ['W maju jedziemy z ciocią basią nad morze bałtyckie, do gdyni.', '➜ [[Basią, Morze Bałtyckie, Gdyni|90]]'],
+          linie: [
+            'W maju jedziemy z ciocią basią nad morze bałtyckie, do gdyni.',
+            '➜ [[Basią, Morze Bałtyckie, Gdyni|90]]',
+            'We Wtorek Kuba pojedzie z tatą do krakowa nad wisłę.',
+            '➜ [[wtorek, Krakowa, Wisłę|90]]',
+          ],
         },
       ],
     },
