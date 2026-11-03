@@ -66,7 +66,7 @@ export const KARTA = {
       wiedza: ['W liście o adresacie wielką literą: **Ty, Ciebie, Ci, Tobie, Twój**. O sobie małą: **ja, mnie, mój**.'],
       zadania: [
         {
-          polecenie: 'Wpisz wyrazy z nawiasów poprawną literą.',
+          polecenie: 'To fragment listu do kolegi. Wpisz wyrazy z nawiasów wielką albo małą literą - tak jak w liście.',
           info: 'Czy to słowo o osobie, do której piszesz (ty, twój)? Wtedy wielką literą - z szacunku. O sobie (ja, mój) - małą, chyba że zaczyna zdanie.',
           linie: [
             'Przesyłam [[Ci|12]] (ty) zdjęcia. Jestem na nich [[ja|12]] (ja) z psem.',
@@ -175,12 +175,9 @@ export const KARTA = {
           ],
         },
         {
-          polecenie: 'Dokończ zdania, podając dwa różne argumenty.',
-          info: 'Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument. Drugi argument musi mówić o czymś innym niż pierwszy.',
-          linie: [
-            'W szkole powinno być więcej wycieczek, ponieważ [[np. najlepiej uczymy się, oglądając rzeczy na żywo|90]]',
-            'Poza tym [[np. na wycieczce klasa lepiej się poznaje i zaprzyjaźnia|90]]',
-          ],
+          polecenie: 'Dokończ zdanie, podając argument.',
+          info: 'Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument.',
+          linie: ['W szkole powinno być więcej wycieczek, ponieważ [[np. najlepiej uczymy się, oglądając rzeczy na żywo|90]]'],
         },
       ],
     },
