@@ -88,6 +88,18 @@ b { font-weight: 800; }
 .kafel.rz.on { background: var(--rz-j); border-color: var(--rz); } .kafel.rz .o { color: var(--rz); }
 .kafel.cz.on { background: var(--cz-j); border-color: var(--cz); } .kafel.cz .o { color: var(--cz); }
 .kafel.prz.on { background: var(--prz-j); border-color: var(--prz); } .kafel.prz .o { color: var(--prz); }
+/* znajdź w zdaniu / dokończ zdanie */
+.zdania .zdanie { font-size: 64px; margin-top: 90px; padding-top: 0; line-height: 1; }
+.zdania .zdanie + .zdanie { margin-top: 110px; }
+.ciasne .zdanie + .zdanie { margin-top: 72px; }
+.zdania .w i { font-size: 32px; }
+.zdania .w .nazwa { font-size: 28px; font-weight: 800; }
+.zdania .w.rz .nazwa { color: var(--rz); } .zdania .w.cz .nazwa { color: var(--cz); } .zdania .w.prz .nazwa { color: var(--prz); }
+.luka { min-width: 250px; text-align: center; border-bottom: 6px dashed #CFC6BB; border-radius: 14px 14px 0 0; }
+.luka i { opacity: 1; transform: translate(-50%, 0); }
+.luka .odp { opacity: 0; transition: opacity .3s; }
+.luka.on .odp { opacity: 1; }
+.luka.on { border-bottom-color: transparent; }
 .podp { font-size: 38px; font-weight: 700; color: var(--szary); margin-top: 12px; }
 
 .bg-rz { background: var(--rz); } .bg-cz { background: var(--cz); } .bg-prz { background: var(--prz); }
@@ -199,6 +211,38 @@ b { font-weight: 800; }
       <button type="button" class="kafel rz" data-k="7"><span class="s">motyl</span><span class="o">kto?<small>rzeczownik</small></span></button>
       <button type="button" class="kafel cz" data-k="8"><span class="s">gotuje</span><span class="o">co robi?<small>czasownik</small></span></button>
     </div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Sprawdź się jeszcze raz</h2>
+    <p class="podp">Najpierw pytanie, potem nazwa: kto? co? - co robi? - jaki?</p>
+    <div class="kafle">
+      <button type="button" class="kafel prz" data-k="1"><span class="s">wysoki</span><span class="o">jaki?<small>przymiotnik</small></span></button>
+      <button type="button" class="kafel rz" data-k="2"><span class="s">jabłko</span><span class="o">co?<small>rzeczownik</small></span></button>
+      <button type="button" class="kafel cz" data-k="3"><span class="s">śpiewa</span><span class="o">co robi?<small>czasownik</small></span></button>
+      <button type="button" class="kafel rz" data-k="4"><span class="s">nauczyciel</span><span class="o">kto?<small>rzeczownik</small></span></button>
+      <button type="button" class="kafel cz" data-k="5"><span class="s">rysuje</span><span class="o">co robi?<small>czasownik</small></span></button>
+      <button type="button" class="kafel prz" data-k="6"><span class="s">kolorowa</span><span class="o">jaka?<small>przymiotnik</small></span></button>
+      <button type="button" class="kafel rz" data-k="7"><span class="s">samolot</span><span class="o">co?<small>rzeczownik</small></span></button>
+      <button type="button" class="kafel cz" data-k="8"><span class="s">płacze</span><span class="o">co robi?<small>czasownik</small></span></button>
+    </div>
+  </section>
+
+  <section class="slajd zdania">
+    <h2 style="font-size:90px;font-weight:800">Znajdź w zdaniu</h2>
+    <p class="podp">Kto? Co robi? A jaki jest?</p>
+    <div class="zdanie"><span class="w prz" data-k="3"><i>jaka?</i>Mała<span class="nazwa">przymiotnik</span></span> <span class="w rz" data-k="1"><i>kto?</i>dziewczynka<span class="nazwa">rzeczownik</span></span> <span class="w cz" data-k="2"><i>co robi?</i>czyta<span class="nazwa">czasownik</span></span>.</div>
+    <div class="zdanie"><span class="w prz" data-k="6"><i>jaki?</i>Głodny<span class="nazwa">przymiotnik</span></span> <span class="w rz" data-k="4"><i>kto?</i>pies<span class="nazwa">rzeczownik</span></span> <span class="w cz" data-k="5"><i>co robi?</i>szczeka<span class="nazwa">czasownik</span></span>.</div>
+    <div class="zdanie"><span class="w prz" data-k="9"><i>jaki?</i>Zimny<span class="nazwa">przymiotnik</span></span> <span class="w rz" data-k="7"><i>co?</i>wiatr<span class="nazwa">rzeczownik</span></span> <span class="w cz" data-k="8"><i>co robi?</i>wieje<span class="nazwa">czasownik</span></span>.</div>
+  </section>
+
+  <section class="slajd zdania ciasne">
+    <h2 style="font-size:90px;font-weight:800">Dokończ zdanie</h2>
+    <p class="podp">Pytanie nad luką podpowiada, jakiego wyrazu brakuje.</p>
+    <div class="zdanie">Zielona żaba <span class="w cz luka" data-k="1"><i>co robi?</i><span class="odp">skacze</span></span>.</div>
+    <div class="zdanie"><span class="w prz luka" data-k="2"><i>jaki?</i><span class="odp">Rudy</span></span> kot śpi.</div>
+    <div class="zdanie">Wesoła <span class="w rz luka" data-k="3"><i>kto?</i><span class="odp">mama</span></span> tańczy.</div>
+    <div class="zdanie">Mój <span class="w prz luka" data-k="4"><i>jaki?</i><span class="odp">nowy</span></span> <span class="w rz luka" data-k="5"><i>co?</i><span class="odp">rower</span></span> stoi w garażu.</div>
   </section>
 
 </div>
