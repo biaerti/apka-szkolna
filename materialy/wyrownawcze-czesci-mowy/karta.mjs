@@ -1,7 +1,7 @@
 // Karta na zajęcia wyrównawcze: części mowy od zera (rzeczownik, czasownik, przymiotnik).
 // Dla dwójki uczniów kl. 4, którzy potrzebują samych podstaw - osobno od arkuszy z czytaniem
 // ze zrozumieniem (src/data/remedial.ts). Pytania zamiast definicji: kto? co? / co robi? / jaki?
-// Większe litery (duza: true), 2 strony A4, wspólne sprawdzenie na projektorze
+// Większe litery (duza: true), 2 strony A4 (dużo prostych przykładów), wspólne sprawdzenie na projektorze
 // (public/materialy/karty/wyrownawcze-czesci-mowy-karta.html).
 // Generator: node materialy/karta.mjs wyrownawcze-czesci-mowy
 
@@ -37,18 +37,41 @@ export const KARTA = {
             'jabłko {{kto?|*co?}}',
             'lekarz {{*kto?|co?}}',
             'rower {{kto?|*co?}}',
+            'koń {{*kto?|co?}}',
+            'drzewo {{kto?|*co?}}',
+            'kolega {{*kto?|co?}}',
+            'telefon {{kto?|*co?}}',
           ],
         },
         {
-          polecenie: 'Co jest w twojej klasie? Napisz trzy rzeczowniki.',
-          info: 'Rozejrzyj się i zapytaj: co tu stoi, co tu leży? Każda rzecz, którą widzisz, ma nazwę - to rzeczownik.',
+          polecenie: 'Podkreśl rzeczowniki. W każdym zdaniu są dwa.',
+          info: 'Szukaj nazw ludzi, zwierząt, rzeczy i roślin. Sprawdź pytaniem: kto to? co to?',
           przyklad: [
-            'Rozglądam się po kuchni.',
-            'Co tu stoi? ==lodówka==',
-            'Co tu leży? ==łyżka==',
-            'lodówka, łyżka to ==rzeczowniki==',
+            'Mama kupiła chleb.',
+            'Kto to? ==mama== ➜ rzeczownik',
+            'Co to? ==chleb== ➜ rzeczownik',
+            '„kupiła” to nie nazwa - pytam „co zrobiła?”',
           ],
-          linie: ['[[np. ławka|34]]   [[np. tablica|34]]   [[np. krzesło|34]]'],
+          kolumny: 2,
+          linie: [
+            '((Pies)) gryzie ((kość)).',
+            '((Tata)) czyta ((gazetę)).',
+            '((Kot)) pije ((mleko)).',
+            '((Babcia)) piecze ((ciasto)).',
+          ],
+        },
+        {
+          polecenie: 'Napisz rzeczowniki.',
+          info: 'Pomyśl o ludziach z domu (kto?) i o rzeczach, które nosisz do szkoły (co?). Każda nazwa to rzeczownik.',
+          przyklad: [
+            'Kto jest w szkole? ==pani==, ==uczeń==',
+            'Co jest w kuchni? ==lodówka==, ==łyżka==',
+            'pani, uczeń, lodówka, łyżka to ==rzeczowniki==',
+          ],
+          linie: [
+            'Kto jest w rodzinie? [[np. mama|24]] [[np. brat|24]] [[np. babcia|24]]',
+            'Co jest w plecaku? [[np. zeszyt|24]] [[np. piórnik|24]] [[np. książka|24]]',
+          ],
         },
       ],
     },
@@ -74,6 +97,10 @@ export const KARTA = {
             'Ryba [[pływa|28]].',
             'Kucharz [[gotuje|28]].',
             'Uczeń [[pisze / czyta|28]].',
+            'Pies [[szczeka / biega|28]].',
+            'Mama [[pracuje / gotuje|28]].',
+            'Żaba [[skacze / kumka|28]].',
+            'Piłkarz [[gra / biega|28]].',
           ],
         },
         {
@@ -91,7 +118,22 @@ export const KARTA = {
             'Zosia ((rysuje)) konia.',
             'Dzieci ((biegają)) po boisku.',
             'Wieczorem ((pada)) deszcz.',
+            'Dziadek ((czyta)) książkę.',
+            'Brat ((je)) zupę.',
+            'Ptaki ((śpiewają)) w lesie.',
+            'Pani ((pisze)) na tablicy.',
           ],
+        },
+        {
+          polecenie: 'Co robisz rano? Napisz trzy czasowniki.',
+          info: 'Pomyśl o swoim poranku po kolei: co robisz po przebudzeniu? Każda czynność to czasownik.',
+          przyklad: [
+            'Co robię wieczorem?',
+            'Ja ==jem== kolację.',
+            'Ja ==oglądam== bajkę.',
+            'Ja ==śpię==. ➜ jem, oglądam, śpię to ==czasowniki==',
+          ],
+          linie: ['Rano ja: [[np. wstaję|30]] [[np. myję się|30]] [[np. jem|30]]'],
         },
       ],
     },
@@ -117,6 +159,27 @@ export const KARTA = {
             'Cytryna jest [[kwaśna / żółta|28]].',
             'Lody są [[zimne / słodkie|28]].',
             'Mysz jest [[mała / szara|28]].',
+            'Niebo jest [[niebieskie|28]].',
+            'Śnieg jest [[biały / zimny|28]].',
+            'Żyrafa jest [[wysoka|28]].',
+            'Czekolada jest [[słodka|28]].',
+          ],
+        },
+        {
+          polecenie: 'Podkreśl przymiotnik w każdym zdaniu.',
+          info: 'Zapytaj o rzecz albo osobę ze zdania: jaki? jaka? jakie? Wyraz, który odpowiada, to przymiotnik.',
+          przyklad: [
+            'Mam nowy plecak.',
+            'Pytam: jaki plecak?',
+            '==nowy== plecak',
+            '„nowy” to ==przymiotnik==',
+          ],
+          kolumny: 2,
+          linie: [
+            'Mam ((czerwoną)) czapkę.',
+            'To jest ((wesoły)) pies.',
+            'Jem ((pyszne)) lody.',
+            'Kot ma ((długi)) ogon.',
           ],
         },
         {
@@ -134,6 +197,8 @@ export const KARTA = {
             'wesoły ➜ [[smutny|26]]',
             'szybki ➜ [[wolny|26]]',
             'gorący ➜ [[zimny|26]]',
+            'stary ➜ [[nowy / młody|26]]',
+            'długi ➜ [[krótki|26]]',
           ],
         },
       ],
@@ -162,6 +227,10 @@ export const KARTA = {
             'je {{kto? co?|*co robi?|jaki?}}',
             'brat {{*kto? co?|co robi?|jaki?}}',
             'ciepła {{kto? co?|co robi?|*jaki?}}',
+            'śpiewa {{kto? co?|*co robi?|jaki?}}',
+            'okno {{*kto? co?|co robi?|jaki?}}',
+            'mały {{kto? co?|co robi?|*jaki?}}',
+            'pisze {{kto? co?|*co robi?|jaki?}}',
           ],
         },
         {
@@ -179,6 +248,8 @@ export const KARTA = {
               ['**mały**', '[[np. pies|30]]', '[[np. szczeka|30]]'],
               ['[[np. stary|30]]', '**dziadek**', '[[np. czyta|30]]'],
               ['[[np. wesoła|30]]', '[[np. dziewczynka|30]]', '**tańczy**'],
+              ['**szybki**', '[[np. samochód|30]]', '[[np. jedzie|30]]'],
+              ['[[np. zmęczony|30]]', '**tata**', '[[np. śpi|30]]'],
             ],
           },
         },
