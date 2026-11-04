@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Części mowy - podstawy</title>
+<!-- Zajęcia wyrównawcze: krótka prezentacja do karty materialy/wyrownawcze-czesci-mowy/karta.mjs.
+     Strzałka w prawo / spacja / PageDown = następny krok, w lewo = cofnij, F = pełny ekran.
+     Bez color-mix, :has() i innych nowości - szkoła ma Chrome 109. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;700;800&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+:root {
+  --ciemny: #2E2A33; --szary: #6E6774; --tlo: #FBF8F3;
+  --rz: #7B3FC4; --rz-j: #EEE4F8;
+  --cz: #138A72; --cz-j: #DDF3EE;
+  --prz: #C93D76; --prz-j: #FBE5EE;
+  --zolty: #FFE27A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--tlo); color: var(--ciemny); font-family: 'Nunito', 'Segoe UI', sans-serif; }
+#scena { position: absolute; width: 1600px; height: 900px; transform-origin: 0 0; }
+.slajd { position: absolute; top: 0; left: 0; width: 1600px; height: 900px; padding: 70px 100px; display: none; flex-direction: column; }
+.slajd.akt { display: flex; }
+h1, h2, h3 { font-family: 'Baloo 2', 'Segoe UI', sans-serif; line-height: 1.05; }
+b { font-weight: 800; }
+
+/* kroki: element z data-k pojawia się po naciśnięciu strzałki */
+.k { opacity: 0; transform: translateY(18px); transition: opacity .35s, transform .35s; }
+.k.on { opacity: 1; transform: none; }
+
+/* tytuł */
+.tytul { justify-content: center; align-items: flex-start; }
+.tytul .nad { font-family: 'Baloo 2'; font-size: 40px; color: var(--szary); font-weight: 600; }
+.tytul h1 { font-size: 150px; font-weight: 800; margin: 10px 0 20px; }
+.tytul p { font-size: 46px; font-weight: 700; margin-bottom: 50px; }
+.pyt3 { display: flex; gap: 30px; }
+.pyt3 span { font-family: 'Baloo 2'; font-weight: 800; font-size: 64px; color: #fff; border-radius: 26px; padding: 6px 40px 0; }
+
+/* slajd części mowy */
+.gora { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; }
+.gora h2 { font-size: 110px; font-weight: 800; }
+.def { font-size: 46px; font-weight: 700; margin-top: 14px; max-width: 900px; line-height: 1.3; }
+.pytanie { flex: none; text-align: center; border-radius: 34px; padding: 22px 46px 16px; color: #fff; }
+.pytanie small { display: block; font-size: 30px; font-weight: 700; opacity: .9; }
+.pytanie strong { display: block; font-family: 'Baloo 2'; font-size: 92px; font-weight: 800; line-height: 1.05; }
+.karty { display: flex; gap: 28px; margin-top: 50px; }
+.karta { flex: 1; background: #fff; border-radius: 26px; border: 4px solid; padding: 20px 24px 22px; text-align: center; }
+.karta .co { font-size: 28px; font-weight: 800; color: var(--szary); text-transform: uppercase; letter-spacing: .06em; }
+.karta .p { font-family: 'Baloo 2'; font-size: 42px; font-weight: 800; margin-top: 6px; }
+.karta .s { font-size: 52px; font-weight: 800; margin-top: 2px; }
+.karta .s em { font-style: normal; color: var(--szary); font-weight: 700; }
+.dol { display: flex; gap: 40px; align-items: flex-end; margin-top: auto; }
+.zdanie { font-size: 70px; font-weight: 800; line-height: 1; padding-top: 50px; }
+.zdanie .lab { font-size: 30px; font-weight: 700; color: var(--szary); display: block; margin-bottom: 62px; padding-top: 0; }
+.dol .zdanie { white-space: nowrap; flex: none; }
+.rada { margin-left: auto; margin-bottom: 30px; max-width: 600px; background: #FFF6D2; border-left: 10px solid #F2B705; border-radius: 0 22px 22px 0; padding: 20px 28px; font-size: 34px; font-weight: 700; line-height: 1.3; }
+.rada b { color: var(--ciemny); }
+
+/* wyraz w zdaniu: po kroku dostaje kolor i pytanie nad sobą */
+.w { position: relative; display: inline-block; padding: 0 10px; border-radius: 14px; transition: background .3s, color .3s; }
+.w i { position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, 10px); font-style: normal; font-size: 32px; white-space: nowrap; opacity: 0; transition: opacity .3s, transform .3s; margin-bottom: 4px; }
+.w.on i { opacity: 1; transform: translate(-50%, 0); }
+.w.rz.on { background: var(--rz-j); color: var(--rz); }
+.w.cz.on { background: var(--cz-j); color: var(--cz); }
+.w.prz.on { background: var(--prz-j); color: var(--prz); }
+.w.rz i { color: var(--rz); } .w.cz i { color: var(--cz); } .w.prz i { color: var(--prz); }
+.w .nazwa { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); font-size: 30px; white-space: nowrap; opacity: 0; transition: opacity .3s; margin-top: 10px; }
+.w.on .nazwa { opacity: 1; }
+
+/* razem */
+.razem h2 { font-size: 90px; font-weight: 800; }
+.klocki { display: flex; gap: 26px; margin-top: 34px; }
+.klocek { flex: 1; border-radius: 26px; padding: 18px 26px 16px; color: #fff; }
+.klocek strong { display: block; font-family: 'Baloo 2'; font-size: 62px; font-weight: 800; line-height: 1.05; }
+.klocek span { font-size: 34px; font-weight: 700; }
+.razem .zdanie { font-size: 110px; margin: 140px 0 0; text-align: center; }
+.razem .w i { font-size: 40px; }
+.razem .w .nazwa { font-size: 36px; font-weight: 800; }
+
+/* sprawdź się */
+.kafle { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 46px; }
+.kafel { font: inherit; cursor: pointer; background: #fff; border: 4px solid #E3DCD3; border-radius: 26px; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ciemny); transition: background .3s, border-color .3s; }
+.kafel .s { font-size: 64px; font-weight: 800; }
+.kafel .o { font-family: 'Baloo 2'; font-size: 38px; font-weight: 800; margin-top: 8px; opacity: 0; transition: opacity .3s; line-height: 1.1; text-align: center; }
+.kafel .o small { display: block; font-family: 'Nunito'; font-size: 28px; font-weight: 700; }
+.kafel.on .o { opacity: 1; }
+.kafel.rz.on { background: var(--rz-j); border-color: var(--rz); } .kafel.rz .o { color: var(--rz); }
+.kafel.cz.on { background: var(--cz-j); border-color: var(--cz); } .kafel.cz .o { color: var(--cz); }
+.kafel.prz.on { background: var(--prz-j); border-color: var(--prz); } .kafel.prz .o { color: var(--prz); }
+.podp { font-size: 38px; font-weight: 700; color: var(--szary); margin-top: 12px; }
+
+.bg-rz { background: var(--rz); } .bg-cz { background: var(--cz); } .bg-prz { background: var(--prz); }
+.c-rz { color: var(--rz); } .c-cz { color: var(--cz); } .c-prz { color: var(--prz); }
+.b-rz { border-color: var(--rz); } .b-cz { border-color: var(--cz); } .b-prz { border-color: var(--prz); }
+.b-rz .p { color: var(--rz); } .b-cz .p { color: var(--cz); } .b-prz .p { color: var(--prz); }
+
+/* pasek nawigacji - dyskretny, żeby nie przeszkadzał na projektorze */
+#pasek { position: fixed; right: 18px; bottom: 14px; display: flex; align-items: center; gap: 10px; opacity: .35; transition: opacity .2s; font-family: 'Nunito', sans-serif; }
+#pasek:hover { opacity: 1; }
+#pasek button { font: inherit; font-size: 20px; font-weight: 800; border: 2px solid #CFC6BB; background: #fff; color: var(--ciemny); border-radius: 12px; min-width: 46px; height: 42px; padding: 0 12px; cursor: pointer; }
+#licznik { font-size: 18px; font-weight: 800; color: var(--szary); min-width: 54px; text-align: center; }
+</style>
+</head>
+<body>
+<div id="scena">
+
+  <section class="slajd tytul">
+    <div class="nad">Zajęcia wyrównawcze</div>
+    <h1>Części mowy</h1>
+    <p>Każdy wyraz odpowiada na jakieś pytanie.</p>
+    <div class="pyt3">
+      <span class="bg-rz k" data-k="1">kto? co?</span>
+      <span class="bg-cz k" data-k="2">co robi?</span>
+      <span class="bg-prz k" data-k="3">jaki?</span>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <div class="gora">
+      <div>
+        <h2 class="c-rz">Rzeczownik</h2>
+        <p class="def">To <b>nazwa</b> osoby, zwierzęcia, rzeczy albo rośliny.</p>
+      </div>
+      <div class="pytanie bg-rz"><small>pytamy</small><strong>kto? co?</strong></div>
+    </div>
+    <div class="karty">
+      <div class="karta b-rz k" data-k="1"><div class="co">osoba</div><div class="p">kto?</div><div class="s">sąsiad</div></div>
+      <div class="karta b-rz k" data-k="2"><div class="co">zwierzę</div><div class="p">kto?</div><div class="s">żyrafa</div></div>
+      <div class="karta b-rz k" data-k="3"><div class="co">rzecz</div><div class="p">co?</div><div class="s">parasol</div></div>
+      <div class="karta b-rz k" data-k="4"><div class="co">roślina</div><div class="p">co?</div><div class="s">tulipan</div></div>
+    </div>
+    <div class="dol">
+      <div class="zdanie k" data-k="5"><span class="lab">Szukam w zdaniu:</span><span class="w rz" data-k="6"><i>kto?</i>Wiewiórka</span> i <span class="w rz" data-k="7"><i>kto?</i>jeż</span> śpią.</div>
+      <div class="rada k" data-k="8">Podpowiedź: przed rzeczownikiem pasuje <b>ten, ta, to</b>. <br>ten parasol, ta żyrafa</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <div class="gora">
+      <div>
+        <h2 class="c-cz">Czasownik</h2>
+        <p class="def">Mówi, <b>co ktoś robi</b> albo <b>co się dzieje</b>.</p>
+      </div>
+      <div class="pytanie bg-cz"><small>pytamy</small><strong>co robi?</strong></div>
+    </div>
+    <div class="karty">
+      <div class="karta b-cz k" data-k="1"><div class="co">chłopiec</div><div class="p">co robi?</div><div class="s">skacze</div></div>
+      <div class="karta b-cz k" data-k="2"><div class="co">kot</div><div class="p">co robi?</div><div class="s">mruczy</div></div>
+      <div class="karta b-cz k" data-k="3"><div class="co">mama</div><div class="p">co robi?</div><div class="s">maluje</div></div>
+      <div class="karta b-cz k" data-k="4"><div class="co">deszcz</div><div class="p">co się dzieje?</div><div class="s">pada</div></div>
+    </div>
+    <div class="dol">
+      <div class="zdanie k" data-k="5"><span class="lab">Szukam w zdaniu:</span>Pies <span class="w cz" data-k="6"><i>co robi?</i>goni</span> piłkę.</div>
+      <div class="rada k" data-k="7">Podpowiedź: czasownik się zmienia, gdy mówię <b>ja, ty, on</b>. <br>ja skaczę, ty skaczesz, on skacze</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <div class="gora">
+      <div>
+        <h2 class="c-prz">Przymiotnik</h2>
+        <p class="def">Mówi, <b>jaki</b> jest ktoś albo coś: kolor, wielkość, smak, charakter.</p>
+      </div>
+      <div class="pytanie bg-prz"><small>pytamy</small><strong style="font-size:66px">jaki? jaka? jakie?</strong></div>
+    </div>
+    <div class="karty">
+      <div class="karta b-prz k" data-k="1"><div class="co">kolor</div><div class="p">jaki banan?</div><div class="s">żółty</div></div>
+      <div class="karta b-prz k" data-k="2"><div class="co">wielkość</div><div class="p">jaka mysz?</div><div class="s">mała</div></div>
+      <div class="karta b-prz k" data-k="3"><div class="co">smak</div><div class="p">jakie jabłko?</div><div class="s">kwaśne</div></div>
+      <div class="karta b-prz k" data-k="4"><div class="co">charakter</div><div class="p">jaki kolega?</div><div class="s">miły</div></div>
+    </div>
+    <div class="dol">
+      <div class="zdanie k" data-k="5"><span class="lab">Szukam w zdaniu:</span>Mam <span class="w prz" data-k="6"><i>jaki?</i>nowy</span> rower.</div>
+      <div class="rada k" data-k="7">Podpowiedź: przymiotnik stoi zwykle <b>przy rzeczowniku</b> i mówi coś o nim.</div>
+    </div>
+  </section>
+
+  <section class="slajd razem">
+    <h2>Składamy zdanie</h2>
+    <div class="klocki">
+      <div class="klocek bg-prz"><strong>jaki?</strong><span>przymiotnik</span></div>
+      <div class="klocek bg-rz"><strong>kto? co?</strong><span>rzeczownik</span></div>
+      <div class="klocek bg-cz"><strong>co robi?</strong><span>czasownik</span></div>
+    </div>
+    <div class="zdanie"><span class="w prz" data-k="3"><i>jaki?</i>Wesoły<span class="nazwa">przymiotnik</span></span> <span class="w rz" data-k="1"><i>kto?</i>chłopiec<span class="nazwa">rzeczownik</span></span> <span class="w cz" data-k="2"><i>co robi?</i>biegnie<span class="nazwa">czasownik</span></span>.</div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Sprawdź się</h2>
+    <p class="podp">Zadaj pytanie: kto? co? - co robi? - jaki? Kliknij wyraz, żeby sprawdzić.</p>
+    <div class="kafle">
+      <button type="button" class="kafel rz" data-k="1"><span class="s">rower</span><span class="o">co?<small>rzeczownik</small></span></button>
+      <button type="button" class="kafel cz" data-k="2"><span class="s">pływa</span><span class="o">co robi?<small>czasownik</small></span></button>
+      <button type="button" class="kafel prz" data-k="3"><span class="s">zielony</span><span class="o">jaki?<small>przymiotnik</small></span></button>
+      <button type="button" class="kafel rz" data-k="4"><span class="s">babcia</span><span class="o">kto?<small>rzeczownik</small></span></button>
+      <button type="button" class="kafel cz" data-k="5"><span class="s">krzyczy</span><span class="o">co robi?<small>czasownik</small></span></button>
+      <button type="button" class="kafel prz" data-k="6"><span class="s">zimna</span><span class="o">jaka?<small>przymiotnik</small></span></button>
+      <button type="button" class="kafel rz" data-k="7"><span class="s">motyl</span><span class="o">kto?<small>rzeczownik</small></span></button>
+      <button type="button" class="kafel cz" data-k="8"><span class="s">gotuje</span><span class="o">co robi?<small>czasownik</small></span></button>
+    </div>
+  </section>
+
+</div>
+
+<div id="pasek">
+  <button type="button" id="wstecz" aria-label="Poprzedni krok">‹</button>
+  <span id="licznik"></span>
+  <button type="button" id="dalej" aria-label="Następny krok">›</button>
+  <button type="button" id="pelny" aria-label="Pełny ekran">Pełny ekran</button>
+</div>
+
+<script>
+(function () {
+  var slajdy = [].slice.call(document.querySelectorAll('.slajd'));
+  var scena = document.getElementById('scena');
+  var nr = 0, krok = 0;
+
+  function maxKrok(s) {
+    var m = 0;
+    [].forEach.call(s.querySelectorAll('[data-k]'), function (el) { m = Math.max(m, Number(el.getAttribute('data-k'))); });
+    return m;
+  }
+
+  function pokaz() {
+    slajdy.forEach(function (s, i) { s.classList.toggle('akt', i === nr); });
+    [].forEach.call(slajdy[nr].querySelectorAll('[data-k]'), function (el) {
+      el.classList.toggle('on', Number(el.getAttribute('data-k')) <= krok);
+    });
+    document.getElementById('licznik').textContent = (nr + 1) + ' / ' + slajdy.length;
+    try { history.replaceState(null, '', '#' + (nr + 1)); } catch (e) {}
+  }
+
+  function dalej() {
+    if (krok < maxKrok(slajdy[nr])) krok++;
+    else if (nr < slajdy.length - 1) { nr++; krok = 0; }
+    pokaz();
+  }
+  function wstecz() {
+    if (krok > 0) krok--;
+    else if (nr > 0) { nr--; krok = maxKrok(slajdy[nr]); }
+    pokaz();
+  }
+
+  function dopasuj() {
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    scena.style.transform = 'scale(' + s + ')';
+    scena.style.left = (window.innerWidth - 1600 * s) / 2 + 'px';
+    scena.style.top = (window.innerHeight - 900 * s) / 2 + 'px';
+  }
+
+  function pelnyEkran() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter' || k === 'ArrowDown') { e.preventDefault(); dalej(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace' || k === 'ArrowUp') { e.preventDefault(); wstecz(); }
+    else if (k === 'Home') { nr = 0; krok = 0; pokaz(); }
+    else if (k === 'f' || k === 'F') pelnyEkran();
+  });
+  document.getElementById('dalej').addEventListener('click', dalej);
+  document.getElementById('wstecz').addEventListener('click', wstecz);
+  document.getElementById('pelny').addEventListener('click', pelnyEkran);
+  // Kafle w "Sprawdź się" odsłaniają się też kliknięciem, w dowolnej kolejności.
+  [].forEach.call(document.querySelectorAll('.kafel'), function (b) {
+    b.addEventListener('click', function () { b.classList.toggle('on'); b.blur(); });
+  });
+  window.addEventListener('resize', dopasuj);
+
+  var zHasha = parseInt(location.hash.slice(1), 10);
+  if (zHasha >= 1 && zHasha <= slajdy.length) nr = zHasha - 1;
+  dopasuj();
+  pokaz();
+})();
+</script>
+</body>
+</html>

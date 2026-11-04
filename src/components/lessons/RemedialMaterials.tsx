@@ -11,6 +11,7 @@ import {
 import {
   POLSKI_OD_ZERA,
   REMEDIAL_KEY_HREF,
+  REMEDIAL_PODSTAWY,
   REMEDIAL_WORKSHEETS,
   polskiOdZeraUrl,
   type PolskiOdZeraWersja,
@@ -186,6 +187,50 @@ function WorksheetList({
   );
 }
 
+const linkBtn = 'inline-flex min-h-10 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500';
+const accentBtn = 'inline-flex min-h-10 shrink-0 items-center justify-center rounded-md border border-accent-500 bg-accent-50 px-3.5 text-sm font-medium text-accent-700 transition-colors hover:bg-accent-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500';
+
+/** Same podstawy (prezentacja + karta) dla uczniów, którym arkusze z czytaniem jeszcze nie idą. */
+function BasicsList() {
+  return (
+    <div className="mb-8">
+      <div className="mb-3 max-w-3xl">
+        <h3 className="font-semibold text-gray-900">Podstawy od zera</h3>
+        <p className="mt-0.5 text-sm leading-5 text-gray-600">
+          Dla uczniów, którym arkusze z czytaniem jeszcze nie idą: krótka prezentacja (strzałki, F - pełny ekran), potem karta na dwie strony A4.
+        </p>
+      </div>
+      <ul className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        {REMEDIAL_PODSTAWY.map((m) => (
+          <li
+            key={m.title}
+            className="flex flex-col gap-3 border-b border-gray-200 px-4 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+          >
+            <div className="min-w-0">
+              <h4 className="font-semibold text-gray-900">{m.title}</h4>
+              <p className="mt-0.5 text-sm leading-5 text-gray-600">{m.description}</p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              <a href={m.prezentacjaHref} target="_blank" rel="noreferrer" className={accentBtn} aria-label={`Prezentacja: ${m.title}`}>
+                Prezentacja
+              </a>
+              <a href={m.projektorHref} target="_blank" rel="noreferrer" className={linkBtn} aria-label={`Karta na projektor: ${m.title}`}>
+                Karta na projektor
+              </a>
+              <a href={m.kartaHref} target="_blank" rel="noreferrer" className={linkBtn} aria-label={`Karta do druku (PDF): ${m.title}`}>
+                PDF
+              </a>
+              <a href={m.rozwiazaniaHref} target="_blank" rel="noreferrer" className={linkBtn} aria-label={`Rozwiązania (PDF): ${m.title}`}>
+                Rozwiązania
+              </a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function RemedialMaterials() {
   const numbered = REMEDIAL_WORKSHEETS.map((worksheet, index) => ({ worksheet, number: index + 1 }));
   const base = numbered.filter(({ worksheet }) => !('levelUp' in worksheet));
@@ -215,6 +260,8 @@ export function RemedialMaterials() {
 
   return (
     <section aria-labelledby="remedial-heading" className="max-w-4xl">
+      <BasicsList />
+
       <div className="mb-5 max-w-3xl">
         <h2 id="remedial-heading" className="text-lg font-semibold text-gray-900">
           Arkusze na zajęcia wyrównawcze

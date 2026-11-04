@@ -63,7 +63,22 @@ export const REMEDIAL_WORKSHEETS = [
   },
 ] as const;
 
-export const REMEDIAL_KEY_HREF = '/materialy/wyrownawcze/klucz-odpowiedzi-arkusze-wyrownawcze.docx';
+/**
+ * Same podstawy dla uczniów, którym arkusze z czytaniem jeszcze nie idą: krótka prezentacja
+ * na projektor + karta pracy (materialy/<folder>/karta.mjs, PDF-y skopiowane z output/materialy/).
+ */
+export const REMEDIAL_PODSTAWY = [
+  {
+    title: 'Części mowy - podstawy',
+    description: 'Rzeczownik, czasownik, przymiotnik: kto? co? co robi? jaki?',
+    prezentacjaHref: '/materialy/wyrownawcze/czesci-mowy-prezentacja.html',
+    kartaHref: '/materialy/wyrownawcze/wyrownawcze-czesci-mowy-karta.pdf',
+    rozwiazaniaHref: '/materialy/wyrownawcze/wyrownawcze-czesci-mowy-karta-rozwiazania.pdf',
+    projektorHref: '/materialy/karty/wyrownawcze-czesci-mowy-karta.html',
+  },
+] as const;
+
+export const REMEDIAL_KEY_HREF ='/materialy/wyrownawcze/klucz-odpowiedzi-arkusze-wyrownawcze.docx';
 
 /**
  * Zeszyt "Moj polski od zera" dla uczniow, ktorzy dopiero ucza sie polskiego
