@@ -59,6 +59,8 @@ body { font-size: 10pt; line-height: 1.3; }
 .dane { display: grid; grid-template-columns: 3fr 1.2fr 1.3fr; gap: 6mm; margin-top: 2mm; font-size: 9.5pt; color: var(--szary); }
 .dane span { border-bottom: 1px dotted var(--szary); padding-bottom: .5mm; }
 .temat.bez-wiedzy { display: block; break-inside: auto; padding: 1.8mm 0; }
+.para { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.para > .temat { border-bottom: 0; min-width: 0; }
 .sprawdzian .linie { line-height: 1.8; }
 .temat.bez-wiedzy .zad { break-inside: avoid; }
 .temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
@@ -73,6 +75,17 @@ body { font-size: 10pt; line-height: 1.3; }
 .kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
 .dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
 :root { --czerw: #D62828; }
+
+.duza { font-size: 12pt; line-height: 1.35; }
+.duza.sprawdzian .linie { line-height: 1.95; }
+.duza .temat.bez-wiedzy { padding: 2.4mm 0; break-inside: avoid; }
+.duza .temat.bez-wiedzy > h2 { font-size: 14pt; }
+.duza.sprawdzian .tab td { height: 9mm; }
+.duza .tab th { font-size: 11pt; }
+.duza .tab .opc, .duza .pol .pkt { font-size: 10.5pt; }
+.duza .luka { height: 6.5mm; }
+.duza .zad + .zad { margin-top: 3mm; }
+
 
 body.ekran { background: #e9e3d8; }
 .ekran .arkusz { width: 210mm; margin: 4mm auto 10mm; background: #fff; padding: 8mm 10mm; box-shadow: 0 1mm 4mm rgba(0,0,0,.15); }
@@ -106,8 +119,30 @@ body.ekran { background: #e9e3d8; }
 .ekran .arkusz[hidden] { display: none; }
 .ekran .info-btn { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--k); background: #fff; border: 1px solid var(--k45); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
 .ekran .info-btn.wl { color: #fff; background: var(--k); border-color: var(--k); }
-.ekran .info { margin: 1mm 0 1mm 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
 .ekran .info[hidden] { display: none; }
+/* Okno „Info”: reguła + jeden przykład rozwijany krok po kroku (zakreślacz przeciąga się po ==ważnych== słowach). */
+#okno[hidden] { display: none; }
+#okno { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; align-items: flex-start; justify-content: center; padding: 5vh 2mm 0; }
+.okno-tlo { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(40, 30, 20, .45); }
+.okno-karta { position: relative; width: 150mm; max-width: 96vw; background: #fff; border-radius: 4mm; border-top: 2.5mm solid var(--k); padding: 4mm 6mm 4mm; box-shadow: 0 2mm 8mm rgba(0,0,0,.25); animation: okno-wjazd .25s ease-out; }
+@keyframes okno-wjazd { from { opacity: 0; transform: translateY(-4mm); } }
+.okno-x { position: absolute; top: 2mm; right: 3mm; border: 0; background: none; font-size: 18pt; line-height: 1; color: var(--szary); cursor: pointer; }
+.okno-tytul { font-family: 'Baloo 2'; font-weight: 800; font-size: 16pt; color: var(--k); line-height: 1.15; }
+.okno-pol { font-weight: 800; font-size: 10.5pt; margin-top: .5mm; padding-right: 6mm; }
+.okno-pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.okno-info { margin-top: 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 10.5pt; }
+.okno-info:empty { display: none; }
+.okno-kroki { margin-top: 2.5mm; font-size: 13.5pt; line-height: 1.45; cursor: pointer; }
+.okno-kroki:empty { display: none; }
+.krok { opacity: 0; transform: translateY(2.5mm); transition: opacity .45s, transform .45s, border-color .3s; padding: .8mm 0 .8mm 3mm; border-left: 3px solid transparent; }
+.krok.widac { opacity: 1; transform: none; }
+.krok.teraz { border-left-color: var(--k); }
+.krok mark { background: linear-gradient(#ffe066, #ffe066) no-repeat 0 0; background-size: 0% 100%; transition: background-size .7s .45s; }
+.krok.widac mark { background-size: 100% 100%; }
+.krok s { text-decoration-color: var(--czerw); text-decoration-thickness: 2px; color: var(--szary); }
+.okno-dol { display: flex; justify-content: flex-end; gap: 2mm; margin-top: 3mm; }
+.okno-dol button { font: 700 10pt 'Nunito', sans-serif; border-radius: 2mm; padding: 1.2mm 3.5mm; cursor: pointer; border: 1px solid var(--ramka); background: #fff; color: var(--ciemny); }
+.okno-dol .okno-zamknij { background: var(--k); border-color: var(--k); color: #fff; }
 .ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
 .ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
 .ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
@@ -124,7 +159,7 @@ body.ekran { background: #e9e3d8; }
   .ekran .opc { white-space: normal; }
   .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
 }
-@media print { .pasek, .pokaz, .info-btn, .info { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+@media print { .pasek, .pokaz, .info-btn, .info, #okno { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
 
 </style></head><body class="ekran">
 <div class="pasek"><span class="odstep"></span><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
@@ -138,6 +173,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">1.1</span> Zamień wyróżniony wyraz potoczny na oficjalny.</div>
         <div class="info" hidden>Zapytaj siebie: jak powiedziałbym to pani dyrektor? Wyraz oficjalny znaczy to samo, zmienia się tylko styl.</div>
+        <template class="przyklad"><div class="krok">Kolega mówi: „Ten film był <b>mega</b>.”</div><div class="krok">Pytam siebie: jak powiem to pani dyrektor?</div><div class="krok">„Ten film był <mark>bardzo dobry</mark>.”</div><div class="krok">Znaczenie to samo, zmienił się tylko styl.</div></template>
         
         <div class="linie"><div class="l">Kuzyn <b>ściemnia</b>, że był w Paryżu. ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="kłamie"></span></div><div class="l"><b>Spoko</b>, pomogę ci. ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="dobrze / w porządku"></span></div><div class="l">Ola <b>wkręciła</b> mnie, że nie ma lekcji. ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="oszukała / okłamała"></span></div></div>
         
@@ -149,6 +185,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">2.1</span> Czy w zdaniu jest porównanie? Zakreśl.</div>
         <div class="info" hidden>Szukaj trzech części: co opisuję, słówko porównania i to, do czego porównuję. „Jak” na początku pytania niczego nie porównuje.</div>
+        <template class="przyklad"><div class="krok">Ręce miała zimne jak lód.</div><div class="krok">Co opisuję? <mark>ręce</mark> (zimne)</div><div class="krok">Słówko porównania: <mark>jak</mark></div><div class="krok">Do czego porównuję? <mark>do lodu</mark> ➜ porównanie: <b>tak</b></div><div class="krok">Jak masz na imię? ➜ „jak” w pytaniu, niczego nie porównuję: <b>nie</b></div></template>
         
         <div class="linie"><div class="l">Jego głos brzmiał jak dzwon. <span class="wybor"><span class="opc" data-ok="1">tak</span><span class="opc">nie</span></span></div><div class="l">Jak zrobić latawiec? <span class="wybor"><span class="opc">tak</span><span class="opc" data-ok="1">nie</span></span></div><div class="l">Szła powoli, niczym żółw. <span class="wybor"><span class="opc" data-ok="1">tak</span><span class="opc">nie</span></span></div><div class="l">Mama robi pyszne pierogi. <span class="wybor"><span class="opc">tak</span><span class="opc" data-ok="1">nie</span></span></div></div>
         
@@ -160,6 +197,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">3.1</span> Dopisz synonim i antonim.</div>
         <div class="info" hidden>Synonim wstaw za wyraz w zdaniu - sens musi zostać ten sam. Antonim to słowo o przeciwnym znaczeniu. Dobrych synonimów jest kilka.</div>
+        <template class="przyklad"><div class="krok">Wyraz: <b>wesoły</b></div><div class="krok">Synonim (to samo znaczenie): wesoły ➜ <mark>radosny</mark></div><div class="krok">Sprawdzam w zdaniu: Ola jest radosna. Sens ten sam.</div><div class="krok">Antonim (przeciwne znaczenie): wesoły ➜ <mark>smutny</mark></div></template>
         
         
         <table class="tab"><thead><tr><th>wyraz</th><th>synonim</th><th>antonim</th></tr></thead>
@@ -172,6 +210,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">4.1</span> To fragment listu do kolegi. Wpisz wyrazy z nawiasów wielką albo małą literą - tak jak w liście.</div>
         <div class="info" hidden>Czy to słowo o osobie, do której piszesz (ty, twój)? Wtedy wielką literą - z szacunku. O sobie (ja, mój) - małą, chyba że zaczyna zdanie.</div>
+        <template class="przyklad"><div class="krok">Piszę list do Kuby: „Dziękuję (ty) za prezent.”</div><div class="krok">Czy „ty” to Kuba, do którego piszę? <b>Tak.</b></div><div class="krok">Więc wielką literą: „Dziękuję <mark>Ci</mark> za prezent.”</div><div class="krok">O sobie: „Tata zabrał (ja) do kina.” ➜ <mark>mnie</mark> - małą literą</div></template>
         
         <div class="linie"><div class="l">Przesyłam <span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="Ci"></span> (ty) zdjęcia. Jestem na nich <span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="ja"></span> (ja) z psem.</div><div class="l">Czy <span class="luka" style="min-width:16mm" contenteditable="true" spellcheck="false" data-odp="Twój"></span> (twój) brat pływa? Buziaki dla <span class="luka" style="min-width:18mm" contenteditable="true" spellcheck="false" data-odp="Ciebie"></span> (ty)!</div></div>
         
@@ -183,6 +222,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">5.1</span> Dopisz ten, ta, to, ci albo te i nazwij rodzaj.</div>
         <div class="info" hidden>Powiedz wyraz z ten, ta, to (liczba pojedyncza) albo z ci, te (liczba mnoga) i posłuchaj, co brzmi dobrze. „Ci” tylko przy mężczyznach.</div>
+        <template class="przyklad"><div class="krok">Wyraz: <b>kot</b></div><div class="krok">Próbuję: <s>ta kot</s>, <s>to kot</s>, <mark>ten kot</mark></div><div class="krok">ten ➜ rodzaj <mark>męski</mark></div><div class="krok">Liczba mnoga: <b>strażacy</b> ➜ <mark>ci strażacy</mark> (sami mężczyźni) ➜ <mark>męskoosobowy</mark></div><div class="krok"><b>koty</b> ➜ <mark>te koty</mark> ➜ <mark>niemęskoosobowy</mark></div></template>
         
         
         <table class="tab"><thead><tr><th>rzeczownik</th><th>ten / ta / to / ci / te</th><th>rodzaj</th></tr></thead>
@@ -195,6 +235,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">6.1</span> Zadaj pytanie o podkreślony wyraz i nazwij przypadek.</div>
         <div class="info" hidden>Znajdź czasownik i zadaj od niego pytanie o podkreślony wyraz. Pytanie podpowie przypadek: nie ma (czego?) mleka - dopełniacz.</div>
+        <template class="przyklad"><div class="krok">Bawię się z <u>kotem</u>.</div><div class="krok">Szukam czasownika: <mark>bawię się</mark></div><div class="krok">Pytam od czasownika: bawię się (z kim? z czym?) ➜ z <mark>kotem</mark></div><div class="krok">z kim? z czym? to <mark>narzędnik</mark></div></template>
         
         
         <table class="tab"><thead><tr><th>zdanie</th><th>pytanie</th><th>przypadek</th></tr></thead>
@@ -207,6 +248,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">7.1</span> Odmień rzeczowniki przez przypadki.</div>
         <div class="info" hidden>Wstawiaj wyraz po pomocniku z lewej kolumny i powiedz całe zdanie na głos: nie ma (kogo? czego?) pszczoły...</div>
+        <template class="przyklad"><div class="krok">Odmieniam: <b>sowa</b></div><div class="krok">nie ma (kogo? czego?) ➜ <mark>sowy</mark></div><div class="krok">przyglądam się (komu? czemu?) ➜ <mark>sowie</mark></div><div class="krok">widzę (kogo? co?) ➜ <mark>sowę</mark> … i tak dalej</div><div class="krok">Mów całe zdanie na głos - ucho podpowie końcówkę.</div></template>
         
         
         <table class="tab"><thead><tr><th>przypadek</th><th>pszczoła</th><th>ząb</th></tr></thead>
@@ -219,6 +261,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">8.1</span> Popraw źle użyty wyraz.</div>
         <div class="info" hidden>Policz: jedna książka - pięć... (nie ma końcówki -ów). Przy wołaniu kogoś po imieniu użyj wołacza: Jacek - Jacku!</div>
+        <template class="przyklad"><div class="krok">„Kupiłem pięć <s>jabłków</s>.”</div><div class="krok">Jedno jabłko - pięć… bez końcówki -ów!</div><div class="krok">„Kupiłem pięć <mark>jabłek</mark>.”</div><div class="krok">Wołam kogoś: „<s>Tomek</s>, chodź!” ➜ „<mark>Tomku</mark>, chodź!”</div></template>
         
         <div class="linie"><div class="l">Na półce stało pięć książków. ➜ <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="książek"></span></div><div class="l">Zjadłem kilka śliwków. ➜ <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="śliwek"></span></div><div class="l">Ela, chodź na obiad! ➜ <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="Elu"></span></div><div class="l">Jacek, oddaj piłkę! ➜ <span class="luka" style="min-width:24mm" contenteditable="true" spellcheck="false" data-odp="Jacku"></span></div></div>
         
@@ -230,6 +273,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">9.1</span> Fakt czy opinia? Zakreśl.</div>
         <div class="info" hidden>Czy można to sprawdzić w książce, na mapie albo licząc? To fakt. Czy ktoś mógłby się nie zgodzić? To opinia.</div>
+        <template class="przyklad"><div class="krok">„Wisła to najdłuższa rzeka w Polsce.”</div><div class="krok">Da się to sprawdzić na mapie? <b>Tak</b> ➜ <mark>fakt</mark></div><div class="krok">„Wisła to najpiękniejsza rzeka.”</div><div class="krok">Ktoś może się nie zgodzić ➜ <mark>opinia</mark></div></template>
         
         <div class="linie k2"><div class="l">W Polsce są cztery pory roku. <span class="wybor"><span class="opc" data-ok="1">fakt</span><span class="opc">opinia</span></span></div><div class="l">Pizza jest lepsza od zupy. <span class="wybor"><span class="opc">fakt</span><span class="opc" data-ok="1">opinia</span></span></div><div class="l">Słoń to największe zwierzę lądowe. <span class="wybor"><span class="opc" data-ok="1">fakt</span><span class="opc">opinia</span></span></div><div class="l">Zima to najgorsza pora roku. <span class="wybor"><span class="opc">fakt</span><span class="opc" data-ok="1">opinia</span></span></div></div>
         
@@ -238,6 +282,7 @@ body.ekran { background: #e9e3d8; }
       </div><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">9.2</span> Dokończ zdanie, podając argument.</div>
         <div class="info" hidden>Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument.</div>
+        <template class="przyklad"><div class="krok">„W szkole powinien być sklepik, ponieważ…”</div><div class="krok"><s>bo tak</s>, <s>bo lubię</s> - to nie są argumenty</div><div class="krok">Pytam: dlaczego? Co dobrego z tego wyjdzie?</div><div class="krok">…ponieważ <mark>uczniowie nie będą głodni na lekcjach</mark>.</div></template>
         
         <div class="linie"><div class="l">W szkole powinno być więcej wycieczek, ponieważ <span class="luka dluga" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="np. najlepiej uczymy się, oglądając rzeczy na żywo"></span></div></div>
         
@@ -249,6 +294,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">10.1</span> Kolega chce zjeść twój deser. Jaka to reakcja? Zakreśl.</div>
         <div class="info" hidden>Agresywna rani albo obraża. Uległa to zgoda wbrew sobie. Asertywna jest spokojna: „nie”, powód i propozycja.</div>
+        <template class="przyklad"><div class="krok">Kolega chce twoją gumkę na cały dzień.</div><div class="krok">„Spadaj!” ➜ rani i obraża ➜ <mark>agresywna</mark></div><div class="krok">„No… dobra.” (choć nie chcesz) ➜ <mark>uległa</mark></div><div class="krok">„Nie, bo potrzebuję jej na matmie. Ale pożyczę ci na przerwie.” ➜ <mark>asertywna</mark></div></template>
         
         <div class="linie"><div class="l">„Spadaj, to moje!” <span class="wybor"><span class="opc">uległa</span><span class="opc" data-ok="1">agresywna</span><span class="opc">asertywna</span></span></div><div class="l">„No dobra, weź...” <span class="wybor"><span class="opc" data-ok="1">uległa</span><span class="opc">agresywna</span><span class="opc">asertywna</span></span></div><div class="l">„Nie, bo jestem głodny. Dam ci jabłko.” <span class="wybor"><span class="opc">uległa</span><span class="opc">agresywna</span><span class="opc" data-ok="1">asertywna</span></span></div></div>
         
@@ -260,6 +306,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">11.1</span> W każdym zdaniu znajdź trzy błędy i wypisz te wyrazy poprawnie.</div>
         <div class="info" hidden>Szukaj imion ludzi i nazw miejsc - one zawsze wielką literą. Nazwa morza ma dwa wyrazy i oba piszemy wielką. Dni tygodnia i miesiące piszemy małą.</div>
+        <template class="przyklad"><div class="krok">W piątek ania jedzie do poznania.</div><div class="krok">Imię? ania ➜ <mark>Ania</mark></div><div class="krok">Miasto? poznania ➜ <mark>Poznania</mark></div><div class="krok">Dzień tygodnia? piątek ➜ zostaje małą literą</div></template>
         
         <div class="linie"><div class="l">W maju jedziemy z ciocią basią nad morze bałtyckie, do gdyni.</div><div class="l">➜ <span class="luka" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="Basią, Morze Bałtyckie, Gdyni"></span></div><div class="l">We Wtorek Kuba pojedzie z tatą do krakowa nad wisłę.</div><div class="l">➜ <span class="luka" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="wtorek, Krakowa, Wisłę"></span></div></div>
         
@@ -271,6 +318,7 @@ body.ekran { background: #e9e3d8; }
       <div class="zadania"><div class="zad">
         <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">12.1</span> Zapisz poprawnie: razem czy osobno?</div>
         <div class="info" hidden>Zakryj „nie” i zapytaj o resztę wyrazu: kto? co? - rzeczownik, piszemy razem. Co robi? - czasownik, piszemy osobno.</div>
+        <template class="przyklad"><div class="krok">(nie)porządek</div><div class="krok">Zakrywam „nie”: <b>porządek</b> - kto? co? ➜ rzeczownik</div><div class="krok">Rzeczownik ➜ razem: <mark>nieporządek</mark></div><div class="krok">(nie)śpij ➜ <b>śpij</b> - co robić? ➜ osobno: <mark>nie śpij</mark></div></template>
         
         <div class="linie k2"><div class="l">(nie)uwaga ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nieuwaga"></span></div><div class="l">(nie)patrz ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie patrz"></span></div><div class="l">(nie)chęć ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="niechęć"></span></div><div class="l">(nie)chcą ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie chcą"></span></div><div class="l">(nie)pamięć ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="niepamięć"></span></div><div class="l">(nie)gadaj ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="nie gadaj"></span></div></div>
         
@@ -279,8 +327,13 @@ body.ekran { background: #e9e3d8; }
       </div></div>
     </section>
 </section></main>
+<div id="okno" hidden><div class="okno-tlo"></div><div class="okno-karta">
+<button type="button" class="okno-x" aria-label="Zamknij">×</button>
+<div class="okno-tytul">Jak to zrobić?</div><div class="okno-pol"></div><div class="okno-info"></div><div class="okno-kroki"></div>
+<div class="okno-dol"><button type="button" class="okno-znowu">Jeszcze raz</button><button type="button" class="okno-zamknij">Rozumiem</button></div>
+</div></div>
 <script>
-var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial2-karta:21182';
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial2-karta:25679';
 // Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
 function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
 window.addEventListener('resize', dopasuj); dopasuj();
@@ -321,13 +374,50 @@ karta.addEventListener('click', function (e) {
   var b = e.target.closest('.pokaz');
   if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
   var ib = e.target.closest('.info-btn');
-  if (ib) { var inf = ib.closest('.zad').querySelector('.info'); inf.hidden = !inf.hidden; ib.classList.toggle('wl', !inf.hidden); return; }
+  if (ib) { otworzInfo(ib.closest('.zad')); return; }
   var o = e.target.closest('.opc');
   if (o) { o.classList.toggle('zakr'); zapisz(); return; }
   var s = e.target.closest('.sl');
   if (s) { s.classList.toggle('podkr'); zapisz(); }
 });
 karta.addEventListener('input', zapisz);
+// Okno „Info”: reguła i przykład krok po kroku. Kroki wchodzą same co chwilę, kliknięcie w nie przyspiesza.
+var okno = document.getElementById('okno'), kroki = okno.querySelector('.okno-kroki'), zegar;
+function nastepny() {
+  clearTimeout(zegar);
+  var ukryty = kroki.querySelector('.krok:not(.widac)');
+  if (!ukryty) return;
+  kroki.querySelectorAll('.teraz').forEach(function (k) { k.classList.remove('teraz'); });
+  ukryty.classList.add('widac', 'teraz');
+  if (kroki.querySelector('.krok:not(.widac)')) zegar = setTimeout(nastepny, 2200);
+}
+function odtworz() {
+  kroki.querySelectorAll('.krok').forEach(function (k) { k.classList.remove('widac', 'teraz'); });
+  clearTimeout(zegar); zegar = setTimeout(nastepny, 500);
+}
+function otworzInfo(zad) {
+  var sekcja = zad.closest('.temat'), st = getComputedStyle(sekcja);
+  okno.style.setProperty('--k', st.getPropertyValue('--k'));
+  okno.style.setProperty('--k9', st.getPropertyValue('--k9'));
+  var pol = zad.querySelector('.pol').cloneNode(true);
+  pol.querySelectorAll('button, .pkt').forEach(function (b) { b.remove(); });
+  okno.querySelector('.okno-pol').innerHTML = pol.innerHTML;
+  var inf = zad.querySelector('.info');
+  okno.querySelector('.okno-info').innerHTML = inf ? inf.innerHTML : '';
+  var t = zad.querySelector('template.przyklad');
+  kroki.innerHTML = '';
+  if (t) kroki.appendChild(t.content.cloneNode(true));
+  okno.querySelector('.okno-znowu').hidden = !t;
+  okno.hidden = false;
+  odtworz();
+}
+function zamknijInfo() { okno.hidden = true; clearTimeout(zegar); }
+kroki.addEventListener('click', nastepny);
+okno.querySelector('.okno-znowu').onclick = odtworz;
+okno.querySelector('.okno-x').onclick = zamknijInfo;
+okno.querySelector('.okno-zamknij').onclick = zamknijInfo;
+okno.querySelector('.okno-tlo').onclick = zamknijInfo;
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !okno.hidden) zamknijInfo(); });
 karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
 var wszystko = document.getElementById('wszystko');
 if (wszystko) wszystko.onclick = function () {

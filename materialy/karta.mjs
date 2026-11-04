@@ -126,8 +126,9 @@ function arkusz(tematyDanych, rozw, grupa, duza = KARTA.duza) {
         : grupa && !rozw && !ekran ? `<span class="pkt ocena"><span class="kratka"></span>/ ${zad.punkty} pkt</span>`
         : `<span class="pkt">${zad.punkty} pkt</span>`;
       return `<div class="zad">
-        <div class="pol">${ekran ? `<button type="button" class="pokaz">${KARTA.domowa ? 'Sprawdź' : 'Odpowiedź'}</button>` : ''}${ekran && zad.info ? '<button type="button" class="info-btn">Info</button>' : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
+        <div class="pol">${ekran ? `<button type="button" class="pokaz">${KARTA.domowa ? 'Sprawdź' : 'Odpowiedź'}</button>` : ''}${ekran && (zad.info || zad.przyklad) ? '<button type="button" class="info-btn">Info</button>' : ''}${pkt}<span class="nr">${i + 1}.${nr}</span> ${z(zad.polecenie)}</div>
         ${ekran && zad.info ? `<div class="info" hidden>${z(zad.info)}</div>` : ''}
+        ${ekran && zad.przyklad ? `<template class="przyklad">${zad.przyklad.map((k) => `<div class="krok">${linia(k, true)}</div>`).join('')}</template>` : ''}
         ${wiersz}${pytania}
         ${linie ? `<div class="linie${zad.kolumny ? ` k${zad.kolumny}` : ''}">${linie}</div>` : ''}
         ${zad.tabela ? tabela(zad.tabela, rozw) : ''}
@@ -243,6 +244,11 @@ ${ekran ? `<div class="pasek">${(KARTA.wersje ?? []).map((w) => `<button type="b
     ? `<a class="druk" href="../${KARTA.plik}.pdf" target="_blank" rel="noreferrer">Wersja do druku (PDF)</a>`
     : '<button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button>'}<button type="button" id="wyczysc">${KARTA.wersje ? 'Wyczyść' : 'Wyczyść kartę'}</button></div>
 <main id="karta">${tresc}</main>
+<div id="okno" hidden><div class="okno-tlo"></div><div class="okno-karta">
+<button type="button" class="okno-x" aria-label="Zamknij">×</button>
+<div class="okno-tytul">Jak to zrobić?</div><div class="okno-pol"></div><div class="okno-info"></div><div class="okno-kroki"></div>
+<div class="okno-dol"><button type="button" class="okno-znowu">Jeszcze raz</button><button type="button" class="okno-zamknij">Rozumiem</button></div>
+</div></div>
 <script>${SKRYPT_EKRAN.replace('__KLUCZ__', `karta:${KARTA.plik}:${tresc.length}`)}</script>` : tresc}
 </body></html>`;
 }
@@ -293,8 +299,30 @@ body.ekran { background: #e9e3d8; }
 .ekran .arkusz[hidden] { display: none; }
 .ekran .info-btn { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--k); background: #fff; border: 1px solid var(--k45); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
 .ekran .info-btn.wl { color: #fff; background: var(--k); border-color: var(--k); }
-.ekran .info { margin: 1mm 0 1mm 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
 .ekran .info[hidden] { display: none; }
+/* Okno „Info”: reguła + jeden przykład rozwijany krok po kroku (zakreślacz przeciąga się po ==ważnych== słowach). */
+#okno[hidden] { display: none; }
+#okno { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; align-items: flex-start; justify-content: center; padding: 5vh 2mm 0; }
+.okno-tlo { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(40, 30, 20, .45); }
+.okno-karta { position: relative; width: 150mm; max-width: 96vw; background: #fff; border-radius: 4mm; border-top: 2.5mm solid var(--k); padding: 4mm 6mm 4mm; box-shadow: 0 2mm 8mm rgba(0,0,0,.25); animation: okno-wjazd .25s ease-out; }
+@keyframes okno-wjazd { from { opacity: 0; transform: translateY(-4mm); } }
+.okno-x { position: absolute; top: 2mm; right: 3mm; border: 0; background: none; font-size: 18pt; line-height: 1; color: var(--szary); cursor: pointer; }
+.okno-tytul { font-family: 'Baloo 2'; font-weight: 800; font-size: 16pt; color: var(--k); line-height: 1.15; }
+.okno-pol { font-weight: 800; font-size: 10.5pt; margin-top: .5mm; padding-right: 6mm; }
+.okno-pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.okno-info { margin-top: 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 10.5pt; }
+.okno-info:empty { display: none; }
+.okno-kroki { margin-top: 2.5mm; font-size: 13.5pt; line-height: 1.45; cursor: pointer; }
+.okno-kroki:empty { display: none; }
+.krok { opacity: 0; transform: translateY(2.5mm); transition: opacity .45s, transform .45s, border-color .3s; padding: .8mm 0 .8mm 3mm; border-left: 3px solid transparent; }
+.krok.widac { opacity: 1; transform: none; }
+.krok.teraz { border-left-color: var(--k); }
+.krok mark { background: linear-gradient(#ffe066, #ffe066) no-repeat 0 0; background-size: 0% 100%; transition: background-size .7s .45s; }
+.krok.widac mark { background-size: 100% 100%; }
+.krok s { text-decoration-color: var(--czerw); text-decoration-thickness: 2px; color: var(--szary); }
+.okno-dol { display: flex; justify-content: flex-end; gap: 2mm; margin-top: 3mm; }
+.okno-dol button { font: 700 10pt 'Nunito', sans-serif; border-radius: 2mm; padding: 1.2mm 3.5mm; cursor: pointer; border: 1px solid var(--ramka); background: #fff; color: var(--ciemny); }
+.okno-dol .okno-zamknij { background: var(--k); border-color: var(--k); color: #fff; }
 .ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
 .ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
 .ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
@@ -311,7 +339,7 @@ body.ekran { background: #e9e3d8; }
   .ekran .opc { white-space: normal; }
   .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
 }
-@media print { .pasek, .pokaz, .info-btn, .info { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+@media print { .pasek, .pokaz, .info-btn, .info, #okno { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
 `;
 
 // Wersja na projektor: klikanie, wpisywanie, odpowiedzi, stan zapisany w przeglądarce.
@@ -357,13 +385,50 @@ karta.addEventListener('click', function (e) {
   var b = e.target.closest('.pokaz');
   if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
   var ib = e.target.closest('.info-btn');
-  if (ib) { var inf = ib.closest('.zad').querySelector('.info'); inf.hidden = !inf.hidden; ib.classList.toggle('wl', !inf.hidden); return; }
+  if (ib) { otworzInfo(ib.closest('.zad')); return; }
   var o = e.target.closest('.opc');
   if (o) { o.classList.toggle('zakr'); zapisz(); return; }
   var s = e.target.closest('.sl');
   if (s) { s.classList.toggle('podkr'); zapisz(); }
 });
 karta.addEventListener('input', zapisz);
+// Okno „Info”: reguła i przykład krok po kroku. Kroki wchodzą same co chwilę, kliknięcie w nie przyspiesza.
+var okno = document.getElementById('okno'), kroki = okno.querySelector('.okno-kroki'), zegar;
+function nastepny() {
+  clearTimeout(zegar);
+  var ukryty = kroki.querySelector('.krok:not(.widac)');
+  if (!ukryty) return;
+  kroki.querySelectorAll('.teraz').forEach(function (k) { k.classList.remove('teraz'); });
+  ukryty.classList.add('widac', 'teraz');
+  if (kroki.querySelector('.krok:not(.widac)')) zegar = setTimeout(nastepny, 2200);
+}
+function odtworz() {
+  kroki.querySelectorAll('.krok').forEach(function (k) { k.classList.remove('widac', 'teraz'); });
+  clearTimeout(zegar); zegar = setTimeout(nastepny, 500);
+}
+function otworzInfo(zad) {
+  var sekcja = zad.closest('.temat'), st = getComputedStyle(sekcja);
+  okno.style.setProperty('--k', st.getPropertyValue('--k'));
+  okno.style.setProperty('--k9', st.getPropertyValue('--k9'));
+  var pol = zad.querySelector('.pol').cloneNode(true);
+  pol.querySelectorAll('button, .pkt').forEach(function (b) { b.remove(); });
+  okno.querySelector('.okno-pol').innerHTML = pol.innerHTML;
+  var inf = zad.querySelector('.info');
+  okno.querySelector('.okno-info').innerHTML = inf ? inf.innerHTML : '';
+  var t = zad.querySelector('template.przyklad');
+  kroki.innerHTML = '';
+  if (t) kroki.appendChild(t.content.cloneNode(true));
+  okno.querySelector('.okno-znowu').hidden = !t;
+  okno.hidden = false;
+  odtworz();
+}
+function zamknijInfo() { okno.hidden = true; clearTimeout(zegar); }
+kroki.addEventListener('click', nastepny);
+okno.querySelector('.okno-znowu').onclick = odtworz;
+okno.querySelector('.okno-x').onclick = zamknijInfo;
+okno.querySelector('.okno-zamknij').onclick = zamknijInfo;
+okno.querySelector('.okno-tlo').onclick = zamknijInfo;
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !okno.hidden) zamknijInfo(); });
 karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
 var wszystko = document.getElementById('wszystko');
 if (wszystko) wszystko.onclick = function () {

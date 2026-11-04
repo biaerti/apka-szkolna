@@ -2,7 +2,8 @@
 // Lekcja 2 tygodnia powtórki: zadania jak na sprawdzianie, ale własne przykłady - inne niż w puli
 // sprawdzianu, filmikach, zeszycie, kartach „Ćwiczymy razem”, ćwiczeniach do domu i prezentacji powtórkowej.
 // Lekcja 3: sprawdzanie na projektorze (public/materialy/karty/klasa4-rozdzial2-karta.html), przy każdym
-// zadaniu „Info” z regułą i „Odpowiedź”.
+// zadaniu „Info” z regułą i „Odpowiedź”. „Info” otwiera okno: reguła (`info`) + jeden przykład
+// rozwijany krok po kroku (`przyklad`, ==zaznaczenie== przeciąga się zakreślaczem).
 // Generator: node materialy/karta.mjs klasa4-rozdzial2 -> karta (dla uczniów) i karta-rozwiazania (do wyświetlenia).
 // Znaczniki jak w materialy/klasa4-rozdzial1/karta.mjs; w luce „a / b” = obie odpowiedzi dobre.
 
@@ -19,6 +20,12 @@ export const KARTA = {
         {
           polecenie: 'Zamień wyróżniony wyraz potoczny na oficjalny.',
           info: 'Zapytaj siebie: jak powiedziałbym to pani dyrektor? Wyraz oficjalny znaczy to samo, zmienia się tylko styl.',
+          przyklad: [
+            'Kolega mówi: „Ten film był **mega**.”',
+            'Pytam siebie: jak powiem to pani dyrektor?',
+            '„Ten film był ==bardzo dobry==.”',
+            'Znaczenie to samo, zmienił się tylko styl.',
+          ],
           linie: [
             'Kuzyn **ściemnia**, że był w Paryżu. ➜ [[kłamie|30]]',
             '**Spoko**, pomogę ci. ➜ [[dobrze / w porządku|30]]',
@@ -34,6 +41,13 @@ export const KARTA = {
         {
           polecenie: 'Czy w zdaniu jest porównanie? Zakreśl.',
           info: 'Szukaj trzech części: co opisuję, słówko porównania i to, do czego porównuję. „Jak” na początku pytania niczego nie porównuje.',
+          przyklad: [
+            'Ręce miała zimne jak lód.',
+            'Co opisuję? ==ręce== (zimne)',
+            'Słówko porównania: ==jak==',
+            'Do czego porównuję? ==do lodu== ➜ porównanie: **tak**',
+            'Jak masz na imię? ➜ „jak” w pytaniu, niczego nie porównuję: **nie**',
+          ],
           linie: [
             'Jego głos brzmiał jak dzwon. {{*tak|nie}}',
             'Jak zrobić latawiec? {{tak|*nie}}',
@@ -50,6 +64,12 @@ export const KARTA = {
         {
           polecenie: 'Dopisz synonim i antonim.',
           info: 'Synonim wstaw za wyraz w zdaniu - sens musi zostać ten sam. Antonim to słowo o przeciwnym znaczeniu. Dobrych synonimów jest kilka.',
+          przyklad: [
+            'Wyraz: **wesoły**',
+            'Synonim (to samo znaczenie): wesoły ➜ ==radosny==',
+            'Sprawdzam w zdaniu: Ola jest radosna. Sens ten sam.',
+            'Antonim (przeciwne znaczenie): wesoły ➜ ==smutny==',
+          ],
           tabela: {
             naglowki: ['wyraz', 'synonim', 'antonim'],
             wiersze: [
@@ -68,6 +88,12 @@ export const KARTA = {
         {
           polecenie: 'To fragment listu do kolegi. Wpisz wyrazy z nawiasów wielką albo małą literą - tak jak w liście.',
           info: 'Czy to słowo o osobie, do której piszesz (ty, twój)? Wtedy wielką literą - z szacunku. O sobie (ja, mój) - małą, chyba że zaczyna zdanie.',
+          przyklad: [
+            'Piszę list do Kuby: „Dziękuję (ty) za prezent.”',
+            'Czy „ty” to Kuba, do którego piszę? **Tak.**',
+            'Więc wielką literą: „Dziękuję ==Ci== za prezent.”',
+            'O sobie: „Tata zabrał (ja) do kina.” ➜ ==mnie== - małą literą',
+          ],
           linie: [
             'Przesyłam [[Ci|12]] (ty) zdjęcia. Jestem na nich [[ja|12]] (ja) z psem.',
             'Czy [[Twój|16]] (twój) brat pływa? Buziaki dla [[Ciebie|18]] (ty)!',
@@ -85,6 +111,13 @@ export const KARTA = {
         {
           polecenie: 'Dopisz ten, ta, to, ci albo te i nazwij rodzaj.',
           info: 'Powiedz wyraz z ten, ta, to (liczba pojedyncza) albo z ci, te (liczba mnoga) i posłuchaj, co brzmi dobrze. „Ci” tylko przy mężczyznach.',
+          przyklad: [
+            'Wyraz: **kot**',
+            'Próbuję: ~~ta kot~~, ~~to kot~~, ==ten kot==',
+            'ten ➜ rodzaj ==męski==',
+            'Liczba mnoga: **strażacy** ➜ ==ci strażacy== (sami mężczyźni) ➜ ==męskoosobowy==',
+            '**koty** ➜ ==te koty== ➜ ==niemęskoosobowy==',
+          ],
           tabela: {
             naglowki: ['rzeczownik', 'ten / ta / to / ci / te', 'rodzaj'],
             wiersze: [
@@ -108,6 +141,12 @@ export const KARTA = {
         {
           polecenie: 'Zadaj pytanie o podkreślony wyraz i nazwij przypadek.',
           info: 'Znajdź czasownik i zadaj od niego pytanie o podkreślony wyraz. Pytanie podpowie przypadek: nie ma (czego?) mleka - dopełniacz.',
+          przyklad: [
+            'Bawię się z __kotem__.',
+            'Szukam czasownika: ==bawię się==',
+            'Pytam od czasownika: bawię się (z kim? z czym?) ➜ z ==kotem==',
+            'z kim? z czym? to ==narzędnik==',
+          ],
           tabela: {
             naglowki: ['zdanie', 'pytanie', 'przypadek'],
             wiersze: [
@@ -129,6 +168,13 @@ export const KARTA = {
         {
           polecenie: 'Odmień rzeczowniki przez przypadki.',
           info: 'Wstawiaj wyraz po pomocniku z lewej kolumny i powiedz całe zdanie na głos: nie ma (kogo? czego?) pszczoły...',
+          przyklad: [
+            'Odmieniam: **sowa**',
+            'nie ma (kogo? czego?) ➜ ==sowy==',
+            'przyglądam się (komu? czemu?) ➜ ==sowie==',
+            'widzę (kogo? co?) ➜ ==sowę== … i tak dalej',
+            'Mów całe zdanie na głos - ucho podpowie końcówkę.',
+          ],
           tabela: {
             naglowki: ['przypadek', 'pszczoła', 'ząb'],
             wiersze: [
@@ -150,6 +196,12 @@ export const KARTA = {
         {
           polecenie: 'Popraw źle użyty wyraz.',
           info: 'Policz: jedna książka - pięć... (nie ma końcówki -ów). Przy wołaniu kogoś po imieniu użyj wołacza: Jacek - Jacku!',
+          przyklad: [
+            '„Kupiłem pięć ~~jabłków~~.”',
+            'Jedno jabłko - pięć… bez końcówki -ów!',
+            '„Kupiłem pięć ==jabłek==.”',
+            'Wołam kogoś: „~~Tomek~~, chodź!” ➜ „==Tomku==, chodź!”',
+          ],
           linie: [
             'Na półce stało pięć książków. ➜ [[książek|24]]',
             'Zjadłem kilka śliwków. ➜ [[śliwek|24]]',
@@ -166,6 +218,12 @@ export const KARTA = {
         {
           polecenie: 'Fakt czy opinia? Zakreśl.',
           info: 'Czy można to sprawdzić w książce, na mapie albo licząc? To fakt. Czy ktoś mógłby się nie zgodzić? To opinia.',
+          przyklad: [
+            '„Wisła to najdłuższa rzeka w Polsce.”',
+            'Da się to sprawdzić na mapie? **Tak** ➜ ==fakt==',
+            '„Wisła to najpiękniejsza rzeka.”',
+            'Ktoś może się nie zgodzić ➜ ==opinia==',
+          ],
           kolumny: 2,
           linie: [
             'W Polsce są cztery pory roku. {{*fakt|opinia}}',
@@ -177,6 +235,12 @@ export const KARTA = {
         {
           polecenie: 'Dokończ zdanie, podając argument.',
           info: 'Argument odpowiada na pytanie „dlaczego?” i ma przekonać innych. „Bo tak” albo „bo lubię” to nie argument.',
+          przyklad: [
+            '„W szkole powinien być sklepik, ponieważ…”',
+            '~~bo tak~~, ~~bo lubię~~ - to nie są argumenty',
+            'Pytam: dlaczego? Co dobrego z tego wyjdzie?',
+            '…ponieważ ==uczniowie nie będą głodni na lekcjach==.',
+          ],
           linie: ['W szkole powinno być więcej wycieczek, ponieważ [[np. najlepiej uczymy się, oglądając rzeczy na żywo|90]]'],
         },
       ],
@@ -188,6 +252,12 @@ export const KARTA = {
         {
           polecenie: 'Kolega chce zjeść twój deser. Jaka to reakcja? Zakreśl.',
           info: 'Agresywna rani albo obraża. Uległa to zgoda wbrew sobie. Asertywna jest spokojna: „nie”, powód i propozycja.',
+          przyklad: [
+            'Kolega chce twoją gumkę na cały dzień.',
+            '„Spadaj!” ➜ rani i obraża ➜ ==agresywna==',
+            '„No… dobra.” (choć nie chcesz) ➜ ==uległa==',
+            '„Nie, bo potrzebuję jej na matmie. Ale pożyczę ci na przerwie.” ➜ ==asertywna==',
+          ],
           linie: [
             '„Spadaj, to moje!” {{uległa|*agresywna|asertywna}}',
             '„No dobra, weź...” {{*uległa|agresywna|asertywna}}',
@@ -203,6 +273,12 @@ export const KARTA = {
         {
           polecenie: 'W każdym zdaniu znajdź trzy błędy i wypisz te wyrazy poprawnie.',
           info: 'Szukaj imion ludzi i nazw miejsc - one zawsze wielką literą. Nazwa morza ma dwa wyrazy i oba piszemy wielką. Dni tygodnia i miesiące piszemy małą.',
+          przyklad: [
+            'W piątek ania jedzie do poznania.',
+            'Imię? ania ➜ ==Ania==',
+            'Miasto? poznania ➜ ==Poznania==',
+            'Dzień tygodnia? piątek ➜ zostaje małą literą',
+          ],
           wLinii: true,
           linie: [
             'W maju jedziemy z ciocią basią nad morze bałtyckie, do gdyni.',
@@ -220,6 +296,12 @@ export const KARTA = {
         {
           polecenie: 'Zapisz poprawnie: razem czy osobno?',
           info: 'Zakryj „nie” i zapytaj o resztę wyrazu: kto? co? - rzeczownik, piszemy razem. Co robi? - czasownik, piszemy osobno.',
+          przyklad: [
+            '(nie)porządek',
+            'Zakrywam „nie”: **porządek** - kto? co? ➜ rzeczownik',
+            'Rzeczownik ➜ razem: ==nieporządek==',
+            '(nie)śpij ➜ **śpij** - co robić? ➜ osobno: ==nie śpij==',
+          ],
           kolumny: 2,
           linie: [
             '(nie)uwaga ➜ [[nieuwaga|26]]',
