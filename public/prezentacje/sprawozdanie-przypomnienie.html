@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprawozdanie - przypomnienie</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck.css">
+<style>
+  .stage { background: #f8f6f1; }
+  h2 { color: #1d4e89; }
+  h1 { font-weight: 800; }
+  .por { display: grid; grid-template-columns: 1fr 1fr; gap: 0; font-size: 32px; border: 3px solid #1f1b16; border-radius: 18px; overflow: hidden; background: #fff; }
+  .por > div { padding: 16px 26px; border-top: 2px solid #ddd5c6; }
+  .por > div:nth-child(odd) { border-right: 3px solid #1f1b16; }
+  .por > .nag { border-top: none; font-weight: 800; background: #1d4e89; color: #fff; }
+  .zd { display: flex; justify-content: space-between; align-items: baseline; gap: 30px; font-size: 32px; background: #fff; border-radius: 14px; padding: 14px 24px; }
+  .zd .ans { flex: none; }
+  .kartka { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; background: #fff; border: 3px solid #1f1b16; border-radius: 10px; padding: 26px 34px; }
+  .akapit { border-radius: 10px; padding: 14px 18px; font-size: 27px; line-height: 1.4; text-indent: 50px; }
+  .a1 { background: #e3eefb; } .a2 { background: #fff1cc; } .a3 { background: #e2f4e8; }
+  .akapit b { text-indent: 0; }
+  .etyk { display: block; margin-bottom: 4px; font-size: 18px; letter-spacing: .1em; text-transform: uppercase; color: #1d4e89; font-weight: 800; text-indent: 0; margin-right: 10px; }
+  .q { padding: 2px 8px; border-radius: 8px; font-weight: 700; }
+  .q1 { background: #ffd6d1; } .q2 { background: #d4e6ff; } .q3 { background: #fbe7a8; } .q4 { background: #cfeedd; }
+  .pod { font-size: 18px; display: block; text-align: center; font-weight: 800; letter-spacing: .08em; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+<!-- 1 -->
+<section class="s srodek">
+  <h2>Przypomnienie</h2>
+  <h1 style="font-size:110px">Sprawozdanie</h1>
+  <p class="lead">Co to jest i jak je napisać?</p>
+</section>
+
+<!-- 2 -->
+<section class="s">
+  <h2>Co to jest?</h2>
+  <h1>Sprawozdanie to relacja z <u>prawdziwego</u> wydarzenia</h1>
+  <p class="lead">Opisujesz po kolei, co się wydarzyło. Tylko fakty.</p>
+  <div class="por krok">
+    <div class="nag">Sprawozdanie</div><div class="nag">Opowiadanie</div>
+    <div>prawdziwe wydarzenie</div><div>może być wymyślone</div>
+    <div>tylko fakty, bez fantazji</div><div>fantazja, smoki, czary - proszę bardzo</div>
+    <div>bez dialogów</div><div>mogą być dialogi</div>
+    <div>opinia dopiero na końcu</div><div>emocje w całym tekście</div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="s">
+  <h2>Sprawdźmy</h2>
+  <h1>Sprawozdanie czy opowiadanie?</h1>
+  <div class="kol">
+    <div class="zd">W piątek klasa 5a pojechała autokarem do planetarium. <span class="ans krok">sprawozdanie</span></div>
+    <div class="zd">Nagle teleskop przemówił ludzkim głosem. <span class="ans krok">opowiadanie</span></div>
+    <div class="zd">Mecz zakończył się wynikiem 2:1 dla naszej szkoły. <span class="ans krok">sprawozdanie</span></div>
+    <div class="zd">„Uciekajcie!” - krzyknął smok spod łóżka. <span class="ans krok">opowiadanie</span></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="s">
+  <h2>Budowa</h2>
+  <h1>Trzy części = trzy akapity</h1>
+  <div class="wiersz">
+    <div class="kartka">
+      <div><span class="etyk">Wstęp</span><div class="akapit a1">W piątek 23 października klasa 5a pojechała do planetarium...</div></div>
+      <div><span class="etyk">Rozwinięcie</span><div class="akapit a2">Najpierw obejrzeliśmy pokaz o planetach. Następnie przewodnik pokazał nam meteoryt. Potem...</div></div>
+      <div><span class="etyk">Zakończenie</span><div class="akapit a3">O 14.00 wróciliśmy do szkoły. Moim zdaniem to była najciekawsza wycieczka w tym roku.</div></div>
+    </div>
+    <div class="kol" style="flex:.6; justify-content:center">
+      <p class="lead krok"><b>Akapit</b> zaczynamy od nowej linijki,</p>
+      <p class="lead krok">z <b>wcięciem</b> - odsuwamy pierwsze słowo od marginesu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="s">
+  <h2>Wstęp</h2>
+  <h1>Odpowiada na pytania</h1>
+  <div>
+    <span class="chip">kto?</span><span class="chip">co?</span><span class="chip">kiedy?</span><span class="chip">gdzie?</span><span class="chip">dlaczego?</span>
+  </div>
+  <p class="lead" style="font-size:40px; line-height:2">
+    <span class="q q3 krok">W piątek 23 października</span>
+    <span class="q q1 krok">klasa 5a</span>
+    <span class="q q2 krok">pojechała</span>
+    <span class="q q4 krok">do planetarium</span>,
+    <span class="krok">żeby obejrzeć pokaz o Układzie Słonecznym.</span>
+  </p>
+  <p class="maly krok">kiedy? · kto? · co? · gdzie? · dlaczego?</p>
+</section>
+
+<!-- 6 -->
+<section class="s">
+  <h2>Rozwinięcie</h2>
+  <h1>Po kolei i tylko to, co ważne</h1>
+  <div>
+    <span class="chip">najpierw</span><span class="chip">następnie</span><span class="chip">potem</span><span class="chip">po chwili</span><span class="chip">w tym czasie</span><span class="chip">na koniec</span>
+  </div>
+  <p class="maly">Co nie pasuje do sprawozdania z wycieczki do planetarium?</p>
+  <ul class="lista">
+    <li>Najpierw obejrzeliśmy pokaz o planetach.</li>
+    <li class="krok skresl">W autokarze Kacper zjadł trzy batoniki i jednego żelka.</li>
+    <li>Następnie przewodnik pokazał nam prawdziwy meteoryt.</li>
+    <li class="krok skresl">Moja siostra ma niebieski plecak.</li>
+  </ul>
+</section>
+
+<!-- 7 -->
+<section class="s">
+  <h2>Zakończenie</h2>
+  <h1>Jak się skończyło + Twoja opinia</h1>
+  <p class="lead">O 14.00 wróciliśmy do szkoły. <b>Moim zdaniem</b> warto pojechać do planetarium, bo...</p>
+  <div>
+    <span class="chip">Moim zdaniem...</span><span class="chip">Uważam, że...</span><span class="chip">Najbardziej podobało mi się...</span><span class="chip">Polecam...</span>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="s">
+  <h2>Uwaga!</h2>
+  <h1>Dialog zamieniamy na zdanie</h1>
+  <div class="zd">„Wsiadajcie do autokaru!” - zawołała pani.</div>
+  <div class="zd krok" style="border:3px solid #1a7f4b">Pani poprosiła, żebyśmy wsiedli do autokaru.</div>
+  <div class="zd" style="margin-top:20px">„Patrzcie, to Saturn!” - powiedział przewodnik.</div>
+  <div class="zd krok" style="border:3px solid #1a7f4b">Przewodnik pokazał nam Saturna.</div>
+</section>
+
+<!-- 9 -->
+<section class="s">
+  <h2>Ściąga</h2>
+  <h1>Sprawozdanie w pigułce</h1>
+  <ul class="lista">
+    <li>prawdziwe wydarzenie, czas przeszły</li>
+    <li><b>wstęp:</b> kto? co? kiedy? gdzie?</li>
+    <li><b>rozwinięcie:</b> po kolei, tylko to, co ważne</li>
+    <li><b>zakończenie:</b> jak się skończyło + opinia</li>
+    <li>trzy akapity, bez dialogów i fantazji</li>
+  </ul>
+</section>
+
+</div>
+<script src="deck.js"></script>
+</body>
+</html>

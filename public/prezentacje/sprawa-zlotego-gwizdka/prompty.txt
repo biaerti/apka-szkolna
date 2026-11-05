@@ -1,0 +1,30 @@
+Prompty do ChatGPT - "Sprawa złotego gwizdka".
+Generuj wszystkie w JEDNYM czacie (postacie wyjdą podobne). Pobrany obrazek zapisz w tym folderze pod numerem: 01.png, 02.png ... (może być .jpg albo .webp).
+Prezentacja sama go podchwyci - bez zdjęcia pokazuje na slajdzie numer i prompt.
+
+--- 01 ---
+Szkolny korytarz w polskiej szkole podstawowej. Na pierwszym planie złoty gwizdek na czerwonym sznurku, oświetlony jak skarb w muzeum. W tle cień detektywa w kapeluszu z lupą. Klimat zagadki. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 02 ---
+Zrozpaczony nauczyciel WF-u, ok. 45 lat, sumiaste wąsy, czerwony dres, łapie się za głowę i patrzy na pusty parapet przy otwartym oknie. Mały pokój z piłkami i pachołkami. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 03 ---
+Mały pokój nauczyciela WF-u na pierwszym piętrze szkoły: piłki w siatce, pachołki, szarfy, biurko z dziennikiem. Okno otwarte na oścież, parapet pusty. Za oknem duży stary kasztanowiec z jesiennymi liśćmi, w dole boisko szkolne. Widok od drzwi. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 04 ---
+Gadatliwa dziewczynka, 11 lat, rude kucyki, piegi, w ręku kanapka z serem, gestykuluje i mówi z przejęciem. Siedzi na krześle w szkolnej sali jak na przesłuchaniu. Portret do pasa. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 05 ---
+Starszy woźny szkolny, ok. 60 lat, siwe wąsy, granatowy fartuch roboczy, śrubokręt w kieszeni, oburzona mina. Siedzi przy stole jak na przesłuchaniu. Portret do pasa. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 06 ---
+Chłopiec, 12 lat, w bluzie w poziome czarno-białe paski, w obu rękach drożdżówki, zdziwiona, niewinna mina. Stoi przy ladzie szkolnego sklepiku. Portret do pasa. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 07 ---
+Biurko detektywa widziane z góry: lupa, notes, kartki z zeznaniami, kubek kakao, plan szkoły przypięty pinezkami połączonymi czerwoną nitką, czarno-białe piórko w woreczku na dowody. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 08 ---
+Sroka siedzi dumnie w gnieździe na gałęzi starego kasztanowca. W gnieździe błyszczą: złoty gwizdek na czerwonym sznurku, srebrna spinka z motylkiem, kilka łyżeczek i kapsle. Przy pniu oparta drabina, na dole zdziwiony woźny z siwymi wąsami. Humorystycznie. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
+
+--- 09 ---
+Szkolny turniej piłki nożnej na boisku. Nauczyciel WF-u z sumiastymi wąsami, w czerwonym dresie, gwiżdże złotym gwizdkiem. Dzieci biegają za piłką. W tle na gałęzi kasztanowca siedzi sroka i patrzy z zazdrością na gwizdek. Styl: kolorowa, lekko humorystyczna ilustracja jak z komiksu detektywistycznego dla dzieci, ciepłe światło, bez żadnych napisów i liter, poziomo 16:9.
