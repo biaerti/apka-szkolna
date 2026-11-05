@@ -24,6 +24,37 @@
   .q { padding: 2px 8px; border-radius: 8px; font-weight: 700; }
   .q1 { background: #ffd6d1; } .q2 { background: #d4e6ff; } .q3 { background: #fbe7a8; } .q4 { background: #cfeedd; }
   .pod { font-size: 18px; display: block; text-align: center; font-weight: 800; letter-spacing: .08em; }
+  /* ściąga: kartka z akapitami po lewej, treść i słownictwo po prawej */
+  .sc { flex: 1; min-height: 0; display: grid; grid-template-columns: 330px 1fr; grid-template-rows: 1fr 1.25fr 1fr; column-gap: 34px; }
+  .sc-kartka { grid-column: 1; grid-row: 1 / 4; background: #fff; border: 3px solid #1f1b16; border-radius: 10px; box-shadow: 6px 6px 0 #d9d2c3; }
+  .sc-ak { grid-column: 1; position: relative; margin: 14px 18px; border-radius: 8px; padding: 22px 16px 14px; display: flex; flex-direction: column; gap: 11px; }
+  .sc-ak i { display: block; height: 9px; border-radius: 5px; background: rgba(31,27,22,.28); }
+  .sc-ak i:first-of-type { margin-left: 92px; }
+  .sc-ak i:last-of-type { width: 55%; }
+  .sc-ak .wc { position: absolute; left: 16px; top: 16px; font-size: 14px; font-weight: 800; color: #b3261e; letter-spacing: .02em; }
+  .sc-ak .wc::after { content: 'wcięcie →'; }
+  .sc-opis { grid-column: 2; display: flex; flex-direction: column; justify-content: center; gap: 8px; border-left: 8px solid; padding: 4px 0 4px 22px; margin: 10px 0; }
+  .sc-opis b.n { font-size: 30px; }
+  .sc-opis .co { font-size: 25px; }
+  .sc-opis .sl { font-size: 22px; color: #4a443b; line-height: 1.45; }
+  .sc-opis .sl em { font-style: normal; background: #fff; border: 1.5px solid #cfc6b4; border-radius: 6px; padding: 0 7px; white-space: nowrap; }
+  .k1 { background: #e3eefb; border-color: #4a7fc1; } .k2 { background: #fff1cc; border-color: #d9a520; } .k3 { background: #e2f4e8; border-color: #3f9a62; }
+  .sc-stopka { font-size: 22px; color: #5f574c; }
+  /* ostatni slajd: ewakuacja */
+  .ew { background: #14161b; color: #fff; padding: 0; overflow: hidden; }
+  .ew .alarm { position: absolute; left: -260px; top: -260px; width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(230,40,30,.55) 0%, rgba(230,40,30,0) 65%); animation: alarm 1.6s ease-in-out infinite; }
+  @keyframes alarm { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+  .ew .exit { position: absolute; left: 110px; top: 150px; width: 560px; }
+  .ew .tekst { position: absolute; left: 760px; top: 150px; right: 80px; }
+  .ew .tekst h2 { color: #ff6b5e; }
+  .ew .tekst h1 { font-size: 92px; line-height: 1.02; margin: 14px 0 30px; }
+  .ew .tekst p { font-size: 34px; line-height: 1.4; color: #d9dce3; }
+  .ew .tekst p b { color: #fff; }
+  .ew .pas { position: absolute; left: 0; right: 0; bottom: 0; height: 150px; background: #1d2027; border-top: 4px solid #2a2e37; overflow: hidden; }
+  .ew .tlum { position: absolute; left: 0; bottom: 26px; width: 3200px; height: 90px; animation: idz 18s linear infinite; }
+  @keyframes idz { from { transform: translateX(-1600px); } to { transform: translateX(0); } }
+  .ew .droga { position: absolute; left: 0; top: 0; bottom: 0; right: 170px; overflow: hidden; -webkit-mask-image: linear-gradient(to right, #000 80%, transparent); mask-image: linear-gradient(to right, #000 80%, transparent); }
+  .ew .zbiorka { position: absolute; right: 50px; bottom: 22px; width: 104px; height: 104px; }
 </style>
 </head>
 <body>
@@ -133,24 +164,78 @@
 </section>
 
 <!-- 9 -->
-<section class="s">
+<section class="s" style="gap:16px; padding-top:44px; padding-bottom:36px">
   <h2>Ściąga</h2>
-  <h1>Sprawozdanie w pigułce</h1>
-  <ul class="lista">
-    <li>prawdziwe wydarzenie, czas przeszły</li>
-    <li><b>wstęp:</b> kto? co? kiedy? gdzie?</li>
-    <li><b>rozwinięcie:</b> po kolei, tylko to, co ważne</li>
-    <li><b>zakończenie:</b> jak się skończyło + opinia</li>
-    <li>trzy akapity, bez dialogów i fantazji</li>
-  </ul>
+  <h1 style="font-size:54px">Sprawozdanie w pigułce</h1>
+  <div class="sc">
+    <div class="sc-kartka"></div>
+    <div class="sc-ak k1" style="grid-row:1"><span class="wc"></span><i></i><i></i><i></i></div>
+    <div class="sc-ak k2" style="grid-row:2"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="sc-ak k3" style="grid-row:3"><i></i><i></i><i></i></div>
+    <div class="sc-opis k1" style="grid-row:1; background:none">
+      <b class="n">1. Wstęp</b>
+      <span class="co">Co się wydarzyło? Kto? Kiedy? Gdzie? Dlaczego?</span>
+      <span class="sl"><em>W piątek 23 października...</em> <em>... odbył się / odbyła się ...</em> <em>Wybraliśmy się do...</em> <em>wzięliśmy udział w...</em> <em>Celem było...</em></span>
+    </div>
+    <div class="sc-opis k2" style="grid-row:2; background:none">
+      <b class="n">2. Rozwinięcie</b>
+      <span class="co">Przebieg wydarzeń po kolei. Tylko to, co ważne.</span>
+      <span class="sl"><em>najpierw</em> <em>następnie</em> <em>potem</em> <em>po chwili</em> <em>w tym czasie</em> <em>później</em> <em>o godzinie...</em><br>
+        <em>udaliśmy się</em> <em>dotarliśmy</em> <em>obejrzeliśmy</em> <em>wysłuchaliśmy</em> <em>zwiedziliśmy</em></span>
+    </div>
+    <div class="sc-opis k3" style="grid-row:3; background:none">
+      <b class="n">3. Zakończenie</b>
+      <span class="co">Jak się skończyło + Twoja opinia.</span>
+      <span class="sl"><em>Na koniec...</em> <em>O 14.00 wróciliśmy...</em> <em>Moim zdaniem...</em> <em>Uważam, że...</em> <em>Najbardziej podobało mi się...</em> <em>Polecam...</em></span>
+    </div>
+  </div>
+  <p class="sc-stopka"><b>Każda część = nowy akapit</b> (nowa linijka z wcięciem) · czas przeszły · bez dialogów i fantazji</p>
 </section>
 
 <!-- 10 -->
-<section class="s" style="padding:0">
-  <div class="foto" style="position:absolute; inset:0; border-radius:0" data-src="wielka-ewakuacja" data-prompt="Wielka ewakuacja ze szkoły: setki uczniów i nauczycieli w pośpiechu wybiegają z budynku polskiej szkoły podstawowej na boisko. Zabawny chaos: ktoś biegnie z plecakiem na głowie, nauczycielka liczy dzieci na palcach, woźny trzyma mopa, pani z kuchni wybiega w fartuchu z chochlą. Przed szkołą stoi czerwony wóz strażacki, strażak drapie się po głowie. Przyczyny nie widać - zostaje tajemnicą. Styl: kolorowa, humorystyczna ilustracja jak z komiksu dla dzieci 10-12 lat, żywe kolory, bez żadnych napisów i liter na obrazku, poziomo 16:9."></div>
-  <div style="position:absolute; left:0; right:0; bottom:0; padding:28px 60px 32px; background:rgba(20,18,15,.82); color:#fff">
-    <h1 style="font-size:72px">Sprawozdanie: <span style="color:#ffb4a8">Wielka ewakuacja</span></h1>
-    <p class="lead" style="font-size:32px; margin-top:8px">Dlaczego była ewakuacja? Wymyśl sam(a) - i napisz sprawozdanie na kartce.</p>
+<section class="s ew">
+  <div class="alarm"></div>
+  <svg class="exit" viewBox="0 0 560 420" aria-hidden="true">
+    <rect x="0" y="0" width="560" height="420" rx="26" fill="#0b8a43"/>
+    <rect x="12" y="12" width="536" height="396" rx="18" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+    <!-- drzwi -->
+    <rect x="368" y="56" width="132" height="250" fill="none" stroke="#fff" stroke-width="16"/>
+    <rect x="384" y="72" width="100" height="218" fill="#0b8a43"/>
+    <!-- biegnący człowiek -->
+    <g stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <circle cx="268" cy="88" r="27" fill="#fff" stroke="none"/>
+      <path d="M252 136 L214 222"/>
+      <path d="M252 140 L300 168 L326 134"/>
+      <path d="M248 142 L196 158 L164 192"/>
+      <path d="M214 222 L268 252 L272 312"/>
+      <path d="M214 222 L180 276 L124 278"/>
+    </g>
+    <!-- strzałka -->
+    <g fill="#fff"><rect x="96" y="344" width="300" height="30" rx="6"/><path d="M380 324 L456 359 L380 394 Z"/></g>
+  </svg>
+  <div class="tekst">
+    <h2>Teraz Ty</h2>
+    <h1>Sprawozdanie: Wielka ewakuacja</h1>
+    <p>Zawył alarm i <b>cała szkoła</b> wyszła na boisko.</p>
+    <p style="margin-top:18px"><b>Dlaczego?</b> Powód wymyślasz sam(a).<br>Reszta - jak w prawdziwym sprawozdaniu.</p>
+  </div>
+  <div class="pas">
+    <div class="droga"><svg class="tlum" viewBox="0 0 3200 90" aria-hidden="true">
+      <defs>
+        <g id="idzie" fill="none" stroke="#c9ced8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="22" cy="10" r="8" fill="#c9ced8" stroke="none"/>
+          <path d="M20 24 L16 52 M20 28 L32 42 M19 28 L8 40 M16 52 L26 80 M16 52 L6 78"/>
+        </g>
+        <g id="tlum"><use href="#idzie" x="30" y="6"/><use href="#idzie" x="150" y="0"/><use href="#idzie" x="215" y="8"/><use href="#idzie" x="380" y="3"/><use href="#idzie" x="470" y="0"/><use href="#idzie" x="530" y="7"/><use href="#idzie" x="700" y="2"/><use href="#idzie" x="790" y="6"/><use href="#idzie" x="930" y="0"/><use href="#idzie" x="990" y="8"/><use href="#idzie" x="1150" y="3"/><use href="#idzie" x="1260" y="0"/><use href="#idzie" x="1330" y="6"/><use href="#idzie" x="1480" y="2"/></g>
+      </defs>
+      <use href="#tlum" x="0"/><use href="#tlum" x="1600"/>
+    </svg></div>
+    <svg class="zbiorka" viewBox="0 0 104 104" aria-hidden="true">
+      <rect width="104" height="104" rx="10" fill="#0b8a43"/>
+      <g fill="#fff"><circle cx="52" cy="40" r="8"/><path d="M42 52 h20 v22 h-20z"/>
+        <circle cx="30" cy="48" r="6"/><path d="M23 57 h14 v17 h-14z"/><circle cx="74" cy="48" r="6"/><path d="M67 57 h14 v17 h-14z"/></g>
+      <g fill="#fff"><path d="M8 8 l18 4 -14 14z"/><path d="M96 8 l-4 18 -14 -14z"/><path d="M8 96 l4 -18 14 14z"/><path d="M96 96 l-18 -4 14 -14z"/></g>
+    </svg>
   </div>
 </section>
 

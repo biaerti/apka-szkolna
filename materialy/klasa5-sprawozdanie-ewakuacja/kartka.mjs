@@ -1,5 +1,5 @@
 // Kartka „Wielka ewakuacja” (kl. 5, sprawozdanie): jedna strona A4 na ucznia - polecenie i linie.
-// Obrazek do zadania jest na ostatnim slajdzie public/prezentacje/sprawozdanie-przypomnienie.html.
+// Slajd do zadania (znak wyjścia, SVG) jest na końcu public/prezentacje/sprawozdanie-przypomnienie.html.
 // node materialy/klasa5-sprawozdanie-ewakuacja/kartka.mjs  ->  output/materialy/wielka-ewakuacja-kartka.pdf
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
