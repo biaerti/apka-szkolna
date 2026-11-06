@@ -40,6 +40,15 @@
   .sc-opis .sl em { font-style: normal; background: #fff; border: 1.5px solid #cfc6b4; border-radius: 6px; padding: 0 7px; white-space: nowrap; }
   .k1 { background: #e3eefb; border-color: #4a7fc1; } .k2 { background: #fff1cc; border-color: #d9a520; } .k3 { background: #e2f4e8; border-color: #3f9a62; }
   .sc-stopka { font-size: 22px; color: #5f574c; }
+  /* przykład całego sprawozdania */
+  .wz { flex: 1; min-height: 0; display: grid; grid-template-columns: 190px 1fr; column-gap: 0; background: #fff; border: 3px solid #1f1b16; border-radius: 10px; padding: 26px 40px 26px 0; box-shadow: 6px 6px 0 #d9d2c3; align-content: center; row-gap: 16px; }
+  .wz .et { align-self: start; margin-top: 10px; text-align: right; padding-right: 22px; font-size: 19px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .wz p { font-size: 32px; line-height: 1.45; text-indent: 50px; padding: 4px 0 4px 22px; border-left: 7px solid; }
+  .wz .w1 { color: #2f62a3; } .wz p.w1 { border-color: #4a7fc1; color: #1f1b16; }
+  .wz .w2 { color: #a87b0c; } .wz p.w2 { border-color: #d9a520; color: #1f1b16; }
+  .wz .w3 { color: #2e7d4f; } .wz p.w3 { border-color: #3f9a62; color: #1f1b16; }
+  .wz .sp { color: #b3261e; font-weight: 800; }
+  .wz .op { background: #fff1cc; border-radius: 6px; padding: 0 5px; }
   /* ostatni slajd: ewakuacja */
   .ew { background: #14161b; color: #fff; padding: 0; overflow: hidden; }
   .ew .alarm { position: absolute; left: -260px; top: -260px; width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(230,40,30,.55) 0%, rgba(230,40,30,0) 65%); animation: alarm 1.6s ease-in-out infinite; }
@@ -190,6 +199,21 @@
     </div>
   </div>
   <p class="sc-stopka"><b>Każda część = nowy akapit</b> (nowa linijka z wcięciem) · czas przeszły · bez dialogów i fantazji</p>
+</section>
+
+<!-- przykład -->
+<section class="s" style="gap:14px; padding-top:40px; padding-bottom:34px">
+  <h2>Przykład</h2>
+  <h1 style="font-size:48px">Sprawozdanie z dnia bez prądu</h1>
+  <div class="wz">
+    <span class="et w1">Wstęp</span>
+    <p class="w1">W poniedziałek 2 listopada w naszej szkole na drugiej lekcji nagle zabrakło prądu. Powodem była awaria: koparka na budowie obok szkoły przecięła kabel.</p>
+    <span class="et w2">Rozwinięcie</span>
+    <p class="w2"><span class="sp">Najpierw</span> w klasach zgasły światła i ucichł dzwonek. <span class="sp">Następnie</span> pani dyrektor obeszła wszystkie sale i poprosiła, żebyśmy zostali na miejscach. <span class="sp">Potem</span> nauczyciele prowadzili lekcje przy oknach, a woźny ogłaszał przerwy ręcznym dzwonkiem. <span class="sp">W tym czasie</span> kucharki przygotowały kanapki, bo kuchenki nie działały. <span class="sp">O 12.30</span> przyjechali elektrycy i zaczęli naprawiać kabel.</p>
+    <span class="et w3">Zakończenie</span>
+    <p class="w3"><span class="sp">Na koniec</span>, o 13.15, prąd wrócił i cała szkoła zaczęła klaskać. <span class="op">Moim zdaniem</span> to był najciekawszy poniedziałek w tym roku, bo szkoła świetnie poradziła sobie bez prądu.</p>
+  </div>
+  <p class="sc-stopka">Trzy akapity z wcięciem · <span style="color:#b3261e;font-weight:800">słowa porządkujące</span> · fakty po kolei · opinia dopiero na końcu</p>
 </section>
 
 <!-- 10 -->
