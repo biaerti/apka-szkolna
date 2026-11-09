@@ -1,0 +1,400 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Przypomnij sobie rozdział I</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap&subset=latin-ext');
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap&subset=latin-ext');
+:root { --krem: #FFF7EA; --pom: #F58220; --roz: #E8425A; --ciemny: #4A3B32; --szary: #7a6a5c; --ramka: #e2d3bd; --ziel: #2E9E5B; --nieb: #3C7DD9; --fiol: #8A4FD0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; color: var(--ciemny); font-size: 11.5pt; line-height: 1.4; }
+h1, h2, h3 { font-family: 'Baloo 2', sans-serif; line-height: 1.1; }
+mark { background: #ffe066; border-radius: 3px; padding: 0 2px; color: inherit; }
+s { color: var(--roz); }
+
+@page { size: A4; margin: 9mm 10mm 9mm; }
+body { font-size: 10pt; line-height: 1.3; }
+.gora { display: flex; align-items: flex-end; gap: 5mm; border-bottom: 2.5px solid var(--ciemny); padding-bottom: 1.5mm; }
+.gora h1 { font-size: 19pt; }
+.gora .pod { font-family: 'Baloo 2'; font-size: 12pt; color: var(--szary); }
+.gora h1, .gora .pod { white-space: nowrap; }
+.gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; overflow: hidden; min-width: 0; }
+.gora .rozw { margin-left: auto; font-family: 'Caveat'; font-size: 20pt; color: var(--czerw); }
+.temat { display: grid; grid-template-columns: 58mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.wiedza { background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
+.wiedza h2 { font-size: 12.5pt; color: var(--k); margin-bottom: 1mm; display: flex; align-items: center; gap: 1.8mm; }
+.wiedza h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.wiedza p + p { margin-top: 1mm; }
+.zad + .zad { margin-top: 1.8mm; }
+.pol { font-weight: 800; }
+.pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.linie { margin: .6mm 0 0 2mm; line-height: 2; }
+.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid var(--k45); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
+.wiersz .przerwa { height: 2mm; }
+.pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
+.pyt .p { font-weight: 700; }
+.pyt .o .luka { display: block; min-width: 0 !important; max-width: 95mm; margin: 0; }
+.linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
+.linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
+.linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }
+.luka { display: inline-block; border-bottom: 1.3px dotted #8d7b6b; height: 5.2mm; vertical-align: -1.2mm; text-align: center; margin: 0 .8mm; position: relative; }
+.luka.dluga { min-width: 0 !important; display: block; margin: .3mm 0 0 0; }
+.l:has(.luka.dluga) { margin-bottom: .6mm; }
+.pis { font-family: 'Caveat'; font-weight: 700; font-size: 14.5pt; color: var(--czerw); line-height: 1; white-space: nowrap; padding: 0 1mm; }
+.luka.dluga .pis { white-space: normal; }
+.wybor { display: inline-flex; flex-wrap: wrap; gap: 1.2mm 1.5mm; margin-left: .5mm; }
+.opc { white-space: nowrap; padding: 0 1.6mm; border: 1.5px solid transparent; border-radius: 99px; background: #f6efe4; line-height: 1.5; }
+.opc.zakr { border-color: var(--czerw); background: #fff; }
+.podkr { text-decoration: underline 2px var(--czerw); text-underline-offset: 2px; }
+.tab { margin: 1mm 0 0 2mm; border-collapse: collapse; }
+.tab th { background: var(--k); color: #fff; font-family: 'Baloo 2'; font-size: 9.5pt; padding: .4mm 2.5mm; text-align: left; }
+.tab td { border: 1px solid var(--ramka); padding: .3mm 1.5mm; height: 7mm; }
+.tab:not(:has(thead)) td { min-width: 28mm; }
+.tab:not(:has(thead)) tr:first-child td { background: var(--k12); }
+.tab td .luka { border-bottom: none; }
+.tab .wybor { flex-wrap: nowrap; }
+.tab .opc { font-size: 9pt; padding: 0 1.3mm; }
+.tab td:first-child { white-space: nowrap; }
+.stopka { margin-top: 2mm; text-align: center; font-size: 8.5pt; color: var(--szary); }
+.arkusz + .arkusz { break-before: page; }
+.gora .grupa { margin-left: auto; font-family: 'Baloo 2'; font-weight: 800; font-size: 15pt; color: #fff; background: var(--roz); border-radius: 2mm; padding: 0 3mm; line-height: 1.35; align-self: center; white-space: nowrap; }
+.gora .rozw + .grupa { margin-left: 0; }
+.dane { display: grid; grid-template-columns: 3fr 1.2fr 1.3fr; gap: 6mm; margin-top: 2mm; font-size: 9.5pt; color: var(--szary); }
+.dane span { border-bottom: 1px dotted var(--szary); padding-bottom: .5mm; }
+.temat.bez-wiedzy { display: block; break-inside: auto; padding: 1.8mm 0; }
+.para { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.para > .temat { border-bottom: 0; min-width: 0; }
+.sprawdzian .linie { line-height: 1.8; }
+.temat.bez-wiedzy .zad { break-inside: avoid; }
+.temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
+.temat.bez-wiedzy > h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.pol .pkt.ocena { display: inline-flex; align-items: center; gap: 1mm; font-size: 9.5pt; color: var(--ciemny); border: 0; padding: 0; line-height: 1.2; }
+.pol .pkt .kratka { display: inline-block; width: 8mm; height: 4.4mm; border: 1.3px solid var(--ciemny); border-radius: 1mm; background: #fff; }
+.pol .pkt { float: right; font-weight: 700; font-size: 8.5pt; color: var(--szary); border: 1px solid var(--ramka); border-radius: 2mm; padding: 0 1.5mm; margin-left: 2mm; }
+.lin { border-bottom: 1px solid #b9a894; height: 8mm; margin-left: 2mm; }
+.sprawdzian .tab td { height: 6.5mm; }
+.wzor { margin: 1mm 0 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--czerw); line-height: 1.35; }
+.kryt { margin: 1mm 0 0 2mm; font-size: 9pt; color: var(--szary); }
+.kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
+.dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
+:root { --czerw: #D62828; }
+
+.duza { font-size: 12pt; line-height: 1.35; }
+.duza.sprawdzian .linie { line-height: 1.95; }
+.duza .temat.bez-wiedzy { padding: 2.4mm 0; break-inside: avoid; }
+.duza .temat.bez-wiedzy > h2 { font-size: 14pt; }
+.duza.sprawdzian .tab td { height: 9mm; }
+.duza .tab th { font-size: 11pt; }
+.duza .tab .opc, .duza .pol .pkt { font-size: 10.5pt; }
+.duza .luka { height: 6.5mm; }
+.duza .zad + .zad { margin-top: 3mm; }
+
+
+body.ekran { background: #e9e3d8; }
+.ekran .arkusz { width: 210mm; margin: 4mm auto 10mm; background: #fff; padding: 8mm 10mm; box-shadow: 0 1mm 4mm rgba(0,0,0,.15); }
+.ekran .temat { break-inside: auto; }
+.ekran .zadania { min-width: 0; }
+.ekran .tab .wybor { flex-wrap: wrap; }
+.ekran .luka { cursor: text; outline: none; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--nieb); line-height: 1; padding: 0 1mm; white-space: nowrap; }
+.ekran .luka.dluga { white-space: normal; height: auto; min-height: 5.2mm; }
+.ekran .luka:focus { background: #fff6cf; }
+.ekran .luka.odp { color: var(--ziel); }
+.ekran .podp { font-family: 'Caveat'; font-weight: 700; font-size: 14pt; color: var(--ziel); margin-left: 1.5mm; }
+.ekran .opc, .ekran .sl { cursor: pointer; user-select: none; }
+.ekran .opc.zakr { border-color: var(--nieb); background: #fff; }
+.ekran .sl.podkr { text-decoration: underline 2px var(--nieb); text-underline-offset: 2px; }
+.ekran .opc.dobrze { border-color: var(--ziel); background: #fff; }
+.ekran .opc.zle { border-color: var(--czerw); text-decoration: line-through; }
+.ekran .sl.dobrze { text-decoration: underline 2px var(--ziel); text-underline-offset: 2px; }
+.ekran .sl.zle { text-decoration: line-through 2px var(--czerw); }
+.ekran .pisz { margin-left: 2mm; outline: none; padding: 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 17pt; color: var(--nieb); line-height: 8mm; overflow: hidden;
+  background: repeating-linear-gradient(transparent 0, transparent calc(8mm - 1px), #b9a894 calc(8mm - 1px), #b9a894 8mm); }
+.ekran .wzor { color: var(--ziel); }
+.ekran .wzor .podkr { text-decoration-color: var(--ziel); }
+.ekran .wzor .kolko { border-color: var(--ziel); }
+.ekran .pokaz { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--szary); background: #fff; border: 1px solid var(--ramka); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .pokaz.wl { color: #fff; background: var(--ziel); border-color: var(--ziel); }
+.pasek { width: 210mm; margin: 3mm auto 0; display: flex; justify-content: flex-end; gap: 2mm; }
+.pasek button { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; cursor: pointer; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+.pasek button.wl { background: var(--ziel); border-color: var(--ziel); color: #fff; }
+.pasek .odstep { flex: 1; }
+.pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
+.ekran .arkusz[hidden] { display: none; }
+.ekran .info-btn { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--k); background: #fff; border: 1px solid var(--k45); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .info-btn.wl { color: #fff; background: var(--k); border-color: var(--k); }
+.ekran .info[hidden] { display: none; }
+/* Okno „Info”: reguła + jeden przykład rozwijany krok po kroku (zakreślacz przeciąga się po ==ważnych== słowach). */
+#okno[hidden] { display: none; }
+#okno { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; align-items: flex-start; justify-content: center; padding: 5vh 2mm 0; }
+.okno-tlo { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(40, 30, 20, .45); }
+.okno-karta { position: relative; width: 150mm; max-width: 96vw; background: #fff; border-radius: 4mm; border-top: 2.5mm solid var(--k); padding: 4mm 6mm 4mm; box-shadow: 0 2mm 8mm rgba(0,0,0,.25); animation: okno-wjazd .25s ease-out; }
+@keyframes okno-wjazd { from { opacity: 0; transform: translateY(-4mm); } }
+.okno-x { position: absolute; top: 2mm; right: 3mm; border: 0; background: none; font-size: 18pt; line-height: 1; color: var(--szary); cursor: pointer; }
+.okno-tytul { font-family: 'Baloo 2'; font-weight: 800; font-size: 16pt; color: var(--k); line-height: 1.15; }
+.okno-pol { font-weight: 800; font-size: 10.5pt; margin-top: .5mm; padding-right: 6mm; }
+.okno-pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.okno-info { margin-top: 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 10.5pt; }
+.okno-info:empty { display: none; }
+.okno-kroki { margin-top: 2.5mm; font-size: 13.5pt; line-height: 1.45; cursor: pointer; }
+.okno-kroki:empty { display: none; }
+.krok { opacity: 0; transform: translateY(2.5mm); transition: opacity .45s, transform .45s, border-color .3s; padding: .8mm 0 .8mm 3mm; border-left: 3px solid transparent; }
+.krok.widac { opacity: 1; transform: none; }
+.krok.teraz { border-left-color: var(--k); }
+.krok mark { background: linear-gradient(#ffe066, #ffe066) no-repeat 0 0; background-size: 0% 100%; transition: background-size .7s .45s; }
+.krok.widac mark { background-size: 100% 100%; }
+.krok s { text-decoration-color: var(--czerw); text-decoration-thickness: 2px; color: var(--szary); }
+.okno-dol { display: flex; justify-content: flex-end; gap: 2mm; margin-top: 3mm; }
+.okno-dol button { font: 700 10pt 'Nunito', sans-serif; border-radius: 2mm; padding: 1.2mm 3.5mm; cursor: pointer; border: 1px solid var(--ramka); background: #fff; color: var(--ciemny); }
+.okno-dol .okno-zamknij { background: var(--k); border-color: var(--k); color: #fff; }
+.ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
+.ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
+.ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
+.pasek a.druk { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; text-decoration: none; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+/* Telefon (ćwiczenia do domu): kartka bez szerokości A4, jedna kolumna, nic nie wystaje w bok. */
+@media (max-width: 760px) {
+  .ekran .arkusz { width: auto; margin: 2mm 0 6mm; padding: 4mm 3mm; }
+  .pasek { width: auto; margin: 2mm 2mm 0; flex-wrap: wrap; }
+  .ekran .gora { flex-wrap: wrap; }
+  .ekran .gora h1, .ekran .gora .pod { white-space: normal; }
+  .ekran .temat { grid-template-columns: 1fr; gap: 2mm; }
+  .ekran .linie.k2, .ekran .linie.k3, .ekran .linie.k4 { grid-template-columns: 1fr; }
+  .ekran .tab { display: block; overflow-x: auto; margin-left: 0; }
+  .ekran .opc { white-space: normal; }
+  .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
+}
+@media print { .pasek, .pokaz, .info-btn, .info, #okno { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+
+</style></head><body class="ekran">
+<div class="pasek"><span class="odstep"></span><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
+<main id="karta"><section class="arkusz">
+<div class="gora"><h1>Przypomnij sobie rozdział I</h1><div class="pod">Klasa 4 · Poznajemy siebie i innych</div>
+</div>
+<p class="wstep">Przeczytaj tekst „Zguba” i rozwiąż zadania. Wszystkie przykłady pochodzą z tego tekstu.</p>
+
+<section class="temat" style="--k:#8A4FD0;--k9:#f4effb;--k12:#f1eaf9;--k45:#cab0ea">
+      <div class="wiedza"><h2><span>1</span>Czytamy ze zrozumieniem</h2><p><b>Zguba</b></p><p>W sobotę rano obudził mnie telefon. Dzwoniła babcia Hela. Zgubiła klucze i nie mogła wejść do mieszkania. Szybko się ubrałem, wsiadłem na rower i pojechałem na drugi koniec osiedla.</p><p>Babcia siedziała na zimnej ławce przed blokiem. Razem przeszukaliśmy trawnik, schody i skrzynkę na listy. Kluczy nigdzie nie było. Babcia westchnęła i usiadła z powrotem na ławce. Wtedy coś cicho zabrzęczało.</p><p>- Babciu, ty dzwonisz! - zawołałem.</p><p>Babcia sięgnęła do kieszeni starego płaszcza. Kieszeń była dziurawa, a klucze schowały się pod podszewką. Przez cały czas babcia nosiła je ze sobą!</p><p>Na pocieszenie upiekła mi pyszną, puszystą szarlotkę.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">1.1</span> Uzupełnij świat przedstawiony.</div>
+        <div class="info" hidden><b>Świat przedstawiony</b>: czas (kiedy?), miejsce (gdzie?), bohaterowie (kto?), wydarzenia (co się stało?).</div>
+        
+        
+        
+        <table class="tab"><thead><tr><th>czas</th><th>miejsce</th><th>bohaterowie</th></tr></thead>
+  <tbody><tr><td><span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="sobota rano"></span></td><td><span class="luka" style="min-width:38mm" contenteditable="true" spellcheck="false" data-odp="osiedle, ławka przed blokiem"></span></td><td><span class="luka" style="min-width:38mm" contenteditable="true" spellcheck="false" data-odp="wnuk (narrator) i babcia Hela"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">1.2</span> Kto opowiada tę historię? Zakreśl i napisz, po czym to poznajesz.</div>
+        <div class="info" hidden><b>Narrator-bohater</b> mówi o sobie (poszedłem, zobaczyłam), <b>narrator-obserwator</b> o innych (Ania poszła). W wierszu mówi <b>podmiot liryczny</b>.</div>
+        
+        
+        <div class="linie"><div class="l"><span class="wybor"><span class="opc" data-ok="1">narrator-bohater</span><span class="opc">narrator-obserwator</span><span class="opc">podmiot liryczny</span></span></div><div class="l">Poznaję po tym, że <span class="luka" style="min-width:90mm" contenteditable="true" spellcheck="false" data-odp="np. mówi o sobie: obudził mnie, pojechałem, zawołałem"></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">1.3</span> Prawda czy fałsz? Zakreśl.</div>
+        
+        
+        
+        <div class="linie"><div class="l">Babcia zostawiła klucze u sąsiadki. <span class="wybor"><span class="opc">prawda</span><span class="opc" data-ok="1">fałsz</span></span></div><div class="l">Wnuk przyjechał do babci rowerem. <span class="wybor"><span class="opc" data-ok="1">prawda</span><span class="opc">fałsz</span></span></div><div class="l">Klucze przez cały czas były w płaszczu babci. <span class="wybor"><span class="opc" data-ok="1">prawda</span><span class="opc">fałsz</span></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">1.4</span> Ponumeruj punkty planu ramowego we właściwej kolejności.</div>
+        <div class="info" hidden><b>Plan ramowy</b>: najważniejsze wydarzenia po kolei, bez szczegółów, najczęściej równoważnikami zdań.</div>
+        
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="3"></span> Poszukiwanie kluczy.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="1"></span> Telefon od babci.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="5"></span> Szarlotka na pocieszenie.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="2"></span> Jazda rowerem do babci.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="4"></span> Klucze pod podszewką.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">1.5</span> Jaka była? Jaki był? Wypisz z tekstu epitety.</div>
+        <div class="info" hidden><b>Epitet</b> określa rzeczownik i odpowiada na pytanie jaki? jaka? jakie?</div>
+        
+        
+        <div class="linie"><div class="l">ławka ➜ <span class="luka" style="min-width:16mm" contenteditable="true" spellcheck="false" data-odp="zimna"></span>   płaszcz ➜ <span class="luka" style="min-width:16mm" contenteditable="true" spellcheck="false" data-odp="stary"></span>   szarlotka ➜ <span class="luka" style="min-width:30mm" contenteditable="true" spellcheck="false" data-odp="pyszna, puszysta"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#1FA58A;--k9:#ebf7f4;--k12:#e4f4f1;--k45:#9ad7ca">
+      <div class="wiedza"><h2><span>2</span>Czasownik</h2><p><b>Czasownik</b> mówi, co ktoś robi albo co się z nim dzieje. Odmienia się przez <b>osobę</b>, <b>liczbę</b>, <b>czas</b>, a w czasie przeszłym też przez <b>rodzaj</b> (męskoosobowy: zrobili, niemęskoosobowy: zrobiły).</p><p><b>Nie</b> z czasownikiem piszemy <b>osobno</b>.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">2.1</span> Uzupełnij tabelę. Czasowniki pochodzą z tekstu.</div>
+        
+        
+        
+        
+        <table class="tab"><thead><tr><th>czasownik</th><th>osoba</th><th>liczba</th><th>czas</th><th>rodzaj</th></tr></thead>
+  <tbody><tr><td><b>pojechałem</b></td><td><span class="luka" style="min-width:10mm" contenteditable="true" spellcheck="false" data-odp="1."></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="pojedyncza"></span></td><td><span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="przeszły"></span></td><td><span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="męski"></span></td></tr><tr><td><b>przeszukaliśmy</b></td><td><span class="luka" style="min-width:10mm" contenteditable="true" spellcheck="false" data-odp="1."></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="mnoga"></span></td><td><span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="przeszły"></span></td><td><span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="męskoosobowy"></span></td></tr><tr><td><b>schowały się</b></td><td><span class="luka" style="min-width:10mm" contenteditable="true" spellcheck="false" data-odp="3."></span></td><td><span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="mnoga"></span></td><td><span class="luka" style="min-width:20mm" contenteditable="true" spellcheck="false" data-odp="przeszły"></span></td><td><span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="niemęskoosobowy"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">2.2</span> Napisz poprawnie.</div>
+        
+        
+        
+        <div class="linie"><div class="l">(nie)mogła ➜ <span class="luka" style="min-width:17mm" contenteditable="true" spellcheck="false" data-odp="nie mogła"></span>   (nie)znalazł ➜ <span class="luka" style="min-width:18mm" contenteditable="true" spellcheck="false" data-odp="nie znalazł"></span>   (nie)szukaj ➜ <span class="luka" style="min-width:17mm" contenteditable="true" spellcheck="false" data-odp="nie szukaj"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#E0679A;--k9:#fcf1f6;--k12:#fbedf3;--k45:#f1bbd2">
+      <div class="wiedza"><h2><span>3</span>Zdanie i równoważnik</h2><p><b>Zdanie</b> ma czasownik w formie osobowej: Babcia <mark>westchnęła</mark>. <b>Równoważnik zdania</b> go nie ma: Telefon od babci.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">3.1</span> Wpisz <b>Z</b> (zdanie) albo <b>R</b> (równoważnik).</div>
+        
+        
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="Z"></span> Kluczy nigdzie nie było.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="R"></span> Zguba babci.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="R"></span> Dziura w kieszeni.</div><div class="l"><span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="Z"></span> Coś cicho zabrzęczało.</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">3.2</span> Zamień zdanie w równoważnik.</div>
+        
+        
+        
+        <div class="linie"><div class="l">Babcia upiekła szarlotkę. ➜ <span class="luka" style="min-width:60mm" contenteditable="true" spellcheck="false" data-odp="Upieczenie szarlotki."></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#D98A1F;--k9:#fcf4eb;--k12:#faf1e4;--k45:#eeca9a">
+      <div class="wiedza"><h2><span>4</span>Głoska, litera, sylaba</h2><p><b>Literę</b> widzimy, <b>głoskę</b> słyszymy (sz, cz, rz, ch, dz to jedna głoska). <b>Sylaba</b> ma jedną samogłoskę.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">4.1</span> Policz litery, głoski i sylaby.</div>
+        
+        
+        
+        
+        <table class="tab"><thead><tr><th>wyraz</th><th>litery</th><th>głoski</th><th>sylaby</th></tr></thead>
+  <tbody><tr><td><b>klucze</b></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="6"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="5"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="2"></span></td></tr><tr><td><b>szarlotka</b></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="9"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="8"></span></td><td><span class="luka" style="min-width:12mm" contenteditable="true" spellcheck="false" data-odp="3"></span></td></tr></tbody></table>
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><span class="nr">4.2</span> Podziel na sylaby.</div>
+        
+        
+        
+        <div class="linie k2"><div class="l">podszewka ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="pod-szew-ka"></span></div><div class="l">skrzynka ➜ <span class="luka" style="min-width:28mm" contenteditable="true" spellcheck="false" data-odp="skrzyn-ka"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section>
+</section></main>
+<div id="okno" hidden><div class="okno-tlo"></div><div class="okno-karta">
+<button type="button" class="okno-x" aria-label="Zamknij">×</button>
+<div class="okno-tytul">Jak to zrobić?</div><div class="okno-pol"></div><div class="okno-info"></div><div class="okno-kroki"></div>
+<div class="okno-dol"><button type="button" class="okno-znowu">Jeszcze raz</button><button type="button" class="okno-zamknij">Rozumiem</button></div>
+</div></div>
+<script>
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa4-rozdzial1-przypomnienie:12503';
+// Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
+function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
+window.addEventListener('resize', dopasuj); dopasuj();
+try { var zapis = localStorage.getItem(KLUCZ_ZAPISU); if (zapis) karta.innerHTML = zapis; } catch (e) {}
+var czas;
+function zapisz() { clearTimeout(czas); czas = setTimeout(function () { try { localStorage.setItem(KLUCZ_ZAPISU, karta.innerHTML); } catch (e) {} }, 300); }
+function norm(t) { return t.replace(/^np\.\s*/i, '').replace(/[\s.,!?…]+/g, ' ').trim().toLowerCase(); }
+// „pszczoła / mrówka” - każda z odpowiedzi jest dobra.
+function pasuje(wpis, odp) { return odp.split(' / ').concat([odp]).some(function (o) { return norm(wpis) === norm(o); }); }
+function pokaz(zad, wl) {
+  zad.querySelector('.pokaz').classList.toggle('wl', wl);
+  zad.querySelectorAll('.luka').forEach(function (l) {
+    var nast = l.nextSibling;
+    if (nast && nast.classList && nast.classList.contains('podp')) nast.remove();
+    if (l.classList.contains('odp')) { l.textContent = ''; l.classList.remove('odp'); }
+    l.classList.remove('dobrze', 'zle');
+    if (!wl) return;
+    var odp = l.getAttribute('data-odp'), wpis = l.textContent.trim();
+    if (!wpis) { l.textContent = odp; l.classList.add('odp'); }
+    else if (pasuje(wpis, odp)) l.classList.add('dobrze');
+    else {
+      // Przy „np. ...” wpis nie jest błędem - obok tylko przykładowa odpowiedź do porównania.
+      if (!/^np\./i.test(odp)) l.classList.add('zle');
+      var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s);
+    }
+  });
+  zad.querySelectorAll('.opc, .sl').forEach(function (o) {
+    var ok = o.hasAttribute('data-ok'), wybrane = o.classList.contains('zakr') || o.classList.contains('podkr');
+    o.classList.toggle('dobrze', wl && ok);
+    o.classList.toggle('zle', wl && !ok && wybrane);
+  });
+  var w = zad.querySelector(':scope > .wzor');
+  if (w) w.remove();
+  var t = zad.querySelector('template');
+  if (wl && t) zad.appendChild(t.content.cloneNode(true));
+}
+karta.addEventListener('click', function (e) {
+  var b = e.target.closest('.pokaz');
+  if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var ib = e.target.closest('.info-btn');
+  if (ib) { otworzInfo(ib.closest('.zad')); return; }
+  var o = e.target.closest('.opc');
+  if (o) { o.classList.toggle('zakr'); zapisz(); return; }
+  var s = e.target.closest('.sl');
+  if (s) { s.classList.toggle('podkr'); zapisz(); }
+});
+karta.addEventListener('input', zapisz);
+// Okno „Info”: reguła i przykład krok po kroku. Kroki wchodzą same co chwilę, kliknięcie w nie przyspiesza.
+var okno = document.getElementById('okno'), kroki = okno.querySelector('.okno-kroki'), zegar;
+function nastepny() {
+  clearTimeout(zegar);
+  var ukryty = kroki.querySelector('.krok:not(.widac)');
+  if (!ukryty) return;
+  kroki.querySelectorAll('.teraz').forEach(function (k) { k.classList.remove('teraz'); });
+  ukryty.classList.add('widac', 'teraz');
+  if (kroki.querySelector('.krok:not(.widac)')) zegar = setTimeout(nastepny, 2200);
+}
+function odtworz() {
+  kroki.querySelectorAll('.krok').forEach(function (k) { k.classList.remove('widac', 'teraz'); });
+  clearTimeout(zegar); zegar = setTimeout(nastepny, 500);
+}
+function otworzInfo(zad) {
+  var sekcja = zad.closest('.temat'), st = getComputedStyle(sekcja);
+  okno.style.setProperty('--k', st.getPropertyValue('--k'));
+  okno.style.setProperty('--k9', st.getPropertyValue('--k9'));
+  var pol = zad.querySelector('.pol').cloneNode(true);
+  pol.querySelectorAll('button, .pkt').forEach(function (b) { b.remove(); });
+  okno.querySelector('.okno-pol').innerHTML = pol.innerHTML;
+  var inf = zad.querySelector('.info');
+  okno.querySelector('.okno-info').innerHTML = inf ? inf.innerHTML : '';
+  var t = zad.querySelector('template.przyklad');
+  kroki.innerHTML = '';
+  if (t) kroki.appendChild(t.content.cloneNode(true));
+  okno.querySelector('.okno-znowu').hidden = !t;
+  okno.hidden = false;
+  odtworz();
+}
+function zamknijInfo() { okno.hidden = true; clearTimeout(zegar); }
+kroki.addEventListener('click', nastepny);
+okno.querySelector('.okno-znowu').onclick = odtworz;
+okno.querySelector('.okno-x').onclick = zamknijInfo;
+okno.querySelector('.okno-zamknij').onclick = zamknijInfo;
+okno.querySelector('.okno-tlo').onclick = zamknijInfo;
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !okno.hidden) zamknijInfo(); });
+karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
+var wszystko = document.getElementById('wszystko');
+if (wszystko) wszystko.onclick = function () {
+  var wl = !this.classList.contains('wl');
+  this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
+  karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
+};
+// Sprawdzian: na ekranie jedna grupa naraz.
+var grupy = document.querySelectorAll('.grupa-btn');
+function grupa(g) {
+  grupy.forEach(function (b) { b.classList.toggle('wl', b.getAttribute('data-grupa') === g); });
+  karta.querySelectorAll('.arkusz[data-grupa]').forEach(function (a) { a.hidden = a.getAttribute('data-grupa') !== g; });
+  try { localStorage.setItem(KLUCZ_ZAPISU + ':grupa', g); } catch (e) {}
+}
+grupy.forEach(function (b) { b.onclick = function () { grupa(b.getAttribute('data-grupa')); window.scrollTo(0, 0); }; });
+if (grupy.length) { var g0 = null; try { g0 = localStorage.getItem(KLUCZ_ZAPISU + ':grupa'); } catch (e) {} grupa(g0 || grupy[0].getAttribute('data-grupa')); }
+document.getElementById('wyczysc').onclick = function () {
+  if (!confirm('Wyczyścić wszystko, co jest wpisane?')) return;
+  try { localStorage.removeItem(KLUCZ_ZAPISU); } catch (e) {}
+  location.reload();
+};
+</script>
+</body></html>
