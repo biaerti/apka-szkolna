@@ -26,6 +26,7 @@ import { RulesPrint } from './pages/RulesPrint';
 import { Dokumenty } from './pages/Dokumenty';
 import { DocPrint } from './pages/DocPrint';
 import { Panel } from './pages/Panel';
+import { Stoper } from './pages/Stoper';
 import { LessonNotesPrint } from './pages/LessonNotesPrint';
 import { Journal } from './pages/Journal';
 import { Sala } from './pages/Sala';
@@ -66,6 +67,8 @@ export default function App() {
       <Route path="/lektury/druk" element={<LekturyPrint />} />
       {/* Tablica dzialu (Excalidraw) na projektor - mapa wiedzy rocznika i miejsce do rysowania */}
       <Route path="/tablica" element={<TablicaDzialu />} />
+      {/* Stoper do godziny na projektor (np. sprawdzian do 9:40) */}
+      <Route path="/stoper" element={<Stoper />} />
 
       <Route element={<AppShell />}>
         <Route path="/" element={<Dashboard />} />
