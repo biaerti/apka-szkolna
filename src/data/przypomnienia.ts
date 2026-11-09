@@ -233,8 +233,8 @@ export const PRZYPOMNIENIA: Przypomnienie[] = [
     tytul: 'Dwukropek',
     kroki: [
       { typ: 'regula', tekst: 'Dwukropek zapowiada, że ==coś zaraz nastąpi==.' },
-      { typ: 'czesci', czesci: [['przed dialogiem', 'Tata zawołał: – Idziemy!'], ['przed wyliczeniem', 'Mam: kota, psa i rybki.'], ['przed cytatem', 'Mówi: „Kto pyta, nie błądzi”.']] },
-      { typ: 'zamiana', pary: [['Mam trzy pasje, piłkę i rower.', 'Mam trzy pasje: piłkę i rower.']] },
+      { typ: 'czesci', czesci: [['przed dialogiem', 'Tata zawołał: – Idziemy!'], ['przed wyliczeniem', 'Mam trzy zwierzęta: kota, psa i rybki.'], ['przed cytatem', 'Mówi: „Kto pyta, nie błądzi”.']] },
+      { typ: 'zamiana', pary: [['Mam dwie pasje, piłkę i rower.', 'Mam dwie pasje: piłkę i rower.']] },
     ],
   },
   {

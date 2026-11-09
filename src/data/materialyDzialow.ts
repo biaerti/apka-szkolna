@@ -27,7 +27,7 @@ export const MATERIALY_DZIALOW: MaterialyDzialu[] = [
   { grade: 'IV', dzial: 'Rozdział I. Poznajemy siebie i innych', folder: 'klasa4-rozdzial1', karta: true },
   { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2', karta: true, domowe: true, sprawdzianProjektor: true },
   { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszyt: false, sprawdzianProjektor: true },
-  { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2' },
+  { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2', karta: true },
 ];
 
 export function materialyDzialu(grade: string, dzial: string | undefined): MaterialyDzialu | undefined {

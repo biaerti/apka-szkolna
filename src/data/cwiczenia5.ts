@@ -631,11 +631,13 @@ export const CWICZENIA5: Cwiczenie[] = [
   },
 
   // ---------- 29a. Powtorka dzialu 2 z nauczycielem (po kazdym przypomnieniu karta) ----------
-  // Krotkie karty (4-6 przykladow, jedna strona), kazda z Info. Przyklady inne niz w kartach
+  // Krotkie karty (4-6 przykladow, jedna strona), kazda z Info. `samodzielnie` = zadanie z karty
+  // pracy (materialy/klasa5-dzial2/karta.mjs), ktore uczniowie robia sami zaraz po tej karcie. Przyklady inne niz w kartach
   // lekcji 17-28, w puli sprawdzianu i w zeszycie powtorkowym.
   {
     id: 'k5-powt2-przenosnia',
     typ: 'luki',
+    samodzielnie: 'zad. 1',
     tytul: 'Porównanie czy przenośnia?',
     polecenie: 'Kliknij, co to jest.',
     info: '**Porównanie** mówi wprost i ma słówko **jak, niczym, niby, jakby**: głos słodki niczym miód. **Przenośnia** nie ma słówka, a wyrazy razem znaczą coś nowego - narysuj to dosłownie, a wyjdzie bzdura: ogień w sercu.',
@@ -653,6 +655,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-frazeo',
     typ: 'luki',
+    samodzielnie: 'zad. 2',
     tytul: 'Co to znaczy?',
     polecenie: 'Kliknij prawdziwe znaczenie związku frazeologicznego.',
     info: '**Związek frazeologiczny** to stałe połączenie wyrazów o przenośnym znaczeniu. Nie rozumiemy go dosłownie - pytamy, co by to znaczyło w życiu: „dać nogę” to nie kopnięcie, tylko ucieczka.',
@@ -670,6 +673,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-nacechowane',
     typ: 'luki',
+    samodzielnie: 'zad. 3',
     tytul: 'Neutralny czy nacechowany?',
     polecenie: 'Kliknij, jaki to wyraz.',
     info: '**Neutralny** tylko nazywa: pies. **Zdrobnienie** - coś małego albo czule: piesek (-ek, -ka, -ko). **Zgrubienie** - coś dużego, żartem albo pogardliwie: psisko (-isko, -sko).',
@@ -687,6 +691,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-przypadek',
     typ: 'luki',
+    samodzielnie: 'zad. 4',
     tytul: 'Zapytaj i rozpoznaj',
     polecenie: 'W jakim przypadku jest pogrubiony rzeczownik?',
     info: 'Znajdź czasownik i zadaj od niego pytanie: Piszę (czym?) ołówkiem - narzędnik. **M** kto? co? · **D** kogo? czego? · **C** komu? czemu? · **B** kogo? co? · **N** z kim? z czym? · **Ms** o kim? o czym? · **W** o!',
@@ -719,6 +724,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-liczba',
     typ: 'luki',
+    samodzielnie: 'zad. 5',
     tytul: 'Tylko jedna liczba',
     polecenie: 'Ten rzeczownik ma tylko liczbę pojedynczą czy tylko mnogą?',
     info: 'Spróbuj powiedzieć „jeden ...” i „dwa ...”. **Tylko lp.**: nie ma formy mnogiej (tlen, odwaga). **Tylko lm.**: nie ma formy pojedynczej, mówimy „jedne”, „dwoje” (jedne skrzypce, dwoje drzwi).',
@@ -737,6 +743,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-ea',
     typ: 'luki',
+    samodzielnie: 'zad. 6',
     tytul: 'Ogonek na końcu',
     polecenie: 'Kliknij literę, która pasuje.',
     info: '**-ę**: widzę kogo? co? (kaczkę), ja (maluję), małe zwierzęta (źrebię). **-ą**: z kim? z czym? (z sąsiadką), oni, one (tańczą). Bez ogonka tylko: wiem, jem, umiem, rozumiem.',
@@ -753,6 +760,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-o',
     typ: 'luki',
+    samodzielnie: 'zad. 7',
     tytul: 'Ó i dowód',
     polecenie: 'Kliknij ó albo u i podaj formę, która to udowadnia.',
     info: 'Piszę **ó**, gdy w innej formie tego wyrazu jest **o**: nóżka - noga. To oboczność: głoski wymieniają się w temacie wyrazu, a końcówka zmienia się w odmianie.',
@@ -769,6 +777,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-sprawozdanie',
     typ: 'luki',
+    samodzielnie: 'zad. 8',
     tytul: 'Która to część?',
     polecenie: 'Z której części sprawozdania jest to zdanie?',
     info: '**Wstęp**: kto? co? kiedy? gdzie? **Przebieg** po kolei, ze słowami: najpierw, następnie, potem, na koniec. **Zakończenie**: krótka opinia o wydarzeniu.',
@@ -786,6 +795,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-dwukropek',
     typ: 'luki',
+    samodzielnie: 'zad. 9',
     tytul: 'Dwukropek czy nic?',
     polecenie: 'Czy w miejscu ▢ stawiamy dwukropek?',
     info: 'Dwukropek stawiam **przed dialogiem** (Babcia zawołała: – Obiad!), **przed wyliczeniem** (mam trzy pasje: ...) i **przed cytatem** (Pani mówi: „...”). Gdy nic nie zapowiadamy - nie ma dwukropka.',
@@ -793,7 +803,7 @@ export const CWICZENIA5: Cwiczenie[] = [
     naRaz: 6,
     przyklady: [
       ['Babcia zawołała ▢ – Chodźcie na obiad!', 'tak'],
-      ['Na łące rosły ▢ maki, stokrotki i chabry.', 'tak'],
+      ['Na łące rosły trzy kwiaty ▢ maki, stokrotki i chabry.', 'tak'],
       ['Poszliśmy ▢ do parku.', 'nie'],
       ['Pani powtarza ▢ „Ćwiczenie czyni mistrza”.', 'tak'],
       ['Kupiłam ▢ chleb w piekarni.', 'nie'],
@@ -803,6 +813,7 @@ export const CWICZENIA5: Cwiczenie[] = [
   {
     id: 'k5-powt2-reklama',
     typ: 'luki',
+    samodzielnie: 'zad. 10',
     tytul: 'Reklama czy informacja?',
     polecenie: 'Kliknij, jaki to tekst.',
     info: '**Tekst reklamowy** namawia do kupna: hasło, słowa „nowość, gratis, taniej”, wykrzykniki, obietnice (będziesz najlepszy!). **Informacja** tylko podaje fakty: godzinę, miejsce, pogodę.',

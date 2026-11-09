@@ -33,6 +33,8 @@ export interface CwiczenieLuki {
   wielkoscLiter?: boolean;
   /** Regula do zadania - przycisk "Info" obok "Sprawdź" (nauczyciel pokazuje ja przed sprawdzaniem). */
   info?: string;
+  /** Po tej karcie uczniowie robia sami zadanie z karty pracy, np. "zad. 3" - znaczek w rogu slajdu. */
+  samodzielnie?: string;
 }
 
 export interface CwiczenieTabela {
@@ -47,6 +49,7 @@ export interface CwiczenieTabela {
   wyrazy: Array<{ haslo: string; komorki: string[][] }>;
   /** Jak w CwiczenieLuki. */
   info?: string;
+  samodzielnie?: string;
 }
 
 export type Cwiczenie = CwiczenieLuki | CwiczenieTabela;

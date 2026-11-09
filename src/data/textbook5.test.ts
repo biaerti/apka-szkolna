@@ -197,6 +197,9 @@ describe('buildTextbook5', () => {
       if (s.kind === 'przypomnienie') expect(przypomnienieById(s.przypomnienieId), s.przypomnienieId).toBeTruthy();
       if (s.kind === 'cwiczenie') expect(cwiczenieById(s.cwiczenieId)?.info, s.cwiczenieId).toBeTruthy();
     }
+    // Po ostatniej karcie tematu uczniowie robia sami zadanie z karty pracy: zad. 1, 2, ... 10 po kolei.
+    const sami = lesson.slides.flatMap((s) => (s.kind === 'cwiczenie' ? [cwiczenieById(s.cwiczenieId)?.samodzielnie] : [])).filter(Boolean);
+    expect(sami).toEqual(Array.from({ length: 10 }, (_, i) => `zad. ${i + 1}`));
   });
 
   it('powtorka przed sprawdzianem dzialu 1: same karty Ćwiczymy razem i opowiadanie na koniec', () => {

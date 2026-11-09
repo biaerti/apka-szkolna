@@ -1,0 +1,434 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Karta pracy - dział 2</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap&subset=latin-ext');
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap&subset=latin-ext');
+:root { --krem: #FFF7EA; --pom: #F58220; --roz: #E8425A; --ciemny: #4A3B32; --szary: #7a6a5c; --ramka: #e2d3bd; --ziel: #2E9E5B; --nieb: #3C7DD9; --fiol: #8A4FD0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; color: var(--ciemny); font-size: 11.5pt; line-height: 1.4; }
+h1, h2, h3 { font-family: 'Baloo 2', sans-serif; line-height: 1.1; }
+mark { background: #ffe066; border-radius: 3px; padding: 0 2px; color: inherit; }
+s { color: var(--roz); }
+
+@page { size: A4; margin: 9mm 10mm 9mm; }
+body { font-size: 10pt; line-height: 1.3; }
+.gora { display: flex; align-items: flex-end; gap: 5mm; border-bottom: 2.5px solid var(--ciemny); padding-bottom: 1.5mm; }
+.gora h1 { font-size: 19pt; }
+.gora .pod { font-family: 'Baloo 2'; font-size: 12pt; color: var(--szary); }
+.gora h1, .gora .pod { white-space: nowrap; }
+.gora .imie { margin-left: auto; font-size: 10pt; color: var(--szary); white-space: nowrap; overflow: hidden; min-width: 0; }
+.gora .rozw { margin-left: auto; font-family: 'Caveat'; font-size: 20pt; color: var(--czerw); }
+.temat { display: grid; grid-template-columns: 58mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.wiedza { background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 3mm 3mm 0; padding: 2mm 3mm; font-size: 9.2pt; line-height: 1.3; }
+.wiedza h2 { font-size: 12.5pt; color: var(--k); margin-bottom: 1mm; display: flex; align-items: center; gap: 1.8mm; }
+.wiedza h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.wiedza p + p { margin-top: 1mm; }
+.zad + .zad { margin-top: 1.8mm; }
+.pol { font-weight: 800; }
+.pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.linie { margin: .6mm 0 0 2mm; line-height: 2; }
+.wiersz { margin: 1.2mm 0 1mm 8mm; padding: .5mm 0 .5mm 4mm; border-left: 2px solid var(--k45); font-size: 10.5pt; line-height: 1.55; font-style: italic; }
+.wiersz .przerwa { height: 2mm; }
+.pyt { display: grid; grid-template-columns: max-content 1fr; column-gap: 3mm; row-gap: 1mm; align-items: end; margin: .6mm 0 0 2mm; line-height: 1.9; }
+.pyt .p { font-weight: 700; }
+.pyt .o .luka { display: block; min-width: 0 !important; max-width: 95mm; margin: 0; }
+.linie.k2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4mm; }
+.linie.k3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 3mm; }
+.linie.k4 { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3mm; }
+.luka { display: inline-block; border-bottom: 1.3px dotted #8d7b6b; height: 5.2mm; vertical-align: -1.2mm; text-align: center; margin: 0 .8mm; position: relative; }
+.luka.dluga { min-width: 0 !important; display: block; margin: .3mm 0 0 0; }
+.l:has(.luka.dluga) { margin-bottom: .6mm; }
+.pis { font-family: 'Caveat'; font-weight: 700; font-size: 14.5pt; color: var(--czerw); line-height: 1; white-space: nowrap; padding: 0 1mm; }
+.luka.dluga .pis { white-space: normal; }
+.wybor { display: inline-flex; flex-wrap: wrap; gap: 1.2mm 1.5mm; margin-left: .5mm; }
+.opc { white-space: nowrap; padding: 0 1.6mm; border: 1.5px solid transparent; border-radius: 99px; background: #f6efe4; line-height: 1.5; }
+.opc.zakr { border-color: var(--czerw); background: #fff; }
+.podkr { text-decoration: underline 2px var(--czerw); text-underline-offset: 2px; }
+.tab { margin: 1mm 0 0 2mm; border-collapse: collapse; }
+.tab th { background: var(--k); color: #fff; font-family: 'Baloo 2'; font-size: 9.5pt; padding: .4mm 2.5mm; text-align: left; }
+.tab td { border: 1px solid var(--ramka); padding: .3mm 1.5mm; height: 7mm; }
+.tab:not(:has(thead)) td { min-width: 28mm; }
+.tab:not(:has(thead)) tr:first-child td { background: var(--k12); }
+.tab td .luka { border-bottom: none; }
+.tab .wybor { flex-wrap: nowrap; }
+.tab .opc { font-size: 9pt; padding: 0 1.3mm; }
+.tab td:first-child { white-space: nowrap; }
+.stopka { margin-top: 2mm; text-align: center; font-size: 8.5pt; color: var(--szary); }
+.arkusz + .arkusz { break-before: page; }
+.gora .grupa { margin-left: auto; font-family: 'Baloo 2'; font-weight: 800; font-size: 15pt; color: #fff; background: var(--roz); border-radius: 2mm; padding: 0 3mm; line-height: 1.35; align-self: center; white-space: nowrap; }
+.gora .rozw + .grupa { margin-left: 0; }
+.dane { display: grid; grid-template-columns: 3fr 1.2fr 1.3fr; gap: 6mm; margin-top: 2mm; font-size: 9.5pt; color: var(--szary); }
+.dane span { border-bottom: 1px dotted var(--szary); padding-bottom: .5mm; }
+.temat.bez-wiedzy { display: block; break-inside: auto; padding: 1.8mm 0; }
+.para { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; border-bottom: 1px dashed var(--ramka); break-inside: avoid; }
+.para > .temat { border-bottom: 0; min-width: 0; }
+.sprawdzian .linie { line-height: 1.8; }
+.temat.bez-wiedzy .zad { break-inside: avoid; }
+.temat.bez-wiedzy > h2 { break-after: avoid; font-size: 12.5pt; color: var(--k); display: flex; align-items: center; gap: 1.8mm; margin-bottom: .6mm; }
+.temat.bez-wiedzy > h2 span { background: var(--k); color: #fff; border-radius: 99px; min-width: 5.5mm; height: 5.5mm; font-size: 10pt; display: inline-flex; align-items: center; justify-content: center; }
+.pol .pkt.ocena { display: inline-flex; align-items: center; gap: 1mm; font-size: 9.5pt; color: var(--ciemny); border: 0; padding: 0; line-height: 1.2; }
+.pol .pkt .kratka { display: inline-block; width: 8mm; height: 4.4mm; border: 1.3px solid var(--ciemny); border-radius: 1mm; background: #fff; }
+.pol .pkt { float: right; font-weight: 700; font-size: 8.5pt; color: var(--szary); border: 1px solid var(--ramka); border-radius: 2mm; padding: 0 1.5mm; margin-left: 2mm; }
+.lin { border-bottom: 1px solid #b9a894; height: 8mm; margin-left: 2mm; }
+.sprawdzian .tab td { height: 6.5mm; }
+.wzor { margin: 1mm 0 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--czerw); line-height: 1.35; }
+.kryt { margin: 1mm 0 0 2mm; font-size: 9pt; color: var(--szary); }
+.kolko { border: 1.8px solid var(--czerw); border-radius: 50%; padding: 0 1.2mm; }
+.dane .wynik { border-bottom: 0; text-align: right; font-family: 'Baloo 2'; font-size: 12pt; font-weight: 800; color: var(--ciemny); }
+:root { --czerw: #D62828; }
+
+.duza { font-size: 12pt; line-height: 1.35; }
+.duza.sprawdzian .linie { line-height: 1.95; }
+.duza .temat.bez-wiedzy { padding: 2.4mm 0; break-inside: avoid; }
+.duza .temat.bez-wiedzy > h2 { font-size: 14pt; }
+.duza.sprawdzian .tab td { height: 9mm; }
+.duza .tab th { font-size: 11pt; }
+.duza .tab .opc, .duza .pol .pkt { font-size: 10.5pt; }
+.duza .luka { height: 6.5mm; }
+.duza .zad + .zad { margin-top: 3mm; }
+
+
+body.ekran { background: #e9e3d8; }
+.ekran .arkusz { width: 210mm; margin: 4mm auto 10mm; background: #fff; padding: 8mm 10mm; box-shadow: 0 1mm 4mm rgba(0,0,0,.15); }
+.ekran .temat { break-inside: auto; }
+.ekran .zadania { min-width: 0; }
+.ekran .tab .wybor { flex-wrap: wrap; }
+.ekran .luka { cursor: text; outline: none; font-family: 'Caveat'; font-weight: 700; font-size: 15pt; color: var(--nieb); line-height: 1; padding: 0 1mm; white-space: nowrap; }
+.ekran .luka.dluga { white-space: normal; height: auto; min-height: 5.2mm; }
+.ekran .luka:focus { background: #fff6cf; }
+.ekran .luka.odp { color: var(--ziel); }
+.ekran .podp { font-family: 'Caveat'; font-weight: 700; font-size: 14pt; color: var(--ziel); margin-left: 1.5mm; }
+.ekran .opc, .ekran .sl { cursor: pointer; user-select: none; }
+.ekran .opc.zakr { border-color: var(--nieb); background: #fff; }
+.ekran .sl.podkr { text-decoration: underline 2px var(--nieb); text-underline-offset: 2px; }
+.ekran .opc.dobrze { border-color: var(--ziel); background: #fff; }
+.ekran .opc.zle { border-color: var(--czerw); text-decoration: line-through; }
+.ekran .sl.dobrze { text-decoration: underline 2px var(--ziel); text-underline-offset: 2px; }
+.ekran .sl.zle { text-decoration: line-through 2px var(--czerw); }
+.ekran .pisz { margin-left: 2mm; outline: none; padding: 0 2mm; font-family: 'Caveat'; font-weight: 700; font-size: 17pt; color: var(--nieb); line-height: 8mm; overflow: hidden;
+  background: repeating-linear-gradient(transparent 0, transparent calc(8mm - 1px), #b9a894 calc(8mm - 1px), #b9a894 8mm); }
+.ekran .wzor { color: var(--ziel); }
+.ekran .wzor .podkr { text-decoration-color: var(--ziel); }
+.ekran .wzor .kolko { border-color: var(--ziel); }
+.ekran .pokaz { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--szary); background: #fff; border: 1px solid var(--ramka); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .pokaz.wl { color: #fff; background: var(--ziel); border-color: var(--ziel); }
+.pasek { width: 210mm; margin: 3mm auto 0; display: flex; justify-content: flex-end; gap: 2mm; }
+.pasek button { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; cursor: pointer; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+.pasek button.wl { background: var(--ziel); border-color: var(--ziel); color: #fff; }
+.pasek .odstep { flex: 1; }
+.pasek .grupa-btn.wl { background: var(--roz); border-color: var(--roz); color: #fff; }
+.ekran .arkusz[hidden] { display: none; }
+.ekran .info-btn { float: right; margin-left: 2mm; font: 700 8.5pt 'Nunito', sans-serif; color: var(--k); background: #fff; border: 1px solid var(--k45); border-radius: 2mm; padding: .3mm 2mm; cursor: pointer; }
+.ekran .info-btn.wl { color: #fff; background: var(--k); border-color: var(--k); }
+.ekran .info[hidden] { display: none; }
+/* Okno „Info”: reguła + jeden przykład rozwijany krok po kroku (zakreślacz przeciąga się po ==ważnych== słowach). */
+#okno[hidden] { display: none; }
+#okno { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; align-items: flex-start; justify-content: center; padding: 5vh 2mm 0; }
+.okno-tlo { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(40, 30, 20, .45); }
+.okno-karta { position: relative; width: 150mm; max-width: 96vw; background: #fff; border-radius: 4mm; border-top: 2.5mm solid var(--k); padding: 4mm 6mm 4mm; box-shadow: 0 2mm 8mm rgba(0,0,0,.25); animation: okno-wjazd .25s ease-out; }
+@keyframes okno-wjazd { from { opacity: 0; transform: translateY(-4mm); } }
+.okno-x { position: absolute; top: 2mm; right: 3mm; border: 0; background: none; font-size: 18pt; line-height: 1; color: var(--szary); cursor: pointer; }
+.okno-tytul { font-family: 'Baloo 2'; font-weight: 800; font-size: 16pt; color: var(--k); line-height: 1.15; }
+.okno-pol { font-weight: 800; font-size: 10.5pt; margin-top: .5mm; padding-right: 6mm; }
+.okno-pol .nr { display: inline-block; background: var(--k); color: #fff; border-radius: 99px; padding: 0 1.8mm; font-size: 8.5pt; margin-right: .5mm; }
+.okno-info { margin-top: 2mm; padding: 1.5mm 3mm; background: var(--k9); border-left: 3px solid var(--k); border-radius: 0 2mm 2mm 0; font-size: 10.5pt; }
+.okno-info:empty { display: none; }
+.okno-kroki { margin-top: 2.5mm; font-size: 13.5pt; line-height: 1.45; cursor: pointer; }
+.okno-kroki:empty { display: none; }
+.krok { opacity: 0; transform: translateY(2.5mm); transition: opacity .45s, transform .45s, border-color .3s; padding: .8mm 0 .8mm 3mm; border-left: 3px solid transparent; }
+.krok.widac { opacity: 1; transform: none; }
+.krok.teraz { border-left-color: var(--k); }
+.krok mark { background: linear-gradient(#ffe066, #ffe066) no-repeat 0 0; background-size: 0% 100%; transition: background-size .7s .45s; }
+.krok.widac mark { background-size: 100% 100%; }
+.krok s { text-decoration-color: var(--czerw); text-decoration-thickness: 2px; color: var(--szary); }
+.okno-dol { display: flex; justify-content: flex-end; gap: 2mm; margin-top: 3mm; }
+.okno-dol button { font: 700 10pt 'Nunito', sans-serif; border-radius: 2mm; padding: 1.2mm 3.5mm; cursor: pointer; border: 1px solid var(--ramka); background: #fff; color: var(--ciemny); }
+.okno-dol .okno-zamknij { background: var(--k); border-color: var(--k); color: #fff; }
+.ekran .luka.dobrze { color: var(--ziel); background: #e9f7ef; }
+.ekran .luka.zle { color: var(--czerw); text-decoration: line-through; }
+.ekran .wstep { margin: 2mm 0 1mm; padding: 2mm 3mm; background: #fff6cf; border-radius: 2mm; font-size: 10pt; }
+.pasek a.druk { font: 700 10pt 'Nunito', sans-serif; background: #fff; color: var(--ciemny); border: 1px solid var(--ramka); border-radius: 2mm; padding: 1.5mm 3mm; text-decoration: none; box-shadow: 0 .5mm 2mm rgba(0,0,0,.12); }
+/* Telefon (ćwiczenia do domu): kartka bez szerokości A4, jedna kolumna, nic nie wystaje w bok. */
+@media (max-width: 760px) {
+  .ekran .arkusz { width: auto; margin: 2mm 0 6mm; padding: 4mm 3mm; }
+  .pasek { width: auto; margin: 2mm 2mm 0; flex-wrap: wrap; }
+  .ekran .gora { flex-wrap: wrap; }
+  .ekran .gora h1, .ekran .gora .pod { white-space: normal; }
+  .ekran .temat { grid-template-columns: 1fr; gap: 2mm; }
+  .ekran .linie.k2, .ekran .linie.k3, .ekran .linie.k4 { grid-template-columns: 1fr; }
+  .ekran .tab { display: block; overflow-x: auto; margin-left: 0; }
+  .ekran .opc { white-space: normal; }
+  .ekran .luka.dluga, .ekran .pyt .o .luka { max-width: none; }
+}
+@media print { .pasek, .pokaz, .info-btn, .info, #okno { display: none; } body.ekran { background: #fff; } .ekran .arkusz { box-shadow: none; margin: 0; padding: 0; width: auto; } }
+
+</style></head><body class="ekran">
+<div class="pasek"><span class="odstep"></span><button type="button" id="wszystko">Pokaż wszystkie odpowiedzi</button><button type="button" id="wyczysc">Wyczyść kartę</button></div>
+<main id="karta"><section class="arkusz">
+<div class="gora"><h1>Karta pracy - dział 2</h1><div class="pod">Klasa 5 · Uwaga, uczucia!</div>
+</div>
+
+
+<section class="temat" style="--k:#8A4FD0;--k9:#f4effb;--k12:#f1eaf9;--k45:#cab0ea">
+      <div class="wiedza"><h2><span>1</span>Porównanie i przenośnia</h2><p><b>Porównanie</b> ma słówko <b>jak, niczym, niby</b>. <b>Przenośnia</b> go nie ma - wyrazy razem znaczą coś nowego, nie dosłownie.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">1.1</span> Porównanie czy przenośnia? Zakreśl.</div>
+        <div class="info" hidden>Szukaj słówka jak, niczym, niby, jakby - jest? To porównanie. Nie ma, a wyrażenie narysowane dosłownie byłoby bzdurą? To przenośnia.</div>
+        <template class="przyklad"><div class="krok">Skakał jak piłka.</div><div class="krok">Jest słówko <mark>jak</mark> ➜ <b>porównanie</b>.</div><div class="krok">morze łez</div><div class="krok">Nie ma słówka, a dosłownie to bzdura (nikt nie płacze morzem) ➜ <mark>przenośnia</mark>.</div></template>
+        
+        <div class="linie k2"><div class="l">Śmiał się jak hiena. <span class="wybor"><span class="opc" data-ok="1">porównanie</span><span class="opc">przenośnia</span></span></div><div class="l">fala śmiechu <span class="wybor"><span class="opc">porównanie</span><span class="opc" data-ok="1">przenośnia</span></span></div><div class="l">Szumiał niczym morze. <span class="wybor"><span class="opc" data-ok="1">porównanie</span><span class="opc">przenośnia</span></span></div><div class="l">serce z lodu <span class="wybor"><span class="opc">porównanie</span><span class="opc" data-ok="1">przenośnia</span></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#1FA58A;--k9:#ebf7f4;--k12:#e4f4f1;--k45:#9ad7ca">
+      <div class="wiedza"><h2><span>2</span>Związki frazeologiczne</h2><p><b>Związek frazeologiczny</b> - stałe połączenie wyrazów o przenośnym znaczeniu. Nie rozumiemy go dosłownie.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">2.1</span> Zakreśl prawdziwe znaczenie.</div>
+        <div class="info" hidden>Nie czytaj dosłownie. Zapytaj: co by to znaczyło, gdyby ktoś tak powiedział o koledze?</div>
+        <template class="przyklad"><div class="krok">dać nogę</div><div class="krok">Dosłownie: ktoś daje komuś nogę? <mark>Bez sensu</mark>.</div><div class="krok">Przenośnie: szybko <mark>uciec</mark>.</div></template>
+        
+        <div class="linie"><div class="l">mieć głowę na karku <span class="wybor"><span class="opc" data-ok="1">być rozsądnym</span><span class="opc">mieć długą szyję</span></span></div><div class="l">owinąć kogoś wokół palca <span class="wybor"><span class="opc" data-ok="1">robić z kimś, co się chce</span><span class="opc">bawić się nitką</span></span></div><div class="l">mieć nosa <span class="wybor"><span class="opc" data-ok="1">trafnie coś przeczuć</span><span class="opc">mieć duży nos</span></span></div><div class="l">serce mu pękło <span class="wybor"><span class="opc" data-ok="1">było mu bardzo smutno</span><span class="opc">zachorował</span></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#E0679A;--k9:#fcf1f6;--k12:#fbedf3;--k45:#f1bbd2">
+      <div class="wiedza"><h2><span>3</span>Zdrobnienia i zgrubienia</h2><p><b>Zdrobnienie</b> - małe albo czule: domek (-ek, -ka, -ko). <b>Zgrubienie</b> - duże, żartem: domisko (-isko).</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">3.1</span> Utwórz zdrobnienie i zgrubienie.</div>
+        <div class="info" hidden>Zdrobnienie: dodaj -ek, -ka, -ko (czasem głoski się zmieniają). Zgrubienie: dodaj -isko, -sko. Powiedz na głos, czy brzmi dobrze.</div>
+        <template class="przyklad"><div class="krok">pies</div><div class="krok">małe, czule: <mark>piesek</mark></div><div class="krok">duże, żartem: <mark>psisko</mark></div></template>
+        
+        
+        <table class="tab"><thead><tr><th>wyraz</th><th>zdrobnienie</th><th>zgrubienie</th></tr></thead>
+  <tbody><tr><td><b>wóz</b></td><td><span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="wózek"></span></td><td><span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="wozisko"></span></td></tr><tr><td><b>ręka</b></td><td><span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="rączka"></span></td><td><span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="ręczysko / łapsko"></span></td></tr><tr><td><b>kamień</b></td><td><span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="kamyk / kamyczek"></span></td><td><span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="kamienisko"></span></td></tr></tbody></table>
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#D98A1F;--k9:#fcf4eb;--k12:#faf1e4;--k45:#eeca9a">
+      <div class="wiedza"><h2><span>4</span>Przypadki</h2><p><b>M</b> kto? co? · <b>D</b> kogo? czego? · <b>C</b> komu? czemu? · <b>B</b> kogo? co? · <b>N</b> z kim? z czym? · <b>Ms</b> o kim? o czym? · <b>W</b> o!</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">4.1</span> W jakim przypadku jest podkreślony rzeczownik? Wpisz skrót.</div>
+        <div class="info" hidden>Znajdź czasownik i zadaj od niego pytanie o podkreślony wyraz. Pytanie podpowie przypadek.</div>
+        <template class="przyklad"><div class="krok">Gram z siostrą.</div><div class="krok">Czasownik: <mark>gram</mark>. Gram (z kim?) z siostrą.</div><div class="krok">z kim? z czym? ➜ <b>narzędnik (N)</b></div></template>
+        
+        <div class="linie k2"><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="D"></span> Nie widzę <u>drogi</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="C"></span> Pomagam <u>bratu</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="B"></span> Zjadłem <u>gruszkę</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="N"></span> Jadę <u>rowerem</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="Ms"></span> Śnię o <u>smokach</u>.</div><div class="l"><span class="luka" style="min-width:9mm" contenteditable="true" spellcheck="false" data-odp="W"></span> <u>Kasiu</u>, chodź!</div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#2A8C9E;--k9:#ecf5f6;--k12:#e5f1f3;--k45:#9fcbd3">
+      <div class="wiedza"><h2><span>5</span>Nietypowa odmiana</h2><p>Na <b>-um</b> w lp. się nie odmieniają: w muzeum. Tylko lp.: odwaga. Tylko lm.: drzwi, sanie.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">5.1</span> Popraw źle użyty wyraz.</div>
+        <div class="info" hidden>Rzeczowniki na -um w liczbie pojedynczej mają zawsze tę samą formę: to liceum, w liceum, do liceum.</div>
+        <template class="przyklad"><div class="krok">Byłam w „muzeumie”.</div><div class="krok">muzeum kończy się na <mark>-um</mark> ➜ w lp. się nie odmienia.</div><div class="krok">Byłam w <mark>muzeum</mark>.</div></template>
+        
+        <div class="linie"><div class="l">Spotkamy się przy „liceumie”. ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="liceum"></span></div><div class="l">Mieszkam blisko „gimnazjumu”. ➜ <span class="luka" style="min-width:26mm" contenteditable="true" spellcheck="false" data-odp="gimnazjum"></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">5.2</span> Tylko liczba pojedyncza czy tylko mnoga? Zakreśl.</div>
+        <div class="info" hidden>Powiedz „jeden ...” i „dwa ...”. Nie da się powiedzieć „jeden grabi”? To tylko lm. Nie ma „dwa szczęścia”? To tylko lp.</div>
+        <template class="przyklad"><div class="krok">okulary</div><div class="krok">„jeden okular”? <mark>nie brzmi</mark> ➜ <b>tylko lm.</b></div><div class="krok">tlen</div><div class="krok">„dwa tleny”? <mark>nie brzmi</mark> ➜ <b>tylko lp.</b></div></template>
+        
+        <div class="linie k2"><div class="l">grabie <span class="wybor"><span class="opc">tylko lp.</span><span class="opc" data-ok="1">tylko lm.</span></span></div><div class="l">szczęście <span class="wybor"><span class="opc" data-ok="1">tylko lp.</span><span class="opc">tylko lm.</span></span></div><div class="l">ferie <span class="wybor"><span class="opc">tylko lp.</span><span class="opc" data-ok="1">tylko lm.</span></span></div><div class="l">chrust <span class="wybor"><span class="opc" data-ok="1">tylko lp.</span><span class="opc">tylko lm.</span></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#B5562B;--k9:#f8f0ec;--k12:#f6ebe6;--k45:#deb3a0">
+      <div class="wiedza"><h2><span>6</span>Ę i ą na końcu wyrazu</h2><p><b>-ę</b>: widzę kogo? co? (mamę), ja (piszę), małe zwierzę (kocię). <b>-ą</b>: z kim? z czym? (z mamą), oni (piszą).</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">6.1</span> Dopisz ę albo ą.</div>
+        <div class="info" hidden>Zadaj pytanie: widzę co? - ę, z kim? z czym? - ą. Przy czasowniku: ja - ę, oni - ą.</div>
+        <template class="przyklad"><div class="krok">Czytam książk…</div><div class="krok">Czytam (co?) <mark>książkę</mark> ➜ biernik, <b>-ę</b>.</div><div class="krok">Idę z babci…</div><div class="krok">Idę (z kim?) <mark>z babcią</mark> ➜ narzędnik, <b>-ą</b>.</div></template>
+        
+        <div class="linie k2"><div class="l">Pomaluję ścian<span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="ę"></span> na zielono.</div><div class="l">Rozmawiam z nauczycielk<span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="ą"></span>.</div><div class="l">Psy szczekaj<span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="ą"></span> na listonosza.</div><div class="l">W kurniku piszczy kurcz<span class="luka" style="min-width:8mm" contenteditable="true" spellcheck="false" data-odp="ę"></span>.</div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#D6336C;--k9:#fbedf2;--k12:#fae7ed;--k45:#eda3bd">
+      <div class="wiedza"><h2><span>7</span>Temat, końcówka i ó</h2><p><b>Temat</b> się nie zmienia, <b>końcówka</b> tak: kot|y. <b>Ó</b> piszę, gdy w innej formie jest <b>o</b>: stół - stoły.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">7.1</span> Wpisz ó albo u i podaj wyraz, który to udowadnia.</div>
+        <div class="info" hidden>Odmień wyraz albo poszukaj wyrazu z tej samej rodziny. Pojawia się o? Piszesz ó.</div>
+        <template class="przyklad"><div class="krok">st…ł</div><div class="krok">Odmieniam: <mark>stoły</mark>, stołu - jest <b>o</b>.</div><div class="krok">Piszę <mark>stół</mark>.</div></template>
+        
+        <div class="linie k2"><div class="l">pok<span class="luka" style="min-width:6mm" contenteditable="true" spellcheck="false" data-odp="ó"></span>j ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="pokoje"></span></div><div class="l">samoch<span class="luka" style="min-width:6mm" contenteditable="true" spellcheck="false" data-odp="ó"></span>d ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="samochody"></span></div><div class="l">ogr<span class="luka" style="min-width:6mm" contenteditable="true" spellcheck="false" data-odp="ó"></span>d ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="ogrody"></span></div><div class="l">p<span class="luka" style="min-width:6mm" contenteditable="true" spellcheck="false" data-odp="ó"></span>ł ➜ <span class="luka" style="min-width:22mm" contenteditable="true" spellcheck="false" data-odp="połowa"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#2F7D5B;--k9:#ecf3f0;--k12:#e6efeb;--k45:#a1c5b5">
+      <div class="wiedza"><h2><span>8</span>Sprawozdanie</h2><p><b>Wstęp</b>: kto? co? kiedy? gdzie? <b>Przebieg</b> po kolei (najpierw, potem, na koniec). <b>Zakończenie</b>: krótka opinia.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">8.1</span> Z której części sprawozdania jest zdanie? Zakreśl.</div>
+        <div class="info" hidden>Mówi, kto, gdzie i kiedy? Wstęp. Opisuje, co się działo po kolei? Przebieg. Mówi, jak mi się podobało? Zakończenie.</div>
+        <template class="przyklad"><div class="krok">We wtorek byliśmy w teatrze.</div><div class="krok">Mówi <mark>kiedy</mark> i <mark>gdzie</mark> ➜ <b>wstęp</b>.</div><div class="krok">Spektakl bardzo mi się podobał.</div><div class="krok">To <mark>moja opinia</mark> ➜ <b>zakończenie</b>.</div></template>
+        
+        <div class="linie"><div class="l">W sobotę harcerze pojechali na biwak w lesie. <span class="wybor"><span class="opc" data-ok="1">wstęp</span><span class="opc">przebieg</span><span class="opc">zakończenie</span></span></div><div class="l">Najpierw rozbiliśmy namioty. <span class="wybor"><span class="opc">wstęp</span><span class="opc" data-ok="1">przebieg</span><span class="opc">zakończenie</span></span></div><div class="l">Potem rozpaliliśmy ognisko. <span class="wybor"><span class="opc">wstęp</span><span class="opc" data-ok="1">przebieg</span><span class="opc">zakończenie</span></span></div><div class="l">To był najlepszy weekend tej jesieni. <span class="wybor"><span class="opc">wstęp</span><span class="opc">przebieg</span><span class="opc" data-ok="1">zakończenie</span></span></div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">8.2</span> Napisz wstęp sprawozdania z ostatniej wycieczki albo wyjścia klasy (1-2 zdania).</div>
+        <div class="info" hidden>Wstęp odpowiada na pytania: kto? co? kiedy? gdzie? Pisz w czasie przeszłym, same fakty.</div>
+        <template class="przyklad"><div class="krok">Kto? <mark>nasza klasa</mark> · Co? <mark>wyjście do kina</mark> · Kiedy? <mark>w piątek</mark> · Gdzie? <mark>w Kinie Luna</mark></div><div class="krok">W piątek nasza klasa poszła do Kina Luna na film przyrodniczy.</div></template>
+        
+        
+        
+        <div class="pisz" contenteditable="true" spellcheck="false" style="height:16mm"></div><template><div class="wzor">np. W czwartek klasa 5a pojechała na wycieczkę do Wieliczki, żeby zwiedzić kopalnię soli.</div></template>
+        
+      </div></div>
+    </section><section class="temat" style="--k:#1B6E8F;--k9:#eaf2f5;--k12:#e4eef2;--k45:#98becd">
+      <div class="wiedza"><h2><span>9</span>Dwukropek</h2><p>Dwukropek stawiam przed <b>dialogiem</b>, przed <b>wyliczeniem</b> (po zapowiedzi: trzy owoce:) i przed <b>cytatem</b>.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">9.1</span> Czy w miejscu ▢ trzeba postawić dwukropek? Zakreśl.</div>
+        <div class="info" hidden>Coś zaraz nastąpi: czyjaś wypowiedź, wyliczenie po zapowiedzi (trzy rzeczy, następujące) albo cytat? Wtedy dwukropek. Inaczej - nic.</div>
+        <template class="przyklad"><div class="krok">Kupiłam dwa owoce ▢ jabłko i banana.</div><div class="krok">„dwa owoce” <mark>zapowiada</mark> wyliczenie ➜ <b>dwukropek</b>.</div><div class="krok">Kupiłam ▢ jabłko w sklepie.</div><div class="krok">Nic nie zapowiadam ➜ <mark>bez dwukropka</mark>.</div></template>
+        
+        <div class="linie"><div class="l">Kolega zapytał ▢ – Grasz z nami? <span class="wybor"><span class="opc" data-ok="1">tak</span><span class="opc">nie</span></span></div><div class="l">Wróciliśmy ▢ późno. <span class="wybor"><span class="opc">tak</span><span class="opc" data-ok="1">nie</span></span></div><div class="l">Na drzwiach wisiał napis ▢ „Proszę pukać”. <span class="wybor"><span class="opc" data-ok="1">tak</span><span class="opc">nie</span></span></div><div class="l">W koszyku miałam trzy owoce ▢ jabłko, gruszkę i śliwkę. <span class="wybor"><span class="opc" data-ok="1">tak</span><span class="opc">nie</span></span></div></div>
+        
+        
+        
+      </div></div>
+    </section><section class="temat" style="--k:#C2410C;--k9:#faeee9;--k12:#f8e8e2;--k45:#e4aa92">
+      <div class="wiedza"><h2><span>10</span>Tekst reklamowy</h2><p><b>Reklama</b> namawia do kupna: hasło, wykrzykniki, słowa nowość, gratis, taniej i obietnice bez pokrycia.</p></div>
+      <div class="zadania"><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">10.1</span> Podkreśl cztery słowa albo zwroty, które namawiają do kupna.</div>
+        <div class="info" hidden>Szukaj słów-wabików (nowość, gratis, taniej), pośpiechu (tylko dziś, ostatnia szansa) i obietnic.</div>
+        <template class="przyklad"><div class="krok">Promocja! Sok Owocek - teraz taniej!</div><div class="krok">Wabiki: <mark>Promocja!</mark> i <mark>teraz taniej</mark>.</div></template>
+        
+        <div class="linie"><div class="l"><span class="sl" data-ok="1">Nowość!</span> <span class="sl">Batonik</span> <span class="sl">Mocarz</span> <span class="sl">-</span> <span class="sl" data-ok="1">tylko dziś</span> <span class="sl">w</span> <span class="sl">każdym</span> <span class="sl">sklepie</span> <span class="sl" data-ok="1">taniej</span>! <span class="sl">Do</span> <span class="sl">każdego</span> <span class="sl">batonika</span> <span class="sl">naklejka</span> <span class="sl" data-ok="1">gratis</span>!</div></div>
+        
+        
+        
+      </div><div class="zad">
+        <div class="pol"><button type="button" class="pokaz">Odpowiedź</button><button type="button" class="info-btn">Info</button><span class="nr">10.2</span> Co obiecuje ta reklama? Czy to na pewno prawda?</div>
+        <div class="info" hidden>Obietnica to to, co według reklamy zyskasz. Zastanów się, czy batonik naprawdę to daje.</div>
+        <template class="przyklad"><div class="krok">„Z sokiem Owocek będziesz najszybszy w klasie!”</div><div class="krok">Obietnica: <mark>będę najszybszy</mark>. Prawda? <mark>Nie</mark> - sok nie sprawi, że szybciej biegam.</div></template>
+        
+        <div class="linie"><div class="l">Batonik Mocarz - z nim będziesz silny jak lew!</div><div class="l">➜ <span class="luka" style="min-width:100mm" contenteditable="true" spellcheck="false" data-odp="np. że będę silny jak lew - to nieprawda, batonik nie daje siły lwa"></span></div></div>
+        
+        
+        
+      </div></div>
+    </section>
+</section></main>
+<div id="okno" hidden><div class="okno-tlo"></div><div class="okno-karta">
+<button type="button" class="okno-x" aria-label="Zamknij">×</button>
+<div class="okno-tytul">Jak to zrobić?</div><div class="okno-pol"></div><div class="okno-info"></div><div class="okno-kroki"></div>
+<div class="okno-dol"><button type="button" class="okno-znowu">Jeszcze raz</button><button type="button" class="okno-zamknij">Rozumiem</button></div>
+</div></div>
+<script>
+var karta = document.getElementById('karta'), KLUCZ_ZAPISU = 'karta:klasa5-dzial2-karta:20448';
+// Kartka A4 (210 mm = 794 px) + marginesy rozciągnięta na szerokość ekranu.
+function dopasuj() { document.body.style.zoom = Math.max(1, Math.min(2.6, document.documentElement.clientWidth / 840)); }
+window.addEventListener('resize', dopasuj); dopasuj();
+try { var zapis = localStorage.getItem(KLUCZ_ZAPISU); if (zapis) karta.innerHTML = zapis; } catch (e) {}
+var czas;
+function zapisz() { clearTimeout(czas); czas = setTimeout(function () { try { localStorage.setItem(KLUCZ_ZAPISU, karta.innerHTML); } catch (e) {} }, 300); }
+function norm(t) { return t.replace(/^np\.\s*/i, '').replace(/[\s.,!?…]+/g, ' ').trim().toLowerCase(); }
+// „pszczoła / mrówka” - każda z odpowiedzi jest dobra.
+function pasuje(wpis, odp) { return odp.split(' / ').concat([odp]).some(function (o) { return norm(wpis) === norm(o); }); }
+function pokaz(zad, wl) {
+  zad.querySelector('.pokaz').classList.toggle('wl', wl);
+  zad.querySelectorAll('.luka').forEach(function (l) {
+    var nast = l.nextSibling;
+    if (nast && nast.classList && nast.classList.contains('podp')) nast.remove();
+    if (l.classList.contains('odp')) { l.textContent = ''; l.classList.remove('odp'); }
+    l.classList.remove('dobrze', 'zle');
+    if (!wl) return;
+    var odp = l.getAttribute('data-odp'), wpis = l.textContent.trim();
+    if (!wpis) { l.textContent = odp; l.classList.add('odp'); }
+    else if (pasuje(wpis, odp)) l.classList.add('dobrze');
+    else {
+      // Przy „np. ...” wpis nie jest błędem - obok tylko przykładowa odpowiedź do porównania.
+      if (!/^np\./i.test(odp)) l.classList.add('zle');
+      var s = document.createElement('span'); s.className = 'podp'; s.textContent = odp; l.after(s);
+    }
+  });
+  zad.querySelectorAll('.opc, .sl').forEach(function (o) {
+    var ok = o.hasAttribute('data-ok'), wybrane = o.classList.contains('zakr') || o.classList.contains('podkr');
+    o.classList.toggle('dobrze', wl && ok);
+    o.classList.toggle('zle', wl && !ok && wybrane);
+  });
+  var w = zad.querySelector(':scope > .wzor');
+  if (w) w.remove();
+  var t = zad.querySelector('template');
+  if (wl && t) zad.appendChild(t.content.cloneNode(true));
+}
+karta.addEventListener('click', function (e) {
+  var b = e.target.closest('.pokaz');
+  if (b) { pokaz(b.closest('.zad'), !b.classList.contains('wl')); zapisz(); return; }
+  var ib = e.target.closest('.info-btn');
+  if (ib) { otworzInfo(ib.closest('.zad')); return; }
+  var o = e.target.closest('.opc');
+  if (o) { o.classList.toggle('zakr'); zapisz(); return; }
+  var s = e.target.closest('.sl');
+  if (s) { s.classList.toggle('podkr'); zapisz(); }
+});
+karta.addEventListener('input', zapisz);
+// Okno „Info”: reguła i przykład krok po kroku. Kroki wchodzą same co chwilę, kliknięcie w nie przyspiesza.
+var okno = document.getElementById('okno'), kroki = okno.querySelector('.okno-kroki'), zegar;
+function nastepny() {
+  clearTimeout(zegar);
+  var ukryty = kroki.querySelector('.krok:not(.widac)');
+  if (!ukryty) return;
+  kroki.querySelectorAll('.teraz').forEach(function (k) { k.classList.remove('teraz'); });
+  ukryty.classList.add('widac', 'teraz');
+  if (kroki.querySelector('.krok:not(.widac)')) zegar = setTimeout(nastepny, 2200);
+}
+function odtworz() {
+  kroki.querySelectorAll('.krok').forEach(function (k) { k.classList.remove('widac', 'teraz'); });
+  clearTimeout(zegar); zegar = setTimeout(nastepny, 500);
+}
+function otworzInfo(zad) {
+  var sekcja = zad.closest('.temat'), st = getComputedStyle(sekcja);
+  okno.style.setProperty('--k', st.getPropertyValue('--k'));
+  okno.style.setProperty('--k9', st.getPropertyValue('--k9'));
+  var pol = zad.querySelector('.pol').cloneNode(true);
+  pol.querySelectorAll('button, .pkt').forEach(function (b) { b.remove(); });
+  okno.querySelector('.okno-pol').innerHTML = pol.innerHTML;
+  var inf = zad.querySelector('.info');
+  okno.querySelector('.okno-info').innerHTML = inf ? inf.innerHTML : '';
+  var t = zad.querySelector('template.przyklad');
+  kroki.innerHTML = '';
+  if (t) kroki.appendChild(t.content.cloneNode(true));
+  okno.querySelector('.okno-znowu').hidden = !t;
+  okno.hidden = false;
+  odtworz();
+}
+function zamknijInfo() { okno.hidden = true; clearTimeout(zegar); }
+kroki.addEventListener('click', nastepny);
+okno.querySelector('.okno-znowu').onclick = odtworz;
+okno.querySelector('.okno-x').onclick = zamknijInfo;
+okno.querySelector('.okno-zamknij').onclick = zamknijInfo;
+okno.querySelector('.okno-tlo').onclick = zamknijInfo;
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !okno.hidden) zamknijInfo(); });
+karta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('luka')) e.preventDefault(); });
+var wszystko = document.getElementById('wszystko');
+if (wszystko) wszystko.onclick = function () {
+  var wl = !this.classList.contains('wl');
+  this.classList.toggle('wl', wl); this.textContent = wl ? 'Ukryj odpowiedzi' : 'Pokaż wszystkie odpowiedzi';
+  karta.querySelectorAll('.zad').forEach(function (z) { pokaz(z, wl); }); zapisz();
+};
+// Sprawdzian: na ekranie jedna grupa naraz.
+var grupy = document.querySelectorAll('.grupa-btn');
+function grupa(g) {
+  grupy.forEach(function (b) { b.classList.toggle('wl', b.getAttribute('data-grupa') === g); });
+  karta.querySelectorAll('.arkusz[data-grupa]').forEach(function (a) { a.hidden = a.getAttribute('data-grupa') !== g; });
+  try { localStorage.setItem(KLUCZ_ZAPISU + ':grupa', g); } catch (e) {}
+}
+grupy.forEach(function (b) { b.onclick = function () { grupa(b.getAttribute('data-grupa')); window.scrollTo(0, 0); }; });
+if (grupy.length) { var g0 = null; try { g0 = localStorage.getItem(KLUCZ_ZAPISU + ':grupa'); } catch (e) {} grupa(g0 || grupy[0].getAttribute('data-grupa')); }
+document.getElementById('wyczysc').onclick = function () {
+  if (!confirm('Wyczyścić wszystko, co jest wpisane?')) return;
+  try { localStorage.removeItem(KLUCZ_ZAPISU); } catch (e) {}
+  location.reload();
+};
+</script>
+</body></html>

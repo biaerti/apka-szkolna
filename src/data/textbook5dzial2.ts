@@ -669,13 +669,14 @@ export const DZIAL2_TOPICS: Topic[] = [
     topic: 'Uwaga, uczucia! - powtórzenie',
     textbookPage: 96,
     teacherPlan: plan(
-      ['Co dziś', 'Powtórka przed sprawdzianem, którą prowadzisz Ty. Jedno zagadnienie na slajd: krótko przypominasz regułę na przykładach, a potem od razu robicie razem kartę. Bez filmu i bez notatki - zeszyty już to mają.'],
+      ['Co dziś', 'Powtórka przed sprawdzianem, którą prowadzisz Ty, razem z kartą pracy działu 2 (rozdaj na początku). Jedno zagadnienie na slajd: krótko przypominasz regułę na przykładach, robicie razem kartę na projektorze, a potem uczniowie sami robią zadanie o tym samym numerze z karty pracy (znaczek „Teraz sami” w rogu karty). Bez filmu i bez notatki.'],
       ['Przebieg (45 min)', [
         '1. **Temat + koło powtórzeniowe** (5 min) - podsumowanie działu.',
         '2. **10 zagadnień po ok. 4 minuty**: porównanie i przenośnia · związki frazeologiczne · zdrobnienia i zgrubienia · przypadki · nietypowa odmiana · ę i ą · temat, końcówka i ó · sprawozdanie · dwukropek · tekst reklamowy.',
         '3. Przy każdym: **Przypomnienie** - strzałka (albo klik w prawą połowę) odsłania kolejny krok, w lewo chowa. Mów do każdego kroku, pokaż przykład. Gdy widać wszystko, strzałka idzie dalej.',
         '4. Potem **karta Ćwiczymy razem** (przy nietypowej odmianie dwie). **Info** obok „Sprawdź” wyświetla regułę do zadania - pokaż ją przed sprawdzaniem. Na każdy przykład koło (K) losuje osobę.',
-        '5. Brakuje czasu? Sprawozdanie i reklamę przejdź szybciej - na sprawdzianie to po jednym zadaniu.',
+        '5. **Teraz sami** (1-2 min): uczniowie robią na karcie pracy zadanie o numerze ze znaczka, Ty chodzisz po klasie. Sprawdzacie na następnej lekcji (karta na projektor w pasku „Po dziale”).',
+        '6. Nie zdążycie wszystkiego? Dokończcie na następnej lekcji - kolejność tematów i zadań jest ta sama.',
       ].join('\n')],
     ),
     questions: [

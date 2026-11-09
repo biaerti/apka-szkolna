@@ -250,7 +250,15 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
           </span>
           <h2 className="truncate text-[40px] font-bold leading-tight text-white">{cw.tytul}</h2>
         </div>
-        <p className="mt-2 text-2xl leading-snug text-gray-300">{cw.polecenie}</p>
+        <div className="mt-2 flex items-start gap-4">
+          <p className="min-w-0 flex-1 text-2xl leading-snug text-gray-300">{cw.polecenie}</p>
+          {/* Po wspolnej karcie uczniowie robia sami zadanie z karty pracy o tym samym typie. */}
+          {cw.samodzielnie && (
+            <span className="shrink-0 rounded-lg bg-amber-400 px-3 py-1 text-xl font-bold text-gray-900">
+              Teraz sami: karta pracy, {cw.samodzielnie}
+            </span>
+          )}
+        </div>
       </header>
 
       <div className="flex min-h-0 flex-1 items-center py-3">
