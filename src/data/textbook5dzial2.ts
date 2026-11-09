@@ -53,6 +53,11 @@ function razem(...ids: string[]): Slide[] {
   return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
 }
 
+/** Przypomnienie na lekcji powtorkowej (src/data/przypomnienia.ts) - kroki odslaniane strzalka. */
+function przypomnienie(przypomnienieId: string): Slide {
+  return { id: newId(), kind: 'przypomnienie', przypomnienieId };
+}
+
 export const DZIAL2_TOPICS: Topic[] = [
   {
     title: '17. Przenośnia - słowa nie wprost',
@@ -652,6 +657,58 @@ export const DZIAL2_TOPICS: Topic[] = [
       zad('d2-s98-zad10', 98, '10', 'zeszyt'),
       slideNote('Uwaga, uczucia! - podsumowanie', '**Słowa i emocje:** przenośnia (kamienne serce), związek frazeologiczny (czuć miętę), zdrobnienie (piesek), zgrubienie (psisko).\n**Rzeczownik:** przypadki; własne wielką literą; muzeum - w muzeum; tylko lp. (odzież), tylko lm. (drzwi).\n**Pisownia:** -ę: widzę mamę, piszę, kocię; -ą: z mamą, piszą. Dwukropek: dialog, wyliczenie, cytat.\n**Formy:** sprawozdanie (kto, co, gdzie, kiedy, przebieg, opinia), tekst reklamowy, recytacja.'),
       ...razem('k5-podsumowanie-d2'),
+    ],
+  },
+  {
+    // Powtorka, ktora prowadzi nauczyciel (Bartek 2026-11-09, jak lekcja 29 kl. 4):
+    // 10 zagadnien, jedno na slajd - przypomnienie z krokami na strzalke
+    // (src/data/przypomnienia.ts) i od razu karta "Ćwiczymy razem" z Info.
+    // Bez filmu i bez notatki. Zlosc i recytacje pomijamy - nie ma ich na sprawdzianie.
+    title: '29a. Powtórzenie działu 2',
+    dzial: DZIAL,
+    topic: 'Uwaga, uczucia! - powtórzenie',
+    textbookPage: 96,
+    teacherPlan: plan(
+      ['Co dziś', 'Powtórka przed sprawdzianem, którą prowadzisz Ty. Jedno zagadnienie na slajd: krótko przypominasz regułę na przykładach, a potem od razu robicie razem kartę. Bez filmu i bez notatki - zeszyty już to mają.'],
+      ['Przebieg (45 min)', [
+        '1. **Temat + koło powtórzeniowe** (5 min) - podsumowanie działu.',
+        '2. **10 zagadnień po ok. 4 minuty**: porównanie i przenośnia · związki frazeologiczne · zdrobnienia i zgrubienia · przypadki · nietypowa odmiana · ę i ą · temat, końcówka i ó · sprawozdanie · dwukropek · tekst reklamowy.',
+        '3. Przy każdym: **Przypomnienie** - strzałka (albo klik w prawą połowę) odsłania kolejny krok, w lewo chowa. Mów do każdego kroku, pokaż przykład. Gdy widać wszystko, strzałka idzie dalej.',
+        '4. Potem **karta Ćwiczymy razem** (przy nietypowej odmianie dwie). **Info** obok „Sprawdź” wyświetla regułę do zadania - pokaż ją przed sprawdzaniem. Na każdy przykład koło (K) losuje osobę.',
+        '5. Brakuje czasu? Sprawozdanie i reklamę przejdź szybciej - na sprawdzianie to po jednym zadaniu.',
+      ].join('\n')],
+    ),
+    questions: [
+      { text: 'Porównanie czy przenośnia: „deszcz pytań”?', answer: 'Przenośnia - nie ma słówka „jak”, nie rozumiemy dosłownie.' },
+      { text: 'Co znaczy „mieć serce na dłoni”?', answer: 'Być życzliwym, chętnie pomagać.' },
+      { text: 'Utwórz zdrobnienie i zgrubienie od „nos”.', answer: 'Nosek, nochal (nosisko).' },
+      { text: 'Popraw: „Byliśmy w muzeumie”.', answer: 'Byliśmy w muzeum - -um w lp. się nie odmienia.' },
+      { text: 'ę czy ą: Oni czytaj… książki.', answer: 'czytają - oni, więc -ą.' },
+      { text: 'Gdzie wstawisz dwukropek: Kupiłam trzy rzeczy chleb, ser i mleko.', answer: 'Po „rzeczy” - przed wyliczeniem.' },
+    ],
+    makeSlides: (previousSetId, _ownSetId) => [
+      slideTopic('Uwaga, uczucia! - powtórzenie'),
+      ...recap(previousSetId),
+      przypomnienie('p5-d2-przenosnia'),
+      ...razem('k5-powt2-przenosnia'),
+      przypomnienie('p5-d2-frazeo'),
+      ...razem('k5-powt2-frazeo'),
+      przypomnienie('p5-d2-nacechowane'),
+      ...razem('k5-powt2-nacechowane'),
+      przypomnienie('p5-d2-przypadki'),
+      ...razem('k5-powt2-przypadek'),
+      przypomnienie('p5-d2-nietypowe'),
+      ...razem('k5-powt2-um', 'k5-powt2-liczba'),
+      przypomnienie('p5-d2-ea'),
+      ...razem('k5-powt2-ea'),
+      przypomnienie('p5-d2-temat'),
+      ...razem('k5-powt2-o'),
+      przypomnienie('p5-d2-sprawozdanie'),
+      ...razem('k5-powt2-sprawozdanie'),
+      przypomnienie('p5-d2-dwukropek'),
+      ...razem('k5-powt2-dwukropek'),
+      przypomnienie('p5-d2-reklama'),
+      ...razem('k5-powt2-reklama'),
     ],
   },
 ];

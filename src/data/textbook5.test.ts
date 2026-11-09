@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildTextbook5, RETIRED_TEXTBOOK5_TITLES, TEXTBOOK5_TOPIC_COUNT } from './textbook5';
 import { cwiczenieById } from './cwiczenia';
+import { przypomnienieById } from './przypomnienia';
 
 describe('buildTextbook5', () => {
   const bundle = buildTextbook5('V', ['klasa-5a']);
@@ -106,8 +107,8 @@ describe('buildTextbook5', () => {
     for (const lesson of bundle.lessons) {
       expect(lesson.teacherPlan).toMatch(/^## /);
       expect(lesson.slides[0].kind).toBe('topic');
-      // Powtorka przed sprawdzianem (16a) to same karty - bez nowej notatki.
-      if (!lesson.title.startsWith('16a.')) expect(lesson.slides.some((s) => s.kind === 'note'), lesson.title).toBe(true);
+      // Powtorki przed sprawdzianem (16a, 29a) bez nowej notatki.
+      if (!/^(16a|29a)\./.test(lesson.title)) expect(lesson.slides.some((s) => s.kind === 'note'), lesson.title).toBe(true);
     }
   });
 
@@ -147,7 +148,7 @@ describe('buildTextbook5', () => {
 
   it('dzial 2: kazdy screen zadania to jedno zadanie z numerem strony i kodem dla kola', () => {
     const dzial2 = bundle.lessons.filter((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
-    expect(dzial2).toHaveLength(13);
+    expect(dzial2).toHaveLength(14);
     for (const lesson of dzial2) {
       for (const slide of lesson.slides) {
         if (slide.kind !== 'image') continue;
@@ -169,7 +170,8 @@ describe('buildTextbook5', () => {
   });
 
   it('dzial 2: po notatce 1-3 karty Ćwiczymy razem, screeny zadan tylko przed filmem', () => {
-    const dzial2 = bundle.lessons.filter((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
+    // 29a to powtorka z nauczycielem bez notatki - ma osobny test.
+    const dzial2 = bundle.lessons.filter((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!' && !l.title.startsWith('29a.'));
     for (const lesson of dzial2) {
       const poNotatce = lesson.slides.slice(lesson.slides.findIndex((s) => s.kind === 'note') + 1);
       const karty = poNotatce.filter((s) => s.kind === 'cwiczenie');
@@ -179,6 +181,21 @@ describe('buildTextbook5', () => {
       expect(poNotatce[0]?.kind, lesson.title).toBe('cwiczenie');
       // Wyjatek: recytacja - lamance i oddech to teksty do mowienia na glos cala klasa.
       if (!lesson.title.startsWith('21.')) expect(poNotatce.some((s) => s.kind === 'image'), lesson.title).toBe(false);
+    }
+  });
+
+  it('powtorka dzialu 2 z nauczycielem: 10 przypomnien, po kazdym 1-2 karty z Info', () => {
+    const lesson = bundle.lessons.find((l) => l.title.startsWith('29a.'))!;
+    expect(lesson.dzial).toBe('Dział 2 - Uwaga, uczucia!');
+    const kinds = lesson.slides.map((s) => s.kind);
+    expect(kinds.slice(0, 2)).toEqual(['topic', 'recap']);
+    const bloki = kinds.slice(2).join(' ').split('przypomnienie').slice(1).map((b) => b.trim().split(' '));
+    expect(bloki).toHaveLength(10);
+    for (const b of bloki) expect(b.length === 1 || b.length === 2, b.join()).toBe(true);
+    expect(bloki.flat().every((k) => k === 'cwiczenie')).toBe(true);
+    for (const s of lesson.slides) {
+      if (s.kind === 'przypomnienie') expect(przypomnienieById(s.przypomnienieId), s.przypomnienieId).toBeTruthy();
+      if (s.kind === 'cwiczenie') expect(cwiczenieById(s.cwiczenieId)?.info, s.cwiczenieId).toBeTruthy();
     }
   });
 

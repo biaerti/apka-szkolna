@@ -35,6 +35,7 @@ export interface Przypomnienie {
 
 // Jedno zagadnienie na slajd (Bartek 2026-11-01: "rozdzielilbym, bo sa na 1 slajdzie oba zagadnienia").
 const R2 = (n: number) => `Powtórka rozdziału II · ${n}/9`;
+const R5 = (n: number) => `Powtórka działu 2 · ${n}/10`;
 
 export const PRZYPOMNIENIA: Przypomnienie[] = [
   // ---------- Klasa 4, rozdzial II - lekcja 29 (powtorka z nauczycielem) ----------
@@ -136,6 +137,114 @@ export const PRZYPOMNIENIA: Przypomnienie[] = [
       { typ: 'pytanie', zdanie: 'Ola czuje niepokój.', od: 'czuje', do: 'niepokój', pytanie: 'co?', wynik: 'rzeczownik - razem' },
       { typ: 'pytanie', zdanie: 'Kuba nie śpi.', od: 'Kuba', do: 'śpi', pytanie: 'co robi?', wynik: 'czasownik - osobno' },
       { typ: 'zamiana', pary: [['nie porządek', 'nieporządek'], ['niewiem', 'nie wiem']] },
+    ],
+  },
+
+  // ---------- Klasa 5, dzial 2 - lekcja 29a (powtorka z nauczycielem) ----------
+  {
+    id: 'p5-d2-przenosnia',
+    naglowek: R5(1),
+    tytul: 'Porównanie i przenośnia',
+    kroki: [
+      { typ: 'regula', tekst: '**Porównanie** mówi wprost, ma słówko ==jak, niczym, niby==: szybki jak wiatr.' },
+      { typ: 'regula', tekst: '**Przenośnia** nie ma słówka - wyrazy razem znaczą coś ==nowego==, nie dosłownie.' },
+      { typ: 'czesci', czesci: [['oczy jak gwiazdy', 'porównanie - jest „jak”'], ['gwiazdy w oczach', 'przenośnia']] },
+      { typ: 'regula', tekst: 'Test: ==narysuj to dosłownie==. Wychodzi bzdura (morze łez)? To przenośnia.' },
+    ],
+  },
+  {
+    id: 'p5-d2-frazeo',
+    naglowek: R5(2),
+    tytul: 'Związki frazeologiczne',
+    kroki: [
+      { typ: 'regula', tekst: 'Związek frazeologiczny - ==stałe połączenie== wyrazów o przenośnym znaczeniu.' },
+      { typ: 'czesci', czesci: [['włosy stanęły dęba', 'strach'], ['zapaść się pod ziemię', 'wstyd'], ['być w siódmym niebie', 'radość']] },
+      { typ: 'zamiana', pary: [['czuć pietruszkę', 'czuć miętę'], ['mieć pszczoły w nosie', 'mieć muchy w nosie']], podpis: 'nie wymieniamy w nim słów' },
+    ],
+  },
+  {
+    id: 'p5-d2-nacechowane',
+    naglowek: R5(3),
+    tytul: 'Zdrobnienia i zgrubienia',
+    kroki: [
+      { typ: 'regula', tekst: 'Wyraz **neutralny** tylko nazywa: pies. **Nacechowany** wyraża też ==uczucia==.' },
+      { typ: 'czesci', czesci: [['piesek', 'zdrobnienie - małe, czule'], ['pies', 'neutralny'], ['psisko', 'zgrubienie - duże, żartem']] },
+      { typ: 'regula', tekst: 'Zdrobnienia: ==-ek, -ka, -ko== (domek). Zgrubienia: ==-isko, -sko== (domisko).' },
+      { typ: 'kolejnosc', elementy: ['niepokój', 'strach', 'groza'] },
+    ],
+  },
+  {
+    id: 'p5-d2-przypadki',
+    naglowek: R5(4),
+    tytul: 'Rzeczownik i przypadki',
+    kroki: [
+      { typ: 'czesci', czesci: [['M', 'kto? co?'], ['D', 'kogo? czego?'], ['C', 'komu? czemu?'], ['B', 'kogo? co?'], ['N', 'z kim? z czym?'], ['Ms', 'o kim? o czym?'], ['W', 'o!']] },
+      { typ: 'pytanie', zdanie: 'Gram w szachy z dziadkiem.', od: 'Gram', do: 'dziadkiem', pytanie: 'z kim?', wynik: 'narzędnik' },
+      { typ: 'pytanie', zdanie: 'Szukam parasola.', od: 'Szukam', do: 'parasola', pytanie: 'kogo? czego?', wynik: 'dopełniacz' },
+      { typ: 'regula', tekst: 'Nazwy **własne** wielką literą: ==Wisła, Wawel==. **Pospolite** małą: rzeka, zamek.' },
+    ],
+  },
+  {
+    id: 'p5-d2-nietypowe',
+    naglowek: R5(5),
+    tytul: 'Nietypowa odmiana',
+    kroki: [
+      { typ: 'regula', tekst: 'Rzeczowniki na **-um** w liczbie pojedynczej ==się nie odmieniają==.' },
+      { typ: 'zamiana', pary: [['w liceumie', 'w liceum'], ['do centruma', 'do centrum']] },
+      { typ: 'regula', tekst: 'W liczbie mnogiej już tak: muzea, ==muzeów==, w muzeach.' },
+      { typ: 'czesci', czesci: [['powietrze, odzież', 'tylko liczba pojedyncza'], ['drzwi, sanie, okulary', 'tylko liczba mnoga']] },
+    ],
+  },
+  {
+    id: 'p5-d2-ea',
+    naglowek: R5(6),
+    tytul: 'Ę i ą na końcu wyrazu',
+    kroki: [
+      { typ: 'czesci', czesci: [['widzę mamę', '-ę: kogo? co?'], ['idę z mamą', '-ą: z kim? z czym?']] },
+      { typ: 'czesci', czesci: [['ja piszę', '-ę: ja'], ['oni piszą', '-ą: oni, one']] },
+      { typ: 'regula', tekst: 'Małe zwierzęta na **-ę**: ==kocię, źrebię, cielę==.' },
+      { typ: 'regula', tekst: 'Bez ogonka tylko: ==wiem, jem, umiem, rozumiem==.' },
+    ],
+  },
+  {
+    id: 'p5-d2-temat',
+    naglowek: R5(7),
+    tytul: 'Temat, końcówka i ó',
+    kroki: [
+      { typ: 'czesci', czesci: [['tablic', 'temat - się nie zmienia'], ['-a, -y, -ą', 'końcówka - zmienia się']] },
+      { typ: 'regula', tekst: 'Brak końcówki to **końcówka zerowa**: brat|==ø==, stół|ø.' },
+      { typ: 'czesci', czesci: [['stół - stoły', 'ó : o'], ['ręka - ręce', 'k : c']] },
+      { typ: 'regula', tekst: 'Piszę **ó**, gdy w innej formie jest ==o==: wóz - wozy.' },
+    ],
+  },
+  {
+    id: 'p5-d2-sprawozdanie',
+    naglowek: R5(8),
+    tytul: 'Sprawozdanie',
+    kroki: [
+      { typ: 'regula', tekst: '**Sprawozdanie** - krótka, rzeczowa relacja z wydarzenia, w którym ==brałem udział==.' },
+      { typ: 'kolejnosc', elementy: ['tytuł', 'wstęp: kto? co? kiedy? gdzie?', 'przebieg po kolei', 'krótka opinia'] },
+      { typ: 'regula', tekst: 'Słowa porządku: ==najpierw, następnie, potem, na koniec==. Same fakty, czas przeszły.' },
+    ],
+  },
+  {
+    id: 'p5-d2-dwukropek',
+    naglowek: R5(9),
+    tytul: 'Dwukropek',
+    kroki: [
+      { typ: 'regula', tekst: 'Dwukropek zapowiada, że ==coś zaraz nastąpi==.' },
+      { typ: 'czesci', czesci: [['przed dialogiem', 'Tata zawołał: – Idziemy!'], ['przed wyliczeniem', 'Mam: kota, psa i rybki.'], ['przed cytatem', 'Mówi: „Kto pyta, nie błądzi”.']] },
+      { typ: 'zamiana', pary: [['Mam trzy pasje, piłkę i rower.', 'Mam trzy pasje: piłkę i rower.']] },
+    ],
+  },
+  {
+    id: 'p5-d2-reklama',
+    naglowek: R5(10),
+    tytul: 'Tekst reklamowy',
+    kroki: [
+      { typ: 'regula', tekst: 'Tekst reklamowy ==namawia== do kupna albo skorzystania z usługi.' },
+      { typ: 'czesci', czesci: [['NOWOŚĆ! GRATIS!', 'słowa-wabiki'], ['Tylko dziś!', 'pośpiech'], ['Będziesz najlepszy!', 'obietnica']] },
+      { typ: 'regula', tekst: 'Reklama pokazuje świat ==piękniejszy niż naprawdę== - najpierw sprawdzam, potem kupuję.' },
     ],
   },
 ];
