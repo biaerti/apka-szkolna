@@ -91,6 +91,7 @@ export const POLSKI_OD_ZERA = [
   { czesc: 3, tematy: 'Pogoda, ubrania, zwierzęta, miasto, czas wolny, Kto? Co? Jaki?' },
   { czesc: 4, tematy: 'Godziny, wczoraj i jutro, zakupy, opis osoby, uczucia' },
   { czesc: 5, tematy: 'Kl. 4: rzeczownik, wielka litera, przymiotnik, opis przedmiotu, ó i u, ogłoszenie' },
+  { czesc: 6, tematy: 'Kl. 4: przypadki, rodzina wyrazów, legendy o Lechu i o Warsie i Sawie, symbole Polski, ch i h' },
 ] as const;
 
 export type PolskiOdZeraWersja = 'A4' | 'A5';

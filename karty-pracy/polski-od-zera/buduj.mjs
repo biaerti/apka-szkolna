@@ -1,5 +1,5 @@
 // Buduje zeszyt "Mój polski od zera": HTML -> PDF A5 (headless Chrome przez CDP) -> A4 jednostronnie do przeciecia (impozycja.py).
-// Uruchom: node karty-pracy/polski-od-zera/buduj.mjs
+// Uruchom: node karty-pracy/polski-od-zera/buduj.mjs [nr czesci, np. 6 - bez numeru buduje wszystkie]
 import { writeFileSync, readFileSync, mkdirSync, rmSync } from 'node:fs'
 import { spawn, execFileSync } from 'node:child_process'
 import { join, dirname } from 'node:path'
@@ -9,6 +9,7 @@ import { czesc1, czesc2, notatkiStrona } from './tresc.mjs'
 import { czesc3 } from './tresc3.mjs'
 import { czesc4 } from './tresc4.mjs'
 import { czesc5 } from './tresc5.mjs'
+import { czesc6 } from './tresc6.mjs'
 
 const DIR = dirname(fileURLToPath(import.meta.url))
 const OUT = join(DIR, 'pdf')
@@ -25,7 +26,8 @@ const czesci = [
   { plik: 'czesc-3', tytul: 'Mój polski od zera - część 3', strony: czesc3() },
   { plik: 'czesc-4', tytul: 'Mój polski od zera - część 4', strony: czesc4() },
   { plik: 'czesc-5', tytul: 'Mój polski od zera - część 5', strony: czesc5() },
-]
+  { plik: 'czesc-6', tytul: 'Mój polski od zera - część 6', strony: czesc6() },
+].filter(c => !process.argv[2] || c.plik === `czesc-${process.argv[2]}`)
 
 // Uklada klocki stron "cont" na wolnym miejscu poprzedniej strony, dopycha notatkami do
 // parzystej liczby stron (dwie A5 na kartce A4) i wpisuje numer strony klucza. Dziala w przegladarce.
