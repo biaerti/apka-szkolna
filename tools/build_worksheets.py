@@ -147,10 +147,15 @@ def add_footer(doc, label):
     add_text(p, f"{label}  |  język polski  |  klasa IV", size=8, color="6B7280")
 
 
-def add_identity(doc, number, title, focus):
+def ws_name(ws):
+    """Nazwa w naglowku: Arkusz N albo wlasna etykieta (np. powtorka po dziale)."""
+    return ws.get("label") or f"Arkusz {ws['number']}"
+
+
+def add_identity(doc, name, title, focus, third="Grupa"):
     p = doc.add_paragraph(style="Title")
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    add_text(p, f"Arkusz {number}  {title}", size=19, bold=True, color="000000")
+    add_text(p, f"{name}  {title}", size=19, bold=True, color="000000")
 
     p = doc.add_paragraph()
     set_paragraph(p, after=7)
@@ -160,7 +165,7 @@ def add_identity(doc, number, title, focus):
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
     widths = [10.0, 4.0, 3.4]
-    labels = ["Imię i nazwisko", "Data", "Grupa"]
+    labels = ["Imię i nazwisko", "Data", third]
     for i, (cell, width, label) in enumerate(zip(table.rows[0].cells, widths, labels)):
         cell.width = Cm(width)
         set_cell_shading(cell, PALE_GRAY)
@@ -265,10 +270,10 @@ def add_page_break(doc):
     p.add_run().add_break(WD_BREAK.PAGE)
 
 
-def add_page_two_header(doc, number, title):
+def add_page_two_header(doc, name, title):
     p = doc.add_paragraph()
     set_paragraph(p, after=5)
-    add_text(p, f"Arkusz {number}  {title}  |  strona 2", size=9, bold=True, color="4B5563")
+    add_text(p, f"{name}  {title}  |  strona 2", size=9, bold=True, color="4B5563")
 
 
 def add_after_check(doc):
@@ -561,15 +566,16 @@ def slug(title):
 
 
 def file_stem(ws):
-    return f"arkusz-{ws['number']}-{slug(ws['title'])}"
+    return ws.get("stem") or f"arkusz-{ws['number']}-{slug(ws['title'])}"
 
 
 def build_worksheet(ws):
     doc = Document()
     configure_doc(doc)
     level = ws.get("level")
-    add_footer(doc, f"Arkusz {ws['number']}" + (f"  |  {level.lower()}" if level else ""))
-    add_identity(doc, ws["number"], ws["title"], (f"{level}  |  " if level else "") + ws["focus"])
+    add_footer(doc, ws_name(ws) + (f"  |  {level.lower()}" if level else ""))
+    add_identity(doc, ws_name(ws), ws["title"], (f"{level}  |  " if level else "") + ws["focus"],
+                 "Klasa" if ws.get("label") else "Grupa")
     if level:
         p = doc.add_paragraph()
         set_paragraph(p, before=0, after=5)
@@ -588,7 +594,7 @@ def build_worksheet(ws):
             add_task(doc, n, prompt, lines=lines, options=options, compact=True)
 
     add_page_break(doc)
-    add_page_two_header(doc, ws["number"], ws["title"])
+    add_page_two_header(doc, ws_name(ws), ws["title"])
     add_section(doc, "Poćwicz język")
     for n, prompt, lines, options in ws["language"]:
         add_task(doc, n, prompt, lines=lines, options=options)

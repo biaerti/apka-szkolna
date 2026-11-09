@@ -43,16 +43,18 @@ const PO_SPRAWDZENIU = `
   </div>`;
 
 function strona(ark) {
+  // Arkusz N albo wlasna etykieta (powtorka po dziale: tools/build_powtorka_klasa4.py).
+  const nazwa = ark.label ?? `Arkusz ${ark.number}`;
   const poziom = ark.level ? `${ark.level}  |  ` : '';
-  const stopka = `Arkusz ${ark.number}${ark.level ? `  |  ${ark.level.toLowerCase()}` : ''}  |  język polski  |  klasa IV`;
+  const stopka = `${nazwa}${ark.level ? `  |  ${ark.level.toLowerCase()}` : ''}  |  język polski  |  klasa IV`;
   const jak = ark.level
     ? 'odpowiedzi nie zawsze są zapisane wprost. Szukaj wskazówek, łącz informacje z różnych akapitów i sprawdzaj, czy tekst naprawdę o czymś mówi.'
     : 'najpierw przeczytaj cały tekst, potem wracaj do niego przy każdym pytaniu. Podkreślaj słowa, które pomagają znaleźć odpowiedź.';
   return `
 <section class="strona">
-  <h1>Arkusz ${ark.number}  ${esc(ark.title)}</h1>
+  <h1>${esc(nazwa)}  ${esc(ark.title)}</h1>
   <p class="focus">${esc(poziom + ark.focus)}</p>
-  <table class="dane"><tr><td style="width:10cm">Imię i nazwisko</td><td style="width:4cm">Data</td><td>Grupa</td></tr></table>
+  <table class="dane"><tr><td style="width:10cm">Imię i nazwisko</td><td style="width:4cm">Data</td><td>${ark.label ? 'Klasa' : 'Grupa'}</td></tr></table>
   <p class="jak"><b>Jak pracować:</b> ${jak}</p>
   <h2>Przeczytaj tekst</h2>
   ${ark.text.map((t) => `<p class="tekst">${esc(t)}</p>`).join('')}
@@ -61,7 +63,7 @@ function strona(ark) {
   <p class="stopka">${esc(stopka)}</p>
 </section>
 <section class="strona">
-  <p class="naglowek2">Arkusz ${ark.number}  ${esc(ark.title)}  |  strona 2</p>
+  <p class="naglowek2">${esc(nazwa)}  ${esc(ark.title)}  |  strona 2</p>
   <h2>Poćwicz język</h2>
   ${ark.language.map(zadanie).join('')}
   <h2>Napisz krótko</h2>
@@ -108,12 +110,14 @@ h3 { font-size: 11.5pt; color: #000; margin: 7pt 0 3pt; }
 .siatka th:first-child { width: 36mm; }
 .siatka td { width: 69mm; }
 .siatka th.kol { background: #EAF3F8; }
+/* luzno: na 2. stronie wiecej miejsca miedzy linijkami z lukami do wpisania */
+.luzno .strona + .strona .zad { line-height: 1.85; margin-top: 5pt; }
 .naglowek2 { font-size: 9pt; font-weight: 700; color: #4B5563; margin-bottom: 4pt; }
 .stopka { position: absolute; bottom: 6mm; left: 0; right: 0; text-align: center; font-size: 8pt; color: #6B7280; }
 `;
 
 for (const ark of arkusze) {
-  const html = `<!doctype html><html lang="pl"><head><meta charset="utf-8"><style>${STYL}</style></head><body>${strona(ark)}</body></html>`;
+  const html = `<!doctype html><html lang="pl"><head><meta charset="utf-8"><style>${STYL}</style></head><body${ark.luzno ? ' class="luzno"' : ''}>${strona(ark)}</body></html>`;
   const htmlPath = join(pdfDir, `${ark.stem}.html`);
   writeFileSync(htmlPath, html);
   await drukujPdf(htmlPath, join(pdfDir, `${ark.stem}.pdf`), 9402);

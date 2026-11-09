@@ -10,7 +10,8 @@ import { fileURLToPath } from 'node:url';
 import { WIZUALIZACJE } from './arkusze-wizualizacje.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = join(ROOT, 'public', 'materialy', 'wyrownawcze', 'projektor');
+// Drugi argument: inny folder wyjsciowy (np. powtorki po dziale).
+const OUT = process.argv[3] || join(ROOT, 'public', 'materialy', 'wyrownawcze', 'projektor');
 mkdirSync(OUT, { recursive: true });
 const arkusze = JSON.parse(readFileSync(join(process.argv[2], 'arkusze.json'), 'utf8'));
 
@@ -359,6 +360,7 @@ const SKRYPT = `
 for (const ark of arkusze) {
   const odp = ark.answers;
   const wiz = WIZUALIZACJE[ark.number] || {};
+  const nazwa = ark.label ?? `Arkusz ${ark.number}`;
   const slajdy = [];
   const zSlajdem = (z) => {
     const w = wiz[z.n];
@@ -372,9 +374,9 @@ for (const ark of arkusze) {
     + zSlajdem({ n: '12', prompt: ark.writing, extra: [] });
   const html = `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arkusz ${ark.number} - ${esc(ark.title)}</title><style>${STYL}</style></head><body>
+<title>${esc(nazwa)} - ${esc(ark.title)}</title><style>${STYL}</style></head><body>
 <header>
-  <h1>Arkusz ${ark.number}  ${esc(ark.title)}${ark.level ? `<small>${esc(ark.level)}</small>` : ''}</h1>
+  <h1>${esc(nazwa)}  ${esc(ark.title)}${ark.level ? `<small>${esc(ark.level)}</small>` : ''}</h1>
   <button type="button" class="przyc" data-widok="czytanie" aria-pressed="true">Tekst i pytania</button>
   <button type="button" class="przyc" data-widok="jezyk" aria-pressed="false">Język i pisanie</button>
   <button type="button" class="przyc" id="wszystkie">Wszystkie odpowiedzi</button>
