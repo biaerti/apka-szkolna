@@ -19,6 +19,7 @@ interface Grafik {
 }
 
 const P1_PIETRO = 'Pawilon 1, piętro';
+const P2_PARTER = 'Pawilon 2, parter';
 const P3_PARTER = 'Pawilon 3, parter';
 const P3_PIETRO = 'Pawilon 3, piętro';
 
@@ -43,6 +44,20 @@ export const GRAFIKI: Grafik[] = [
       { weekday: 3, afterPeriod: 5, place: P3_PARTER },
       { weekday: 4, afterPeriod: 2, place: P3_PIETRO },
       { weekday: 4, afterPeriod: 3, place: P3_PARTER },
+    ],
+  },
+  {
+    // wersja 1.3: nowy dyzur w pon. po 2. lekcji, bez czwartku po 3.
+    from: '2026-11-10',
+    duties: [
+      { weekday: 1, afterPeriod: 2, place: P2_PARTER },
+      { weekday: 1, afterPeriod: 4, place: P3_PARTER },
+      { weekday: 1, afterPeriod: 6, place: P3_PARTER },
+      { weekday: 2, afterPeriod: 6, place: P3_PARTER },
+      { weekday: 3, afterPeriod: 2, place: P1_PIETRO },
+      { weekday: 3, afterPeriod: 4, place: P3_PARTER },
+      { weekday: 3, afterPeriod: 5, place: P3_PARTER },
+      { weekday: 4, afterPeriod: 2, place: P3_PIETRO },
     ],
   },
 ];

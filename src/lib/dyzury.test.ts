@@ -36,6 +36,16 @@ describe('grafik 1.2 od 2026-10-05', () => {
   });
 });
 
+describe('grafik 1.3 od 2026-11-10', () => {
+  const d = dyzuryNa(new Date(2026, 10, 10, 8, 0));
+  it('w poniedzialek po 2. lekcji Pawilon 2 parter', () => {
+    expect(d.find((x) => x.weekday === 1 && x.afterPeriod === 2)?.place).toBe('Pawilon 2, parter');
+  });
+  it('w czwartek po 3. lekcji juz bez dyzuru', () => {
+    expect(d.some((x) => x.weekday === 4 && x.afterPeriod === 3)).toBe(false);
+  });
+});
+
 describe('nextRoom', () => {
   // Wtorek 2026-10-06: 1-2 sala 31, 4 sala 35, 5 sala 30.
   const tt: TimetableEntry[] = [
