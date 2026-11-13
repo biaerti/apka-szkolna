@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plac Broni - model 3D i bitwa</title>
+<!--
+  Model placu z „Chłopców z Placu Broni” na projektor (kl. 4, lekcja 5).
+  Uklad wg planu Boki z wydania z 1916 r. (domena publiczna, Gutenberg 69689):
+  brama od ul. Marii z lewej, furtka od ul. Pawla na dole, 12 sagow drewna,
+  forty 1-6, tartak, wozownia, chatka Janosza, dom. Przebieg bitwy wg rozdz. VI
+  i VIII oryginalu, podpisy wlasnymi slowami (bez cytatow z przekladu).
+  Strzalki / spacja = kroki, P = widok z gory, N = napisy. ?krok=N na start.
+  three.js r162 (ostatnie z WebGL1 - szkolne komputery z Chrome 109).
+-->
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three-0.162/three.module.min.js",
+  "three/addons/OrbitControls.js": "./vendor/three-0.162/OrbitControls.js",
+  "three/addons/CSS2DRenderer.js": "./vendor/three-0.162/CSS2DRenderer.js"
+} }
+</script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #cfe3ee; font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif; }
+  #scena { position: absolute; inset: 0; }
+  #napisy3d { position: absolute; inset: 0; pointer-events: none; z-index: 1; isolation: isolate; overflow: hidden; }
+  .lab { font-weight: 800; color: #1f1b16; background: rgba(255,255,255,.88); border-radius: 8px; padding: 2px 9px; font-size: 15px; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .lab.ulica { background: #3d3a36; color: #fff; font-size: 19px; }
+  .lab.plac { background: none; box-shadow: none; color: rgba(60,45,20,.75); font-size: 30px; letter-spacing: .12em; }
+  .lab.fort { background: #7a4b1c; color: #fff; border-radius: 50%; width: 30px; height: 30px; padding: 0; display: grid; place-items: center; font-size: 19px; }
+  .lab.osoba { font-size: 15px; padding: 1px 8px; }
+  .lab.osoba.red { background: #c8302c; color: #fff; }
+  .lab.osoba.boy { background: #2e7d3a; color: #fff; }
+  .lab.osoba.boy.wazny { background: #1d4e89; }
+  .lab.osoba.nem { background: #f2c230; color: #1f1b16; font-size: 18px; }
+  .lab.okop { background: #5b3b1a; color: #fff; }
+  body.bez-napisow .lab:not(.osoba) { display: none; }
+  body.bez-opisu #opis { visibility: hidden; }
+
+  #panel { z-index: 5; position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; gap: 16px; align-items: flex-end; pointer-events: none; }
+  #opis { flex: 1; background: rgba(255,253,247,.95); border-radius: 16px; padding: 14px 22px 16px; box-shadow: 0 4px 16px rgba(0,0,0,.25); pointer-events: auto; max-width: 1100px; }
+  #opis .krok { font-size: 15px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #8a7f6d; }
+  #opis h1 { margin: 2px 0 6px; font-size: 30px; line-height: 1.15; color: #1f1b16; }
+  #opis p { margin: 0; font-size: 22px; line-height: 1.35; color: #2b261f; }
+  #opis .czytamy { margin-top: 8px; font-size: 18px; color: #1d4e89; font-weight: 700; }
+  #opis .czytamy b { background: #1d4e89; color: #fff; border-radius: 6px; padding: 1px 8px; margin-right: 6px; }
+  #opis .pytanie { margin-top: 8px; font-size: 20px; font-weight: 800; color: #b3261e; }
+  #przyciski { display: flex; flex-direction: column; gap: 8px; pointer-events: auto; }
+  #przyciski .rzad { display: flex; gap: 8px; }
+  button { font: inherit; font-weight: 800; font-size: 18px; border: 0; border-radius: 12px; padding: 10px 16px; background: #fffdf7; color: #1f1b16; box-shadow: 0 2px 8px rgba(0,0,0,.25); cursor: pointer; }
+  button.duzy { font-size: 26px; padding: 10px 22px; background: #1d4e89; color: #fff; }
+  button.wl { background: #f2c230; }
+  button:disabled { opacity: .4; cursor: default; }
+  #legenda { z-index: 5; position: absolute; top: 14px; left: 18px; display: flex; gap: 10px; font-size: 16px; font-weight: 800; }
+  #legenda span { background: rgba(255,253,247,.92); border-radius: 10px; padding: 4px 12px; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+  #legenda i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  #blad { position: absolute; inset: 0; display: none; place-items: center; font-size: 26px; padding: 40px; text-align: center; background: #fffdf7; }
+</style>
+</head>
+<body>
+<div id="scena"></div>
+<div id="napisy3d"></div>
+<div id="legenda">
+  <span><i style="background:#2e7d3a"></i>chłopcy z Placu Broni</span>
+  <span><i style="background:#c8302c"></i>Czerwone Koszule</span>
+</div>
+<div id="panel">
+  <div id="opis"><div class="krok"></div><h1></h1><p></p><div class="czytamy"></div><div class="pytanie"></div></div>
+  <div id="przyciski">
+    <div class="rzad"><button id="wstecz" class="duzy" title="Poprzedni krok (←)">◀</button><button id="dalej" class="duzy" title="Następny krok (→)">▶</button></div>
+    <div class="rzad"><button id="zgory" title="Widok z góry (P)">Z góry</button><button id="nap" title="Napisy (N)">Napisy</button><button id="tekst" title="Schowaj opis (T)">Tekst</button></div>
+  </div>
+</div>
+<div id="blad">Ten komputer nie pokazuje grafiki 3D (WebGL). Otwórz model na innym komputerze albo w nowszej przeglądarce.</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/CSS2DRenderer.js';
+
+// ---------- uklad: wspolrzedne z planu Boki (x w prawo, z w dol planu) ----------
+const CX = 49, CZ = 37;
+const W = (mx, mz, y = 0) => new THREE.Vector3(mx - CX, y, mz - CZ);
+const STOS_H = 4.5;
+const STOSY = [];
+for (const [r, z0] of [[0, 7], [1, 20], [2, 33]]) for (const [c, x0] of [[0, 41], [1, 54], [2, 68], [3, 81]]) STOSY.push({ r, c, x0, z0, x1: x0 + 8, z1: z0 + 6 });
+const stos = (r, c) => STOSY.find((s) => s.r === r && s.c === c);
+const FORTY = { 1: stos(0, 0), 2: stos(1, 0), 3: stos(2, 0), 4: stos(2, 1), 5: stos(2, 2), 6: stos(2, 3) };
+const fortXZ = (n) => { const s = FORTY[n]; return [(s.x0 + s.x1) / 2, (s.z0 + s.z1) / 2]; };
+const CHATKA = [19, 33.5], WOZOWNIA = [19, 6];
+
+// ---------- renderer ----------
+const el = document.getElementById('scena');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+} catch (e) {
+  document.getElementById('blad').style.display = 'grid';
+  throw e;
+}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+el.appendChild(renderer.domElement);
+const css = new CSS2DRenderer({ element: document.getElementById('napisy3d') });
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xcfe3ee);
+scene.fog = new THREE.Fog(0xcfe3ee, 160, 300);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.5, 600);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI / 2.15;
+controls.minDistance = 15;
+controls.maxDistance = 220;
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7a5a, 1.1));
+const sun = new THREE.DirectionalLight(0xfff3dd, 1.6);
+sun.position.set(-40, 80, 30);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+Object.assign(sun.shadow.camera, { left: -70, right: 70, top: 60, bottom: -60, near: 10, far: 200 });
+scene.add(sun);
+
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h); css.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ---------- tekstury z canvasa ----------
+function canvasTex(w, h, draw, rep = [1, 1]) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const texPolana = canvasTex(256, 256, (g, w, h) => {
+  g.fillStyle = '#c9b48a'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(${90 + Math.random() * 60},${80 + Math.random() * 50},${40 + Math.random() * 30},.35)`; g.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
+  for (let i = 0; i < 40; i++) { g.fillStyle = 'rgba(110,140,60,.35)'; g.beginPath(); g.arc(Math.random() * w, Math.random() * h, 3 + Math.random() * 6, 0, 7); g.fill(); }
+}, [10, 8]);
+const texDrewno = canvasTex(256, 256, (g, w, h) => {
+  g.fillStyle = '#6b4520'; g.fillRect(0, 0, w, h);
+  for (let y = 16; y < h; y += 32) for (let x = 16 + ((y / 32) % 2) * 16; x < w; x += 32) {
+    g.fillStyle = '#c99a5b'; g.beginPath(); g.arc(x, y, 14, 0, 7); g.fill();
+    g.strokeStyle = '#a0723c'; g.lineWidth = 2; g.beginPath(); g.arc(x, y, 8, 0, 7); g.stroke();
+  }
+}, [1, 1]);
+const texDeski = canvasTex(128, 128, (g, w, h) => {
+  for (let x = 0; x < w; x += 16) { g.fillStyle = (x / 16) % 2 ? '#8a6238' : '#7a552f'; g.fillRect(x, 0, 16, h); g.fillStyle = '#4a3218'; g.fillRect(x, 0, 1, h); }
+}, [1, 1]);
+const texMur = canvasTex(256, 256, (g, w, h) => {
+  g.fillStyle = '#d9cdb4'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#5d6f80';
+  for (let y = 20; y < h; y += 64) for (let x = 18; x < w; x += 64) g.fillRect(x, y, 26, 34);
+}, [1, 1]);
+
+const mat = (o) => new THREE.MeshLambertMaterial(o);
+function box(w, h, d, material, x, y, z, cast = true) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
+  m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = true;
+  scene.add(m); return m;
+}
+function label(text, cls, pos, parent = scene) {
+  const d = document.createElement('div'); d.className = 'lab ' + cls; d.textContent = text;
+  const o = new CSS2DObject(d); o.position.copy(pos); parent.add(o); return o;
+}
+
+// ---------- teren ----------
+const grunt = new THREE.Mesh(new THREE.PlaneGeometry(98, 74), mat({ map: texPolana }));
+grunt.rotation.x = -Math.PI / 2; grunt.position.set(0, 0, 0); grunt.receiveShadow = true; scene.add(grunt);
+const ulica = mat({ color: 0x8d8a85 });
+const chodnik = mat({ color: 0xb5b0a6 });
+box(140, 0.1, 14, ulica, 0, -0.05, 37 + 9, false);      // ul. Pawla (dol)
+box(14, 0.1, 110, ulica, -49 - 9, -0.05, 0, false);    // ul. Marii (lewo)
+box(140, 0.2, 2, chodnik, 0, 0, 38, false);
+box(2, 0.2, 110, chodnik, -50, 0, 0, false);
+label('ulica Pawła', 'ulica', W(88, 80, 0.5));
+label('ulica Marii', 'ulica', W(-9, 50, 0.5));
+
+// kamienice dookola (tyl i prawa strona) + dom w rogu
+const murMat = mat({ map: texMur });
+box(100, 12, 3, murMat, 0, 6, -37 - 1.5);
+box(3, 12, 80, murMat, 49 + 1.5, 6, 0);
+box(3, 12, 13, murMat, -49 - 1.5, 6, W(0, 7).z);       // lewa sciana nad brama
+box(3, 12, 16, murMat, -49 - 1.5, 6, W(0, 38).z);      // lewa sciana pod brama
+const dom = box(33, 6, 16, murMat, W(16.5, 0).x, 3, W(0, 54).z);
+box(33.6, 0.6, 16.6, mat({ color: 0x8c3b2a }), dom.position.x, 6.3, dom.position.z);
+label('dom', '', W(16.5, 54, 7.5));
+box(3, 12, 12, murMat, -49 - 1.5, 6, W(0, 68).z);       // lewa sciana przy domu
+
+// palank od ul. Pawla z furtka
+const deski = mat({ map: texDeski });
+box(58, 2.6, 0.4, deski, W(29, 0).x, 1.3, W(0, 74).z);
+box(35, 2.6, 0.4, deski, W(80.5, 0).x, 1.3, W(0, 74).z);
+const furtka = new THREE.Group(); furtka.position.copy(W(58, 74));
+const furtkaDeska = new THREE.Mesh(new THREE.BoxGeometry(5, 2.6, 0.3), deski); furtkaDeska.position.set(2.5, 1.3, 0); furtkaDeska.castShadow = true;
+furtka.add(furtkaDeska); scene.add(furtka);
+label('furtka', '', W(60.5, 76, 3));
+
+// brama od ul. Marii (dwa skrzydla)
+const bramaL = new THREE.Group(), bramaP = new THREE.Group();
+bramaL.position.copy(W(0, 13)); bramaP.position.copy(W(0, 30));
+const sk1 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 4, 8.5), deski); sk1.position.set(0, 2, 4.25); bramaL.add(sk1);
+const sk2 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 4, 8.5), deski); sk2.position.set(0, 2, -4.25); bramaP.add(sk2);
+scene.add(bramaL, bramaP);
+bramaL.rotation.y = -1.3; bramaP.rotation.y = 1.3; // otwarta na osciez (jak w ksiazce)
+label('brama', '', W(-1, 21.5, 5));
+
+// sagi drewna (forty na wybranych)
+const drewnoMat = mat({ map: texDrewno });
+const drewnoBok = mat({ map: texDeski, color: 0xc49a6c });
+for (const s of STOSY) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(8, STOS_H, 6), [drewnoBok, drewnoBok, drewnoBok, drewnoBok, drewnoMat, drewnoMat]);
+  const c = W((s.x0 + s.x1) / 2, (s.z0 + s.z1) / 2, STOS_H / 2); m.position.copy(c); m.castShadow = m.receiveShadow = true; scene.add(m);
+}
+label('skład drewna', '', W(65, 16.5, 7.5));
+const flagi = {};
+for (const n of [1, 2, 3, 4, 5, 6]) {
+  const [fx, fz] = fortXZ(n);
+  const g = new THREE.Group(); g.position.copy(W(fx, fz, STOS_H)); scene.add(g);
+  const brzeg = mat({ color: 0xe0c27a });
+  for (const [w, d, x, z] of [[8.2, 0.5, 0, -2.9], [8.2, 0.5, 0, 2.9], [0.5, 6.2, -3.9, 0], [0.5, 6.2, 3.9, 0]]) {
+    const b = new THREE.Mesh(new THREE.BoxGeometry(w, 1.3, d), brzeg); b.position.set(x, 0.65, z); b.castShadow = true; g.add(b);
+  }
+  const maszt = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 4), mat({ color: 0x333333 })); maszt.position.set(3.3, 2, -2.3); g.add(maszt);
+  const flaga = new THREE.Group(); flaga.position.set(3.3, 3.5, -2.3);
+  const fc = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.5), mat({ color: 0xc8302c, side: THREE.DoubleSide })); fc.position.set(0.8, 0.25, 0);
+  const fz2 = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.5), mat({ color: 0x2e8b3a, side: THREE.DoubleSide })); fz2.position.set(0.8, -0.25, 0);
+  flaga.add(fc, fz2); g.add(flaga); flagi[n] = g;
+  label(String(n), 'fort', W(fx - 2.5, fz, STOS_H + 2.2));
+}
+
+// tartak (maszynownia) z kominem i para
+const tartak = box(9, 5.5, 10, mat({ color: 0xa69684 }), W(27.5, 0).x, 2.75, W(0, 21).z);
+const dach = new THREE.Mesh(new THREE.ConeGeometry(7.6, 3, 4), mat({ color: 0x5e4b3c }));
+dach.position.set(tartak.position.x, 7, tartak.position.z); dach.rotation.y = Math.PI / 4; dach.scale.set(1, 1, 1.1); dach.castShadow = true; scene.add(dach);
+const komin = box(0.8, 5, 0.8, mat({ color: 0x222222 }), tartak.position.x + 2, 9, tartak.position.z - 2);
+label('tartak', '', W(27.5, 21, 10));
+const para = [];
+for (let i = 0; i < 6; i++) {
+  const p = new THREE.Mesh(new THREE.SphereGeometry(0.7, 10, 8), new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 }));
+  scene.add(p); para.push({ m: p, t: i / 6 });
+}
+
+// wozownia: dach na slupach
+const woz = new THREE.Group(); woz.position.copy(W(WOZOWNIA[0], WOZOWNIA[1]));
+for (const [x, z] of [[-4, -3], [4, -3], [-4, 3], [4, 3]]) { const s = new THREE.Mesh(new THREE.BoxGeometry(0.4, 4, 0.4), deski); s.position.set(x, 2, z); s.castShadow = true; woz.add(s); }
+const wd = new THREE.Mesh(new THREE.BoxGeometry(9.5, 0.4, 7.5), mat({ color: 0x5e4b3c })); wd.position.y = 4.1; wd.castShadow = true; woz.add(wd);
+const wtyl = new THREE.Mesh(new THREE.BoxGeometry(9, 3.8, 0.3), deski); wtyl.position.set(0, 1.9, -3.2); woz.add(wtyl);
+scene.add(woz);
+label('wozownia', '', W(WOZOWNIA[0], WOZOWNIA[1], 6));
+
+// chatka Janosza pod morwami
+const chatka = box(6, 3, 5, deski, W(CHATKA[0], 0).x, 1.5, W(0, CHATKA[1]).z);
+const cd = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.3, 5.6), mat({ color: 0x5e4b3c })); cd.position.set(chatka.position.x, 3.15, chatka.position.z); scene.add(cd);
+const drzwi = box(1.4, 2.2, 0.1, mat({ color: 0x3a2814 }), chatka.position.x + 1, 1.1, chatka.position.z + 2.55, false);
+label('chatka Janosza', '', W(CHATKA[0], CHATKA[1] + 1, 5.2));
+for (const [mx, mz] of [[24, 30], [25, 37]]) {
+  const pien = box(0.5, 3, 0.5, mat({ color: 0x5a3d22 }), W(mx, 0).x, 1.5, W(0, mz).z);
+  const korona = new THREE.Mesh(new THREE.SphereGeometry(2.2, 10, 8), mat({ color: 0x5f8f3a })); korona.position.set(pien.position.x, 4, pien.position.z); korona.castShadow = true; scene.add(korona);
+}
+
+// okop przed fortami 4 i 5 (Janosz kopie go rano przed bitwa)
+const okop = new THREE.Group();
+const rowMesh = new THREE.Mesh(new THREE.BoxGeometry(24, 0.12, 2.2), mat({ color: 0x3b2a18 })); rowMesh.position.set(0, 0.06, 0); okop.add(rowMesh);
+const nasyp = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 24, 10, 1, false, 0, Math.PI), mat({ color: 0x8a6a3e }));
+nasyp.rotation.z = Math.PI / 2; nasyp.position.set(0, 0, 1.9); nasyp.castShadow = true; okop.add(nasyp);
+okop.position.copy(W(65, 42)); scene.add(okop);
+const okopLab = label('okop', 'okop', W(78.5, 42.5, 1.5));
+label('PLAC BRONI', 'plac', W(70, 58, 0.2));
+
+// ---------- postacie ----------
+const SKORA = 0xf1c7a1;
+function osoba(team, scale = 1) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.55, 1.5, 10), mat({ color: team === 'red' ? 0xc8302c : team === 'adult' ? 0x6b6b6b : 0x2f4f7a }));
+  body.position.y = 0.75; body.castShadow = true;
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 12, 10), mat({ color: SKORA })); head.position.y = 1.85; head.castShadow = true;
+  g.add(body, head);
+  if (team === 'red') {
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.22, 12), mat({ color: 0xa01f1b })); cap.position.y = 2.18; g.add(cap);
+  } else if (team === 'boy') {
+    const cap1 = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.12, 12), mat({ color: 0x2e8b3a })); cap1.position.y = 2.12;
+    const cap2 = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.12, 12), mat({ color: 0xc8302c })); cap2.position.y = 2.24;
+    g.add(cap1, cap2);
+  } else {
+    const hat = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.15, 12), mat({ color: 0x3a3a3a })); hat.position.y = 2.15; g.add(hat);
+  }
+  g.scale.setScalar(scale);
+  scene.add(g); g.visible = false;
+  return g;
+}
+
+// oddzialy: n osob, druzyna, napis
+const U = {};
+function oddzial(id, team, n, nazwa, opts = {}) {
+  const czl = [];
+  for (let i = 0; i < n; i++) czl.push(osoba(team, opts.scale || 1));
+  let lab = null;
+  if (nazwa) {
+    lab = label(nazwa, 'osoba ' + (opts.cls || (team === 'red' ? 'red' : 'boy')), new THREE.Vector3(0, (opts.labY || 2.9) / (opts.scale || 1), 0), czl[0]);
+    lab.visible = false;
+  }
+  U[id] = { id, team, n, czl, lab, cur: czl.map(() => new THREE.Vector3()), from: [], to: [], hidden: true, fall: false, fallCur: 0 };
+}
+oddzial('A', 'boy', 3, 'A - Weisz');
+oddzial('B', 'boy', 3, 'B - Leszik');
+oddzial('C', 'boy', 4, 'C - Richter');
+oddzial('D', 'boy', 4, 'D');
+for (const n of [1, 2, 4, 5, 6]) oddzial('f' + n, 'boy', 2, null);
+oddzial('f3', 'boy', 2, 'Barabasz');
+oddzial('boka', 'boy', 1, 'Boka', { cls: 'boy wazny' });
+oddzial('kolnay', 'boy', 1, 'Kolnay', { cls: 'boy' });
+oddzial('czon', 'boy', 1, null, { scale: 1.15 });
+oddzial('gereb', 'boy', 1, 'Gereb');
+oddzial('nem', 'boy', 1, 'Nemeczek', { scale: 0.8, cls: 'nem' });
+oddzial('janosz', 'adult', 1, 'Janosz', { scale: 1.25, cls: 'boy' });
+oddzial('pastor', 'red', 7, 'starszy Pastor');
+oddzial('feri', 'red', 1, 'Feri Acz', { scale: 1.1 });
+oddzial('ferig', 'red', 7, 'młodszy Pastor, Sebenicz');
+U.janosz.lab.element.style.background = '#6b6b6b';
+
+// ---------- kroki bitwy ----------
+// p: [mx, mz, y], f: 'line' | 'grid', hide: schowany w budynku, fall: lezy.
+// Stan kroku = suma wszystkich wczesniejszych zmian (nie trzeba powtarzac).
+const FY = STOS_H;
+const naForcie = (n, dx = 0) => { const [x, z] = fortXZ(n); return [x + dx, z, FY]; };
+const KROKI = [
+  {
+    t: 'Jak wygląda Plac Broni?', kam: 'wide', napisy: false,
+    o: 'Porównajcie model ze swoimi rysunkami. Pokażcie: gdzie jest ulica Pawła, a gdzie ulica Marii? Gdzie są forty, tartak i chatka Janosza?',
+    pyt: 'Czego brakowało na waszych rysunkach?',
+  },
+  {
+    t: 'Plan = widok z góry', kam: 'top',
+    o: 'Tak plac wygląda z lotu ptaka. Boka narysował dokładnie taki plan na kartce: z przodu pusty plac, z tyłu skład drewna z fortami, z boku tartak, wozownia i chatka.',
+    cz: 'rozdz. II - opis placu i składu drewna',
+  },
+  {
+    t: 'Plan Boki', kam: 'wide',
+    o: 'Wrogowie mają zaatakować z dwóch stron naraz. Przy furtce od ulicy Pawła stoją oddziały A i B, przy bramie od ulicy Marii - C i D. Na fortach po dwóch chłopców z bombami z piasku. Boka i Kolnay z trąbką stoją na dachu chatki.',
+    cz: 'rozdz. VI - Boka objaśnia plan na kamieniu',
+    u: {
+      A: { p: [51, 64], f: 'line' }, B: { p: [79, 64], f: 'line' },
+      C: { p: [6, 11] }, D: { p: [6, 33] }, czon: { p: [9, 9.5] },
+      f1: { p: naForcie(1) }, f2: { p: naForcie(2) }, f3: { p: naForcie(3) }, f4: { p: naForcie(4) }, f5: { p: naForcie(5) }, f6: { p: naForcie(6) },
+      boka: { p: [18, 33, 3.3] }, kolnay: { p: [20.5, 34, 3.3] },
+    },
+  },
+  {
+    t: 'Zmiana planu: okop', kam: 'plac', okop: true,
+    o: 'W dniu bitwy Janosz wykopał rano rów przed fortami 4 i 5. Oddziały A i B nie czekają przy furtce, tylko chowają się w okopie. Wróg ich nie zobaczy. Gereb robi w okopie bomby z mokrego piasku.',
+    cz: 'rozdz. VIII - okop przed fortami',
+    u: {
+      A: { p: [59, 41.5, -1.2], f: 'line' }, B: { p: [71, 41.5, -1.2], f: 'line' },
+      janosz: { p: [66, 46] }, gereb: { p: [65, 41.5, -1.2] },
+    },
+  },
+  {
+    t: 'Czerwone Koszule u bram', kam: 'wide', furtka: 'open',
+    o: 'Wrogowie przychodzą z dwóch stron. Od ulicy Marii - oddział starszego Pastora. Od ulicy Pawła - Feri Acz, a z nim Sebenicz z zabraną chorągiewką. Grają trąbki. Boka patrzy z dachu chatki przez lornetkę.',
+    cz: 'rozdz. VIII - wrogowie przy bramach',
+    u: {
+      janosz: { hide: true, p: [19, 33.5] },
+      pastor: { p: [-6, 21.5], f: 'grid' },
+      feri: { p: [60.5, 79] }, ferig: { p: [60.5, 82.5], f: 'line' },
+    },
+  },
+  {
+    t: 'Udawana ucieczka', kam: 'maria',
+    o: 'Oddział Pastora wbiega bramą od ulicy Marii. Chłopcy z C i D udają, że uciekają w panice: C chowa się w wozowni, D w chatce. A Feri nie wchodzi! Czeka przed furtką na sygnał trąbki. Boka od razu rozumie: wrogowie mają taki sam plan jak on.',
+    cz: 'rozdz. VIII - atak od ulicy Marii',
+    u: {
+      pastor: { p: [13, 21.5], f: 'grid' },
+      C: { p: [WOZOWNIA[0], WOZOWNIA[1]], hide: true }, czon: { p: [WOZOWNIA[0] + 1, WOZOWNIA[1]], hide: true },
+      D: { p: CHATKA, hide: true },
+    },
+  },
+  {
+    t: 'Forty 1, 2 i 3 strzelają', kam: 'maria',
+    o: 'Czerwone Koszule obiegają tartak i stają pod fortami. Trąbka Kolnaya - forty zaczynają bombardowanie piaskiem. Barabasz z fortu 3 celuje prosto w starszego Pastora.',
+    cz: 'rozdz. VIII - bombardowanie z fortów',
+    u: { pastor: { p: [36.5, 21], f: 'grid' } },
+    bomby: [['f1', 37, 19], ['f2', 37, 21], ['f3', 37, 23]],
+  },
+  {
+    t: 'Atak od tyłu!', kam: 'maria',
+    o: 'W forcie 2 kończy się piasek. Boka krzyczy: szturm! Chłopcy wybiegają z wozowni i z chatki i atakują wrogów od tyłu. Czerwone Koszule nic nie rozumieją: skąd ci chłopcy się wzięli?',
+    cz: 'rozdz. VIII - szturm z wozowni i chatki',
+    u: {
+      C: { p: [31, 15], hide: false }, czon: { p: [32, 17], hide: false },
+      D: { p: [31, 27], hide: false },
+      pastor: { p: [36, 21], f: 'grid' },
+    },
+    bomby: [['f1', 37, 19], ['f3', 37, 23]],
+  },
+  {
+    t: 'Jeńcy w chatce', kam: 'maria',
+    o: 'Czerwonych wnoszą jednego po drugim do chatki i zamykają drzwi. Czonakosz niesie na rękach samego Pastora. W chatce siedzi też ich trębacz - więc Feri nie dostanie sygnału. Załogi fortów 1 i 2 przechodzą na forty 4 i 5.',
+    cz: 'rozdz. VIII - jeńcy w chatce',
+    u: {
+      pastor: { p: CHATKA, hide: true },
+      czon: { p: [22, 31] }, C: { p: [24, 27] }, D: { p: [25, 34] },
+      f1: { p: naForcie(4, -2) }, f2: { p: naForcie(5, -2) },
+    },
+  },
+  {
+    t: 'Feri rusza do ataku', kam: 'plac',
+    o: 'Zamiast trąbki wrogów słychać trąbkę Boki. Feri rozumie, że Pastor przegrał, i rusza całą linią przez plac na okop. Oddział C wychodzi przy chatce, D przy forcie 6. Strzelają forty 3, 4, 5 i 6.',
+    cz: 'rozdz. VIII - atak Feriego',
+    u: {
+      C: { p: [27, 41], f: 'line' }, czon: { p: [30, 43] }, D: { p: [91, 44], f: 'line' },
+      feri: { p: [63, 54] }, ferig: { p: [63, 57], f: 'line' },
+    },
+    bomby: [['f3', 61, 54], ['f4', 62, 55], ['f5', 65, 55], ['f6', 66, 54], ['f1', 63, 56], ['f2', 64, 54]],
+  },
+  {
+    t: 'Ognia z okopu!', kam: 'plac',
+    o: 'Kolnay biegnie z rozkazem do okopu, ale jeden z wrogów go łapie. Wtedy Boka sam skacze do okopu i woła: ognia! Feri dostaje naraz garść bomb - spod ziemi. Strzelają forty i okop.',
+    cz: 'rozdz. VIII - Boka w okopie',
+    u: {
+      kolnay: { p: [55, 48] }, boka: { p: [62, 41.5, -1.2] },
+      feri: { p: [62, 47.5] }, ferig: { p: [62, 50.5], f: 'line' },
+      A: { p: [57, 41.5, -0.5], f: 'line' }, B: { p: [69, 41.5, -0.5], f: 'line' }, gereb: { p: [64.5, 41.5, -0.5] },
+    },
+    bomby: [['A', 61, 48], ['B', 64, 49], ['f4', 62, 50], ['f5', 64, 50], ['f6', 66, 51]],
+  },
+  {
+    t: 'Szturm', kam: 'plac',
+    o: 'Chłopcy wychodzą z okopu i idą zwartą linią, a za nimi schodzą z fortów ci, którym skończył się piasek. Zasada: w ataku oddziałem wolno być w przewadze, ale w zapasach nigdy dwóch na jednego.',
+    cz: 'rozdz. VIII - pełny szturm',
+    u: {
+      A: { p: [58, 49], f: 'line' }, B: { p: [68, 49], f: 'line' }, boka: { p: [63, 48.5] }, gereb: { p: [63, 47] },
+      f1: { p: [56, 45], f: 'line' }, f2: { p: [61, 45], f: 'line' }, f3: { p: [52, 46], f: 'line' }, f4: { p: [66, 45], f: 'line' }, f5: { p: [71, 45], f: 'line' }, f6: { p: [76, 46], f: 'line' },
+      feri: { p: [63, 52] }, ferig: { p: [63, 54.5], f: 'line' }, kolnay: { p: [56, 50] },
+    },
+  },
+  {
+    t: '„Do chatki!”', kam: 'chatka',
+    o: 'Feri chce uwolnić jeńców i nagle skręca całą grupą w lewo, do chatki. Chłopcy z placu się tego nie spodziewali. I wtedy zza chatki wyskakuje ktoś mały i chudy, chory, w gorączce...',
+    cz: 'rozdz. VIII - zwrot do chatki',
+    u: {
+      feri: { p: [33.5, 42] }, ferig: { p: [38.5, 44], f: 'grid' },
+      nem: { p: [25, 39.8] },
+      C: { p: [38, 48.5], f: 'line' }, czon: { p: [41, 47] },
+    },
+  },
+  {
+    t: 'Nemeczek!', kam: 'chatka', ring: 'nem',
+    o: 'Nemeczek, o głowę niższy, staje przed Ferim Aczem, podnosi ręce: stój! Chwyta go i przewraca na ziemię. Siły dała mu gorączka. Zaraz potem sam mdleje. Mały pokonał dużego - jak Dawid Goliata.',
+    cz: 'koniec rozdz. VIII - Nemeczek i Feri Acz',
+    u: {
+      nem: { p: [31.5, 41.5], fall: true }, feri: { p: [32.8, 42.3], fall: true },
+    },
+  },
+  {
+    t: 'Zwycięstwo - i cisza', kam: 'wide', furtka: 'closed', ring: 'nem',
+    o: 'Bez wodza Czerwone Koszule się gubią. Chłopcy wypychają je przez furtkę na ulicę Pawła i zamykają ją. Feri wstaje i stoi sam. Wszyscy zbierają się wokół Nemeczka. Janosz przynosi wodę.',
+    cz: 'rozdz. VIII - po bitwie',
+    pyt: 'Dlaczego plan Boki się udał? Co by się stało bez Nemeczka?',
+    u: {
+      ferig: { p: [61, 84], f: 'line' }, feri: { p: [38, 47.5], fall: false },
+      A: { p: [61, 70], f: 'line' }, B: { p: [61, 67.5], f: 'line' },
+      f1: { p: [27.5, 37.8], f: 'line' }, f2: { p: [36, 37.8], f: 'line' }, f3: { p: [26.5, 44.5], f: 'line' }, f4: { p: [36.5, 45], f: 'line' }, f5: { p: [41, 41.5], f: 'line' }, f6: { p: [41.5, 44.5], f: 'line' },
+      D: { p: [46, 47], f: 'line' }, C: { p: [44, 50], f: 'line' }, boka: { p: [29.3, 40.3] }, kolnay: { p: [34.5, 43.3] },
+      gereb: { p: [28.8, 43] }, czon: { p: [31.8, 38.8] },
+      janosz: { p: [34, 40.2], hide: false },
+    },
+  },
+];
+const KAM = {
+  wide: { pos: [8, 100, 66], tgt: [2, 0, 14] },
+  top: { pos: [0, 128, 16.1], tgt: [0, 0, 16] },
+  maria: { pos: [-10, 40, 40], tgt: [-18, 0, -6] },
+  plac: { pos: [24, 40, 62], tgt: [14, 0, 15] },
+  chatka: { pos: [8, 24, 24], tgt: [-18, 0, 3] },
+};
+
+// ---------- stan ----------
+function stanKroku(k) {
+  const st = {};
+  for (const id in U) st[id] = { p: null, f: 'grid', hide: true, fall: false };
+  for (let i = 0; i <= k; i++) {
+    const u = KROKI[i].u || {};
+    for (const id in u) {
+      const s = st[id], z = u[id];
+      if (z.p) { s.p = z.p; if (!('hide' in z) && s.hide) s.hide = false; }
+      if (z.f) s.f = z.f;
+      if ('hide' in z) s.hide = z.hide;
+      if ('fall' in z) s.fall = z.fall;
+    }
+  }
+  return st;
+}
+function pozycje(u, s) {
+  const [mx, mz, y = 0] = s.p;
+  const n = u.n, out = [];
+  if (s.f === 'line') {
+    for (let i = 0; i < n; i++) out.push(W(mx + (i - (n - 1) / 2) * 1.5, mz, y));
+  } else {
+    const cols = Math.ceil(Math.sqrt(n)), rows = Math.ceil(n / cols);
+    for (let i = 0; i < n; i++) {
+      const c = i % cols, r = Math.floor(i / cols);
+      out.push(W(mx + (c - (cols - 1) / 2) * 1.4 + (r % 2) * 0.3, mz + (r - (rows - 1) / 2) * 1.4, y));
+    }
+  }
+  return out;
+}
+
+let krok = 0, tStart = 0, pierwszy = true;
+const DUR = 2600;
+let bomby = [];
+let zGory = false;
+let kamAnim = null;
+const okopBylo = () => KROKI.slice(0, krok + 1).some((k) => k.okop);
+
+function ustawKrok(k, natychmiast = false) {
+  krok = Math.max(0, Math.min(KROKI.length - 1, k));
+  const K = KROKI[krok];
+  const st = stanKroku(krok);
+  for (const id in U) {
+    const u = U[id], s = st[id];
+    u.from = u.czl.map((m) => m.position.clone());
+    if (!s.p) { u.czl.forEach((m) => (m.visible = false)); if (u.lab) u.lab.visible = false; u.hidden = true; continue; }
+    u.to = pozycje(u, s);
+    const bylUkryty = u.hidden;
+    if (bylUkryty || natychmiast) {
+      // wychodzi z budynku albo pierwszy raz: startuje tam, gdzie byl (albo od razu na miejscu)
+      if (natychmiast || u.from.every((p) => p.lengthSq() === 0)) u.from = u.to.map((p) => p.clone());
+    }
+    u.hideAfter = s.hide;
+    u.hidden = false;
+    u.fallTo = s.fall ? 1 : 0;
+    if (!(bylUkryty && s.hide)) u.czl.forEach((m) => (m.visible = true));
+    if (u.lab) u.lab.visible = !(bylUkryty && s.hide);
+    if (bylUkryty && s.hide) { u.czl.forEach((m) => (m.visible = false)); u.hidden = true; u.czl.forEach((m, i) => m.position.copy(u.to[i])); }
+  }
+  tStart = natychmiast ? performance.now() - DUR : performance.now();
+  // okop, furtka
+  okop.visible = okopBylo(); okopLab.visible = okop.visible;
+  let fur = 'closed';
+  for (let i = 0; i <= krok; i++) if (KROKI[i].furtka) fur = KROKI[i].furtka;
+  furtkaCel = fur === 'open' ? -1.6 : 0;
+  // napisy
+  const napisyKroku = K.napisy !== false;
+  document.body.classList.toggle('bez-napisow', !(napisyKroku && napisyWl));
+  // kamera
+  idzKamera(zGory ? 'top' : K.kam, natychmiast);
+  // tekst
+  const op = document.getElementById('opis');
+  op.querySelector('.krok').textContent = `Krok ${krok + 1} z ${KROKI.length}`;
+  op.querySelector('h1').textContent = K.t;
+  op.querySelector('p').textContent = K.o;
+  op.querySelector('.czytamy').innerHTML = K.cz ? `<b>Czytamy</b>${K.cz}` : '';
+  op.querySelector('.pytanie').textContent = K.pyt || '';
+  document.getElementById('wstecz').disabled = krok === 0;
+  document.getElementById('dalej').disabled = krok === KROKI.length - 1;
+  bomby.forEach((b) => scene.remove(b.m));
+  bomby = [];
+  zrodla = (K.bomby || []).map(([src, x, z]) => ({ src, x, z, next: performance.now() + 900 + Math.random() * 500 }));
+  ring.visible = false;
+  try { history.replaceState(null, '', `?krok=${krok + 1}`); } catch (e) { /* file:// */ }
+  if (window.parent !== window) window.parent.postMessage({ typ: 'slajd-stan', krok, ile: KROKI.length }, '*');
+}
+
+let furtkaCel = 0;
+let napisyWl = true;
+let zrodla = [];
+
+function idzKamera(nazwa, natychmiast) {
+  const k = KAM[nazwa] || KAM.wide;
+  const pos = new THREE.Vector3(...k.pos), tgt = new THREE.Vector3(...k.tgt);
+  if (natychmiast) { camera.position.copy(pos); controls.target.copy(tgt); controls.update(); kamAnim = null; return; }
+  kamAnim = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos, t1: tgt, start: performance.now() };
+}
+
+// pierscien wokol wyroznionej osoby
+const ring = new THREE.Mesh(new THREE.RingGeometry(1.3, 1.7, 32), new THREE.MeshBasicMaterial({ color: 0xf2c230, side: THREE.DoubleSide, transparent: true, opacity: 0.9 }));
+ring.rotation.x = -Math.PI / 2; ring.visible = false; scene.add(ring);
+
+// bomby z piasku
+const piasekMat = new THREE.MeshLambertMaterial({ color: 0xe6cf98 });
+const bombaGeo = new THREE.SphereGeometry(0.35, 8, 6);
+function wystrzel(z) {
+  const u = U[z.src]; if (!u || u.hidden) return;
+  const zr = u.czl[Math.floor(Math.random() * u.n)].position.clone(); zr.y += 1.8;
+  const cel = W(z.x + (Math.random() - 0.5) * 4, z.z + (Math.random() - 0.5) * 3, 0.3);
+  const m = new THREE.Mesh(bombaGeo, piasekMat); m.position.copy(zr); scene.add(m);
+  bomby.push({ m, p0: zr, p1: cel, t0: performance.now(), dur: 650 + Math.random() * 250, puf: false });
+}
+
+// ---------- petla ----------
+const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+function klatka(now) {
+  requestAnimationFrame(klatka);
+  const tt = Math.min(1, (now - tStart) / DUR);
+  for (const id in U) {
+    const u = U[id];
+    if (u.hidden || !u.to.length) continue;
+    u.fallCur += ((u.fallTo || 0) - u.fallCur) * 0.05;
+    u.czl.forEach((m, i) => {
+      const opozn = (i / Math.max(1, u.n)) * 0.25;
+      const t = ease(Math.max(0, Math.min(1, (tt - opozn) / (1 - 0.25))));
+      m.position.lerpVectors(u.from[i] || u.to[i], u.to[i], t);
+      const idzie = t > 0 && t < 1 && (u.from[i] && u.from[i].distanceToSquared(u.to[i]) > 0.5);
+      if (idzie) m.position.y += Math.abs(Math.sin(now / 70 + i)) * 0.35;
+      // przewracanie
+      m.rotation.x = -Math.PI / 2 * u.fallCur;
+      if (u.fallCur > 0.01) m.position.y = Math.max(m.position.y, 0.45 * u.fallCur);
+    });
+    if (tt >= 1 && u.hideAfter && !u.hidden) { u.czl.forEach((m) => (m.visible = false)); if (u.lab) u.lab.visible = false; u.hidden = true; }
+  }
+  // wyroznienie
+  const K = KROKI[krok];
+  if (K.ring && U[K.ring] && !U[K.ring].hidden) {
+    ring.visible = true; ring.position.copy(U[K.ring].czl[0].position); ring.position.y = 0.08;
+    const s = 1 + 0.15 * Math.sin(now / 200); ring.scale.set(s, s, s);
+  }
+  // bomby
+  for (const z of zrodla) if (tt >= 0.6 && now >= z.next) { wystrzel(z); z.next = now + 280 + Math.random() * 420; }
+  bomby = bomby.filter((b) => {
+    const t = (now - b.t0) / b.dur;
+    if (t < 1) {
+      b.m.position.lerpVectors(b.p0, b.p1, t); b.m.position.y += Math.sin(Math.PI * t) * 4;
+      return true;
+    }
+    if (!b.puf) { b.puf = true; b.m.material = new THREE.MeshLambertMaterial({ color: 0xe6cf98, transparent: true, opacity: 0.7 }); b.m.position.copy(b.p1); }
+    const u = (now - b.t0 - b.dur) / 500;
+    if (u >= 1) { scene.remove(b.m); b.m.material.dispose(); return false; }
+    b.m.scale.setScalar(1 + u * 4); b.m.material.opacity = 0.7 * (1 - u);
+    return true;
+  });
+  // furtka, para
+  furtka.rotation.y += (furtkaCel - furtka.rotation.y) * 0.06;
+  for (const p of para) {
+    p.t = (p.t + 0.004) % 1;
+    p.m.position.set(komin.position.x + p.t * 3, 11.5 + p.t * 7, komin.position.z - p.t * 2);
+    p.m.scale.setScalar(0.6 + p.t * 1.8); p.m.material.opacity = 0.8 * (1 - p.t);
+  }
+  // flagi
+  for (const n in flagi) flagi[n].children[flagi[n].children.length - 1].rotation.y = Math.sin(now / 400 + +n) * 0.4;
+  // kamera
+  if (kamAnim) {
+    const t = ease(Math.min(1, (now - kamAnim.start) / 1600));
+    camera.position.lerpVectors(kamAnim.p0, kamAnim.p1, t); controls.target.lerpVectors(kamAnim.t0, kamAnim.t1, t);
+    if (t >= 1) kamAnim = null;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+  css.render(scene, camera);
+}
+
+// ---------- sterowanie ----------
+const dalej = () => ustawKrok(krok + 1), wstecz = () => ustawKrok(krok - 1);
+document.getElementById('dalej').onclick = dalej;
+document.getElementById('wstecz').onclick = wstecz;
+const przelaczZGory = () => { zGory = !zGory; document.getElementById('zgory').classList.toggle('wl', zGory); idzKamera(zGory ? 'top' : KROKI[krok].kam); };
+const przelaczNapisy = () => { napisyWl = !napisyWl; document.getElementById('nap').classList.toggle('wl', !napisyWl); document.body.classList.toggle('bez-napisow', !(napisyWl && KROKI[krok].napisy !== false)); };
+document.getElementById('zgory').onclick = przelaczZGory;
+document.getElementById('nap').onclick = przelaczNapisy;
+const przelaczTekst = () => { document.body.classList.toggle('bez-opisu'); document.getElementById('tekst').classList.toggle('wl', document.body.classList.contains('bez-opisu')); };
+document.getElementById('tekst').onclick = przelaczTekst;
+// W slajdzie apki (ramka): apka przysyla kroki, a strzalka poza pierwszy/ostatni
+// krok wraca do apki i zmienia slajd (EmbedSlideView).
+const wRamce = window.parent !== window;
+window.addEventListener('message', (e) => {
+  if (e.source !== window.parent || !e.data || e.data.typ !== 'slajd-krok') return;
+  e.data.kierunek > 0 ? dalej() : wstecz();
+});
+const doApki = (key) => { if (wRamce) window.parent.postMessage({ typ: 'slajd-klawisz', key }, '*'); };
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); krok === KROKI.length - 1 ? doApki(e.key) : dalej(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); krok === 0 ? doApki(e.key) : wstecz(); }
+  else if (e.key === 'p' || e.key === 'P') przelaczZGory();
+  else if (e.key === 'n' || e.key === 'N') przelaczNapisy();
+  else if (e.key === 't' || e.key === 'T') przelaczTekst();
+});
+
+const start = parseInt(new URLSearchParams(location.search).get('krok') || '1', 10) - 1;
+// pierwsze ustawienie: poprzednie kroki "na skroty", zeby ludziki staly tam, gdzie trzeba
+if (start > 0) { ustawKrok(start - 1, true); }
+ustawKrok(start, start === 0);
+requestAnimationFrame(klatka);
+window.__plac = { ustawKrok, KROKI };
+</script>
+</body>
+</html>

@@ -21,6 +21,7 @@ import { VideoSlideView } from './VideoSlideView';
 import { CzytankaSlideView } from './CzytankaSlideView';
 import { CwiczenieSlideView } from './CwiczenieSlideView';
 import { PrzypomnienieSlideView } from './PrzypomnienieSlideView';
+import { EmbedSlideView } from './EmbedSlideView';
 import { TopicSlideView } from './TopicSlideView';
 
 export interface SlideViewProps {
@@ -157,6 +158,7 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
       {slide.kind === 'czytanka' && <CzytankaSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'cwiczenie' && <CwiczenieSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'przypomnienie' && <PrzypomnienieSlideView key={slide.id} slide={slide} />}
+      {slide.kind === 'embed' && <EmbedSlideView key={slide.id} slide={slide} />}
       {overlay}
     </SlideStage>
   );

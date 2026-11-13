@@ -17,8 +17,8 @@
 #s01 .grupy .chip { font-size: 30px; white-space: nowrap; background: var(--pomarancz); }
 #s01 .zapowiedz { margin-top: 24px; font-size: 40px; font-weight: 800; }
 
-#s02 .lista { width: 1000px; margin-top: 24px; gap: 16px; }
-#s02 .linia { font-size: 34px; }
+#s02 .lista { width: 1120px; margin-top: 10px; gap: 7px; }
+#s02 .linia { font-size: 28px; padding: 5px 18px; }
 #s03 .rzad { margin-top: 30px; }
 #s03 .karta .nazwa { font-size: 46px; }
 #s03 .karta .pyt { font-family: 'Baloo 2'; font-size: 40px; font-weight: 800; color: var(--szary); }
@@ -62,22 +62,26 @@
     <div><span class="chip autor pop" data-slowo="molnar">Ferenc Molnár</span></div>
     <div class="tytul pop" data-slowo="chłopcy">Chłopcy z Placu Broni</div>
     <div class="grupy">
-      <span class="chip pop" data-slowo="gdzie">📍 gdzie?</span>
-      <span class="chip pop" data-slowo="kiedy">🕰️ kiedy?</span>
+      <span class="chip pop" data-slowo="skrócie">📖 historia w skrócie</span>
+      <span class="chip pop" data-slowo="gdzie">📍 gdzie i kiedy?</span>
       <span class="chip pop" data-slowo="ważny">❓ po co walczyć o pusty plac?</span>
     </div>
-    <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
+    <div class="zapowiedz pop" data-slowo="zadania">✏️ 2 zadania · 📓 zeszyt w gotowości!</div>
   </section>
 
-  <!-- ===== 02 przypomnienie ===== -->
-  <section class="scena" data-id="02-przypomnienie" id="s02">
-    <span class="czesc zjaw" data-t="0">PRZYPOMNIENIE · rozdz. I-II</span>
-    <h2 class="naglowek wjazd-dol" data-t="0">Jak to się zaczyna? 📖</h2>
+  <!-- ===== 02 streszczenie ===== -->
+  <section class="scena" data-id="02-streszczenie" id="s02">
+    <span class="czesc zjaw" data-t="0">STRESZCZENIE · cała książka</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">O czym jest ta książka? 📖</h2>
     <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="zebranie">🏫 Na lekcji wiadomość: po południu <b>zebranie na placu</b>.</div>
-      <div class="linia wjazd-lewo" data-slowo="kulki">🔮 Bracia Pastorowie zabierają Nemeczkowi <b>szklane kulki</b>.</div>
-      <div class="linia wjazd-lewo b-kosz" data-slowo="chorągiewkę">🚩 Feri Acz, wódz Czerwonych Koszul, zabiera <b>chorągiewkę</b> z placu.</div>
-      <div class="linia wjazd-lewo b-plac" data-slowo="boka">👑 Chłopcy wybierają wodza. Zostaje nim <b>Boka</b>.</div>
+      <div class="linia wjazd-lewo b-plac" data-slowo="plac">🏚️ Chłopcy z ulicy Pawła mają swój <b>plac</b> i fortece na składzie drewna.</div>
+      <div class="linia wjazd-lewo b-kosz" data-slowo="czerwone">🔴 <b>Czerwone Koszule</b> chcą zabrać plac. Feri Acz zabiera <b>chorągiewkę</b>.</div>
+      <div class="linia wjazd-lewo" data-slowo="boka">👑 Wodzem chłopców zostaje <b>Boka</b>.</div>
+      <div class="linia wjazd-lewo" data-slowo="wyprawę">🌿 Wyprawa do Ogrodu Botanicznego: <b>Gereb zdradził</b>.</div>
+      <div class="linia wjazd-lewo" data-slowo="trzy">💧 Nemeczek trzy razy w zimnej wodzie, ale <b>nie zdradza</b> - honory od Feriego.</div>
+      <div class="linia wjazd-lewo b-kosz" data-slowo="bitwy">⚔️ <b>Bitwa o plac.</b> Chory Nemeczek przewraca Feriego Acza.</div>
+      <div class="linia wjazd-lewo" data-slowo="umiera">🕯️ <b>Nemeczek umiera.</b></div>
+      <div class="linia wjazd-lewo b-plac" data-slowo="kamienica">🏗️ Na placu stanie <b>kamienica</b>. Zostaje pamięć o odwadze i przyjaźni.</div>
     </div>
   </section>
 
@@ -184,45 +188,6 @@
     </div>
   </section>
 
-  <!-- ===== 09 zadanie 2 ===== -->
-  <section class="scena zadanie" data-id="09-zadanie2+60" id="s09">
-    <span class="czesc">1 · CZAS I MIEJSCE AKCJI</span>
-    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
-    <div class="polecenie wjazd-dol" data-slowo="które">Czas akcji czy miejsce akcji?</div>
-    <div class="kafle">
-      <div class="kafel pop" data-slowo="sześć"><b>1</b>w marcu</div>
-      <div class="kafel pop" data-slowo="sześć" data-po="0.25"><b>2</b>w Budapeszcie</div>
-      <div class="kafel pop" data-slowo="sześć" data-po="0.5"><b>3</b>po lekcjach</div>
-      <div class="kafel pop" data-slowo="sześć" data-po="0.75"><b>4</b>na wyspie</div>
-      <div class="kafel pop" data-slowo="sześć" data-po="1"><b>5</b>w 1889 roku</div>
-      <div class="kafel pop" data-slowo="sześć" data-po="1.25"><b>6</b>przy ulicy Pawła</div>
-    </div>
-    <div class="slowa">
-      <span class="chip pop" data-slowo="czas">czas · kiedy?</span>
-      <span class="chip pop" data-slowo="miejsce" style="background:var(--plac)">miejsce · gdzie?</span>
-    </div>
-    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
-  </section>
-
-  <!-- ===== 10 odpowiedz 2 ===== -->
-  <section class="scena odp" data-id="10-odpowiedz2" id="s10">
-    <span class="czesc">1 · CZAS I MIEJSCE AKCJI</span>
-    <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="polecenie">Czas akcji czy miejsce akcji?</div>
-    <div class="kafle">
-      <div class="kafel"><b>1</b>w marcu <span class="etyk o-znak" data-slowo="marcu" style="background:var(--niebieski)">czas</span></div>
-      <div class="kafel"><b>2</b>w Budapeszcie <span class="etyk o-znak" data-slowo="budapeszcie">miejsce</span></div>
-      <div class="kafel"><b>3</b>po lekcjach <span class="etyk o-znak" data-slowo="lekcjach" style="background:var(--niebieski)">czas</span></div>
-      <div class="kafel"><b>4</b>na wyspie <span class="etyk o-znak" data-slowo="wyspie">miejsce</span></div>
-      <div class="kafel"><b>5</b>w 1889 roku <span class="etyk o-znak" data-slowo="tysiąc" style="background:var(--niebieski)">czas</span></div>
-      <div class="kafel"><b>6</b>przy ulicy Pawła <span class="etyk o-znak" data-slowo="pawła">miejsce</span></div>
-    </div>
-    <div class="slowa">
-      <span class="chip pop" data-slowo="kiedy" style="background:var(--niebieski)">kiedy? ➜ czas</span>
-      <span class="chip pop" data-slowo="gdzie" style="background:var(--plac)">gdzie? ➜ miejsce</span>
-    </div>
-  </section>
-
   <!-- ===== 11 dlaczego plac ===== -->
   <section class="scena" data-id="11-dlaczego" id="s11">
     <span class="czesc zjaw" data-t="0">2 · PO CO WALCZYĆ O PLAC?</span>
@@ -244,10 +209,10 @@
     <div><span class="chip ojczyzna pop" data-slowo="ojczyzna">❤️ plac = ich mała ojczyzna</span></div>
   </section>
 
-  <!-- ===== 12 zadanie 3 ===== -->
-  <section class="scena zadanie" data-id="12-zadanie3+60" id="s12">
+  <!-- ===== 12 zadanie 2 ===== -->
+  <section class="scena zadanie" data-id="12-zadanie2+60" id="s12">
     <span class="czesc">2 · PO CO WALCZYĆ O PLAC?</span>
-    <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
+    <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
     <div class="polecenie wjazd-dol" data-slowo="dlaczego">Dlaczego plac jest dla chłopców taki ważny?</div>
     <div class="lista">
       <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Bo leży na nim dużo cennych rzeczy.</div>
@@ -259,8 +224,8 @@
     <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
   </section>
 
-  <!-- ===== 13 odpowiedz 3 ===== -->
-  <section class="scena odp" data-id="13-odpowiedz3" id="s13">
+  <!-- ===== 13 odpowiedz 2 ===== -->
+  <section class="scena odp" data-id="13-odpowiedz2" id="s13">
     <span class="czesc">2 · PO CO WALCZYĆ O PLAC?</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
     <div class="polecenie">Dlaczego plac jest dla chłopców taki ważny?</div>

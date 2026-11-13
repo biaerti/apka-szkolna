@@ -450,7 +450,10 @@ export type Slide =
   | { id: ID; kind: 'cwiczenie'; cwiczenieId: string }
   // Przypomnienie na lekcji powtorkowej (src/data/przypomnienia.ts): nauczyciel
   // mowi, a slajd odslania kroki strzalka - regula, przyklad z animacja.
-  | { id: ID; kind: 'przypomnienie'; przypomnienieId: string };
+  | { id: ID; kind: 'przypomnienie'; przypomnienieId: string }
+  // Strona z public/ w ramce na caly slajd (np. model 3D Placu Broni z krokami
+  // bitwy). Strzalki ida najpierw po krokach strony - patrz EmbedSlideView.
+  | { id: ID; kind: 'embed'; url: string; title?: string };
 
 export interface Settings {
   // Wszystko rozliczamy pelnymi miesiacami kalendarzowymi: pasy, uwagi i statystyki

@@ -70,7 +70,7 @@ export const FILMIKI: Filmik[] = [
   { id: 'opis-postaci-film1', lekcja: '38', title: 'Opis postaci (3 zadania)' },
   { id: 'podsumowanie4-dzial3-film1', lekcja: '39', title: 'Podsumowanie rozdziału III - Od pomysłu do działania (3 zadania)' },
   // Klasa 4, lektura „Chłopcy z Placu Broni” (lekturaChlopcy.ts): ok. 8 min, 3 zadania z minuta na kazde.
-  { id: 'placu-broni-film1', lekcja: 'L1', title: 'Plac Broni - czas i miejsce akcji (3 zadania)' },
+  { id: 'placu-broni-film1', lekcja: 'L1', title: 'Plac Broni - streszczenie, czas i miejsce akcji (2 zadania)' },
   { id: 'placu-broni-film2', lekcja: 'L2', title: 'Dwie drużyny - bohater główny, drugoplanowy, zbiorowy (3 zadania)' },
   { id: 'placu-broni-film3', lekcja: 'L3', title: 'Nemeczek - cechy bohatera i dowody (3 zadania)' },
   { id: 'placu-broni-film4', lekcja: 'L4', title: 'Gereb - czyn, motyw i ocena bohatera (3 zadania)' },

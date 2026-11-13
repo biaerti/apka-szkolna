@@ -19,6 +19,7 @@ export const SLIDE_KIND_LABELS: Record<SlideKind, string> = {
   czytanka: 'Czytanka z lektorem',
   cwiczenie: 'Ćwiczymy razem',
   przypomnienie: 'Przypomnienie (powtórka)',
+  embed: 'Strona / model 3D',
   note: 'Notatka do zeszytu',
 };
 
@@ -52,6 +53,8 @@ export function slideSummary(slide: Slide): string {
       return cwiczenieById(slide.cwiczenieId)?.tytul ?? '(bez ćwiczenia)';
     case 'przypomnienie':
       return przypomnienieById(slide.przypomnienieId)?.tytul ?? '(bez przypomnienia)';
+    case 'embed':
+      return slide.title || slide.url || '(bez strony)';
     default:
       return '';
   }

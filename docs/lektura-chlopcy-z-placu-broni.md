@@ -38,8 +38,12 @@ Notatka tylko z pojęcia (2 zdania), nigdy z fabuły.
       Nie przechodzi do wrogów. Pastorowie wrzucają go do wody (3. kąpiel). Feri Acz każe oddać mu honory.
   VI-VII. Odezwa Boki, przysięga. Nemeczek choruje. Gereb przeprasza i wraca jako szeregowiec.
       Wypowiedzenie wojny pod białą flagą, zasady: bomby z piasku, zapasy, walka na dzidy (bez bicia).
-  VIII. Bitwa. Wygrywają przy ulicy Marii, ale wróg wchodzi od tyłu. Chory Nemeczek przybiega,
-      przewraca Feriego Acza i mdleje. Zwycięstwo. Boka mianuje go kapitanem. Feri Acz przychodzi pod jego dom.
+  VIII. Bitwa (wg oryginału, Gutenberg 69689): Janosz kopie rano okop przed fortami 4 i 5, oddziały A i B chowają się
+      w nim. Pastor wchodzi bramą od ulicy Marii, C i D udają ucieczkę do wozowni i chatki, forty 1-3 bombardują,
+      potem atak od tyłu i jeńcy zamknięci w chatce (z trębaczem Wendauerem). Feri Acz czeka przed furtką od ulicy
+      Pawła na trąbkę, która nie przychodzi, i w końcu atakuje. Kolnay nie dobiega do okopu, Boka sam skacze do okopu:
+      ognia. Feri skręca „do chatki!”, wtedy chory Nemeczek przewraca go i mdleje. Zwycięstwo. Boka mianuje go
+      kapitanem. Feri Acz przychodzi pod jego dom.
   IX-X. Nazwisko Nemeczka w księdze **wielkimi literami**. Nemeczek umiera. Boka dowiaduje się od Janosza,
       że na placu stanie kamienica - plac i tak przepadnie.
 
@@ -109,3 +113,20 @@ Plan zatwierdzony przez Bartka (6 lekcji, cała książka przeczytana przed lekc
   wysłane do bucketu jako `placu-broni-filmN.mp4`.
 
 Do zrobienia osobno, jeśli Bartek zechce: kahoot i krótki test ze znajomości lektury wg CLAUDE.md.
+
+## Zmiany 2026-11-13 (pomysły Bartka)
+
+- **L1:** film zaczyna się streszczeniem całej książki (scena `02-streszczenie`, ok. 1:13), żeby każdy wiedział, o czym
+  mówimy. Film skrócony o zadanie „czas czy miejsce” (zostało na kartach), teraz 2 zadania, 8:00.
+- **L3:** po filmie slajd rozmowy „Alfa, beta, sigma - a Nemeczek?”: według tej tabelki byłby „betą”, a to on zdaje
+  każdą próbę odwagi. Męskość = odwaga wystawiona na próbę, nie rządzenie innymi (Gereb chciał być „alfą” i zdradził).
+- **L5:** rysunek placu z pamięci (5 min) -> **model 3D placu** `public/prezentacje/plac-broni-3d.html` (slajd `embed`)
+  -> film -> notatka. Model: układ wg planu Boki z wydania z 1916 r. (domena publiczna), bitwa w 15 krokach z
+  podpisem „Czytamy: rozdz. ...”, widok z góry = plan (wyobraźnia przestrzenna). three.js r162 w
+  `public/prezentacje/vendor/` (ostatnie z WebGL1 - szkolne komputery). Strzałki w apce idą najpierw po krokach
+  modelu (`EmbedSlideView`, umowa `postMessage`).
+- **L6:** „Dlaczego Nemeczek musiał umrzeć?” (stary tytuł zmapowany w `TITLE_ALIASES`): fragmenty, w których plac
+  jest jak ojczyzna (rozdz. II, VI, VII, koniec VIII, X), rozmowa: plac = **symbol** ojczyzny, dlaczego nie zginął
+  w bitwie (zasady walki, choroba od trzech kąpieli = od wierności), dlaczego musiał umrzeć (patriotyzm, cena,
+  pamięć). Film 6 bez zmian, 1 karta, notatka: symbol + przesłanie.
+

@@ -223,7 +223,7 @@ describe('buildTextbook4', () => {
     expect(lesson.teacherPlan).toContain('klasa4-rozdzial2-domowe.html');
   });
 
-  it('lektura Chłopcy z Placu Broni: osobna zakladka, film, 2 karty i notatka na koniec', () => {
+  it('lektura Chłopcy z Placu Broni: osobna zakladka, koło, film i notatka na koniec', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     const lektura = bundle.lessons.filter((l) => l.dzial === LEKTURA_CHLOPCY);
     expect(lektura).toHaveLength(6);
@@ -231,8 +231,18 @@ describe('buildTextbook4', () => {
       // Bez podrecznika - zadnego "Podręcznik s. 0" na liscie lekcji.
       expect(lesson.textbookPage).toBeUndefined();
       expect(lesson.teacherPlan).toBeTruthy();
-      expect(lesson.slides.map((s) => s.kind)).toEqual(['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note']);
-      const video = lesson.slides[2];
+      // L3: rozmowa „alfa, beta, sigma” po filmie; L5: rysunek z pamieci + model 3D
+      // placu przed filmem; L6: fragmenty i rozmowa o smierci Nemeczka przed filmem.
+      const uklady = [
+        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'video', 'text', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'task', 'embed', 'video', 'note'],
+        ['topic', 'recap', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
+      ];
+      expect(lesson.slides.map((s) => s.kind)).toEqual(uklady[i]);
+      const video = lesson.slides.find((s) => s.kind === 'video')!;
       expect(video.kind === 'video' && video.videoId).toBe(`placu-broni-film${i + 1}`);
       expect(video.kind === 'video' && Boolean(filmikById(video.videoId))).toBe(true);
       // Kolo na start: 3 pytania z poprzedniej lekcji, nie z tej.
@@ -240,9 +250,10 @@ describe('buildTextbook4', () => {
       expect(lesson.slides[1]).not.toMatchObject({ questionSetId: lesson.questionSetId });
       expect(lesson.slides.filter((s) => s.kind === 'cwiczenie').every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
       // Notatka: 2 zdania z pojecia, nie streszczenie.
-      const note = lesson.slides[5];
+      const note = lesson.slides[lesson.slides.length - 1];
       expect(note.kind === 'note' ? note.body.split('\n').length : 0).toBe(3);
       expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(5);
+      for (const sl of lesson.slides) if (sl.kind === 'embed') expect(sl.url).toBe('/prezentacje/plac-broni-3d.html');
     }
   });
 

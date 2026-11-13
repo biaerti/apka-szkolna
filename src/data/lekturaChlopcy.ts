@@ -27,6 +27,16 @@ function razem(...ids: string[]): Slide[] {
   return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
 }
 
+/** Model 3D placu z bitwa krok po kroku (public/prezentacje/plac-broni-3d.html). */
+function modelPlacu(): Slide {
+  return { id: newId(), kind: 'embed', url: '/prezentacje/plac-broni-3d.html', title: 'Plac Broni - model i bitwa' };
+}
+
+/** Rozmowa na projektorze (bez notatki, bez oceny). */
+function rozmowa(title: string, body: string): Slide {
+  return { id: newId(), kind: 'text', title, body, studentAction: 'oral' };
+}
+
 /** Wspolny przebieg lekcji z lektury (45 min). */
 function przebieg(film: string, karty: string): string {
   return [
@@ -45,14 +55,14 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     topic: 'Plac Broni - czas i miejsce akcji',
     textbookPage: 0,
     teacherPlan: plan(
-      ['Co dziś', 'Pierwsza lekcja o lekturze (cała książka przeczytana wcześniej). Rozdziały I-II: chłopcy, Plac Broni, Czerwone Koszule, zabrana chorągiewka, wybór Boki. Pojęcie: **czas i miejsce akcji**, prawdziwe albo wymyślone. Film pokazuje mapę okolicy placu - wrócimy do niej przy wyprawie i bitwie.'],
+      ['Co dziś', 'Pierwsza lekcja o lekturze (cała książka przeczytana wcześniej). Film zaczyna się **streszczeniem całej książki** (ok. 1 min), żeby każdy wiedział, o czym rozmawiamy - także ci, którzy nie doczytali. Potem pojęcie: **czas i miejsce akcji**, prawdziwe albo wymyślone, i mapa okolicy placu - wrócimy do niej przy wyprawie, a przy bitwie zobaczymy plac w 3D.'],
       ['Po lekcji uczeń', [
         '- wskazuje czas i miejsce akcji (Budapeszt, wiosna 1889 r., kilka dni),',
         '- odróżnia miejsce prawdziwe od wymyślonego,',
         '- wie, gdzie są Plac Broni, skład drewna, Ogród Botaniczny i ogród przy Muzeum,',
         '- wyjaśnia, czym plac był dla chłopców.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Plac Broni - czas i miejsce akcji', '„Gdzie i kiedy?”, „Prawdziwe czy wymyślone?”')],
+      ['Przebieg (45 min)', przebieg('Plac Broni - streszczenie, czas i miejsce akcji', '„Gdzie i kiedy?”, „Prawdziwe czy wymyślone?”')],
       ['Jak wyjaśnić', [
         '- Miejsce akcji odpowiada na pytanie **gdzie?**, czas akcji na pytanie **kiedy?**',
         '- Budapeszt, ulica Pawła, Ogród Botaniczny istnieją naprawdę - miejsce akcji jest prawdziwe. W baśni bywa wymyślone.',
@@ -61,8 +71,8 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ].join('\n')],
       ['Odpowiedzi do filmu', [
         '- **Z1** kulki - muzeum, fortece - plac, narada na wyspie - ogród, wybór wodza - plac.',
-        '- **Z2** czas: w marcu, po lekcjach, w 1889 roku; miejsce: w Budapeszcie, na wyspie, przy ulicy Pawła.',
-        '- **Z3** odpowiedź 2 - jedyne wolne miejsce do zabawy, ich własny świat z zasadami.',
+        '- **Z2** odpowiedź 2 - jedyne wolne miejsce do zabawy, ich własny świat z zasadami.',
+        '- Czas czy miejsce (w marcu, w Budapeszcie...) ćwiczymy już na kartach, nie w filmie.',
       ].join('\n')],
     ),
     questions: [
@@ -140,6 +150,13 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- Czyn: sam idzie do kryjówki wrogów. Słowa: woli zimną wodę niż zdradę. Opinia innych: wróg, Feri Acz, każe mu oddać honory.',
         '- Małe litery w księdze, potem wielkie - tak zmienia się opinia kolegów.',
       ].join('\n')],
+      ['Rozmowa po filmie: alfa, beta, sigma (5 min)', [
+        'Dzieci znają z internetu podział chłopaków na „alfa” (rządzi), „beta” (słabszy, słucha innych) i „sigma” (samotny wilk). Slajd po filmie pyta, kim byłby Nemeczek. Na co naprowadzić:',
+        '- Według tej tabelki Nemeczek to „beta”: najmniejszy, jedyny szeregowiec, wszyscy mu rozkazują. A to on zdaje każdą próbę.',
+        '- Męskość = odwaga wystawiona na próbę: schodzi z drzewa i przyznaje się przed wrogami, trzy razy ląduje w zimnej wodzie, nie przechodzi do Czerwonych Koszul, chory biegnie na bitwę.',
+        '- Gereb chciał być „alfą” (wodzem, wysokim stopniem) - i zdradził. Feri Acz, prawdziwy „alfa”, oddaje honory najmniejszemu.',
+        '- Wniosek: siła to nie rządzenie innymi ani wzrost, tylko odwaga i wierność, kiedy jest trudno. Najmniejszy okazał się największy - warto o tym pamiętać, zanim w klasie ktoś kogoś nazwie „betą”.',
+      ].join('\n')],
       ['Odpowiedzi do filmu', [
         '- **Z1** odpowiedź 2 - schodzi z drzewa i mówi: to ja.',
         '- **Z2** sam idzie do kryjówki wrogów - odważny, nie przechodzi do wrogów - wierny, przyznaje się - prawdomówny (honorowy).',
@@ -158,6 +175,13 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       slideTopic('Nemeczek - cechy bohatera i dowody'),
       ...kolo(previousSetId),
       slideVideo('placu-broni-film3'),
+      rozmowa('„Alfa, beta, sigma” - a Nemeczek?', [
+        'W internecie dzieli się chłopaków na **alfa** (rządzi grupą), **beta** (słabszy, słucha innych) i **sigma** (chodzi własnymi drogami).',
+        '- Kim byłby Nemeczek według tej tabelki? A Gereb? A Feri Acz?',
+        '- Kiedy odwaga Nemeczka zostaje wystawiona na próbę?',
+        '- Kto w tej książce naprawdę zdał egzamin z odwagi?',
+        '- Co jest ważniejsze: kto rządzi grupą - czy kto dotrzymuje słowa, kiedy jest trudno?',
+      ].join('\n')),
       ...razem('k4-chlopcy-cecha', 'k4-chlopcy-dowod'),
       slideNote('Nemeczek - cechy bohatera i dowody', 'Cechy bohatera poznajemy po jego **czynach**, **słowach** i po tym, co mówią o nim **inni**.\nKażdą cechę popieramy dowodem, np. Nemeczek jest odważny, bo sam poszedł do kryjówki wrogów.'),
     ],
@@ -206,20 +230,41 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
   {
     title: '5. Bitwa o Plac Broni',
     dzial: LEKTURA_CHLOPCY,
-    topic: 'Przyczyna i skutek, punkt kulminacyjny',
+    topic: 'Plan bitwy, przyczyna i skutek',
     textbookPage: 0,
     teacherPlan: plan(
-      ['Co dziś', 'Rozdziały VI-VIII: choroba Nemeczka, wypowiedzenie wojny i zasady walki, bitwa. Pojęcia: **przyczyna i skutek** (bo / więc) oraz **punkt kulminacyjny**. Film: łańcuch zdarzeń, mapa bitwy i krzywa napięcia.'],
+      ['Co dziś', 'Rozdziały VI-VIII: plan Boki, okop, bitwa. Najpierw dzieci rysują plac **z pamięci**, potem model 3D placu: porównanie z rysunkami, widok z góry = plan, a potem bitwa krok po kroku. Przy każdym kroku czytasz krótki fragment (podpis „Czytamy” na modelu), dzieci śledzą na modelu, gdzie kto jest. Ćwiczymy **wyobraźnię przestrzenną**: czytając opis, ustawiamy sobie w głowie plan. Pojęcia z filmu: **przyczyna i skutek**, **punkt kulminacyjny**.'],
       ['Po lekcji uczeń', [
+        '- rysuje plan placu i wskazuje na nim bramy, forty, tartak i chatkę,',
+        '- opowiada przebieg bitwy na planie,',
         '- łączy wydarzenia jak przyczynę i skutek (bo, więc),',
-        '- wskazuje punkt kulminacyjny powieści,',
-        '- opowiada przebieg bitwy na mapie placu.',
+        '- wskazuje punkt kulminacyjny powieści.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Bitwa o Plac Broni', '„Bo czy więc?”, „Dopisz skutek”')],
+      ['Przebieg (45 min)', [
+        '1. **Przygotuj się + temat** (3 min).',
+        '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby.',
+        '3. **Narysuj plac z pamięci** (5 min) - kartka, widok z góry, podpisy. Bez zaglądania do książki.',
+        '4. **Model 3D** (15 min) - krok 1: dzieci porównują model ze swoimi rysunkami i pokazują miejsca (napisy są schowane), krok 2: widok z góry = plan, kroki 3-15: bitwa. Najpierw czytasz fragment, potem ▶ i model pokazuje ruch.',
+        '5. **Film „Bitwa o Plac Broni”** (ok. 8 min) - bo / więc i punkt kulminacyjny.',
+        '6. **Notatka** (5 min) - 2 zdania do przepisania.',
+      ].join('\n')],
+      ['Model - obsługa', [
+        '- Strzałki / spacja przechodzą po krokach modelu, po ostatnim kroku idzie kolejny slajd.',
+        '- Myszką: lewy przycisk obraca, kółko przybliża, prawy przesuwa. Kamera i tak wraca do ujęcia przy kolejnym kroku.',
+        '- Przyciski: **Z góry** (plan, zostaje na kolejnych krokach), **Napisy** (podpisy miejsc), **Tekst** (chowa opis na dole). Po kliknięciu w model klawisze P, N, T robią to samo.',
+        '- Układ placu jest wg planu Boki z węgierskiego wydania z 1916 r.: brama od ulicy Marii z lewej, furtka od ulicy Pawła na dole, 12 sągów, forty 1-6, okop przed fortami 4 i 5.',
+      ].join('\n')],
+      ['Fragmenty do czytania (strony wpisz ze swojego wydania)', [
+        '- rozdz. II - opis placu i składu drewna (labirynt sągów, tartak, chatka Słowaka) - krok 2,',
+        '- rozdz. VI - Boka objaśnia plan bitwy na kamieniu: oddziały A-D, forty 1-6, udawana ucieczka - krok 3,',
+        '- początek rozdz. VIII - okop przed fortami 4 i 5 - krok 4,',
+        '- rozdz. VIII - bitwa: wrogowie u bram, ucieczka do wozowni i chatki, jeńcy w chatce, atak Feriego, Boka w okopie, „Do chatki!”, Nemeczek i Feri Acz - kroki 5-15.',
+      ].join('\n')],
       ['Jak wyjaśnić', [
-        '- Przyczyna odpowiada na pytanie **dlaczego?** (łączymy przez **bo**), skutek na **co z tego wynikło?** (**więc**).',
-        '- Punkt kulminacyjny = najwyższy punkt krzywej napięcia: chory Nemeczek przewraca Feriego Acza.',
-        '- Po nim napięcie opada: zwycięstwo, choroba, zakończenie.',
+        '- Plan to widok z góry: z lotu ptaka widać, co jest obok czego. Czytając, pytaj: gdzie jesteśmy? skąd przychodzi wróg? co jest po lewej, a co po prawej?',
+        '- Boka wygrywa, bo zna swój teren: wróg nie widzi okopu i nie wie, że „uciekający” chowają się w wozowni i chatce.',
+        '- Feri miał taki sam plan (atak z dwóch stron), ale czekał na trąbkę, a trębacza zamknięto w chatce - to przyczyna i skutek.',
+        '- Punkt kulminacyjny = najwyższy punkt krzywej napięcia: chory Nemeczek przewraca Feriego Acza. Po nim napięcie opada.',
       ].join('\n')],
       ['Odpowiedzi do filmu', [
         '- **Z1** luka 1 - wyprawa do Ogrodu Botanicznego, luka 2 - ciężka choroba.',
@@ -229,37 +274,64 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     ),
     questions: [
       { text: 'Dlaczego Nemeczek ciężko zachorował?', answer: 'Trzy razy był w zimnej wodzie i chodził w mokrym ubraniu.' },
-      { text: 'Kto przyniósł wypowiedzenie wojny i jak?', answer: 'Posłańcy Czerwonych Koszul (bracia Pastorowie i Sebenicz), pod białą flagą.' },
       { text: 'Na jakie sposoby wolno było walczyć w bitwie?', answer: 'Bomby z piasku, zapasy i walka na dzidy - uczciwie, według zasad.' },
+      { text: 'Dlaczego Czerwone Koszule nie zauważyły oddziałów A i B?', answer: 'Bo chłopcy schowali się w okopie przed fortami 4 i 5.' },
+      { text: 'Dlaczego Feri Acz długo czekał przed furtką od ulicy Pawła?', answer: 'Czekał na sygnał trąbki od oddziału Pastora - a ich trębacza zamknięto w chatce.' },
       { text: 'Co jest punktem kulminacyjnym powieści?', answer: 'Chory Nemeczek wbiega na plac i przewraca Feriego Acza.' },
-      { text: 'Dlaczego Boka mianował Nemeczka kapitanem?', answer: 'Bo dzięki niemu chłopcy wygrali bitwę.' },
       { text: 'Bo czy więc: „Nemeczek przewrócił Feriego Acza, … Czerwone Koszule uciekły”?', answer: 'Więc - ucieczka to skutek.' },
     ],
     makeSlides: (previousSetId) => [
-      slideTopic('Bitwa o Plac Broni - przyczyny i skutki'),
+      slideTopic('Bitwa o Plac Broni - plan, przyczyny i skutki'),
       ...kolo(previousSetId),
+      {
+        id: newId(),
+        kind: 'task',
+        code: 'Plan',
+        title: 'Narysuj Plac Broni z pamięci',
+        body: 'Narysuj plac **z góry**, jak na planie. Zaznacz i podpisz:\n- ulicę Pawła z furtką i ulicę Marii z bramą,\n- skład drewna z fortami,\n- tartak, wozownię i chatkę Janosza.',
+        timerSec: 300,
+        studentAction: 'write-answer',
+      },
+      modelPlacu(),
       slideVideo('placu-broni-film5'),
-      ...razem('k4-chlopcy-bo-wiec', 'k4-chlopcy-skutek'),
-      slideNote('Bitwa o Plac Broni - przyczyny i skutki', 'Wydarzenia łączą się jak łańcuch: **przyczyna** (bo) prowadzi do **skutku** (więc).\n**Punkt kulminacyjny** to moment największego napięcia w utworze.'),
+      slideNote('Bitwa o Plac Broni - plan, przyczyny i skutki', 'Wydarzenia łączą się jak łańcuch: **przyczyna** (bo) prowadzi do **skutku** (więc).\n**Punkt kulminacyjny** to moment największego napięcia w utworze.'),
     ],
   },
   {
-    title: '6. Co zostaje po Nemeczku i po placu?',
+    title: '6. Dlaczego Nemeczek musiał umrzeć?',
     dzial: LEKTURA_CHLOPCY,
-    topic: 'Przesłanie i wartości',
+    topic: 'Symbol i przesłanie',
     textbookPage: 0,
     teacherPlan: plan(
-      ['Co dziś', 'Rozdziały IX-X i cała książka: nazwisko wielkimi literami, śmierć Nemeczka, Feri Acz pod domem, plac pod budowę. Pojęcia: **wartości** i **przesłanie**. Na końcu filmu prawda/fałsz z całej książki - sprawdzenie przeczytania bez ocen.'],
+      ['Co dziś', 'Rozdziały IX-X i cała książka. Pytanie lekcji: dlaczego autor pozwolił Nemeczkowi umrzeć? Czytamy krótkie fragmenty, w których plac jest jak ojczyzna, i rozmawiamy: plac to **symbol** ojczyzny, a Nemeczek oddaje za niego zdrowie i życie - to idea **patriotyzmu**. Potem film o wartościach i przesłaniu (na końcu prawda/fałsz z całej książki).'],
       ['Po lekcji uczeń', [
-        '- nazywa wartości, które ważą w książce (przyjaźń, odwaga, wierność, szacunek, przebaczenie),',
-        '- wskazuje przesłanie i je uzasadnia,',
-        '- łączy pojęcia z całego działu lektury.',
+        '- wyjaśnia, co to symbol, i podaje przykład z książki,',
+        '- wyjaśnia, dlaczego plac jest dla chłopców jak ojczyzna,',
+        '- odpowiada na pytanie lekcji własnym zdaniem z „ponieważ”,',
+        '- nazywa przesłanie książki.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Przesłanie i wartości', '„Jaka wartość?”, „Pojęcia z lektury” (powtórka całego działu)')],
+      ['Przebieg (45 min)', [
+        '1. **Przygotuj się + temat** (3 min).',
+        '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby.',
+        '3. **Czytamy fragmenty** (10 min) - plac jak ojczyzna; po każdym fragmencie jedno pytanie.',
+        '4. **Rozmowa** (7 min) - plac jako symbol, dlaczego Nemeczek nie zginął w bitwie, dlaczego musiał umrzeć.',
+        '5. **Film „Przesłanie i wartości”** (ok. 9 min) - 3 zadania, na końcu prawda/fałsz z całej książki.',
+        '6. **Ćwiczymy razem** (1 karta, „Jaka wartość?”), jeśli zostanie czas.',
+        '7. **Notatka** (5 min) - 2 zdania do przepisania.',
+      ].join('\n')],
+      ['Fragmenty do czytania (strony wpisz ze swojego wydania)', [
+        '- rozdz. II - okrzyk na cześć placu; autor dopowiada, że chłopcy wołali tak, jakby wiwatowali na cześć ojczyzny - to odmiana miłości do ojczyzny,',
+        '- rozdz. VI - Boka przed bitwą zastanawia się, czy kiedyś będzie walczył nie o mały plac, tylko o wielką ojczyznę,',
+        '- rozdz. VII - pan Racz mówi, że Nemeczek się przeziębił. Chłopcy wiedzą swoje: przeziębił się za ojczyznę,',
+        '- koniec rozdz. VIII - chory Nemeczek w gorączce czuje wiatr od placu,',
+        '- rozdz. X - Nemeczek mówi Boce, że walczył za wszystkich, choć wie, że placu już nie zobaczy,',
+        '- rozdz. X - Boka sam na placu szuka śladów Nemeczka tam, gdzie przewrócił Feriego (jak Dawid Goliata). Janosz: na placu stanie dom.',
+      ].join('\n')],
       ['Jak wyjaśnić', [
-        '- Wartość to to, co dla bohaterów najważniejsze - widać ją w czynach.',
-        '- Przesłanie to myśl, którą autor chce nam przekazać. Szukamy go w zakończeniu i w ważnych decyzjach.',
-        '- Plac i tak przepada, ale zostaje pamięć o odwadze i wierności Nemeczka. Rozmowa: czy walka miała sens? (własne zdanie z „ponieważ”).',
+        '- **Symbol** to coś, co znaczy więcej niż samo siebie. Plac to mała ojczyzna: swoja ziemia i granice, własne prawa i przysięga, flaga (chorągiewka), wojsko ze stopniami, zdrajca i bohater.',
+        '- **Dlaczego nie zginął w bitwie?** W tej wojnie są zasady: wojnę wypowiada się pod białą flagą, walczy się piaskiem i w zapasach, nigdy dwóch na jednego. Nikt nikogo nie bije na śmierć. Gdyby Pastor pobił Nemeczka, książka byłaby o okrucieństwie i winie jednego chłopca. Nemeczek choruje od trzech kąpieli, czyli od własnej wierności i honoru - za każdym razem mógł się wycofać i nie chciał.',
+        '- **Dlaczego musiał umrzeć?** Kilka dobrych odpowiedzi, liczy się „ponieważ”: zabawa w wojnę pokazuje prawdziwą cenę; najmniejszy okazuje się największy i zostaje zapamiętany (wielkie litery w księdze); patriotyzm to oddać coś swojego dla wspólnej sprawy; gorzki koniec - dorośli i tak zabierają plac pod kamienicę, ale nie mogą zabrać tego, czego chłopcy się nauczyli.',
+        '- Patriotyzm w tej książce to wierność swoim i uczciwa walka, nie nienawiść do wroga: Feri Acz oddaje Nemeczkowi honory i przychodzi pod jego dom.',
       ].join('\n')],
       ['Odpowiedzi do filmu', [
         '- **Z1** honory od Feriego - szacunek, Boka przyjmuje Gereba - przebaczenie, chory Nemeczek biegnie na plac - odwaga, Boka płacze pod domem Nemeczka - przyjaźń.',
@@ -268,18 +340,47 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ].join('\n')],
     ),
     questions: [
+      { text: 'Dlaczego Plac Broni jest symbolem ojczyzny?', answer: 'Chłopcy mają tam swoją ziemię, prawa, flagę i wojsko - i bronią go jak ojczyzny.' },
+      { text: 'Od czego naprawdę zachorował Nemeczek?', answer: 'Od trzech kąpieli w zimnej wodzie - przez swoją wierność i honor.' },
+      { text: 'Dlaczego Nemeczek nie mógł zginąć w samej bitwie?', answer: 'W tej wojnie były zasady: piasek, zapasy, nigdy dwóch na jednego - nikt nikogo nie bił na śmierć.' },
       { text: 'Czego dowiaduje się Boka na końcu od stróża Janosza?', answer: 'Że na placu zbudują dom - plac i tak przepadnie.' },
-      { text: 'Jak koledzy uczcili Nemeczka w księdze Związku Kitowców?', answer: 'Wpisali jego nazwisko wielkimi literami.' },
       { text: 'Jaką wartość pokazuje Feri Acz, gdy przychodzi pod dom Nemeczka?', answer: 'Szacunek dla przeciwnika.' },
       { text: 'Jakie jest przesłanie „Chłopców z Placu Broni”?', answer: 'Np. o wartości człowieka świadczą jego czyny, nie wzrost ani stopień.' },
-      { text: 'Czy walka o plac miała sens? Uzasadnij.', answer: 'Własna opinia z „ponieważ”, np. tak, ponieważ chłopcy nauczyli się przyjaźni i odwagi.' },
     ],
     makeSlides: (previousSetId) => [
-      slideTopic('Przesłanie „Chłopców z Placu Broni”'),
+      slideTopic('Dlaczego Nemeczek musiał umrzeć?'),
       ...kolo(previousSetId),
+      {
+        id: newId(),
+        kind: 'read',
+        title: 'Plac jak ojczyzna',
+        source: 'Lektura: Chłopcy z Placu Broni',
+        body: 'Szukamy miejsc, w których plac jest jak **ojczyzna**:\n- rozdz. II - okrzyk na cześć placu\n- rozdz. VI - Boka przed bitwą\n- rozdz. VII - Nemeczek się przeziębił... za co?\n- koniec rozdz. VIII - wiatr od placu\n- rozdz. X - Nemeczek: placu już nie zobaczę',
+        timerSec: 600,
+        studentAction: 'look',
+      },
+      rozmowa('Plac Broni = ...?', [
+        'Na placu chłopcy mają:',
+        '- swoją ziemię i granice (płot, furtka, brama),',
+        '- swoje prawa i przysięgę,',
+        '- swoją flagę - chorągiewkę,',
+        '- wojsko ze stopniami,',
+        '- zdrajcę i bohatera.',
+        '**Co to przypomina? O co walczą naprawdę?**',
+      ].join('\n')),
+      rozmowa('Dlaczego Nemeczek nie zginął w bitwie?', [
+        '- Czy Pastor albo Feri Acz mogli go pobić na śmierć? Jakie zasady obowiązywały w bitwie?',
+        '- Od czego naprawdę zachorował Nemeczek?',
+        '- Kiedy mógł się wycofać - i dlaczego tego nie zrobił?',
+      ].join('\n')),
+      rozmowa('Dlaczego Nemeczek musiał umrzeć?', [
+        'Dokończ: **Moim zdaniem Nemeczek musiał umrzeć, ponieważ...**',
+        '- Co zostaje po Nemeczku?',
+        '- Co zostaje po placu, skoro stanie na nim kamienica?',
+      ].join('\n')),
       slideVideo('placu-broni-film6'),
-      ...razem('k4-chlopcy-wartosci', 'k4-chlopcy-pojecia'),
-      slideNote('Przesłanie „Chłopców z Placu Broni”', '**Przesłanie** to myśl, którą autor chce nam przekazać - szukamy jej w zakończeniu i w ważnych decyzjach bohaterów.\n**Wartości** to to, co dla bohaterów najważniejsze, np. przyjaźń, odwaga, wierność.'),
+      ...razem('k4-chlopcy-wartosci'),
+      slideNote('Dlaczego Nemeczek musiał umrzeć?', '**Symbol** to coś, co oznacza więcej niż samo siebie, np. Plac Broni oznacza ojczyznę, której chłopcy bronią.\n**Przesłanie** to myśl, którą autor chce nam przekazać - szukamy jej w zakończeniu i w ważnych decyzjach bohaterów.'),
     ],
   },
 ];
