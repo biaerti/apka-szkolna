@@ -33,8 +33,8 @@ function modelPlacu(): Slide {
 }
 
 /** Rozmowa na projektorze (bez notatki, bez oceny). */
-function rozmowa(title: string, body: string): Slide {
-  return { id: newId(), kind: 'text', title, body, studentAction: 'oral' };
+function rozmowa(title: string, body: string, photo?: { src: string; credit: string }): Slide {
+  return { id: newId(), kind: 'text', title, body, studentAction: 'oral', ...(photo ? { photo } : {}) };
 }
 
 /** Wspolny przebieg lekcji z lektury (45 min). */
@@ -133,7 +133,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     ],
   },
   {
-    title: '3. Nemeczek - mały, ale wielki',
+    title: '3. Nemeczek - alfa, sigma czy beta?',
     dzial: LEKTURA_CHLOPCY,
     topic: 'Cechy bohatera i dowody',
     textbookPage: 0,
@@ -184,7 +184,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       { text: 'Podaj jedną cechę Nemeczka i dowód.', answer: 'Np. odważny - sam poszedł do kryjówki wrogów; wierny - nie przeszedł do Czerwonych Koszul.' },
     ],
     makeSlides: (previousSetId) => [
-      slideTopic('Nemeczek - cechy bohatera i dowody'),
+      slideTopic('Nemeczek - alfa, sigma czy beta?'),
       ...kolo(previousSetId),
       slideVideo('placu-broni-film3'),
       rozmowa('Skąd się wzięły „alfa” i „beta”?', [
@@ -193,7 +193,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- Badacz, który rozsławił słowo „alfa”, sam potem prosił, żeby go nie używać.',
         '- Internet przeniósł ten podział na chłopaków, a ok. 15 lat temu dodał **sigmę** - „samotnego wilka”.',
         '- Skoro nawet u wilków to pomyłka - czy pasuje do ludzi?',
-      ].join('\n')),
+      ].join('\n'), { src: '/prezentacje/wilk.jpg', credit: 'Fot. Mas3cf, CC BY-SA 4.0, Wikimedia Commons' }),
       rozmowa('Dlaczego tylko chłopcy?', [
         'Nikt nie dzieli tak dziewczyn. O dziewczynie mówi się, że po prostu **jest** dziewczyną. Chłopak słyszy: „bądź twardy”, „nie becz”, „pokaż, że jesteś facetem”. Męskość trzeba **udowadniać** - ciągle jest wystawiana na próbę.',
         '- Kto zda próbę, idzie w górę grupy - „alfa”. Kto się przestraszy, spada w dół - „beta”.',

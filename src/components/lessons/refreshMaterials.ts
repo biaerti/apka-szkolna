@@ -66,6 +66,7 @@ const TITLE_ALIASES: Record<string, string> = {
   [titleMatchKey('29. Co już wiesz? Co umiesz? Podsumowanie rozdziału II')]: titleMatchKey('29. Powtórzenie rozdziału II'),
   // Klasa 4, lektura: ostatnia lekcja o Chłopcach z Placu Broni stawia teraz pytanie Bartka.
   [titleMatchKey('6. Co zostaje po Nemeczku i po placu?')]: titleMatchKey('6. Dlaczego Nemeczek musiał umrzeć?'),
+  [titleMatchKey('3. Nemeczek - mały, ale wielki')]: titleMatchKey('3. Nemeczek - alfa, sigma czy beta?'),
 };
 
 /**

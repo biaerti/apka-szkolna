@@ -296,6 +296,8 @@ export type Slide =
       title?: string;
       body: string;
       art?: SlideArt;
+      /** Zdjecie z prawej (np. z public/prezentacje/), z podpisem autora i licencji. */
+      photo?: { src: string; credit: string };
       /** Pole historyczne. Nowe slajdy korzystaja z `studentAction`. */
       zeszyt?: boolean;
       studentAction?: StudentAction;

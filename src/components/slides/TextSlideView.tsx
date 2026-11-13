@@ -62,6 +62,19 @@ export function TextSlideView({ slide, narrow = false }: { slide: Extract<Slide,
     );
   }
 
+  if (slide.photo) {
+    return (
+      <div className="relative flex h-full flex-row items-center gap-10 px-14 py-12">
+        {badge}
+        <div className="flex flex-1 flex-col justify-center gap-6">{block(700, 600)}</div>
+        <figure className="flex flex-col items-end gap-2" style={{ width: 400 }}>
+          <img src={slide.photo.src} alt="" className="w-full rounded-2xl object-cover" style={{ maxHeight: 520 }} />
+          <figcaption className="text-xs text-gray-500">{slide.photo.credit}</figcaption>
+        </figure>
+      </div>
+    );
+  }
+
   if (!slide.art) {
     return (
       <div className="relative flex h-full flex-col justify-center gap-7 px-20 py-14">
