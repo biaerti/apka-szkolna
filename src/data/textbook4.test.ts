@@ -236,7 +236,7 @@ describe('buildTextbook4', () => {
       const uklady = [
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'video', 'text', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'task', 'embed', 'video', 'note'],
         ['topic', 'recap', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
