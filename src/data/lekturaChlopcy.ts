@@ -27,6 +27,14 @@ function razem(...ids: string[]): Slide[] {
   return ids.map((cwiczenieId) => ({ id: newId(), kind: 'cwiczenie', cwiczenieId }));
 }
 
+/**
+ * Notatka z lektury: temat i kazde zdanie w osobnej linijce (Bartek 2026-11-16).
+ * Pusta linia miedzy nimi, bo markdownLite skleja sasiednie linie spacja.
+ */
+function notatka(temat: string, ...zdania: string[]): Slide {
+  return slideNote(temat, `\n${zdania.join('\n\n')}`);
+}
+
 /** Model 3D placu z bitwa krok po kroku (public/prezentacje/plac-broni-3d.html). */
 function modelPlacu(): Slide {
   return { id: newId(), kind: 'embed', url: '/prezentacje/plac-broni-3d.html', title: 'Plac Broni - model i bitwa' };
@@ -88,27 +96,31 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ...kolo(previousSetId),
       slideVideo('placu-broni-film1'),
       ...razem('k4-chlopcy-gdzie-kiedy', 'k4-chlopcy-co-tu-bylo', 'k4-chlopcy-przed-po'),
-      slideNote('Plac Broni - czas i miejsce akcji', '**Miejsce akcji** to miejsce, gdzie dzieją się wydarzenia (gdzie?), a **czas akcji** to czas, kiedy się dzieją (kiedy?).\nMogą być **prawdziwe**, jak Budapeszt w 1889 roku, albo **wymyślone**, jak w baśni.'),
+      notatka('Plac Broni - czas i miejsce akcji', '**Miejsce akcji** to miejsce, gdzie dzieją się wydarzenia (gdzie?), a **czas akcji** to czas, kiedy się dzieją (kiedy?).', 'Mogą być **prawdziwe**, jak Budapeszt w 1889 roku, albo **wymyślone**, jak w baśni.'),
     ],
   },
   {
     title: '2. Dwie drużyny - kto jest kim?',
     dzial: LEKTURA_CHLOPCY,
-    topic: 'Bohaterowie główni, drugoplanowi i zbiorowi',
+    topic: 'Bohaterowie główni, drugoplanowi i zbiorowi, protagonista i antagonista',
     textbookPage: 0,
     teacherPlan: plan(
-      ['Co dziś', 'Bohaterowie całej książki: chłopcy z Placu Broni i Czerwone Koszule, stopnie wojskowe (jeden szeregowiec - Nemeczek). Pojęcia: **bohater główny, drugoplanowy, zbiorowy**. Film rysuje sieć bohaterów: kto do której drużyny, kto z kim się przyjaźni, kto rywalizuje, kto zdradza.'],
+      ['Co dziś', 'Bohaterowie całej książki: chłopcy z Placu Broni i Czerwone Koszule, stopnie wojskowe (jeden szeregowiec - Nemeczek). Pojęcia: **bohater główny, drugoplanowy, zbiorowy** oraz **protagonista i antagonista** (po filmie: karta i notatka). Film rysuje sieć bohaterów: kto do której drużyny, kto z kim się przyjaźni, kto rywalizuje, kto zdradza.'],
       ['Po lekcji uczeń', [
         '- przypisuje bohaterów do drużyn,',
         '- odróżnia bohatera głównego, drugoplanowego i zbiorowego,',
+        '- wskazuje protagonistę i antagonistę (Boka - Feri Acz),',
         '- uzasadnia, dlaczego Nemeczek jest bohaterem głównym, choć jest najmniejszy.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Dwie drużyny', '„Która drużyna?”, „Główny, drugoplanowy czy zbiorowy?”')],
+      ['Przebieg (45 min)', przebieg('Dwie drużyny', '„Która drużyna?”, „Główny, drugoplanowy czy zbiorowy?”, „Protagonista czy antagonista?” (przed tą kartą 2 min wyjaśnienia z „Jak wyjaśnić”)')],
       ['Jak wyjaśnić', [
         '- Bohater główny - wokół niego toczy się akcja (Nemeczek, Boka).',
         '- Drugoplanowy - często jest w książce, ale historia nie jest o nim (Feri Acz, Gereb, Czonakosz).',
         '- Zbiorowy - grupa działająca razem (chłopcy z Placu Broni, Czerwone Koszule).',
         '- Wszyscy chłopcy są oficerami, tylko Nemeczek jest szeregowcem - a to on okaże się najważniejszy.',
+        '- **Protagonista** dąży do celu, któremu kibicujemy: Boka i chłopcy chcą obronić plac. **Antagonista** stoi mu na drodze: Feri Acz i Czerwone Koszule chcą plac zabrać.',
+        '- Antagonista nie musi być zły: Feri Acz jest honorowy, każe oddać honory Nemeczkowi. Po prostu chce czegoś przeciwnego.',
+        '- Przykłady spoza książki: Simba i Skaza („Król Lew”), Harry Potter i Voldemort.',
       ].join('\n')],
       ['Odpowiedzi do filmu', [
         '- **Z1** plac: Boka, Nemeczek, Czonakosz, Czele; koszule: Feri Acz, Pastorowie, Sebenicz, Wendauer.',
@@ -123,13 +135,15 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       { text: 'Dlaczego Gereb nie był zadowolony z wyboru wodza?', answer: 'Sam chciał nim zostać, a chłopcy wybrali Bokę.' },
       { text: 'Czym zajmuje się Związek Kitowców?', answer: 'To klub chłopców: razem dbają o kit, żeby nie wysechł, mają prezesa, pieczęć i księgę.' },
       { text: 'Feri Acz to bohater główny czy drugoplanowy? Dlaczego?', answer: 'Drugoplanowy - jest ważny, ale historia toczy się wokół Nemeczka i Boki.' },
+      { text: 'Kto jest protagonistą, a kto antagonistą w „Chłopcach z Placu Broni”?', answer: 'Protagonista: Boka i chłopcy z Placu Broni (bronią placu). Antagonista: Feri Acz i Czerwone Koszule (chcą plac zabrać).' },
+      { text: 'Czy antagonista musi być zły? Podaj przykład z książki.', answer: 'Nie - Feri Acz przeszkadza chłopcom, ale jest honorowy: każe oddać honory Nemeczkowi.' },
     ],
     makeSlides: (previousSetId) => [
       slideTopic('Bohaterowie „Chłopców z Placu Broni”'),
       ...kolo(previousSetId),
       slideVideo('placu-broni-film2'),
-      ...razem('k4-chlopcy-druzyny', 'k4-chlopcy-rodzaje-bohaterow'),
-      slideNote('Bohaterowie „Chłopców z Placu Broni”', '**Bohater główny** jest najważniejszy - wokół niego toczy się akcja, a **bohater drugoplanowy** mu towarzyszy.\n**Bohater zbiorowy** to grupa, która działa razem, np. chłopcy z Placu Broni.'),
+      ...razem('k4-chlopcy-druzyny', 'k4-chlopcy-rodzaje-bohaterow', 'k4-chlopcy-protagonista'),
+      notatka('Bohaterowie „Chłopców z Placu Broni”', '**Bohater główny** jest najważniejszy - wokół niego toczy się akcja, a **bohater drugoplanowy** mu towarzyszy.', '**Bohater zbiorowy** to grupa, która działa razem, np. chłopcy z Placu Broni.', '**Protagonista** dąży do celu (Boka i chłopcy bronią placu), a **antagonista** mu przeszkadza (Feri Acz i Czerwone Koszule).'),
     ],
   },
   {
@@ -208,7 +222,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- Co jest ważniejsze: kto rządzi grupą - czy kto dotrzymuje słowa, kiedy jest trudno?',
       ].join('\n')),
       ...razem('k4-chlopcy-cecha', 'k4-chlopcy-dowod'),
-      slideNote('Nemeczek - cechy bohatera i dowody', 'Cechy bohatera poznajemy po jego **czynach**, **słowach** i po tym, co mówią o nim **inni**.\nKażdą cechę popieramy dowodem, np. Nemeczek jest odważny, bo sam poszedł do kryjówki wrogów.'),
+      notatka('Nemeczek - cechy bohatera i dowody', 'Cechy bohatera poznajemy po jego **czynach**, **słowach** i po tym, co mówią o nim **inni**.', 'Każdą cechę popieramy dowodem, np. Nemeczek jest odważny, bo sam poszedł do kryjówki wrogów.'),
     ],
   },
   {
@@ -249,7 +263,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ...kolo(previousSetId),
       slideVideo('placu-broni-film4'),
       ...razem('k4-chlopcy-czyn-motyw', 'k4-chlopcy-uzasadnienie'),
-      slideNote('Gereb - oceniamy postępowanie bohatera', 'Oceniając bohatera, patrzymy, **co zrobił** (czyn) i **dlaczego** (motyw).\nSwoją ocenę zawsze uzasadniamy: „Uważam, że..., ponieważ...”.'),
+      notatka('Gereb - oceniamy postępowanie bohatera', 'Oceniając bohatera, patrzymy, **co zrobił** (czyn) i **dlaczego** (motyw).', 'Swoją ocenę zawsze uzasadniamy: „Uważam, że..., ponieważ...”.'),
     ],
   },
   {
@@ -319,7 +333,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       },
       modelPlacu(),
       slideVideo('placu-broni-film5'),
-      slideNote('Bitwa o Plac Broni - plan, przyczyny i skutki', 'Wydarzenia łączą się jak łańcuch: **przyczyna** (bo) prowadzi do **skutku** (więc).\n**Punkt kulminacyjny** to moment największego napięcia w utworze.'),
+      notatka('Bitwa o Plac Broni - plan, przyczyny i skutki', 'Wydarzenia łączą się jak łańcuch: **przyczyna** (bo) prowadzi do **skutku** (więc).', '**Punkt kulminacyjny** to moment największego napięcia w utworze.'),
     ],
   },
   {
@@ -405,7 +419,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ].join('\n')),
       slideVideo('placu-broni-film6'),
       ...razem('k4-chlopcy-wartosci'),
-      slideNote('Dlaczego Nemeczek musiał umrzeć?', '**Symbol** to coś, co oznacza więcej niż samo siebie, np. Plac Broni oznacza ojczyznę, której chłopcy bronią.\n**Przesłanie** to myśl, którą autor chce nam przekazać - szukamy jej w zakończeniu i w ważnych decyzjach bohaterów.'),
+      notatka('Dlaczego Nemeczek musiał umrzeć?', '**Symbol** to coś, co oznacza więcej niż samo siebie, np. Plac Broni oznacza ojczyznę, której chłopcy bronią.', '**Przesłanie** to myśl, którą autor chce nam przekazać - szukamy jej w zakończeniu i w ważnych decyzjach bohaterów.'),
     ],
   },
 ];

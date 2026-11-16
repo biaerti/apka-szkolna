@@ -11,6 +11,7 @@ const MIEJSCA = ['plac', 'ogród', 'szkoła', 'dom'];
 const BITWA = ['przed bitwą', 'po bitwie'];
 const DRUZYNA = ['Plac Broni', 'Czerwone Koszule'];
 const BOHATER = ['główny', 'drugoplanowy', 'zbiorowy'];
+const PROTAGONISTA = ['protagonista', 'antagonista'];
 const DOWOD = ['czyn', 'słowa', 'opinia innych'];
 const CZYN = ['czyn', 'motyw'];
 const UZASADNIENIE = ['dobre uzasadnienie', 'brak uzasadnienia'];
@@ -115,6 +116,25 @@ export const CWICZENIA_CHLOPCY: Cwiczenie[] = [
       `cała klasa 4a, która razem jedzie na wycieczkę | ${wybor(BOHATER, 'zbiorowy')}`,
       `Mikołajek w książce o Mikołajku | ${wybor(BOHATER, 'główny')}`,
       `załoga statku, która razem walczy z burzą | ${wybor(BOHATER, 'zbiorowy')}`,
+    ],
+  },
+
+  {
+    id: 'k4-chlopcy-protagonista',
+    typ: 'luki',
+    tytul: 'Protagonista czy antagonista?',
+    polecenie: 'Protagonista dąży do celu, a antagonista mu przeszkadza. Kim jest ta postać?',
+    naglowki: ['postać', 'kto?'],
+    naRaz: 4,
+    przyklady: [
+      `Simba w „Królu Lwie” | ${wybor(PROTAGONISTA, 'protagonista')}`,
+      `Skaza w „Królu Lwie” | ${wybor(PROTAGONISTA, 'antagonista')}`,
+      `Voldemort w „Harrym Potterze” | ${wybor(PROTAGONISTA, 'antagonista')}`,
+      `Harry Potter | ${wybor(PROTAGONISTA, 'protagonista')}`,
+      `czarownica w „Jasiu i Małgosi” | ${wybor(PROTAGONISTA, 'antagonista')}`,
+      `Jaś i Małgosia | ${wybor(PROTAGONISTA, 'protagonista')}`,
+      `Boka, wódz chłopców z Placu Broni | ${wybor(PROTAGONISTA, 'protagonista')}`,
+      `Feri Acz, wódz Czerwonych Koszul | ${wybor(PROTAGONISTA, 'antagonista')}`,
     ],
   },
 

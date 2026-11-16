@@ -235,7 +235,7 @@ describe('buildTextbook4', () => {
       // placu przed filmem; L6: fragmenty i rozmowa o smierci Nemeczka przed filmem.
       const uklady = [
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'task', 'embed', 'video', 'note'],
@@ -249,9 +249,11 @@ describe('buildTextbook4', () => {
       expect(lesson.slides[1]).toMatchObject({ kind: 'recap', questionCount: 3 });
       expect(lesson.slides[1]).not.toMatchObject({ questionSetId: lesson.questionSetId });
       expect(lesson.slides.filter((s) => s.kind === 'cwiczenie').every((s) => s.kind === 'cwiczenie' && Boolean(cwiczenieById(s.cwiczenieId)))).toBe(true);
-      // Notatka: 2 zdania z pojecia, nie streszczenie.
+      // Notatka: zdania z pojecia, nie streszczenie; temat i kazde zdanie w osobnym akapicie.
       const note = lesson.slides[lesson.slides.length - 1];
-      expect(note.kind === 'note' ? note.body.split('\n').length : 0).toBe(3);
+      const akapity = note.kind === 'note' ? note.body.split('\n\n') : [];
+      expect(akapity[0]).toMatch(/^\*\*Temat:\*\* /);
+      expect(akapity.length).toBe(i === 1 ? 4 : 3);
       expect(bundle.questions.filter((q) => q.setId === lesson.questionSetId).length).toBeGreaterThanOrEqual(5);
       for (const sl of lesson.slides) if (sl.kind === 'embed') expect(sl.url).toBe('/prezentacje/plac-broni-3d.html');
     }
