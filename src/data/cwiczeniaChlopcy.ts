@@ -7,7 +7,8 @@
 import type { Cwiczenie } from './cwiczenia';
 import { wybor } from './cwiczeniaKlocki';
 
-const MIEJSCE = ['prawdziwe', 'wymyślone'];
+const MIEJSCA = ['plac', 'ogród', 'szkoła', 'dom'];
+const BITWA = ['przed bitwą', 'po bitwie'];
 const DRUZYNA = ['Plac Broni', 'Czerwone Koszule'];
 const BOHATER = ['główny', 'drugoplanowy', 'zbiorowy'];
 const DOWOD = ['czyn', 'słowa', 'opinia innych'];
@@ -16,45 +17,60 @@ const UZASADNIENIE = ['dobre uzasadnienie', 'brak uzasadnienia'];
 const BO_WIEC = ['bo', 'więc'];
 
 export const CWICZENIA_CHLOPCY: Cwiczenie[] = [
-  // ---------- 1. Czas i miejsce akcji ----------
+  // ---------- 1. Czas i miejsce akcji (fakty z ksiazki, Bartek 2026-11-16:
+  // zamiast zdan o Kubie i "prawdziwe czy wymyslone" - quiz z lektury) ----------
   {
     id: 'k4-chlopcy-gdzie-kiedy',
     typ: 'luki',
-    tytul: 'Gdzie i kiedy?',
-    polecenie: 'Znajdź w zdaniu czas akcji (kiedy?) i miejsce akcji (gdzie?).',
-    naglowki: ['zdanie', 'kiedy?', 'gdzie?'],
+    tytul: 'Gdzie i kiedy? Fakty z książki',
+    polecenie: 'Co wiesz o czasie i miejscu akcji „Chłopców z Placu Broni”? Wybierz odpowiedź.',
+    naglowki: ['pytanie', 'odpowiedź'],
     naRaz: 4,
     przyklady: [
-      'W sobotę Kuba pojechał nad jezioro. | [[w sobotę|sobota]] | [[nad jezioro|nad jeziorem|jezioro]]',
-      'Na przerwie Ola czytała w bibliotece. | [[na przerwie|przerwa]] | [[w bibliotece|biblioteka]]',
-      'W wakacje spaliśmy w lesie. | [[w wakacje|wakacje]] | [[w lesie|las]]',
-      'Wieczorem chłopcy grali na boisku. | [[wieczorem|wieczór]] | [[na boisku|boisko]]',
-      'Dawno temu w wieży mieszkała królewna. | [[dawno temu]] | [[w wieży|wieża]]',
-      'W grudniu w Zakopanem spadł śnieg. | [[w grudniu|grudzień]] | [[w Zakopanem|Zakopane]]',
-      'Po lekcjach Zosia czekała przed szkołą. | [[po lekcjach]] | [[przed szkołą|szkoła]]',
-      'W 1410 roku pod Grunwaldem była bitwa. | [[w 1410 roku|1410|w 1410 r.]] | [[pod Grunwaldem|Grunwald]]',
+      `W jakim mieście dzieje się akcja? | ${wybor(['w Budapeszcie', 'w Warszawie', 'w Wiedniu'], 'w Budapeszcie')}`,
+      `W którym roku? | ${wybor(['w 1889', 'w 1939', 'w 1989'], 'w 1889')}`,
+      `O jakiej porze roku? | ${wybor(['zimą', 'wiosną', 'latem'], 'wiosną')}`,
+      `Ile trwa cała historia? | ${wybor(['kilka dni', 'kilka lat', 'całe wakacje'], 'kilka dni')}`,
+      `Przy jakich ulicach leży plac? | ${wybor(['Pawła i Marii', 'Długiej i Krótkiej', 'Szkolnej i Polnej'], 'Pawła i Marii')}`,
+      `Co sąsiaduje z placem? | ${wybor(['skład drewna', 'stadion', 'dworzec'], 'skład drewna')}`,
+      `Kto pilnuje drewna? | ${wybor(['stróż Janosz', 'pan Racz', 'Feri Acz'], 'stróż Janosz')}`,
+      `Jak ma na imię pies stróża? | ${wybor(['Hektor', 'Burek', 'Azor'], 'Hektor')}`,
     ],
   },
   {
-    id: 'k4-chlopcy-prawdziwe',
+    id: 'k4-chlopcy-co-tu-bylo',
     typ: 'luki',
-    tytul: 'Prawdziwe czy wymyślone?',
-    polecenie: 'Miejsce akcji istnieje naprawdę czy ktoś je wymyślił?',
-    naglowki: ['miejsce akcji', 'jakie?'],
-    naRaz: 6,
+    tytul: 'Co tu się wydarzyło?',
+    polecenie: 'Gdzie to się stało? Ogród to Ogród Botaniczny, a dom to dom Nemeczka.',
+    naglowki: ['wydarzenie', 'gdzie?'],
+    naRaz: 4,
     przyklady: [
-      `Warszawa, park Łazienki | ${wybor(MIEJSCE, 'prawdziwe')}`,
-      `kraina za drzwiami starej szafy | ${wybor(MIEJSCE, 'wymyślone')}`,
-      `Kraków, smocza jama pod Wawelem | ${wybor(MIEJSCE, 'prawdziwe')}`,
-      `szkoła czarodziejów w zamku | ${wybor(MIEJSCE, 'wymyślone')}`,
-      `Gdańsk, port nad morzem | ${wybor(MIEJSCE, 'prawdziwe')}`,
-      `Akademia pana Kleksa | ${wybor(MIEJSCE, 'wymyślone')}`,
-      `Tatry, Morskie Oko | ${wybor(MIEJSCE, 'prawdziwe')}`,
-      `pałac Królowej Śniegu | ${wybor(MIEJSCE, 'wymyślone')}`,
-      `Budapeszt, ulica Pawła | ${wybor(MIEJSCE, 'prawdziwe')}`,
-      `wioska Smerfów | ${wybor(MIEJSCE, 'wymyślone')}`,
-      `Londyn, most nad Tamizą | ${wybor(MIEJSCE, 'prawdziwe')}`,
-      `kraina, gdzie zwierzęta mówią | ${wybor(MIEJSCE, 'wymyślone')}`,
+      `Pan Racz rozwiązuje Związek Kitowców. | ${wybor(MIEJSCA, 'szkoła')}`,
+      `Nemeczek chowa się w basenie w palmiarni. | ${wybor(MIEJSCA, 'ogród')}`,
+      `Feri Acz zabiera chłopcom chorągiewkę. | ${wybor(MIEJSCA, 'plac')}`,
+      `Ojciec krawiec szyje, a Nemeczek leży chory. | ${wybor(MIEJSCA, 'dom')}`,
+      `Nemeczek schodzi z drzewa i przyznaje się. | ${wybor(MIEJSCA, 'ogród')}`,
+      `Janosz rano kopie okop przed fortami. | ${wybor(MIEJSCA, 'plac')}`,
+      `Gereb przekupuje Janosza cygarami. | ${wybor(MIEJSCA, 'plac')}`,
+      `Feri Acz przychodzi do chorego Nemeczka. | ${wybor(MIEJSCA, 'dom')}`,
+    ],
+  },
+  {
+    id: 'k4-chlopcy-przed-po',
+    typ: 'luki',
+    tytul: 'Przed bitwą czy po bitwie?',
+    polecenie: 'Kiedy to się stało: przed wielką bitwą o plac czy po niej?',
+    naglowki: ['wydarzenie', 'kiedy?'],
+    naRaz: 4,
+    przyklady: [
+      `Chłopcy wybierają Bokę na wodza. | ${wybor(BITWA, 'przed bitwą')}`,
+      `Nazwisko Nemeczka trafia do księgi wielkimi literami. | ${wybor(BITWA, 'po bitwie')}`,
+      `Kitowcy wpisują nazwisko Nemeczka małymi literami. | ${wybor(BITWA, 'przed bitwą')}`,
+      `Boka dowiaduje się, że na placu stanie kamienica. | ${wybor(BITWA, 'po bitwie')}`,
+      `Gereb przeprasza i wraca jako szeregowiec. | ${wybor(BITWA, 'przed bitwą')}`,
+      `Boka mianuje Nemeczka kapitanem. | ${wybor(BITWA, 'po bitwie')}`,
+      `Czerwone Koszule wypowiadają wojnę pod białą flagą. | ${wybor(BITWA, 'przed bitwą')}`,
+      `Nemeczek umiera. | ${wybor(BITWA, 'po bitwie')}`,
     ],
   },
 

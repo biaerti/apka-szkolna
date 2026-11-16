@@ -234,7 +234,7 @@ describe('buildTextbook4', () => {
       // L3: rozmowa „alfa, beta, sigma” po filmie; L5: rysunek z pamieci + model 3D
       // placu przed filmem; L6: fragmenty i rozmowa o smierci Nemeczka przed filmem.
       const uklady = [
-        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],

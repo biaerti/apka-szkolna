@@ -62,7 +62,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- wie, gdzie są Plac Broni, skład drewna, Ogród Botaniczny i ogród przy Muzeum,',
         '- wyjaśnia, czym plac był dla chłopców.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Plac Broni - streszczenie, czas i miejsce akcji', '„Gdzie i kiedy?”, „Prawdziwe czy wymyślone?”')],
+      ['Przebieg (45 min)', przebieg('Plac Broni - streszczenie, czas i miejsce akcji', '„Gdzie i kiedy? Fakty z książki”, „Co tu się wydarzyło?”, „Przed bitwą czy po bitwie?” (3 karty, quiz z lektury)')],
       ['Jak wyjaśnić', [
         '- Miejsce akcji odpowiada na pytanie **gdzie?**, czas akcji na pytanie **kiedy?**',
         '- Budapeszt, ulica Pawła, Ogród Botaniczny istnieją naprawdę - miejsce akcji jest prawdziwe. W baśni bywa wymyślone.',
@@ -87,7 +87,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       slideTopic('Plac Broni - czas i miejsce akcji'),
       ...kolo(previousSetId),
       slideVideo('placu-broni-film1'),
-      ...razem('k4-chlopcy-gdzie-kiedy', 'k4-chlopcy-prawdziwe'),
+      ...razem('k4-chlopcy-gdzie-kiedy', 'k4-chlopcy-co-tu-bylo', 'k4-chlopcy-przed-po'),
       slideNote('Plac Broni - czas i miejsce akcji', '**Miejsce akcji** to miejsce, gdzie dzieją się wydarzenia (gdzie?), a **czas akcji** to czas, kiedy się dzieją (kiedy?).\nMogą być **prawdziwe**, jak Budapeszt w 1889 roku, albo **wymyślone**, jak w baśni.'),
     ],
   },
