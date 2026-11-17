@@ -10,10 +10,14 @@
 // krotka notatka na koniec. Notatka tylko z pojecia, nigdy ze streszczenia.
 // Filmy: filmiki/placu-broni/ (film1-film6), narracja wlasna, bez cytatow
 // z przekladu.
+//
+// Bartek (2026-11-17): po kole czytanka - ok. 4 min fragmentu ksiazki z lektorka
+// (przeklad T. Olszanskiego), pasujacego do lekcji. Tekst i mp3 jak inne
+// czytanki: poza repo, w prywatnym buckecie (src/data/czytanki.ts).
 
 import { newId } from './id';
 import type { Slide } from './types';
-import { plan, slideNote, slideTopic, slideVideo, type Topic } from './textbook5slides';
+import { plan, slideCzytanka, slideNote, slideTopic, slideVideo, type Topic } from './textbook5slides';
 
 export const LEKTURA_CHLOPCY = 'Lektura - Chłopcy z Placu Broni';
 
@@ -46,13 +50,14 @@ function rozmowa(title: string, body: string, photo?: { src: string; credit: str
 }
 
 /** Wspolny przebieg lekcji z lektury (45 min). */
-function przebieg(film: string, karty: string): string {
+function przebieg(film: string, karty: string, czytanka: string): string {
   return [
     '1. **Przygotuj się + temat** (3 min).',
     '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby.',
-    `3. **Film „${film}”** (ok. 8 min) - 3 zadania z minutą na każde, sprawdzanie z „dlaczego”, na końcu „Zapamiętaj!”.`,
-    `4. **Ćwiczymy razem** (reszta lekcji, 2 karty): ${karty}. Na czarnym ekranie, każdy przykład - koło (K) losuje osobę.`,
-    '5. **Notatka** (5 min) - 2 zdania do przepisania.',
+    `3. **Czytanka** (ok. 4 min) - ${czytanka}. Lektorka czyta, tekst podświetla się na ekranie.`,
+    `4. **Film „${film}”** (ok. 8 min) - 3 zadania z minutą na każde, sprawdzanie z „dlaczego”, na końcu „Zapamiętaj!”.`,
+    `5. **Ćwiczymy razem** (reszta lekcji, 2 karty): ${karty}. Na czarnym ekranie, każdy przykład - koło (K) losuje osobę.`,
+    '6. **Notatka** (5 min) - 2 zdania do przepisania.',
   ].join('\n');
 }
 
@@ -70,7 +75,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- wie, gdzie są Plac Broni, skład drewna, Ogród Botaniczny i ogród przy Muzeum,',
         '- wyjaśnia, czym plac był dla chłopców.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Plac Broni - streszczenie, czas i miejsce akcji', '„Gdzie i kiedy? Fakty z książki”, „Co tu się wydarzyło?”, „Przed bitwą czy po bitwie?” (3 karty, quiz z lektury)')],
+      ['Przebieg (45 min)', przebieg('Plac Broni - streszczenie, czas i miejsce akcji', '„Gdzie i kiedy? Fakty z książki”, „Co tu się wydarzyło?”, „Przed bitwą czy po bitwie?” (3 karty, quiz z lektury)', 'opis placu i składu drewna z rozdz. II (zapytaj potem: gdzie jest plac i co go otacza?)')],
       ['Jak wyjaśnić', [
         '- Miejsce akcji odpowiada na pytanie **gdzie?**, czas akcji na pytanie **kiedy?**',
         '- Budapeszt, ulica Pawła, Ogród Botaniczny istnieją naprawdę - miejsce akcji jest prawdziwe. W baśni bywa wymyślone.',
@@ -94,6 +99,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Plac Broni - czas i miejsce akcji'),
       ...kolo(previousSetId),
+      slideCzytanka('placu-broni-plac'),
       slideVideo('placu-broni-film1'),
       ...razem('k4-chlopcy-gdzie-kiedy', 'k4-chlopcy-co-tu-bylo', 'k4-chlopcy-przed-po'),
       notatka('Plac Broni - czas i miejsce akcji', '**Miejsce akcji** to miejsce, gdzie dzieją się wydarzenia (gdzie?), a **czas akcji** to czas, kiedy się dzieją (kiedy?).', 'Mogą być **prawdziwe**, jak Budapeszt w 1889 roku, albo **wymyślone**, jak w baśni.'),
@@ -112,7 +118,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- wskazuje protagonistę i antagonistę (Boka - Feri Acz),',
         '- uzasadnia, dlaczego Nemeczek jest bohaterem głównym, choć jest najmniejszy.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Dwie drużyny', '„Która drużyna?”, „Główny, drugoplanowy czy zbiorowy?”, „Protagonista czy antagonista?” (przed tą kartą 2 min wyjaśnienia z „Jak wyjaśnić”)')],
+      ['Przebieg (45 min)', przebieg('Dwie drużyny', '„Która drużyna?”, „Główny, drugoplanowy czy zbiorowy?”, „Protagonista czy antagonista?” (przed tą kartą 2 min wyjaśnienia z „Jak wyjaśnić”)', 'wybór przewodniczącego z rozdz. II: płacz Nemeczka-szeregowca, Boka kontra Gereb, „Niech żyje Plac!”')],
       ['Jak wyjaśnić', [
         '- Bohater główny - wokół niego toczy się akcja (Nemeczek, Boka).',
         '- Drugoplanowy - często jest w książce, ale historia nie jest o nim (Feri Acz, Gereb, Czonakosz).',
@@ -141,6 +147,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Bohaterowie „Chłopców z Placu Broni”'),
       ...kolo(previousSetId),
+      slideCzytanka('placu-broni-wybory'),
       slideVideo('placu-broni-film2'),
       ...razem('k4-chlopcy-druzyny', 'k4-chlopcy-rodzaje-bohaterow', 'k4-chlopcy-protagonista'),
       notatka('Bohaterowie „Chłopców z Placu Broni”', '**Bohater główny** jest najważniejszy - wokół niego toczy się akcja, a **bohater drugoplanowy** mu towarzyszy.', '**Bohater zbiorowy** to grupa, która działa razem, np. chłopcy z Placu Broni.', '**Protagonista** dąży do celu (Boka i chłopcy bronią placu), a **antagonista** mu przeszkadza (Feri Acz i Czerwone Koszule).'),
@@ -158,7 +165,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- popiera każdą cechę dowodem,',
         '- rozpoznaje rodzaj dowodu: czyn, słowa albo opinia innych.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Nemeczek - cecha i dowód', '„Jaka cecha?”, „Czyn, słowa czy opinia innych?”')],
+      ['Przebieg (45 min)', przebieg('Nemeczek - cecha i dowód', '„Jaka cecha?”, „Czyn, słowa czy opinia innych?”', 'Nemeczek na wyspie z rozdz. V: „Są tacy!”, „Nigdy!”, kąpiel w stawie i „Prezentuj broń!” (ok. 5 min)')],
       ['Jak wyjaśnić', [
         '- Cecha bez dowodu to tylko opinia. Mówimy: jest odważny, **bo**...',
         '- Czyn: sam idzie do kryjówki wrogów. Słowa: woli zimną wodę niż zdradę. Opinia innych: wróg, Feri Acz, każe mu oddać honory.',
@@ -200,6 +207,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Nemeczek - alfa, sigma czy beta?'),
       ...kolo(previousSetId),
+      slideCzytanka('placu-broni-nemeczek'),
       slideVideo('placu-broni-film3'),
       rozmowa('Skąd się wzięły „alfa” i „beta”?', [
         'Te słowa wymyślili badacze **wilków** ok. 80 lat temu. Patrzyli na wilki w zoo: obce sobie, zamknięte razem, biły się o to, kto rządzi.',
@@ -237,7 +245,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '- wskazuje motywy Gereba,',
         '- ocenia postępowanie bohatera i uzasadnia ocenę.',
       ].join('\n')],
-      ['Przebieg (45 min)', przebieg('Gereb - czyn i motyw', '„Czyn czy motyw?”, „Dobre uzasadnienie?”')],
+      ['Przebieg (45 min)', przebieg('Gereb - czyn i motyw', '„Czyn czy motyw?”, „Dobre uzasadnienie?”', 'Gereb przy furtce z rozdz. VI: przeprasza, a Boka go nie przyjmuje (zapytaj: dobrze zrobił?)')],
       ['Jak wyjaśnić', [
         '- Najpierw pytamy: co zrobił? (czyn). Potem: dlaczego? (motyw).',
         '- Motyw pomaga zrozumieć, ale nie usprawiedliwia złego czynu.',
@@ -261,6 +269,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Gereb - oceniamy postępowanie bohatera'),
       ...kolo(previousSetId),
+      slideCzytanka('placu-broni-gereb'),
       slideVideo('placu-broni-film4'),
       ...razem('k4-chlopcy-czyn-motyw', 'k4-chlopcy-uzasadnienie'),
       notatka('Gereb - oceniamy postępowanie bohatera', 'Oceniając bohatera, patrzymy, **co zrobił** (czyn) i **dlaczego** (motyw).', 'Swoją ocenę zawsze uzasadniamy: „Uważam, że..., ponieważ...”.'),
@@ -282,10 +291,11 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ['Przebieg (45 min)', [
         '1. **Przygotuj się + temat** (3 min).',
         '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby.',
-        '3. **Narysuj plac z pamięci** (5 min) - kartka, widok z góry, podpisy. Bez zaglądania do książki.',
-        '4. **Model 3D** (15 min) - krok 1: dzieci porównują model ze swoimi rysunkami i pokazują miejsca (napisy są schowane), krok 2: widok z góry = plan, kroki 3-15: bitwa. Najpierw czytasz fragment, potem ▶ i model pokazuje ruch.',
-        '5. **Film „Bitwa o Plac Broni”** (ok. 8 min) - bo / więc i punkt kulminacyjny.',
-        '6. **Notatka** (5 min) - 2 zdania do przepisania.',
+        '3. **Czytanka** (ok. 4 min) - punkt kulminacyjny bitwy z rozdz. VIII: chory Nemeczek przewraca Feriego Acza.',
+        '4. **Narysuj plac z pamięci** (5 min) - kartka, widok z góry, podpisy. Bez zaglądania do książki.',
+        '5. **Model 3D** (12 min) - krok 1: dzieci porównują model ze swoimi rysunkami i pokazują miejsca (napisy są schowane), krok 2: widok z góry = plan, kroki 3-15: bitwa. Najpierw czytasz fragment, potem ▶ i model pokazuje ruch.',
+        '6. **Film „Bitwa o Plac Broni”** (ok. 8 min) - bo / więc i punkt kulminacyjny.',
+        '7. **Notatka** (5 min) - 2 zdania do przepisania.',
       ].join('\n')],
       ['Model - obsługa', [
         '- Strzałki / spacja przechodzą po krokach modelu, po ostatnim kroku idzie kolejny slajd.',
@@ -322,6 +332,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Bitwa o Plac Broni - plan, przyczyny i skutki'),
       ...kolo(previousSetId),
+      slideCzytanka('placu-broni-bitwa'),
       {
         id: newId(),
         kind: 'task',
@@ -352,11 +363,12 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ['Przebieg (45 min)', [
         '1. **Przygotuj się + temat** (3 min).',
         '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby.',
-        '3. **Czytamy fragmenty** (10 min) - plac jak ojczyzna; po każdym fragmencie jedno pytanie.',
-        '4. **Rozmowa** (7 min) - plac jako symbol, dlaczego Nemeczek nie zginął w bitwie, dlaczego musiał umrzeć.',
-        '5. **Film „Przesłanie i wartości”** (ok. 9 min) - 3 zadania, na końcu prawda/fałsz z całej książki.',
-        '6. **Ćwiczymy razem** (1 karta, „Jaka wartość?”), jeśli zostanie czas.',
-        '7. **Notatka** (5 min) - 2 zdania do przepisania.',
+        '3. **Czytanka** (ok. 4 min) - zakończenie z rozdz. X: Boka sam na placu, „Budować będą”, plac jak ojczyzna.',
+        '4. **Czytamy fragmenty** (6 min) - plac jak ojczyzna; zakończenie już było w czytance, rozdz. X pomiń. Po każdym fragmencie jedno pytanie.',
+        '5. **Rozmowa** (7 min) - plac jako symbol, dlaczego Nemeczek nie zginął w bitwie, dlaczego musiał umrzeć.',
+        '6. **Film „Przesłanie i wartości”** (ok. 9 min) - 3 zadania, na końcu prawda/fałsz z całej książki.',
+        '7. **Ćwiczymy razem** (1 karta, „Jaka wartość?”), jeśli zostanie czas.',
+        '8. **Notatka** (5 min) - 2 zdania do przepisania.',
       ].join('\n')],
       ['Fragmenty do czytania (strony wpisz ze swojego wydania)', [
         '- rozdz. II - okrzyk na cześć placu; autor dopowiada, że chłopcy wołali tak, jakby wiwatowali na cześć ojczyzny - to odmiana miłości do ojczyzny,',
@@ -389,6 +401,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     makeSlides: (previousSetId) => [
       slideTopic('Dlaczego Nemeczek musiał umrzeć?'),
       ...kolo(previousSetId),
+      slideCzytanka('placu-broni-koniec'),
       {
         id: newId(),
         kind: 'read',

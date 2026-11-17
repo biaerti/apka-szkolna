@@ -16,8 +16,15 @@ export type Czytanka = {
   temat: string;
   title: string;
   author?: string;
-  pages: string; // np. "12-13" - strony w podreczniku
+  pages?: string; // np. "12-13" - strony w podreczniku
+  /** Rozdzial lektury (zamiast stron podrecznika), np. "II". */
+  rozdzial?: string;
 };
+
+/** Skad jest tekst: "s. 12-13" z podrecznika albo "rozdz. II" z lektury. */
+export function czytankaGdzie(c: Czytanka): string {
+  return c.rozdzial ? `rozdz. ${c.rozdzial}` : `s. ${c.pages ?? ''}`;
+}
 
 export const CZYTANKI: Czytanka[] = [
   { id: 'moje-lato-z-szablozebnym', lekcja: '1-2', temat: 'Krok po kroku tworzymy pierwszą wspólną opowieść', title: 'Moje lato z szablozębnym - całość', author: 'Weronika Kurosz', pages: '12-14' },
@@ -55,6 +62,14 @@ export const CZYTANKI: Czytanka[] = [
   // Klasa 5, dzial 3 "Ideały, autorytety, idole" (src/data/textbook5dzial3.ts).
   { id: 'rece', lekcja: 'V.30', temat: 'Epitet', title: 'Ręce', author: 'Jan Twardowski', pages: '108' },
   { id: 'lewy', lekcja: 'V.31', temat: 'Autorytet czy idol? Dedykacja', title: 'Lewy. Chłopak, który zachwycił świat (fragmenty)', author: 'Yvette Żółtowska-Darska', pages: '110-113' },
+  // Klasa 4, lektura „Chłopcy z Placu Broni” (src/data/lekturaChlopcy.ts) - ok. 4 min
+  // fragmentu na start kazdej lekcji. Przeklad T. Olszanskiego, teksty jak zawsze poza repo.
+  { id: 'placu-broni-plac', lekcja: 'Lektura 1', temat: 'Plac Broni - czas i miejsce akcji', title: 'Plac, pusty plac...', author: 'Ferenc Molnár', rozdzial: 'II' },
+  { id: 'placu-broni-wybory', lekcja: 'Lektura 2', temat: 'Bohaterowie „Chłopców z Placu Broni”', title: 'Wybór przewodniczącego', author: 'Ferenc Molnár', rozdzial: 'II' },
+  { id: 'placu-broni-nemeczek', lekcja: 'Lektura 3', temat: 'Nemeczek - cechy bohatera i dowody', title: 'Nemeczek na wyspie', author: 'Ferenc Molnár', rozdzial: 'V' },
+  { id: 'placu-broni-gereb', lekcja: 'Lektura 4', temat: 'Gereb - oceniamy postępowanie bohatera', title: 'Gereb przy furtce', author: 'Ferenc Molnár', rozdzial: 'VI' },
+  { id: 'placu-broni-bitwa', lekcja: 'Lektura 5', temat: 'Bitwa o Plac Broni', title: 'Punkt kulminacyjny bitwy', author: 'Ferenc Molnár', rozdzial: 'VIII' },
+  { id: 'placu-broni-koniec', lekcja: 'Lektura 6', temat: 'Dlaczego Nemeczek musiał umrzeć?', title: 'Zakończenie', author: 'Ferenc Molnár', rozdzial: 'X' },
 ];
 
 export type GrupaCzytanek = { lekcja: string; temat: string; czytanki: Czytanka[] };

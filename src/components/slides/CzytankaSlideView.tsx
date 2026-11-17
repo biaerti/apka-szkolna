@@ -153,7 +153,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     <div className="flex h-full flex-col px-16 pt-7">
       {/* Tytul i autor sa w pierwszej linijce czytanki; prawy gorny rog zajmuje zegar prezentacji. */}
       <span className="shrink-0 text-[34px] font-bold text-accent-300">
-        {czytanka ? `Podręcznik s. ${czytanka.pages}` : 'Czytanka'}
+        {czytanka ? (czytanka.rozdzial ? `Lektura, rozdz. ${czytanka.rozdzial}` : `Podręcznik s. ${czytanka.pages}`) : 'Czytanka'}
       </span>
 
       <div

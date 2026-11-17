@@ -2,7 +2,7 @@
 // Widoczny w całej aplikacji (montowany w AppShell), nie na ekranach prezentacji.
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CZYTANKI, grupujWgLekcji } from '../../data/czytanki';
+import { CZYTANKI, czytankaGdzie, grupujWgLekcji } from '../../data/czytanki';
 import { formatCzasu, useCzytankaPlayer } from './useCzytankaPlayer';
 
 function SpeakerIcon({ className }: { className?: string }) {
@@ -228,7 +228,7 @@ export function CzytankiFab() {
                           <span className="block truncate text-xs text-gray-500">{czytanka.author}</span>
                         )}
                       </span>
-                      <span className="shrink-0 text-xs text-gray-400">str. {czytanka.pages}</span>
+                      <span className="shrink-0 text-xs text-gray-400">{czytankaGdzie(czytanka)}</span>
                     </button>
                   </li>
                 ))}

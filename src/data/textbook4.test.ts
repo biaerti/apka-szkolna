@@ -4,6 +4,7 @@ import { ROZDZIAL_2 } from './textbook4rozdzial2';
 import { ROZDZIAL_3 } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY } from './lekturaChlopcy';
 import { filmikById } from './filmiki';
+import { czytankaById } from './czytanki';
 import { cwiczenieById } from './cwiczenia';
 import { przypomnienieById } from './przypomnienia';
 import { estimateTextHeight, fitFontSize } from '../components/slides/fitText';
@@ -234,14 +235,17 @@ describe('buildTextbook4', () => {
       // L3: rozmowa „alfa, beta, sigma” po filmie; L5: rysunek z pamieci + model 3D
       // placu przed filmem; L6: fragmenty i rozmowa o smierci Nemeczka przed filmem.
       const uklady = [
-        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'video', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'task', 'embed', 'video', 'note'],
-        ['topic', 'recap', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'task', 'embed', 'video', 'note'],
+        ['topic', 'recap', 'czytanka', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
       ];
       expect(lesson.slides.map((s) => s.kind)).toEqual(uklady[i]);
+      // Czytanka na start (ok. 4 min fragmentu z lektorka), zarejestrowana w czytanki.ts.
+      const czytanka = lesson.slides[2];
+      expect(czytanka.kind === 'czytanka' && czytankaById(czytanka.czytankaId)?.rozdzial).toBeTruthy();
       const video = lesson.slides.find((s) => s.kind === 'video')!;
       expect(video.kind === 'video' && video.videoId).toBe(`placu-broni-film${i + 1}`);
       expect(video.kind === 'video' && Boolean(filmikById(video.videoId))).toBe(true);

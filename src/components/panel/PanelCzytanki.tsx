@@ -4,7 +4,7 @@
 // Klawisze (w Panel.tsx): spacja = pauza/odtworz, strzalki = -10 s / +10 s.
 
 import { useMemo } from 'react';
-import { CZYTANKI, grupujWgLekcji } from '../../data/czytanki';
+import { CZYTANKI, czytankaGdzie, grupujWgLekcji } from '../../data/czytanki';
 import { formatCzasu, type CzytankaPlayer } from '../czytanki/useCzytankaPlayer';
 
 export function PanelCzytanki({ player }: { player: CzytankaPlayer }) {
@@ -17,7 +17,7 @@ export function PanelCzytanki({ player }: { player: CzytankaPlayer }) {
         <p className="truncate text-sm font-semibold text-white">{current?.title ?? 'Wybierz czytankę z listy'}</p>
         <p className="mt-0.5 truncate text-xs text-gray-400">
           {current
-            ? `Lekcja ${current.lekcja} · s. ${current.pages}${current.author ? ` · ${current.author}` : ''}`
+            ? `Lekcja ${current.lekcja} · ${czytankaGdzie(current)}${current.author ? ` · ${current.author}` : ''}`
             : 'Spacja - pauza, strzałki - 10 s w tył / w przód'}
         </p>
 
@@ -77,7 +77,7 @@ export function PanelCzytanki({ player }: { player: CzytankaPlayer }) {
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{c.title}</span>
                     <span className={`block truncate text-xs ${wybrana ? 'text-indigo-100' : 'text-gray-400'}`}>
-                      s. {c.pages}{c.author ? ` · ${c.author}` : ''}
+                      {czytankaGdzie(c)}{c.author ? ` · ${c.author}` : ''}
                     </span>
                   </span>
                 </button>
