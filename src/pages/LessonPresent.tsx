@@ -48,9 +48,14 @@ function buildPresentationSteps(slides: Slide[]): {
     (slide): slide is Slide => !!slide,
   );
 
+  // „Wyjmij zeszyt... zaczynamy powtórkę” tylko przed lekcja z tematem albo kolem.
+  // Lekcja wychowawcza (src/data/wychowawcze4.ts) nie ma ani jednego, ani drugiego.
+  const preparation: PresentationStep[] =
+    topic || reviewRecap || ordered.length === 0 ? [{ kind: 'preparation', id: `preparation:${slides[0]?.id ?? 'lesson'}` }] : [];
+
   return {
     steps: [
-      { kind: 'preparation', id: `preparation:${slides[0]?.id ?? 'lesson'}` },
+      ...preparation,
       ...ordered.map((slide) => ({ kind: 'slide' as const, id: slide.id, slide })),
     ],
     textbookPage:

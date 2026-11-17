@@ -3,6 +3,7 @@ import { buildTextbook4, TEXTBOOK4_TOPIC_COUNT } from './textbook4';
 import { ROZDZIAL_2 } from './textbook4rozdzial2';
 import { ROZDZIAL_3 } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY } from './lekturaChlopcy';
+import { WYCHOWAWCZE } from './wychowawcze4';
 import { filmikById } from './filmiki';
 import { czytankaById } from './czytanki';
 import { cwiczenieById } from './cwiczenia';
@@ -15,14 +16,14 @@ describe('buildTextbook4', () => {
     expect(bundle.lessons).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
     expect(bundle.lessons[0]).toMatchObject({ title: '1-2. Krok po kroku tworzymy pierwszą wspólną opowieść', textbookPage: 12 });
     expect(bundle.lessons.find((l) => l.title.startsWith('5-6.'))).toMatchObject({ textbookPage: 22 });
-    const pages = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY).map((l) => l.textbookPage ?? 0);
+    const pages = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== WYCHOWAWCZE).map((l) => l.textbookPage ?? 0);
     expect([...pages].sort((a, b) => a - b)).toEqual(pages);
   });
 
   it('kazda lekcja zaczyna sie zapisaniem tematu i konczy notatka do zeszytu', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     // Rozdzial II ma wlasny format (klasa 5) - osobny test nizej.
-    const rozdzial1 = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== ROZDZIAL_3);
+    const rozdzial1 = bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== ROZDZIAL_3 && l.dzial !== WYCHOWAWCZE);
     expect(rozdzial1.slice(5).map((lesson) => lesson.title)).toEqual([
       '8. Dlaczego warto być sobą?',
       '9-10. Dzień tematyczny: Międzynarodowy Dzień Kropki',
@@ -78,7 +79,7 @@ describe('buildTextbook4', () => {
   it('kazdy temat ma notatke A5 i pytania do kola z odpowiedziami', () => {
     const bundle = buildTextbook4('IV', ['4a']);
     expect(bundle.questionSets).toHaveLength(TEXTBOOK4_TOPIC_COUNT);
-    for (const lesson of bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== ROZDZIAL_3)) {
+    for (const lesson of bundle.lessons.filter((l) => l.dzial !== ROZDZIAL_2 && l.dzial !== LEKTURA_CHLOPCY && l.dzial !== ROZDZIAL_3 && l.dzial !== WYCHOWAWCZE)) {
       expect(lesson.notebookNote).toBeTruthy();
     }
     for (const lesson of bundle.lessons) {
@@ -288,6 +289,26 @@ describe('buildTextbook4', () => {
     }
     // Dwa teksty na rozdzial: Grabarczyk i Vestly.
     expect(r3.flatMap((l) => l.slides.filter((s) => s.kind === 'czytanka'))).toHaveLength(2);
+  });
+
+  it('wychowawcze: osobna zakladka bez kola i notatki, nie psuje kola kolejnych lekcji', () => {
+    const bundle = buildTextbook4('IV', ['4a']);
+    const w = bundle.lessons.filter((l) => l.dzial === WYCHOWAWCZE);
+    expect(w.length).toBeGreaterThanOrEqual(1);
+    for (const lesson of w) {
+      const kinds = lesson.slides.map((s) => s.kind);
+      expect(kinds).not.toContain('recap');
+      expect(kinds).not.toContain('note');
+      expect(kinds).not.toContain('topic');
+      expect(lesson.teacherPlan).toBeTruthy();
+    }
+    // Lekcja 1: eksperyment Ascha na stronie z liniami.
+    expect(w[0].slides).toContainEqual(expect.objectContaining({ kind: 'embed', url: '/prezentacje/linie-asch.html' }));
+    // Kolo kazdej lekcji polskiego bierze pytania z lekcji polskiego, nigdy z wychowawczej.
+    const wSets = new Set(w.map((l) => l.questionSetId));
+    for (const lesson of bundle.lessons) {
+      for (const s of lesson.slides) if (s.kind === 'recap' && s.questionSetId !== lesson.questionSetId) expect(wSets.has(s.questionSetId)).toBe(false);
+    }
   });
 
   it('nie pokazuje materialu klasy czwartej w innym roczniku', () => {

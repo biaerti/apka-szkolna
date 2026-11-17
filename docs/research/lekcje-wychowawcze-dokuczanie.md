@@ -21,6 +21,8 @@ Liczby z dymem i z Ascha sprawdź w oryginale przed pokazaniem na slajdzie. Źr�
 
 ## Proponowana seria: „Badacze klasy” (6 lekcji + stały punkt)
 
+W apce: kl. 4, zakładka „Wychowawcze - Badacze klasy” (`src/data/wychowawcze4.ts`). Gotowa lekcja 1, linie do eksperymentu w `public/prezentacje/linie-asch.html`.
+
 Każda lekcja ma haczyk, który nie jest moralizowaniem. Nigdzie nie pada imię ucznia z tej klasy.
 
 ### 1. Eksperyment: „Która linia jest dłuższa?” (nacisk grupy)

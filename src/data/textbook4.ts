@@ -7,6 +7,7 @@ import { newId } from './id';
 import { ROZDZIAL2_TOPICS } from './textbook4rozdzial2';
 import { ROZDZIAL3_TOPICS } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY_TOPICS } from './lekturaChlopcy';
+import { WYCHOWAWCZE, WYCHOWAWCZE4_TOPICS } from './wychowawcze4';
 import { plan } from './textbook5slides';
 
 interface Topic {
@@ -451,7 +452,15 @@ const TOPICS: Topic[] = [
 
 // Rozdzial II ma wlasny plik (textbook4rozdzial2.ts) w formacie klasy 5,
 // lektura „Chłopcy z Placu Broni” tez (lekturaChlopcy.ts, bez stron podrecznika).
-const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? ROZDZIAL_1 })), ...ROZDZIAL2_TOPICS, ...LEKTURA_CHLOPCY_TOPICS, ...ROZDZIAL3_TOPICS];
+// Lekcje wychowawcze (wychowawcze4.ts) to osobna zakladka bez kola - nie wchodza
+// w lancuch "kolo z poprzedniej lekcji" (patrz previousSetId nizej).
+const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? ROZDZIAL_1 })), ...ROZDZIAL2_TOPICS, ...LEKTURA_CHLOPCY_TOPICS, ...ROZDZIAL3_TOPICS, ...WYCHOWAWCZE4_TOPICS];
+
+/** Zestaw pytan poprzedniej lekcji polskiego (pomija lekcje wychowawcze). */
+function previousSetId(questionSets: QuestionSet[], index: number): string | undefined {
+  for (let i = index - 1; i >= 0; i--) if (ALL_TOPICS[i].dzial !== WYCHOWAWCZE) return questionSets[i].id;
+  return undefined;
+}
 
 export function buildTextbook4(grade: string, classIds: string[]): FreshMaterialsBundle {
   if (grade.toUpperCase() !== 'IV') throw new Error('Podręcznik jest przygotowany dla klasy IV.');
@@ -460,7 +469,7 @@ export function buildTextbook4(grade: string, classIds: string[]): FreshMaterial
   const lessons: Array<Omit<Lesson, 'id' | 'order'>> = ALL_TOPICS.map((topic, index) => {
     const setId = questionSets[index].id;
     topic.questions.forEach((question, order) => questions.push({ id: newId(), setId, ...question, order }));
-    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage || undefined, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: topic.dzial, teacherPlan: topic.teacherPlan, progress: {}, slides: sameTopicInNote(topic.makeSlides(questionSets[index - 1]?.id, setId)) };
+    return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage || undefined, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: topic.dzial, teacherPlan: topic.teacherPlan, progress: {}, slides: sameTopicInNote(topic.makeSlides(previousSetId(questionSets, index), setId)) };
   });
   return { lessons, questionSets, questions };
 }
