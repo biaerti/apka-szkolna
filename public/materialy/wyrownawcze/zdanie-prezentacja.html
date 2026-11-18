@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zdanie od zera</title>
+<!-- Zajęcia wyrównawcze: prezentacja do karty materialy/wyrownawcze-zdanie/karta.mjs.
+     Strzałka w prawo / spacja / PageDown = następny krok, w lewo = cofnij, F = pełny ekran.
+     Wygląd i nawigacja we wspólnych prezentacja.css i prezentacja.js. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;700;800&display=swap&subset=latin-ext" rel="stylesheet">
+<link rel="stylesheet" href="prezentacja.css">
+</head>
+<body>
+<div id="scena">
+
+  <section class="slajd tytul">
+    <div class="nad">Zajęcia wyrównawcze</div>
+    <h1>Zdanie</h1>
+    <p>Zdanie mówi coś do końca.</p>
+    <div class="pyt3">
+      <span class="bg-po k" data-k="1">Wielka litera</span>
+      <span class="bg-cz k" data-k="2">czasownik</span>
+      <span class="bg-ni k" data-k="3">. ? !</span>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <div class="gora">
+      <div>
+        <h2 class="c-po">Początek i koniec</h2>
+        <p class="def">Zdanie zaczynamy <b>wielką literą</b>. Na końcu stawiamy <b>kropkę</b>, <b>pytajnik</b> albo <b>wykrzyknik</b>.</p>
+      </div>
+      <div class="pytanie bg-ni"><small>na końcu</small><strong>. ? !</strong></div>
+    </div>
+    <div class="karty">
+      <div class="karta b-ni k" data-k="1"><div class="co">mówię, opowiadam</div><div class="p">kropka .</div><div class="s" style="font-size:44px">Pada deszcz.</div></div>
+      <div class="karta b-ni k" data-k="2"><div class="co">pytam</div><div class="p">pytajnik ?</div><div class="s" style="font-size:44px">Czy pada deszcz?</div></div>
+      <div class="karta b-ni k" data-k="3"><div class="co">wołam, ostrzegam</div><div class="p">wykrzyknik !</div><div class="s" style="font-size:44px">Uwaga, ślisko!</div></div>
+    </div>
+    <div class="dol">
+      <div class="zdanie k" data-k="4"><span class="lab">Popatrz:</span><span class="w po" data-k="5"><i>wielka litera</i>M</span>ama piecze ciasto<span class="w ni" data-k="6"><i>kropka</i>.</span></div>
+      <div class="rada k" data-k="7">Na początku zdania zawsze <b>wielka litera</b>, nawet gdy to zwykły wyraz.</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <div class="gora">
+      <div>
+        <h2 class="c-cz" style="font-size:90px">Zdanie ma czasownik</h2>
+        <p class="def">W zdaniu ktoś <b>coś robi</b> albo <b>coś się dzieje</b>.</p>
+      </div>
+      <div class="pytanie bg-cz"><small>szukam</small><strong>co robi?</strong></div>
+    </div>
+    <div class="lista" style="gap:40px;margin-top:70px">
+      <div class="k" data-k="1">Pies na podwórku. <span class="ocena c-zle poj" data-k="2">✗ brak czasownika</span></div>
+      <div class="k" data-k="3">Pies <span class="w cz" data-k="4"><i>co robi?</i>biega</span> po podwórku. <span class="ocena c-ok poj" data-k="4">✓ zdanie</span></div>
+      <div class="k" data-k="5">Wakacje nad morzem. <span class="ocena c-zle poj" data-k="6">✗ brak czasownika</span></div>
+      <div class="k" data-k="7">Latem <span class="w cz" data-k="8"><i>co robimy?</i>jedziemy</span> nad morze. <span class="ocena c-ok poj" data-k="8">✓ zdanie</span></div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Budujemy zdanie</h2>
+    <p class="podp">Zaczynamy od kto? + co robi?, potem dokładamy klocki.</p>
+    <div class="budowa" style="margin-top:50px;gap:36px">
+      <div class="k" data-k="1" style="font-size:54px"><span class="dop">kto? + co robi?</span><span><span class="c-rz">Kot</span> <span class="c-cz">śpi</span>.</span></div>
+      <div class="k" data-k="2" style="font-size:54px"><span class="dop">+ jaki?</span><span><span class="c-prz">Mały</span> kot śpi.</span></div>
+      <div class="k" data-k="3" style="font-size:54px"><span class="dop">+ gdzie?</span><span>Mały kot śpi <span class="c-ni">na kanapie</span>.</span></div>
+      <div class="k" data-k="4" style="font-size:54px"><span class="dop">+ kiedy?</span><span><span class="c-po">Po obiedzie</span> mały kot śpi na kanapie.</span></div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Ułóż zdanie</h2>
+    <p class="podp">Najpierw: kto? Potem: co robi? Na początku wielka litera, na końcu znak.</p>
+    <div class="rozsyp">
+      <div><div class="t"><span class="sl">piłkę</span><span class="sl">kopie</span><span class="sl">Kuba</span></div><div class="odp poj" data-k="1">➜ Kuba kopie piłkę.</div></div>
+      <div><div class="t"><span class="sl">herbatę</span><span class="sl">gorącą</span><span class="sl">babcia</span><span class="sl">lubi</span></div><div class="odp poj" data-k="2">➜ Babcia lubi gorącą herbatę.</div></div>
+      <div><div class="t"><span class="sl">psa</span><span class="sl">masz</span><span class="sl">czy</span></div><div class="odp poj" data-k="3">➜ Czy masz psa?</div></div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Gdzie kończy się zdanie?</h2>
+    <p class="podp">Kończy się jedna myśl? Stawiam kropkę, a dalej piszę wielką literą.</p>
+    <div class="tekst"><span class="zm" data-k="1"><s>w</s><u>W</u></span> sobotę pojechaliśmy nad jezioro<span class="kr poj" data-k="2">.</span> <span class="zm" data-k="2"><s>t</s><u>T</u></span>ata łowił ryby<span class="kr poj" data-k="3">.</span> <span class="zm" data-k="3"><s>j</s><u>J</u></span>a pływałam w wodzie<span class="kr poj" data-k="4">.</span> <span class="zm" data-k="4"><s>w</s><u>W</u></span>ieczorem zjedliśmy kolację przy ognisku<span class="kr poj" data-k="5">.</span></div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Kropka, pytajnik czy wykrzyknik?</h2>
+    <p class="podp">Mówię, pytam czy wołam?</p>
+    <div class="lista" style="gap:18px;margin-top:34px">
+      <div style="font-size:52px;display:block">Która jest godzina<span class="box" data-k="1">?</span></div>
+      <div style="font-size:52px;display:block">Uważaj, gorąca zupa<span class="box" data-k="2">!</span></div>
+      <div style="font-size:52px;display:block">Mój brat ma osiem lat<span class="box" data-k="3">.</span></div>
+      <div style="font-size:52px;display:block">Czy pożyczysz mi gumkę<span class="box" data-k="4">?</span></div>
+      <div style="font-size:52px;display:block">Ratunku<span class="box" data-k="5">!</span></div>
+      <div style="font-size:52px;display:block">Jutro idziemy do kina<span class="box" data-k="6">.</span></div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <h2 style="font-size:90px;font-weight:800">Sprawdź się: zdanie czy nie?</h2>
+    <p class="podp">Szukaj czasownika: co robi? co się dzieje?</p>
+    <div class="lista" style="gap:22px;margin-top:34px">
+      <div style="font-size:52px">Słońce świeci. <span class="ocena c-ok poj" data-k="1">✓ zdanie</span></div>
+      <div style="font-size:52px">Piękny dzień. <span class="ocena c-zle poj" data-k="2">✗ nie</span></div>
+      <div style="font-size:52px">Tomek czyta książkę. <span class="ocena c-ok poj" data-k="3">✓ zdanie</span></div>
+      <div style="font-size:52px">Mój nowy rower. <span class="ocena c-zle poj" data-k="4">✗ nie</span></div>
+      <div style="font-size:52px">Na dworze pada śnieg. <span class="ocena c-ok poj" data-k="5">✓ zdanie</span></div>
+      <div style="font-size:52px">Cisza w klasie. <span class="ocena c-zle poj" data-k="6">✗ nie</span></div>
+    </div>
+  </section>
+
+</div>
+
+<div id="pasek">
+  <button type="button" id="wstecz" aria-label="Poprzedni krok">‹</button>
+  <span id="licznik"></span>
+  <button type="button" id="dalej" aria-label="Następny krok">›</button>
+  <button type="button" id="pelny" aria-label="Pełny ekran">Pełny ekran</button>
+</div>
+
+<script src="prezentacja.js"></script>
+</body>
+</html>

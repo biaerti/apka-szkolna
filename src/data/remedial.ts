@@ -76,9 +76,25 @@ export const REMEDIAL_PODSTAWY = [
     rozwiazaniaHref: '/materialy/wyrownawcze/wyrownawcze-czesci-mowy-karta-rozwiazania.pdf',
     projektorHref: '/materialy/karty/wyrownawcze-czesci-mowy-karta.html',
   },
+  {
+    title: 'Zdanie od zera',
+    description: 'Wielka litera i znak na końcu, zdanie ma czasownik, rozsypanki, granice zdań.',
+    prezentacjaHref: '/materialy/wyrownawcze/zdanie-prezentacja.html',
+    kartaHref: '/materialy/wyrownawcze/wyrownawcze-zdanie-karta.pdf',
+    rozwiazaniaHref: '/materialy/wyrownawcze/wyrownawcze-zdanie-karta-rozwiazania.pdf',
+    projektorHref: '/materialy/karty/wyrownawcze-zdanie-karta.html',
+  },
+  {
+    title: 'Ó czy u?',
+    description: 'Ó wymienne na o, zakończenia -ów i -ówka, u na początku i końcu oraz w -uje, -unek, -uszek, -utki.',
+    prezentacjaHref: '/materialy/wyrownawcze/o-u-prezentacja.html',
+    kartaHref: '/materialy/wyrownawcze/wyrownawcze-o-u-karta.pdf',
+    rozwiazaniaHref: '/materialy/wyrownawcze/wyrownawcze-o-u-karta-rozwiazania.pdf',
+    projektorHref: '/materialy/karty/wyrownawcze-o-u-karta.html',
+  },
 ] as const;
 
-export const REMEDIAL_KEY_HREF ='/materialy/wyrownawcze/klucz-odpowiedzi-arkusze-wyrownawcze.docx';
+export const REMEDIAL_KEY_HREF = '/materialy/wyrownawcze/klucz-odpowiedzi-arkusze-wyrownawcze.docx';
 
 /**
  * Zeszyt "Moj polski od zera" dla uczniow, ktorzy dopiero ucza sie polskiego
