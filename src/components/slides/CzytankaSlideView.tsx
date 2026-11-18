@@ -4,6 +4,10 @@
 //
 // Spacja = czytaj / pauza (faza capture, przed klawiszami prezentacji), klik
 // w slowo = czytaj od tego miejsca. Strzalki dalej zmieniaja slajdy.
+// Kolko myszy przewija tekst recznie (lektor czyta dalej, tekst za nim nie skacze,
+// az do "Wroc do lektora" albo kliku w slowo). Z = tryb zaznaczania: klik albo
+// przeciagniecie po slowach zakresla je markerem (drugi raz zmazuje), bez
+// przewijania nagrania. Zakreslenia zostaja w przegladarce dla tej czytanki.
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import type { Slide } from '../../data/types';
@@ -31,6 +35,26 @@ function indeksSlowa(starty: number[], t: number): number {
   return wynik;
 }
 
+/** Zakreslacz - kolor pelny (lime-300 na 40% na tle slajdu), bo nachodzace
+ *  na siebie polprzezroczyste kawalki dawalyby ciemniejsze paski miedzy slowami. */
+const MARKER = 'bg-[#4e6533]';
+
+const kluczZaznaczen =(id: string) => `czytanka-zaznaczenia:${id}`;
+
+function wczytajZaznaczenia(id: string): Set<number> {
+  try {
+    const raw = localStorage.getItem(kluczZaznaczen(id));
+    return new Set(raw ? (JSON.parse(raw) as number[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function zapiszZaznaczeniaLS(id: string, zbior: Set<number>) {
+  if (zbior.size) localStorage.setItem(kluczZaznaczen(id), JSON.stringify([...zbior]));
+  else localStorage.removeItem(kluczZaznaczen(id));
+}
+
 function czas(s: number): string {
   const m = Math.floor(s / 60);
   return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
@@ -49,6 +73,15 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
   const [gra, setGra] = useState(false);
   const [idx, setIdx] = useState(-1);
   const [przesuniecie, setPrzesuniecie] = useState(OKNO_H * LINIA_BIEZACA);
+  // Tekst przewiniety kolkiem - nie wraca sam do biezacego slowa.
+  const [reczne, setReczne] = useState(false);
+  const [zaznaczanie, setZaznaczanie] = useState(false);
+  const [zaznaczone, setZaznaczone] = useState<Set<number>>(() => new Set());
+  // Trwajace przeciaganie markerem: od ktorego slowa, do ktorego, czy zmazuje.
+  const [przeciag, setPrzeciag] = useState<{ od: number; do: number; zmaz: boolean } | null>(null);
+  const przeciagRef = useRef(przeciag);
+  przeciagRef.current = przeciag;
+  const czytankaId = czytanka?.id;
 
   useEffect(() => {
     let cancelled = false;
@@ -56,6 +89,8 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     setAkapity(null);
     setError(null);
     setIdx(-1);
+    setReczne(false);
+    setZaznaczone(czytanka ? wczytajZaznaczenia(czytanka.id) : new Set());
     if (!czytanka) return;
     Promise.all([czytankaUrl(czytanka), wczytajSynchro(czytanka)])
       .then(([nextUrl, nextAkapity]) => {
@@ -101,15 +136,53 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
 
   // Biezaca linijka zawsze na tej samej wysokosci - tekst plynie do gory jak napisy.
   useLayoutEffect(() => {
+    if (reczne) return;
     const el = tekstRef.current?.querySelector<HTMLElement>(`[data-i="${Math.max(idx, 0)}"]`);
     if (el) setPrzesuniecie(OKNO_H * LINIA_BIEZACA - el.offsetTop);
-  }, [idx, akapity]);
+  }, [idx, akapity, reczne]);
+
+  // Kolko: gora tekstu nie schodzi nizej niz linijka czytania, koniec nie ucieka nad srodek okna.
+  function przewinKolkiem(dy: number) {
+    const wys = tekstRef.current?.offsetHeight ?? 0;
+    const max = OKNO_H * LINIA_BIEZACA;
+    const min = Math.min(max, OKNO_H * 0.6 - wys);
+    setReczne(true);
+    setPrzesuniecie((p) => Math.max(min, Math.min(max, p - dy)));
+  }
+
+  // Koniec przeciagania (takze poza tekstem) - zakres trafia do zaznaczen.
+  const ciagnie = przeciag !== null;
+  useEffect(() => {
+    if (!ciagnie) return;
+    function koniec() {
+      const p = przeciagRef.current;
+      if (!p) return;
+      setPrzeciag(null);
+      setZaznaczone((stare) => {
+        const next = new Set(stare);
+        for (let i = Math.min(p.od, p.do); i <= Math.max(p.od, p.do); i++) {
+          if (p.zmaz) next.delete(i);
+          else next.add(i);
+        }
+        if (czytankaId) zapiszZaznaczeniaLS(czytankaId, next);
+        return next;
+      });
+    }
+    window.addEventListener('pointerup', koniec);
+    window.addEventListener('pointercancel', koniec);
+    return () => {
+      window.removeEventListener('pointerup', koniec);
+      window.removeEventListener('pointercancel', koniec);
+    };
+  }, [ciagnie, czytankaId]);
 
   function przelacz() {
     const audio = audioRef.current;
     if (!audio) return;
-    if (audio.paused) void audio.play();
-    else audio.pause();
+    if (audio.paused) {
+      setReczne(false);
+      void audio.play();
+    } else audio.pause();
   }
 
   function czytajOd(start: number) {
@@ -117,6 +190,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     if (!audio) return;
     audio.currentTime = start;
     setIdx(indeksSlowa(starty, start));
+    setReczne(false);
     void audio.play();
   }
 
@@ -129,12 +203,19 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     const t = ulamek * audio.duration;
     audio.currentTime = t;
     setIdx(indeksSlowa(starty, t));
+    setReczne(false);
     if (paskRef.current) paskRef.current.style.width = `${ulamek * 100}%`;
     if (czasRef.current) czasRef.current.textContent = czas(t);
   }
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
+      if ((e.key === 'z' || e.key === 'Z') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        setZaznaczanie((on) => !on);
+        return;
+      }
       if (e.key !== ' ' && e.code !== 'Space') return;
       e.preventDefault();
       e.stopPropagation();
@@ -145,6 +226,11 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
   }, []);
 
   useEffect(() => () => audioRef.current?.pause(), []);
+
+  function jestZakreslone(i: number): boolean {
+    if (przeciag && i >= Math.min(przeciag.od, przeciag.do) && i <= Math.max(przeciag.od, przeciag.do)) return !przeciag.zmaz;
+    return zaznaczone.has(i);
+  }
 
   const fontSize = Math.round(38 * scale);
   let licznik = 0;
@@ -158,6 +244,11 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
 
       <div
         className="relative mt-3 shrink-0 overflow-hidden"
+        onWheel={(e) => {
+          if (akapity) przewinKolkiem(e.deltaMode === 1 ? e.deltaY * 40 : e.deltaY);
+        }}
+        // W trybie zaznaczania klik w tekst nie zmienia slajdu.
+        onClick={zaznaczanie ? (e) => e.stopPropagation() : undefined}
         style={{
           height: OKNO_H,
           maskImage: 'linear-gradient(to bottom, transparent 0, #000 14%, #000 80%, transparent 100%)',
@@ -167,12 +258,12 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
         {akapity ? (
           <div
             ref={tekstRef}
-            className="relative mx-auto max-w-[1080px] font-serif"
+            className={`relative mx-auto max-w-[1080px] font-serif ${zaznaczanie ? 'select-none' : ''}`}
             style={{
               fontSize,
               lineHeight: 1.55,
               transform: `translateY(${przesuniecie}px)`,
-              transition: 'transform 700ms cubic-bezier(.25,.8,.3,1)',
+              transition: reczne ? 'transform 150ms ease-out' : 'transform 700ms cubic-bezier(.25,.8,.3,1)',
             }}
           >
             {akapity.map((akapit, a) => (
@@ -183,7 +274,19 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
               >
                 {akapit.slowa.map(([slowo, start]) => {
                   const i = licznik++;
-                  const stan = i === idx ? 'bg-amber-300 text-gray-950' : i < idx ? 'text-gray-500' : a === 0 ? '' : 'text-gray-100';
+                  const zakreslone = jestZakreslone(i);
+                  // Marker idzie tez przez spacje, gdy nastepne slowo jest zakreslone.
+                  const ciaglyMarker = zakreslone && jestZakreslone(i + 1);
+                  const stan =
+                    i === idx
+                      ? 'bg-amber-300 text-gray-950'
+                      : zakreslone
+                        ? `${MARKER} text-white`
+                        : i < idx
+                          ? 'text-gray-500'
+                          : a === 0
+                            ? ''
+                            : 'text-gray-100';
                   return (
                     <span key={i}>
                       <span
@@ -191,12 +294,33 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
                         onClick={(e) => {
                           // Klik w pokaz zmienia slajd (LessonPresent) - tu ma przewinac nagranie.
                           e.stopPropagation();
-                          czytajOd(start);
+                          if (!zaznaczanie) czytajOd(start);
                         }}
-                        className={`cursor-pointer rounded-md -mx-[3px] px-[3px] transition-colors duration-150 ${stan}`}
+                        onPointerDown={
+                          zaznaczanie
+                            ? (e) => {
+                                e.preventDefault();
+                                // Bez tego dotyk/pioro trzyma capture na pierwszym slowie
+                                // i pointerenter na kolejnych nie przychodzi.
+                                if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+                                  e.currentTarget.releasePointerCapture(e.pointerId);
+                                }
+                                setPrzeciag({ od: i, do: i, zmaz: zaznaczone.has(i) });
+                              }
+                            : undefined
+                        }
+                        onPointerEnter={
+                          zaznaczanie
+                            ? () => {
+                                if (przeciagRef.current) setPrzeciag({ ...przeciagRef.current, do: i });
+                              }
+                            : undefined
+                        }
+                        className={`${zaznaczanie ? 'cursor-text' : 'cursor-pointer'} ${zakreslone && i !== idx ? 'rounded-sm' : 'rounded-md'} -mx-[3px] px-[3px] transition-colors duration-150 ${stan}`}
                       >
                         {slowo}
-                      </span>{' '}
+                      </span>
+                      <span className={ciaglyMarker ? MARKER : undefined}> </span>
                     </span>
                   );
                 })}
@@ -244,7 +368,45 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
             </div>
           </div>
           <span ref={czasRef} className="w-16 text-right text-xl tabular-nums text-gray-400">0:00</span>
-          <span className="text-xl text-gray-500">Spacja: czytaj / pauza</span>
+          {reczne && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setReczne(false);
+              }}
+              className="shrink-0 rounded-full border border-gray-600 px-4 py-1.5 text-lg text-gray-200 hover:bg-gray-800"
+            >
+              Wróć do lektora
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setZaznaczanie((on) => !on);
+            }}
+            className={`shrink-0 rounded-full px-4 py-1.5 text-lg ${
+              zaznaczanie ? 'bg-lime-300 font-semibold text-gray-950' : 'border border-gray-600 text-gray-200 hover:bg-gray-800'
+            }`}
+            aria-pressed={zaznaczanie}
+          >
+            Zaznaczanie (Z)
+          </button>
+          {zaznaczone.size > 0 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setZaznaczone(new Set());
+                if (czytankaId) zapiszZaznaczeniaLS(czytankaId, new Set());
+              }}
+              className="shrink-0 rounded-full border border-gray-600 px-4 py-1.5 text-lg text-gray-400 hover:bg-gray-800"
+            >
+              Wyczyść
+            </button>
+          )}
+          <span className="shrink-0 text-xl text-gray-500">Spacja: czytaj / pauza</span>
         </footer>
       )}
       {url && (
