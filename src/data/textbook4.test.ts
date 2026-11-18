@@ -240,7 +240,7 @@ describe('buildTextbook4', () => {
         ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'czytanka', 'task', 'embed', 'video', 'note'],
+        ['topic', 'recap', 'czytanka', 'task', 'embed', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
       ];
       expect(lesson.slides.map((s) => s.kind)).toEqual(uklady[i]);

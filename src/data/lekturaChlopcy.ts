@@ -295,7 +295,8 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '4. **Narysuj plac z pamięci** (5 min) - kartka, widok z góry, podpisy. Bez zaglądania do książki.',
         '5. **Model 3D** (12 min) - krok 1: dzieci porównują model ze swoimi rysunkami i pokazują miejsca (napisy są schowane), krok 2: widok z góry = plan, kroki 3-15: bitwa. Najpierw czytasz fragment, potem ▶ i model pokazuje ruch.',
         '6. **Film „Bitwa o Plac Broni”** (ok. 8 min) - bo / więc i punkt kulminacyjny.',
-        '7. **Notatka** (5 min) - 2 zdania do przepisania.',
+        '7. **Ćwiczymy razem** (reszta lekcji, 3 karty): „Bo czy więc?”, „Co z tego wynikło w bitwie?”, „Dopisz skutek”. Ile zdążycie - każdy przykład, koło (K) losuje osobę.',
+        '8. **Notatka** (5 min) - 2 zdania do przepisania.',
       ].join('\n')],
       ['Model - obsługa', [
         '- Strzałki / spacja przechodzą po krokach modelu, po ostatnim kroku idzie kolejny slajd.',
@@ -344,6 +345,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       },
       modelPlacu(),
       slideVideo('placu-broni-film5'),
+      ...razem('k4-chlopcy-bo-wiec', 'k4-chlopcy-bitwa-skutki', 'k4-chlopcy-skutek'),
       notatka('Bitwa o Plac Broni - plan, przyczyny i skutki', 'Wydarzenia łączą się jak łańcuch: **przyczyna** (bo) prowadzi do **skutku** (więc).', '**Punkt kulminacyjny** to moment największego napięcia w utworze.'),
     ],
   },

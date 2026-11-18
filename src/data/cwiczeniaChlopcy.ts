@@ -243,6 +243,22 @@ export const CWICZENIA_CHLOPCY: Cwiczenie[] = [
     ],
   },
   {
+    // Fakty z bitwy (model 3D, kroki 8-13) - inne niz w filmie 5 i w kole.
+    id: 'k4-chlopcy-bitwa-skutki',
+    typ: 'luki',
+    tytul: 'Co z tego wynikło w bitwie?',
+    polecenie: 'Przypomnij sobie bitwę na modelu. Co wynikło z tej przyczyny? Wybierz słowo po „więc”.',
+    naRaz: 3,
+    przyklady: [
+      `W forcie 2 skończył się piasek, więc Boka zawołał: ${wybor(['szturm!', 'stój!', 'do domu!'], 'szturm!')}`,
+      `Oddziały C i D wybiegły z wozowni i z chatki, więc zaatakowały wrogów ${wybor(['od tyłu', 'od przodu', 'z dachu'], 'od tyłu')}`,
+      `Oddział Pastora siedział zamknięty w chatce, więc załogi fortów 1 i 2 przeszły na forty ${wybor(['4 i 5', '3 i 6', '1 i 3'], '4 i 5')}`,
+      `Feri usłyszał trąbkę Boki zamiast trąbki Pastora, więc zrozumiał, że Pastor ${wybor(['przegrał', 'wygrał', 'się schował'], 'przegrał')}`,
+      `Wróg złapał Kolnaya z rozkazem, więc do okopu skoczył sam ${wybor(['Boka', 'Nemeczek', 'Janosz'], 'Boka')}`,
+      `Feri chciał uwolnić jeńców, więc nagle skręcił całą grupą do ${wybor(['chatki', 'bramy', 'tartaku'], 'chatki')}`,
+    ],
+  },
+  {
     id: 'k4-chlopcy-skutek',
     typ: 'luki',
     tytul: 'Dopisz skutek',
