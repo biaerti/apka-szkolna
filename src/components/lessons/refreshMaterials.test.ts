@@ -96,6 +96,17 @@ describe('matchLessonsForRefresh - dopasowanie po tytule z aliasami', () => {
     expect(matches[0].oldLesson.id).toBe('l3');
   });
 
+  it('wychowawcze kl. 4: lekcja z eksperymentem Ascha przechodzi w miejscu na „Zart czy dokuczanie?”', () => {
+    const oldLesson = lesson({ id: 'w1', title: '1. Eksperyment: czy pójdziesz za grupą?' });
+    const fresh: FreshMaterialsBundle = {
+      lessons: [{ grade: 'IV', title: '1. Żart czy dokuczanie?', progress: {}, slides: [] }],
+      questionSets: [],
+      questions: [],
+    };
+    const matches = matchLessonsForRefresh([oldLesson], fresh);
+    expect(matches.map((m) => m.oldLesson.id)).toEqual(['w1']);
+  });
+
   it('bez dopasowania (ani wprost, ani przez alias) - lekcja zostaje pominieta', () => {
     const oldLesson = lesson({ id: 'l9', title: 'Zupelnie inny temat' });
     const fresh: FreshMaterialsBundle = {

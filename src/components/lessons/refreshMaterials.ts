@@ -67,6 +67,8 @@ const TITLE_ALIASES: Record<string, string> = {
   // Klasa 4, lektura: ostatnia lekcja o Chłopcach z Placu Broni stawia teraz pytanie Bartka.
   [titleMatchKey('6. Co zostaje po Nemeczku i po placu?')]: titleMatchKey('6. Dlaczego Nemeczek musiał umrzeć?'),
   [titleMatchKey('3. Nemeczek - mały, ale wielki')]: titleMatchKey('3. Nemeczek - alfa, sigma czy beta?'),
+  // Klasa 4, wychowawcze: eksperyment Ascha zastapiony gra „Zart czy dokuczanie?” (Bartek 2026-11-18).
+  [titleMatchKey('1. Eksperyment: czy pójdziesz za grupą?')]: titleMatchKey('1. Żart czy dokuczanie?'),
 };
 
 /**

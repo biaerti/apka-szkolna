@@ -21,7 +21,7 @@ Liczby z dymem i z Ascha sprawdź w oryginale przed pokazaniem na slajdzie. Źr�
 
 ## Proponowana seria: „Badacze klasy” (6 lekcji + stały punkt)
 
-W apce: kl. 4, zakładka „Wychowawcze - Badacze klasy” (`src/data/wychowawcze4.ts`). Gotowa lekcja 1, linie do eksperymentu w `public/prezentacje/linie-asch.html`.
+W apce: kl. 4, zakładka „Wychowawcze - Badacze klasy” (`src/data/wychowawcze4.ts`). Gotowa lekcja 1 „Żart czy dokuczanie?” (gra w `public/prezentacje/zart-czy-dokuczanie.html`). Eksperyment Ascha Bartkowi nie pasował (za dużo zamieszania).
 
 Każda lekcja ma haczyk, który nie jest moralizowaniem. Nigdzie nie pada imię ucznia z tej klasy.
 

@@ -302,8 +302,8 @@ describe('buildTextbook4', () => {
       expect(kinds).not.toContain('topic');
       expect(lesson.teacherPlan).toBeTruthy();
     }
-    // Lekcja 1: eksperyment Ascha na stronie z liniami.
-    expect(w[0].slides).toContainEqual(expect.objectContaining({ kind: 'embed', url: '/prezentacje/linie-asch.html' }));
+    // Lekcja 1: gra „Zart czy dokuczanie?” w dwoch rundach.
+    expect(w[0].slides).toContainEqual(expect.objectContaining({ kind: 'embed', url: '/prezentacje/zart-czy-dokuczanie.html?runda=1' }));
     // Kolo kazdej lekcji polskiego bierze pytania z lekcji polskiego, nigdy z wychowawczej.
     const wSets = new Set(w.map((l) => l.questionSetId));
     for (const lesson of bundle.lessons) {
