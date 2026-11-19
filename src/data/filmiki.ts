@@ -73,7 +73,7 @@ export const FILMIKI: Filmik[] = [
   { id: 'placu-broni-film1', lekcja: 'L1', title: 'Plac Broni - streszczenie, czas i miejsce akcji (2 zadania)' },
   { id: 'placu-broni-film2', lekcja: 'L2', title: 'Dwie drużyny - bohater główny, drugoplanowy, zbiorowy (3 zadania)' },
   { id: 'placu-broni-film3', lekcja: 'L3', title: 'Nemeczek - cechy bohatera i dowody (3 zadania)' },
-  { id: 'placu-broni-film4', lekcja: 'L4', title: 'Gereb - czyn, motyw i ocena bohatera (3 zadania)' },
+  { id: 'placu-broni-film4', lekcja: 'L4', title: 'Gereb - czyn i motyw, sympatia i zaufanie (3 zadania)' },
   { id: 'placu-broni-film5', lekcja: 'L5', title: 'Bitwa o Plac Broni - przyczyna, skutek, punkt kulminacyjny (3 zadania)' },
   { id: 'placu-broni-film6', lekcja: 'L6', title: 'Przesłanie i wartości - podsumowanie lektury (3 zadania)' },
   // Klasa 5, dzial 3 "Ideały, autorytety, idole" (textbook5dzial3.ts) - nowy format: ok. 8 min, 3 zadania z minuta na kazde.

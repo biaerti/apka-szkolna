@@ -2,22 +2,14 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
-<title>Gereb - ocena postępowania - lektura kl. 4</title>
+<title>Gereb - czyn i motyw, sympatia i zaufanie - lektura kl. 4</title>
 <link rel="stylesheet" href="wspolne.css">
 <link rel="stylesheet" href="lektura.css">
-<script src="krzywa.js"></script>
-<script>
-// Krzywa postepowania Gereba - ta sama w scenie 07, w zadaniu 2 i w odpowiedzi.
-window.GEREB = [
-  { x: 160, y: 200, emo: '😒', tekst: 'zazdrość|przegrał wybór wodza', nad: true, slowo: 'zazdrość' },
-  { x: 380, y: 270, emo: '🗡️', tekst: 'zdrada|porucznik u wrogów', slowo: 'zdrada' },
-  { x: 610, y: 330, emo: '😳', tekst: 'widzi odwagę|Nemeczka', slowo: 'wstrząsa' },
-  { x: 850, y: 190, emo: '✉️', tekst: 'list z przeprosinami|wraca jako szeregowiec', dx: 70, slowo: 'list' },
-  { x: 1050, y: 90, emo: '🛡️', tekst: 'walczy|w pierwszym szeregu', nad: true, dx: -40, slowo: 'szeregu' },
-];
-</script>
 <style>
 /* Opoznienia animacji ustawia player.js ze slow narracji (data-slowo). */
+:root { --sym: #E8425A; --zauf: #3C7DD9; }
+.c-sym { color: var(--sym); } .c-zauf { color: var(--zauf); }
+
 #s01 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 #s01 .male { font-size: 32px; font-weight: 800; color: var(--szary); }
 #s01 .ikona { font-size: 90px; line-height: 1.1; }
@@ -36,30 +28,65 @@ window.GEREB = [
 #s03 .linia { font-size: 34px; }
 #s03 .pyt { margin-top: 20px; font-size: 38px; background: var(--szary); }
 
-#s04 .rzad { margin-top: 20px; align-items: stretch; }
-#s04 .karta .nazwa { font-size: 44px; }
-#s04 .karta .pyt { font-family: 'Baloo 2'; font-size: 34px; font-weight: 800; color: var(--szary); }
-#s04 .karta .gereb { font-size: 30px; font-weight: 800; margin-top: 10px; }
-#s04 .uwaga { margin-top: 22px; font-size: 34px; background: var(--koszule); }
+#s04 { padding-top: 34px; }
+#s04 .rzad { margin: 14px auto 0; width: 1000px; }
+#s04 .karta { padding: 8px 18px; }
+#s04 .karta .nazwa { font-size: 40px; }
+#s04 .karta .pyt { font-family: 'Baloo 2'; font-size: 32px; font-weight: 800; color: var(--szary); }
+#s04 .kafle { width: 1060px; margin-top: 16px; }
+#s04 .kafel { font-size: 29px; }
+#s04 .ten-sam { margin-top: 12px; font-size: 28px; background: var(--szary); }
+#s04 .lampka { margin: 16px auto 0; width: 1100px; font-size: 29px; white-space: nowrap; text-align: center; border-color: var(--pomarancz); }
+#s04 .uwaga { margin-top: 16px; font-size: 30px; background: var(--koszule); }
 
 #s05 .lista, #s06 .lista { width: 1000px; gap: 12px; margin-top: 16px; }
 #s05 .linia, #s06 .linia { font-size: 33px; padding: 8px 22px; }
 
-#s07 h2, #s08 .polecenie, #s09 .polecenie { margin-bottom: 0; }
-#s08 .krzywa, #s09 .krzywa { margin-top: 0; height: 450px; }
+#s07 { padding-top: 36px; }
+#s07 .rzad { margin: 16px auto 0; width: 1060px; }
+#s07 .karta .nazwa { font-size: 46px; }
+#s07 .karta .opis { font-size: 29px; color: var(--ciemny); }
+#s07 .samo { margin-top: 14px; font-size: 34px; background: var(--pomarancz); }
+#s07 .lista { width: 1060px; gap: 10px; margin-top: 14px; }
+#s07 .linia { font-size: 28px; padding: 6px 20px; }
+#s07 .przyj { margin-top: 14px; font-size: 34px; background: var(--plac); }
 
-#s10 .wzor { font-family: 'Baloo 2'; font-size: 46px; font-weight: 800; margin-top: 18px; }
-#s10 .wzor .t { color: var(--niebieski); } #s10 .wzor .p { color: var(--plac); }
-#s10 .lista { width: 1100px; gap: 12px; margin-top: 16px; }
-#s10 .linia { font-size: 30px; }
-#s10 .obie { margin-top: 16px; font-size: 32px; background: var(--plac); }
+.legenda { display: flex; gap: 14px; justify-content: center; margin-top: 10px; }
+.legenda .chip { font-size: 26px; padding: 2px 22px; }
+#s08 .lista, #s09 .lista { width: 1140px; gap: 10px; margin-top: 12px; }
+#s08 .linia, #s09 .linia { font-size: 28px; padding: 6px 20px; }
+#s09 .lista { gap: 8px; }
+#s09 .linia { font-size: 26px; padding: 4px 18px; }
+#s09 .dl { font-size: 24px; }
 
-#s11 .lista, #s12 .lista { width: 1120px; gap: 10px; margin-top: 12px; }
-#s11 .linia, #s12 .linia { font-size: 29px; padding: 7px 20px; }
+#s10 { padding-top: 60px; }
+#s10 .tajemnice { margin-top: 22px; }
+#s10 .tajemnice .chip { font-size: 34px; background: var(--plac); }
+#s10 .potrzeba { margin-top: 22px; font-size: 32px; font-weight: 800; }
+#s10 .furtka { margin: 34px auto 0; width: 1040px; padding: 20px 30px; text-align: left; }
+#s10 .furtka .nazwa { text-align: center; }
+#s10 .furtka .nazwa { font-size: 42px; }
+#s10 .miernik { font-size: 38px; font-weight: 800; padding: 10px 0; }
+#s10 .miernik .dl { display: block; font-size: 27px; margin: 0 0 0 52px; }
+
+#s11 .lista, #s12 .lista { width: 1060px; gap: 10px; margin-top: 14px; }
+#s11 .linia, #s12 .linia { font-size: 31px; padding: 7px 22px; }
 #s12 .lista { gap: 8px; }
-#s12 .linia { font-size: 27px; padding: 5px 18px; }
-#s12 .dl { font-size: 21px; }
-#s13 .lista { width: 1100px; gap: 14px; }
+#s12 .linia { font-size: 28px; padding: 5px 20px; }
+#s12 .dl { font-size: 24px; }
+#s12 .czyny { margin-top: 12px; font-size: 30px; background: var(--plac); }
+
+#s13 { padding-top: 36px; }
+#s13 .lista { width: 1100px; gap: 9px; margin-top: 12px; }
+#s13 .linia { font-size: 28px; padding: 5px 20px; }
+#s13 .schodek:nth-child(2) { margin-left: 30px; } #s13 .schodek:nth-child(3) { margin-left: 60px; }
+#s13 .schodek:nth-child(4) { margin-left: 90px; } #s13 .schodek:nth-child(5) { margin-left: 120px; }
+#s13 .schodek:nth-child(6) { margin-left: 150px; }
+#s13 .schodek { width: calc(100% - 150px); }
+#s13 .wniosek { margin-top: 14px; font-size: 30px; background: var(--zauf); }
+
+#s14 .lista { width: 1120px; gap: 16px; margin-top: 26px; }
+#s14 .linia { font-size: 33px; }
 </style>
 </head>
 <body>
@@ -68,12 +95,12 @@ window.GEREB = [
   <!-- ===== 01 intro ===== -->
   <section class="scena" data-id="01-intro" id="s01">
     <div class="male zjaw" data-t="0">Klasa 4 · Lektura · lekcja 4</div>
-    <div class="ikona pop" data-t="0.3">😒 ➜ 🗡️ ➜ 😳 ➜ 🤝</div>
+    <div class="ikona pop" data-t="0.3">😒 ➜ 🗡️ ➜ 💔 ➜ 🤝</div>
     <div class="tytul pop" data-slowo="gereb">Gereb - czy zdradę można wybaczyć?</div>
     <div class="grupy">
       <span class="chip pop" data-slowo="dlaczego">❓ dlaczego zdradził?</span>
-      <span class="chip pop" data-slowo="wybaczyć">🤝 czy można wybaczyć?</span>
-      <span class="chip pop" data-slowo="lubię" style="background:var(--pomarancz)">⚖️ ocena, nie tylko „lubię”</span>
+      <span class="chip pop" data-slowo="lubić" style="background:var(--sym)">❤️ dalej lubić…</span>
+      <span class="chip pop" data-slowo="ufać" style="background:var(--zauf)">🔒 …ale nie ufać?</span>
     </div>
     <div class="zapowiedz pop" data-slowo="zadania">✏️ 3 zadania · 📓 zeszyt w gotowości!</div>
   </section>
@@ -118,17 +145,21 @@ window.GEREB = [
     <span class="czesc zjaw" data-t="0">CZYN I MOTYW</span>
     <h2 class="naglowek wjazd-dol" data-t="0">Dwa pytania ⚖️</h2>
     <div class="rzad">
-      <div class="karta pop" data-slowo="zrobił" style="border-color:var(--niebieski)">
+      <div class="karta pop" data-slowo="czyn" style="border-color:var(--niebieski)">
         <div class="nazwa" style="color:var(--niebieski)">CZYN</div>
         <div class="pyt">co zrobił?</div>
-        <div class="gereb zjaw" data-slowo="zdrada">Gereb: 🗡️ zdrada</div>
       </div>
       <div class="karta pop" data-slowo="motyw" style="border-color:var(--fiolet)">
         <div class="nazwa" style="color:var(--fiolet)">MOTYW</div>
         <div class="pyt">dlaczego to zrobił? (powód)</div>
-        <div class="gereb zjaw" data-slowo="zazdrość">Gereb: 😒 zazdrość, chęć bycia ważnym</div>
       </div>
     </div>
+    <div class="kafle">
+      <div class="kafel pop" data-slowo="jeden">🦹 kradnie, bo chce mieć więcej</div>
+      <div class="kafel pop" data-slowo="drugi">🏥 kradnie, bo potrzebuje pieniędzy na operację dziecka</div>
+    </div>
+    <div><span class="chip ten-sam pop" data-slowo="sam">czyn ten sam - motywy zupełnie różne</span></div>
+    <div class="linia lampka pop" data-slowo="wyborów">🗳️ 3 głosy <span class="zjaw" data-slowo="lampka">➜ 💡 „Ja też mógłbym być wodzem!”</span> <span class="zjaw" data-slowo="stopień">➜ 🎖️ stopień u wroga</span></div>
     <div><span class="chip uwaga pop" data-slowo="usprawiedliwić">⚠️ zrozumieć ≠ usprawiedliwić - zdrada dalej jest zła</span></div>
   </section>
 
@@ -160,53 +191,92 @@ window.GEREB = [
     </div>
   </section>
 
-  <!-- ===== 07 krzywa ===== -->
-  <section class="scena" data-id="07-krzywa" id="s07" style="padding-top:24px">
-    <span class="czesc zjaw" data-t="0">ZMIANA BOHATERA</span>
-    <h2 class="naglowek wjazd-dol" data-t="0" style="font-size:46px">Jak zmienia się Gereb? 📈</h2>
-    <script>wstawKrzywa({ punkty: GEREB, os: '⬆ postępuje lepiej', kolor: '#D6453D' })</script>
+  <!-- ===== 07 sympatia i zaufanie ===== -->
+  <section class="scena" data-id="07-dwa-poziomy" id="s07">
+    <span class="czesc zjaw" data-t="0">SYMPATIA I ZAUFANIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Co psuje zdrada? 💔</h2>
+    <div class="rzad">
+      <div class="karta pop" data-slowo="sympatia" style="border-color:var(--sym)">
+        <div class="nazwa c-sym">❤️ SYMPATIA</div>
+        <div class="opis zjaw" data-slowo="lubię">lubię cię, dobrze mi z tobą, razem się śmiejemy</div>
+      </div>
+      <div class="karta pop" data-slowo="zaufanie" style="border-color:var(--zauf)">
+        <div class="nazwa c-zauf">🔒 ZAUFANIE</div>
+        <div class="opis zjaw" data-slowo="polegać">mogę na tobie polegać, dochowasz tajemnicy</div>
+      </div>
+    </div>
+    <div><span class="chip samo pop" data-slowo="samo">To nie to samo!</span></div>
+    <div class="lista">
+      <div class="linia wjazd-lewo" data-slowo="korytarza">😄 kolega z korytarza: śmiejemy się, ale o ważnych sprawach nie rozmawiamy <span class="zjaw" data-slowo="ufasz">→ <span class="c-sym">❤️ tak</span>, <span class="c-zauf">🔒 nie</span></span></div>
+      <div class="linia wjazd-lewo" data-slowo="innym">🆘 ktoś, z kim prawie nie rozmawiam, ale wiem, że mi pomoże <span class="zjaw" data-slowo="kolegujecie">→ <span class="c-zauf">🔒 tak</span></span></div>
+    </div>
+    <div><span class="chip przyj pop" data-slowo="przyjaciel">🤝 przyjaciel = ❤️ sympatia + 🔒 zaufanie</span></div>
   </section>
 
   <!-- ===== 08 zadanie 2 ===== -->
-  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08" style="padding-top:24px">
-    <span class="czesc">ZMIANA BOHATERA</span>
+  <section class="scena zadanie" data-id="08-zadanie2+60" id="s08">
+    <span class="czesc">SYMPATIA I ZAUFANIE</span>
     <div><span class="badge pop" data-t="0">ZADANIE 2 ✏️</span></div>
-    <div class="polecenie wjazd-dol" data-slowo="momencie">W którym punkcie Gereb zaczyna się zmieniać? Zapisz numer.</div>
-    <script>wstawKrzywa({ punkty: GEREB, os: '⬆ postępuje lepiej', kolor: '#D6453D', statyczna: true })</script>
-    <div class="odliczanie" style="margin-top:0"><div class="odliczanie-pasek"></div></div>
+    <div class="polecenie wjazd-dol" data-slowo="sytuacje">Co tu jest? Zapisz przy każdym numerze:</div>
+    <div class="legenda">
+      <span class="chip pop" data-slowo="sympatia" style="background:var(--sym)">❤️ sama sympatia</span>
+      <span class="chip pop" data-slowo="zaufanie" style="background:var(--zauf)">🔒 samo zaufanie</span>
+      <span class="chip pop" data-slowo="drugie" style="background:var(--plac)">❤️ + 🔒 jedno i drugie</span>
+    </div>
+    <div class="lista">
+      <div class="linia pop" data-slowo="numerze"><span class="nr">1</span>Z Kubą świetnie się bawisz na przerwie, ale nie mówisz mu sekretów, bo wszystko rozpowiada.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.3"><span class="nr">2</span>Z Olą rzadko gadasz, ale gdy zgubiłeś klucze, o pomoc poprosiłeś właśnie ją.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.6"><span class="nr">3</span>Z Tymkiem grasz codziennie i tylko jemu powiedziałeś, czego się boisz.</div>
+      <div class="linia pop" data-slowo="numerze" data-po="0.9"><span class="nr">4</span>Lubisz Maję, ale wczoraj rozpowiedziała całej klasie twoją tajemnicę.</div>
+    </div>
+    <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
   </section>
 
   <!-- ===== 09 odpowiedz 2 ===== -->
-  <section class="scena odp" data-id="09-odpowiedz2" id="s09" style="padding-top:24px">
-    <span class="czesc">ZMIANA BOHATERA</span>
+  <section class="scena odp" data-id="09-odpowiedz2" id="s09">
+    <span class="czesc">SYMPATIA I ZAUFANIE</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="polecenie">W którym punkcie Gereb zaczyna się zmieniać? Zapisz numer.</div>
-    <script>wstawKrzywa({ punkty: GEREB, os: '⬆ postępuje lepiej', kolor: '#D6453D', statyczna: true, wyroznij: { nr: 3, slowo: 'trzeci', napis: 'PRZEŁOM', nad: true } })</script>
+    <div class="polecenie">Co tu jest? Zapisz przy każdym numerze:</div>
+    <div class="legenda">
+      <span class="chip" style="background:var(--sym)">❤️ sama sympatia</span>
+      <span class="chip" style="background:var(--zauf)">🔒 samo zaufanie</span>
+      <span class="chip" style="background:var(--plac)">❤️ + 🔒 jedno i drugie</span>
+    </div>
+    <div class="lista">
+      <div class="linia o-dobra" data-slowo="pierwsza"><span class="nr">1</span>Z Kubą świetnie się bawisz na przerwie, ale nie mówisz mu sekretów, bo wszystko rozpowiada.<span class="dl o-wpis-blok o-razem">❤️ sama sympatia - tajemnicy mu nie powierzysz</span></div>
+      <div class="linia o-dobra" data-slowo="druga"><span class="nr">2</span>Z Olą rzadko gadasz, ale gdy zgubiłeś klucze, o pomoc poprosiłeś właśnie ją.<span class="dl o-wpis-blok o-razem">🔒 samo zaufanie - nie kolegujecie się, ale na niej polegasz</span></div>
+      <div class="linia o-dobra" data-slowo="trzecia"><span class="nr">3</span>Z Tymkiem grasz codziennie i tylko jemu powiedziałeś, czego się boisz.<span class="dl o-wpis-blok o-razem">❤️ + 🔒 jedno i drugie - to już przyjaźń</span></div>
+      <div class="linia o-dobra" data-slowo="czwarta"><span class="nr">4</span>Lubisz Maję, ale wczoraj rozpowiedziała całej klasie twoją tajemnicę.<span class="dl o-wpis-blok" data-slowo="sympatia">❤️ sympatia została, <span class="zjaw" data-slowo="zaufanie">🔒 zaufanie zniknęło - tak działa zdrada</span></span></div>
+    </div>
   </section>
 
-  <!-- ===== 10 ocena ===== -->
-  <section class="scena" data-id="10-ocena" id="s10">
-    <span class="czesc zjaw" data-t="0">OCENA BOHATERA</span>
-    <h2 class="naglowek wjazd-dol" data-t="0">Jak ocenić Gereba? ⚖️</h2>
-    <div class="slowa"><span class="chip pop" data-slowo="zły" style="background:var(--koszule)">❌ „jest zły” - to za mało</span></div>
-    <div class="wzor pop" data-slowo="myślę"><span class="t">Uważam, że…</span> <span class="zjaw p" data-slowo="powód">, ponieważ…</span></div>
-    <div class="lista">
-      <div class="linia wjazd-lewo" data-slowo="źle">Uważam, że Gereb postąpił źle, <b>ponieważ</b> zdradził kolegów, którzy mu ufali.</div>
-      <div class="linia wjazd-lewo" data-slowo="szansę">Uważam, że Gereb zasłużył na drugą szansę, <b>ponieważ</b> przeprosił i chciał naprawić błąd.</div>
+  <!-- ===== 10 plac ===== -->
+  <section class="scena" data-id="10-plac" id="s10">
+    <span class="czesc zjaw" data-t="0">SYMPATIA I ZAUFANIE</span>
+    <h2 class="naglowek wjazd-dol c-plac" data-t="0">Plac Broni 🟩</h2>
+    <div class="slowa tajemnice">
+      <span class="chip pop" data-slowo="kit">🤫 kit</span>
+      <span class="chip pop" data-slowo="chorągiewkę">🚩 chorągiewka</span>
+      <span class="chip pop" data-slowo="plan">🗺️ plan bitwy</span>
     </div>
-    <div><span class="chip obie pop" data-slowo="obie">✅ obie oceny dobre - mają mocne „ponieważ”</span></div>
+    <div class="potrzeba zjaw" data-slowo="ufać">Tu trzeba się lubić <span class="c-sym">❤️</span> i sobie ufać <span class="c-zauf">🔒</span>, bo jeden zdrajca zdradzi cały plan.</div>
+    <div class="karta furtka pop" data-slowo="furtki">
+      <div class="nazwa">🚪 Gereb przy furtce przeprasza</div>
+      <div class="miernik zjaw" data-slowo="sympatia"><span class="c-sym">❤️ sympatia:</span> została ✅<span class="dl">Boka przebacza, chce za nim zawołać</span></div>
+      <div class="miernik zjaw" data-slowo="zaufanie"><span class="c-zauf">🔒 zaufanie:</span> zniknęło ❌<span class="dl">nie przyjmuje go z powrotem</span></div>
+    </div>
   </section>
 
   <!-- ===== 11 zadanie 3 ===== -->
   <section class="scena zadanie" data-id="11-zadanie3+60" id="s11">
-    <span class="czesc">OCENA BOHATERA</span>
+    <span class="czesc">ODBUDOWAĆ ZAUFANIE</span>
     <div><span class="badge pop" data-t="0">ZADANIE 3 ✏️</span></div>
-    <div class="polecenie wjazd-dol" data-slowo="dobrze">Które <u>dwie</u> oceny są dobrze uzasadnione?</div>
+    <div class="polecenie wjazd-dol" data-slowo="odzyskać">Co pomoże Gerebowi odzyskać zaufanie? Wybierz <u>dwa</u> pomysły.</div>
     <div class="lista">
-      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Gereb jest głupi i tyle.</div>
-      <div class="linia pop" data-slowo="cztery" data-po="0.3"><span class="nr">2</span>Uważam, że Gereb postąpił źle, ponieważ zdradził wrogom plany kolegów.</div>
-      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">3</span>Gereb mi się nie podoba, bo nie.</div>
-      <div class="linia pop" data-slowo="cztery" data-po="0.9"><span class="nr">4</span>Uważam, że Boka dobrze zrobił, przyjmując Gereba z powrotem, ponieważ Gereb przeprosił i chciał naprawić błąd.</div>
+      <div class="linia pop" data-slowo="cztery"><span class="nr">1</span>Kupi chłopcom cukierki.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.3"><span class="nr">2</span>Sam zrobi coś trudnego dla Placu Broni.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.6"><span class="nr">3</span>Będzie ciągle powtarzał: „Przepraszam!”.</div>
+      <div class="linia pop" data-slowo="cztery" data-po="0.9"><span class="nr">4</span>Wróci jako zwykły szeregowiec i będzie słuchał rozkazów.</div>
     </div>
     <div class="pisz zjaw" data-slowo="numery">Zapisz dwa numery 📓</div>
     <div class="odliczanie"><div class="odliczanie-pasek"></div></div>
@@ -214,26 +284,42 @@ window.GEREB = [
 
   <!-- ===== 12 odpowiedz 3 ===== -->
   <section class="scena odp" data-id="12-odpowiedz3" id="s12">
-    <span class="czesc">OCENA BOHATERA</span>
+    <span class="czesc">ODBUDOWAĆ ZAUFANIE</span>
     <div><span class="badge pop" data-t="0">SPRAWDZAMY ✅</span></div>
-    <div class="polecenie">Które <u>dwie</u> oceny są dobrze uzasadnione?</div>
+    <div class="polecenie">Co pomoże Gerebowi odzyskać zaufanie? Wybierz <u>dwa</u> pomysły.</div>
     <div class="lista">
-      <div class="linia o-zla" data-slowo="pierwsza"><span class="nr">1</span>Gereb jest głupi i tyle.<span class="dl o-wpis-blok o-razem">bez powodu - nic nie wyjaśnia</span></div>
-      <div class="linia o-dobra" data-slowo="druga"><span class="nr">2</span>Uważam, że Gereb postąpił źle, ponieważ zdradził wrogom plany kolegów.<span class="dl o-wpis-blok" data-slowo="planów">powód z książki: zdrada planów</span></div>
-      <div class="linia o-zla" data-slowo="trzecia"><span class="nr">3</span>Gereb mi się nie podoba, bo nie.<span class="dl o-wpis-blok" data-slowo="argument">„bo nie” to nie argument</span></div>
-      <div class="linia o-dobra" data-slowo="czwarta"><span class="nr">4</span>Uważam, że Boka dobrze zrobił, przyjmując Gereba z powrotem, ponieważ Gereb przeprosił i chciał naprawić błąd.<span class="dl o-wpis-blok" data-slowo="naprawienia">powód z książki: przeprosiny</span></div>
+      <div class="linia o-zla" data-slowo="cukierki"><span class="nr">1</span>Kupi chłopcom cukierki.<span class="dl o-wpis-blok o-razem">to przekupstwo - jak cygara dla Janosza</span></div>
+      <div class="linia o-dobra" data-slowo="drugi"><span class="nr">2</span>Sam zrobi coś trudnego dla Placu Broni.<span class="dl o-wpis-blok o-razem">czyn</span></div>
+      <div class="linia o-zla" data-slowo="przepraszam"><span class="nr">3</span>Będzie ciągle powtarzał: „Przepraszam!”.<span class="dl o-wpis-blok o-razem">to tylko słowa</span></div>
+      <div class="linia o-dobra" data-slowo="czwarty"><span class="nr">4</span>Wróci jako zwykły szeregowiec i będzie słuchał rozkazów.<span class="dl o-wpis-blok o-razem">czyn</span></div>
     </div>
+    <div><span class="chip czyny pop" data-slowo="czyny">💪 Zaufanie odbudowują czyny</span></div>
   </section>
 
-  <!-- ===== 13 zapamietaj ===== -->
-  <section class="scena zapamietaj" data-id="13-zapamietaj" id="s13">
+  <!-- ===== 13 powrot ===== -->
+  <section class="scena" data-id="13-powrot" id="s13">
+    <span class="czesc zjaw" data-t="0">ODBUDOWAĆ ZAUFANIE</span>
+    <h2 class="naglowek wjazd-dol" data-t="0">Gereb - krok po kroku 🪜</h2>
+    <div class="lista">
+      <div class="linia schodek wjazd-lewo" data-slowo="drzewo">🌳 sam wchodzi na drzewo u wrogów i podsłuchuje ich plan</div>
+      <div class="linia schodek wjazd-lewo" data-slowo="liście">✉️ opisuje to w liście do Boki</div>
+      <div class="linia schodek wjazd-lewo" data-slowo="szeregowca">🪖 wraca - na razie jako szeregowiec, a oficer ma go pilnować</div>
+      <div class="linia schodek wjazd-lewo" data-slowo="jednak">💬 „<b>Jednak</b> porządny z ciebie chłopak” - to „jednak” boli</div>
+      <div class="linia schodek wjazd-lewo" data-slowo="chorągiewkę">🚩 w bitwie odbiera wrogom chorągiewkę</div>
+      <div class="linia schodek b-plac wjazd-lewo" data-slowo="porucznika">🎖️ Boka oddaje mu stopień porucznika</div>
+    </div>
+    <div><span class="chip wniosek pop" data-slowo="chwili">🔒 zaufanie: traci się w chwili, <span class="zjaw" data-slowo="kroku">odbudowuje krok po kroku</span></span></div>
+  </section>
+
+  <!-- ===== 14 zapamietaj ===== -->
+  <section class="scena zapamietaj" data-id="14-zapamietaj" id="s14">
     <h2 class="naglowek pop" data-t="0">Zapamiętaj! 🧠</h2>
     <div class="lista">
-      <div class="linia pop" data-slowo="czyn" style="border-color:var(--niebieski)">🗡️ <b>Czyn</b> - co bohater zrobił?</div>
-      <div class="linia pop" data-slowo="motyw" style="border-color:var(--fiolet)">❓ <b>Motyw</b> - dlaczego to zrobił? (powód)</div>
-      <div class="linia pop" data-slowo="usprawiedliwia" style="border-color:var(--koszule)">⚠️ Motyw pomaga zrozumieć, ale nie usprawiedliwia złego czynu.</div>
-      <div class="linia b-plac pop" data-slowo="uzasadniamy">⚖️ Ocenę uzasadniamy: <b>„Uważam, że…, ponieważ…”</b></div>
-      <div class="linia pop" data-slowo="przeprosi">✉️ Błąd można naprawić, jeśli ktoś szczerze przeprosi.</div>
+      <div class="linia pop" data-slowo="czyn" style="border-color:var(--niebieski)">🗡️ <b>Czyn</b> - co bohater zrobił? <b>Motyw</b> - dlaczego?</div>
+      <div class="linia pop" data-slowo="usprawiedliwia" style="border-color:var(--fiolet)">⚠️ Motyw pomaga zrozumieć, ale nie usprawiedliwia złego czynu.</div>
+      <div class="linia pop" data-slowo="sympatia" style="border-color:var(--sym)">❤️ <b>Sympatia</b> - lubię cię. <span class="zjaw" data-slowo="zaufanie">🔒 <b>Zaufanie</b> - mogę na tobie polegać.</span></div>
+      <div class="linia b-plac pop" data-slowo="przyjaźń">🤝 Przyjaźń potrzebuje obu.</div>
+      <div class="linia pop" data-slowo="zdrada" style="border-color:var(--koszule)">💔 Zdrada niszczy zaufanie. <span class="zjaw" data-slowo="czynami">Odbudowują je czyny, krok po kroku.</span></div>
     </div>
     <div><span class="chip brawo pop" data-slowo="brawo">Brawo! 🎉</span></div>
   </section>

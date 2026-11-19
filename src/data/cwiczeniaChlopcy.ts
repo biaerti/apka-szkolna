@@ -14,7 +14,8 @@ const BOHATER = ['główny', 'drugoplanowy', 'zbiorowy'];
 const PROTAGONISTA = ['protagonista', 'antagonista'];
 const DOWOD = ['czyn', 'słowa', 'opinia innych'];
 const CZYN = ['czyn', 'motyw'];
-const UZASADNIENIE = ['dobre uzasadnienie', 'brak uzasadnienia'];
+const POZIOM = ['sympatia', 'zaufanie', 'jedno i drugie'];
+const ODBUDOWA = ['czyn', 'same słowa', 'przekupstwo'];
 const BO_WIEC = ['bo', 'więc'];
 
 export const CWICZENIA_CHLOPCY: Cwiczenie[] = [
@@ -201,22 +202,38 @@ export const CWICZENIA_CHLOPCY: Cwiczenie[] = [
       `bo chciała, żeby wszyscy ją podziwiali. | ${wybor(CZYN, 'motyw')}`,
     ],
   },
+  // Bartek 2026-11-19: zamiast "Dobre uzasadnienie?" - sympatia i zaufanie
+  // (glowna mysl lekcji) i czym odbudowac zaufanie. Przyklady inne niz w filmie.
   {
-    id: 'k4-chlopcy-uzasadnienie',
+    id: 'k4-chlopcy-sympatia-zaufanie',
     typ: 'luki',
-    tytul: 'Dobre uzasadnienie?',
-    polecenie: 'Czy ta ocena ma prawdziwe uzasadnienie z książki?',
-    naglowki: ['ocena', 'uzasadnienie'],
-    naRaz: 4,
+    tytul: 'Sympatia czy zaufanie?',
+    polecenie: 'Sympatia: lubię cię. Zaufanie: mogę na tobie polegać. Co tu jest?',
+    naglowki: ['sytuacja', 'co tu jest?'],
+    naRaz: 3,
     przyklady: [
-      `Uważam, że Boka jest dobrym wodzem, ponieważ jest spokojny i sprawiedliwy. | ${wybor(UZASADNIENIE, 'dobre uzasadnienie')}`,
-      `Gereb jest beznadziejny, bo tak. | ${wybor(UZASADNIENIE, 'brak uzasadnienia')}`,
-      `Uważam, że bracia Pastorowie postąpili źle, ponieważ zabrali młodszym kulki. | ${wybor(UZASADNIENIE, 'dobre uzasadnienie')}`,
-      `Feri Acz jest fajny, bo jest fajny. | ${wybor(UZASADNIENIE, 'brak uzasadnienia')}`,
-      `Uważam, że Czonakosz jest dobrym kolegą, ponieważ poszedł z Boką na wyprawę do Ogrodu. | ${wybor(UZASADNIENIE, 'dobre uzasadnienie')}`,
-      `Nie lubię Czerwonych Koszul i już. | ${wybor(UZASADNIENIE, 'brak uzasadnienia')}`,
-      `Uważam, że Gereb był odważny, ponieważ walczył w pierwszym szeregu. | ${wybor(UZASADNIENIE, 'dobre uzasadnienie')}`,
-      `Kitowcy są dziwni, bo mi się nie podobają. | ${wybor(UZASADNIENIE, 'brak uzasadnienia')}`,
+      `Z Antkiem gracie w piłkę na każdej przerwie, ale pożyczonych rzeczy nigdy nie oddaje. | ${wybor(POZIOM, 'sympatia')}`,
+      `Z Lenką siedzicie w ławce, razem się śmiejecie i dochowujecie swoich tajemnic. | ${wybor(POZIOM, 'jedno i drugie')}`,
+      `Sąsiad, z którym rzadko rozmawiacie, podlewa wasze kwiaty, kiedy wyjeżdżacie. | ${wybor(POZIOM, 'zaufanie')}`,
+      `Kuzyn jest bardzo zabawny, ale zawsze na ciebie skarży rodzicom. | ${wybor(POZIOM, 'sympatia')}`,
+      `Szymon z drużyny ciągle się z ciebie nabija, ale na boisku zawsze możesz na nim polegać. | ${wybor(POZIOM, 'zaufanie')}`,
+      `Z Igą znacie się od przedszkola i to jej pierwszej mówisz o kłopotach. | ${wybor(POZIOM, 'jedno i drugie')}`,
+    ],
+  },
+  {
+    id: 'k4-chlopcy-odbudowa',
+    typ: 'luki',
+    tytul: 'Czym odbudować zaufanie?',
+    polecenie: 'Przeprosiny są ważne, ale zaufanie odbudowują czyny. Co to jest?',
+    naglowki: ['co robię?', 'co to jest?'],
+    naRaz: 3,
+    przyklady: [
+      `Zgubiłem pożyczoną książkę, więc odkupuję ją za kieszonkowe i oddaję. | ${wybor(ODBUDOWA, 'czyn')}`,
+      `Wygadałam sekret koleżanki, więc daję jej czekoladę, żeby nie była zła. | ${wybor(ODBUDOWA, 'przekupstwo')}`,
+      `Zapomniałem oddać koledze grę, więc mówię: „Sorry, zapomniałem”. | ${wybor(ODBUDOWA, 'same słowa')}`,
+      `Spóźniłam się na umówione spotkanie, więc od tej pory zawsze przychodzę na czas. | ${wybor(ODBUDOWA, 'czyn')}`,
+      `Śmiałem się z kolegi przy wszystkich, więc obiecuję mu grę na mojej konsoli. | ${wybor(ODBUDOWA, 'przekupstwo')}`,
+      `Wygłupami zepsułam drużynie mecz, więc cały tydzień przychodzę pierwsza na trening. | ${wybor(ODBUDOWA, 'czyn')}`,
     ],
   },
 
