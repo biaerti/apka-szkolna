@@ -125,7 +125,9 @@ export function remapRecapSlides(slides: Slide[], resolve: (tempId: string) => s
   return slides.map((s) => {
     if (s.kind !== 'recap') return s;
     const mapped = resolve(s.questionSetId);
-    return mapped ? { ...s, questionSetId: mapped } : s;
+    // Wyjatki klas (dlaKlas) tez wskazuja zestawy z buildu - te same reguly.
+    const dlaKlas = s.dlaKlas?.map((w) => ({ ...w, questionSetId: resolve(w.questionSetId) ?? w.questionSetId }));
+    return { ...s, ...(mapped ? { questionSetId: mapped } : {}), ...(dlaKlas ? { dlaKlas } : {}) };
   });
 }
 
@@ -277,7 +279,10 @@ export function orphanedQuestionSetIds(lessons: Lesson[], questionSetIds: string
     if (l.questionSetId) referenced.add(l.questionSetId);
     if (l.reviewQuestionSetId) referenced.add(l.reviewQuestionSetId);
     for (const s of l.slides) {
-      if (s.kind === 'recap') referenced.add(s.questionSetId);
+      if (s.kind === 'recap') {
+        referenced.add(s.questionSetId);
+        s.dlaKlas?.forEach((w) => referenced.add(w.questionSetId));
+      }
     }
   }
   return questionSetIds.filter((id) => !referenced.has(id));
@@ -311,7 +316,13 @@ export function codeVersion(
   const ownerTitle = (setId: string) =>
     fresh.lessons.find((l) => l.questionSetId === setId || l.reviewQuestionSetId === setId)?.title ?? '?';
   const slides = newLesson.slides.map(({ id: _id, ...rest }) =>
-    rest.kind === 'recap' ? { ...rest, questionSetId: ownerTitle(rest.questionSetId) } : rest,
+    rest.kind === 'recap'
+      ? {
+          ...rest,
+          questionSetId: ownerTitle(rest.questionSetId),
+          ...(rest.dlaKlas ? { dlaKlas: rest.dlaKlas.map((w) => ({ ...w, questionSetId: ownerTitle(w.questionSetId) })) } : {}),
+        }
+      : rest,
   );
   return hashString(
     JSON.stringify({

@@ -8,7 +8,7 @@ import { ROZDZIAL2_TOPICS } from './textbook4rozdzial2';
 import { ROZDZIAL3_TOPICS } from './textbook4rozdzial3';
 import { LEKTURA_CHLOPCY_TOPICS } from './lekturaChlopcy';
 import { WYCHOWAWCZE, WYCHOWAWCZE4_TOPICS } from './wychowawcze4';
-import { plan } from './textbook5slides';
+import { plan, zKoloDlaKlas, type Topic as TopicWspolny } from './textbook5slides';
 
 interface Topic {
   title: string;
@@ -20,6 +20,7 @@ interface Topic {
   textbookPage: number;
   notebookNote?: string;
   questions: Array<{ text: string; answer: string }>;
+  koloDlaKlas?: TopicWspolny['koloDlaKlas'];
   /** ownQuestionSetId - zestaw pytan tej lekcji (kolo po filmie z jej wlasnymi pytaniami). */
   makeSlides: (previousQuestionSetId?: string, ownQuestionSetId?: string) => Slide[];
 }
@@ -471,7 +472,10 @@ export function buildTextbook4(grade: string, classIds: string[]): FreshMaterial
     topic.questions.forEach((question, order) => questions.push({ id: newId(), setId, ...question, order }));
     return { grade, title: topic.title, topic: topic.topic, registerTopic: topic.title.replace(/^[\d-]+\.\s*/, ''), materialType: 'textbook', textbookPage: topic.textbookPage || undefined, notebookNote: topic.notebookNote, questionSetId: setId, reviewQuestionSetId: setId, dzial: topic.dzial, teacherPlan: topic.teacherPlan, progress: {}, slides: sameTopicInNote(topic.makeSlides(previousSetId(questionSets, index), setId)) };
   });
-  return { lessons, questionSets, questions };
+  // Klasy, ktore szly w innej kolejnosci (Topic.koloDlaKlas), dostaja w kole pytania z innej lekcji.
+  const setIdTematu = (title: string) => questionSets[ALL_TOPICS.findIndex((t) => t.title === title)]?.id;
+  const zWyjatkami = lessons.map((l, i) => ({ ...l, slides: zKoloDlaKlas(l.slides, ALL_TOPICS[i], setIdTematu) }));
+  return { lessons: zWyjatkami, questionSets, questions };
 }
 
 export const TEXTBOOK4_TOPIC_COUNT = ALL_TOPICS.length;

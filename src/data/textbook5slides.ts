@@ -13,6 +13,25 @@ export interface Topic {
   questions: Array<{ text: string; answer: string }>;
   /** ownQuestionSetId - zestaw pytan tej lekcji (kolo po filmie z jej wlasnymi pytaniami). */
   makeSlides: (previousQuestionSetId?: string, ownQuestionSetId?: string) => Slide[];
+  /**
+   * Klasy, ktore przerobily lekcje w innej kolejnosci: ich kolo na starcie bierze
+   * pytania z lekcji o tytule `zLekcji` zamiast z lekcji wyzej na liscie.
+   */
+  koloDlaKlas?: Array<{ klasy: string[]; zLekcji: string }>;
+}
+
+/**
+ * Dokleja do kola powtorzeniowego lekcji wyjatki klas (`Topic.koloDlaKlas`).
+ * `setIdTematu` zamienia tytul lekcji na id jej zestawu pytan z tego samego buildu.
+ */
+export function zKoloDlaKlas(slides: Slide[], topic: Pick<Topic, 'koloDlaKlas'>, setIdTematu: (title: string) => string | undefined): Slide[] {
+  if (!topic.koloDlaKlas?.length) return slides;
+  const dlaKlas = topic.koloDlaKlas.map((w) => {
+    const questionSetId = setIdTematu(w.zLekcji);
+    if (!questionSetId) throw new Error(`koloDlaKlas: brak lekcji „${w.zLekcji}”`);
+    return { klasy: w.klasy, questionSetId };
+  });
+  return slides.map((s) => (s.kind === 'recap' && s.mode === 'powtorzeniowe' ? { ...s, dlaKlas } : s));
 }
 
 /** Sekcje planu: "## Naglowek" + tresc, oddzielone pusta linia (markdown-lite). */

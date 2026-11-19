@@ -61,6 +61,11 @@ function przebieg(film: string, karty: string, czytanka: string): string {
   ].join('\n');
 }
 
+const TYTUL_GEREB = '4. Gereb - czy zdradę można wybaczyć?';
+const TYTUL_BITWA = '5. Bitwa o Plac Broni';
+/** Bartek 2026-11-19: 4a i 4c zrobily bitwe (L5) przed Gerebem (L4), 4b po kolei. */
+const BITWA_PRZED_GEREBEM = ['4a', '4c'];
+
 export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
   {
     title: '1. Plac Broni - po co walczyć o pusty plac?',
@@ -234,9 +239,11 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     ],
   },
   {
-    title: '4. Gereb - czy zdradę można wybaczyć?',
+    title: TYTUL_GEREB,
     dzial: LEKTURA_CHLOPCY,
     topic: 'Czyn i motyw. Sympatia i zaufanie',
+    // 4a i 4c przyszly na Gereba prosto z bitwy - kolo z pytan o bitwe.
+    koloDlaKlas: [{ klasy: BITWA_PRZED_GEREBEM, zLekcji: TYTUL_BITWA }],
     textbookPage: 0,
     teacherPlan: plan(
       ['Co dziś', 'Gereb: przegrane wybory (3 głosy na 11 - pierwszy raz rywalizuje z Boką i „zapala mu się lampka”), zdrada, wstyd, powrót. Dwie rzeczy: **czyn i motyw** (motyw pomaga zrozumieć, nie usprawiedliwia) oraz główna myśl lekcji - **sympatia i zaufanie** to dwa różne poziomy. Zdrada nie musi zabrać sympatii, ale niszczy zaufanie. Chłopcy z Placu Broni potrzebowali obu, bo powierzali sobie tajemnice. Zaufanie odbudowują czyny, krok po kroku.'],
@@ -248,7 +255,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', [
         '1. **Przygotuj się + temat** (3 min).',
-        '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby.',
+        '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby (4b: Nemeczek, 4a i 4c: bitwa - te klasy zrobiły bitwę wcześniej).',
         '3. **Czytanka** (ok. 4 min) - Gereb przy furtce z rozdz. VI. Przed czytaniem: „Boka zgaduje, dlaczego Gereb przyszedł. Gereb mówi, że inny był powód. Uważajcie”.',
         '4. **Film „Gereb - czyn i motyw, sympatia i zaufanie”** (ok. 9 min) - 3 zadania z minutą na każde.',
         '5. **Rozmowa „Lubić a ufać”** (5 min) - pytania na slajdzie.',
@@ -293,7 +300,7 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     ],
   },
   {
-    title: '5. Bitwa o Plac Broni',
+    title: TYTUL_BITWA,
     dzial: LEKTURA_CHLOPCY,
     topic: 'Plan bitwy, przyczyna i skutek',
     textbookPage: 0,
@@ -370,6 +377,8 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
     title: '6. Dlaczego Nemeczek musiał umrzeć?',
     dzial: LEKTURA_CHLOPCY,
     topic: 'Symbol i przesłanie',
+    // 4a i 4c robia Gereba tuz przed ta lekcja - kolo z pytan o Gereba.
+    koloDlaKlas: [{ klasy: BITWA_PRZED_GEREBEM, zLekcji: TYTUL_GEREB }],
     textbookPage: 0,
     teacherPlan: plan(
       ['Co dziś', 'Rozdziały IX-X i cała książka. Pytanie lekcji: dlaczego autor pozwolił Nemeczkowi umrzeć? Czytamy krótkie fragmenty, w których plac jest jak ojczyzna, i rozmawiamy: plac to **symbol** ojczyzny, a Nemeczek oddaje za niego zdrowie i życie - to idea **patriotyzmu**. Potem film o wartościach i przesłaniu (na końcu prawda/fałsz z całej książki).'],

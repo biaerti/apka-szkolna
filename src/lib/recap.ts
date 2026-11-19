@@ -51,6 +51,25 @@ export function resolveRecapMode(slide: Extract<Slide, { kind: 'recap' }>): Reca
   return 'po-lekcji';
 }
 
+const RZYMSKIE: Record<string, string> = { VIII: '8', VII: '7', VI: '6', IV: '4', V: '5' };
+
+/** Klucz klasy niezalezny od zapisu: "IV A", "4a", "4 A" -> "4A". */
+export function klasaKlucz(nazwa: string): string {
+  const s = nazwa.replace(/\s+/g, '').toUpperCase();
+  const rz = Object.keys(RZYMSKIE).find((r) => s.startsWith(r) && /^[A-Z]$/.test(s.slice(r.length)));
+  return rz ? RZYMSKIE[rz] + s.slice(rz.length) : s;
+}
+
+/**
+ * Zestaw pytan kola dla konkretnej klasy: wyjatek z `dlaKlas` (klasa szla w
+ * innej kolejnosci lekcji), a bez wyjatku - zwykly zestaw slajdu.
+ */
+export function recapSetIdForClass(slide: Extract<Slide, { kind: 'recap' }>, className?: string): string {
+  if (!className || !slide.dlaKlas) return slide.questionSetId;
+  const klucz = klasaKlucz(className);
+  return slide.dlaKlas.find((w) => w.klasy.some((k) => klasaKlucz(k) === klucz))?.questionSetId ?? slide.questionSetId;
+}
+
 // --- pula losowania ---------------------------------------------------------
 
 /**

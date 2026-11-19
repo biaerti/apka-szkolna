@@ -421,6 +421,12 @@ export type Slide =
        * 60 sekundami na samodzielne rozwiazanie, a dopiero potem idzie do kola.
        */
       afterVideoPractice?: boolean;
+      /**
+       * Klasy, ktore przerobily lekcje w innej kolejnosci niz lista rocznika
+       * (np. 4a i 4c zrobily bitwe przed Gerebem): dla nich kolo bierze pytania
+       * z innego zestawu. Klasy po nazwie, "4a" = "IV A" (src/lib/recap.ts).
+       */
+      dlaKlas?: Array<{ klasy: string[]; questionSetId: ID }>;
     }
   // `title`/`body` opcjonalne: pozwalaja polaczyc zdjecie z krotkim tekstem na
   // jednym slajdzie (np. "Kim jestem" - zdjecie + dwa zdania obok) albo dac

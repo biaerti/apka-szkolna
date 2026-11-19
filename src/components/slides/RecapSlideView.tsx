@@ -1,5 +1,6 @@
 import type { Slide } from '../../data/types';
-import { resolveRecapMode } from '../../lib/recap';
+import { recapSetIdForClass, resolveRecapMode } from '../../lib/recap';
+import { useStore } from '../../data/store';
 import { RecapSession } from '../recap/RecapSession';
 
 export function RecapSlideView({
@@ -12,11 +13,12 @@ export function RecapSlideView({
   onExit?: () => void;
 }) {
   const mode = resolveRecapMode(slide);
+  const className = useStore((s) => s.classes.find((c) => c.id === classId)?.name);
   return (
     <div className="h-full">
       <RecapSession
         classId={classId}
-        setId={slide.questionSetId}
+        setId={recapSetIdForClass(slide, className)}
         onExit={onExit}
         embedded
         demoVariant={mode === 'demo'}
