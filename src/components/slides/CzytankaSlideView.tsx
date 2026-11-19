@@ -7,7 +7,8 @@
 // Kolko myszy przewija tekst recznie (lektor czyta dalej, tekst za nim nie skacze,
 // az do "Wroc do lektora" albo kliku w slowo). Z = tryb zaznaczania: klik albo
 // przeciagniecie po slowach zakresla je markerem (drugi raz zmazuje), bez
-// przewijania nagrania. Zakreslenia zostaja w przegladarce dla tej czytanki.
+// przewijania nagrania. Zakreslenia zostaja w przegladarce dla tej czytanki,
+// tej klasy i tego dnia - kolejna klasa (i kolejny dzien) dostaje czysty tekst.
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import type { Slide } from '../../data/types';
@@ -39,20 +40,44 @@ function indeksSlowa(starty: number[], t: number): number {
  *  na siebie polprzezroczyste kawalki dawalyby ciemniejsze paski miedzy slowami. */
 const MARKER = 'bg-[#4e6533]';
 
-const kluczZaznaczen =(id: string) => `czytanka-zaznaczenia:${id}`;
+const PREFIKS_ZAZNACZEN = 'czytanka-zaznaczenia:';
 
-function wczytajZaznaczenia(id: string): Set<number> {
+function dzis(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+/** Zakreslenia na jedna lekcje: czytanka + klasa + dzien. */
+export function kluczZaznaczen(id: string, klasaId: string | undefined, dzien: string): string {
+  return `${PREFIKS_ZAZNACZEN}${id}:${klasaId ?? '-'}:${dzien}`;
+}
+
+/** Sprzata zakreslenia z innych dni (i stary zapis bez klasy i daty). */
+function sprzatnijStareZaznaczenia(dzien: string) {
   try {
-    const raw = localStorage.getItem(kluczZaznaczen(id));
+    const stare: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k?.startsWith(PREFIKS_ZAZNACZEN) && !k.endsWith(`:${dzien}`)) stare.push(k);
+    }
+    stare.forEach((k) => localStorage.removeItem(k));
+  } catch {
+    // brak localStorage (tryb prywatny) - nic do sprzatania
+  }
+}
+
+function wczytajZaznaczenia(klucz: string): Set<number> {
+  try {
+    const raw = localStorage.getItem(klucz);
     return new Set(raw ? (JSON.parse(raw) as number[]) : []);
   } catch {
     return new Set();
   }
 }
 
-function zapiszZaznaczeniaLS(id: string, zbior: Set<number>) {
-  if (zbior.size) localStorage.setItem(kluczZaznaczen(id), JSON.stringify([...zbior]));
-  else localStorage.removeItem(kluczZaznaczen(id));
+function zapiszZaznaczeniaLS(klucz: string, zbior: Set<number>) {
+  if (zbior.size) localStorage.setItem(klucz, JSON.stringify([...zbior]));
+  else localStorage.removeItem(klucz);
 }
 
 function czas(s: number): string {
@@ -60,7 +85,8 @@ function czas(s: number): string {
   return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 }
 
-export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
+/** `klasaId` - zakreslenia osobno dla kazdej klasy (inaczej 4c widzi markery z 4b). */
+export function CzytankaSlideView({ slide, klasaId }: { slide: CzytankaSlide; klasaId?: string }) {
   const czytanka = czytankaById(slide.czytankaId);
   const scale = useSlideFontScale();
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -82,6 +108,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
   const przeciagRef = useRef(przeciag);
   przeciagRef.current = przeciag;
   const czytankaId = czytanka?.id;
+  const kluczZ = czytankaId ? kluczZaznaczen(czytankaId, klasaId, dzis()) : undefined;
 
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +117,8 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     setError(null);
     setIdx(-1);
     setReczne(false);
-    setZaznaczone(czytanka ? wczytajZaznaczenia(czytanka.id) : new Set());
+    sprzatnijStareZaznaczenia(dzis());
+    setZaznaczone(czytanka ? wczytajZaznaczenia(kluczZaznaczen(czytanka.id, klasaId, dzis())) : new Set());
     if (!czytanka) return;
     Promise.all([czytankaUrl(czytanka), wczytajSynchro(czytanka)])
       .then(([nextUrl, nextAkapity]) => {
@@ -104,7 +132,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
     return () => {
       cancelled = true;
     };
-  }, [czytanka]);
+  }, [czytanka, klasaId]);
 
   const starty = useMemo(() => (akapity ?? []).flatMap((a) => a.slowa.map((s) => s[1])), [akapity]);
 
@@ -164,7 +192,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
           if (p.zmaz) next.delete(i);
           else next.add(i);
         }
-        if (czytankaId) zapiszZaznaczeniaLS(czytankaId, next);
+        if (kluczZ) zapiszZaznaczeniaLS(kluczZ, next);
         return next;
       });
     }
@@ -174,7 +202,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
       window.removeEventListener('pointerup', koniec);
       window.removeEventListener('pointercancel', koniec);
     };
-  }, [ciagnie, czytankaId]);
+  }, [ciagnie, kluczZ]);
 
   function przelacz() {
     const audio = audioRef.current;
@@ -399,7 +427,7 @@ export function CzytankaSlideView({ slide }: { slide: CzytankaSlide }) {
               onClick={(e) => {
                 e.stopPropagation();
                 setZaznaczone(new Set());
-                if (czytankaId) zapiszZaznaczeniaLS(czytankaId, new Set());
+                if (kluczZ) zapiszZaznaczeniaLS(kluczZ, new Set());
               }}
               className="shrink-0 rounded-full border border-gray-600 px-4 py-1.5 text-lg text-gray-400 hover:bg-gray-800"
             >
