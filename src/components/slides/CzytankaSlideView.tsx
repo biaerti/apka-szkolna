@@ -6,7 +6,7 @@
 // w slowo = czytaj od tego miejsca. Strzalki dalej zmieniaja slajdy.
 // Kolko myszy przewija tekst recznie (lektor czyta dalej, tekst za nim nie skacze,
 // az do "Wroc do lektora" albo kliku w slowo). Z = tryb zaznaczania: klik albo
-// przeciagniecie po slowach zakresla je markerem (drugi raz zmazuje), bez
+// przeciagniecie po slowach zakresla je markerem (drugi raz zmazuje; W czysci), bez
 // przewijania nagrania. Zakreslenia zostaja w przegladarce dla tej czytanki,
 // tej klasy i tego dnia - kolejna klasa (i kolejny dzien) dostaje czysty tekst.
 
@@ -236,12 +236,25 @@ export function CzytankaSlideView({ slide, klasaId }: { slide: CzytankaSlide; kl
     if (czasRef.current) czasRef.current.textContent = czas(t);
   }
 
+  // W = wyczysc zakreslenia (ref, bo nasluch jest zakladany raz).
+  const wyczyscRef = useRef<() => void>(() => {});
+  wyczyscRef.current = () => {
+    setZaznaczone(new Set());
+    if (kluczZ) zapiszZaznaczeniaLS(kluczZ, new Set());
+  };
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if ((e.key === 'z' || e.key === 'Z') && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault();
         e.stopPropagation();
         setZaznaczanie((on) => !on);
+        return;
+      }
+      if ((e.key === 'w' || e.key === 'W') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        wyczyscRef.current();
         return;
       }
       if (e.key !== ' ' && e.code !== 'Space') return;
@@ -414,27 +427,29 @@ export function CzytankaSlideView({ slide, klasaId }: { slide: CzytankaSlide; kl
               e.stopPropagation();
               setZaznaczanie((on) => !on);
             }}
-            className={`shrink-0 rounded-full px-4 py-1.5 text-lg ${
-              zaznaczanie ? 'bg-lime-300 font-semibold text-gray-950' : 'border border-gray-600 text-gray-200 hover:bg-gray-800'
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-semibold ${
+              zaznaczanie ? 'bg-lime-300 text-gray-950' : 'border border-gray-600 text-gray-200 hover:bg-gray-800'
             }`}
             aria-pressed={zaznaczanie}
+            title="Zaznaczanie markerem (Z)"
+            aria-label="Zaznaczanie markerem (Z)"
           >
-            Zaznaczanie (Z)
+            Z
           </button>
           {zaznaczone.size > 0 && (
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setZaznaczone(new Set());
-                if (kluczZ) zapiszZaznaczeniaLS(kluczZ, new Set());
+                wyczyscRef.current();
               }}
-              className="shrink-0 rounded-full border border-gray-600 px-4 py-1.5 text-lg text-gray-400 hover:bg-gray-800"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-600 text-lg font-semibold text-gray-400 hover:bg-gray-800"
+              title="Wyczyść zaznaczenia (W)"
+              aria-label="Wyczyść zaznaczenia (W)"
             >
-              Wyczyść
+              W
             </button>
           )}
-          <span className="shrink-0 text-xl text-gray-500">Spacja: czytaj / pauza</span>
         </footer>
       )}
       {url && (
