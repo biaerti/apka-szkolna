@@ -6,6 +6,7 @@
 // widzi wszystkie lekcje czwartych, bez kopiowania.
 
 import type { Lesson, LessonProgress, SchoolClass } from '../data/types';
+import { wKolejnosciKlasy } from './kolejnoscKlas';
 
 /** "IV A" -> "IV". Nazwa bez spacji jest sama swoim rocznikiem. */
 export function classGrade(className: string): string {
@@ -50,10 +51,11 @@ export function lessonsOfGrade(lessons: Lesson[], grade: string): Lesson[] {
   return lessons.filter((l) => l.grade === grade).sort((a, b) => a.order - b.order);
 }
 
-/** Lekcje widoczne dla klasy = lekcje jej rocznika. */
+/** Lekcje widoczne dla klasy = lekcje jej rocznika, w kolejnosci tej klasy (kolejnoscKlas.ts). */
 export function lessonsForClass(lessons: Lesson[], classes: SchoolClass[], classId: string): Lesson[] {
   const grade = gradeOfClass(classes, classId);
-  return grade === undefined ? [] : lessonsOfGrade(lessons, grade);
+  if (grade === undefined) return [];
+  return wKolejnosciKlasy(lessonsOfGrade(lessons, grade), classes.find((c) => c.id === classId)?.name);
 }
 
 /** Dzisiejsza data jako YYYY-MM-DD (lokalnie). */

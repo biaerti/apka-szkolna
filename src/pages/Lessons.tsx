@@ -9,6 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../data/store';
 import type { Lesson, LessonMaterialType, LessonSlot, LessonStatus } from '../data/types';
 import { allGrades, classesOfGrade, gradeLabel, gradeOfClass, lessonProgress, lessonsOfGrade, todayKey } from '../lib/grade';
+import { wKolejnosciKlasy } from '../lib/kolejnoscKlas';
 import { classSlotOptions, progressWithoutSlot, slotsFromProgress } from '../lib/lessonSlots';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
@@ -90,7 +91,10 @@ export function Lessons() {
   const requestedType = params.get('typ');
   // Zakladki: Powtorzeniowe | Dzial 1 | Dzial 2. Wybrany dzial pamietamy per
   // rocznik w przegladarce, zeby po zamknieciu apki wrocic na ten sam dzial.
-  const sections = useMemo(() => lessonSections(gradeLessons), [gradeLessons]);
+  // Lista w kolejnosci tej klasy (np. 4a i 4c zrobily bitwe przed Gerebem) - kolejnoscKlas.ts.
+  const nazwaKlasy = classes.find((c) => c.id === classId)?.name;
+  const lekcjeKlasy = useMemo(() => wKolejnosciKlasy(gradeLessons, nazwaKlasy), [gradeLessons, nazwaKlasy]);
+  const sections = useMemo(() => lessonSections(lekcjeKlasy), [lekcjeKlasy]);
   const activeSection = pickLessonSection(sections, requestedType, readStoredSection(grade));
   const materialType: LessonMaterialType = activeSection?.type ?? (requestedType === 'review' ? 'review' : 'textbook');
   const visibleLessons = useMemo(() => activeSection?.lessons ?? [], [activeSection]);
