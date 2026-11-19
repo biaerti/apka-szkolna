@@ -13,6 +13,7 @@ import { ZleZachowania } from './ZleZachowania';
 import { Pas } from './Pas';
 import { Lawki } from './Lawki';
 import { Przebieg } from './Przebieg';
+import { Zdrada } from './Zdrada';
 import { Zeszyt } from './Zeszyt';
 import { Procenty } from './Procenty';
 import { Samogloski } from './Samogloski';
@@ -152,10 +153,15 @@ const ART_REGISTRY: Record<SlideArt, ArtComponent> = {
   swiatPrzedstawiony: SwiatPrzedstawiony,
   gatunki: Gatunki,
   teatrFilm: TeatrFilm,
+  // Lektura: co psuje zdrada (sympatia, zaufanie) + motyw i czyn.
+  zdrada: Zdrada,
 };
 
 /** Ilustracje o bardzo szerokim ukladzie - lepiej wygladaja pod tekstem na cala szerokosc niz obok. */
 export const WIDE_ART: ReadonlySet<SlideArt> = new Set(['przebieg']);
+
+/** Schematy na caly slajd: maly tytul i ilustracja na reszcie kartki, bez tresci obok. */
+export const FULL_ART: ReadonlySet<SlideArt> = new Set(['zdrada']);
 
 export function SlideArtView({ art, className }: { art?: SlideArt; className?: string }) {
   if (!art) return null;

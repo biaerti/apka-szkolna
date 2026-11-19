@@ -271,10 +271,16 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '7. **Notatka** (5 min) - 3 zdania do przepisania.',
       ].join('\n')],
       ['Pytania po czytance - odpowiedzi', [
+        '- **Dlaczego zdradził?** Omów sam, bez zapisywania: przy wyborach dostał 3 głosy (Boka 11). Pierwszy raz rywalizował z Boką i zrodziła się w nim myśl: „może ja też mogę awansować?”. Skoro nie u nas, to u wrogów.',
         '- **Lubi?** Tak - przebacza mu i już prawie woła za nim „Wracaj!”.',
         '- **Ufa?** Nie - przypomina sobie, jak Gereb śmiał się z nich szyderczo, i podejrzewa, że wrócił, bo u Czerwonych Koszul też stracił zaufanie.',
         '- **Lubić, a nie ufać?** Można - to dwie różne rzeczy (film to rozwinie: sympatia i zaufanie).',
         '- **Co sprawiło, że go przyjęli?** Czyn, nie słowa: sam podsłuchał z drzewa plan Czerwonych Koszul i opisał to w liście. Boka uwierzył, a chłopcy zagłosowali „Tak!”.',
+      ].join('\n')],
+      ['Schemat „Co psuje zdrada?” (3 kroki strzałką)', [
+        '1. **Przed:** chłopcy i Gereb stoją na wspólnym fundamencie - to zaufanie. Nad nimi łuk sympatii. W takiej grupie, która powierza sobie tajemnice, trzeba obu.',
+        '2. **Zdrada:** fundament pęka pod Gerebem - zaufanie zerwane. Łuk sympatii zostaje (przerywany): Boka dalej go lubi. Sympatia może zostać, ale w grupie podstawą jest zaufanie.',
+        '3. **Motyw i czyn:** każdy zły czyn (zdrada, kradzież, kłamstwo) ma motyw. U Gereba motyw to zazdrość, czyn to zdrada: przeszedł do Czerwonych Koszul i namawiał Janosza cygarami.',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- Czyn: co zrobił? Motyw: dlaczego? Dwóch złodziei: jeden chce mieć więcej, drugi potrzebuje na operację dziecka. Czyn ten sam, motywy różne. Motyw pomaga zrozumieć, ale nie usprawiedliwia.',
@@ -302,11 +308,14 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       ...kolo(previousSetId),
       slideCzytanka('placu-broni-gereb'),
       poCzytance('Boka i Gereb przy furtce',
+        'Dlaczego Gereb w ogóle zdradził?',
         'Czy po tym fragmencie widać, że Boka lubi Gereba? Po czym?',
         'A czy Boka mu ufa?',
         'Czy można kogoś lubić, ale mu nie ufać?',
         'Co sprawiło, że Gereb w końcu został przyjęty z powrotem?',
       ),
+      // Schemat bez tekstu do omowienia: przed/po zdradzie, potem motyw -> czyn.
+      { id: newId(), kind: 'text', title: 'Co psuje zdrada?', body: '', art: 'zdrada', studentAction: 'look', krokowo: true },
       slideVideo('placu-broni-film4'),
       ...razem('k4-chlopcy-czyn-motyw', 'k4-chlopcy-sympatia-zaufanie', 'k4-chlopcy-odbudowa'),
       notatka('Gereb - czyn i motyw, sympatia i zaufanie', 'Oceniając bohatera, patrzymy, **co zrobił** (czyn) i **dlaczego** (motyw). Motyw pomaga zrozumieć, ale nie usprawiedliwia złego czynu.', '**Sympatia** to: lubię cię. **Zaufanie** to: mogę na tobie polegać. Przyjaźń potrzebuje obu.', 'Zdrada niszczy zaufanie. Odbudowują je **czyny**, nie same słowa.'),

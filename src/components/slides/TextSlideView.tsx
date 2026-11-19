@@ -6,7 +6,7 @@
 import { useRef } from 'react';
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
-import { SlideArtView, WIDE_ART } from './art';
+import { FULL_ART, SlideArtView, WIDE_ART } from './art';
 import { resolvedStudentAction, StudentActionBadge } from './StudentActionBadge';
 import { estimateTextHeight, fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
@@ -83,6 +83,22 @@ export function TextSlideView({ slide, narrow = false, kroki = false }: { slide:
           <img src={slide.photo.src} alt="" className="w-full rounded-2xl object-cover" style={{ maxHeight: 520 }} />
           <figcaption className="text-xs text-gray-500">{slide.photo.credit}</figcaption>
         </figure>
+      </div>
+    );
+  }
+
+  // Schemat na caly slajd (np. "zdrada"): maly tytul, ilustracja na reszcie
+  // kartki. Kroki (`krokowo`) odkrywaja jej czesci z data-krok.
+  if (slide.art && FULL_ART.has(slide.art)) {
+    return (
+      <div ref={tresc} className="relative flex h-full flex-col gap-4 px-14 pb-8 pt-12">
+        {badge}
+        {slide.title && (
+          <h2 className="font-bold leading-tight text-white" style={{ fontSize: 56 * scale, maxWidth: 1172 - PLAKIETKA }}>
+            {slide.title}
+          </h2>
+        )}
+        <SlideArtView art={slide.art} className="min-h-0 w-full flex-1" />
       </div>
     );
   }

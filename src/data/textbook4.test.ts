@@ -239,7 +239,7 @@ describe('buildTextbook4', () => {
         ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'czytanka', 'text', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'text', 'text', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'task', 'embed', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
       ];

@@ -1,6 +1,6 @@
 // Punkty listy odkrywane po kolei (slajd tekstowy z `krokowo: true`, np.
-// pytania do klasy po czytance). Strzalka w prawo / spacja pokazuje kolejny
-// punkt, a dopiero po ostatnim idzie kolejny slajd; strzalka w lewo chowa
+// pytania do klasy po czytance) albo czesci schematu z atrybutem data-krok.
+// Strzalka w prawo / spacja pokazuje kolejny punkt, a dopiero po ostatnim idzie kolejny slajd; strzalka w lewo chowa
 // ostatni pokazany. Klik mysza nie jest przechwytywany - prawa polowa ekranu
 // od razu przechodzi na nastepny slajd (LessonPresent).
 //
@@ -26,7 +26,8 @@ export function useKrokiListy(kontener: RefObject<HTMLElement | null>, wlaczone:
 
   // Widocznosc punktow - po kazdym kroku i po kazdym renderze tresci.
   useEffect(() => {
-    const punkty = kontener.current ? [...kontener.current.querySelectorAll('li')] : [];
+    // Punkty listy albo czesci ilustracji oznaczone data-krok (np. art "zdrada").
+    const punkty = kontener.current ? [...kontener.current.querySelectorAll<HTMLElement | SVGElement>('li, [data-krok]')] : [];
     stan.current = { widoczne, ile: punkty.length };
     punkty.forEach((li, i) => {
       li.style.transition = 'opacity 350ms ease';

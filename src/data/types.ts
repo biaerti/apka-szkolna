@@ -248,6 +248,7 @@ export type SlideArt =
   | 'dialog' // zapis rozmowy: nowa linia i myslnik
   | 'zyczenia' // zyczenia i podziekowanie
   | 'kolejnoscZdarzen' // najpierw - potem - nagle - na koniec
+  | 'zdrada' // lektura: przed/po zdradzie (sympatia, zaufanie) + motyw -> czyn
   | 'tematTekstu' // o czym jest tekst + szukanie informacji lupa
   | 'bohaterowie' // bohater glowny w kazdej scenie, drugoplanowy tylko w niektorych
   | 'cechyBohatera' // przymiotniki opisujace bohatera + uzasadnienie z tekstu
