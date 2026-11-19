@@ -294,6 +294,7 @@ export function LessonPresent() {
               onRecapExit={() => (isLast ? finishLesson() : goTo(index + 1))}
               overlay={<AnnotationLayer ann={ann} />}
               writePane={writePaneOn}
+              kroki
             />
             </NoteEditContext.Provider>
           </StudentActionEditContext.Provider>

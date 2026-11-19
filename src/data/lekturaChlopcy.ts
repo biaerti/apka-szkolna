@@ -49,6 +49,14 @@ function rozmowa(title: string, body: string, photo?: { src: string; credit: str
   return { id: newId(), kind: 'text', title, body, studentAction: 'oral', ...(photo ? { photo } : {}) };
 }
 
+/**
+ * Pytania do klasy zaraz po czytance (Bartek 2026-11-19): ustnie, punkty
+ * wchodza po kolei strzalkami, klik mysza od razu na kolejny slajd.
+ */
+function poCzytance(title: string, ...pytania: string[]): Slide {
+  return { id: newId(), kind: 'text', title, body: pytania.map((p) => `- ${p}`).join('\n'), studentAction: 'oral', krokowo: true };
+}
+
 /** Wspolny przebieg lekcji z lektury (45 min). */
 function przebieg(film: string, karty: string, czytanka: string): string {
   return [
@@ -257,10 +265,16 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
         '1. **Przygotuj się + temat** (3 min).',
         '2. **Koło** (5 min) - 3 pytania z poprzedniej lekcji, 3 osoby (4b: Nemeczek, 4a i 4c: bitwa - te klasy zrobiły bitwę wcześniej).',
         '3. **Czytanka** (ok. 4 min) - Gereb przy furtce z rozdz. VI. Przed czytaniem: „Boka zgaduje, dlaczego Gereb przyszedł. Gereb mówi, że inny był powód. Uważajcie”.',
-        '4. **Film „Gereb - czyn i motyw, sympatia i zaufanie”** (ok. 9 min) - 3 zadania z minutą na każde.',
-        '5. **Rozmowa „Lubić a ufać”** (5 min) - pytania na slajdzie.',
+        '4. **Pytania po czytance** (5 min) - ustnie, strzałka w prawo pokazuje kolejne pytanie.',
+        '5. **Film „Gereb - czyn i motyw, sympatia i zaufanie”** (ok. 9 min) - 3 zadania z minutą na każde, ustnie.',
         '6. **Ćwiczymy razem** (3 karty): „Czyn czy motyw?”, „Sympatia czy zaufanie?”, „Czym odbudować zaufanie?”. Każdy przykład - koło (K) losuje osobę.',
         '7. **Notatka** (5 min) - 3 zdania do przepisania.',
+      ].join('\n')],
+      ['Pytania po czytance - odpowiedzi', [
+        '- **Lubi?** Tak - przebacza mu i już prawie woła za nim „Wracaj!”.',
+        '- **Ufa?** Nie - przypomina sobie, jak Gereb śmiał się z nich szyderczo, i podejrzewa, że wrócił, bo u Czerwonych Koszul też stracił zaufanie.',
+        '- **Lubić, a nie ufać?** Można - to dwie różne rzeczy (film to rozwinie: sympatia i zaufanie).',
+        '- **Co sprawiło, że go przyjęli?** Czyn, nie słowa: sam podsłuchał z drzewa plan Czerwonych Koszul i opisał to w liście. Boka uwierzył, a chłopcy zagłosowali „Tak!”.',
       ].join('\n')],
       ['Jak wyjaśnić', [
         '- Czyn: co zrobił? Motyw: dlaczego? Dwóch złodziei: jeden chce mieć więcej, drugi potrzebuje na operację dziecka. Czyn ten sam, motywy różne. Motyw pomaga zrozumieć, ale nie usprawiedliwia.',
@@ -287,14 +301,13 @@ export const LEKTURA_CHLOPCY_TOPICS: Topic[] = [
       slideTopic('Gereb - czyn i motyw, sympatia i zaufanie'),
       ...kolo(previousSetId),
       slideCzytanka('placu-broni-gereb'),
+      poCzytance('Boka i Gereb przy furtce',
+        'Czy po tym fragmencie widać, że Boka lubi Gereba? Po czym?',
+        'A czy Boka mu ufa?',
+        'Czy można kogoś lubić, ale mu nie ufać?',
+        'Co sprawiło, że Gereb w końcu został przyjęty z powrotem?',
+      ),
       slideVideo('placu-broni-film4'),
-      rozmowa('Lubić a ufać', [
-        'Boka mówi Gerebowi, że mu przebacza - i nie przyjmuje go z powrotem. Czy to się wyklucza?',
-        '- Czy kolega może być jednocześnie dobry i zły?',
-        '- Czy da się kogoś lubić i mu nie ufać? A ufać komuś, kogo się nie lubi?',
-        '- Dlaczego zaufanie traci się w jednej chwili, a odbudowuje tak powoli?',
-        '- Czy Boka dobrze zrobił, że kazał Rychterowi pilnować Gereba?',
-      ].join('\n')),
       ...razem('k4-chlopcy-czyn-motyw', 'k4-chlopcy-sympatia-zaufanie', 'k4-chlopcy-odbudowa'),
       notatka('Gereb - czyn i motyw, sympatia i zaufanie', 'Oceniając bohatera, patrzymy, **co zrobił** (czyn) i **dlaczego** (motyw). Motyw pomaga zrozumieć, ale nie usprawiedliwia złego czynu.', '**Sympatia** to: lubię cię. **Zaufanie** to: mogę na tobie polegać. Przyjaźń potrzebuje obu.', 'Zdrada niszczy zaufanie. Odbudowują je **czyny**, nie same słowa.'),
     ],

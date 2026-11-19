@@ -3,12 +3,14 @@
 // miescil. Wymiary ponizej sa w pikselach kartki 1280x720 ze SlideView, ktora
 // na rzutniku skaluje sie do pelnego ekranu.
 
+import { useRef } from 'react';
 import type { Slide } from '../../data/types';
 import { RichText } from './RichText';
 import { SlideArtView, WIDE_ART } from './art';
 import { resolvedStudentAction, StudentActionBadge } from './StudentActionBadge';
 import { estimateTextHeight, fitFontSize } from './fitText';
 import { useSlideFontScale } from './useSlideFontScale';
+import { useKrokiListy } from './useKrokiListy';
 
 const TITLE_FIT = { lineHeight: 1.15, charRatio: 0.55 };
 
@@ -20,27 +22,37 @@ function titleHeight(title: string, size: number, width: number): number {
   return estimateTextHeight(title, size, { width, height: 0, min: 0, max: 0, ...TITLE_FIT });
 }
 
-/** `narrow` - tryb pisania (klawisz P): sam tekst w lewej kolumnie, bez ilustracji. */
-export function TextSlideView({ slide, narrow = false }: { slide: Extract<Slide, { kind: 'text' }>; narrow?: boolean }) {
+/**
+ * `narrow` - tryb pisania (klawisz P): sam tekst w lewej kolumnie, bez ilustracji.
+ * `kroki` - prezentacja: punkty slajdu `krokowo` wchodza po kolei (w miniaturkach wszystkie).
+ */
+export function TextSlideView({ slide, narrow = false, kroki = false }: { slide: Extract<Slide, { kind: 'text' }>; narrow?: boolean; kroki?: boolean }) {
   const scale = useSlideFontScale();
+  const tresc = useRef<HTMLDivElement>(null);
+  useKrokiListy(tresc, kroki && !!slide.krokowo, slide.id);
   const studentAction = resolvedStudentAction(slide.studentAction, slide.zeszyt, 'copy');
 
-  function block(width: number, height: number) {
-    const tSize = slide.title ? titleSize(slide.title, width, scale) : 0;
-    const used = slide.title ? titleHeight(slide.title, tSize, width) + 28 : 0;
+  // Plakietka (prawy gorny rog) zabiera tytulowi miejsce w ukladach na cala szerokosc.
+  const PLAKIETKA = 380;
+  function block(width: number, height: number, podPlakietka = false) {
+    const tWidth = podPlakietka && studentAction ? width - PLAKIETKA : width;
+    const tSize = slide.title ? titleSize(slide.title, tWidth, scale) : 0;
+    const used = slide.title ? titleHeight(slide.title, tSize, tWidth) + 28 : 0;
     const bSize = fitFontSize(slide.body, { width, height: height - used, min: 28, max: 72, scale });
     return (
       <>
         {slide.title && (
-          <h2 className="font-bold leading-tight text-white" style={{ fontSize: tSize }}>
+          <h2 className="font-bold leading-tight text-white" style={{ fontSize: tSize, maxWidth: tWidth }}>
             {slide.title}
           </h2>
         )}
-        <RichText
-          text={slide.body}
-          className="space-y-[0.6em] leading-snug text-gray-100 [&_ul]:space-y-[0.3em] [&_ol]:space-y-[0.3em]"
-          style={{ fontSize: bSize }}
-        />
+        <div ref={tresc}>
+          <RichText
+            text={slide.body}
+            className="space-y-[0.6em] leading-snug text-gray-100 [&_ul]:space-y-[0.3em] [&_ol]:space-y-[0.3em]"
+            style={{ fontSize: bSize }}
+          />
+        </div>
       </>
     );
   }
@@ -79,7 +91,7 @@ export function TextSlideView({ slide, narrow = false }: { slide: Extract<Slide,
     return (
       <div className="relative flex h-full flex-col justify-center gap-7 px-20 py-14">
         {badge}
-        {block(1120, 600)}
+        {block(1120, 600, true)}
       </div>
     );
   }
@@ -90,7 +102,7 @@ export function TextSlideView({ slide, narrow = false }: { slide: Extract<Slide,
     return (
       <div className="relative flex h-full flex-col justify-center gap-8 px-16 py-12">
         {badge}
-        <div className="flex flex-col justify-center gap-6">{block(1152, 350)}</div>
+        <div className="flex flex-col justify-center gap-6">{block(1152, 350, true)}</div>
         <SlideArtView art={slide.art} className="mx-auto h-auto w-full max-w-3xl" />
       </div>
     );

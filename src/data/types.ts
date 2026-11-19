@@ -305,6 +305,11 @@ export type Slide =
       studentActionText?: string;
       /** Nauczyciel zmienil plakietke w prezentacji - odswiezenie z kodu jej nie nadpisze. */
       studentActionManual?: boolean;
+      /**
+       * Punkty listy odkrywane po kolei strzalkami (np. pytania do klasy po
+       * czytance) - src/components/slides/useKrokiListy.ts.
+       */
+      krokowo?: boolean;
     } // markdown-lite: akapity, listy
   // Temat lekcji do zapisania w zeszycie: kod lekcji (np. 4.3) + krotka wersja
   // tematu do zeszytu (celowo krotsza niz `registerTopic` w dzienniku Vulcan -

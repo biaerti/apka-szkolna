@@ -24,6 +24,7 @@ Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recyt
 - Zwykle 3 zadania. Podczas sprawdzania treść zadania i przykłady nadal są widoczne na górnej części ekranu, a odpowiedzi pojawiają się poniżej. Nie przełączaj na osobny ekran bez polecenia.
 - Zadania w filmie nie mogą dublować zadań z podręcznika ani pytań z koła powtórzeniowego. Koło z pytaniami lekcji wraca dopiero na początku kolejnej lekcji, nie bezpośrednio po filmie. Nie cytuj tekstów z podręcznika (prawa autorskie), używaj własnych przykładów.
 - W narracji nie ma gołych liter („ek”, „ó”), bo TTS czyta je jako nazwy liter. Końcówki i litery pokazuj na ekranie.
+- **Zadania z filmu robimy ustnie** (od 2026-11-19): w narracji i na ekranie nie ma „zapiszcie w zeszycie”, „zeszyty w gotowości”, „zapisz numery”. Gotowych filmów nie przerabiamy tylko z tego powodu.
 
 **Pipeline nowego filmu:**
 1. Skopiuj folder wzoru i zamień jego nazwę w `*.py`/`*.mjs`. W `renderuj.mjs` ustaw **nowy PORT** (zajęte 9333-9399, 9401 to zeszyt `karty-pracy/`, 9410-9419 kl. 4 rozdział III; wolny sprawdź: `grep -h "PORT =" filmiki/*/renderuj.mjs`). Profil Chrome i folder klatek biorą nazwę z folderu, dzięki temu rendery idą równolegle.
@@ -35,7 +36,8 @@ Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recyt
 7. `node filmiki/X/renderuj.mjs film1` → `output/filmiki/X-film1.mp4` → `python filmiki/wyslij.py X-film1.mp4` → kopia do `public/filmiki/` (dev).
 8. Wpis w `src/data/filmiki.ts`, a w lekcji: `slideVideo('X-film1')` i zaraz po nim `...(ownSetId ? [{ ...slideRecap(ownSetId), questionCount: 5 }] : [])` z `makeSlides: (previousSetId, ownSetId)`.
 9. `questions` lekcji = **nowe, podobne** zadania do koła po filmie, inne niż w filmie. Kolejność slajdów: [czytanka/ramka] → film → notatka → 2-3 karty „Ćwiczymy razem”.
-10. Audio, mp4 i klatki nie idą do repo (gitignore). Commituj html, narrację, timeline i skrypty.
+10. **Pytania po czytance** (od 2026-11-19): zaraz po czytance slajd z 3-4 pytaniami do klasy (ustnie), np. o relacji bohaterów we fragmencie, prowadzące do pojęcia z filmu. `kind: 'text'`, `krokowo: true`, `studentAction: 'oral'` (wzór: `poCzytance` w `lekturaChlopcy.ts`): pytania wchodzą po kolei strzałką w prawo, klik myszą w prawą połowę ekranu od razu daje kolejny slajd. Odpowiedzi w planie lekcji.
+11. Audio, mp4 i klatki nie idą do repo (gitignore). Commituj html, narrację, timeline i skrypty.
 
 ## Handoff
 Stan bieżącej pracy jest w `session-logs/` (`/handoff`, `/pickup`).

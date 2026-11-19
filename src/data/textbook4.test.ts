@@ -233,13 +233,13 @@ describe('buildTextbook4', () => {
       // Bez podrecznika - zadnego "Podręcznik s. 0" na liscie lekcji.
       expect(lesson.textbookPage).toBeUndefined();
       expect(lesson.teacherPlan).toBeTruthy();
-      // L3: rozmowa „alfa, beta, sigma” po filmie; L4: rozmowa „Lubić a ufać” po filmie; L5: rysunek z pamieci + model 3D
+      // L3: rozmowa „alfa, beta, sigma” po filmie; L4: pytania po czytance (krokowo) przed filmem; L5: rysunek z pamieci + model 3D
       // placu przed filmem; L6: fragmenty i rozmowa o smierci Nemeczka przed filmem.
       const uklady = [
         ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'video', 'text', 'text', 'text', 'cwiczenie', 'cwiczenie', 'note'],
-        ['topic', 'recap', 'czytanka', 'video', 'text', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
+        ['topic', 'recap', 'czytanka', 'text', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'task', 'embed', 'video', 'cwiczenie', 'cwiczenie', 'cwiczenie', 'note'],
         ['topic', 'recap', 'czytanka', 'read', 'text', 'text', 'text', 'video', 'cwiczenie', 'note'],
       ];

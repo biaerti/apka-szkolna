@@ -46,6 +46,8 @@ export interface SlideViewProps {
    * `task` i `text`; pozostale rysuja sie normalnie (patrz supportsWritePane).
    */
   writePane?: boolean;
+  /** Prezentacja: slajd moze przechwycic strzalki na wlasne kroki (np. tekst `krokowo`). */
+  kroki?: boolean;
 }
 
 /** Kartka 1280x720 wyskalowana do kontenera, wysrodkowana. */
@@ -116,7 +118,7 @@ function WritePad() {
   );
 }
 
-export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, textbookPage, overlay, writePane = false }: SlideViewProps) {
+export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic, textbookPage, overlay, writePane = false, kroki = false }: SlideViewProps) {
   // Kolo fortuny: wlasny uklad na caly ekran, bez kartki i bez znacznika w rogu
   // (ma wlasny gorny pasek z nazwa klasy i zestawu).
   if (slide.kind === 'recap') {
@@ -149,7 +151,7 @@ export function SlideView({ slide, classId, onRecapExit, lessonCode, lessonTopic
       )}
       {slide.kind === 'title' && <TitleSlideView slide={slide} />}
       {slide.kind === 'topic' && <TopicSlideView slide={slide} code={lessonCode} lessonTopic={lessonTopic} textbookPage={textbookPage} />}
-      {slide.kind === 'text' && <TextSlideView slide={slide} />}
+      {slide.kind === 'text' && <TextSlideView slide={slide} kroki={kroki} />}
       {slide.kind === 'task' && <TaskSlideView key={slide.id} slide={slide} />}
       {slide.kind === 'read' && <ReadSlideView slide={slide} />}
       {slide.kind === 'note' && <NoteSlideView slide={slide} code={lessonCode} />}
