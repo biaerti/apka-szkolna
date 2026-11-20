@@ -98,7 +98,7 @@ export function DocPrint() {
         </header>
 
         {doc.sections.map((section) => (
-          <section key={section.title} className="mb-2">
+          <section key={section.title} className={section.nowaStrona ? 'mb-2 break-before-page' : 'mb-2'}>
             <h2 className="mb-0.5 text-[11px] font-bold uppercase tracking-wide text-accent-700">
               {section.title}
             </h2>

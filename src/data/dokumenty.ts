@@ -16,6 +16,8 @@ export type DocBlock =
 export interface DocSection {
   title: string;
   blocks: DocBlock[];
+  /** Na wydruku sekcja zaczyna sie od nowej strony. */
+  nowaStrona?: boolean;
 }
 
 export interface Dokument {
@@ -301,15 +303,14 @@ export const PLAN_ROZWOJU: Dokument = {
 
 // Bartek 2026-11-20: dyrektor byl na lekcji (bitwa z modelem 3D placu) i prosil
 // o konspekt pracy. Opis systemu + przyklad lekcji o Gerebie (lekturaChlopcy.ts).
-// Wielokanalowosc opisana jako kodowanie podwojne / uczenie multimedialne, NIE
-// jako "style uczenia sie" (te badania podwazaja) - zeby dyrektor nie mial
-// czego podwazyc.
+// Bez sekcji z badaniami i nazwiskami ("zeby nie bylo wymadrzania") - jedno
+// zdanie o wielokanalowosci w zalozeniach. Bez tlumaczenia sie z bodzcow.
 export const KONSPEKT_PRACY: Dokument = {
   slug: 'konspekt-pracy',
   title: 'Konspekt pracy',
   printTitle: 'Konspekt pracy - język polski w klasach IV-V',
   subtitle: `Szkoła Podstawowa nr 97 we Wrocławiu, rok szkolny ${ROK_SZKOLNY}. Nauczyciel: Bartosz Kuniński, klasy IV A, IV B, IV C i V A`,
-  description: 'Dla dyrektora: jak wyglądają moje lekcje i sprawdziany, dlaczego tak, plus przykład lekcji o Gerebie.',
+  description: 'Dla dyrektora: jak wyglądają moje lekcje i sprawdziany, plus przykład lekcji o Gerebie.',
   sections: [
     {
       title: 'Założenia',
@@ -321,7 +322,7 @@ export const KONSPEKT_PRACY: Dokument = {
         {
           type: 'ul',
           items: [
-            'Wielokanałowość. Ta sama wiedza dociera do ucznia kilka razy i różnymi drogami: słuchem (czytanka z lektorem, rozmowa, narracja filmu), wzrokiem (tekst podświetlany na ekranie, schemat, przykłady w filmie) i działaniem (zadania robione wspólnie, notatka pisana ręką).',
+            'Wielokanałowość. Ta sama wiedza dociera do ucznia kilka razy i różnymi drogami: słuchem (czytanka z lektorem, rozmowa, narracja filmu), wzrokiem (tekst podświetlany na ekranie, schemat, przykłady w filmie) i działaniem (zadania robione wspólnie, notatka pisana ręką). Taki układ lekcji opieram na badaniach nad wielokanałowością: treść podana kilka razy, słowem i obrazem, zapamiętuje się lepiej.',
             'Najpierw konkret, potem porządek. Pojęcie najpierw pojawia się w tekście albo w rozmowie, a potem jeszcze raz, w uporządkowany sposób, w krótkim filmie. Film zatrzymuję, dopowiadam i rozmawiamy.',
             'Przykłady z życia. Omawiane motywy odnoszę do świata uczniów: szkoły, podwórka, rodziny, sklepu. Zadania mają własne, codzienne przykłady („Ola skłamała mamie, bo bała się kary”), a nie oderwane zdania.',
             'Myśli każdy, nie tylko zgłaszający się. Do odpowiedzi losuje koło fortuny, więc każdy musi być gotowy, a każdy ma równe szanse.',
@@ -376,20 +377,6 @@ export const KONSPEKT_PRACY: Dokument = {
       ],
     },
     {
-      title: 'Dlaczego tak - co mówią badania',
-      blocks: [
-        {
-          type: 'ul',
-          items: [
-            'Słowo połączone z obrazem zapamiętuje się lepiej niż samo słowo (teoria podwójnego kodowania Paivia; R. Mayer, „Multimedia Learning”). Nie chodzi tu o „style uczenia się” (wzrokowiec, słuchowiec), których badania nie potwierdzają (Pashler i in., 2008), tylko o to, żeby każdy uczeń dostał tę samą treść kilkoma drogami.',
-            'Przypominanie z pamięci (koło, pytania po czytance, zadania w filmie) utrwala wiedzę silniej niż ponowne czytanie, a powtórka rozłożona w czasie silniej niż jednorazowa (metaanaliza Rowland, 2014; Dunlosky i in., 2013).',
-            'Film podzielony na części z pauzami uczy lepiej niż ciągły (metaanaliza Rey i in., 2019). Dlatego po każdej części filmu jest zadanie, a ja zatrzymuję film i dopytuję.',
-            'Jawne nauczanie: najpierw wyjaśnienie i przykład, potem praktyka wspólna z informacją zwrotną, na końcu zapis (AERO, „Explicit instruction”). Stała struktura lekcji i przewidywalne zasady ułatwiają też utrzymanie porządku w klasie (Oliver, Wehby i Reschly, 2011).',
-          ],
-        },
-      ],
-    },
-    {
       title: 'Sprawdzanie wiedzy i ocenianie',
       blocks: [
         {
@@ -420,6 +407,7 @@ export const KONSPEKT_PRACY: Dokument = {
     },
     {
       title: 'Przykład: lekcja z lektury „Chłopcy z Placu Broni” (klasa IV)',
+      nowaStrona: true,
       blocks: [
         {
           type: 'table',
