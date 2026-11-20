@@ -160,6 +160,45 @@ export async function encryptStudentRows<T extends NamedRow>(rows: T[]): Promise
   );
 }
 
+// --- inne dane o uczniach (prace pisemne: tekst i zdjecia) ---------------------
+
+/** Szyfruje dowolny tekst o uczniu (gdy szyfrowanie wlaczone). */
+export async function encryptStudentText(text: string): Promise<string> {
+  if (!enabled) return text;
+  return encryptText(requireKey(), text);
+}
+
+/** Odszyfrowuje tekst o uczniu; jawny zostawia bez zmian. */
+export async function decryptStudentText(value: string): Promise<string> {
+  if (!isEncrypted(value)) return value;
+  return decryptText(requireKey(), value);
+}
+
+const BYTES_MAGIC = [0x45, 0x4e, 0x43, 0x31]; // "ENC1"
+
+function hasBytesMagic(bytes: Uint8Array): boolean {
+  return bytes.length > 16 && BYTES_MAGIC.every((b, i) => bytes[i] === b);
+}
+
+/** Plik (np. zdjecie pracy) -> "ENC1" + iv + szyfrogram. Bez szyfrowania zwraca bez zmian. */
+export async function encryptStudentBytes(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
+  if (!enabled) return bytes;
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, requireKey(), bytes));
+  const out = new Uint8Array(new ArrayBuffer(4 + iv.length + ct.length));
+  out.set(BYTES_MAGIC);
+  out.set(iv, 4);
+  out.set(ct, 4 + iv.length);
+  return out;
+}
+
+/** Odwrotnosc encryptStudentBytes; plik bez naglowka "ENC1" zwraca bez zmian. */
+export async function decryptStudentBytes(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
+  if (!hasBytesMagic(bytes)) return bytes;
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes.slice(4, 16) }, requireKey(), bytes.slice(16));
+  return new Uint8Array(pt);
+}
+
 /** Po pobraniu: odszyfrowuje wiersze; jawne (stare) zostawia bez zmian. */
 export async function decryptStudentRows<T extends NamedRow>(rows: T[]): Promise<T[]> {
   const anyEncrypted = rows.some((r) => isEncrypted(r.first_name) || isEncrypted(r.last_name) || isEncrypted(r.note));

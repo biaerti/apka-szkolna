@@ -9,6 +9,7 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { StudentFormModal, type StudentFormValue } from '../components/students/StudentFormModal';
 import { ImportStudentsModal } from '../components/students/ImportStudentsModal';
 import { ClassStats } from '../components/stats/ClassStats';
+import { PisanieKlasy } from '../components/pisanie/PisanieKlasy';
 import type { Student } from '../data/types';
 
 /**
@@ -16,11 +17,12 @@ import type { Student } from '../data/types';
  * "Rozlicz" przy komplecie - src/components/stats/ClassStats.tsx). Dawna
  * zakladka "Do rozliczenia" i podzial na miesiace usuniete (Bartek 2026-10-02).
  */
-type ClassTab = 'uczniowie' | 'bilans';
+type ClassTab = 'uczniowie' | 'bilans' | 'pisanie';
 
 const TAB_LABELS: Record<ClassTab, string> = {
   uczniowie: 'Uczniowie',
   bilans: 'Bilans',
+  pisanie: 'Pisanie',
 };
 
 export function ClassDetail() {
@@ -142,6 +144,8 @@ export function ClassDetail() {
       </div>
 
       {tab === 'bilans' && id && <ClassStats classId={id} students={classStudents} />}
+
+      {tab === 'pisanie' && id && <PisanieKlasy classId={id} students={students.filter((s) => s.classId === id).sort((a, b) => a.number - b.number)} />}
 
       {tab === 'uczniowie' && (
       <>
