@@ -79,14 +79,9 @@ export const PSO: Dokument = {
               'tylko plusy i kropki - za rozwiązanie zadania nie można nic stracić',
             ],
             [
-              'Dyktanda, recytacja, projekty',
+              'Dyktanda, prace pisemne, recytacja, projekty',
               'kilka razy w półroczu',
               'ocena na bieżąco, kryteria podaję przed zadaniem',
-            ],
-            [
-              'Kartkówka z hałaśliwej lekcji',
-              'po hałaśliwej lekcji - sprawdzenie wiedzy z tej lekcji',
-              'krótka, na ocenę, z materiału tej lekcji',
             ],
           ],
         },
@@ -119,11 +114,11 @@ export const PSO: Dokument = {
       ],
     },
     {
-      title: 'Hałas i kartkówka',
+      title: 'Zachowanie',
       blocks: [
         {
           type: 'p',
-          text: 'Gdy cała klasa jest za głośno, stawiam kreskę na tablicy. Gdy klasa się wycisza, kreski ścieram. Trzy kreski naraz oznaczają, że klasa pisze krótką kartkówkę sprawdzającą wiedzę z tej hałaśliwej lekcji. Kartkówka nie jest karą za zachowanie - sprawdza, ile z lekcji zostało w głowach. Zachowanie oceniam osobno: uwagą w dzienniku, wpisywaną od razu, bez ostrzeżeń. Uwaga nie ma wpływu na oceny z przedmiotu.',
+          text: 'Kartkówek nie robię - wiedzę sprawdzam na kole i na sprawdzianach po dziale. Zachowanie oceniam osobno: uwagą w dzienniku, wpisywaną od razu, bez ostrzeżeń. Uwaga nie ma wpływu na oceny z przedmiotu.',
         },
       ],
     },
@@ -227,7 +222,7 @@ export const PLAN_ROZWOJU: Dokument = {
           rows: [
             [
               'Warsztat dydaktyczny, metody aktywizujące i TIK (1, 12)',
-              'Prowadzę lekcje na projektorze z własną aplikacją: koło fortuny do odpowiedzi, zadania ze stoperem, notatki, kartkówki. Rozbudowuję bank lekcji dla klas IV-V do podręcznika GWO. Wprowadzam elementy oceniania kształtującego (kryteria przed zadaniem, informacja zwrotna). Obserwuję lekcje mentora i innych polonistów.',
+              'Prowadzę lekcje na projektorze z własną aplikacją: koło fortuny do odpowiedzi, zadania ze stoperem, notatki, filmy i karty zadań. Rozbudowuję bank lekcji dla klas IV-V do podręcznika GWO. Wprowadzam elementy oceniania kształtującego (kryteria przed zadaniem, informacja zwrotna). Obserwuję lekcje mentora i innych polonistów.',
               'na bieżąco; bank lekcji dla klasy IV do czerwca 2027, dla klasy V do czerwca 2028',
               'scenariusze i prezentacje lekcji, arkusze obserwacji, konspekty lekcji obserwowanych',
             ],
@@ -251,7 +246,7 @@ export const PLAN_ROZWOJU: Dokument = {
             ],
             [
               'Współpraca z nauczycielami (7)',
-              'Praca w zespole humanistycznym i zespole wychowawców klas IV. Dzielę się materiałami i narzędziami do lekcji (prezentacje, koło fortuny, kartkówki) z innymi polonistami.',
+              'Praca w zespole humanistycznym i zespole wychowawców klas IV. Dzielę się materiałami i narzędziami do lekcji (prezentacje, koło fortuny, karty zadań) z innymi polonistami.',
               'cały okres',
               'protokoły zespołów, udostępnione materiały',
             ],
@@ -413,7 +408,7 @@ export const KONSPEKT_PRACY: Dokument = {
             'Przed sprawdzianem tydzień powtórki: zeszyt powtórzeniowy w dzienniku VULCAN (każdy temat działu w punktach i te same zadania co w filmach, z rozwiązaniem i uzasadnieniem), karta pracy na lekcji i quiz w Kahoocie.',
             'Co najmniej jedna praca pisemna w półroczu, zwykle związana z lekturą.',
             'Odpowiedzi ustne na kole powtórzeniowym: plusy, kropki i plomby, rozliczane co miesiąc (3 plusy = piątka, 3 plomby = jedynka). Każdy uczeń ma 2 „pasy” w miesiącu, czyli prawo powiedzieć „dziś nie odpowiadam”.',
-            'Bieżących kartkówek nie robię. Wyjątek: krótkie sprawdzenie wiedzy po lekcji, na której klasa nie pracowała przez hałas (opisane w PSO).',
+            'Kartkówek nie robię: wiedzę z bieżących lekcji sprawdza koło, a cały dział - sprawdzian.',
             'Pełne zasady i skala procentowa: przedmiotowy system oceniania przekazany rodzicom.',
           ],
         },
