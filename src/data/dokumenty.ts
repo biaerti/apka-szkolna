@@ -304,7 +304,202 @@ export const PLAN_ROZWOJU: Dokument = {
   footer: 'Wrocław, wrzesień 2026',
 };
 
-export const DOKUMENTY: Dokument[] = [PSO, PLAN_ROZWOJU];
+// Bartek 2026-11-20: dyrektor byl na lekcji (bitwa z modelem 3D placu) i prosil
+// o konspekt pracy. Opis systemu + przyklad lekcji o Gerebie (lekturaChlopcy.ts).
+// Wielokanalowosc opisana jako kodowanie podwojne / uczenie multimedialne, NIE
+// jako "style uczenia sie" (te badania podwazaja) - zeby dyrektor nie mial
+// czego podwazyc.
+export const KONSPEKT_PRACY: Dokument = {
+  slug: 'konspekt-pracy',
+  title: 'Konspekt pracy',
+  printTitle: 'Konspekt pracy - język polski w klasach IV-V',
+  subtitle: `Szkoła Podstawowa nr 97 we Wrocławiu, rok szkolny ${ROK_SZKOLNY}. Nauczyciel: Bartosz Kuniński, klasy IV A, IV B, IV C i V A`,
+  description: 'Dla dyrektora: jak wyglądają moje lekcje i sprawdziany, dlaczego tak, plus przykład lekcji o Gerebie.',
+  sections: [
+    {
+      title: 'Założenia',
+      blocks: [
+        {
+          type: 'p',
+          text: 'Każda lekcja ma tę samą, przewidywalną strukturę: uczniowie wiedzą, co nastąpi po dzwonku, kiedy odpowiadają i co zapisują. Zmienia się treść, rama zostaje.',
+        },
+        {
+          type: 'ul',
+          items: [
+            'Wielokanałowość. Ta sama wiedza dociera do ucznia kilka razy i różnymi drogami: słuchem (czytanka z lektorem, rozmowa, narracja filmu), wzrokiem (tekst podświetlany na ekranie, schemat, przykłady w filmie) i działaniem (zadania robione wspólnie, notatka pisana ręką).',
+            'Najpierw konkret, potem porządek. Pojęcie najpierw pojawia się w tekście albo w rozmowie, a potem jeszcze raz, w uporządkowany sposób, w krótkim filmie. Film zatrzymuję, dopowiadam i rozmawiamy.',
+            'Przykłady z życia. Omawiane motywy odnoszę do świata uczniów: szkoły, podwórka, rodziny, sklepu. Zadania mają własne, codzienne przykłady („Ola skłamała mamie, bo bała się kary”), a nie oderwane zdania.',
+            'Myśli każdy, nie tylko zgłaszający się. Do odpowiedzi losuje koło fortuny, więc każdy musi być gotowy, a każdy ma równe szanse.',
+            'Podręcznik to pomoc, nie rama. Z działu wybieram najwyżej dwa teksty do czytania, pozostałe lekcje to nauka o języku i pisanie.',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Przebieg lekcji (45 minut)',
+      blocks: [
+        {
+          type: 'table',
+          head: ['Etap', 'Czas', 'Co się dzieje', 'Po co'],
+          rows: [
+            [
+              'Temat i koło powtórzeniowe',
+              '5-8 min',
+              'Krótki temat na ekranie, uczniowie zapisują go w zeszycie. Koło fortuny losuje 3-5 osób, każda odpowiada na pytanie z poprzedniej lekcji. Odpowiedź jest oceniana (plus, kropka, plomba).',
+              'Przypominanie z pamięci utrwala wiedzę. Uczniowie wiedzą, że z każdej lekcji trzeba coś wynieść.',
+            ],
+            [
+              'Czytanka albo pogadanka',
+              '5-10 min',
+              'Fragment tekstu czyta lektor, a tekst podświetla się na ekranie. Potem 3-5 pytań do klasy, ustnie, odkrywanych po kolei: o bohaterach i sytuacji, prowadzących do pojęcia z lekcji. Na lekcji bez tekstu: rozmowa wprowadzająca, kluczowe kwestie na tablicy.',
+              'Uczniowie sami dochodzą do pojęcia na konkretnym tekście albo sytuacji.',
+            ],
+            [
+              'Film podsumowujący',
+              '5-9 min',
+              'Krótki film z głosem lektora, przygotowany przeze mnie z pomocą narzędzi AI i sprawdzony w całości przed lekcją: wyjaśnienie, zwykle 3 zadania z pauzą na odpowiedź, sprawdzenie z uzasadnieniem „dlaczego”, na końcu „Zapamiętaj!”. Zadania z filmu robimy ustnie.',
+              'To samo pojęcie drugi raz, uporządkowane: słowo i obraz razem, małymi porcjami, z przerwami na myślenie.',
+            ],
+            [
+              'Ćwiczymy razem',
+              '10-15 min',
+              '2-3 karty z zadaniami na projektorze, z własnymi przykładami z życia uczniów. Po każdym przykładzie koło losuje osobę, która odpowiada i uzasadnia.',
+              'Praktyka prowadzona: od razu widzę, kto rozumie, i poprawiam błędy na bieżąco.',
+            ],
+            [
+              'Notatka do zeszytu',
+              '5 min',
+              'Na koniec 2-4 krótkie zdania z wiedzy (reguła, pojęcie, sposób), każdy pisze sam. Z treści omawianego tekstu notatki nie robimy.',
+              'Pisanie ręką domyka lekcję, a notatka służy potem do powtórki.',
+            ],
+          ],
+        },
+        {
+          type: 'p',
+          text: 'Pytania z lekcji wracają na kole na początku kolejnej lekcji. Zestaw pytań do koła jest inny niż zadania z filmu i z kart: ta sama umiejętność, inny materiał.',
+        },
+      ],
+    },
+    {
+      title: 'Dlaczego tak - co mówią badania',
+      blocks: [
+        {
+          type: 'ul',
+          items: [
+            'Słowo połączone z obrazem zapamiętuje się lepiej niż samo słowo (teoria podwójnego kodowania Paivia; R. Mayer, „Multimedia Learning”). Nie chodzi tu o „style uczenia się” (wzrokowiec, słuchowiec), których badania nie potwierdzają (Pashler i in., 2008), tylko o to, żeby każdy uczeń dostał tę samą treść kilkoma drogami.',
+            'Przypominanie z pamięci (koło, pytania po czytance, zadania w filmie) utrwala wiedzę silniej niż ponowne czytanie, a powtórka rozłożona w czasie silniej niż jednorazowa (metaanaliza Rowland, 2014; Dunlosky i in., 2013).',
+            'Film podzielony na części z pauzami uczy lepiej niż ciągły (metaanaliza Rey i in., 2019). Dlatego po każdej części filmu jest zadanie, a ja zatrzymuję film i dopytuję.',
+            'Jawne nauczanie: najpierw wyjaśnienie i przykład, potem praktyka wspólna z informacją zwrotną, na końcu zapis (AERO, „Explicit instruction”). Stała struktura lekcji i przewidywalne zasady ułatwiają też utrzymanie porządku w klasie (Oliver, Wehby i Reschly, 2011).',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Ile bodźców na ekranie',
+      blocks: [
+        {
+          type: 'p',
+          text: 'Model 3D Placu Broni z obserwowanej lekcji to wyjątek: ta lekcja dotyczyła planu bitwy i przestrzeni, a tego nie da się zrozumieć bez mapy. Zwykle ekran jest spokojny - ciemne tło, jeden tekst albo jedno zadanie naraz, bez ozdobników. Analizę tekstu prowadzimy przede wszystkim słownie, a kluczowe kwestie zapisuję na tablicy. Obraz pojawia się tylko wtedy, gdy wyjaśnia treść (schemat, mapa, przykład w filmie), bo zbędne elementy na ekranie przeszkadzają w nauce (Mayer, zasada spójności).',
+        },
+      ],
+    },
+    {
+      title: 'Sprawdzanie wiedzy i ocenianie',
+      blocks: [
+        {
+          type: 'ul',
+          items: [
+            'Sprawdzian po każdym dziale, zapowiedziany tydzień wcześniej. Cztery grupy: A i B dla klasy, C dla nieobecnych (piszą w innym terminie), D dla uczniów z orzeczeniem - krótsza, z większymi literami i podpowiedziami.',
+            'Przed sprawdzianem tydzień powtórki: zeszyt powtórzeniowy w dzienniku VULCAN (każdy temat działu w punktach i te same zadania co w filmach, z rozwiązaniem i uzasadnieniem), karta pracy na lekcji i quiz w Kahoocie.',
+            'Co najmniej jedna praca pisemna w półroczu, zwykle związana z lekturą.',
+            'Odpowiedzi ustne na kole powtórzeniowym: plusy, kropki i plomby, rozliczane co miesiąc (3 plusy = piątka, 3 plomby = jedynka). Każdy uczeń ma 2 „pasy” w miesiącu, czyli prawo powiedzieć „dziś nie odpowiadam”.',
+            'Bieżących kartkówek nie robię. Wyjątek: krótkie sprawdzenie wiedzy po lekcji, na której klasa nie pracowała przez hałas (opisane w PSO).',
+            'Pełne zasady i skala procentowa: przedmiotowy system oceniania przekazany rodzicom.',
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Rytm roku: działy i lektury',
+      blocks: [
+        {
+          type: 'p',
+          text: 'Pracuję działami podręcznika (klasa IV: GWO „Między nami”, klasa V: Nowa Era „NEON”). Po dwóch działach przychodzi lektura: dział, dział, lektura, dział, dział, lektura. Każdy dział kończy się tygodniem powtórki i sprawdzianem. Lekturę omawiamy po przeczytaniu całej książki, w 5-6 lekcjach - każda lekcja to jeden problem i jedno pojęcie (np. czyn i motyw, sympatia i zaufanie). Pierwsza lektura w klasie IV: „Chłopcy z Placu Broni”.',
+        },
+        {
+          type: 'p',
+          text: 'Lekcje prowadzę z własnej aplikacji (szkola.klippi.pl): slajdy na projektor, koło fortuny, czytanki z lektorem, filmy i karty zadań. Odpowiedzi z koła zapisują się na bieżąco, więc co miesiąc widzę, kto odpowiada i które pytania sprawiają trudność.',
+        },
+      ],
+    },
+    {
+      title: 'Przykład: lekcja z lektury „Chłopcy z Placu Broni” (klasa IV)',
+      blocks: [
+        {
+          type: 'table',
+          rows: [
+            ['Temat', 'Gereb - czy zdradę można wybaczyć? (lekcja 4 z 6)'],
+            ['Pojęcia', 'czyn i motyw, sympatia i zaufanie'],
+            [
+              'Po lekcji uczeń',
+              'odróżnia czyn od motywu; odróżnia sympatię od zaufania i rozpoznaje je w sytuacjach z życia; wyjaśnia, dlaczego Boka przebacza Gerebowi, ale nie przyjmuje go od razu z powrotem; wie, że zaufanie odbudowują czyny, a nie same słowa',
+            ],
+            ['Metody', 'pogadanka, praca z tekstem, film z pauzami, ćwiczenia wspólne z losowaniem odpowiadających'],
+            ['Środki', 'projektor i aplikacja (koło fortuny, czytanka z lektorem, schemat, film, karty zadań), tablica, zeszyt'],
+          ],
+        },
+        {
+          type: 'table',
+          head: ['Etap', 'Czas', 'Przebieg'],
+          rows: [
+            [
+              '1. Temat i koło',
+              '8 min',
+              'Temat na ekranie, uczniowie zapisują go w zeszycie. Koło losuje 3 osoby, pytania z poprzedniej lekcji (np. „Dlaczego koledzy wpisali nazwisko Nemeczka małymi literami?”).',
+            ],
+            [
+              '2. Czytanka',
+              '4 min',
+              'Fragment z rozdz. VI: Gereb przy furtce prosi Bokę o przebaczenie. Lektor czyta, tekst podświetla się na ekranie. Przed czytaniem jedno zadanie dla uwagi: „Boka zgaduje, dlaczego Gereb przyszedł. Gereb mówi, że powód był inny. Uważajcie”.',
+            ],
+            [
+              '3. Pytania po czytance',
+              '5 min',
+              'Ustnie, pytania wchodzą po kolei: Dlaczego Gereb zdradził? Czy Boka go lubi - po czym to widać? A czy mu ufa? Czy można kogoś lubić, ale mu nie ufać? Co sprawiło, że Gereb został w końcu przyjęty z powrotem?',
+            ],
+            [
+              '4. Schemat „Co psuje zdrada?”',
+              '3 min',
+              'Rysunek w trzech krokach: chłopcy i Gereb na wspólnym fundamencie zaufania, nad nimi łuk sympatii; po zdradzie fundament pęka, a sympatia zostaje; motyw (zazdrość o Bokę) prowadzi do czynu (zdrada).',
+            ],
+            [
+              '5. Film',
+              '9 min',
+              '„Gereb - czyn i motyw, sympatia i zaufanie”: wyjaśnienie i 3 zadania ustne z minutą na każde (motywy Gereba; cztery sytuacje: sympatia czy zaufanie; czym odbudować zaufanie), sprawdzenie z uzasadnieniem, „Zapamiętaj!”.',
+            ],
+            [
+              '6. Ćwiczymy razem',
+              '10 min',
+              'Trzy karty z przykładami z życia: „Czyn czy motyw?” (Kuba wziął rower brata bez pytania, bo spóźniał się na trening), „Sympatia czy zaufanie?” (sąsiad, z którym rzadko rozmawiacie, podlewa wasze kwiaty), „Czym odbudować zaufanie?” (czyn, same słowa czy przekupstwo). Po każdym przykładzie koło losuje osobę.',
+            ],
+            [
+              '7. Notatka',
+              '5 min',
+              'Trzy zdania do zeszytu: Oceniając bohatera, patrzymy, co zrobił (czyn) i dlaczego (motyw). Motyw pomaga zrozumieć, ale nie usprawiedliwia złego czynu. Sympatia to: lubię cię. Zaufanie to: mogę na tobie polegać. Przyjaźń potrzebuje obu. Zdrada niszczy zaufanie, a odbudowują je czyny, nie same słowa.',
+            ],
+          ],
+        },
+        {
+          type: 'p',
+          text: 'Na tej lekcji to samo pojęcie pojawia się pięć razy i za każdym razem inaczej: w pytaniach do tekstu, na schemacie, w filmie, w zadaniach z życia i w notatce. Pytania z tej lekcji (np. „Czym różni się sympatia od zaufania?”) wracają na kole na początku następnej.',
+        },
+      ],
+    },
+  ],
+  footer: 'Wrocław, listopad 2026',
+};
+
+export const DOKUMENTY: Dokument[] = [PSO, PLAN_ROZWOJU, KONSPEKT_PRACY];
 
 export function findDokument(slug: string | undefined): Dokument | undefined {
   return DOKUMENTY.find((d) => d.slug === slug);
