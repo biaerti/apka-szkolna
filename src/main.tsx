@@ -2,9 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Capacitor } from '@capacitor/core';
-import App from './App';
-import { AuthGate } from './components/layout/AuthGate';
-import { PanelPasek } from './components/panel/PanelPasek';
 import './index.css';
 
 // Telefon (APK z Capacitora) sluzy do widoku Sala, a WebView zawsze startuje
@@ -43,13 +40,35 @@ if (!rootEl) {
   throw new Error('Brak elementu #root w index.html');
 }
 
-ReactDOM.createRoot(rootEl).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      {jestPanel && <PanelPasek />}
-      <AuthGate>
-        <App />
-      </AuthGate>
-    </BrowserRouter>
-  </React.StrictMode>,
-);
+// Dyktanda dla uczniow (/dyktando) - bez logowania nauczyciela, bez synchronizacji
+// i bez reszty apki (osobny, maly kawalek JS na telefon ucznia). Uczen loguje sie
+// haslem z kartki (src/pages/Dyktando.tsx). Reszta apki laduje sie jak dotad.
+const jestDyktando = window.location.pathname.startsWith('/dyktando');
+const root = ReactDOM.createRoot(rootEl);
+
+if (jestDyktando) {
+  void import('./pages/Dyktando').then(({ Dyktando }) => {
+    root.render(
+      <React.StrictMode>
+        <Dyktando />
+      </React.StrictMode>,
+    );
+  });
+} else {
+  void Promise.all([
+    import('./App'),
+    import('./components/layout/AuthGate'),
+    import('./components/panel/PanelPasek'),
+  ]).then(([{ default: App }, { AuthGate }, { PanelPasek }]) => {
+    root.render(
+      <React.StrictMode>
+        <BrowserRouter>
+          {jestPanel && <PanelPasek />}
+          <AuthGate>
+            <App />
+          </AuthGate>
+        </BrowserRouter>
+      </React.StrictMode>,
+    );
+  });
+}

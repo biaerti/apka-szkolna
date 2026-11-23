@@ -39,6 +39,9 @@ Wzór: `filmiki/przenosnia/`, `frazeologizmy/`, `zdrobnienia/`, `zlosc/`, `recyt
 10. **Pytania po czytance** (od 2026-11-19): zaraz po czytance slajd z 3-4 pytaniami do klasy (ustnie), np. o relacji bohaterów we fragmencie, prowadzące do pojęcia z filmu. `kind: 'text'`, `krokowo: true`, `studentAction: 'oral'` (wzór: `poCzytance` w `lekturaChlopcy.ts`): pytania wchodzą po kolei strzałką w prawo, klik myszą w prawą połowę ekranu od razu daje kolejny slajd. Odpowiedzi w planie lekcji.
 11. Audio, mp4 i klatki nie idą do repo (gitignore). Commituj html, narrację, timeline i skrypty.
 
+## Dyktanda dla uczniów z Ukrainy
+Zadanie domowe co poniedziałek pod `/dyktando` (bez logowania nauczyciela, uczeń: imię z listy + hasło z kartki). Plan serii i jak dodać lekcję: `docs/dyktanda-plan.md`. Treść `src/data/dyktanda/NN-*.json` (własne przykłady, tłumaczenie UA), audio `python tools/dyktanda-audio.py` (turbo v2.5 + `--sprawdz`), wyniki w Supabase (migracja 0042), podgląd: Lekcje → Polski od zera → Dyktanda.
+
 ## Handoff
 Stan bieżącej pracy jest w `session-logs/` (`/handoff`, `/pickup`).
 

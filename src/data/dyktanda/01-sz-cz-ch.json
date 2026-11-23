@@ -1,0 +1,59 @@
+{
+  "id": "01-sz-cz-ch",
+  "nr": 1,
+  "od": "2026-11-23",
+  "temat": "sz, cz, ch",
+  "tematUa": "Звуки ш, ч, х",
+  "wstep": [
+    {
+      "litery": "sz",
+      "dzwiek": "ш",
+      "pl": "Głoskę [ш] piszemy dwiema literami: s + z.",
+      "ua": "Звук [ш] пишемо двома літерами: s + z.",
+      "przyklady": [
+        { "pl": "szkoła", "ua": "школа" },
+        { "pl": "szafa", "ua": "шафа" }
+      ]
+    },
+    {
+      "litery": "cz",
+      "dzwiek": "ч",
+      "pl": "Głoskę [ч] piszemy: c + z.",
+      "ua": "Звук [ч] пишемо: c + z.",
+      "przyklady": [
+        { "pl": "czapka", "ua": "шапка" },
+        { "pl": "czas", "ua": "час" }
+      ]
+    },
+    {
+      "litery": "ch",
+      "dzwiek": "х",
+      "pl": "Głoskę [х] piszemy: c + h. Uwaga: po polsku ch to NIE jest [ч]!",
+      "ua": "Звук [х] пишемо: c + h. Увага: польське ch - це НЕ [ч], як в англійській!",
+      "przyklady": [
+        { "pl": "chleb", "ua": "хліб" },
+        { "pl": "mucha", "ua": "муха" }
+      ]
+    }
+  ],
+  "slowa": [
+    { "pl": "szkoła", "ua": "школа" },
+    { "pl": "kasza", "ua": "каша" },
+    { "pl": "mysz", "ua": "миша" },
+    { "pl": "czapka", "ua": "шапка" },
+    { "pl": "oczy", "ua": "очі" },
+    { "pl": "klucz", "ua": "ключ" },
+    { "pl": "chleb", "ua": "хліб" },
+    { "pl": "chmura", "ua": "хмара" },
+    { "pl": "ucho", "ua": "вухо" },
+    { "pl": "dach", "ua": "дах" }
+  ],
+  "zdania": [
+    { "pl": "To jest moja szkoła.", "ua": "Це моя школа." },
+    { "pl": "Mam czarny plecak.", "ua": "У мене чорний рюкзак." },
+    { "pl": "Tata kupił chleb.", "ua": "Тато купив хліб." },
+    { "pl": "Kot ma szare uszy.", "ua": "Кіт має сірі вуха." },
+    { "pl": "Mucha siedzi na dachu.", "ua": "Муха сидить на даху." },
+    { "pl": "Czas na obiad.", "ua": "Час обідати." }
+  ]
+}
