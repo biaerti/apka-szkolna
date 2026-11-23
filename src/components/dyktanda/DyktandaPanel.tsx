@@ -2,8 +2,11 @@
 // Kto zrobil ktora lekcje, z jakim wynikiem i jakie byly bledy; dodawanie
 // uczniow, nowe hasla i kartki z haslami do wydruku. Strona ucznia: /dyktando.
 
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../../data/supabase';
+import { useStore } from '../../data/store';
+import { Select } from '../ui/Select';
+import type { Student } from '../../data/types';
 import { DYKTANDA, dostepneLekcje } from '../../data/dyktanda';
 import { toDateKey } from '../../lib/dates';
 import { copyToClipboard } from '../../lib/clipboard';
@@ -74,13 +77,25 @@ body { font-family: Arial, sans-serif; margin: 0; }
   okno.document.close();
 }
 
+/**
+ * Imie na publicznej liscie /dyktando: samo imie, a przy tym samym imieniu
+ * w klasie albo na liscie - z pierwsza litera nazwiska ("Daniel K.").
+ */
+export function imieNaListe(uczen: Student, klasa: Student[], naLiscie: string[]): string {
+  const imie = uczen.firstName.trim();
+  const powtarza =
+    klasa.some((s) => s.id !== uczen.id && s.firstName.trim() === imie) || naLiscie.includes(imie);
+  const litera = uczen.lastName.trim().charAt(0).toUpperCase();
+  return powtarza && litera ? `${imie} ${litera}.` : imie;
+}
+
 const krotkaData = (iso: string) => {
   const d = new Date(iso);
   return `${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
 
 const btn =
-  'inline-flex min-h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500';
+  'inline-flex min-h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:cursor-not-allowed disabled:opacity-50';
 const btnMaly = 'text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline';
 
 export function DyktandaPanel() {
@@ -89,6 +104,20 @@ export function DyktandaPanel() {
   const [blad, setBlad] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [otwarte, setOtwarte] = useState<string | null>(null);
+  const [dodawanie, setDodawanie] = useState(false);
+  const classes = useStore((s) => s.classes);
+  const students = useStore((s) => s.students);
+  const domyslnaKlasa = classes.find((c) => c.name.replace(/\s/g, '').toUpperCase() === 'VA')?.id ?? classes[0]?.id ?? '';
+  const [klasaId, setKlasaId] = useState('');
+  const [uczenId, setUczenId] = useState('');
+  const wybranaKlasa = klasaId || domyslnaKlasa;
+  const uczniowieKlasy = useMemo(
+    () =>
+      students
+        .filter((s) => s.classId === wybranaKlasa && s.active)
+        .sort((a, b) => a.number - b.number),
+    [students, wybranaKlasa],
+  );
 
   const wczytaj = useCallback(async () => {
     const sb = getSupabase();
@@ -116,11 +145,14 @@ export function DyktandaPanel() {
   const lekcje = dostepne.length ? dostepne : DYKTANDA.slice(0, 1);
 
   async function dodaj() {
-    const imie = window.prompt('Imię ucznia (bez nazwiska, tak jak ma je widzieć na liście):')?.trim();
-    if (!imie) return;
+    const uczen = uczniowieKlasy.find((x) => x.id === uczenId);
+    if (!uczen) return;
+    const imie = imieNaListe(uczen, uczniowieKlasy, aktywni.map((u) => u.imie));
     const haslo = noweHaslo();
     const { error } = await getSupabase().rpc('dyktando_dodaj_ucznia', { p_imie: imie, p_haslo: haslo });
     if (error) return setInfo('Nie udało się dodać ucznia.');
+    setUczenId('');
+    setInfo(`Dodano: ${imie}.`);
     await wczytaj();
     drukujKartki([{ imie, haslo }]);
   }
@@ -177,12 +209,50 @@ export function DyktandaPanel() {
         </div>
         <div className="flex shrink-0 flex-wrap gap-2">
           <button type="button" className={btn} onClick={kopiuj}>Kopiuj link</button>
-          <button type="button" className={btn} onClick={dodaj}>Dodaj ucznia</button>
+          <button type="button" className={btn} onClick={() => setDodawanie((v) => !v)} aria-expanded={dodawanie}>
+            Dodaj ucznia
+          </button>
           <button type="button" className={btn} onClick={wszystkieKartki} disabled={aktywni.length === 0}>
             Kartki z hasłami
           </button>
         </div>
       </div>
+      {dodawanie && (
+        <div className="mb-4 flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-4 sm:flex-row sm:items-end">
+          <label className="text-sm text-gray-700 sm:w-32">
+            Klasa
+            <Select
+              className="mt-1"
+              value={wybranaKlasa}
+              onChange={(e) => {
+                setKlasaId(e.target.value);
+                setUczenId('');
+              }}
+            >
+              {classes.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </Select>
+          </label>
+          <label className="flex-1 text-sm text-gray-700">
+            Uczeń
+            <Select className="mt-1" value={uczenId} onChange={(e) => setUczenId(e.target.value)}>
+              <option value="">- wybierz -</option>
+              {uczniowieKlasy.map((s) => {
+                const juz = aktywni.some((u) => u.imie === imieNaListe(s, uczniowieKlasy, []));
+                return (
+                  <option key={s.id} value={s.id} disabled={juz}>
+                    {s.number}. {s.lastName} {s.firstName}{juz ? ' (już jest)' : ''}
+                  </option>
+                );
+              })}
+            </Select>
+          </label>
+          <button type="button" className={btn} onClick={dodaj} disabled={!uczenId}>
+            Dodaj i drukuj kartkę
+          </button>
+        </div>
+      )}
       {blad && <p className="mb-3 text-sm text-red-700">{blad}</p>}
       {info && <p className="mb-3 text-sm text-gray-600">{info}</p>}
 
