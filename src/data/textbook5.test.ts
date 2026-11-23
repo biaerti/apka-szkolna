@@ -140,7 +140,7 @@ describe('buildTextbook5', () => {
 
   it('dzial 2 idzie po dziale 1 jako osobna grupa na liscie lekcji', () => {
     const dzialy = [...new Set(bundle.lessons.map((l) => l.dzial))];
-    expect(dzialy).toEqual(['Dział 1 - W poszukiwaniu przyjaźni', 'Dział 2 - Uwaga, uczucia!', 'Dział 3 - Ideały, autorytety, idole']);
+    expect(dzialy).toEqual(['Dział 1 - W poszukiwaniu przyjaźni', 'Dział 2 - Uwaga, uczucia!', 'Dział 3 - Ideały, autorytety, idole', 'Lektura - Chłopcy z Placu Broni']);
     const pierwsza = bundle.lessons.findIndex((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!');
     expect(bundle.lessons[pierwsza].title).toBe('17. Przenośnia - słowa nie wprost');
     expect(bundle.lessons.slice(pierwsza, pierwsza + 13).every((l) => l.dzial === 'Dział 2 - Uwaga, uczucia!')).toBe(true);

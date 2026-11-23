@@ -13,6 +13,7 @@ import type { FreshMaterialsBundle } from '../components/lessons/refreshMaterial
 import { newId } from './id';
 import { DZIAL2_TOPICS } from './textbook5dzial2';
 import { DZIAL3_TOPICS } from './textbook5dzial3';
+import { LEKTURA_CHLOPCY_TOPICS } from './lekturaChlopcy';
 import {
   plan, recap, slideCzytanka, slideNote, slideRead, slideRecap, slideTask, slideText, slideTextbookImage,
   slideTextbookTask, slideTopic, slideVideo, type Topic,
@@ -579,7 +580,9 @@ const TOPICS: Topic[] = [
   },
 ];
 
-const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? DZIAL })), ...DZIAL2_TOPICS, ...DZIAL3_TOPICS];
+// Lektura „Chłopcy z Placu Broni” - te same lekcje co w kl. 4 (lekturaChlopcy.ts),
+// 5a tez ja przerabia (Bartek 2026-11-23). Na koncu, zeby nie przesunac kodow lekcji.
+const ALL_TOPICS: Topic[] = [...TOPICS.map((t) => ({ ...t, dzial: t.dzial ?? DZIAL })), ...DZIAL2_TOPICS, ...DZIAL3_TOPICS, ...LEKTURA_CHLOPCY_TOPICS];
 
 export function buildTextbook5(grade: string, classIds: string[]): FreshMaterialsBundle {
   if (grade.toUpperCase() !== 'V') throw new Error('Materiał jest przygotowany dla klasy V.');
@@ -594,7 +597,7 @@ export function buildTextbook5(grade: string, classIds: string[]): FreshMaterial
       topic: topic.topic,
       registerTopic: topic.title.replace(/^[\d-]+[a-z]?\.\s*/, ''),
       materialType: 'textbook',
-      textbookPage: topic.textbookPage,
+      textbookPage: topic.textbookPage || undefined,
       teacherPlan: topic.teacherPlan,
       questionSetId: setId,
       reviewQuestionSetId: setId,
