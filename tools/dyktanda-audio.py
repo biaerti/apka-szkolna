@@ -60,18 +60,33 @@ def wolno(zdanie: str) -> str:
 
 
 def teksty() -> dict[str, str]:
+    """slug pliku -> tekst do przeczytania (ten sam slug co w src/data/dyktanda.ts)."""
     wynik: dict[str, str] = {}
+
+    def dodaj(t: str) -> None:
+        s = slug(t)
+        if s in wynik and wynik[s] != t:
+            sys.exit(f"Ten sam plik dla dwoch tekstow: {wynik[s]!r} i {t!r}")
+        wynik[s] = t
+
     for plik in sorted(LEKCJE.glob("*.json")):
         lekcja = json.loads(plik.read_text(encoding="utf-8"))
-        wszystkie = [p["pl"] for r in lekcja["wstep"] for p in r["przyklady"]]
-        wszystkie += [s["pl"] for s in lekcja["slowa"]] + [z["pl"] for z in lekcja["zdania"]]
-        for t in wszystkie:
-            s = slug(t)
-            if s in wynik and wynik[s] != t:
-                sys.exit(f"Ten sam plik dla dwoch tekstow: {wynik[s]!r} i {t!r}")
-            wynik[s] = t
-        for z in lekcja["zdania"]:
+        test = lekcja.get("test", {"slowa": [], "zdania": []})
+        zdania = lekcja["zdania"] + test["zdania"]
+        for t in [p["pl"] for r in lekcja["wstep"] for p in r["przyklady"]]:
+            dodaj(t)
+        for t in [x["pl"] for x in lekcja.get("cwiczenie", []) + lekcja["slowa"] + test["slowa"] + zdania]:
+            dodaj(t)
+        for z in zdania:
             wynik[f"{slug(z['pl'])}-wolno"] = wolno(z["pl"])
+        # Lektorka do slajdow: <id>-intro, <id>-regula-N, <id>-zapamietaj (lektorUrl w dyktanda.ts).
+        if "intro" in lekcja:
+            wynik[f"{lekcja['id']}-intro"] = lekcja["intro"]["lektor"]
+        for i, r in enumerate(lekcja["wstep"]):
+            if "lektor" in r:
+                wynik[f"{lekcja['id']}-regula-{i + 1}"] = r["lektor"]
+        if "zapamietaj" in lekcja:
+            wynik[f"{lekcja['id']}-zapamietaj"] = lekcja["zapamietaj"]["lektor"]
     return wynik
 
 

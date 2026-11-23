@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cegielki, porownajSlowo, porownajZdanie, punktyZdania } from './dyktando';
-import { DYKTANDA, maksPunktow, slugAudio } from '../data/dyktanda';
+import { DYKTANDA, maksPunktow, polski, slugAudio } from '../data/dyktanda';
 
 const litery = (s: string) => cegielki(s).map((c) => c.litery);
 
@@ -92,10 +92,57 @@ describe('dane dyktand', () => {
     for (const l of DYKTANDA) {
       expect(l.slowa.length).toBeGreaterThanOrEqual(6);
       expect(l.zdania.length).toBeGreaterThanOrEqual(4);
+      expect(l.test.slowa.length + l.test.zdania.length).toBeGreaterThanOrEqual(5);
       expect(maksPunktow(l)).toBeGreaterThan(10);
-      const teksty = new Set([...l.slowa, ...l.zdania, ...l.wstep.flatMap((r) => r.przyklady)].map((p) => p.pl));
+      const wszystkie = [
+        ...l.slowa, ...l.zdania, ...l.cwiczenie, ...l.test.slowa, ...l.test.zdania,
+        ...l.wstep.flatMap((r) => r.przyklady),
+      ];
+      const teksty = new Set(wszystkie.map((p) => p.pl));
       const slugi = new Set([...teksty].map(slugAudio));
       expect(slugi.size).toBe(teksty.size);
+    }
+  });
+
+  it('kazdy tekst ma tlumaczenie ukrainskie i hiszpanskie', () => {
+    for (const l of DYKTANDA) {
+      const teksty = [
+        l.intro, ...l.wstep, ...l.slowa, ...l.zdania, ...l.cwiczenie, ...l.test.slowa, ...l.test.zdania,
+        ...l.zapamietaj.punkty, ...l.wstep.flatMap((r) => r.przyklady),
+      ];
+      for (const t of teksty) {
+        expect(t.ua, t.pl).toBeTruthy();
+        expect(t.es, t.pl).toBeTruthy();
+      }
+      expect(l.tematUa && l.tematEs).toBeTruthy();
+      for (const r of l.wstep) expect(r.dzwiek && r.dzwiekEs && r.lektor).toBeTruthy();
+    }
+  });
+
+  it('hiszpanskojezyczny nie widzi cyrylicy ani wzmianki o ukrainskim', () => {
+    for (const l of DYKTANDA) {
+      for (const t of [l.intro, ...l.wstep, ...l.zapamietaj.punkty]) {
+        expect(polski(t, 'es'), t.pl).not.toMatch(/[\u0400-\u04FF]|ukrai/i);
+      }
+    }
+  });
+
+  it('w cwiczeniu luka jest w slowie i jest jedna z liter lekcji', () => {
+    for (const l of DYKTANDA) {
+      const litery = l.wstep.map((r) => r.litery);
+      for (const c of l.cwiczenie) {
+        expect(c.pl.toLowerCase(), c.pl).toContain(c.luka);
+        expect(litery).toContain(c.luka);
+      }
+    }
+  });
+
+  it('lektorka nie czyta golych liter ani nawiasow (TTS czyta je zle)', () => {
+    for (const l of DYKTANDA) {
+      for (const t of [l.intro.lektor, l.zapamietaj.lektor, ...l.wstep.map((r) => r.lektor)]) {
+        expect(t).not.toMatch(/[[\]+=]/);
+        for (const r of l.wstep) expect(t.split(/[\s.,:!?]+/)).not.toContain(r.litery);
+      }
     }
   });
 });

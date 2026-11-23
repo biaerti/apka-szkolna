@@ -21,6 +21,7 @@ import { Uwagi } from './pages/Uwagi';
 import { SettingsPage } from './pages/Settings';
 import { Podstawa } from './pages/Podstawa';
 import { Lektury } from './pages/Lektury';
+import { ZadaniaDomowe } from './pages/ZadaniaDomowe';
 import { LekturyPrint } from './pages/LekturyPrint';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
 import { RulesPrint } from './pages/RulesPrint';
@@ -95,6 +96,7 @@ export default function App() {
         <Route path="/dokumenty" element={<Dokumenty />} />
         <Route path="/podstawa" element={<Podstawa />} />
         <Route path="/lektury" element={<Lektury />} />
+        <Route path="/zadania" element={<ZadaniaDomowe />} />
         <Route path="/ustawienia" element={<SettingsPage />} />
         <Route path="*" element={<ModulePlaceholder title="Nie znaleziono strony" />} />
       </Route>

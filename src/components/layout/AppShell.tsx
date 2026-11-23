@@ -25,11 +25,14 @@ import { useDarkMode } from '../../lib/theme';
 // z ktorych nauczyciel sklada paczki na WhatsAppa (patrz src/pages/WazneInfo.tsx).
 // "Dokumenty" to lista wydrukow: zasady lekcji dla dzieci, PSO dla rodzicow,
 // plan rozwoju dla dyrektora - jedna zakladka zamiast osobnej na kazdy papier.
+// "Zadania domowe" to prace robione w domu pod linkiem (na razie dyktanda dla
+// uczniow z innym jezykiem ojczystym), z wynikami wracajacymi do apki.
 const NAV_ITEMS = [
   { to: '/', label: 'Pulpit', end: true },
   { to: '/sala', label: 'Sala' },
   { to: '/klasy', label: 'Klasy' },
   { to: '/lekcje', label: 'Lekcje' },
+  { to: '/zadania', label: 'Zadania domowe' },
   { to: '/uwagi', label: 'Uwagi' },
   { to: '/kartkowki', label: 'Kartkówki' },
   { to: '/stoper', label: 'Stoper' },

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { DownloadIcon } from '../ui/icons';
-import { DyktandaPanel } from '../dyktanda/DyktandaPanel';
 import { useStore } from '../../data/store';
 import { toDateKey } from '../../lib/dates';
 import {
@@ -91,7 +90,6 @@ export function PolskiOdZeraMaterials() {
         ))}
       </ol>
       {info && <p className="mt-2 text-sm text-gray-500">{info}</p>}
-      <DyktandaPanel />
     </section>
   );
 }

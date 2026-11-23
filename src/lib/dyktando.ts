@@ -15,8 +15,13 @@ export interface Wskazowka {
   litery: string;
   /** Ukrainski dzwiek, np. "ш". */
   dzwiek: string;
+  /** Ten sam dzwiek dla hiszpanskojezycznych, np. "sh". */
+  dzwiekEs: string;
   pl: string;
+  /** Polska linijka dla hiszpanskojezycznych (bez cyrylicy). */
+  plEs?: string;
   ua: string;
+  es: string;
 }
 
 export interface WynikSlowa {
@@ -118,48 +123,48 @@ export function cegielki(slowo: string): Cegielka[] {
 }
 
 const WSKAZOWKI: Record<string, Omit<Wskazowka, 'litery'>> = {
-  sz: { dzwiek: 'ш', pl: 'piszemy dwiema literami: s + z', ua: 'дві літери: s + z' },
-  cz: { dzwiek: 'ч', pl: 'piszemy c + z (nie ch!)', ua: 'c + z (не ch!)' },
-  ch: { dzwiek: 'х', pl: 'piszemy c + h (to nie jest [ч]!)', ua: 'c + h (це не [ч]!)' },
-  h: { dzwiek: 'г / х', pl: 'jedna litera h', ua: 'одна літера h' },
-  rz: { dzwiek: 'ж', pl: 'rz brzmi tak samo jak ż', ua: 'rz звучить як ż' },
-  ż: { dzwiek: 'ж', pl: 'z z kropką', ua: 'z з крапкою' },
-  ź: { dzwiek: 'зь', pl: 'z z kreską', ua: 'z з рисочкою' },
-  ś: { dzwiek: 'сь', pl: 's z kreską', ua: 's з рисочкою' },
-  ć: { dzwiek: 'ть / м’яке ч', pl: 'c z kreską', ua: 'c з рисочкою' },
-  ń: { dzwiek: 'нь', pl: 'n z kreską', ua: 'n з рисочкою' },
-  dz: { dzwiek: 'дз', pl: 'd + z', ua: 'd + z' },
-  dż: { dzwiek: 'дж', pl: 'd + ż', ua: 'd + ż' },
-  dź: { dzwiek: 'дзь', pl: 'd + ź', ua: 'd + ź' },
-  dzi: { dzwiek: 'дзі / дзь', pl: 'przed samogłoską piszemy dzi', ua: 'перед голосною: dzi' },
-  si: { dzwiek: 'сі / сь', pl: 'przed samogłoską piszemy si (nie ś)', ua: 'перед голосною: si' },
-  ci: { dzwiek: 'ті / ть', pl: 'przed samogłoską piszemy ci (nie ć)', ua: 'перед голосною: ci' },
-  zi: { dzwiek: 'зі / зь', pl: 'przed samogłoską piszemy zi (nie ź)', ua: 'перед голосною: zi' },
-  ni: { dzwiek: 'ні / нь', pl: 'przed samogłoską piszemy ni (nie ń)', ua: 'перед голосною: ni' },
-  ia: { dzwiek: 'я', pl: 'po spółgłosce [я] piszemy ia', ua: 'я = ia' },
-  ie: { dzwiek: 'є', pl: 'po spółgłosce [є] piszemy ie', ua: 'є = ie' },
-  iu: { dzwiek: 'ю', pl: 'po spółgłosce [ю] piszemy iu', ua: 'ю = iu' },
-  io: { dzwiek: 'ьо', pl: 'po spółgłosce piszemy io', ua: 'ьо = io' },
-  ią: { dzwiek: 'ьон', pl: 'piszemy ią', ua: 'ьон = ią' },
-  ię: { dzwiek: 'єн', pl: 'piszemy ię', ua: 'єн = ię' },
-  ł: { dzwiek: 'ў', pl: 'ł z kreską, brzmi jak angielskie w', ua: 'як англійське w' },
-  l: { dzwiek: 'л', pl: 'zwykłe l, bez kreski', ua: 'звичайне l' },
-  w: { dzwiek: 'в', pl: 'piszemy w (nie v)', ua: 'в = w (не v)' },
-  y: { dzwiek: 'и', pl: 'piszemy y', ua: 'и = y' },
-  i: { dzwiek: 'і', pl: 'piszemy i', ua: 'і = i' },
-  j: { dzwiek: 'й', pl: 'piszemy j', ua: 'й = j' },
-  ą: { dzwiek: 'он / ом', pl: 'a z ogonkiem', ua: 'a з хвостиком' },
-  ę: { dzwiek: 'ен / ем', pl: 'e z ogonkiem', ua: 'e з хвостиком' },
-  ó: { dzwiek: 'у', pl: 'o z kreską (brzmi jak u)', ua: 'o з рисочкою, звучить як у' },
-  u: { dzwiek: 'у', pl: 'zwykłe u', ua: 'звичайне u' },
-  c: { dzwiek: 'ц', pl: 'piszemy c', ua: 'ц = c' },
-  e: { dzwiek: 'е', pl: 'piszemy e', ua: 'е = e' },
-  a: { dzwiek: 'а', pl: 'piszemy a', ua: 'а = a' },
-  o: { dzwiek: 'о', pl: 'piszemy o', ua: 'о = o' },
-  z: { dzwiek: 'з', pl: 'piszemy z', ua: 'з = z' },
-  s: { dzwiek: 'с', pl: 'piszemy s', ua: 'с = s' },
-  k: { dzwiek: 'к', pl: 'piszemy k', ua: 'к = k' },
-  g: { dzwiek: 'ґ', pl: 'piszemy g', ua: 'ґ = g' },
+  sz: { dzwiek: 'ш', dzwiekEs: 'sh', pl: 'piszemy dwiema literami: s + z', ua: 'дві літери: s + z', es: 'dos letras: s + z (como «sh» en inglés)' },
+  cz: { dzwiek: 'ч', dzwiekEs: 'ch', pl: 'piszemy c + z (nie ch!)', ua: 'c + z (не ch!)', es: 'c + z (la «ch» de «chico»)' },
+  ch: { dzwiek: 'х', dzwiekEs: 'j', pl: 'piszemy c + h (to nie jest [ч]!)', plEs: 'piszemy c + h (jak hiszpańskie j)', ua: 'c + h (це не [ч]!)', es: 'c + h (suena como la «j» de «jamón»)' },
+  h: { dzwiek: 'г / х', dzwiekEs: 'j', pl: 'jedna litera h', ua: 'одна літера h', es: 'una letra h (suena como la «j»)' },
+  rz: { dzwiek: 'ж', dzwiekEs: 'zh', pl: 'rz brzmi tak samo jak ż', ua: 'rz звучить як ż', es: 'rz suena igual que ż' },
+  ż: { dzwiek: 'ж', dzwiekEs: 'zh', pl: 'z z kropką', ua: 'z з крапкою', es: 'z con punto (como la «s» de «vision» en inglés)' },
+  ź: { dzwiek: 'зь', dzwiekEs: 'zh suave', pl: 'z z kreską', ua: 'z з рисочкою', es: 'z con rayita' },
+  ś: { dzwiek: 'сь', dzwiekEs: 'sh suave', pl: 's z kreską', ua: 's з рисочкою', es: 's con rayita' },
+  ć: { dzwiek: 'ть / м’яке ч', dzwiekEs: 'ch suave', pl: 'c z kreską', ua: 'c з рисочкою', es: 'c con rayita' },
+  ń: { dzwiek: 'нь', dzwiekEs: 'ñ', pl: 'n z kreską', ua: 'n з рисочкою', es: 'n con rayita (suena como ñ)' },
+  dz: { dzwiek: 'дз', dzwiekEs: 'dz', pl: 'd + z', ua: 'd + z', es: 'd + z' },
+  dż: { dzwiek: 'дж', dzwiekEs: 'dy', pl: 'd + ż', ua: 'd + ż', es: 'd + ż (como la «j» inglesa de «jungle»)' },
+  dź: { dzwiek: 'дзь', dzwiekEs: 'dy suave', pl: 'd + ź', ua: 'd + ź', es: 'd + ź' },
+  dzi: { dzwiek: 'дзі / дзь', dzwiekEs: 'dyi', pl: 'przed samogłoską piszemy dzi', ua: 'перед голосною: dzi', es: 'antes de vocal: dzi' },
+  si: { dzwiek: 'сі / сь', dzwiekEs: 'si suave', pl: 'przed samogłoską piszemy si (nie ś)', ua: 'перед голосною: si', es: 'antes de vocal: si (no ś)' },
+  ci: { dzwiek: 'ті / ть', dzwiekEs: 'chi suave', pl: 'przed samogłoską piszemy ci (nie ć)', ua: 'перед голосною: ci', es: 'antes de vocal: ci (no ć)' },
+  zi: { dzwiek: 'зі / зь', dzwiekEs: 'zi suave', pl: 'przed samogłoską piszemy zi (nie ź)', ua: 'перед голосною: zi', es: 'antes de vocal: zi (no ź)' },
+  ni: { dzwiek: 'ні / нь', dzwiekEs: 'ñ', pl: 'przed samogłoską piszemy ni (nie ń)', ua: 'перед голосною: ni', es: 'antes de vocal: ni (suena ñ)' },
+  ia: { dzwiek: 'я', dzwiekEs: 'ya', pl: 'po spółgłosce [я] piszemy ia', ua: 'я = ia', es: 'después de consonante: ia' },
+  ie: { dzwiek: 'є', dzwiekEs: 'ye', pl: 'po spółgłosce [є] piszemy ie', ua: 'є = ie', es: 'después de consonante: ie' },
+  iu: { dzwiek: 'ю', dzwiekEs: 'yu', pl: 'po spółgłosce [ю] piszemy iu', ua: 'ю = iu', es: 'después de consonante: iu' },
+  io: { dzwiek: 'ьо', dzwiekEs: 'yo', pl: 'po spółgłosce piszemy io', ua: 'ьо = io', es: 'después de consonante: io' },
+  ią: { dzwiek: 'ьон', dzwiekEs: 'yon', pl: 'piszemy ią', ua: 'ьон = ią', es: 'escribimos ią' },
+  ię: { dzwiek: 'єн', dzwiekEs: 'yen', pl: 'piszemy ię', ua: 'єн = ię', es: 'escribimos ię' },
+  ł: { dzwiek: 'ў', dzwiekEs: 'u', pl: 'ł z kreską, brzmi jak angielskie w', ua: 'як англійське w', es: 'l con rayita, suena como la «u» de «huevo»' },
+  l: { dzwiek: 'л', dzwiekEs: 'l', pl: 'zwykłe l, bez kreski', ua: 'звичайне l', es: 'l normal, sin rayita' },
+  w: { dzwiek: 'в', dzwiekEs: 'v', pl: 'piszemy w (nie v)', ua: 'в = w (не v)', es: 'escribimos w (suena como la «v» inglesa)' },
+  y: { dzwiek: 'и', dzwiekEs: 'i oscura', pl: 'piszemy y', ua: 'и = y', es: 'escribimos y (en polaco es una vocal)' },
+  i: { dzwiek: 'і', dzwiekEs: 'i', pl: 'piszemy i', ua: 'і = i', es: 'escribimos i' },
+  j: { dzwiek: 'й', dzwiekEs: 'y', pl: 'piszemy j', ua: 'й = j', es: 'escribimos j (suena como la «y» de «yo»)' },
+  ą: { dzwiek: 'он / ом', dzwiekEs: 'on', pl: 'a z ogonkiem', ua: 'a з хвостиком', es: 'a con colita (suena «on»)' },
+  ę: { dzwiek: 'ен / ем', dzwiekEs: 'en', pl: 'e z ogonkiem', ua: 'e з хвостиком', es: 'e con colita (suena «en»)' },
+  ó: { dzwiek: 'у', dzwiekEs: 'u', pl: 'o z kreską (brzmi jak u)', ua: 'o з рисочкою, звучить як у', es: 'o con rayita (suena como u)' },
+  u: { dzwiek: 'у', dzwiekEs: 'u', pl: 'zwykłe u', ua: 'звичайне u', es: 'u normal' },
+  c: { dzwiek: 'ц', dzwiekEs: 'ts', pl: 'piszemy c', ua: 'ц = c', es: 'escribimos c (suena «ts»)' },
+  e: { dzwiek: 'е', dzwiekEs: 'e', pl: 'piszemy e', ua: 'е = e', es: 'escribimos e' },
+  a: { dzwiek: 'а', dzwiekEs: 'a', pl: 'piszemy a', ua: 'а = a', es: 'escribimos a' },
+  o: { dzwiek: 'о', dzwiekEs: 'o', pl: 'piszemy o', ua: 'о = o', es: 'escribimos o' },
+  z: { dzwiek: 'з', dzwiekEs: 'z', pl: 'piszemy z', ua: 'з = z', es: 'escribimos z (zumbido, como «zoo» en inglés)' },
+  s: { dzwiek: 'с', dzwiekEs: 's', pl: 'piszemy s', ua: 'с = s', es: 'escribimos s' },
+  k: { dzwiek: 'к', dzwiekEs: 'k', pl: 'piszemy k', ua: 'к = k', es: 'escribimos k' },
+  g: { dzwiek: 'ґ', dzwiekEs: 'g', pl: 'piszemy g', ua: 'ґ = g', es: 'escribimos g (como «gato»)' },
 };
 
 /** Porownuje jedno slowo (z interpunkcja albo bez) z tym, co wpisal uczen. */
@@ -258,4 +263,10 @@ export function porownajZdanie(wpisane: string, wzor: string): WynikSlowa[] {
 /** Punkty za zdanie: poprawne slowa ze wzoru (nadmiarowe slowa nie odejmuja). */
 export function punktyZdania(wyniki: WynikSlowa[]): number {
   return wyniki.filter((w) => w.wzor && w.ok).length;
+}
+
+/** Podpowiedz dla liter (np. do cwiczenia z luka). */
+export function wskazowkaDla(litery: string): Wskazowka | null {
+  const opis = WSKAZOWKI[litery];
+  return opis ? { litery, ...opis } : null;
 }

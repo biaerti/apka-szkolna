@@ -4,56 +4,107 @@
   "od": "2026-11-23",
   "temat": "sz, cz, ch",
   "tematUa": "Звуки ш, ч, х",
+  "tematEs": "Los sonidos sh, ch, j",
+  "intro": { "pl": "Cześć! Dziś poznasz trzy polskie dźwięki. Każdy z nich piszemy dwiema literami.", "ua": "Привіт! Сьогодні ти познайомишся з трьома польськими звуками. Кожен із них пишемо двома літерами.", "es": "¡Hola! Hoy vas a conocer tres sonidos polacos. Cada uno se escribe con dos letras.", "lektor": "Cześć! Dziś poznasz trzy polskie dźwięki. Każdy z nich piszemy dwiema literami. Posłuchaj i zapamiętaj." },
   "wstep": [
     {
       "litery": "sz",
       "dzwiek": "ш",
-      "pl": "Głoskę [ш] piszemy dwiema literami: s + z.",
+      "dzwiekEs": "sh",
+      "pl": "Szumiący dźwięk [ш] piszemy dwiema literami: s + z.",
+      "plEs": "Dźwięk [sh] piszemy dwiema literami: s + z.",
       "ua": "Звук [ш] пишемо двома літерами: s + z.",
+      "es": "El sonido «sh» (como en inglés «she») se escribe con dos letras: s + z.",
+      "lektor": "Posłuchaj: szkoła, mysz. Ten szumiący dźwięk piszemy dwiema literami: es i zet.",
       "przyklady": [
-        { "pl": "szkoła", "ua": "школа" },
-        { "pl": "szafa", "ua": "шафа" }
+        { "pl": "szkoła", "ua": "школа", "es": "escuela", "obraz": "🏫" },
+        { "pl": "mysz", "ua": "миша", "es": "ratón", "obraz": "🐭" }
       ]
     },
     {
       "litery": "cz",
       "dzwiek": "ч",
-      "pl": "Głoskę [ч] piszemy: c + z.",
-      "ua": "Звук [ч] пишемо: c + z.",
+      "dzwiekEs": "ch",
+      "pl": "Dźwięk [ч] piszemy dwiema literami: c + z.",
+      "plEs": "Dźwięk [ch] piszemy dwiema literami: c + z.",
+      "ua": "Звук [ч] пишемо двома літерами: c + z.",
+      "es": "El sonido «ch» de «chico» se escribe con dos letras: c + z.",
+      "lektor": "Posłuchaj: czapka, klucz. Ten dźwięk piszemy dwiema literami: ce i zet.",
       "przyklady": [
-        { "pl": "czapka", "ua": "шапка" },
-        { "pl": "czas", "ua": "час" }
+        { "pl": "czapka", "ua": "шапка", "es": "gorro", "obraz": "🧢" },
+        { "pl": "klucz", "ua": "ключ", "es": "llave", "obraz": "🔑" }
       ]
     },
     {
       "litery": "ch",
       "dzwiek": "х",
-      "pl": "Głoskę [х] piszemy: c + h. Uwaga: po polsku ch to NIE jest [ч]!",
-      "ua": "Звук [х] пишемо: c + h. Увага: польське ch - це НЕ [ч], як в англійській!",
+      "dzwiekEs": "j",
+      "pl": "Dźwięk [х] piszemy dwiema literami: c + h. Uwaga: polskie ch to nie jest [ч]!",
+      "plEs": "Dźwięk [j] piszemy dwiema literami: c + h. Uwaga: polskie ch to nie jest hiszpańskie ch!",
+      "ua": "Звук [х] пишемо двома літерами: c + h. Увага: польське ch - це НЕ [ч], як в англійській!",
+      "es": "El sonido de la «j» española (jamón) se escribe con dos letras: c + h. ¡Ojo: la ch polaca NO suena como en «chico»!",
+      "lektor": "Posłuchaj: chleb, dach. Ten dźwięk piszemy dwiema literami: ce i ha. Uwaga! To nie jest ten sam dźwięk co w słowie czapka.",
       "przyklady": [
-        { "pl": "chleb", "ua": "хліб" },
-        { "pl": "mucha", "ua": "муха" }
+        { "pl": "chleb", "ua": "хліб", "es": "pan", "obraz": "🍞" },
+        { "pl": "dach", "ua": "дах", "es": "techo", "obraz": "🏠" }
       ]
     }
   ],
+  "cwiczenie": [
+    { "pl": "szafa", "luka": "sz", "ua": "шафа", "es": "armario" },
+    { "pl": "czas", "luka": "cz", "ua": "час", "es": "tiempo" },
+    { "pl": "chłopiec", "luka": "ch", "ua": "хлопець", "es": "chico" },
+    { "pl": "koszula", "luka": "sz", "ua": "сорочка", "es": "camisa" },
+    { "pl": "kaczka", "luka": "cz", "ua": "качка", "es": "pato" },
+    { "pl": "suchy", "luka": "ch", "ua": "сухий", "es": "seco" }
+  ],
   "slowa": [
-    { "pl": "szkoła", "ua": "школа" },
-    { "pl": "kasza", "ua": "каша" },
-    { "pl": "mysz", "ua": "миша" },
-    { "pl": "czapka", "ua": "шапка" },
-    { "pl": "oczy", "ua": "очі" },
-    { "pl": "klucz", "ua": "ключ" },
-    { "pl": "chleb", "ua": "хліб" },
-    { "pl": "chmura", "ua": "хмара" },
-    { "pl": "ucho", "ua": "вухо" },
-    { "pl": "dach", "ua": "дах" }
+    { "pl": "kasza", "ua": "каша", "es": "papilla" },
+    { "pl": "szuflada", "ua": "шухляда", "es": "cajón" },
+    { "pl": "kosz", "ua": "кошик", "es": "cesta" },
+    { "pl": "czekolada", "ua": "шоколад", "es": "chocolate" },
+    { "pl": "oczy", "ua": "очі", "es": "ojos" },
+    { "pl": "kurczak", "ua": "курка", "es": "pollo" },
+    { "pl": "chmura", "ua": "хмара", "es": "nube" },
+    { "pl": "ucho", "ua": "вухо", "es": "oreja" }
   ],
   "zdania": [
-    { "pl": "To jest moja szkoła.", "ua": "Це моя школа." },
-    { "pl": "Mam czarny plecak.", "ua": "У мене чорний рюкзак." },
-    { "pl": "Tata kupił chleb.", "ua": "Тато купив хліб." },
-    { "pl": "Kot ma szare uszy.", "ua": "Кіт має сірі вуха." },
-    { "pl": "Mucha siedzi na dachu.", "ua": "Муха сидить на даху." },
-    { "pl": "Czas na obiad.", "ua": "Час обідати." }
-  ]
+    { "pl": "To jest moja szkoła.", "ua": "Це моя школа.", "es": "Esta es mi escuela." },
+    { "pl": "Mam czarny plecak.", "ua": "У мене чорний рюкзак.", "es": "Tengo una mochila negra." },
+    { "pl": "Tata kupił chleb.", "ua": "Тато купив хліб.", "es": "Papá compró pan." },
+    { "pl": "Kot ma szare uszy.", "ua": "Кіт має сірі вуха.", "es": "El gato tiene orejas grises." },
+    { "pl": "Mucha siedzi na dachu.", "ua": "Муха сидить на даху.", "es": "Una mosca está en el techo." }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Szkoła piszemy przez es zet. Czapka przez ce zet. Chleb przez ce ha. A teraz krótki test.",
+    "punkty": [
+      { "pl": "Jeden dźwięk, dwie litery: sz, cz, ch.", "ua": "Один звук - дві літери: sz, cz, ch.", "es": "Un sonido, dos letras: sz, cz, ch." },
+      {
+        "pl": "Polskie ch to [х]. Dźwięk [ч] piszemy cz.",
+        "plEs": "Polskie ch czytamy jak hiszpańskie j. Dźwięk z hiszpańskiego chico piszemy cz.",
+        "ua": "Польське ch - це [х]. Звук [ч] пишемо cz.",
+        "es": "La ch polaca suena como la «j» española. El sonido de «chico» en polaco se escribe cz."
+      },
+      {
+        "pl": "Uważaj na słowa podobne do ukraińskich: czekolada, a nie szokolada.",
+        "plEs": "Po polsku w tych słowach nie piszemy sh ani j: szafa, chleb.",
+        "ua": "Обережно зі схожими словами: czekolada (шоколад), а не szokolada.",
+        "es": "En polaco no escribimos «sh» ni «j» en estas palabras: szafa, chleb."
+      }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "puszka", "ua": "банка", "es": "lata" },
+      { "pl": "szyja", "ua": "шия", "es": "cuello" },
+      { "pl": "czytam", "ua": "читаю", "es": "leo" },
+      { "pl": "czwartek", "ua": "четвер", "es": "jueves" },
+      { "pl": "chory", "ua": "хворий", "es": "enfermo" },
+      { "pl": "duch", "ua": "привид", "es": "fantasma" }
+    ],
+    "zdania": [
+      { "pl": "Szymon ma chomika.", "ua": "Шимон має хом’ячка.", "es": "Szymon tiene un hámster." },
+      { "pl": "Czytam w domu.", "ua": "Я читаю вдома.", "es": "Leo en casa." }
+    ]
+  }
 }

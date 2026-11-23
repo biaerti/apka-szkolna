@@ -1,13 +1,14 @@
-// Dyktanda dla uczniow z Ukrainy - widok nauczyciela (Lekcje -> Polski od zera).
-// Kto zrobil ktora lekcje, z jakim wynikiem i jakie byly bledy; dodawanie
-// uczniow, nowe hasla i kartki z haslami do wydruku. Strona ucznia: /dyktando.
+// Dyktanda dla uczniow z innym jezykiem ojczystym - widok nauczyciela (zakladka
+// Zadania domowe). Kto zrobil ktora lekcje, z jakim wynikiem i jakie byly bledy;
+// dodawanie uczniow z dziennika, jezyk podpowiedzi (ukrainski / hiszpanski), nowe
+// hasla i kartki z haslami do wydruku. Strona ucznia: /dyktando.
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../../data/supabase';
 import { useStore } from '../../data/store';
 import { Select } from '../ui/Select';
 import type { Student } from '../../data/types';
-import { DYKTANDA, dostepneLekcje } from '../../data/dyktanda';
+import { DYKTANDA, JEZYKI, dostepneLekcje, type Jezyk } from '../../data/dyktanda';
 import { toDateKey } from '../../lib/dates';
 import { copyToClipboard } from '../../lib/clipboard';
 
@@ -17,7 +18,14 @@ interface UczenDyktanda {
   id: string;
   imie: string;
   aktywny: boolean;
+  /** Kolumny z migracji 0043 - przed nia ich nie ma. */
+  jezyk?: Jezyk;
+  student_id?: string | null;
+  class_id?: string | null;
 }
+
+const BRAK_0043 =
+  'W bazie brakuje migracji 0043 (język i klasa) - wklej supabase/migrations/0043_dyktanda_jezyk_klasa.sql w Supabase.';
 
 interface WynikDyktanda {
   id: string;
@@ -98,7 +106,8 @@ const btn =
   'inline-flex min-h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:cursor-not-allowed disabled:opacity-50';
 const btnMaly = 'text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline';
 
-export function DyktandaPanel() {
+/** klasaId - pokazuj tylko uczniow tej klasy (null = wszystkich). */
+export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
   const [uczniowie, setUczniowie] = useState<UczenDyktanda[] | null>(null);
   const [wyniki, setWyniki] = useState<WynikDyktanda[]>([]);
   const [blad, setBlad] = useState<string | null>(null);
@@ -108,9 +117,10 @@ export function DyktandaPanel() {
   const classes = useStore((s) => s.classes);
   const students = useStore((s) => s.students);
   const domyslnaKlasa = classes.find((c) => c.name.replace(/\s/g, '').toUpperCase() === 'VA')?.id ?? classes[0]?.id ?? '';
-  const [klasaId, setKlasaId] = useState('');
+  const [klasaFormularza, setKlasaFormularza] = useState('');
   const [uczenId, setUczenId] = useState('');
-  const wybranaKlasa = klasaId || domyslnaKlasa;
+  const [jezykNowego, setJezykNowego] = useState<Jezyk>('ua');
+  const wybranaKlasa = klasaFormularza || (klasaId ?? domyslnaKlasa);
   const uczniowieKlasy = useMemo(
     () =>
       students
@@ -122,7 +132,7 @@ export function DyktandaPanel() {
   const wczytaj = useCallback(async () => {
     const sb = getSupabase();
     const [u, w] = await Promise.all([
-      sb.from('dyktando_uczniowie').select('id, imie, aktywny').order('imie'),
+      sb.from('dyktando_uczniowie').select('*').order('imie'),
       sb.from('dyktando_wyniki').select('*').order('created_at', { ascending: false }),
     ]);
     if (u.error || w.error) {
@@ -138,9 +148,35 @@ export function DyktandaPanel() {
     if (isSupabaseConfigured()) void wczytaj();
   }, [wczytaj]);
 
+  // Uczniowie dodani przed migracja 0043 nie maja klasy - dopasowujemy po imieniu
+  // z dziennika (tylko jednoznaczne trafienia) i zapisujemy raz.
+  useEffect(() => {
+    if (!uczniowie || students.length === 0) return;
+    const bezKlasy = uczniowie.filter((u) => u.aktywny && 'student_id' in u && !u.student_id);
+    if (bezKlasy.length === 0) return;
+    void (async () => {
+      let zmiana = false;
+      for (const u of bezKlasy) {
+        const trafienia = students.filter((s) => {
+          if (!s.active) return false;
+          const klasa = students.filter((x) => x.classId === s.classId && x.active);
+          return imieNaListe(s, klasa, []) === u.imie || s.firstName.trim() === u.imie;
+        });
+        if (trafienia.length !== 1) continue;
+        const { error } = await getSupabase()
+          .from('dyktando_uczniowie')
+          .update({ student_id: trafienia[0].id, class_id: trafienia[0].classId })
+          .eq('id', u.id);
+        if (!error) zmiana = true;
+      }
+      if (zmiana) await wczytaj();
+    })();
+  }, [uczniowie, students, wczytaj]);
+
   if (!isSupabaseConfigured()) return null;
 
-  const aktywni = (uczniowie ?? []).filter((u) => u.aktywny);
+  const nazwaKlasy = (id?: string | null) => classes.find((c) => c.id === id)?.name ?? '';
+  const aktywni = (uczniowie ?? []).filter((u) => u.aktywny && (!klasaId || u.class_id === klasaId));
   const { dostepne } = dostepneLekcje(toDateKey(new Date()));
   const lekcje = dostepne.length ? dostepne : DYKTANDA.slice(0, 1);
 
@@ -149,10 +185,14 @@ export function DyktandaPanel() {
     if (!uczen) return;
     const imie = imieNaListe(uczen, uczniowieKlasy, aktywni.map((u) => u.imie));
     const haslo = noweHaslo();
-    const { error } = await getSupabase().rpc('dyktando_dodaj_ucznia', { p_imie: imie, p_haslo: haslo });
+    const { data: nowyId, error } = await getSupabase().rpc('dyktando_dodaj_ucznia', { p_imie: imie, p_haslo: haslo });
     if (error) return setInfo('Nie udało się dodać ucznia.');
+    const { error: bladKlasy } = await getSupabase()
+      .from('dyktando_uczniowie')
+      .update({ jezyk: jezykNowego, student_id: uczen.id, class_id: uczen.classId })
+      .eq('id', nowyId as string);
     setUczenId('');
-    setInfo(`Dodano: ${imie}.`);
+    setInfo(bladKlasy ? `Dodano: ${imie}. ${BRAK_0043}` : `Dodano: ${imie}.`);
     await wczytaj();
     drukujKartki([{ imie, haslo }]);
   }
@@ -181,6 +221,12 @@ export function DyktandaPanel() {
     await wczytaj();
   }
 
+  async function ustawJezyk(u: UczenDyktanda, jezyk: Jezyk) {
+    const { error } = await getSupabase().from('dyktando_uczniowie').update({ jezyk }).eq('id', u.id);
+    if (error) setInfo(BRAK_0043);
+    await wczytaj();
+  }
+
   async function usun(u: UczenDyktanda) {
     if (!window.confirm(`Zdjąć ${u.imie} z listy? Wyniki zostają w bazie.`)) return;
     await getSupabase().from('dyktando_uczniowie').update({ aktywny: false }).eq('id', u.id);
@@ -193,18 +239,18 @@ export function DyktandaPanel() {
   }
 
   return (
-    <section aria-labelledby="dyktanda-heading" className="mt-10 max-w-4xl">
+    <section aria-labelledby="dyktanda-heading" className="max-w-4xl">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-2xl">
-          <h2 id="dyktanda-heading" className="text-lg font-semibold text-gray-900">
-            Dyktanda - zadanie domowe
-          </h2>
+          <h3 id="dyktanda-heading" className="text-base font-semibold text-gray-900">
+            Dyktanda online
+          </h3>
           <p className="mt-1 text-sm leading-6 text-gray-600">
             Co poniedziałek nowa lekcja pisowni pod{' '}
             <a href="/dyktando" target="_blank" rel="noreferrer" className="font-medium text-accent-700 underline">
               szkola.klippi.pl/dyktando
             </a>
-            : uczeń wybiera imię, wpisuje hasło z kartki, słucha słów i zdań i pisze. Od razu widzi błędy z podpowiedzią po ukraińsku.
+            : wstęp z lektorką, ćwiczenie, słowa, dyktando zdań i test na koniec. Podpowiedzi po ukraińsku albo hiszpańsku, według języka ucznia.
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap gap-2">
@@ -225,7 +271,7 @@ export function DyktandaPanel() {
               className="mt-1"
               value={wybranaKlasa}
               onChange={(e) => {
-                setKlasaId(e.target.value);
+                setKlasaFormularza(e.target.value);
                 setUczenId('');
               }}
             >
@@ -248,6 +294,14 @@ export function DyktandaPanel() {
               })}
             </Select>
           </label>
+          <label className="text-sm text-gray-700 sm:w-36">
+            Podpowiedzi
+            <Select className="mt-1" value={jezykNowego} onChange={(e) => setJezykNowego(e.target.value as Jezyk)}>
+              {JEZYKI.map((j) => (
+                <option key={j.id} value={j.id}>{j.nazwa}</option>
+              ))}
+            </Select>
+          </label>
           <button type="button" className={btn} onClick={dodaj} disabled={!uczenId}>
             Dodaj i drukuj kartkę
           </button>
@@ -262,6 +316,7 @@ export function DyktandaPanel() {
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                 <th className="px-4 py-2">Uczeń</th>
+                <th className="px-3 py-2">Podpowiedzi</th>
                 {lekcje.map((l) => (
                   <th key={l.id} className="px-3 py-2">
                     {l.nr}. {l.temat}
@@ -273,15 +328,32 @@ export function DyktandaPanel() {
             <tbody>
               {aktywni.length === 0 && (
                 <tr>
-                  <td colSpan={lekcje.length + 2} className="px-4 py-4 text-gray-500">
-                    Nikogo jeszcze nie ma - dodaj uczniów.
+                  <td colSpan={lekcje.length + 3} className="px-4 py-4 text-gray-500">
+                    {klasaId ? 'Nikt z tej klasy nie robi dyktand.' : 'Nikogo jeszcze nie ma - dodaj uczniów.'}
                   </td>
                 </tr>
               )}
               {aktywni.map((u) => (
                 <Fragment key={u.id}>
                   <tr className="border-b border-gray-100 last:border-b-0">
-                    <td className="px-4 py-2.5 font-medium text-gray-900">{u.imie}</td>
+                    <td className="px-4 py-2.5 font-medium text-gray-900">
+                      {u.imie}
+                      {!klasaId && u.class_id && (
+                        <span className="ml-2 text-xs font-normal text-gray-500">{nazwaKlasy(u.class_id)}</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <select
+                        aria-label={`Język podpowiedzi: ${u.imie}`}
+                        value={u.jezyk ?? 'ua'}
+                        onChange={(e) => void ustawJezyk(u, e.target.value as Jezyk)}
+                        className="rounded-md border border-gray-200 bg-white px-1.5 py-1 text-xs text-gray-700"
+                      >
+                        {JEZYKI.map((j) => (
+                          <option key={j.id} value={j.id}>{j.nazwa}</option>
+                        ))}
+                      </select>
+                    </td>
                     {lekcje.map((l) => {
                       const proby = wyniki.filter((w) => w.uczen_id === u.id && w.lekcja === l.id);
                       const klucz = `${u.id}:${l.id}`;
@@ -321,7 +393,7 @@ export function DyktandaPanel() {
                     const proby = wyniki.filter((w) => w.uczen_id === u.id && w.lekcja === l.id);
                     return (
                       <tr key={`${l.id}-bledy`} className="border-b border-gray-100 bg-gray-50">
-                        <td colSpan={lekcje.length + 2} className="px-4 py-3">
+                        <td colSpan={lekcje.length + 3} className="px-4 py-3">
                           {proby.map((p) => (
                             <div key={p.id} className="mb-2 last:mb-0">
                               <p className="text-xs font-semibold text-gray-600">
