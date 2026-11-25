@@ -110,6 +110,9 @@ export function ClassDetail() {
               <Link to={`/sala/${schoolClass.id}`}>
                 <Button variant="secondary">Sala</Button>
               </Link>
+              <Link to={`/klasy/${schoolClass.id}/mikolajki`}>
+                <Button variant="secondary">Mikołajki</Button>
+              </Link>
               <Button variant="secondary" onClick={() => setImportOpen(true)}>
                 Importuj z tekstu
               </Button>
