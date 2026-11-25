@@ -1,0 +1,120 @@
+{
+  "id": "02-l-w",
+  "nr": 2,
+  "od": "2026-11-30",
+  "temat": "ł, l, w",
+  "tematUa": "Літери ł, l, w",
+  "tematEs": "Las letras ł, l, w",
+  "intro": { "pl": "Cześć! Dziś ćwiczymy litery ł, l oraz w. Łatwo je pomylić w pisaniu.", "ua": "Привіт! Сьогодні вчимося писати літери ł, l і w. Їх легко переплутати на письмі.", "es": "¡Hola! Hoy practicamos las letras ł, l y w. Es fácil confundirlas al escribir.", "lektor": "Cześć! Dziś ćwiczymy litery eł, el oraz wu. Łatwo je pomylić przy pisaniu. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "ł",
+      "dzwiek": "ў",
+      "dzwiekEs": "u",
+      "pl": "Litera ł to l z kreską. Brzmi jak [ў], krótkie u.",
+      "plEs": "Litera ł to l z kreską. Brzmi jak krótkie u.",
+      "ua": "Літера ł - це l з рисочкою. Звучить як [ў], як у кінці слова «вовк». Часто там, де українською тверде л: лапа - łapa.",
+      "es": "La letra ł es una l con rayita. Suena como la «u» de «huevo».",
+      "lektor": "Posłuchaj: łyżka, jabłko. Ta litera to el z kreską. Brzmi jak krótkie u.",
+      "przyklady": [
+        { "pl": "łyżka", "ua": "ложка", "es": "cuchara", "obraz": "🥄" },
+        { "pl": "jabłko", "ua": "яблуко", "es": "manzana", "obraz": "🍎" }
+      ]
+    },
+    {
+      "litery": "l",
+      "dzwiek": "л",
+      "dzwiekEs": "l",
+      "pl": "Zwykłe l, bez kreski, brzmi jak [л].",
+      "plEs": "Zwykłe l, bez kreski, brzmi jak hiszpańskie l.",
+      "ua": "Звичайне l без рисочки звучить як [л]. Часто там, де українською ль, лі, ле: літо - lato.",
+      "es": "La l sin rayita suena igual que la l española.",
+      "lektor": "Posłuchaj: lody, lampa. To zwykłe el, bez kreski.",
+      "przyklady": [
+        { "pl": "lody", "ua": "морозиво", "es": "helado", "obraz": "🍦" },
+        { "pl": "lampa", "ua": "лампа", "es": "lámpara", "obraz": "💡" }
+      ]
+    },
+    {
+      "litery": "w",
+      "dzwiek": "в",
+      "dzwiekEs": "v",
+      "pl": "Dźwięk [в] piszemy w, a nie v. Na końcu wyrazu w brzmi jak f.",
+      "plEs": "Polskie w brzmi jak angielskie v, ale piszemy w. Na końcu wyrazu brzmi jak f.",
+      "ua": "Звук [в] пишемо літерою w, а не v. У кінці слова w звучить як [ф], але пишемо w: lew.",
+      "es": "La w polaca suena como la «v» inglesa (los dientes tocan el labio). Al final de la palabra suena como «f»: lew.",
+      "lektor": "Posłuchaj: woda, lew. Ten dźwięk piszemy literą wu. Na końcu słowa lew słyszymy ef, ale piszemy wu.",
+      "przyklady": [
+        { "pl": "woda", "ua": "вода", "es": "agua", "obraz": "💧" },
+        { "pl": "lew", "ua": "лев", "es": "león", "obraz": "🦁" }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "ławka", "luka": "ł", "ua": "парта", "es": "pupitre" },
+    { "pl": "lato", "luka": "l", "ua": "літо", "es": "verano" },
+    { "pl": "wiosna", "luka": "w", "ua": "весна", "es": "primavera" },
+    { "pl": "głowa", "luka": "ł", "ua": "голова", "es": "cabeza" },
+    { "pl": "kolano", "luka": "l", "ua": "коліно", "es": "rodilla" },
+    { "pl": "sowa", "luka": "w", "ua": "сова", "es": "búho" },
+    { "pl": "lalka", "luka": "l", "ua": "лялька", "es": "muñeca" },
+    {
+      "pl": "marchew",
+      "luka": "w",
+      "ua": "морква",
+      "es": "zanahoria",
+      "dlaczego": { "pl": "Na końcu słyszymy f, ale piszemy w: marchew, marchewka.", "ua": "У кінці чуємо [ф], але пишемо w: marchew, marchewka.", "es": "Al final suena «f», pero se escribe w: marchew, marchewka." }
+    }
+  ],
+  "slowa": [
+    { "pl": "piłka", "ua": "м’яч", "es": "pelota" },
+    { "pl": "mleko", "ua": "молоко", "es": "leche" },
+    { "pl": "ołówek", "ua": "олівець", "es": "lápiz" },
+    { "pl": "długopis", "ua": "ручка", "es": "bolígrafo" },
+    { "pl": "wtorek", "ua": "вівторок", "es": "martes" },
+    { "pl": "telewizor", "ua": "телевізор", "es": "televisor" },
+    { "pl": "kolega", "ua": "товариш", "es": "compañero" },
+    { "pl": "małpa", "ua": "мавпа", "es": "mono" },
+    { "pl": "lustro", "ua": "дзеркало", "es": "espejo" },
+    { "pl": "sałatka", "ua": "салат", "es": "ensalada" }
+  ],
+  "zdania": [
+    { "pl": "Ola ma nową lalkę.", "ua": "Оля має нову ляльку.", "es": "Ola tiene una muñeca nueva." },
+    { "pl": "Lubię zimne lody.", "ua": "Я люблю холодне морозиво.", "es": "Me gusta el helado frío." },
+    { "pl": "Wojtek gra w piłkę.", "ua": "Войтек грає у м’яч.", "es": "Wojtek juega a la pelota." },
+    { "pl": "Mama kupiła masło.", "ua": "Мама купила масло.", "es": "Mamá compró mantequilla." },
+    { "pl": "W klasie jest wesoło.", "ua": "У класі весело.", "es": "En la clase hay mucha alegría." }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Łyżka piszemy przez eł. Lody przez el. Woda przez wu. Na końcu słowa lew słyszymy ef, ale piszemy wu. A teraz krótki test.",
+    "punkty": [
+      {
+        "pl": "ł brzmi jak [ў], a l jak [л].",
+        "plEs": "ł brzmi jak krótkie u, a l jak zwykłe l.",
+        "ua": "ł звучить як [ў], а l - як [л].",
+        "es": "La ł suena como la «u» de «huevo»; la l es una l normal."
+      },
+      {
+        "pl": "Polskie w to [в]. Nie piszemy v.",
+        "plEs": "Polskie w brzmi jak angielskie v, ale piszemy w.",
+        "ua": "Польське w - це [в]. Літеру v не пишемо.",
+        "es": "La w polaca suena como la «v» inglesa, pero se escribe w."
+      },
+      { "pl": "Na końcu wyrazu w brzmi jak f: lew, marchew.", "ua": "У кінці слова w звучить як [ф]: lew, marchew.", "es": "Al final de la palabra la w suena como «f»: lew, marchew." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "bułka", "ua": "булочка", "es": "panecillo" },
+      { "pl": "lekcja", "ua": "урок", "es": "clase" },
+      { "pl": "kwiat", "ua": "квітка", "es": "flor" },
+      { "pl": "biały", "ua": "білий", "es": "blanco" },
+      { "pl": "wilk", "ua": "вовк", "es": "lobo" },
+      { "pl": "wakacje", "ua": "канікули", "es": "vacaciones" }
+    ],
+    "zdania": [
+      { "pl": "Lena ma długie włosy.", "ua": "Лена має довге волосся.", "es": "Lena tiene el pelo largo." },
+      { "pl": "Wczoraj padał deszcz.", "ua": "Учора йшов дощ.", "es": "Ayer llovió." }
+    ]
+  }
+}

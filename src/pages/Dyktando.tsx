@@ -1,19 +1,22 @@
-// Strona /dyktando - zadanie domowe z pisowni dla uczniow z innym jezykiem ojczystym
-// (ukrainski albo hiszpanski - ustawia Bartek w zakladce Zadania domowe).
-// Dziala bez logowania nauczyciela (main.tsx omija AuthGate): uczen wybiera imie,
-// wpisuje haslo z kartki i robi lekcje: wstep jak prezentacja (lektorka),
-// cwiczenie z luka, slowa, dyktando zdan, "Zapamietaj" i test bez podpowiedzi.
+// Kurs "Polski krok po kroku" w portalu ucznia (/uczen, src/pages/portal/Portal.tsx):
+// pisownia dla uczniow z innym jezykiem ojczystym (podpowiedzi po ukrainsku albo
+// hiszpansku - ustawia Bartek w zakladce Zadania domowe). Co tydzien nowa lekcja:
+// powtorka z poprzednich, wstep jak prezentacja (lektorka), cwiczenie z luka, slowa,
+// dyktando zdan, "Zapamietaj" i test bez podpowiedzi.
 // Sprawdzanie litera po literze z podpowiedzia (src/lib/dyktando.ts).
-// Wynik idzie przez funkcje dyktando_* w Supabase (migracje 0042, 0043).
+// Wynik idzie przez funkcje dyktando_* w Supabase (migracje 0042-0044).
 
-import { createContext, useContext, useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
-import { getSupabase, isSupabaseConfigured } from '../data/supabase';
+import clsx from 'clsx';
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { getSupabase } from '../data/supabase';
 import {
+  DYKTANDA,
   audioUrl,
   dostepneLekcje,
   lektorUrl,
   maksPunktow,
   polski,
+  powtorkaDla,
   przeklad,
   punktyLekcji,
   tematLekcji,
@@ -34,37 +37,10 @@ import {
   type WynikSlowa,
 } from '../lib/dyktando';
 import { toDateKey } from '../lib/dates';
+import { Arkusz, DolnyPrzycisk, GornyPasek, Karta as KartaPortalu, btnDrugi, btnGlowny, IkonaGlosnik } from './portal/ui';
+import type { KontoUcznia, WynikUcznia } from './portal/konto';
 
-interface Uczen {
-  id: string;
-  imie: string;
-  haslo: string;
-  jezyk?: Jezyk;
-}
-
-interface WynikLekcji {
-  lekcja: string;
-  punkty: number;
-  maks: number;
-  created_at: string;
-}
-
-interface PozycjaListy {
-  id: string;
-  imie: string;
-  jezyk?: Jezyk | null;
-}
-
-const KLUCZ_UCZNIA = 'dyktando-uczen';
-
-function wczytajUcznia(): Uczen | null {
-  try {
-    const raw = localStorage.getItem(KLUCZ_UCZNIA);
-    return raw ? (JSON.parse(raw) as Uczen) : null;
-  } catch {
-    return null;
-  }
-}
+type Uczen = Pick<KontoUcznia, 'id' | 'haslo' | 'jezyk'>;
 
 // ---------- napisy (po polsku + jezyk ucznia) ----------
 
@@ -127,6 +103,16 @@ const N = {
   czescCwiczenie: { pl: 'ćwiczenie', ua: 'вправа', es: 'ejercicio' },
   zaczynamy: { pl: 'Zaczynamy', ua: 'Почнімо', es: 'Empezamos' },
   lekcja: { pl: 'Lekcja', ua: 'Урок', es: 'Lección' },
+  powtorka: { pl: 'Powtórka', ua: 'Повторення', es: 'Repaso' },
+  powtorkaOpis: {
+    pl: 'Zanim zaczniemy: 5 słów z poprzednich lekcji.',
+    ua: 'Перед початком: 5 слів з попередніх уроків.',
+    es: 'Antes de empezar: 5 palabras de las lecciones anteriores.',
+  },
+  dlaczego: { pl: 'Dlaczego?', ua: 'Чому?', es: '¿Por qué?' },
+  kurs: { pl: 'Polski krok po kroku', ua: 'Польська крок за кроком', es: 'Polaco paso a paso' },
+  zablokowana: { pl: 'od', ua: 'з', es: 'desde' },
+  wroc: { pl: 'Wróć', ua: 'Назад', es: 'Volver' },
 } satisfies Record<string, Tekst>;
 
 const licznik = (pl: string, ua: string, es: string, i: number, n: number): Tekst => ({
@@ -195,21 +181,8 @@ function Dwujezycznie({ t, className = '' }: { t: Tekst; className?: string }) {
   );
 }
 
-const btnGlowny =
-  'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-accent-600 px-6 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-accent-700 disabled:cursor-not-allowed disabled:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500';
-const btnDrugi =
-  'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 text-base font-medium text-gray-800 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500';
 const pole =
-  'w-full rounded-xl border-2 border-gray-300 bg-white px-4 py-3 text-2xl tracking-wide text-gray-900 outline-none focus:border-accent-500';
-
-function IkonaGlosnik({ className = 'h-5 w-5' }: { className?: string }) {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M11 5 6 9H3v6h3l5 4V5Z" strokeLinejoin="round" />
-      <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" strokeLinecap="round" />
-    </svg>
-  );
-}
+  'w-full rounded-2xl border-2 border-[#d6d5cf] bg-white px-4 py-3 text-2xl tracking-wide text-[#1d1d1f] outline-none focus:border-[#22a95b]';
 
 function Posluchaj({ url, t = N.posluchaj }: { url: string | string[]; t?: Tekst }) {
   return (
@@ -413,16 +386,20 @@ function SlowoZBledami({ w }: { w: WynikSlowa }) {
   );
 }
 
-function Pasek({ zrobione, wszystkie }: { zrobione: number; wszystkie: number }) {
-  return (
-    <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200" aria-hidden="true">
-      <div className="h-full rounded-full bg-accent-500 transition-all" style={{ width: `${(zrobione / wszystkie) * 100}%` }} />
-    </div>
-  );
+function Karta({ children }: { children: ReactNode }) {
+  return <KartaPortalu>{children}</KartaPortalu>;
 }
 
-function Karta({ children }: { children: ReactNode }) {
-  return <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">{children}</div>;
+/** Dlaczego tak piszemy (wymiana albo regula) - w lekcjach z regulami. */
+function Dlaczego({ t }: { t?: Tekst }) {
+  const napis = useNapis();
+  if (!t) return null;
+  return (
+    <div className="mt-3 flex items-start gap-3 rounded-xl bg-[#fff6d6] px-3 py-2.5">
+      <span className="shrink-0 text-sm font-bold text-[#8a6d00]">{napis(N.dlaczego)}</span>
+      <Dwujezycznie t={t} className="text-[0.95rem] leading-snug text-[#1d1d1f]" />
+    </div>
+  );
 }
 
 /** Slowo z podkreslonymi literami lekcji (np. "sz" w "szkoła"). */
@@ -441,187 +418,83 @@ function Podkresl({ slowo, litery }: { slowo: string; litery: string }) {
   );
 }
 
-// ---------- logowanie ----------
-
-function Logowanie({ onZalogowany }: { onZalogowany: (u: Uczen) => void }) {
-  const [lista, setLista] = useState<PozycjaListy[] | null>(null);
-  const [blad, setBlad] = useState<Tekst | null>(null);
-  const [wybrany, setWybrany] = useState<PozycjaListy | null>(null);
-  const [haslo, setHaslo] = useState('');
-  const [czekam, setCzekam] = useState(false);
-  const jezyk: Jezyk = wybrany?.jezyk === 'es' ? 'es' : 'ua';
-
-  useEffect(() => {
-    getSupabase()
-      .rpc('dyktando_lista')
-      .then(({ data, error }) => {
-        if (error) setBlad(N.bladListy);
-        else setLista((data ?? []) as PozycjaListy[]);
-      });
-  }, []);
-
-  async function wejdz() {
-    if (!wybrany || !haslo.trim()) return;
-    setCzekam(true);
-    setBlad(null);
-    const { data, error } = await getSupabase().rpc('dyktando_sprawdz', { p_id: wybrany.id, p_haslo: haslo });
-    setCzekam(false);
-    if (error) setBlad(N.bladSieci);
-    else if (data === true) onZalogowany({ id: wybrany.id, imie: wybrany.imie, haslo: haslo.trim().toLowerCase(), jezyk });
-    else setBlad(N.zleHaslo);
-  }
-
-  return (
-    <JezykCtx.Provider value={jezyk}>
-      <Karta>
-        {!wybrany ? (
-          <>
-            {/* Przed wyborem imienia nie wiemy, jaki jezyk - napis we wszystkich trzech. */}
-            <h2 className="text-xl font-semibold text-gray-900">
-              {N.wybierzImie.pl}
-              <span className="block text-[0.85em] font-normal text-gray-500">
-                {N.wybierzImie.ua} · {N.wybierzImie.es}
-              </span>
-            </h2>
-            {lista === null && !blad && <p className="mt-4 text-gray-500">{N.chwila.pl}</p>}
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {lista?.map((u) => (
-                <button
-                  key={u.id}
-                  type="button"
-                  onClick={() => setWybrany(u)}
-                  className="min-h-14 rounded-xl border-2 border-gray-200 bg-white px-4 text-lg font-semibold text-gray-900 transition-colors hover:border-accent-500 hover:bg-accent-50"
-                >
-                  {u.imie}
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            <button type="button" onClick={() => { setWybrany(null); setHaslo(''); setBlad(null); }} className="text-sm text-accent-700 hover:underline">
-              ← {N.toNieJa.pl} · {przeklad(N.toNieJa, jezyk)}
-            </button>
-            <h2 className="mt-3 text-2xl font-semibold text-gray-900">{wybrany.imie}</h2>
-            <label className="mt-4 block">
-              <Dwujezycznie t={N.wpiszHaslo} className="mb-2 font-medium text-gray-800" />
-              <input
-                type="text"
-                value={haslo}
-                onChange={(e) => setHaslo(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && wejdz()}
-                autoFocus
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                className={pole}
-              />
-            </label>
-            <button type="button" className={`${btnGlowny} mt-4 w-full`} disabled={czekam || !haslo.trim()} onClick={wejdz}>
-              {N.wejdz.pl} · {przeklad(N.wejdz, jezyk)}
-            </button>
-          </>
-        )}
-        {blad && (
-          <p className="mt-4 font-medium text-red-700">
-            {blad.pl} · {wybrany ? przeklad(blad, jezyk) : `${blad.ua} · ${blad.es}`}
-          </p>
-        )}
-      </Karta>
-    </JezykCtx.Provider>
-  );
-}
-
-// ---------- lista lekcji ----------
+// ---------- lista lekcji kursu ----------
 
 const krotkaData = (key: string) => {
   const [, m, d] = key.split('-');
   return `${Number(d)}.${m}`;
 };
 
-function ListaLekcji({
-  uczen,
+function ListaKursu({
+  wyniki,
   onStart,
-  onWyloguj,
+  onWroc,
 }: {
-  uczen: Uczen;
+  wyniki: WynikUcznia[] | null;
   onStart: (l: DyktandoLekcja) => void;
-  onWyloguj: () => void;
+  onWroc: () => void;
 }) {
   const j = useJezyk();
   const napis = useNapis();
-  const [wyniki, setWyniki] = useState<WynikLekcji[] | null>(null);
-  const { dostepne, nastepna } = dostepneLekcje(toDateKey(new Date()));
-
-  useEffect(() => {
-    getSupabase()
-      .rpc('dyktando_moje_wyniki', { p_id: uczen.id, p_haslo: uczen.haslo })
-      .then(({ data, error }) => {
-        if (error) {
-          // Haslo zmienione przez nauczyciela - trzeba wpisac nowe.
-          if (error.code === '28P01') onWyloguj();
-          setWyniki([]);
-        } else setWyniki((data ?? []) as WynikLekcji[]);
-      });
-  }, [uczen, onWyloguj]);
-
+  const dzis = toDateKey(new Date());
+  const { dostepne } = dostepneLekcje(dzis);
   const najlepszy = (id: string) =>
     (wyniki ?? []).filter((w) => w.lekcja === id).sort((a, b) => b.punkty / b.maks - a.punkty / a.maks)[0];
-
-  const nastepnaTekst: Tekst | null = nastepna
-    ? {
-        pl: `Następna lekcja od poniedziałku ${krotkaData(nastepna.od)}.`,
-        ua: `Наступний урок з понеділка ${krotkaData(nastepna.od)}.`,
-        es: `La próxima lección: desde el lunes ${krotkaData(nastepna.od)}.`,
-      }
-    : null;
+  const zrobione = DYKTANDA.filter((l) => najlepszy(l.id)).length;
+  // Pierwsza dostepna i niezrobiona - na nia wskazuje "Zrób".
+  const teraz = dostepne.find((l) => !najlepszy(l.id));
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900">
-          <Dwujezycznie t={{ pl: `Cześć, ${uczen.imie}!`, ua: N.twojeLekcje.ua, es: N.twojeLekcje.es }} />
-        </h2>
-        <button type="button" onClick={onWyloguj} className="text-sm text-gray-500 hover:text-gray-800 hover:underline">
-          {napis(N.toNieJa)}
-        </button>
-      </div>
-      <ol className="space-y-3">
-        {[...dostepne].reverse().map((l) => {
+    <div>
+      <GornyPasek zrobione={zrobione} wszystkie={DYKTANDA.length} onZamknij={onWroc} etykietaZamknij={napis(N.wroc)}
+        prawy={<span className="text-sm font-extrabold text-[#5b5b57]">{zrobione}/{DYKTANDA.length}</span>} />
+      <h1 className="text-[1.75rem] font-extrabold leading-tight">
+        <Dwujezycznie t={N.kurs} />
+      </h1>
+      <ol className="relative mt-6 space-y-3 before:absolute before:bottom-6 before:left-[1.85rem] before:top-6 before:w-1 before:rounded-full before:bg-[#e6e5df]">
+        {DYKTANDA.map((l) => {
           const w = najlepszy(l.id);
+          const otwarta = l.od <= dzis;
+          const aktualna = teraz?.id === l.id;
           return (
-            <li key={l.id}>
+            <li key={l.id} className="relative">
               <button
                 type="button"
+                disabled={!otwarta}
                 onClick={() => onStart(l)}
-                className={`flex w-full items-center gap-4 rounded-2xl border-2 bg-white p-4 text-left shadow-sm transition-colors hover:border-accent-500 ${w ? 'border-gray-200' : 'border-accent-300'}`}
+                className={clsx(
+                  'flex w-full items-center gap-4 rounded-3xl p-3 pr-4 text-left transition-transform',
+                  otwarta && 'active:translate-y-[2px]',
+                  aktualna ? 'bg-white shadow-[0_4px_0_#8b5cf6] ring-2 ring-[#8b5cf6]' : otwarta ? 'bg-white shadow-[0_3px_0_#e3e2dc]' : 'bg-transparent',
+                )}
               >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent-50 text-xl font-bold text-accent-700">
-                  {l.nr}
+                <span
+                  className={clsx(
+                    'relative z-10 flex h-[3.2rem] w-[3.2rem] shrink-0 items-center justify-center rounded-full text-xl font-extrabold',
+                    w ? 'bg-[#ffd43b] text-[#1d1d1f] shadow-[0_3px_0_#e0ac00]' : aktualna ? 'bg-[#8b5cf6] text-white shadow-[0_3px_0_#6a3fd1]' : otwarta ? 'bg-[#ecebe5] text-[#5b5b57]' : 'bg-[#ecebe5] text-[#b5b4ad]',
+                  )}
+                >
+                  {w ? '★' : otwarta ? l.nr : '🔒'}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-lg font-semibold text-gray-900">{l.temat}</span>
-                  <span className="block text-sm text-gray-500">{tematLekcji(l, j)} · {krotkaData(l.od)}</span>
+                  <span className={clsx('block text-lg font-extrabold', !otwarta && 'text-[#9a9993]')}>{l.temat}</span>
+                  <span className="block truncate text-sm text-[#8a8a85]">
+                    {tematLekcji(l, j)}
+                    {!otwarta && ` · ${napis(N.zablokowana)} ${krotkaData(l.od)}`}
+                  </span>
                 </span>
-                {wyniki === null ? null : w ? (
-                  <span className="shrink-0 text-right">
-                    <span className="block text-lg font-bold text-green-700">{w.punkty}/{w.maks}</span>
-                    <span className="block text-xs text-gray-500">{napis(N.zrobione)}</span>
+                {w ? (
+                  <span className="shrink-0 text-right text-base font-extrabold text-[#17803f]">
+                    {w.punkty}/{w.maks}
                   </span>
-                ) : (
-                  <span className="shrink-0 rounded-full bg-accent-600 px-3 py-1 text-sm font-semibold text-white">
-                    {napis(N.zrob)}
-                  </span>
-                )}
+                ) : aktualna ? (
+                  <span className="shrink-0 rounded-full bg-[#8b5cf6] px-3.5 py-1.5 text-sm font-bold text-white">{napis(N.zrob)}</span>
+                ) : null}
               </button>
             </li>
           );
         })}
       </ol>
-      {nastepnaTekst && (
-        <p className="rounded-xl border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-500">{napis(nastepnaTekst)}</p>
-      )}
     </div>
   );
 }
@@ -657,11 +530,11 @@ function SlajdIntro({ lekcja }: { lekcja: DyktandoLekcja }) {
     <div className="text-center">
       <p className="text-5xl" aria-hidden="true">👋</p>
       <Dwujezycznie t={lekcja.intro} className="mx-auto mt-4 block max-w-md text-xl font-medium leading-snug text-gray-900" />
-      <div className="mt-8 flex justify-center gap-3 sm:gap-5">
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
         {lekcja.wstep.map((r) => (
-          <div key={r.litery} className="w-24 rounded-2xl border-2 border-accent-200 bg-accent-50 py-4 sm:w-28">
-            <p className="text-5xl font-bold text-accent-700">{r.litery}</p>
-            <p className="mt-1 text-xl text-gray-600">[{dzwiekDla(r, j)}]</p>
+          <div key={r.litery} className="w-24 rounded-2xl bg-[#f1ebff] py-4 shadow-[0_3px_0_#d9ccff]">
+            <p className="text-5xl font-extrabold text-[#6a3fd1]">{r.litery}</p>
+            <p className="mt-1 text-xl text-[#5b5b57]">[{dzwiekDla(r, j)}]</p>
           </div>
         ))}
       </div>
@@ -714,7 +587,7 @@ function Prezentacja({ lekcja, onDalej }: { lekcja: DyktandoLekcja; onDalej: () 
       <div className="mb-5 flex items-center justify-between">
         <div className="flex gap-1.5" aria-hidden="true">
           {Array.from({ length: ile }, (_, i) => (
-            <span key={i} className={`h-2.5 rounded-full transition-all ${i === nr ? 'w-6 bg-accent-500' : 'w-2.5 bg-gray-300'}`} />
+            <span key={i} className={`h-2.5 rounded-full transition-all ${i === nr ? 'w-6 bg-[#8b5cf6]' : 'w-2.5 bg-[#e3e2dc]'}`} />
           ))}
         </div>
         <button type="button" onClick={() => graj([nagranie])} className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-700 hover:underline">
@@ -724,16 +597,16 @@ function Prezentacja({ lekcja, onDalej }: { lekcja: DyktandoLekcja; onDalej: () 
       <div className="min-h-[22rem]" key={nr}>
         {nr === 0 ? <SlajdIntro lekcja={lekcja} /> : <SlajdReguly regula={lekcja.wstep[nr - 1]} />}
       </div>
-      <div className="mt-6 flex gap-3">
+      <DolnyPrzycisk>
         {nr > 0 && (
-          <button type="button" className={btnDrugi} onClick={() => setNr(nr - 1)}>
-            ← {napis(N.wstecz)}
+          <button type="button" className={btnDrugi} onClick={() => setNr(nr - 1)} aria-label={napis(N.wstecz)}>
+            ←
           </button>
         )}
         <button type="button" className={`${btnGlowny} flex-1`} onClick={() => (ostatni ? onDalej() : setNr(nr + 1))}>
-          {ostatni ? napis(N.cwiczymy) : napis(N.dalej)} →
+          {ostatni ? napis(N.cwiczymy) : napis(N.dalej)}
         </button>
-      </div>
+      </DolnyPrzycisk>
     </Karta>
   );
 }
@@ -786,7 +659,7 @@ function KrokLuka({ lekcja, idx, onDalej }: { lekcja: DyktandoLekcja; idx: numbe
           </button>
         </p>
       </div>
-      <div className="mt-6 grid grid-cols-3 gap-3">
+      <div className={clsx('mt-6 grid gap-3', opcje.length === 2 || opcje.length === 4 ? 'grid-cols-2' : 'grid-cols-3')}>
         {opcje.map((o) => {
           const zly = zle.includes(o);
           const trafiony = dobrze && o === zadanie.luka;
@@ -796,12 +669,12 @@ function KrokLuka({ lekcja, idx, onDalej }: { lekcja: DyktandoLekcja; idx: numbe
               type="button"
               onClick={() => wybierz(o)}
               disabled={zly || dobrze}
-              className={`min-h-16 rounded-xl border-2 text-3xl font-bold transition-colors ${
+              className={`min-h-16 rounded-2xl border-2 text-3xl font-extrabold transition-colors ${
                 trafiony
-                  ? 'border-green-500 bg-green-50 text-green-700'
+                  ? 'border-[#22a95b] bg-[#e7f7ec] text-[#17803f]'
                   : zly
-                    ? 'border-red-200 bg-red-50 text-red-300 line-through'
-                    : 'border-gray-300 bg-white text-gray-900 hover:border-accent-500 hover:bg-accent-50'
+                    ? 'border-[#f5c2c0] bg-[#fdeceb] text-[#e8a09b] line-through'
+                    : 'border-[#d6d5cf] bg-white text-[#1d1d1f] shadow-[0_4px_0_#d6d5cf] hover:bg-[#fafaf7] active:translate-y-[3px] active:shadow-none'
               }`}
             >
               {o}
@@ -809,15 +682,20 @@ function KrokLuka({ lekcja, idx, onDalej }: { lekcja: DyktandoLekcja; idx: numbe
           );
         })}
       </div>
-      {zle.length > 0 && !dobrze && <p className="mt-4 font-medium text-red-700">{napis(N.jeszczeRazWybierz)}</p>}
+      {zle.length > 0 && !dobrze && <p className="mt-4 font-semibold text-[#c0362c]">{napis(N.jeszczeRazWybierz)}</p>}
       {dobrze && (
-        <div className="mt-5">
-          <p className="text-lg font-semibold text-green-700">{napis(N.dobrze)}</p>
+        <Arkusz
+          stan="dobrze"
+          tytul={<>🎉 {napis(N.dobrze)}</>}
+          przyciski={
+            <button type="button" className={`${btnGlowny} flex-1`} onClick={() => onDalej(zle.length === 0)} autoFocus>
+              {napis(N.dalej)}
+            </button>
+          }
+        >
           {zle.length > 0 && wskazowka && <ListaWskazowek wskazowki={[wskazowka]} />}
-          <button type="button" className={`${btnGlowny} mt-4 w-full`} onClick={() => onDalej(zle.length === 0)} autoFocus>
-            {napis(N.dalej)}
-          </button>
-        </div>
+          <Dlaczego t={zadanie.dlaczego} />
+        </Arkusz>
       )}
     </Karta>
   );
@@ -867,11 +745,11 @@ function KrokSlowo({ slowo, nr, ile, onWynik }: { slowo: DyktandoPrzyklad; nr: n
       {wynik && (
         <div className="mt-5">
           {wynik.ok ? (
-            <p className="rounded-xl bg-green-50 px-4 py-3 text-lg font-semibold text-green-800">
-              {napis(N.dobrze)} <span className="ml-2 text-2xl">{slowo.pl}</span>
+            <p className="rounded-2xl bg-[#e7f7ec] px-4 py-3 text-lg font-bold text-[#17803f]">
+              🎉 {napis(N.dobrze)} <span className="ml-2 text-2xl">{slowo.pl}</span>
             </p>
           ) : (
-            <div className="rounded-xl border border-red-200 bg-red-50/40 p-4">
+            <div className="rounded-2xl border-2 border-[#f5c2c0] bg-[#fdeceb]/60 p-4">
               <p className="font-semibold text-gray-900">
                 <Dwujezycznie t={N.prawie} />
               </p>
@@ -879,6 +757,7 @@ function KrokSlowo({ slowo, nr, ile, onWynik }: { slowo: DyktandoPrzyklad; nr: n
                 <SlowoZBledami w={wynik} />
               </div>
               <ListaWskazowek wskazowki={wynik.wskazowki} />
+              <Dlaczego t={slowo.dlaczego} />
               <label className="mt-4 block">
                 <Dwujezycznie t={N.napiszPoprawnie} className="mb-2 text-sm font-medium text-gray-800" />
                 <PoleDyktanda value={poprawka} onChange={setPoprawka} onEnter={dalej} />
@@ -1077,6 +956,7 @@ function PoprawkiTestu({ pozycje, wyniki, onDalej }: { pozycje: PozycjaTestu[]; 
             ))}
           </div>
           <ListaWskazowek wskazowki={wskazowki} />
+          {pozycje.map((p, i) => (!p.zdanie && !wyniki[i][0].ok ? <Dlaczego key={i} t={p.przyklad.dlaczego} /> : null))}
         </div>
       )}
       <div className="mt-3 space-y-3">
@@ -1104,6 +984,7 @@ function PoprawkiTestu({ pozycje, wyniki, onDalej }: { pozycje: PozycjaTestu[]; 
 function Podsumowanie({
   lekcja,
   uczen,
+  powtorka,
   slowa,
   zdania,
   test,
@@ -1113,6 +994,7 @@ function Podsumowanie({
 }: {
   lekcja: DyktandoLekcja;
   uczen: Uczen;
+  powtorka: WynikSlowa[];
   slowa: WynikSlowa[];
   zdania: WynikSlowa[][];
   test: WynikSlowa[][];
@@ -1122,11 +1004,12 @@ function Podsumowanie({
 }) {
   const napis = useNapis();
   const maksy = punktyLekcji(lekcja);
+  const zaPowtorke = powtorka.filter((w) => w.ok).length;
   const zaCwiczenia = slowa.filter((w) => w.ok).length + zdania.reduce((s, z) => s + punktyZdania(z), 0);
   const zaTest = test.reduce((s, z) => s + punktyZdania(z), 0);
-  const punkty = zaCwiczenia + zaTest;
+  const punkty = zaPowtorke + zaCwiczenia + zaTest;
   const maks = maksPunktow(lekcja);
-  const bledne = [...slowa, ...zdania.flat(), ...test.flat()].filter((w) => w.wzor && !w.ok);
+  const bledne = [...powtorka, ...slowa, ...zdania.flat(), ...test.flat()].filter((w) => w.wzor && !w.ok);
   const doPowtorki = [...new Set(bledne.map((w) => w.wzor.replace(/[^\p{L}\p{N}]+$/u, '')))];
   const [zapis, setZapis] = useState<'trwa' | 'ok' | 'blad'>('trwa');
   const wyslane = useRef(false);
@@ -1161,6 +1044,11 @@ function Podsumowanie({
         {punkty} / {maks}
       </p>
       <p className="mt-2 text-gray-600">
+        {maksy.powtorka > 0 && (
+          <>
+            {napis(N.powtorka)}: <b>{zaPowtorke}/{maksy.powtorka}</b> ·{' '}
+          </>
+        )}
         {napis(N.cwiczenia)}: <b>{zaCwiczenia}/{maksy.cwiczenia}</b> · {napis(N.test)}: <b>{zaTest}/{maksy.test}</b>
       </p>
       <p className="mt-2 text-sm text-gray-500">
@@ -1203,17 +1091,20 @@ function Podsumowanie({
 
 // ---------- przebieg lekcji ----------
 
-type Etap = 'wstep' | 'cwiczenie' | 'slowa' | 'zdania' | 'zapamietaj' | 'test' | 'poprawki' | 'wynik';
+type Etap = 'powtorka' | 'wstep' | 'cwiczenie' | 'slowa' | 'zdania' | 'zapamietaj' | 'test' | 'poprawki' | 'wynik';
 
 function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uczen; onKoniec: () => void }) {
   const napis = useNapis();
-  const [etap, setEtap] = useState<Etap>('wstep');
+  const [proba, setProba] = useState(0);
+  const slowaPowtorki = useMemo(() => powtorkaDla(lekcja), [lekcja, proba]); // eslint-disable-line react-hooks/exhaustive-deps
+  const pierwszy: Etap = slowaPowtorki.length ? 'powtorka' : 'wstep';
+  const [etap, setEtap] = useState<Etap>(pierwszy);
   const [idx, setIdx] = useState(0);
+  const [powtorka, setPowtorka] = useState<WynikSlowa[]>([]);
   const [slowa, setSlowa] = useState<WynikSlowa[]>([]);
   const [zdania, setZdania] = useState<WynikSlowa[][]>([]);
   const [test, setTest] = useState<WynikSlowa[][]>([]);
   const [start, setStart] = useState(() => Date.now());
-  const [proba, setProba] = useState(0);
 
   useEffect(() => () => zatrzymaj(), []);
 
@@ -1235,15 +1126,17 @@ function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uc
   }
 
   function odNowa() {
-    przejdz('wstep');
+    setPowtorka([]);
     setSlowa([]);
     setZdania([]);
     setTest([]);
     setStart(Date.now());
     setProba((p) => p + 1);
+    przejdz(pierwszy);
   }
 
   const kolejnosc: Array<[Etap, number]> = [
+    ['powtorka', slowaPowtorki.length],
     ['wstep', 1],
     ['cwiczenie', lekcja.cwiczenie.length],
     ['slowa', lekcja.slowa.length],
@@ -1253,16 +1146,18 @@ function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uc
     ['poprawki', 1],
   ];
   const wszystkie = kolejnosc.reduce((s, [, n]) => s + n, 0);
-  let zrobione = 0;
+  let zrobione = wszystkie;
+  let licz = 0;
   for (const [e, n] of kolejnosc) {
     if (e === etap) {
-      zrobione += idx;
+      zrobione = licz + idx;
       break;
     }
-    zrobione += n;
+    licz += n;
   }
 
   const podtytul: Partial<Record<Etap, Tekst>> = {
+    powtorka: N.powtorka,
     cwiczenie: N.czescCwiczenie,
     slowa: N.czescSlowa,
     zdania: N.czescDyktando,
@@ -1271,22 +1166,34 @@ function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uc
   };
 
   return (
-    <div className="space-y-4" key={proba}>
-      <div className="flex items-center gap-3">
-        <button type="button" onClick={onKoniec} className="shrink-0 text-sm text-accent-700 hover:underline">
-          ← {napis(N.lista)}
-        </button>
-        <Pasek zrobione={zrobione} wszystkie={wszystkie} />
-      </div>
-      <div>
-        <p className="text-sm text-gray-500">
+    <div key={proba}>
+      <GornyPasek zrobione={zrobione} wszystkie={wszystkie} onZamknij={onKoniec} etykietaZamknij={napis(N.lista)} />
+      <div className="mb-4">
+        <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#8a8a85]">
           {napis({ pl: `${N.lekcja.pl} ${lekcja.nr}`, ua: `${N.lekcja.ua} ${lekcja.nr}`, es: `${N.lekcja.es} ${lekcja.nr}` })}
+          {podtytul[etap] && ` · ${napis(podtytul[etap]!)}`}
         </p>
-        <h1 className="text-2xl font-bold text-gray-900">
-          {lekcja.temat}
-          {podtytul[etap] && <span className="ml-2 text-base font-medium text-gray-500">{napis(podtytul[etap]!)}</span>}
-        </h1>
+        <h1 className="mt-1 text-[1.6rem] font-extrabold leading-tight">{lekcja.temat}</h1>
       </div>
+      {etap === 'powtorka' && (
+        <>
+          {idx === 0 && (
+            <p className="mb-3 rounded-2xl bg-[#f1ebff] px-4 py-3 font-semibold text-[#4b2aa8]">
+              <Dwujezycznie t={N.powtorkaOpis} />
+            </p>
+          )}
+          <KrokSlowo
+            key={`p${idx}`}
+            slowo={slowaPowtorki[idx]}
+            nr={idx + 1}
+            ile={slowaPowtorki.length}
+            onWynik={(w) => {
+              setPowtorka((s) => [...s, w]);
+              nastepny(slowaPowtorki.length, 'wstep');
+            }}
+          />
+        </>
+      )}
       {etap === 'wstep' && <Prezentacja lekcja={lekcja} onDalej={() => przejdz('cwiczenie')} />}
       {etap === 'cwiczenie' && (
         <KrokLuka key={idx} lekcja={lekcja} idx={idx} onDalej={() => nastepny(lekcja.cwiczenie.length, 'slowa')} />
@@ -1334,6 +1241,7 @@ function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uc
         <Podsumowanie
           lekcja={lekcja}
           uczen={uczen}
+          powtorka={powtorka}
           slowa={slowa}
           zdania={zdania}
           test={test}
@@ -1346,69 +1254,36 @@ function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uc
   );
 }
 
-// ---------- calosc ----------
+// ---------- calosc kursu ----------
 
-export function Dyktando() {
-  const [uczen, setUczen] = useState<Uczen | null>(wczytajUcznia);
+/** Kurs w portalu ucznia: lista 10 lekcji albo otwarta lekcja. */
+export function KursPolski({
+  konto,
+  wyniki,
+  onWroc,
+  onZapisano,
+}: {
+  konto: KontoUcznia;
+  wyniki: WynikUcznia[] | null;
+  onWroc: () => void;
+  /** Po skonczonej lekcji - portal odswieza wyniki. */
+  onZapisano: () => void;
+}) {
   const [lekcja, setLekcja] = useState<DyktandoLekcja | null>(null);
-  const jezyk: Jezyk = uczen?.jezyk === 'es' ? 'es' : 'ua';
-
-  useEffect(() => {
-    document.title = 'Dyktanda';
-  }, []);
-
-  function zaloguj(u: Uczen) {
-    localStorage.setItem(KLUCZ_UCZNIA, JSON.stringify(u));
-    setUczen(u);
-  }
-
-  // Jezyk mogl sie zmienic (Bartek ustawia go w apce) - odswiezamy z listy.
-  const idUcznia = uczen?.id;
-  useEffect(() => {
-    if (!idUcznia || !isSupabaseConfigured()) return;
-    getSupabase()
-      .rpc('dyktando_lista')
-      .then(({ data }) => {
-        const ja = ((data ?? []) as PozycjaListy[]).find((p) => p.id === idUcznia);
-        const nowy: Jezyk = ja?.jezyk === 'es' ? 'es' : 'ua';
-        setUczen((u) => {
-          if (!u || u.jezyk === nowy) return u;
-          const zmieniony = { ...u, jezyk: nowy };
-          localStorage.setItem(KLUCZ_UCZNIA, JSON.stringify(zmieniony));
-          return zmieniony;
-        });
-      });
-  }, [idUcznia]);
-
-  const wyloguj = useRef(() => {
-    localStorage.removeItem(KLUCZ_UCZNIA);
-    setUczen(null);
-    setLekcja(null);
-  }).current;
-
   return (
-    <JezykCtx.Provider value={jezyk}>
-      <div className="min-h-screen bg-gray-50">
-        <main className="mx-auto max-w-2xl px-4 py-6 sm:py-10">
-          {!lekcja && (
-            <header className="mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Dyktanda</h1>
-              <p className="text-gray-500">
-                {N.naglowek.pl} · {uczen ? przeklad(N.naglowek, jezyk) : `${N.naglowek.ua} · ${N.naglowek.es}`}
-              </p>
-            </header>
-          )}
-          {!isSupabaseConfigured() ? (
-            <Karta>Strona nie jest skonfigurowana.</Karta>
-          ) : !uczen ? (
-            <Logowanie onZalogowany={zaloguj} />
-          ) : lekcja ? (
-            <Lekcja lekcja={lekcja} uczen={uczen} onKoniec={() => setLekcja(null)} />
-          ) : (
-            <ListaLekcji uczen={uczen} onStart={setLekcja} onWyloguj={wyloguj} />
-          )}
-        </main>
-      </div>
+    <JezykCtx.Provider value={konto.jezyk}>
+      {lekcja ? (
+        <Lekcja
+          lekcja={lekcja}
+          uczen={konto}
+          onKoniec={() => {
+            setLekcja(null);
+            onZapisano();
+          }}
+        />
+      ) : (
+        <ListaKursu wyniki={wyniki} onStart={setLekcja} onWroc={onWroc} />
+      )}
     </JezykCtx.Provider>
   );
 }

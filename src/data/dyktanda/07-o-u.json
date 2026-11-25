@@ -1,0 +1,88 @@
+{
+  "id": "07-o-u",
+  "nr": 7,
+  "od": "2027-01-11",
+  "temat": "ó czy u",
+  "tematUa": "Ó чи u",
+  "tematEs": "¿Ó o u?",
+  "intro": { "pl": "Cześć! Dziś poznasz pierwszą regułę pisowni. Ó i u brzmią tak samo, ale piszemy je różnie. Nauczysz się, kiedy pisać ó, a kiedy u.", "ua": "Привіт! Сьогодні ти вивчиш перше правило правопису. Ó і u звучать однаково, але пишуться по-різному. Ти навчишся, коли писати ó, а коли u.", "es": "¡Hola! Hoy vas a aprender la primera regla de ortografía. Ó y u suenan igual, pero se escriben distinto. Vas a aprender cuándo escribir ó y cuándo u.", "lektor": "Cześć! Dziś poznasz pierwszą regułę pisowni. O z kreską i u-otwarte brzmią tak samo, ale piszemy je inaczej. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "ó",
+      "dzwiek": "у",
+      "dzwiekEs": "u",
+      "pl": "Ó brzmi jak u. Piszemy ó, gdy w innej formie słowa jest o, e albo a: stół - stoły, wrócę - wracać. Ó piszemy też w końcówkach -ów, -ówka, -ówna.",
+      "ua": "Ó звучить як u. Пишемо ó, коли в іншій формі слова є o, e або a: stół - stoły, wrócę - wracać. Ó пишемо також у закінченнях -ów, -ówka, -ówna.",
+      "es": "La ó suena como u. Se escribe ó cuando en otra forma de la palabra hay o, e o a: stół - stoły, wrócę - wracać. También se escribe ó en las terminaciones -ów, -ówka, -ówna.",
+      "lektor": "Posłuchaj: stół, stoły. Gdy w innej formie słowa słychać o, piszemy o z kreską. Tak samo w końcówce, na przykład żarówka.",
+      "przyklady": [
+        { "pl": "stół", "ua": "стіл", "es": "mesa", "obraz": "🪑", "dlaczego": { "pl": "stół, bo stoły", "ua": "stół, бо stoły", "es": "stół, porque stoły" } },
+        { "pl": "żarówka", "ua": "лампочка", "es": "bombillo", "obraz": "💡", "dlaczego": { "pl": "żarówka: końcówka -ówka", "ua": "żarówka: закінчення -ówka", "es": "żarówka: terminación -ówka" } }
+      ]
+    },
+    {
+      "litery": "u",
+      "dzwiek": "у",
+      "dzwiekEs": "u",
+      "pl": "Gdy nie ma wymiany na o, e albo a, piszemy u. Zawsze u w końcówkach -unek, -uje, -uszek. Na początku i na końcu słowa prawie zawsze u: ulica, kakadu.",
+      "ua": "Коли немає заміни на o, e або a, пишемо u. Завжди u в закінченнях -unek, -uje, -uszek. На початку і в кінці слова майже завжди u: ulica, kakadu.",
+      "es": "Si no cambia a o, e o a, se escribe u. Siempre u en las terminaciones -unek, -uje, -uszek. Al inicio y al final de la palabra casi siempre u: ulica, kakadu.",
+      "lektor": "Posłuchaj: rysunek, maluje. Tu nie ma wymiany na o, więc piszemy u-otwarte. Tak samo na początku słowa, na przykład uczeń.",
+      "przyklady": [
+        { "pl": "rysunek", "ua": "малюнок", "es": "dibujo", "obraz": "🖼️", "dlaczego": { "pl": "rysunek: końcówka -unek", "ua": "rysunek: закінчення -unek", "es": "rysunek: terminación -unek" } },
+        { "pl": "maluje", "ua": "малює", "es": "pinta", "obraz": "🎨", "dlaczego": { "pl": "maluje: końcówka -uje", "ua": "maluje: закінчення -uje", "es": "maluje: terminación -uje" } }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "lód", "luka": "ó", "ua": "лід", "es": "hielo", "dlaczego": { "pl": "lód, bo lody", "ua": "lód, бо lody", "es": "lód, porque lody" } },
+    { "pl": "fartuszek", "luka": "u", "ua": "фартушок", "es": "delantal", "dlaczego": { "pl": "fartuszek: końcówka -uszek", "ua": "fartuszek: закінчення -uszek", "es": "fartuszek: terminación -uszek" } },
+    { "pl": "mróz", "luka": "ó", "ua": "мороз", "es": "helada", "dlaczego": { "pl": "mróz, bo mrozy", "ua": "mróz, бо mrozy", "es": "mróz, porque mrozy" } },
+    { "pl": "pracuje", "luka": "u", "ua": "працює", "es": "trabaja", "dlaczego": { "pl": "pracuje: końcówka -uje", "ua": "pracuje: закінчення -uje", "es": "pracuje: terminación -uje" } },
+    { "pl": "kózka", "luka": "ó", "ua": "кізочка", "es": "cabrita", "dlaczego": { "pl": "kózka, bo koza", "ua": "kózka, бо koza", "es": "kózka, porque koza" } },
+    { "pl": "ubranie", "luka": "u", "ua": "одяг", "es": "ropa", "dlaczego": { "pl": "ubranie: na początku słowa u", "ua": "ubranie: на початку слова u", "es": "ubranie: al inicio de la palabra va u" } },
+    { "pl": "pocztówka", "luka": "ó", "ua": "листівка", "es": "postal", "dlaczego": { "pl": "pocztówka: końcówka -ówka", "ua": "pocztówka: закінчення -ówka", "es": "pocztówka: terminación -ówka" } },
+    { "pl": "podarunek", "luka": "u", "ua": "подарунок", "es": "regalo", "dlaczego": { "pl": "podarunek: końcówka -unek", "ua": "podarunek: закінчення -unek", "es": "podarunek: terminación -unek" } }
+  ],
+  "slowa": [
+    { "pl": "samochód", "ua": "автомобіль", "es": "carro", "dlaczego": { "pl": "samochód, bo samochody", "ua": "samochód, бо samochody", "es": "samochód, porque samochody" } },
+    { "pl": "ogród", "ua": "сад", "es": "jardín", "dlaczego": { "pl": "ogród, bo ogrody", "ua": "ogród, бо ogrody", "es": "ogród, porque ogrody" } },
+    { "pl": "wrócę", "ua": "я повернуся", "es": "volveré", "dlaczego": { "pl": "wrócę, bo wracać", "ua": "wrócę, бо wracać", "es": "wrócę, porque wracać" } },
+    { "pl": "kółko", "ua": "кружечок", "es": "circulito", "dlaczego": { "pl": "kółko, bo koło", "ua": "kółko, бо koło", "es": "kółko, porque koło" } },
+    { "pl": "kotów", "ua": "котів (багато котів)", "es": "de gatos (muchos gatos)", "dlaczego": { "pl": "dużo kotów: końcówka -ów", "ua": "dużo kotów: закінчення -ów", "es": "dużo kotów: terminación -ów" } },
+    { "pl": "malutki", "ua": "малесенький", "es": "chiquito", "dlaczego": { "pl": "malutki: końcówka -utki, nie ma wymiany na o", "ua": "malutki: закінчення -utki, немає заміни на o", "es": "malutki: terminación -utki, no cambia a o" } },
+    { "pl": "gotuje", "ua": "готує", "es": "cocina", "dlaczego": { "pl": "gotuje: końcówka -uje", "ua": "gotuje: закінчення -uje", "es": "gotuje: terminación -uje" } },
+    { "pl": "okruszek", "ua": "крихта", "es": "migaja", "dlaczego": { "pl": "okruszek: końcówka -uszek", "ua": "okruszek: закінчення -uszek", "es": "okruszek: terminación -uszek" } },
+    { "pl": "uczeń", "ua": "учень", "es": "alumno", "dlaczego": { "pl": "uczeń: na początku słowa u", "ua": "uczeń: на початку слова u", "es": "uczeń: al inicio de la palabra va u" } },
+    { "pl": "zupa", "ua": "суп", "es": "sopa", "dlaczego": { "pl": "zupa: nie ma wymiany na o, więc u", "ua": "zupa: немає заміни на o, тому u", "es": "zupa: no cambia a o, por eso u" } }
+  ],
+  "zdania": [
+    { "pl": "Mój pies śpi w budzie.", "ua": "Мій пес спить у будці.", "es": "Mi perro duerme en su casita.", "dlaczego": { "pl": "mój, bo moja; budzie: nie ma wymiany na o, więc u", "ua": "mój, бо moja; budzie: немає заміни на o, тому u", "es": "mój, porque moja; budzie: no cambia a o, por eso u" } },
+    { "pl": "Mama kupuje bułki.", "ua": "Мама купує булочки.", "es": "Mamá compra pancitos.", "dlaczego": { "pl": "kupuje: końcówka -uje; bułki: nie ma wymiany na o", "ua": "kupuje: закінчення -uje; bułki: немає заміни на o", "es": "kupuje: terminación -uje; bułki: no cambia a o" } },
+    { "pl": "Pomóż mi, proszę.", "ua": "Допоможи мені, будь ласка.", "es": "Ayúdame, por favor.", "dlaczego": { "pl": "pomóż, bo pomoc", "ua": "pomóż, бо pomoc", "es": "pomóż, porque pomoc" } },
+    { "pl": "Jemy obiad w stołówce.", "ua": "Ми обідаємо в їдальні.", "es": "Almorzamos en el comedor.", "dlaczego": { "pl": "stołówce, bo stołówka: końcówka -ówka", "ua": "stołówce, бо stołówka: закінчення -ówka", "es": "stołówce, porque stołówka: terminación -ówka" } },
+    { "pl": "Ula rysuje kota.", "ua": "Уля малює кота.", "es": "Ula dibuja un gato.", "dlaczego": { "pl": "Ula: na początku słowa u; rysuje: końcówka -uje", "ua": "Ula: на початку слова u; rysuje: закінчення -uje", "es": "Ula: al inicio de la palabra va u; rysuje: terminación -uje" } }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Stół piszemy przez o z kreską, bo mówimy stoły. Rysunek piszemy przez u-otwarte, bo tu nie ma wymiany. A teraz krótki test.",
+    "punkty": [
+      { "pl": "Ó i u brzmią tak samo. Szukaj słowa do wymiany: stół - stoły, wrócę - wracać.", "ua": "Ó і u звучать однаково. Шукай слово для заміни: stół - stoły, wrócę - wracać.", "es": "Ó y u suenan igual. Busca otra forma de la palabra: stół - stoły, wrócę - wracać." },
+      { "pl": "Ó piszemy też w końcówkach -ów, -ówka, -ówna: kotów, żarówka.", "ua": "Ó пишемо також у закінченнях -ów, -ówka, -ówna: kotów, żarówka.", "es": "También se escribe ó en las terminaciones -ów, -ówka, -ówna: kotów, żarówka." },
+      { "pl": "U piszemy w końcówkach -unek, -uje, -uszek i zwykle na początku słowa: rysunek, maluje, uczeń.", "ua": "U пишемо в закінченнях -unek, -uje, -uszek і зазвичай на початку слова: rysunek, maluje, uczeń.", "es": "Se escribe u en las terminaciones -unek, -uje, -uszek y casi siempre al inicio de la palabra: rysunek, maluje, uczeń." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "nóżka", "ua": "ніжка", "es": "piecito", "dlaczego": { "pl": "nóżka, bo noga", "ua": "nóżka, бо noga", "es": "nóżka, porque noga" } },
+      { "pl": "król", "ua": "король", "es": "rey", "dlaczego": { "pl": "król, bo królowa", "ua": "król, бо królowa", "es": "król, porque królowa" } },
+      { "pl": "szósty", "ua": "шостий", "es": "sexto", "dlaczego": { "pl": "szósty, bo sześć", "ua": "szósty, бо sześć", "es": "szósty, porque sześć" } },
+      { "pl": "paluszek", "ua": "пальчик", "es": "dedito", "dlaczego": { "pl": "paluszek: końcówka -uszek", "ua": "paluszek: закінчення -uszek", "es": "paluszek: terminación -uszek" } },
+      { "pl": "buduje", "ua": "будує", "es": "construye", "dlaczego": { "pl": "buduje: końcówka -uje", "ua": "buduje: закінчення -uje", "es": "buduje: terminación -uje" } },
+      { "pl": "usta", "ua": "рот", "es": "boca", "dlaczego": { "pl": "usta: na początku słowa u", "ua": "usta: на початку слова u", "es": "usta: al inicio de la palabra va u" } }
+    ],
+    "zdania": [
+      { "pl": "Ola lubi swój kubek.", "ua": "Оля любить свою чашку.", "es": "A Ola le gusta su taza.", "dlaczego": { "pl": "swój, bo swoja; kubek: nie ma wymiany na o, więc u", "ua": "swój, бо swoja; kubek: немає заміни на o, тому u", "es": "swój, porque swoja; kubek: no cambia a o, por eso u" } },
+      { "pl": "Na stole leży nóż.", "ua": "На столі лежить ніж.", "es": "En la mesa hay un cuchillo.", "dlaczego": { "pl": "nóż, bo noże", "ua": "nóż, бо noże", "es": "nóż, porque noże" } }
+    ]
+  }
+}

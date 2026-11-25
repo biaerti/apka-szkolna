@@ -1,0 +1,95 @@
+{
+  "id": "05-a-e",
+  "nr": 5,
+  "od": "2026-12-21",
+  "temat": "ą, ę",
+  "tematUa": "Носові звуки ą, ę",
+  "tematEs": "Las vocales nasales ą, ę",
+  "intro": { "pl": "Cześć! Dziś poznasz dwie litery z ogonkiem: ą i ę. Te dźwięki mówimy trochę przez nos.", "ua": "Привіт! Сьогодні ти познайомишся з двома літерами з хвостиком: ą і ę. Ці звуки ми вимовляємо трохи через ніс.", "es": "¡Hola! Hoy vas a conocer dos letras con colita: ą y ę. Estos sonidos se dicen un poco por la nariz.", "lektor": "Cześć! Dziś poznasz dwie litery z ogonkiem: a z ogonkiem i e z ogonkiem. Te dźwięki mówimy trochę przez nos. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "ą",
+      "dzwiek": "он / ом",
+      "dzwiekEs": "on",
+      "pl": "Dźwięk [он] piszemy jedną literą: ą (a z ogonkiem). Przed b i p brzmi jak [ом]: ząb. Ogonek piszemy też na końcu słowa: mają, z mamą.",
+      "plEs": "Dźwięk [on] piszemy jedną literą: ą (a z ogonkiem). Przed b i p brzmi jak [om]: ząb. Ogonek piszemy też na końcu słowa: mają, z mamą.",
+      "ua": "Звук [он] пишемо однією літерою: ą (a з хвостиком). Перед b і p звучить як [ом]: ząb. Хвостик пишемо й у кінці слова: mają, z mamą.",
+      "es": "El sonido «on» se escribe con una sola letra: ą (a con colita). Antes de b y p suena «om»: ząb. La colita también va al final de la palabra: mają, z mamą.",
+      "lektor": "Posłuchaj: wąż, ząb. Ten dźwięk piszemy jedną literą: a z ogonkiem. Ogonek piszemy też na końcu słowa, na przykład mają.",
+      "przyklady": [
+        { "pl": "wąż", "ua": "змія", "es": "serpiente", "obraz": "🐍" },
+        { "pl": "ząb", "ua": "зуб", "es": "diente", "obraz": "🦷", "dlaczego": { "pl": "ząb: słychać om, ale piszemy ą", "ua": "ząb: чуємо [ом], але пишемо ą", "es": "ząb: suena «om», pero escribimos ą" } }
+      ]
+    },
+    {
+      "litery": "ę",
+      "dzwiek": "ен / ем",
+      "dzwiekEs": "en",
+      "pl": "Dźwięk [ен] piszemy jedną literą: ę (e z ogonkiem). Na końcu słowa ę słychać słabo, ale ogonek zostaje: idę, piszę.",
+      "plEs": "Dźwięk [en] piszemy jedną literą: ę (e z ogonkiem). Na końcu słowa ę słychać słabo, ale ogonek zostaje: idę, piszę.",
+      "ua": "Звук [ен] пишемо однією літерою: ę (e з хвостиком). У кінці слова ę чути слабо, але хвостик залишається: idę, piszę.",
+      "es": "El sonido «en» se escribe con una sola letra: ę (e con colita). Al final de la palabra la ę casi no se oye, pero la colita se queda: idę, piszę.",
+      "lektor": "Posłuchaj: ręka, idę. Ten dźwięk piszemy jedną literą: e z ogonkiem. Na końcu słowa słychać go słabo, ale ogonek zostaje.",
+      "przyklady": [
+        { "pl": "ręka", "ua": "рука", "es": "mano", "obraz": "✋" },
+        { "pl": "idę", "ua": "я йду", "es": "voy", "obraz": "🚶", "dlaczego": { "pl": "ja idę - na końcu ę", "ua": "ja idę (я йду) - у кінці ę", "es": "ja idę (yo voy) - al final va ę" } }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "mąka", "luka": "ą", "ua": "борошно", "es": "harina" },
+    { "pl": "pięć", "luka": "ę", "ua": "п’ять", "es": "cinco" },
+    { "pl": "książka", "luka": "ą", "ua": "книжка", "es": "libro" },
+    { "pl": "dziękuję", "luka": "ę", "ua": "дякую", "es": "gracias" },
+    { "pl": "mają", "luka": "ą", "ua": "вони мають", "es": "ellos tienen", "dlaczego": { "pl": "oni mają - na końcu ą", "ua": "oni mają (вони мають) - у кінці ą", "es": "oni mają (ellos tienen) - al final va ą" } },
+    { "pl": "piszę", "luka": "ę", "ua": "я пишу", "es": "escribo", "dlaczego": { "pl": "ja piszę - na końcu ę", "ua": "ja piszę (я пишу) - у кінці ę", "es": "ja piszę (yo escribo) - al final va ę" } },
+    { "pl": "pociąg", "luka": "ą", "ua": "поїзд", "es": "tren" },
+    { "pl": "tęcza", "luka": "ę", "ua": "веселка", "es": "arcoíris" }
+  ],
+  "slowa": [
+    { "pl": "miesiąc", "ua": "місяць (12 у році)", "es": "mes" },
+    { "pl": "pieniądze", "ua": "гроші", "es": "dinero" },
+    { "pl": "gałąź", "ua": "гілка", "es": "rama" },
+    { "pl": "piątek", "ua": "п’ятниця", "es": "viernes" },
+    { "pl": "sąsiad", "ua": "сусід", "es": "vecino" },
+    { "pl": "mięso", "ua": "м’ясо", "es": "carne" },
+    { "pl": "święto", "ua": "свято", "es": "fiesta" },
+    { "pl": "ręcznik", "ua": "рушник", "es": "toalla" },
+    { "pl": "chcę", "ua": "я хочу", "es": "quiero", "dlaczego": { "pl": "ja chcę - na końcu ę", "ua": "ja chcę (я хочу) - у кінці ę", "es": "ja chcę (yo quiero) - al final va ę" } },
+    { "pl": "idą", "ua": "вони йдуть", "es": "ellos van", "dlaczego": { "pl": "oni idą - na końcu ą", "ua": "oni idą (вони йдуть) - у кінці ą", "es": "oni idą (ellos van) - al final va ą" } }
+  ],
+  "zdania": [
+    { "pl": "Idę z mamą na spacer.", "ua": "Я йду з мамою на прогулянку.", "es": "Voy a pasear con mamá." },
+    { "pl": "Lubię zupę pomidorową.", "ua": "Я люблю томатний суп.", "es": "Me gusta la sopa de tomate." },
+    { "pl": "Dziadek czyta gazetę.", "ua": "Дідусь читає газету.", "es": "El abuelo lee el periódico." },
+    { "pl": "Mam nową kurtkę.", "ua": "У мене нова куртка.", "es": "Tengo una chaqueta nueva." },
+    { "pl": "Dzieci grają w piłkę.", "ua": "Діти грають у м’яча.", "es": "Los niños juegan a la pelota." }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Wąż piszemy przez a z ogonkiem. Ręka przez e z ogonkiem. Ogonek piszemy też na końcu słowa. A teraz krótki test.",
+    "punkty": [
+      {
+        "pl": "ą brzmi jak [он], ę jak [ен]. To jedna litera z ogonkiem.",
+        "plEs": "ą brzmi jak on, ę jak en. To jedna litera z ogonkiem.",
+        "ua": "ą звучить як [он], ę - як [ен]. Це одна літера з хвостиком.",
+        "es": "ą suena «on», ę suena «en». Es una sola letra con colita."
+      },
+      { "pl": "Na końcu słowa ogonek słychać słabo, ale go piszemy: idę, mają, z mamą.", "ua": "У кінці слова хвостик чути слабо, але ми його пишемо: idę, mają, z mamą.", "es": "Al final de la palabra la colita casi no se oye, pero se escribe: idę, mają, z mamą." },
+      { "pl": "Nie piszemy on ani en zamiast ogonka: ręka, a nie renka.", "ua": "Не пиши on чи en замість хвостика: ręka, а не renka.", "es": "No escribas «on» ni «en» en lugar de la colita: ręka, no «renka»." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "dąb", "ua": "дуб", "es": "roble" },
+      { "pl": "zając", "ua": "заєць", "es": "liebre" },
+      { "pl": "księżyc", "ua": "місяць (на небі)", "es": "luna" },
+      { "pl": "kąpiel", "ua": "купання", "es": "baño" },
+      { "pl": "pamiętam", "ua": "я пам’ятаю", "es": "recuerdo" },
+      { "pl": "proszę", "ua": "будь ласка", "es": "por favor" }
+    ],
+    "zdania": [
+      { "pl": "Oni mieszkają blisko.", "ua": "Вони живуть близько.", "es": "Ellos viven cerca." },
+      { "pl": "Jem kanapkę z serem.", "ua": "Я їм бутерброд із сиром.", "es": "Como un sándwich de queso." }
+    ]
+  }
+}

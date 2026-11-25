@@ -1,0 +1,251 @@
+{
+  "id": "04-s-c-n-z",
+  "nr": 4,
+  "od": "2026-12-14",
+  "temat": "ś, ć, ń, ź",
+  "tematUa": "М’які звуки ś, ć, ń, ź",
+  "tematEs": "Los sonidos suaves ś, ć, ń, ź",
+  "intro": { "pl": "Cześć! Dziś ćwiczymy miękkie dźwięki: ś, ć, ń, ź. Raz piszemy je z kreską, a raz przez i.", "ua": "Привіт! Сьогодні вчимося писати м’які звуки: ś, ć, ń, ź. Іноді пишемо їх з рисочкою, а іноді через i.", "es": "¡Hola! Hoy practicamos los sonidos suaves: ś, ć, ń, ź. A veces se escriben con rayita y a veces con i.", "lektor": "Cześć! Dziś ćwiczymy miękkie dźwięki. Raz piszemy je z kreską, a raz z literą i. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "ś",
+      "dzwiek": "сь",
+      "dzwiekEs": "sh suave",
+      "pl": "Miękkie [сь] piszemy ś przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy si: siostra.",
+      "plEs": "Miękkie ś piszemy z kreską przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy si: siostra.",
+      "ua": "М’який звук [сь] пишемо ś перед приголосною і в кінці слова. Перед голосною пишемо si: siostra (сестра).",
+      "es": "Es una «sh» muy suave. Se escribe ś antes de consonante y al final de la palabra. Antes de vocal se escribe si: siostra.",
+      "lektor": "Posłuchaj: ślimak, miś. Ten miękki dźwięk piszemy jako eś, czyli es z kreską. Przed samogłoską piszemy es oraz i, jak w słowie siostra.",
+      "przyklady": [
+        { "pl": "ślimak", "ua": "равлик", "es": "caracol", "obraz": "🐌" },
+        { "pl": "miś", "ua": "ведмедик", "es": "osito", "obraz": "🧸" }
+      ]
+    },
+    {
+      "litery": "ć",
+      "dzwiek": "чь",
+      "dzwiekEs": "ch suave",
+      "pl": "Miękkie [чь] piszemy ć przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy ci: ciocia.",
+      "plEs": "Miękkie ć piszemy z kreską przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy ci: ciocia.",
+      "ua": "М’який звук, схожий на м’яке [ч], пишемо ć перед приголосною і в кінці слова. Перед голосною пишемо ci: ciocia (тітка).",
+      "es": "Es una «ch» muy suave. Se escribe ć antes de consonante y al final de la palabra. Antes de vocal se escribe ci: ciocia.",
+      "lektor": "Posłuchaj: pięć, nić. Ten dźwięk piszemy jako cie, czyli ce z kreską. Przed samogłoską piszemy ce oraz i, jak w słowie ciocia.",
+      "przyklady": [
+        { "pl": "pięć", "ua": "п’ять", "es": "cinco", "obraz": "✋" },
+        { "pl": "nić", "ua": "нитка", "es": "hilo", "obraz": "🧵" }
+      ]
+    },
+    {
+      "litery": "ń",
+      "dzwiek": "нь",
+      "dzwiekEs": "ñ",
+      "pl": "Miękkie [нь] piszemy ń przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy ni: koń, ale konie.",
+      "plEs": "Dźwięk ñ piszemy ń przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy ni: koń, ale konie.",
+      "ua": "М’який звук [нь] пишемо ń перед приголосною і в кінці слова. Перед голосною пишемо ni: koń (кінь), але konie (коні).",
+      "es": "Es la «ñ» española. Se escribe ń antes de consonante y al final de la palabra: koń. Antes de vocal se escribe ni: konie.",
+      "lektor": "Posłuchaj: koń, słońce. Ten dźwięk piszemy jako eń, czyli en z kreską. Przed samogłoską piszemy en oraz i, jak w słowie konie.",
+      "przyklady": [
+        { "pl": "koń", "ua": "кінь", "es": "caballo", "obraz": "🐴" },
+        { "pl": "słońce", "ua": "сонце", "es": "sol", "obraz": "☀️" }
+      ]
+    },
+    {
+      "litery": "ź",
+      "dzwiek": "зь",
+      "dzwiekEs": "zh suave",
+      "pl": "Miękkie [зь] piszemy ź przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy zi: buźka, ale buzia.",
+      "plEs": "Miękkie ź piszemy z kreską przed spółgłoską i na końcu wyrazu. Przed samogłoską piszemy zi: buźka, ale buzia.",
+      "ua": "М’який звук [зь] пишемо ź перед приголосною і в кінці слова. Перед голосною пишемо zi: buźka, але buzia (личко).",
+      "es": "Es como ś, pero con zumbido. Se escribe ź antes de consonante y al final de la palabra. Antes de vocal se escribe zi: buźka, pero buzia.",
+      "lektor": "Posłuchaj: buźka, źle. Ten dźwięk piszemy jako ziet, czyli zet z kreską. Przed samogłoską piszemy zet oraz i, jak w słowie buzia.",
+      "przyklady": [
+        { "pl": "buźka", "ua": "усмішка", "es": "carita", "obraz": "😊" },
+        { "pl": "źle", "ua": "погано", "es": "mal", "obraz": "👎" }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    {
+      "pl": "śnieg",
+      "luka": "ś",
+      "ua": "сніг",
+      "es": "nieve",
+      "dlaczego": { "pl": "Przed spółgłoską piszemy ś.", "ua": "Перед приголосною пишемо ś.", "es": "Antes de consonante se escribe ś." }
+    },
+    {
+      "pl": "spać",
+      "luka": "ć",
+      "ua": "спати",
+      "es": "dormir",
+      "dlaczego": { "pl": "Na końcu wyrazu piszemy ć.", "ua": "У кінці слова пишемо ć.", "es": "Al final de la palabra se escribe ć." }
+    },
+    {
+      "pl": "jesień",
+      "luka": "ń",
+      "ua": "осінь",
+      "es": "otoño",
+      "dlaczego": { "pl": "Na końcu wyrazu piszemy ń. Wcześniej przed samogłoską jest si.", "ua": "У кінці слова пишемо ń. А перед голосною - si.", "es": "Al final de la palabra se escribe ń. Antes, delante de vocal, va si." }
+    },
+    {
+      "pl": "późno",
+      "luka": "ź",
+      "ua": "пізно",
+      "es": "tarde",
+      "dlaczego": { "pl": "Przed spółgłoską piszemy ź.", "ua": "Перед приголосною пишемо ź.", "es": "Antes de consonante se escribe ź." }
+    },
+    {
+      "pl": "liść",
+      "luka": "ś",
+      "ua": "листок",
+      "es": "hoja",
+      "dlaczego": { "pl": "Przed spółgłoską ś, na końcu wyrazu ć.", "ua": "Перед приголосною ś, у кінці слова ć.", "es": "Antes de consonante ś; al final de la palabra ć." }
+    },
+    {
+      "pl": "ćwiczyć",
+      "luka": "ć",
+      "ua": "тренуватися",
+      "es": "practicar",
+      "dlaczego": { "pl": "Przed spółgłoską piszemy ć. Na końcu wyrazu też ć.", "ua": "Перед приголосною пишемо ć. У кінці слова теж ć.", "es": "Antes de consonante se escribe ć. Al final de la palabra, también ć." }
+    },
+    {
+      "pl": "tańczyć",
+      "luka": "ń",
+      "ua": "танцювати",
+      "es": "bailar",
+      "dlaczego": { "pl": "Przed spółgłoską piszemy ń.", "ua": "Перед приголосною пишемо ń.", "es": "Antes de consonante se escribe ń." }
+    },
+    {
+      "pl": "jeździć",
+      "luka": "ź",
+      "ua": "їздити",
+      "es": "ir en bici o en coche",
+      "dlaczego": { "pl": "Przed spółgłoską piszemy ź.", "ua": "Перед приголосною пишемо ź.", "es": "Antes de consonante se escribe ź." }
+    }
+  ],
+  "slowa": [
+    {
+      "pl": "konie",
+      "ua": "коні",
+      "es": "caballos",
+      "dlaczego": { "pl": "Przed samogłoską piszemy ni: konie, ale koń.", "ua": "Перед голосною пишемо ni: konie, але koń.", "es": "Antes de vocal se escribe ni: konie, pero koń." }
+    },
+    {
+      "pl": "ciocia",
+      "ua": "тітка",
+      "es": "tía",
+      "dlaczego": { "pl": "Przed samogłoską piszemy ci.", "ua": "Перед голосною пишемо ci.", "es": "Antes de vocal se escribe ci." }
+    },
+    {
+      "pl": "gość",
+      "ua": "гість",
+      "es": "invitado",
+      "dlaczego": { "pl": "Przed spółgłoską ś, na końcu wyrazu ć.", "ua": "Перед приголосною ś, у кінці слова ć.", "es": "Antes de consonante ś; al final de la palabra ć." }
+    },
+    {
+      "pl": "zielony",
+      "ua": "зелений",
+      "es": "verde",
+      "dlaczego": { "pl": "Przed samogłoską piszemy zi.", "ua": "Перед голосною пишемо zi.", "es": "Antes de vocal se escribe zi." }
+    },
+    {
+      "pl": "niebo",
+      "ua": "небо",
+      "es": "cielo",
+      "dlaczego": { "pl": "Przed samogłoską piszemy ni.", "ua": "Перед голосною пишемо ni.", "es": "Antes de vocal se escribe ni." }
+    },
+    {
+      "pl": "środa",
+      "ua": "середа",
+      "es": "miércoles",
+      "dlaczego": { "pl": "Przed spółgłoską piszemy ś.", "ua": "Перед приголосною пишемо ś.", "es": "Antes de consonante se escribe ś." }
+    },
+    {
+      "pl": "grudzień",
+      "ua": "грудень",
+      "es": "diciembre",
+      "dlaczego": { "pl": "Na końcu wyrazu piszemy ń.", "ua": "У кінці слова пишемо ń.", "es": "Al final de la palabra se escribe ń." }
+    },
+    {
+      "pl": "siedem",
+      "ua": "сім",
+      "es": "siete",
+      "dlaczego": { "pl": "Przed samogłoską piszemy si.", "ua": "Перед голосною пишемо si.", "es": "Antes de vocal se escribe si." }
+    },
+    {
+      "pl": "buzia",
+      "ua": "личко",
+      "es": "boquita",
+      "dlaczego": { "pl": "Przed samogłoską piszemy zi: buzia, ale buźka.", "ua": "Перед голосною пишемо zi: buzia, але buźka.", "es": "Antes de vocal se escribe zi: buzia, pero buźka." }
+    },
+    {
+      "pl": "płakać",
+      "ua": "плакати",
+      "es": "llorar",
+      "dlaczego": { "pl": "Na końcu wyrazu piszemy ć.", "ua": "У кінці слова пишемо ć.", "es": "Al final de la palabra se escribe ć." }
+    }
+  ],
+  "zdania": [
+    { "pl": "Jaś jedzie na koniu.", "ua": "Ясь їде на коні.", "es": "Jaś va a caballo." },
+    { "pl": "Zosia lubi spać.", "ua": "Зося любить спати.", "es": "A Zosia le gusta dormir." },
+    { "pl": "Dziś jest piękny dzień.", "ua": "Сьогодні гарний день.", "es": "Hoy es un día bonito." },
+    { "pl": "Ania ma śliczny rysunek.", "ua": "Аня має гарний малюнок.", "es": "Ania tiene un dibujo precioso." },
+    { "pl": "Kot śpi na kanapie.", "ua": "Кіт спить на дивані.", "es": "El gato duerme en el sofá." }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Koń piszemy z kreską, ale konie przez en oraz i. Kreska jest na końcu słowa albo przed spółgłoską. Przed samogłoską piszemy literę i. A teraz krótki test.",
+    "punkty": [
+      { "pl": "Na końcu wyrazu i przed spółgłoską: ś, ć, ń, ź (koń, śnieg).", "ua": "У кінці слова і перед приголосною: ś, ć, ń, ź (koń, śnieg).", "es": "Al final de la palabra y antes de consonante: ś, ć, ń, ź (koń, śnieg)." },
+      { "pl": "Przed samogłoską: si, ci, ni, zi (siostra, ciocia, konie, buzia).", "ua": "Перед голосною: si, ci, ni, zi (siostra, ciocia, konie, buzia).", "es": "Antes de vocal: si, ci, ni, zi (siostra, ciocia, konie, buzia)." },
+      {
+        "pl": "сь = ś, чь = ć, нь = ń, зь = ź.",
+        "plEs": "Polskie ń brzmi jak hiszpańskie ñ: koń, słońce.",
+        "ua": "сь = ś, м’яке ч = ć, нь = ń, зь = ź.",
+        "es": "La ń polaca suena como la ñ española: koń, słońce."
+      }
+    ]
+  },
+  "test": {
+    "slowa": [
+      {
+        "pl": "cześć",
+        "ua": "привіт",
+        "es": "hola",
+        "dlaczego": { "pl": "Przed spółgłoską ś, na końcu wyrazu ć.", "ua": "Перед приголосною ś, у кінці слова ć.", "es": "Antes de consonante ś; al final de la palabra ć." }
+      },
+      {
+        "pl": "kapcie",
+        "ua": "капці",
+        "es": "pantuflas",
+        "dlaczego": { "pl": "Przed samogłoską piszemy ci.", "ua": "Перед голосною пишемо ci.", "es": "Antes de vocal se escribe ci." }
+      },
+      {
+        "pl": "niedziela",
+        "ua": "неділя",
+        "es": "domingo",
+        "dlaczego": { "pl": "Przed samogłoską piszemy ni oraz dzi.", "ua": "Перед голосною пишемо ni та dzi.", "es": "Antes de vocal se escribe ni y dzi." }
+      },
+      {
+        "pl": "dziewięć",
+        "ua": "дев’ять",
+        "es": "nueve",
+        "dlaczego": { "pl": "Na końcu wyrazu piszemy ć.", "ua": "У кінці слова пишемо ć.", "es": "Al final de la palabra se escribe ć." }
+      },
+      {
+        "pl": "ziemniak",
+        "ua": "картопля",
+        "es": "papa",
+        "dlaczego": { "pl": "Przed samogłoską piszemy zi oraz ni.", "ua": "Перед голосною пишемо zi та ni.", "es": "Antes de vocal se escribe zi y ni." }
+      },
+      {
+        "pl": "słoń",
+        "ua": "слон",
+        "es": "elefante",
+        "dlaczego": { "pl": "Na końcu wyrazu piszemy ń.", "ua": "У кінці слова пишемо ń.", "es": "Al final de la palabra se escribe ń." }
+      }
+    ],
+    "zdania": [
+      { "pl": "Kasia ma śmieszny kapelusz.", "ua": "Кася має смішний капелюх.", "es": "Kasia tiene un sombrero chistoso." },
+      { "pl": "Pies gryzie kość.", "ua": "Пес гризе кістку.", "es": "El perro muerde un hueso." }
+    ]
+  }
+}

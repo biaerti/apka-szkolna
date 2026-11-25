@@ -40,17 +40,17 @@ if (!rootEl) {
   throw new Error('Brak elementu #root w index.html');
 }
 
-// Dyktanda dla uczniow (/dyktando) - bez logowania nauczyciela, bez synchronizacji
-// i bez reszty apki (osobny, maly kawalek JS na telefon ucznia). Uczen loguje sie
-// haslem z kartki (src/pages/Dyktando.tsx). Reszta apki laduje sie jak dotad.
-const jestDyktando = window.location.pathname.startsWith('/dyktando');
+// Portal ucznia (/uczen, stary adres /dyktando) - bez logowania nauczyciela, bez
+// synchronizacji i bez reszty apki (osobny, maly kawalek JS na telefon ucznia).
+// Uczen loguje sie loginem i haslem z kartki (src/pages/portal/Portal.tsx).
+const jestPortal = /^\/(uczen|dyktando)(\/|$)/.test(window.location.pathname);
 const root = ReactDOM.createRoot(rootEl);
 
-if (jestDyktando) {
-  void import('./pages/Dyktando').then(({ Dyktando }) => {
+if (jestPortal) {
+  void import('./pages/portal/Portal').then(({ Portal }) => {
     root.render(
       <React.StrictMode>
-        <Dyktando />
+        <Portal />
       </React.StrictMode>,
     );
   });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cegielki, porownajSlowo, porownajZdanie, punktyZdania } from './dyktando';
-import { DYKTANDA, maksPunktow, polski, slugAudio } from '../data/dyktanda';
+import { DYKTANDA, ILE_POWTORKI, maksPunktow, polski, powtorkaDla, slugAudio } from '../data/dyktanda';
 
 const litery = (s: string) => cegielki(s).map((c) => c.litery);
 
@@ -143,6 +143,34 @@ describe('dane dyktand', () => {
         expect(t).not.toMatch(/[[\]+=]/);
         for (const r of l.wstep) expect(t.split(/[\s.,:!?]+/)).not.toContain(r.litery);
       }
+    }
+  });
+
+  it('lekcje maja kolejne numery i coraz pozniejsze daty', () => {
+    DYKTANDA.forEach((l, i) => {
+      expect(l.nr).toBe(i + 1);
+      if (i > 0) expect(l.od > DYKTANDA[i - 1].od, l.id).toBe(true);
+      expect(l.id.startsWith(String(l.nr).padStart(2, '0'))).toBe(true);
+    });
+  });
+
+  it('"dlaczego" ma tlumaczenia', () => {
+    for (const l of DYKTANDA) {
+      for (const p of [...l.slowa, ...l.zdania, ...l.cwiczenie, ...l.test.slowa, ...l.test.zdania]) {
+        if (!p.dlaczego) continue;
+        expect(p.dlaczego.ua && p.dlaczego.es, p.pl).toBeTruthy();
+        expect(polski(p.dlaczego, 'es'), p.pl).not.toMatch(/[Ѐ-ӿ]|ukrai/i);
+      }
+    }
+  });
+
+  it('powtorka: lekcja 1 bez, kolejne po 5 slow z wczesniejszych lekcji', () => {
+    expect(powtorkaDla(DYKTANDA[0])).toEqual([]);
+    for (const l of DYKTANDA.slice(1)) {
+      const p = powtorkaDla(l);
+      expect(p).toHaveLength(ILE_POWTORKI);
+      const wczesniejsze = new Set(DYKTANDA.filter((x) => x.nr < l.nr).flatMap((x) => [...x.slowa, ...x.test.slowa].map((s) => s.pl)));
+      for (const s of p) expect(wczesniejsze.has(s.pl), s.pl).toBe(true);
     }
   });
 });

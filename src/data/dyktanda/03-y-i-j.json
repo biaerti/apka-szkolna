@@ -1,0 +1,174 @@
+{
+  "id": "03-y-i-j",
+  "nr": 3,
+  "od": "2026-12-07",
+  "temat": "y, i, j",
+  "tematUa": "Літери y, i, j",
+  "tematEs": "Las letras y, i, j",
+  "intro": { "pl": "Cześć! Dziś ćwiczymy litery y, i oraz j. Łatwo je pomylić, bo brzmią podobnie.", "ua": "Привіт! Сьогодні вчимося писати літери y, i та j. Запам’ятай: и = y, і = i, й = j.", "es": "¡Hola! Hoy practicamos las letras y, i, j. Es fácil confundirlas porque suenan parecido.", "lektor": "Cześć! Dziś ćwiczymy trzy dźwięki, takie jak w słowach ryba, kino oraz jajko. Łatwo je pomylić, bo brzmią podobnie. Posłuchaj oraz zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "y",
+      "dzwiek": "и",
+      "dzwiekEs": "i oscura",
+      "pl": "Dźwięk [и] piszemy y. Po cz, sz, rz oraz ż zawsze piszemy y.",
+      "plEs": "Polskie y to samogłoska, ciemniejsza niż i. Po cz, sz, rz oraz ż zawsze piszemy y.",
+      "ua": "Звук [и] пишемо літерою y: риба - ryba. Після cz, sz, rz, ż завжди пишемо y.",
+      "es": "En polaco la y es una vocal: una «i» más grave, con la lengua más atrás. Después de cz, sz, rz y ż siempre va y.",
+      "lektor": "Posłuchaj: ryba, dynia. Ten dźwięk piszemy literą igrek. Po ce zet, es zet, er zet oraz żet zawsze piszemy igrek.",
+      "przyklady": [
+        { "pl": "ryba", "ua": "риба", "es": "pez", "obraz": "🐟" },
+        { "pl": "dynia", "ua": "гарбуз", "es": "calabaza", "obraz": "🎃" }
+      ]
+    },
+    {
+      "litery": "i",
+      "dzwiek": "і",
+      "dzwiekEs": "i",
+      "pl": "Dźwięk [і] piszemy i. To nie jest y!",
+      "plEs": "Dźwięk taki jak hiszpańskie i piszemy i. To nie jest y!",
+      "ua": "Звук [і] пишемо літерою i. Обережно: у схожих словах українською буває «и», а польською i: липа - lipa.",
+      "es": "El sonido de la «i» española se escribe i. ¡No es la y!",
+      "lektor": "Posłuchaj: kino, lis. Ten dźwięk piszemy tak jak w słowie kino. To nie jest igrek!",
+      "przyklady": [
+        { "pl": "kino", "ua": "кіно", "es": "cine", "obraz": "🎬" },
+        { "pl": "lis", "ua": "лис", "es": "zorro", "obraz": "🦊" }
+      ]
+    },
+    {
+      "litery": "j",
+      "dzwiek": "й",
+      "dzwiekEs": "y",
+      "pl": "Dźwięk [й] piszemy j. Na początku wyrazu я = ja, є = je, ю = ju.",
+      "plEs": "Polskie j brzmi jak y w hiszpańskim słowie yo. Nigdy nie brzmi jak hiszpańskie j.",
+      "ua": "Звук [й] пишемо літерою j. На початку слова я = ja, є = je, ю = ju: яйце - jajko.",
+      "es": "La j polaca suena como la «y» de «yo». ¡Nunca suena como la j de «jamón»!",
+      "lektor": "Posłuchaj: jajko, jeż. Ten dźwięk piszemy literą jot.",
+      "przyklady": [
+        { "pl": "jajko", "ua": "яйце", "es": "huevo", "obraz": "🥚" },
+        { "pl": "jeż", "ua": "їжак", "es": "erizo", "obraz": "🦔" }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    {
+      "pl": "czysty",
+      "luka": "y",
+      "ua": "чистий",
+      "es": "limpio",
+      "dlaczego": { "pl": "Po cz zawsze piszemy y.", "ua": "Після cz завжди пишемо y.", "es": "Después de cz siempre va y." }
+    },
+    {
+      "pl": "zima",
+      "luka": "i",
+      "ua": "зима",
+      "es": "invierno",
+      "dlaczego": { "pl": "Po ukraińsku зима, ale po polsku słyszymy i, więc piszemy i.", "plEs": "Słyszymy i, więc piszemy i.", "ua": "Українською «зима», але польською чуємо [і], тому пишемо i.", "es": "Suena como «i», así que escribimos i." }
+    },
+    { "pl": "jogurt", "luka": "j", "ua": "йогурт", "es": "yogur" },
+    {
+      "pl": "żyrafa",
+      "luka": "y",
+      "ua": "жирафа",
+      "es": "jirafa",
+      "dlaczego": { "pl": "Po ż zawsze piszemy y.", "ua": "Після ż завжди пишемо y.", "es": "Después de ż siempre va y." }
+    },
+    { "pl": "lizak", "luka": "i", "ua": "льодяник", "es": "paleta de caramelo" },
+    { "pl": "zając", "luka": "j", "ua": "заєць", "es": "conejo" },
+    {
+      "pl": "szynka",
+      "luka": "y",
+      "ua": "шинка",
+      "es": "jamón",
+      "dlaczego": { "pl": "Po sz zawsze piszemy y.", "ua": "Після sz завжди пишемо y.", "es": "Después de sz siempre va y." }
+    },
+    {
+      "pl": "list",
+      "luka": "i",
+      "ua": "лист",
+      "es": "carta",
+      "dlaczego": { "pl": "Po ukraińsku лист, ale po polsku słyszymy i, więc piszemy i.", "plEs": "Słyszymy i, więc piszemy i.", "ua": "Українською «лист», але польською чуємо [і], тому пишемо i.", "es": "Suena como «i», así que escribimos i." }
+    }
+  ],
+  "slowa": [
+    { "pl": "ryż", "ua": "рис", "es": "arroz" },
+    {
+      "pl": "przyjaciel",
+      "ua": "друг",
+      "es": "amigo",
+      "dlaczego": { "pl": "Po rz zawsze piszemy y.", "ua": "Після rz завжди пишемо y.", "es": "Después de rz siempre va y." }
+    },
+    {
+      "pl": "szybko",
+      "ua": "швидко",
+      "es": "rápido",
+      "dlaczego": { "pl": "Po sz zawsze piszemy y.", "ua": "Після sz завжди пишемо y.", "es": "Después de sz siempre va y." }
+    },
+    {
+      "pl": "nożyczki",
+      "ua": "ножиці",
+      "es": "tijeras",
+      "dlaczego": { "pl": "Po ż zawsze piszemy y.", "ua": "Після ż завжди пишемо y.", "es": "Después de ż siempre va y." }
+    },
+    {
+      "pl": "miska",
+      "ua": "миска",
+      "es": "tazón",
+      "dlaczego": { "pl": "Po ukraińsku миска, ale po polsku słyszymy i, więc piszemy i.", "plEs": "Słyszymy i, więc piszemy i.", "ua": "Українською «миска», але польською чуємо [і], тому пишемо i.", "es": "Suena como «i», así que escribimos i." }
+    },
+    { "pl": "bilet", "ua": "квиток", "es": "boleto" },
+    { "pl": "film", "ua": "фільм", "es": "película" },
+    { "pl": "jutro", "ua": "завтра", "es": "mañana" },
+    { "pl": "kraj", "ua": "країна", "es": "país" },
+    { "pl": "dywan", "ua": "килим", "es": "alfombra" }
+  ],
+  "zdania": [
+    { "pl": "Mój brat ma rybki.", "ua": "Мій брат має рибок.", "es": "Mi hermano tiene pececitos." },
+    { "pl": "Jemy obiad w kuchni.", "ua": "Ми обідаємо на кухні.", "es": "Comemos en la cocina." },
+    { "pl": "Lubimy szybkie rowery.", "ua": "Ми любимо швидкі велосипеди.", "es": "Nos gustan las bicicletas rápidas." },
+    { "pl": "Kot pije mleko z miski.", "ua": "Кіт п’є молоко з миски.", "es": "El gato toma leche del tazón." },
+    { "pl": "Czy masz nowy zeszyt?", "ua": "Чи маєш ти новий зошит?", "es": "¿Tienes un cuaderno nuevo?" }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Ryba piszemy przez igrek, a jajko przez jot. Po ce zet, es zet, er zet oraz żet zawsze piszemy igrek. A teraz krótki test.",
+    "punkty": [
+      {
+        "pl": "и = y, і = i, й = j.",
+        "plEs": "Polskie y to samogłoska. Polskie j brzmi jak y w słowie yo.",
+        "ua": "и = y, і = i, й = j.",
+        "es": "En polaco la y es una vocal. La j suena como la «y» de «yo»."
+      },
+      { "pl": "Po cz, sz, rz, ż zawsze piszemy y: czysty, szynka, przyjaciel, żyrafa.", "ua": "Після cz, sz, rz, ż завжди пишемо y: czysty, szynka, przyjaciel, żyrafa.", "es": "Después de cz, sz, rz y ż siempre escribimos y: czysty, szynka, przyjaciel, żyrafa." },
+      {
+        "pl": "Uważaj na słowa podobne do ukraińskich: zima, list, miska piszemy przez i.",
+        "plEs": "Polskie j nigdy nie brzmi jak hiszpańskie j: jutro, jogurt.",
+        "ua": "Обережно: зима, лист, миска, а польською zima, list, miska - через i.",
+        "es": "La j polaca nunca suena como la j española: jutro, jogurt."
+      }
+    ]
+  },
+  "test": {
+    "slowa": [
+      {
+        "pl": "szyszka",
+        "ua": "шишка",
+        "es": "piña de pino",
+        "dlaczego": { "pl": "Po sz zawsze piszemy y.", "ua": "Після sz завжди пишемо y.", "es": "Después de sz siempre va y." }
+      },
+      {
+        "pl": "trzy",
+        "ua": "три",
+        "es": "tres",
+        "dlaczego": { "pl": "Po rz zawsze piszemy y.", "ua": "Після rz завжди пишемо y.", "es": "Después de rz siempre va y." }
+      },
+      { "pl": "pisak", "ua": "фломастер", "es": "marcador" },
+      { "pl": "cytryna", "ua": "лимон", "es": "limón" },
+      { "pl": "jagoda", "ua": "ягода (чорниця)", "es": "arándano" },
+      { "pl": "wujek", "ua": "дядько", "es": "tío" }
+    ],
+    "zdania": [
+      { "pl": "Ten ser jest pyszny.", "ua": "Цей сир дуже смачний.", "es": "Este queso está riquísimo." },
+      { "pl": "Moja siostra czyta bajki.", "ua": "Моя сестра читає казки.", "es": "Mi hermana lee cuentos." }
+    ]
+  }
+}

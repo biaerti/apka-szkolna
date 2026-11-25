@@ -4,6 +4,7 @@ Zadanie domowe co poniedziałek pod `https://szkola.klippi.pl/dyktando`. Dla ucz
 
 ## Jedna lekcja (ok. 20 minut)
 
+0. **Powtórka** (od lekcji 2) - 5 słów z wcześniejszych lekcji, z podpowiedzią po błędzie.
 1. **Wstęp jak prezentacja** - slajd powitalny z literami lekcji, potem slajd na każdą regułę: litery składają się na ekranie (`s + z → sz = [ш]`), lektorka czyta krótki tekst, dwa przykłady z obrazkiem i nagraniem.
 2. **Ćwiczenie z luką** (6 słów) - słucha słowa i wybiera brakujące litery (`?afa` → sz / cz / ch). Bez punktów, to nauka: po złym wyborze słyszy słowo jeszcze raz i dostaje podpowiedź.
 3. **Słowa** (8) - słucha i pisze, od razu widzi złą literę i podpowiedź w swoim języku. Po błędzie przepisuje słowo poprawnie.
@@ -14,50 +15,32 @@ Zadanie domowe co poniedziałek pod `https://szkola.klippi.pl/dyktando`. Dla ucz
 
 Zasady treści: własne, proste przykłady z życia ucznia (szkoła, dom, jedzenie), bez tekstów z podręcznika. W zdaniach głównie litery z tej i poprzednich lekcji. Każdy tekst ma `ua` i `es`. Gdy polska linijka mówi o cyrylicy albo o ukraińskim, dopisujemy `plEs` - wersję dla hiszpańskojęzycznych (pilnuje test). Tekst lektorki (`lektor`) bez gołych liter i nawiasów - piszemy nazwy liter słowami („es i zet”).
 
-## Seria: od dźwięków do reguł
+## Seria: 10 lekcji, jedna na tydzień
 
 Uczniowie mówią po polsku, więc pierwsza część jest krótka: tylko te dźwięki, które ich alfabet zapisuje inaczej. Potem reguły ortografii, czyli te same dźwięki pisane różnie - tego nie da się „usłyszeć”, trzeba znać zasadę i słowo do wymiany.
 
-**Etap 1 - dźwięk i litera** (Ukraińcy: cyrylica → łacinka; Hiszpanie: inne znaczenie liter)
+**Powtórka na start** (od lekcji 2): zanim zacznie się nowy temat, uczeń pisze 5 słów z wcześniejszych lekcji - 3 z poprzedniej i 2 ze starszych, za każdym razem inne (`powtorkaDla` w `src/data/dyktanda.ts`). Tak stare reguły wracają co tydzień.
 
 | Nr | Od | Temat | Co sprawia kłopot |
 |----|----|-------|-------------------|
 | 1 | 23.11 | sz, cz, ch | jeden dźwięk - dwie litery; ch to nie [ч] (Hiszpanie: ch = j) |
 | 2 | 30.11 | ł, l, w | ł = ў; w = в, a nie v (Hiszpanie: w = v, ł = u z „huevo”) |
 | 3 | 7.12 | y, i, j | и = y, і = i, й = j; po cz, sz, rz, ż zawsze y (Hiszpanie: j = y z „yo”, y to samogłoska) |
-| 4 | 14.12 | ś, ć, ń, ź i si, ci, ni, zi | kreska przed spółgłoską i na końcu, i przed samogłoską (Hiszpanie: ń = ñ) |
-| 5 | 4.01 | ia, ie, iu, io (я, є, ю) | biały, wiem, kiedy |
-| 6 | 11.01 | ą, ę | он/ен; ogonek na końcu wyrazu (idę, mają) |
-| 7 | 18.01 | dz, dż, dź; c = [ц] | Hiszpanie: c to zawsze „ts” |
+| 4 | 14.12 | ś, ć, ń, ź | kreska przed spółgłoską i na końcu, przed samogłoską si, ci, ni, zi (Hiszpanie: ń = ñ) |
+| 5 | 21.12 | ą, ę | он/ен; ogonek na końcu wyrazu (idę, mają) |
+| 6 | 4.01 | c, dz, dż, dź | c = [ц] (Hiszpanie: c to zawsze „ts”), dż = дж |
+| 7 | 11.01 | ó czy u | ó wymienia się na o, e, a (stół - stoły); końcówki -ów, -ówka |
+| 8 | 18.01 | rz czy ż | rz wymienia się na r (morze - morski), ż na g, z, s, h (mogę - może) |
+| 9 | 25.01 | ch czy h | h wymienia się na g, z, ż (wahać - waga); ch na końcu wyrazu |
+| 10 | 1.02 | wielka powtórka | wszystkie reguły naraz, dłuższe zdania |
 
-**Etap 2 - reguły ortografii** (ten sam dźwięk, różne litery)
+Daty to poniedziałki - ferie i przerwy przesunąć w polu `od` (każda kolejna lekcja musi mieć późniejszą datę, pilnuje test). Lekcje 7-9 mają przy słowach pole `dlaczego` (słowo do wymiany albo reguła) - uczeń widzi je po błędzie i po wyborze litery w ćwiczeniu.
 
-Wstęp pokazuje regułę i **wymianę** (`stół → stołu`), w ćwiczeniu z luką uczeń wybiera literę i widzi słowo, które ją uzasadnia.
-
-| Nr | Temat | Reguła |
-|----|-------|--------|
-| 8 | ó czy u | ó wymienia się na o, e, a; końcówki -ów, -ówka, -ówna |
-| 9 | rz czy ż | rz wymienia się na r; ż na g, z, s, h; rz po p, b, t, d, k, g, ch, j, w |
-| 10 | ch czy h | h wymienia się na g, z, ż; ch na końcu wyrazu |
-| 11 | ą i ę na końcu | idą / idę, z mamą, -ę w 1. osobie |
-| 12 | wielka litera | imiona, miasta, kraje, święta; dni tygodnia i miesiące małą |
-| 13 | nie z czasownikiem i przymiotnikiem | nie idę (osobno), niebieski / niewysoki (razem) |
-| 14 | -i, -ii, -ji | Maria - Marii, lekcja - lekcji, pani |
-
-**Etap 3 - pisanie dłuższego tekstu**
-
-| Nr | Temat |
-|----|-------|
-| 15 | dyktando z krótkiego tekstu (wiadomość do kolegi) - wszystkie reguły naraz |
-| 16 | powtórka z testem całego etapu 2 |
-
-Daty to poniedziałki - ferie i przerwy przesunąć w polu `od`.
-
-**Dopasowanie poziomu.** Po lekcjach 1-2 patrzymy na wyniki w zakładce Zadania domowe. Jeśli większość ma ponad 90%, lekcje 3-7 łączymy po dwie (2 tematy w jednej lekcji) i szybciej dochodzimy do etapu 2. Jeśli ktoś ma poniżej 60%, zostaje dłużej na etapie 1 - lekcję można robić kilka razy.
+**Dopasowanie poziomu.** Po lekcjach 1-2 patrzymy na wyniki w zakładce Zadania domowe. Jeśli większość ma ponad 90%, kolejne lekcje można odblokować wcześniej (zmienić `od`). Jeśli ktoś ma poniżej 60%, robi lekcję jeszcze raz - można ją powtarzać.
 
 ## Nowa lekcja
 
-1. `src/data/dyktanda/NN-temat.json` (wzór: `01-sz-cz-ch.json`), dopisać import w `src/data/dyktanda.ts`.
+1. `src/data/dyktanda/NN-temat.json` (wzór: `01-sz-cz-ch.json`) - apka wczytuje sama wszystkie pliki z folderu.
 2. `python tools/dyktanda-audio.py` - nagrania brakujących słów, zdań i tekstów lektorki (ElevenLabs, ok. 700 znaków na lekcję).
 3. `python tools/dyktanda-audio.py --sprawdz` - rozpoznawanie mowy w każdym pliku; wszystko `OK` (słowo zapisane cyrylicą, np. „Пушка”, to też dobrze - STT pomylił tylko alfabet).
 4. `npx vitest run src/lib/dyktando.test.ts`, obejrzeć lekcję na `/dyktando` po ukraińsku i po hiszpańsku, commit z mp3.

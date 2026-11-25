@@ -1,0 +1,123 @@
+{
+  "id": "06-c-dz",
+  "nr": 6,
+  "od": "2027-01-04",
+  "temat": "c, dz, dż, dź",
+  "tematUa": "Звуки ц, дз, дж, дзь",
+  "tematEs": "Los sonidos ts, dz, dy",
+  "intro": { "pl": "Cześć! Dziś poznasz cztery dźwięki: c, dz, dż i dź. Jeden piszemy jedną literą, a trzy dwiema literami.", "ua": "Привіт! Сьогодні ти познайомишся з чотирма звуками: c, dz, dż і dź. Один пишемо однією літерою, а три - двома літерами.", "es": "¡Hola! Hoy vas a conocer cuatro sonidos: c, dz, dż y dź. Uno se escribe con una letra y tres con dos letras.", "lektor": "Cześć! Dziś poznasz cztery dźwięki. Jeden piszemy jedną literą, a trzy dwiema literami. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "c",
+      "dzwiek": "ц",
+      "dzwiekEs": "ts",
+      "pl": "Dźwięk [ц] piszemy jedną literą: c.",
+      "plEs": "Dźwięk [ts] piszemy jedną literą: c. Zawsze brzmi ts, nigdy k ani s.",
+      "ua": "Звук [ц] пишемо однією літерою: c.",
+      "es": "El sonido «ts» (como en «tsunami») se escribe con una sola letra: c. ¡Ojo! En polaco la c SIEMPRE suena «ts», nunca «k» ni «s».",
+      "lektor": "Posłuchaj: noc, cebula. Ten dźwięk piszemy jedną literą: ce.",
+      "przyklady": [
+        { "pl": "noc", "ua": "ніч", "es": "noche", "obraz": "🌙" },
+        { "pl": "cebula", "ua": "цибуля", "es": "cebolla", "obraz": "🧅" }
+      ]
+    },
+    {
+      "litery": "dz",
+      "dzwiek": "дз",
+      "dzwiekEs": "dz",
+      "pl": "Dźwięk [дз] piszemy dwiema literami: d + z.",
+      "plEs": "Dźwięk [dz] piszemy dwiema literami: d + z. Brzmi jak d i z razem.",
+      "ua": "Звук [дз] пишемо двома літерами: d + z.",
+      "es": "El sonido «dz» (d y z juntas, con zumbido) se escribe con dos letras: d + z.",
+      "lektor": "Posłuchaj: dzwon, kukurydza. Ten dźwięk piszemy dwiema literami: de i zet.",
+      "przyklady": [
+        { "pl": "dzwon", "ua": "дзвін", "es": "campana", "obraz": "🔔" },
+        { "pl": "kukurydza", "ua": "кукурудза", "es": "maíz", "obraz": "🌽" }
+      ]
+    },
+    {
+      "litery": "dż",
+      "dzwiek": "дж",
+      "dzwiekEs": "dy",
+      "pl": "Dźwięk [дж] piszemy dwiema literami: d + ż (z z kropką).",
+      "plEs": "Dźwięk dż, jak w angielskim jungle, piszemy dwiema literami: d + ż (z z kropką).",
+      "ua": "Звук [дж] пишемо двома літерами: d + ż (z з крапкою).",
+      "es": "El sonido de la «j» inglesa de «jungle» se escribe con dos letras: d + ż (z con punto).",
+      "lektor": "Posłuchaj: dżem, dżungla. Ten dźwięk piszemy dwiema literami: de i żet.",
+      "przyklady": [
+        { "pl": "dżem", "ua": "джем", "es": "mermelada", "obraz": "🍓" },
+        { "pl": "dżungla", "ua": "джунглі", "es": "selva", "obraz": "🌴" }
+      ]
+    },
+    {
+      "litery": "dź",
+      "dzwiek": "дзь",
+      "dzwiekEs": "dy suave",
+      "pl": "Miękki dźwięk [дзь] piszemy d + ź (z z kreską). Przed samogłoską piszemy dzi: dziecko.",
+      "plEs": "Miękkie dź piszemy d + ź (z z kreską). Przed samogłoską piszemy dzi: dziecko.",
+      "ua": "М’який звук [дзь] пишемо d + ź (z з рисочкою). Перед голосною пишемо dzi: dziecko.",
+      "es": "La «dy» suave se escribe d + ź (z con rayita). Antes de vocal se escribe dzi: dziecko.",
+      "lektor": "Posłuchaj: niedźwiedź, dziecko. Ten miękki dźwięk piszemy de i ziet. Przed samogłoską piszemy de, zet, i.",
+      "przyklady": [
+        { "pl": "niedźwiedź", "ua": "ведмідь", "es": "oso", "obraz": "🐻" },
+        { "pl": "dziecko", "ua": "дитина", "es": "niño", "obraz": "👶", "dlaczego": { "pl": "dziecko: przed samogłoską piszemy dzi, nie dź", "ua": "dziecko: перед голосною пишемо dzi, а не dź", "es": "dziecko: antes de vocal se escribe dzi, no dź" } }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "ulica", "luka": "c", "ua": "вулиця", "es": "calle" },
+    { "pl": "owca", "luka": "c", "ua": "вівця", "es": "oveja" },
+    { "pl": "jedzenie", "luka": "dz", "ua": "їжа", "es": "comida" },
+    { "pl": "bardzo", "luka": "dz", "ua": "дуже", "es": "muy" },
+    { "pl": "dżinsy", "luka": "dż", "ua": "джинси", "es": "jeans" },
+    { "pl": "dżudo", "luka": "dż", "ua": "дзюдо", "es": "judo" },
+    { "pl": "dźwig", "luka": "dź", "ua": "підйомний кран", "es": "grúa" },
+    { "pl": "łódź", "luka": "dź", "ua": "човен", "es": "bote", "dlaczego": { "pl": "łódź: na końcu słowa piszemy dź", "ua": "łódź: у кінці слова пишемо dź", "es": "łódź: al final de la palabra se escribe dź" } }
+  ],
+  "slowa": [
+    { "pl": "cukier", "ua": "цукор", "es": "azúcar" },
+    { "pl": "taniec", "ua": "танець", "es": "baile" },
+    { "pl": "palec", "ua": "палець", "es": "dedo" },
+    { "pl": "rodzynki", "ua": "родзинки", "es": "pasas" },
+    { "pl": "chodzę", "ua": "я ходжу", "es": "camino" },
+    { "pl": "jeżdżę", "ua": "я їжджу", "es": "ando (en bici o en carro)" },
+    { "pl": "drożdżówka", "ua": "солодка булочка", "es": "pan dulce" },
+    { "pl": "dzień", "ua": "день", "es": "día", "dlaczego": { "pl": "dzień: przed samogłoską piszemy dzi, nie dź", "ua": "dzień: перед голосною пишемо dzi, а не dź", "es": "dzień: antes de vocal se escribe dzi, no dź" } },
+    { "pl": "dziadek", "ua": "дідусь", "es": "abuelo", "dlaczego": { "pl": "dziadek: przed samogłoską piszemy dzi, nie dź", "ua": "dziadek: перед голосною пишемо dzi, а не dź", "es": "dziadek: antes de vocal se escribe dzi, no dź" } },
+    { "pl": "żołądź", "ua": "жолудь", "es": "bellota", "dlaczego": { "pl": "żołądź: na końcu słowa piszemy dź", "ua": "żołądź: у кінці слова пишемо dź", "es": "żołądź: al final de la palabra se escribe dź" } }
+  ],
+  "zdania": [
+    { "pl": "Tata pije kawę z cukrem.", "ua": "Тато п’є каву з цукром.", "es": "Papá toma café con azúcar." },
+    { "pl": "Dzisiaj jest zimno.", "ua": "Сьогодні холодно.", "es": "Hoy hace frío." },
+    { "pl": "Budzik dzwoni o siódmej.", "ua": "Будильник дзвонить о сьомій.", "es": "El despertador suena a las siete." },
+    { "pl": "Jedziemy do cioci.", "ua": "Ми їдемо до тітки.", "es": "Vamos a casa de la tía." },
+    { "pl": "Lubię pączki z dżemem.", "ua": "Я люблю пончики з джемом.", "es": "Me gustan las donas con mermelada." }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Noc piszemy przez ce. Dzwon przez de zet. Dżem przez de żet. Niedźwiedź przez de ziet. A teraz krótki test.",
+    "punkty": [
+      {
+        "pl": "c = [ц], dz = [дз], dż = [дж], dź = [дзь].",
+        "plEs": "c to zawsze ts, nigdy k ani s. dz, dż i dź piszemy dwiema literami.",
+        "ua": "c = [ц], dz = [дз], dż = [дж], dź = [дзь].",
+        "es": "La c polaca siempre suena «ts», nunca «k» ni «s». dz, dż y dź se escriben con dos letras."
+      },
+      { "pl": "Przed samogłoską nie piszemy dź, tylko dzi: dziecko, dzień.", "ua": "Перед голосною пишемо не dź, а dzi: dziecko, dzień.", "es": "Antes de vocal no se escribe dź, sino dzi: dziecko, dzień." },
+      { "pl": "dż to d + ż z kropką, a dź to d + ź z kreską: dżem, łódź.", "ua": "dż - це d + ż з крапкою, а dź - d + ź з рисочкою: dżem, łódź.", "es": "dż es d + ż con punto, y dź es d + ź con rayita: dżem, łódź." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "cytryna", "ua": "лимон", "es": "limón" },
+      { "pl": "koc", "ua": "ковдра", "es": "cobija" },
+      { "pl": "pędzel", "ua": "пензлик", "es": "pincel" },
+      { "pl": "dżdżownica", "ua": "дощовий черв’як", "es": "lombriz" },
+      { "pl": "dźwięk", "ua": "звук", "es": "sonido" },
+      { "pl": "dziewczynka", "ua": "дівчинка", "es": "niña", "dlaczego": { "pl": "dziewczynka: przed samogłoską piszemy dzi, nie dź", "ua": "dziewczynka: перед голосною пишемо dzi, а не dź", "es": "dziewczynka: antes de vocal se escribe dzi, no dź" } }
+    ],
+    "zdania": [
+      { "pl": "Ciocia jeździ rowerem.", "ua": "Тітка їздить на велосипеді.", "es": "La tía anda en bicicleta." },
+      { "pl": "Dzieci bawią się w ogrodzie.", "ua": "Діти граються в саду.", "es": "Los niños juegan en el jardín." }
+    ]
+  }
+}
