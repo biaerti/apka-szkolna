@@ -54,12 +54,15 @@ export const ROZDZIAL3_TOPICS: Topic[] = [
       ['Przebieg (45 min)', przebieg({
         przed: [
           '**Czytanka „I ty możesz zmienić świat”** (ok. 4 min z lektorem) + **s. 101 zad. 1** ustnie (3 min).',
+          '**Przedsiębiorstwo i problem → rozwiązanie** (4 min) - dwa slajdy, punkty wchodzą strzałką: skąd słowo (firma, przedsięwzięcie), potem Chester, Mikajla i paczkomat. Na koniec pytanie do klasy o problem w szkole.',
         ],
         film: '„Przedsiębiorczy, czyli jaki?” (9:03) - pomysł + działanie, cechy i przysłowia, 3 zadania',
         karty: '„Jaka to cecha?”, „Dokończ przysłowie”, „Co znaczy przysłowie?”',
       })],
       ['Jak wyjaśnić', [
         '- Sam pomysł to za mało, samo działanie bez pomysłu też. Przedsiębiorczość = jedno i drugie.',
+        '- Przedsiębiorczość, przedsiębiorstwo, przedsięwzięcie - jedna rodzina. Przedsięwzięcie to coś, co bierzemy na siebie i planujemy; dobrze zaplanowana firma jest osobnym bytem i działa bez ciągłego pilnowania założyciela.',
+        '- Każdy dobry pomysł zaczyna się od problemu albo potrzeby: czapka gryzie i jest za cienka → nauszniki; ludzie chcą pomóc pszczołom → lemoniada z miodem; kurier nie zastaje nas w domu → paczkomat.',
         '- Nie trzeba mieć firmy: zbiórka karmy dla schroniska też jest przedsiębiorcza.',
         '- Przysłowie mówi o życiu wszystkich ludzi, nie o jednej sytuacji. Pytamy: co znaczy dosłownie, a co naprawdę?',
       ].join('\n')],
@@ -72,11 +75,41 @@ export const ROZDZIAL3_TOPICS: Topic[] = [
       { text: 'Dokończ przysłowie: Kto rano wstaje, ...', answer: 'temu Pan Bóg daje' },
       { text: 'Co znaczy przysłowie „Nie od razu Kraków zbudowano”?', answer: 'Na wielkie rzeczy potrzeba czasu i cierpliwości.' },
       { text: 'Czym przysłowie różni się od zwykłego zdania?', answer: 'Jest krótkie, mądre, powtarzane od dawna i mówi o życiu wszystkich ludzi.' },
+      { text: 'Jaki problem rozwiązuje paczkomat?', answer: 'Kurier nie zastaje nas w domu - z paczkomatu odbieramy paczkę, kiedy chcemy.' },
     ],
     makeSlides: (previousSetId) => [
       slideTopic('Przedsiębiorczy, czyli jaki?'),
       ...kolo(previousSetId),
       slideCzytanka('i-ty-mozesz-zmienic-swiat'),
+      // Bartek 2026-11-26: skad slowo (firma, przedsiewziecie) i problem -> rozwiazanie
+      // na historiach z czytanki plus paczkomat. Punkty wchodza strzalka.
+      {
+        id: newId(),
+        kind: 'text',
+        title: 'Przedsiębiorstwo, czyli firma',
+        body: [
+          'Słowo **przedsiębiorczość** ma tę samą rodzinę co **przedsiębiorstwo** i **przedsięwzięcie**.',
+          '- **Przedsiębiorstwo** to firma.',
+          '- **Przedsięwzięcie** to coś, co bierzemy na siebie i planujemy krok po kroku.',
+          '- Dobrze zaplanowana firma żyje własnym życiem: działa także wtedy, gdy jej założyciel śpi albo jest na wakacjach.',
+        ].join('\n'),
+        studentAction: 'look',
+        krokowo: true,
+      },
+      {
+        id: newId(),
+        kind: 'text',
+        title: 'Problem → rozwiązanie',
+        body: [
+          'Osoba przedsiębiorcza **zauważa problem** (albo potrzebę ludzi) i wymyśla **rozwiązanie**.',
+          '- **Chester:** wełniana czapka gryzie, uczula i jest za cienka → **nauszniki**',
+          '- **Mikajla:** ludzie chcą pomóc przyrodzie, a pszczoły giną → **lemoniada z miodem**, która pomaga pszczołom',
+          '- **Paczki:** kurier przyjeżdża, gdy nikogo nie ma w domu → **paczkomat** - odbierasz paczkę, kiedy chcesz',
+          '- A wy? Jaki problem widzicie w szkole albo na osiedlu? Co by go rozwiązało?',
+        ].join('\n'),
+        studentAction: 'oral',
+        krokowo: true,
+      },
       slideVideo('przedsiebiorczy-film1'),
       ...razem('k4-przedsiebiorczy-cecha', 'k4-przyslowia-dokoncz', 'k4-przyslowia-znaczenie'),
       slideNote('Przedsiębiorczy, czyli jaki?', '**Przedsiębiorczość** to pomysł + działanie. Osoba przedsiębiorcza jest zaradna, kreatywna, wytrwała, odważna i odpowiedzialna.\n**Przysłowie** to krótkie, mądre zdanie powtarzane od dawna, np. Kto pyta, nie błądzi.'),
