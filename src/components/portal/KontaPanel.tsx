@@ -2,10 +2,10 @@
 // tylko login, hash hasla i student_id - imie i nazwisko widac wylacznie tutaj,
 // bo dziennik w apce jest odszyfrowany kluczem Bartka.
 //
-// "Załóż konta" daje kazdemu uczniowi klasy login (np. lis27) i haslo. Haslo
-// widac tylko raz, zaraz po zalozeniu albo zmianie: wtedy kartki do druku
-// i gotowe wiadomosci do rodzicow (do wklejenia w VULCANIE, kazdy rodzic
-// dostaje tylko dane swojego dziecka).
+// "Załóż konta" (jednej klasie albo wszystkim naraz) daje uczniowi login (np.
+// lis27) i haslo. Kopia hasla lezy w bazie zaszyfrowana kluczem Bartka (0045),
+// wiec kartki do druku i wiadomosci do rodzicow (do wklejenia w VULCANIE,
+// kazdy rodzic dostaje tylko dane swojego dziecka) sa dostepne zawsze.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../../data/supabase';
@@ -13,6 +13,7 @@ import { useStore } from '../../data/store';
 import { JEZYKI, type Jezyk } from '../../data/dyktanda';
 import { copyToClipboard } from '../../lib/clipboard';
 import { stanWyzwania, CEL_TYGODNIA } from '../../lib/wyzwanie';
+import { decryptStudentText, encryptStudentText, isEncrypted } from '../../lib/studentCrypto';
 import type { Student } from '../../data/types';
 
 export const LINK_PORTALU = 'https://szkola.klippi.pl/uczen';
@@ -26,6 +27,8 @@ export interface KontoPortalu {
   polski: boolean;
   student_id: string | null;
   class_id: string | null;
+  /** Haslo z kartki zaszyfrowane kluczem Bartka (migracja 0045). */
+  haslo_szyfr?: string | null;
 }
 
 interface WynikKonta {
@@ -122,20 +125,33 @@ const btn =
   'inline-flex min-h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:cursor-not-allowed disabled:opacity-50';
 const btnMaly = 'text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline';
 
+/** Zapisuje kopie hasla zaszyfrowana kluczem Bartka - tylko gdy szyfrowanie dziala (nigdy jawnie). */
+async function zapiszKopieHasla(kontoId: string, haslo: string): Promise<void> {
+  try {
+    const szyfr = await encryptStudentText(haslo);
+    if (!isEncrypted(szyfr)) return;
+    await getSupabase().from('dyktando_uczniowie').update({ haslo_szyfr: szyfr }).eq('id', kontoId);
+  } catch {
+    // brak klucza albo kolumny (migracja 0045) - haslo zostaje tylko na kartce
+  }
+}
+
 export function KontaPanel({ klasaId }: { klasaId: string | null }) {
   const [konta, setKonta] = useState<KontoPortalu[] | null>(null);
   const [wyniki, setWyniki] = useState<WynikKonta[]>([]);
+  const [hasla, setHasla] = useState<Record<string, string>>({});
   const [blad, setBlad] = useState<string | null>(null);
-  const [nowe, setNowe] = useState<NoweHaslo[]>([]);
-  const [pracuje, setPracuje] = useState(false);
+  const [info, setInfo] = useState<string | null>(null);
+  const [pracuje, setPracuje] = useState<string | null>(null);
   const [skopiowane, setSkopiowane] = useState<string | null>(null);
   const classes = useStore((s) => s.classes);
   const students = useStore((s) => s.students);
 
-  const uczniowie = useMemo(
-    () => students.filter((s) => s.classId === klasaId && s.active).sort((a, b) => a.number - b.number),
-    [students, klasaId],
+  const aktywniUczniowie = useMemo(
+    () => students.filter((s) => s.active).sort((a, b) => a.number - b.number),
+    [students],
   );
+  const uczniowie = useMemo(() => aktywniUczniowie.filter((s) => s.classId === klasaId), [aktywniUczniowie, klasaId]);
 
   const wczytaj = useCallback(async () => {
     const sb = getSupabase();
@@ -153,6 +169,16 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
     } else setBlad(null);
     setKonta(lista);
     setWyniki((w.data ?? []) as WynikKonta[]);
+    const odszyfrowane: Record<string, string> = {};
+    for (const konto of lista) {
+      if (!konto.haslo_szyfr) continue;
+      try {
+        odszyfrowane[konto.id] = await decryptStudentText(konto.haslo_szyfr);
+      } catch {
+        // inny klucz - hasla nie pokazujemy
+      }
+    }
+    setHasla(odszyfrowane);
   }, []);
 
   useEffect(() => {
@@ -160,24 +186,22 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
   }, [wczytaj]);
 
   if (!isSupabaseConfigured()) return null;
-  if (!klasaId) {
-    return <p className="rounded-xl border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-600">Wybierz klasę na górze, żeby zobaczyć i założyć konta uczniów.</p>;
-  }
 
   const aktywne = (konta ?? []).filter((k) => k.aktywny);
   const kontoUcznia = (s: Student) => aktywne.find((k) => k.student_id === s.id);
-  const bezKonta = uczniowie.filter((s) => !kontoUcznia(s));
   const zajete = new Set((konta ?? []).map((k) => (k.login ?? '').toLowerCase()).filter(Boolean));
-  const nazwaKlasy = classes.find((c) => c.id === klasaId)?.name ?? '';
+  const nazwaKlasy = (id: string | null) => classes.find((c) => c.id === id)?.name ?? '';
+  const brak0045 = !!konta?.length && !('haslo_szyfr' in konta[0]);
 
   async function zalozKonta(lista: Student[]) {
-    setPracuje(true);
-    const utworzone: NoweHaslo[] = [];
+    setPracuje('konta');
+    setInfo(null);
+    let ile = 0;
     for (const uczen of lista) {
       const login = nowyLogin(zajete);
       zajete.add(login);
       const haslo = noweHasloPortalu();
-      const { error } = await getSupabase().rpc('portal_dodaj_konto', {
+      const { data: id, error } = await getSupabase().rpc('portal_dodaj_konto', {
         p_login: login,
         p_haslo: haslo,
         p_student_id: uczen.id,
@@ -189,21 +213,22 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
         setBlad(`Nie udało się założyć konta: ${uczen.firstName} ${uczen.lastName}. Czy migracja 0044 jest w bazie?`);
         break;
       }
-      utworzone.push({ uczen, login, haslo });
+      await zapiszKopieHasla(id as string, haslo);
+      setHasla((h) => ({ ...h, [id as string]: haslo }));
+      ile++;
+      setInfo(`Zakładam konta: ${ile}/${lista.length}…`);
     }
-    setNowe(utworzone);
-    setPracuje(false);
+    setInfo(ile ? `Założono kont: ${ile}.` : null);
+    setPracuje(null);
     await wczytaj();
   }
 
   async function noweHasla(lista: Array<{ uczen: Student; konto: KontoPortalu }>) {
-    setPracuje(true);
-    const zmienione: NoweHaslo[] = [];
+    setPracuje('hasla');
     for (const { uczen, konto } of lista) {
       const haslo = noweHasloPortalu();
-      let login = konto.login;
-      if (!login) {
-        login = nowyLogin(zajete);
+      if (!konto.login) {
+        const login = nowyLogin(zajete);
         zajete.add(login);
         await getSupabase().from('dyktando_uczniowie').update({ login }).eq('id', konto.id);
       }
@@ -212,10 +237,10 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
         setBlad(`Nie udało się zmienić hasła: ${uczen.firstName} ${uczen.lastName}.`);
         break;
       }
-      zmienione.push({ uczen, login, haslo });
+      await zapiszKopieHasla(konto.id, haslo);
+      setHasla((h) => ({ ...h, [konto.id]: haslo }));
     }
-    setNowe(zmienione);
-    setPracuje(false);
+    setPracuje(null);
     await wczytaj();
   }
 
@@ -229,69 +254,124 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
     if (await copyToClipboard(tekst)) setSkopiowane(klucz);
   }
 
+  const ostrzezenia = (
+    <>
+      {blad && <p className="mb-3 text-sm text-red-700">{blad}</p>}
+      {brak0045 && !blad && (
+        <p className="mb-3 text-sm text-amber-800">
+          Hasła widać tylko zaraz po założeniu konta - wklej supabase/migrations/0045_portal_haslo_szyfr.sql, żeby apka je zapamiętała (zaszyfrowane).
+        </p>
+      )}
+      {info && <p className="mb-3 text-sm text-gray-700">{info}</p>}
+    </>
+  );
+
+  // ---------- wszystkie klasy: podsumowanie + zbiorcze zakladanie kont ----------
+  if (!klasaId) {
+    const klasy = [...classes].sort((a, b) => a.order - b.order);
+    const wszyscyBezKonta = aktywniUczniowie.filter((s) => !kontoUcznia(s) && klasy.some((c) => c.id === s.classId));
+    return (
+      <section aria-labelledby="konta-heading" className="max-w-4xl">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <h3 id="konta-heading" className="text-base font-semibold text-gray-900">Konta uczniów</h3>
+            <p className="mt-1 text-sm leading-6 text-gray-600">
+              Uczeń wchodzi na{' '}
+              <a href="/uczen" target="_blank" rel="noreferrer" className="font-medium text-accent-700 underline">szkola.klippi.pl/uczen</a>{' '}
+              loginem i hasłem. W bazie nie ma imion ani nazwisk. Wiadomości do rodziców i kartki są przy każdej klasie (wybierz ją na górze).
+            </p>
+          </div>
+          <button
+            type="button"
+            className={btn}
+            disabled={!!pracuje || !konta || wszyscyBezKonta.length === 0}
+            onClick={() => {
+              if (window.confirm(`Założyć konta wszystkim uczniom bez konta (${wszyscyBezKonta.length})?`)) void zalozKonta(wszyscyBezKonta);
+            }}
+          >
+            {wszyscyBezKonta.length ? `Załóż konta wszystkim (${wszyscyBezKonta.length})` : 'Wszyscy mają konta'}
+          </button>
+        </div>
+        {ostrzezenia}
+        {konta && (
+          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  <th className="px-4 py-2">Klasa</th>
+                  <th className="px-3 py-2">Konta</th>
+                  <th className="px-3 py-2">Zaliczony ten tydzień</th>
+                </tr>
+              </thead>
+              <tbody>
+                {klasy.map((c) => {
+                  const wKlasie = aktywniUczniowie.filter((s) => s.classId === c.id);
+                  const zKontem = wKlasie.flatMap((s) => {
+                    const k = kontoUcznia(s);
+                    return k ? [k] : [];
+                  });
+                  const zaliczyli = zKontem.filter((k) => stanWyzwania(wyniki.filter((w) => w.uczen_id === k.id)).teraz >= CEL_TYGODNIA).length;
+                  return (
+                    <tr key={c.id} className="border-b border-gray-100 last:border-b-0">
+                      <td className="px-4 py-2 font-medium text-gray-900">{c.name}</td>
+                      <td className="px-3 py-2 text-gray-700">{zKontem.length}/{wKlasie.length}</td>
+                      <td className="px-3 py-2 text-gray-700">{zKontem.length ? `${zaliczyli} uczniów` : ''}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    );
+  }
+
+  // ---------- jedna klasa ----------
+  const bezKonta = uczniowie.filter((s) => !kontoUcznia(s));
   const zKontem = uczniowie.flatMap((uczen) => {
     const konto = kontoUcznia(uczen);
     return konto ? [{ uczen, konto }] : [];
   });
+  const kartki: NoweHaslo[] = zKontem.flatMap(({ uczen, konto }) =>
+    konto.login && hasla[konto.id] ? [{ uczen, login: konto.login, haslo: hasla[konto.id] }] : [],
+  );
 
   return (
     <section aria-labelledby="konta-heading" className="max-w-4xl">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-2xl">
           <h3 id="konta-heading" className="text-base font-semibold text-gray-900">
-            Konta uczniów {nazwaKlasy}
+            Konta uczniów {nazwaKlasy(klasaId)}
           </h3>
           <p className="mt-1 text-sm leading-6 text-gray-600">
             Uczeń wchodzi na{' '}
             <a href="/uczen" target="_blank" rel="noreferrer" className="font-medium text-accent-700 underline">
               szkola.klippi.pl/uczen
             </a>{' '}
-            loginem i hasłem. W bazie nie ma imion ani nazwisk. Hasło widać tylko raz - zaraz po założeniu konta albo zmianie hasła.
+            loginem i hasłem. „Wiadomość” kopiuje tekst dla rodzica do wklejenia w VULCANIE.
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap gap-2">
-          <button type="button" className={btn} disabled={pracuje || bezKonta.length === 0 || !konta} onClick={() => void zalozKonta(bezKonta)}>
+          <button type="button" className={btn} disabled={!!pracuje || bezKonta.length === 0 || !konta} onClick={() => void zalozKonta(bezKonta)}>
             {bezKonta.length ? `Załóż konta (${bezKonta.length})` : 'Wszyscy mają konta'}
+          </button>
+          <button type="button" className={btn} disabled={kartki.length === 0} onClick={() => drukujKartki(kartki)}>
+            Drukuj kartki ({kartki.length})
           </button>
           <button
             type="button"
             className={btn}
-            disabled={pracuje || zKontem.length === 0}
+            disabled={!!pracuje || zKontem.length === 0}
             onClick={() => {
-              if (window.confirm(`Nowe hasła dla całej klasy ${nazwaKlasy} (${zKontem.length})? Stare przestaną działać.`)) void noweHasla(zKontem);
+              if (window.confirm(`Nowe hasła dla całej klasy ${nazwaKlasy(klasaId)} (${zKontem.length})? Stare przestaną działać.`)) void noweHasla(zKontem);
             }}
           >
             Nowe hasła dla klasy
           </button>
         </div>
       </div>
-      {blad && <p className="mb-3 text-sm text-red-700">{blad}</p>}
-
-      {nowe.length > 0 && (
-        <div className="mb-5 rounded-xl border border-amber-300 bg-amber-50 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-sm font-semibold text-amber-900">
-              Nowe hasła ({nowe.length}) - zapisz albo roześlij teraz, potem nie będzie ich widać.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <button type="button" className={btn} onClick={() => drukujKartki(nowe)}>Drukuj kartki</button>
-              <button type="button" className={btn} onClick={() => setNowe([])}>Zamknij</button>
-            </div>
-          </div>
-          <ul className="mt-3 divide-y divide-amber-200">
-            {nowe.map((n) => (
-              <li key={n.uczen.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 py-2 text-sm">
-                <span className="w-56 font-medium text-gray-900">{n.uczen.number}. {n.uczen.lastName} {n.uczen.firstName}</span>
-                <span className="font-mono">{n.login}</span>
-                <span className="font-mono">{n.haslo}</span>
-                <button type="button" className={btnMaly} onClick={() => void kopiuj(wiadomoscDoRodzica(n.uczen, n.login, n.haslo), n.uczen.id)}>
-                  {skopiowane === n.uczen.id ? '✓ skopiowane' : 'Kopiuj wiadomość do rodzica'}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {ostrzezenia}
 
       {konta && (
         <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
@@ -300,6 +380,7 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
               <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                 <th className="px-4 py-2">Uczeń</th>
                 <th className="px-3 py-2">Login</th>
+                <th className="px-3 py-2">Hasło</th>
                 <th className="px-3 py-2">Ten tydzień</th>
                 <th className="px-3 py-2">Poziom</th>
                 <th className="px-3 py-2">Polski krok po kroku</th>
@@ -309,6 +390,7 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
             <tbody>
               {uczniowie.map((uczen) => {
                 const konto = kontoUcznia(uczen);
+                const haslo = konto ? hasla[konto.id] : undefined;
                 const stan = konto ? stanWyzwania(wyniki.filter((w) => w.uczen_id === konto.id)) : null;
                 return (
                   <tr key={uczen.id} className="border-b border-gray-100 last:border-b-0">
@@ -316,6 +398,7 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
                       {uczen.number}. {uczen.lastName} {uczen.firstName}
                     </td>
                     <td className="px-3 py-2 font-mono text-gray-700">{konto ? konto.login ?? '-' : <span className="font-sans text-gray-400">brak konta</span>}</td>
+                    <td className="px-3 py-2 font-mono text-gray-700">{konto ? haslo ?? <span className="font-sans text-xs text-gray-400">na kartce</span> : ''}</td>
                     <td className="px-3 py-2">
                       {stan && (
                         <span className={stan.teraz >= CEL_TYGODNIA ? 'font-semibold text-green-700' : 'text-gray-700'}>
@@ -343,11 +426,16 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
                         </span>
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-right">
+                    <td className="space-x-3 whitespace-nowrap px-3 py-2 text-right">
+                      {konto && konto.login && haslo && (
+                        <button type="button" className={btnMaly} onClick={() => void kopiuj(wiadomoscDoRodzica(uczen, konto.login!, haslo), uczen.id)}>
+                          {skopiowane === uczen.id ? '✓ skopiowane' : 'Wiadomość'}
+                        </button>
+                      )}
                       {konto ? (
-                        <button type="button" className={btnMaly} disabled={pracuje} onClick={() => void noweHasla([{ uczen, konto }])}>Nowe hasło</button>
+                        <button type="button" className={btnMaly} disabled={!!pracuje} onClick={() => void noweHasla([{ uczen, konto }])}>Nowe hasło</button>
                       ) : (
-                        <button type="button" className={btnMaly} disabled={pracuje} onClick={() => void zalozKonta([uczen])}>Załóż konto</button>
+                        <button type="button" className={btnMaly} disabled={!!pracuje} onClick={() => void zalozKonta([uczen])}>Załóż konto</button>
                       )}
                     </td>
                   </tr>
