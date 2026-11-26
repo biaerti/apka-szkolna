@@ -130,7 +130,7 @@ export const ROZDZIAL3_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', przebieg({
         film: '„Przymiotnik - król opisu” (8:36) - cechy i właściwości, przymiotnik słucha rzeczownika, pułapka „szybko”, 3 zadania',
-        karty: '„Jaki? Jaka? Jakie?”, „Przymiotnik czy nie?”, „O czym mówi przymiotnik?”',
+        karty: '„Jaki? Jaka? Jakie?”, „Pytanie i część mowy” (z listy najpierw pytanie, potem część mowy: rzeczownik, czasownik, przymiotnik czy przysłówek), „O czym mówi przymiotnik?”',
       })],
       ['Jak wyjaśnić', [
         '- „Mam psa” i „Mam małego, rudego psa” - po którym zdaniu widzicie psa? To robota przymiotników.',
@@ -151,7 +151,7 @@ export const ROZDZIAL3_TOPICS: Topic[] = [
       slideTopic('Przymiotnik - król opisu'),
       ...kolo(previousSetId),
       slideVideo('przymiotnik-film1'),
-      ...razem('k4-przymiotnik-jaki', 'k4-przymiotnik-czy', 'k4-przymiotnik-grupy'),
+      ...razem('k4-przymiotnik-jaki', 'k4-przymiotnik-pytanie-czesc', 'k4-przymiotnik-grupy'),
       slideNote('Przymiotnik - król opisu', '**Przymiotnik** nazywa cechy i właściwości ludzi, zwierząt, roślin i przedmiotów.\nOdpowiada na pytania: **jaki? jaka? jakie?**, np. wesoły pies, drewniana ławka.'),
     ],
   },

@@ -14,6 +14,18 @@ const CZESCI_POSTAC = ['wstęp', 'wygląd', 'zakończenie'];
 const ZMYSLY = ['wzrok', 'dotyk', 'słuch', 'węch', 'smak'];
 const WAZNE = ['ważne', 'zbędne'];
 const ZASADA = ['wymiana', 'ó: -ów, -ówka', 'u: końcówka', 'u: początek', 'zapamiętaj'];
+const CZESCI_MOWY = ['rzeczownik', 'czasownik', 'przymiotnik', 'przysłówek'];
+const PYTANIE_CZESCI: Record<string, string> = {
+  rzeczownik: 'kto? co?',
+  czasownik: 'co robi?',
+  przymiotnik: 'jaki? jaka? jakie?',
+  przysłówek: 'jak?',
+};
+
+/** Zdanie z **wyrazem**: najpierw pytanie, potem czesc mowy (dwie listy rozwijane). */
+function pytanieICzesc(zdanie: string, czesc: string): string {
+  return `${zdanie} | ${wybor(Object.values(PYTANIE_CZESCI), PYTANIE_CZESCI[czesc])} | ${wybor(CZESCI_MOWY, czesc)}`;
+}
 
 export const CWICZENIA4_ROZDZIAL3: Cwiczenie[] = [
   // ---------- 30. Przedsiębiorczy, czyli jaki? ----------
@@ -135,6 +147,36 @@ export const CWICZENIA4_ROZDZIAL3: Cwiczenie[] = [
       `kolorowy | ${wybor(TAK_NIE, 'tak')}`,
       `kolorowo | ${wybor(TAK_NIE, 'nie')}`,
       `szkolny | ${wybor(TAK_NIE, 'tak')}`,
+    ],
+  },
+  {
+    id: 'k4-przymiotnik-pytanie-czesc',
+    typ: 'luki',
+    tytul: 'Pytanie i część mowy',
+    polecenie: 'Zadaj pytanie do pogrubionego wyrazu. Potem wybierz, jaka to część mowy.',
+    naglowki: ['zdanie', 'pytanie', 'część mowy'],
+    naRaz: 6,
+    rozwijane: true,
+    info: 'Najpierw pytanie, potem nazwa:\n**kto? co?** - rzeczownik\n**co robi?** - czasownik\n**jaki? jaka? jakie?** - przymiotnik\n**jak?** - przysłówek',
+    przyklady: [
+      pytanieICzesc('Na niebie świeci **jasne** słońce.', 'przymiotnik'),
+      pytanieICzesc('Mama **jasno** wytłumaczyła zasady.', 'przysłówek'),
+      pytanieICzesc('**Jasność** lampy razi oczy.', 'rzeczownik'),
+      pytanieICzesc('Ola **maluje** obraz farbami.', 'czasownik'),
+      pytanieICzesc('Zając **zwinnie** ucieka przed lisem.', 'przysłówek'),
+      pytanieICzesc('**Zwinny** kot wskoczył na płot.', 'przymiotnik'),
+      pytanieICzesc('Na gałęzi **skacze** wiewiórka.', 'czasownik'),
+      pytanieICzesc('W kuchni pachnie **szarlotka**.', 'rzeczownik'),
+      pytanieICzesc('Brat **wesoło** gwiżdże.', 'przysłówek'),
+      pytanieICzesc('**Wesoły** klaun rozdaje balony.', 'przymiotnik'),
+      pytanieICzesc('Wiatr **szumi** w koronach drzew.', 'czasownik'),
+      pytanieICzesc('**Pszczoła** siada na kwiatku.', 'rzeczownik'),
+      pytanieICzesc('Pociąg **powoli** wjeżdża na stację.', 'przysłówek'),
+      pytanieICzesc('Ciocia upiekła **pyszne** ciasto.', 'przymiotnik'),
+      pytanieICzesc('**Mróz** maluje wzory na szybie.', 'rzeczownik'),
+      pytanieICzesc('Tata **ostrożnie** niesie tort.', 'przysłówek'),
+      pytanieICzesc('Za oknem pada **gęsty** śnieg.', 'przymiotnik'),
+      pytanieICzesc('Kolega **pożycza** mi linijkę.', 'czasownik'),
     ],
   },
   {

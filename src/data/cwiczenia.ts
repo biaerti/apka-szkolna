@@ -31,6 +31,11 @@ export interface CwiczenieLuki {
   kolumny?: 1 | 2;
   /** Luki sprawdzane z wielkoscia liter (cwiczenia o wielkiej literze). */
   wielkoscLiter?: boolean;
+  /**
+   * Wybory {{a|b|c}} jako lista rozwijana zamiast rzedu przyciskow - gdy w
+   * wierszu sa dwa wybory po kilka opcji (np. pytanie, potem czesc mowy).
+   */
+  rozwijane?: boolean;
   /** Regula do zadania - przycisk "Info" obok "Sprawdź" (nauczyciel pokazuje ja przed sprawdzaniem). */
   info?: string;
   /** Po tej karcie uczniowie robia sami zadanie z karty pracy, np. "zad. 3" - znaczek w rogu slajdu. */

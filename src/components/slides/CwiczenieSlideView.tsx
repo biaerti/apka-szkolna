@@ -167,6 +167,37 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
         </span>
       );
     }
+    // Lista rozwijana: dwa wybory po kilka opcji w jednym wierszu nie
+    // zmiescilyby sie jako przyciski. Szerokosc z najdluzszej opcji - pola
+    // w kolumnie sa rowne.
+    if (cw.typ === 'luki' && cw.rozwijane) {
+      const wybrana = wybory[klucz];
+      const szer = Math.max(...k.opcje.map((o) => [...o].length)) + 3;
+      return (
+        <span className="relative inline-block align-middle">
+          <select
+            value={wybrana ?? ''}
+            onChange={(e) => {
+              setWybory((prev) => ({ ...prev, [klucz]: Number(e.target.value) }));
+              zmienione(klucz);
+            }}
+            onKeyDown={(e) => e.key === 'Escape' && e.currentTarget.blur()}
+            style={{ width: `${szer}ch` }}
+            className={clsx('cursor-pointer rounded-lg border-2 px-2 py-0.5 leading-snug outline-none', klasaOpcji(stan, wybrana !== undefined, false))}
+          >
+            <option value="" disabled>
+              wybierz…
+            </option>
+            {k.opcje.map((opcja, n) => (
+              <option key={n} value={n} className="bg-gray-900 text-white no-underline">
+                {opcja}
+              </option>
+            ))}
+          </select>
+          {stan === 'zle' && <Poprawka>{k.opcje[k.dobra]}</Poprawka>}
+        </span>
+      );
+    }
     return (
       <span className="wybor inline-flex flex-wrap gap-2 align-middle">
         {k.opcje.map((opcja, n) => (
