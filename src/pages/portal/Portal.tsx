@@ -18,7 +18,8 @@ import { kluczZadania, maZadanie, type LekcjaZadania } from '../../lib/zadaniaDo
 import { KursPolski } from '../Dyktando';
 import { ZadanieDomowe } from './ZadanieDomowe';
 import { usunKonto, wczytajKonto, zapiszKonto, type KontoUcznia, type WynikUcznia } from './konto';
-import { Ekran, Kafel, Karta, Tydzien, btnCichy, btnGlowny } from './ui';
+import { stanWyzwania } from '../../lib/wyzwanie';
+import { Ekran, Kafel, Karta, PasekWyzwania, Tydzien, btnCichy, btnGlowny } from './ui';
 
 type Widok = { co: 'start' } | { co: 'zadania' } | { co: 'zadanie'; lekcja: LekcjaZadania } | { co: 'polski' };
 
@@ -190,8 +191,11 @@ function Start({
         <button type="button" onClick={onWyloguj} className={btnCichy}>Wyloguj</button>
       </div>
       <h1 className="mt-5 text-[2rem] font-extrabold leading-tight">Dla ciebie</h1>
+      <div className="mt-4">
+        <PasekWyzwania {...stanWyzwania(wyniki ?? [])} />
+      </div>
       <Karta className="mt-4">
-        <p className="mb-3 text-sm font-bold text-[#5b5b57]">Ten tydzień</p>
+        <p className="mb-3 text-sm font-bold text-[#5b5b57]">Dni z ćwiczeniami w tym tygodniu</p>
         <Tydzien aktywneDni={aktywneDni} dzis={new Date()} />
       </Karta>
       <div className="mt-6 space-y-5">
@@ -206,7 +210,7 @@ function Start({
         {konto.polski && (
           <Kafel
             kolor="fiolet"
-            ikona="🇵🇱"
+            ikona="✍️"
             tytul={<>Polski krok po kroku{tlum('Польська крок за кроком', 'Polaco paso a paso')}</>}
             opis={czekaPolski ? `Nowa lekcja czeka · ${zrobionePolski}/${DYKTANDA.length}` : `Zrobione ${zrobionePolski}/${DYKTANDA.length} - nowa w poniedziałek`}
             postep={{ zrobione: zrobionePolski, wszystkie: DYKTANDA.length }}

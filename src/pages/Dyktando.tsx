@@ -480,7 +480,7 @@ function ListaKursu({
                   <span className={clsx('block text-lg font-extrabold', !otwarta && 'text-[#9a9993]')}>{l.temat}</span>
                   <span className="block truncate text-sm text-[#8a8a85]">
                     {tematLekcji(l, j)}
-                    {!otwarta && ` · ${napis(N.zablokowana)} ${krotkaData(l.od)}`}
+                    {!otwarta && ` · ${krotkaData(l.od)}`}
                   </span>
                 </span>
                 {w ? (

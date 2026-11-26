@@ -57,6 +57,17 @@
         "przeglad"
       ],
       "port": 5177
+    },
+    {
+      "name": "apka-szkolna-dev-2",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "--port",
+        "5178",
+        "--strictPort"
+      ],
+      "port": 5178
     }
   ]
 }

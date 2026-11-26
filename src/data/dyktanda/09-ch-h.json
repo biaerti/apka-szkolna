@@ -1,0 +1,89 @@
+{
+  "id": "09-ch-h",
+  "nr": 9,
+  "od": "2027-01-25",
+  "temat": "ch czy h",
+  "tematUa": "ch чи h",
+  "tematEs": "¿ch o h?",
+  "intro": { "pl": "Cześć! Dziś ch i h. Brzmią tak samo, a piszemy je inaczej. Nauczysz się, kiedy pisać które.", "ua": "Привіт! Сьогодні ch і h. Звучать однаково, а пишемо їх по-різному. Ти навчишся, коли писати яке.", "es": "¡Hola! Hoy ch y h. Suenan igual, pero se escriben distinto. Vas a aprender cuándo usar cada una.", "lektor": "Cześć! Dziś poznasz dwa zapisy tego samego dźwięku: ce ha i samo ha. Nauczysz się, kiedy pisać który. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "ch",
+      "dzwiek": "х",
+      "dzwiekEs": "j",
+      "pl": "Dźwięk [х] najczęściej piszemy ch: na końcu słowa (strych), po s (schody) i gdy wymienia się na sz (mucha - muszka).",
+      "plEs": "Dźwięk [j] najczęściej piszemy ch: na końcu słowa (strych), po s (schody) i gdy wymienia się na sz (mucha - muszka).",
+      "ua": "Звук [х] найчастіше пишемо ch: у кінці слова (strych), після s (schody) і коли він чергується з sz (mucha - muszka).",
+      "es": "El sonido de la «j» española casi siempre se escribe ch: al final de la palabra (strych), después de s (schody) y cuando cambia a sz (mucha - muszka).",
+      "lektor": "Posłuchaj: schody, mucha. Piszemy ce ha na końcu słowa, po literze es i wtedy, gdy w innym słowie słychać es zet: mucha, bo muszka.",
+      "przyklady": [
+        { "pl": "schody", "ua": "сходи", "es": "escaleras", "obraz": "🪜", "dlaczego": { "pl": "schody: po s piszemy ch", "ua": "schody: після s пишемо ch", "es": "schody: después de s escribimos ch" } },
+        { "pl": "mucha", "ua": "муха", "es": "mosca", "obraz": "🪰", "dlaczego": { "pl": "mucha, bo muszka", "ua": "mucha, бо muszka", "es": "mucha, porque muszka" } }
+      ]
+    },
+    {
+      "litery": "h",
+      "dzwiek": "г / х",
+      "dzwiekEs": "j",
+      "pl": "Ten sam dźwięk piszemy h, gdy wymienia się na g, z albo ż: druh - drużyna, wahać się - waga. Wiele słów z h trzeba po prostu zapamiętać: herbata, hulajnoga.",
+      "ua": "Той самий звук пишемо h, коли він чергується з g, z або ż: druh - drużyna, wahać się - waga. Багато слів із h треба просто запам’ятати: herbata, hulajnoga.",
+      "es": "El mismo sonido se escribe h cuando cambia a g, z o ż: druh - drużyna, wahać się - waga. Muchas palabras con h hay que aprenderlas de memoria: herbata, hulajnoga. ¡Ojo! En polaco la h sí suena, como la «j».",
+      "lektor": "Posłuchaj: herbata, hulajnoga. Samo ha piszemy, gdy w innym słowie słychać inny dźwięk: druh, bo drużyna. Wiele słów, jak herbata, trzeba po prostu zapamiętać.",
+      "przyklady": [
+        { "pl": "herbata", "ua": "чай", "es": "té", "obraz": "🍵", "dlaczego": { "pl": "herbata: trzeba zapamiętać", "ua": "herbata: треба запам’ятати", "es": "herbata: hay que aprenderla de memoria" } },
+        { "pl": "hulajnoga", "ua": "самокат", "es": "patineta", "obraz": "🛴", "dlaczego": { "pl": "hulajnoga: trzeba zapamiętać", "ua": "hulajnoga: треба запам’ятати", "es": "hulajnoga: hay que aprenderla de memoria" } }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "hałas", "luka": "h", "ua": "шум", "es": "ruido", "dlaczego": { "pl": "hałas: trzeba zapamiętać", "ua": "hałas: треба запам’ятати", "es": "hałas: hay que aprenderla de memoria" } },
+    { "pl": "schować", "luka": "ch", "ua": "сховати", "es": "esconder", "dlaczego": { "pl": "schować: po s piszemy ch", "ua": "schować: після s пишемо ch", "es": "schować: después de s escribimos ch" } },
+    { "pl": "hokej", "luka": "h", "ua": "хокей", "es": "hockey", "dlaczego": { "pl": "hokej: słowo międzynarodowe, piszemy h", "ua": "hokej: міжнародне слово, пишемо h", "es": "hokej: palabra internacional, con h como «hockey»" } },
+    { "pl": "groch", "luka": "ch", "ua": "горох", "es": "arvejas", "dlaczego": { "pl": "groch, bo groszek", "ua": "groch, бо groszek", "es": "groch, porque groszek" } },
+    { "pl": "wahać się", "luka": "h", "ua": "вагатися", "es": "dudar", "dlaczego": { "pl": "wahać się, bo waga", "ua": "wahać się, бо waga", "es": "wahać się, porque waga" } },
+    { "pl": "cicho", "luka": "ch", "ua": "тихо", "es": "en silencio", "dlaczego": { "pl": "cicho, bo ciszej", "ua": "cicho, бо ciszej", "es": "cicho, porque ciszej" } },
+    { "pl": "huśtawka", "luka": "h", "ua": "гойдалка", "es": "columpio", "dlaczego": { "pl": "huśtawka: trzeba zapamiętać", "ua": "huśtawka: треба запам’ятати", "es": "huśtawka: hay que aprenderla de memoria" } },
+    { "pl": "strych", "luka": "ch", "ua": "горище", "es": "ático", "dlaczego": { "pl": "strych: na końcu słowa piszemy ch", "ua": "strych: у кінці слова пишемо ch", "es": "strych: al final de la palabra escribimos ch" } }
+  ],
+  "slowa": [
+    { "pl": "orzech", "ua": "горіх", "es": "nuez", "dlaczego": { "pl": "orzech, bo orzeszek", "ua": "orzech, бо orzeszek", "es": "orzech, porque orzeszek" } },
+    { "pl": "śmiech", "ua": "сміх", "es": "risa", "dlaczego": { "pl": "śmiech: na końcu słowa piszemy ch", "ua": "śmiech: у кінці слова пишемо ch", "es": "śmiech: al final de la palabra escribimos ch" } },
+    { "pl": "schronisko", "ua": "притулок", "es": "refugio", "dlaczego": { "pl": "schronisko: po s piszemy ch", "ua": "schronisko: після s пишемо ch", "es": "schronisko: después de s escribimos ch" } },
+    { "pl": "choinka", "ua": "ялинка", "es": "árbol de Navidad", "dlaczego": { "pl": "choinka: trzeba zapamiętać", "ua": "choinka: треба запам’ятати", "es": "choinka: hay que aprenderla de memoria" } },
+    { "pl": "zapach", "ua": "запах", "es": "olor", "dlaczego": { "pl": "zapach: na końcu słowa piszemy ch", "ua": "zapach: у кінці слова пишемо ch", "es": "zapach: al final de la palabra escribimos ch" } },
+    { "pl": "druh", "ua": "друг (у скаутів)", "es": "compañero scout", "dlaczego": { "pl": "druh, bo drużyna", "ua": "druh, бо drużyna", "es": "druh, porque drużyna" } },
+    { "pl": "historia", "ua": "історія", "es": "historia", "dlaczego": { "pl": "historia: słowo międzynarodowe, piszemy h", "ua": "historia: міжнародне слово, пишемо h", "es": "historia: palabra internacional, con h como en español" } },
+    { "pl": "hotel", "ua": "готель", "es": "hotel", "dlaczego": { "pl": "hotel: słowo międzynarodowe, piszemy h", "ua": "hotel: міжнародне слово, пишемо h", "es": "hotel: palabra internacional, con h como en español" } },
+    { "pl": "harcerz", "ua": "скаут", "es": "scout", "dlaczego": { "pl": "harcerz: h trzeba zapamiętać, na końcu -erz", "ua": "harcerz: h треба запам’ятати, у кінці -erz", "es": "harcerz: la h hay que aprenderla, al final -erz" } },
+    { "pl": "hamulec", "ua": "гальмо", "es": "freno", "dlaczego": { "pl": "hamulec: trzeba zapamiętać", "ua": "hamulec: треба запам’ятати", "es": "hamulec: hay que aprenderla de memoria" } }
+  ],
+  "zdania": [
+    { "pl": "Pijemy ciepłą herbatę.", "ua": "Ми п’ємо теплий чай.", "es": "Tomamos té caliente.", "dlaczego": { "pl": "herbata: trzeba zapamiętać", "ua": "herbata: треба запам’ятати", "es": "herbata: hay que aprenderla de memoria" } },
+    { "pl": "Idę po schodach.", "ua": "Я йду сходами.", "es": "Voy por las escaleras.", "dlaczego": { "pl": "schodach: po s piszemy ch", "ua": "schodach: після s пишемо ch", "es": "schodach: después de s escribimos ch" } },
+    { "pl": "Słyszę głośny huk.", "ua": "Я чую гучний гуркіт.", "es": "Oigo un ruido fuerte.", "dlaczego": { "pl": "huk: trzeba zapamiętać", "ua": "huk: треба запам’ятати", "es": "huk: hay que aprenderla de memoria" } },
+    { "pl": "Mama gotuje w kuchni.", "ua": "Мама готує на кухні.", "es": "Mamá cocina en la cocina.", "dlaczego": { "pl": "kuchnia: trzeba zapamiętać", "ua": "kuchnia: треба запам’ятати", "es": "kuchnia: hay que aprenderla de memoria" } },
+    { "pl": "Hej, chodź do nas!", "ua": "Гей, іди до нас!", "es": "¡Oye, ven con nosotros!", "dlaczego": { "pl": "hej i chodź: trzeba zapamiętać", "ua": "hej і chodź: треба запам’ятати", "es": "hej y chodź: hay que aprenderlas de memoria" } }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Na końcu słowa i po literze es piszemy ce ha: strych, schody. Samo ha piszemy, gdy wymienia się na inny dźwięk, jak druh i drużyna, albo gdy słowo trzeba zapamiętać, jak herbata. A teraz krótki test.",
+    "punkty": [
+      { "pl": "Ch i h brzmią tak samo. Na końcu słowa i po s piszemy ch: strych, schody.", "ua": "Ch і h звучать однаково. У кінці слова і після s пишемо ch: strych, schody.", "es": "Ch y h suenan igual, como la «j». Al final de la palabra y después de s escribimos ch: strych, schody." },
+      { "pl": "Ch wymienia się na sz: mucha - muszka. H wymienia się na g, z, ż: druh - drużyna.", "ua": "Ch чергується з sz: mucha - muszka. H чергується з g, z, ż: druh - drużyna.", "es": "Ch cambia a sz: mucha - muszka. H cambia a g, z, ż: druh - drużyna." },
+      { "pl": "Słowa międzynarodowe często mają h: hotel, historia, hokej.", "ua": "Міжнародні слова часто мають h: hotel, historia, hokej.", "es": "Las palabras internacionales suelen llevar h, como en español: hotel, historia, hokej." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "ruch", "ua": "рух", "es": "movimiento", "dlaczego": { "pl": "ruch: na końcu słowa piszemy ch", "ua": "ruch: у кінці слова пишемо ch", "es": "ruch: al final de la palabra escribimos ch" } },
+      { "pl": "chodnik", "ua": "тротуар", "es": "acera", "dlaczego": { "pl": "chodnik: trzeba zapamiętać", "ua": "chodnik: треба запам’ятати", "es": "chodnik: hay que aprenderla de memoria" } },
+      { "pl": "chusteczka", "ua": "хусточка", "es": "pañuelo", "dlaczego": { "pl": "chusteczka: trzeba zapamiętać", "ua": "chusteczka: треба запам’ятати", "es": "chusteczka: hay que aprenderla de memoria" } },
+      { "pl": "helikopter", "ua": "гелікоптер", "es": "helicóptero", "dlaczego": { "pl": "helikopter: słowo międzynarodowe, piszemy h", "ua": "helikopter: міжнародне слово, пишемо h", "es": "helikopter: palabra internacional, con h como en español" } },
+      { "pl": "humor", "ua": "гумор", "es": "humor", "dlaczego": { "pl": "humor: słowo międzynarodowe, piszemy h", "ua": "humor: міжнародне слово, пишемо h", "es": "humor: palabra internacional, con h como en español" } },
+      { "pl": "herbatnik", "ua": "печиво", "es": "galleta", "dlaczego": { "pl": "herbatnik, bo herbata", "ua": "herbatnik, бо herbata", "es": "herbatnik, porque herbata" } }
+    ],
+    "zdania": [
+      { "pl": "Halina słucha muzyki.", "ua": "Галина слухає музику.", "es": "Halina escucha música.", "dlaczego": { "pl": "Halina i słucha: trzeba zapamiętać", "ua": "Halina і słucha: треба запам’ятати", "es": "Halina y słucha: hay que aprenderlas de memoria" } },
+      { "pl": "Mój pies to wielki śpioch.", "ua": "Мій пес - великий соня.", "es": "Mi perro es un gran dormilón.", "dlaczego": { "pl": "śpioch: na końcu słowa piszemy ch", "ua": "śpioch: у кінці слова пишемо ch", "es": "śpioch: al final de la palabra escribimos ch" } }
+    ]
+  }
+}

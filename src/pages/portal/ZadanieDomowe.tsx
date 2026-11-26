@@ -282,7 +282,7 @@ function EkranPytania({
       ) : (
         <Arkusz
           stan={wszystkoDobrze ? 'dobrze' : 'zle'}
-          tytul={wszystkoDobrze ? <>🎉 Dobrze!</> : <>Prawie! {ocena.wynik.punkty}/{ocena.wynik.maks}</>}
+          tytul={wszystkoDobrze ? <>🎉 Dobrze!</> : ocena.wynik.maks === 1 ? <>Tym razem nie</> : <>Prawie! {ocena.wynik.punkty}/{ocena.wynik.maks}</>}
           przyciski={
             <>
               {p.cw.info && (
@@ -440,7 +440,9 @@ export function ZadanieDomowe({ lekcja, konto, onKoniec }: { lekcja: LekcjaZadan
   const [wyniki, setWyniki] = useState<WynikPytania[]>([]);
   const [start, setStart] = useState(() => Date.now());
 
-  useEffect(() => window.scrollTo({ top: 0 }), [krok]);
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [krok]);
 
   if (krok === -1 && notatka) {
     return (

@@ -82,13 +82,28 @@ function wymieszaj<T>(lista: T[], los: () => number): T[] {
 }
 
 /**
- * Pytania do zadania: z kazdej karty kilka losowych przykladow (odmiana: jeden
- * wyraz), w kolejnosci kart z lekcji. Razem ok. 10 ekranow - na 10-15 minut.
+ * Tasuje kolejnosc odpowiedzi w {{a|*b|c}} - w kartach dobra czesto stoi
+ * pierwsza (na lekcji to nie szkodzi, w domu dziecko szybko by to wylapalo).
  */
-export function pytaniaZadania(l: LekcjaZadania, los: () => number = Math.random, naKarte = 4): PytanieZadania[] {
-  return kartyLekcji(l).flatMap((cw) => {
+export function przetasujWybory(linia: string, los: () => number): string {
+  return linia.replace(/\{\{(.+?)\}\}/g, (_, srodek: string) => `{{${wymieszaj(srodek.split('|'), los).join('|')}}}`);
+}
+
+/** Najwiecej ekranow w jednym zadaniu (powtorka dzialu ma nawet 11 kart). */
+export const MAKS_PYTAN = 12;
+
+/**
+ * Pytania do zadania: z kazdej karty kilka losowych przykladow (odmiana: jeden
+ * wyraz), w kolejnosci kart z lekcji. Razem do 12 ekranow - na 10-15 minut.
+ */
+export function pytaniaZadania(l: LekcjaZadania, los: () => number = Math.random): PytanieZadania[] {
+  const karty = kartyLekcji(l).filter((c) => mozliwePytania(c).length > 0);
+  const naKarte = Math.max(1, Math.min(4, Math.floor(MAKS_PYTAN / Math.max(1, karty.length))));
+  return karty.flatMap((cw) => {
     const mozliwe = mozliwePytania(cw);
-    return wymieszaj(mozliwe, los).slice(0, cw.typ === 'tabela' ? 1 : naKarte);
+    return wymieszaj(mozliwe, los)
+      .slice(0, cw.typ === 'tabela' ? 1 : naKarte)
+      .map((p) => (p.typ === 'luki' ? { ...p, linia: przetasujWybory(p.linia, los) } : p));
   });
 }
 

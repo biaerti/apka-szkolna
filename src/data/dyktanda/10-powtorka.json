@@ -1,0 +1,146 @@
+{
+  "id": "10-powtorka",
+  "nr": 10,
+  "od": "2027-02-01",
+  "temat": "Wielka powtórka",
+  "tematUa": "Велике повторення",
+  "tematEs": "Gran repaso",
+  "intro": { "pl": "Cześć! To ostatnia lekcja serii. Powtórzymy wszystkie reguły: ó i u, rz i ż, ch i h.", "ua": "Привіт! Це останній урок серії. Повторимо всі правила: ó і u, rz і ż, ch і h.", "es": "¡Hola! Esta es la última lección. Vamos a repasar todas las reglas: ó y u, rz y ż, ch y h.", "lektor": "Cześć! To ostatnia lekcja. Powtórzymy wszystkie reguły pisowni, które już znasz. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "ó",
+      "dzwiek": "у",
+      "dzwiekEs": "u",
+      "pl": "Ó piszemy, gdy w innym słowie jest o, e albo a: lód - lody, ogród - ogrody. Zawsze w końcówkach -ów, -ówka.",
+      "ua": "Ó пишемо, якщо в іншому слові є o, e або a: lód - lody, ogród - ogrody. Завжди в закінченнях -ów, -ówka.",
+      "es": "Escribimos ó cuando en otra palabra de la familia hay o, e o a: lód - lody, ogród - ogrody. Siempre en las terminaciones -ów, -ówka.",
+      "lektor": "Posłuchaj: lód, ogród. Piszemy o z kreską, gdy w innym słowie słychać o: lód, bo lody, ogród, bo ogrody.",
+      "przyklady": [
+        { "pl": "lód", "ua": "лід", "es": "hielo", "obraz": "🧊", "dlaczego": { "pl": "lód, bo lody", "ua": "lód, бо lody", "es": "lód, porque lody" } },
+        { "pl": "ogród", "ua": "сад", "es": "jardín", "obraz": "🏡", "dlaczego": { "pl": "ogród, bo ogrody", "ua": "ogród, бо ogrody", "es": "ogród, porque ogrody" } }
+      ]
+    },
+    {
+      "litery": "u",
+      "dzwiek": "у",
+      "dzwiekEs": "u",
+      "pl": "U piszemy, gdy nie ma wymiany: kura. Zawsze w końcówkach -uje, -unek, -utki: rysunek.",
+      "ua": "U пишемо, коли немає слова для перевірки: kura. Завжди в закінченнях -uje, -unek, -utki: rysunek.",
+      "es": "Escribimos u cuando no hay cambio: kura. Siempre en las terminaciones -uje, -unek, -utki: rysunek.",
+      "lektor": "Posłuchaj: kura, rysunek. Gdy nie ma wymiany, piszemy zwykłą literę bez kreski. Tak samo w końcówkach słów rysunek i maluje.",
+      "przyklady": [
+        { "pl": "kura", "ua": "курка", "es": "gallina", "obraz": "🐔" },
+        { "pl": "rysunek", "ua": "малюнок", "es": "dibujo", "obraz": "🖼️", "dlaczego": { "pl": "rysunek: końcówka -unek", "ua": "rysunek: закінчення -unek", "es": "rysunek: terminación -unek" } }
+      ]
+    },
+    {
+      "litery": "rz",
+      "dzwiek": "ж",
+      "dzwiekEs": "zh",
+      "pl": "Rz piszemy, gdy wymienia się na r (morze - morski), po p, b, t, d, k, g, ch, w (krzesło) i w końcówkach -arz, -erz.",
+      "ua": "Rz пишемо, коли чергується з r (morze - morski), після p, b, t, d, k, g, ch, w (krzesło) і в закінченнях -arz, -erz.",
+      "es": "Escribimos rz cuando cambia a r (morze - morski), después de p, b, t, d, k, g, ch, w (krzesło) y en las terminaciones -arz, -erz.",
+      "lektor": "Posłuchaj: morze, krzesło. Piszemy er zet, gdy w innym słowie słychać er, jak morze i morski, oraz po spółgłoskach, jak w słowie krzesło.",
+      "przyklady": [
+        { "pl": "morze", "ua": "море", "es": "mar", "obraz": "🌊", "dlaczego": { "pl": "morze, bo morski", "ua": "morze, бо morski", "es": "morze, porque morski" } },
+        { "pl": "krzesło", "ua": "стілець", "es": "silla", "obraz": "🪑", "dlaczego": { "pl": "krzesło: rz po k", "ua": "krzesło: rz після k", "es": "krzesło: rz después de k" } }
+      ]
+    },
+    {
+      "litery": "ż",
+      "dzwiek": "ж",
+      "dzwiekEs": "zh",
+      "pl": "Ż piszemy, gdy wymienia się na g, z, s albo h (książka - księga). Inne słowa trzeba zapamiętać: żółw.",
+      "ua": "Ż пишемо, коли чергується з g, z, s або h (książka - księga). Інші слова треба запам’ятати: żółw.",
+      "es": "Escribimos ż cuando cambia a g, z, s o h (książka - księga). Las demás palabras hay que aprenderlas de memoria: żółw.",
+      "lektor": "Posłuchaj: żółw, książka. Piszemy zet z kropką, gdy w innym słowie słychać inny dźwięk: książka, bo księga. Słowo żółw trzeba zapamiętać.",
+      "przyklady": [
+        { "pl": "żółw", "ua": "черепаха", "es": "tortuga", "obraz": "🐢" },
+        { "pl": "książka", "ua": "книжка", "es": "libro", "obraz": "📚", "dlaczego": { "pl": "książka, bo księga", "ua": "książka, бо księga", "es": "książka, porque księga" } }
+      ]
+    },
+    {
+      "litery": "ch",
+      "dzwiek": "х",
+      "dzwiekEs": "j",
+      "pl": "Ch piszemy najczęściej: na końcu słowa, po s (schody) i gdy wymienia się na sz (mucha - muszka).",
+      "ua": "Ch пишемо найчастіше: у кінці слова, після s (schody) і коли чергується з sz (mucha - muszka).",
+      "es": "Ch es la forma más común: al final de la palabra, después de s (schody) y cuando cambia a sz (mucha - muszka).",
+      "lektor": "Posłuchaj: kuchnia, chomik. Ce ha piszemy najczęściej: na końcu słowa, po literze es i gdy wymienia się na es zet.",
+      "przyklady": [
+        { "pl": "kuchnia", "ua": "кухня", "es": "cocina", "obraz": "🍳" },
+        { "pl": "chomik", "ua": "хом’як", "es": "hámster", "obraz": "🐹" }
+      ]
+    },
+    {
+      "litery": "h",
+      "dzwiek": "г / х",
+      "dzwiekEs": "j",
+      "pl": "H piszemy, gdy wymienia się na g, z, ż (druh - drużyna). Wiele słów, często międzynarodowych, trzeba zapamiętać: hipopotam.",
+      "ua": "H пишемо, коли чергується з g, z, ż (druh - drużyna). Багато слів, часто міжнародних, треба запам’ятати: hipopotam.",
+      "es": "Escribimos h cuando cambia a g, z, ż (druh - drużyna). Muchas palabras, a menudo internacionales, hay que aprenderlas de memoria: hipopotam.",
+      "lektor": "Posłuchaj: hipopotam, hamburger. Samo ha piszemy w słowach, które trzeba zapamiętać, często międzynarodowych, i gdy wymienia się na inny dźwięk, jak druh i drużyna.",
+      "przyklady": [
+        { "pl": "hipopotam", "ua": "бегемот", "es": "hipopótamo", "obraz": "🦛" },
+        { "pl": "hamburger", "ua": "гамбургер", "es": "hamburguesa", "obraz": "🍔" }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "pszczółka", "luka": "ó", "ua": "бджілка", "es": "abejita", "dlaczego": { "pl": "pszczółka, bo pszczoła", "ua": "pszczółka, бо pszczoła", "es": "pszczółka, porque pszczoła" } },
+    { "pl": "kupuje", "luka": "u", "ua": "купує", "es": "compra", "dlaczego": { "pl": "kupuje: końcówka -uje", "ua": "kupuje: закінчення -uje", "es": "kupuje: terminación -uje" } },
+    { "pl": "przerwa", "luka": "rz", "ua": "перерва", "es": "recreo", "dlaczego": { "pl": "przerwa: rz po p", "ua": "przerwa: rz після p", "es": "przerwa: rz después de p" } },
+    { "pl": "drużyna", "luka": "ż", "ua": "команда", "es": "equipo", "dlaczego": { "pl": "drużyna, bo druh", "ua": "drużyna, бо druh", "es": "drużyna, porque druh" } },
+    { "pl": "strach", "luka": "ch", "ua": "страх", "es": "miedo", "dlaczego": { "pl": "strach: na końcu słowa piszemy ch", "ua": "strach: у кінці слова пишемо ch", "es": "strach: al final de la palabra escribimos ch" } },
+    { "pl": "hasło", "luka": "h", "ua": "пароль", "es": "contraseña", "dlaczego": { "pl": "hasło: trzeba zapamiętać", "ua": "hasło: треба запам’ятати", "es": "hasło: hay que aprenderla de memoria" } },
+    { "pl": "pokój", "luka": "ó", "ua": "кімната", "es": "habitación", "dlaczego": { "pl": "pokój, bo pokoje", "ua": "pokój, бо pokoje", "es": "pokój, porque pokoje" } },
+    { "pl": "malutki", "luka": "u", "ua": "малесенький", "es": "chiquito", "dlaczego": { "pl": "malutki: końcówka -utki", "ua": "malutki: закінчення -utki", "es": "malutki: terminación -utki" } },
+    { "pl": "pisarz", "luka": "rz", "ua": "письменник", "es": "escritor", "dlaczego": { "pl": "pisarz: końcówka -arz", "ua": "pisarz: закінчення -arz", "es": "pisarz: terminación -arz" } },
+    { "pl": "chrapie", "luka": "ch", "ua": "хропе", "es": "ronca", "dlaczego": { "pl": "chrapie: trzeba zapamiętać", "ua": "chrapie: треба запам’ятати", "es": "chrapie: hay que aprenderla de memoria" } }
+  ],
+  "slowa": [
+    { "pl": "wiewiórka", "ua": "білка", "es": "ardilla", "dlaczego": { "pl": "wiewiórka: końcówka -ówka", "ua": "wiewiórka: закінчення -ówka", "es": "wiewiórka: terminación -ówka" } },
+    { "pl": "łąka", "ua": "луг", "es": "prado" },
+    { "pl": "siostra", "ua": "сестра", "es": "hermana", "dlaczego": { "pl": "siostra: przed samogłoską piszemy si", "ua": "siostra: перед голосною пишемо si", "es": "siostra: antes de vocal escribimos si" } },
+    { "pl": "gęś", "ua": "гуска", "es": "ganso", "dlaczego": { "pl": "gęś: na końcu słowa piszemy ś", "ua": "gęś: у кінці слова пишемо ś", "es": "gęś: al final de la palabra escribimos ś" } },
+    { "pl": "krzyczy", "ua": "кричить", "es": "grita", "dlaczego": { "pl": "krzyczy: rz po k, po cz piszemy y", "ua": "krzyczy: rz після k, після cz пишемо y", "es": "krzyczy: rz después de k, después de cz escribimos y" } },
+    { "pl": "łóżko", "ua": "ліжко", "es": "cama", "dlaczego": { "pl": "łóżko: ó i ż trzeba zapamiętać", "ua": "łóżko: ó і ż треба запам’ятати", "es": "łóżko: la ó y la ż hay que aprenderlas" } },
+    { "pl": "hełm", "ua": "шолом", "es": "casco", "dlaczego": { "pl": "hełm: h trzeba zapamiętać", "ua": "hełm: h треба запам’ятати", "es": "hełm: la h hay que aprenderla" } },
+    { "pl": "zachód", "ua": "захід", "es": "oeste", "dlaczego": { "pl": "zachód, bo zachody", "ua": "zachód, бо zachody", "es": "zachód, porque zachody" } },
+    { "pl": "piszę", "ua": "я пишу", "es": "escribo", "dlaczego": { "pl": "piszę: ja robię - na końcu ę", "ua": "piszę: я роблю - у кінці ę", "es": "piszę: yo hago - al final ę" } },
+    { "pl": "uczeń", "ua": "учень", "es": "alumno", "dlaczego": { "pl": "uczeń: na końcu słowa piszemy ń", "ua": "uczeń: у кінці слова пишемо ń", "es": "uczeń: al final de la palabra escribimos ń" } }
+  ],
+  "zdania": [
+    { "pl": "Cześć, Marku! Wczoraj byłem nad jeziorem.", "ua": "Привіт, Марку! Учора я був біля озера.", "es": "¡Hola, Marek! Ayer estuve en el lago.", "dlaczego": { "pl": "cześć: ś przed spółgłoską, ć na końcu", "ua": "cześć: ś перед приголосною, ć у кінці", "es": "cześć: ś antes de consonante, ć al final" } },
+    { "pl": "Na brzegu siedziała duża zielona żaba.", "ua": "На березі сиділа велика зелена жаба.", "es": "En la orilla había una rana grande y verde.", "dlaczego": { "pl": "brzegu: rz po b; żaba: trzeba zapamiętać", "ua": "brzegu: rz після b; żaba: треба запам’ятати", "es": "brzegu: rz después de b; żaba: hay que aprenderla" } },
+    { "pl": "Potem przyszedł mój młodszy brat Hubert.", "ua": "Потім прийшов мій молодший брат Губерт.", "es": "Luego llegó mi hermano menor Hubert.", "dlaczego": { "pl": "przyszedł: rz po p; mój, bo moja", "ua": "przyszedł: rz після p; mój, бо moja", "es": "przyszedł: rz después de p; mój, porque moja" } },
+    { "pl": "Nagle żaba wskoczyła prosto do wody.", "ua": "Раптом жаба стрибнула просто у воду.", "es": "De pronto la rana saltó directo al agua.", "dlaczego": { "pl": "wskoczyła: po cz piszemy y", "ua": "wskoczyła: після cz пишемо y", "es": "wskoczyła: después de cz escribimos y" } },
+    { "pl": "Hubert zrobił jej śmieszne zdjęcie.", "ua": "Губерт зробив їй смішне фото.", "es": "Hubert le tomó una foto chistosa.", "dlaczego": { "pl": "śmieszne: ś przed spółgłoską", "ua": "śmieszne: ś перед приголосною", "es": "śmieszne: ś antes de consonante" } },
+    { "pl": "Jutro pokażę ci je na przerwie.", "ua": "Завтра покажу тобі його на перерві.", "es": "Mañana te la muestro en el recreo.", "dlaczego": { "pl": "pokażę, bo pokazać; przerwie: rz po p", "ua": "pokażę, бо pokazać; przerwie: rz після p", "es": "pokażę, porque pokazać; przerwie: rz después de p" } }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Zawsze szukaj słowa do wymiany: stół, bo stoły, morze, bo morski, nóżka, bo noga. Gdy wymiany nie ma, słowo trzeba zapamiętać. A teraz krótki test.",
+    "punkty": [
+      { "pl": "Szukaj słowa do wymiany: stół - stoły, morze - morski, nóżka - noga, druh - drużyna.", "ua": "Шукай слово для перевірки: stół - stoły, morze - morski, nóżka - noga, druh - drużyna.", "es": "Busca otra palabra de la familia: stół - stoły, morze - morski, nóżka - noga, druh - drużyna." },
+      { "pl": "Po p, b, t, d, k, g, ch, w piszemy rz. Na końcu słowa i po s piszemy ch.", "ua": "Після p, b, t, d, k, g, ch, w пишемо rz. У кінці слова і після s пишемо ch.", "es": "Después de p, b, t, d, k, g, ch, w escribimos rz. Al final de la palabra y después de s escribimos ch." },
+      { "pl": "Końcówki -ów, -ówka, -uje, -unek, -arz, -erz piszemy zawsze tak samo.", "ua": "Закінчення -ów, -ówka, -uje, -unek, -arz, -erz пишемо завжди однаково.", "es": "Las terminaciones -ów, -ówka, -uje, -unek, -arz, -erz se escriben siempre igual." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "mrówka", "ua": "мураха", "es": "hormiga", "dlaczego": { "pl": "mrówka: końcówka -ówka", "ua": "mrówka: закінчення -ówka", "es": "mrówka: terminación -ówka" } },
+      { "pl": "rysuje", "ua": "малює", "es": "dibuja", "dlaczego": { "pl": "rysuje: końcówka -uje", "ua": "rysuje: закінчення -uje", "es": "rysuje: terminación -uje" } },
+      { "pl": "grzebień", "ua": "гребінець", "es": "peine", "dlaczego": { "pl": "grzebień: rz po g, ń na końcu", "ua": "grzebień: rz після g, ń у кінці", "es": "grzebień: rz después de g, ń al final" } },
+      { "pl": "wyższy", "ua": "вищий", "es": "más alto", "dlaczego": { "pl": "wyższy, bo wysoki", "ua": "wyższy, бо wysoki", "es": "wyższy, porque wysoki" } },
+      { "pl": "schowek", "ua": "схованка", "es": "escondite", "dlaczego": { "pl": "schowek: po s piszemy ch", "ua": "schowek: після s пишемо ch", "es": "schowek: después de s escribimos ch" } },
+      { "pl": "hamak", "ua": "гамак", "es": "hamaca", "dlaczego": { "pl": "hamak: słowo międzynarodowe, piszemy h", "ua": "hamak: міжнародне слово, пишемо h", "es": "hamak: palabra internacional, con h como en español" } },
+      { "pl": "ślimak", "ua": "равлик", "es": "caracol", "dlaczego": { "pl": "ślimak: ś przed spółgłoską", "ua": "ślimak: ś перед приголосною", "es": "ślimak: ś antes de consonante" } },
+      { "pl": "pięć", "ua": "п’ять", "es": "cinco", "dlaczego": { "pl": "pięć: na końcu słowa piszemy ć", "ua": "pięć: у кінці слова пишемо ć", "es": "pięć: al final de la palabra escribimos ć" } }
+    ],
+    "zdania": [
+      { "pl": "Pszczoła siedzi na żółtym kwiatku.", "ua": "Бджола сидить на жовтій квітці.", "es": "Una abeja está sobre una flor amarilla.", "dlaczego": { "pl": "żółtym: ż i ó trzeba zapamiętać", "ua": "żółtym: ż і ó треба запам’ятати", "es": "żółtym: la ż y la ó hay que aprenderlas" } },
+      { "pl": "Hania pije herbatę z cytryną.", "ua": "Ганя п’є чай з лимоном.", "es": "Hania toma té con limón.", "dlaczego": { "pl": "herbatę: h trzeba zapamiętać", "ua": "herbatę: h треба запам’ятати", "es": "herbatę: la h hay que aprenderla" } },
+      { "pl": "W sobotę jedziemy rowerem nad rzekę.", "ua": "У суботу ми їдемо велосипедом до річки.", "es": "El sábado vamos en bicicleta al río.", "dlaczego": { "pl": "rzeka: trzeba zapamiętać; sobotę: ę na końcu", "ua": "rzeka: треба запам’ятати; sobotę: ę у кінці", "es": "rzeka: hay que aprenderla; sobotę: ę al final" } }
+    ]
+  }
+}

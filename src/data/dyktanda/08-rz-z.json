@@ -1,0 +1,90 @@
+{
+  "id": "08-rz-z",
+  "nr": 8,
+  "od": "2027-01-18",
+  "temat": "rz czy ż",
+  "tematUa": "rz чи ż",
+  "tematEs": "¿rz o ż?",
+  "intro": { "pl": "Cześć! Dziś poznasz dwa sposoby zapisu jednego dźwięku: rz i ż. Brzmią tak samo, więc pomoże ci reguła.", "ua": "Привіт! Сьогодні ти дізнаєшся два способи записати один звук: rz і ż. Вони звучать однаково, тому допоможе правило.", "es": "¡Hola! Hoy vas a conocer dos formas de escribir un mismo sonido: rz y ż. Suenan igual, así que te ayudará una regla.", "lektor": "Cześć! Dziś poznasz dwa sposoby zapisu jednego dźwięku: er zet i zet z kropką. Brzmią tak samo, więc pomoże ci reguła. Posłuchaj i zapamiętaj." },
+  "wstep": [
+    {
+      "litery": "rz",
+      "dzwiek": "ж",
+      "dzwiekEs": "zh",
+      "pl": "Dźwięk [ж] piszemy rz, gdy w innym słowie słychać r: morze - morski. Rz piszemy też po p, b, t, d, k, g, ch, j, w (drzewo, trzy) i w końcówkach -arz, -erz (lekarz, rycerz).",
+      "plEs": "Dźwięk [zh] piszemy rz, gdy w innym słowie słychać r: morze - morski. Rz piszemy też po p, b, t, d, k, g, ch, j, w (drzewo, trzy) i w końcówkach -arz, -erz (lekarz, rycerz).",
+      "ua": "Звук [ж] пишемо rz, якщо в іншому слові чути r: morze - morski. Також rz пишемо після p, b, t, d, k, g, ch, j, w (drzewo, trzy) і в закінченнях -arz, -erz (lekarz, rycerz).",
+      "es": "El sonido «zh» se escribe rz cuando en otra palabra de la familia se oye r: morze - morski. También escribimos rz después de p, b, t, d, k, g, ch, j, w (drzewo, trzy) y en las terminaciones -arz, -erz (lekarz, rycerz).",
+      "lektor": "Posłuchaj: morze, drzewo. Piszemy er zet, gdy w innym słowie słychać er: morze, bo morski. Er zet piszemy też po spółgłoskach, jak w słowach drzewo i trzy, oraz na końcu słów lekarz i rycerz.",
+      "przyklady": [
+        { "pl": "morze", "ua": "море", "es": "mar", "obraz": "🌊", "dlaczego": { "pl": "morze, bo morski", "ua": "morze, бо morski", "es": "morze, porque morski" } },
+        { "pl": "drzewo", "ua": "дерево", "es": "árbol", "obraz": "🌳", "dlaczego": { "pl": "drzewo: rz po d", "ua": "drzewo: rz після d", "es": "drzewo: rz después de d" } }
+      ]
+    },
+    {
+      "litery": "ż",
+      "dzwiek": "ж",
+      "dzwiekEs": "zh",
+      "pl": "Ten sam dźwięk [ж] piszemy ż, gdy w innym słowie słychać g, z albo s: nóżka - noga, wyżej - wysoko. Wiele słów z ż trzeba po prostu zapamiętać: żaba, jeż.",
+      "plEs": "Ten sam dźwięk [zh] piszemy ż, gdy w innym słowie słychać g, z albo s: nóżka - noga, wyżej - wysoko. Wiele słów z ż trzeba po prostu zapamiętać: żaba, jeż.",
+      "ua": "Той самий звук [ж] пишемо ż, якщо в іншому слові чути g, z або s: nóżka - noga, wyżej - wysoko. Багато слів із ż треба просто запам’ятати: żaba, jeż.",
+      "es": "El mismo sonido «zh» se escribe ż cuando en otra palabra de la familia se oye g, z o s: nóżka - noga, wyżej - wysoko. Muchas palabras con ż hay que aprenderlas de memoria: żaba, jeż.",
+      "lektor": "Posłuchaj: nóżka, żaba. Piszemy zet z kropką, gdy w innym słowie słychać inny dźwięk: nóżka, bo noga, wyżej, bo wysoko. Słowo żaba trzeba po prostu zapamiętać.",
+      "przyklady": [
+        { "pl": "nóżka", "ua": "ніжка", "es": "piecito", "obraz": "🦶", "dlaczego": { "pl": "nóżka, bo noga", "ua": "nóżka, бо noga", "es": "nóżka, porque noga" } },
+        { "pl": "żaba", "ua": "жаба", "es": "rana", "obraz": "🐸", "dlaczego": { "pl": "żaba: trzeba zapamiętać", "ua": "żaba: треба запам’ятати", "es": "żaba: hay que aprenderla de memoria" } }
+      ]
+    }
+  ],
+  "cwiczenie": [
+    { "pl": "dworzec", "luka": "rz", "ua": "вокзал", "es": "estación de tren", "dlaczego": { "pl": "dworzec, bo dwór", "ua": "dworzec, бо dwór", "es": "dworzec, porque dwór" } },
+    { "pl": "książka", "luka": "ż", "ua": "книжка", "es": "libro", "dlaczego": { "pl": "książka, bo księga", "ua": "książka, бо księga", "es": "książka, porque księga" } },
+    { "pl": "krzesło", "luka": "rz", "ua": "стілець", "es": "silla", "dlaczego": { "pl": "krzesło: rz po k", "ua": "krzesło: rz після k", "es": "krzesło: rz después de k" } },
+    { "pl": "śnieżka", "luka": "ż", "ua": "сніжка", "es": "bola de nieve", "dlaczego": { "pl": "śnieżka, bo śnieg", "ua": "śnieżka, бо śnieg", "es": "śnieżka, porque śnieg" } },
+    { "pl": "lekarz", "luka": "rz", "ua": "лікар", "es": "médico", "dlaczego": { "pl": "lekarz: końcówka -arz", "ua": "lekarz: закінчення -arz", "es": "lekarz: terminación -arz" } },
+    { "pl": "może", "luka": "ż", "ua": "може", "es": "puede", "dlaczego": { "pl": "może, bo mogę", "ua": "może, бо mogę", "es": "może, porque mogę" } },
+    { "pl": "grzyb", "luka": "rz", "ua": "гриб", "es": "hongo", "dlaczego": { "pl": "grzyb: rz po g", "ua": "grzyb: rz після g", "es": "grzyb: rz después de g" } },
+    { "pl": "niżej", "luka": "ż", "ua": "нижче", "es": "más abajo", "dlaczego": { "pl": "niżej, bo nisko", "ua": "niżej, бо nisko", "es": "niżej, porque nisko" } }
+  ],
+  "slowa": [
+    { "pl": "trzy", "ua": "три", "es": "tres", "dlaczego": { "pl": "trzy: rz po t", "ua": "trzy: rz після t", "es": "trzy: rz después de t" } },
+    { "pl": "przyjaciel", "ua": "друг", "es": "amigo", "dlaczego": { "pl": "przyjaciel: rz po p", "ua": "przyjaciel: rz після p", "es": "przyjaciel: rz después de p" } },
+    { "pl": "kucharz", "ua": "кухар", "es": "cocinero", "dlaczego": { "pl": "kucharz: końcówka -arz", "ua": "kucharz: закінчення -arz", "es": "kucharz: terminación -arz" } },
+    { "pl": "dobrze", "ua": "добре", "es": "bien", "dlaczego": { "pl": "dobrze, bo dobry", "ua": "dobrze, бо dobry", "es": "dobrze, porque dobry" } },
+    { "pl": "drzwi", "ua": "двері", "es": "puerta", "dlaczego": { "pl": "drzwi: rz po d", "ua": "drzwi: rz після d", "es": "drzwi: rz después de d" } },
+    { "pl": "wyżej", "ua": "вище", "es": "más arriba", "dlaczego": { "pl": "wyżej, bo wysoko", "ua": "wyżej, бо wysoko", "es": "wyżej, porque wysoko" } },
+    { "pl": "dróżka", "ua": "стежка", "es": "caminito", "dlaczego": { "pl": "dróżka, bo droga", "ua": "dróżka, бо droga", "es": "dróżka, porque droga" } },
+    { "pl": "łyżka", "ua": "ложка", "es": "cuchara", "dlaczego": { "pl": "łyżka: trzeba zapamiętać", "ua": "łyżka: треба запам’ятати", "es": "łyżka: hay que aprenderla de memoria" } },
+    { "pl": "żółty", "ua": "жовтий", "es": "amarillo", "dlaczego": { "pl": "żółty: trzeba zapamiętać", "ua": "żółty: треба запам’ятати", "es": "żółty: hay que aprenderla de memoria" } },
+    { "pl": "plaża", "ua": "пляж", "es": "playa", "dlaczego": { "pl": "plaża: trzeba zapamiętać", "ua": "plaża: треба запам’ятати", "es": "plaża: hay que aprenderla de memoria" } }
+  ],
+  "zdania": [
+    { "pl": "Jadę na rowerze.", "ua": "Я їду на велосипеді.", "es": "Voy en bicicleta.", "dlaczego": { "pl": "rowerze, bo rower", "ua": "rowerze, бо rower", "es": "rowerze, porque rower" } },
+    { "pl": "Żaba skacze do jeziora.", "ua": "Жаба стрибає в озеро.", "es": "La rana salta al lago.", "dlaczego": { "pl": "żaba: trzeba zapamiętać", "ua": "żaba: треба запам’ятати", "es": "żaba: hay que aprenderla de memoria" } },
+    { "pl": "Dziadek jest piekarzem.", "ua": "Дідусь - пекар.", "es": "Mi abuelo es panadero.", "dlaczego": { "pl": "piekarz: końcówka -arz", "ua": "piekarz: закінчення -arz", "es": "piekarz: terminación -arz" } },
+    { "pl": "Plecak dużo waży.", "ua": "Рюкзак багато важить.", "es": "La mochila pesa mucho.", "dlaczego": { "pl": "waży, bo waga", "ua": "waży, бо waga", "es": "waży, porque waga" } },
+    { "pl": "Siedzę przy oknie.", "ua": "Я сиджу біля вікна.", "es": "Estoy sentado junto a la ventana.", "dlaczego": { "pl": "przy: rz po p", "ua": "przy: rz після p", "es": "przy: rz después de p" } }
+  ],
+  "zapamietaj": {
+    "lektor": "Zapamiętaj! Er zet piszemy, gdy w innym słowie słychać er: morze, bo morski. Zet z kropką piszemy, gdy w innym słowie słychać inny dźwięk: nóżka, bo noga. A teraz krótki test.",
+    "punkty": [
+      { "pl": "Rz i ż brzmią tak samo. Szukaj słowa do wymiany: morze - morski, nóżka - noga.", "ua": "Rz і ż звучать однаково. Шукай слово для перевірки: morze - morski, nóżka - noga.", "es": "Rz y ż suenan igual. Busca otra palabra de la familia: morze - morski, nóżka - noga." },
+      { "pl": "Po p, b, t, d, k, g, ch, w piszemy rz: przy, brzeg, trzy, krzak. Na końcu: -arz, -erz.", "ua": "Після p, b, t, d, k, g, ch, w пишемо rz: przy, brzeg, trzy, krzak. У кінці: -arz, -erz.", "es": "Después de p, b, t, d, k, g, ch, w escribimos rz: przy, brzeg, trzy, krzak. Al final: -arz, -erz." },
+      { "pl": "Gdy nie ma wymiany, słowo trzeba zapamiętać: żaba, jeż, rzeka.", "ua": "Коли немає слова для перевірки, слово треба запам’ятати: żaba, jeż, rzeka.", "es": "Si no hay otra palabra para comprobar, hay que aprenderla de memoria: żaba, jeż, rzeka." }
+    ]
+  },
+  "test": {
+    "slowa": [
+      { "pl": "brzuch", "ua": "живіт", "es": "barriga", "dlaczego": { "pl": "brzuch: rz po b", "ua": "brzuch: rz після b", "es": "brzuch: rz después de b" } },
+      { "pl": "malarz", "ua": "художник", "es": "pintor", "dlaczego": { "pl": "malarz: końcówka -arz", "ua": "malarz: закінчення -arz", "es": "malarz: terminación -arz" } },
+      { "pl": "wrzesień", "ua": "вересень", "es": "septiembre", "dlaczego": { "pl": "wrzesień: rz po w", "ua": "wrzesień: rz після w", "es": "wrzesień: rz después de w" } },
+      { "pl": "bliżej", "ua": "ближче", "es": "más cerca", "dlaczego": { "pl": "bliżej, bo blisko", "ua": "bliżej, бо blisko", "es": "bliżej, porque blisko" } },
+      { "pl": "drożej", "ua": "дорожче", "es": "más caro", "dlaczego": { "pl": "drożej, bo drogi", "ua": "drożej, бо drogi", "es": "drożej, porque drogi" } },
+      { "pl": "żyrafa", "ua": "жирафа", "es": "jirafa", "dlaczego": { "pl": "żyrafa: trzeba zapamiętać", "ua": "żyrafa: треба запам’ятати", "es": "żyrafa: hay que aprenderla de memoria" } }
+    ],
+    "zdania": [
+      { "pl": "Babcia mieszka nad morzem.", "ua": "Бабуся живе біля моря.", "es": "La abuela vive junto al mar.", "dlaczego": { "pl": "morzem, bo morski", "ua": "morzem, бо morski", "es": "morzem, porque morski" } },
+      { "pl": "Lody są w zamrażarce.", "ua": "Морозиво лежить у морозилці.", "es": "El helado está en el congelador.", "dlaczego": { "pl": "zamrażarka, bo mróz", "ua": "zamrażarka, бо mróz", "es": "zamrażarka, porque mróz" } }
+    ]
+  }
+}

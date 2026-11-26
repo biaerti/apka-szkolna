@@ -204,3 +204,65 @@ export function IkonaGlosnik({ className = 'h-5 w-5' }: { className?: string }) 
     </svg>
   );
 }
+
+/**
+ * Wyzwanie tygodnia: 5 kratek ladujacych sie jak bateria, poziom = zaliczone
+ * tygodnie, kropki za ostatnie tygodnie. Logika: src/lib/wyzwanie.ts.
+ */
+export function PasekWyzwania({
+  teraz,
+  cel,
+  zaliczone,
+  dniDoKonca,
+  historia,
+}: {
+  teraz: number;
+  cel: number;
+  zaliczone: number;
+  dniDoKonca: number;
+  historia: boolean[];
+}) {
+  const pelny = teraz >= cel;
+  return (
+    <div className={clsx('rounded-3xl p-5', pelny ? 'bg-[#fff4c2] shadow-[0_6px_0_#f0c419]' : 'bg-white shadow-[0_1px_0_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)]')}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#8a8a85]">Wyzwanie tygodnia</p>
+          <p className="mt-1 text-2xl font-extrabold">
+            {pelny ? 'Tydzień zaliczony! ⭐' : `${teraz} z ${cel} zadań`}
+          </p>
+          <p className="text-sm text-[#5b5b57]">
+            {pelny
+              ? 'Wróć w poniedziałek po nowe wyzwanie.'
+              : dniDoKonca === 1
+                ? 'Ostatni dzień - jutro pasek startuje od zera.'
+                : `Zostało ${dniDoKonca} dni (do niedzieli).`}
+          </p>
+        </div>
+        <span className="shrink-0 rounded-2xl bg-[#8b5cf6] px-3 py-2 text-center text-white shadow-[0_3px_0_#6a3fd1]">
+          <span className="block text-[0.65rem] font-bold uppercase tracking-[0.08em] text-white/80">Poziom</span>
+          <span className="block text-2xl font-extrabold leading-none">{zaliczone + 1}</span>
+        </span>
+      </div>
+      <div className="mt-4 flex gap-1.5" role="progressbar" aria-valuenow={teraz} aria-valuemin={0} aria-valuemax={cel} aria-label="Zadania w tym tygodniu">
+        {Array.from({ length: cel }, (_, i) => (
+          <span
+            key={i}
+            className={clsx(
+              'h-5 flex-1 rounded-lg transition-colors duration-500',
+              i < teraz ? (pelny ? 'bg-[#f0b400]' : 'bg-[#22a95b]') : 'bg-[#ecebe5]',
+            )}
+          />
+        ))}
+      </div>
+      <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#8a8a85]">
+        <span>Ostatnie tygodnie:</span>
+        {historia.map((z, i) => (
+          <span key={i} className={clsx('flex h-6 w-6 items-center justify-center rounded-full', z ? 'bg-[#ffd43b]' : 'bg-[#ecebe5]')} aria-label={z ? 'zaliczony' : 'niezaliczony'}>
+            {z ? '⭐' : ''}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}

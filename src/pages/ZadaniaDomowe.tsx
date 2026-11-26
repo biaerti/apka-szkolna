@@ -1,14 +1,14 @@
-// Zakladka "Zadania domowe": prace, ktore uczniowie robia w domu pod linkiem,
-// a wyniki wracaja do apki. Na razie jeden modul - polski dla uczniow z innym
-// jezykiem ojczystym (dyktanda online + zeszyt "Moj polski od zera"). Kolejne
-// moduly (np. zadania domowe calej klasy) dochodza jako nowe sekcje ponizej;
-// filtr klas na gorze dotyczy wszystkich.
+// Zakladka "Zadania domowe": portal ucznia szkola.klippi.pl/uczen. Konta klasy
+// (login + haslo, kartki i wiadomosci do rodzicow), zadania robia sie same z
+// lekcji klasy, a modul "Polski krok po kroku" to kurs pisowni dla uczniow
+// z innym jezykiem ojczystym. Filtr klas na gorze dotyczy wszystkich sekcji.
 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import clsx from 'clsx';
 import { PageHeader } from '../components/ui/PageHeader';
 import { DyktandaPanel } from '../components/dyktanda/DyktandaPanel';
+import { KontaPanel } from '../components/portal/KontaPanel';
 import { useStore } from '../data/store';
 
 export function ZadaniaDomowe() {
@@ -26,7 +26,7 @@ export function ZadaniaDomowe() {
     <div>
       <PageHeader
         title="Zadania domowe"
-        description="Uczniowie robią je w domu pod linkiem, wyniki i błędy wracają tutaj."
+        description="Uczniowie robią je w domu na szkola.klippi.pl/uczen. Zadania robią się same z lekcji klasy, wyniki wracają tutaj."
       />
       <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Klasa">
         <button type="button" className={chip(klasaId === null)} onClick={() => setKlasaId(null)} aria-pressed={klasaId === null}>
@@ -39,13 +39,17 @@ export function ZadaniaDomowe() {
         ))}
       </div>
 
+      <div className="mb-10">
+        <KontaPanel klasaId={klasaId} />
+      </div>
+
       <section aria-labelledby="modul-obcokrajowcy" className="max-w-4xl">
         <h2 id="modul-obcokrajowcy" className="text-lg font-semibold text-gray-900">
-          Polski dla obcokrajowców
+          Polski krok po kroku
         </h2>
         <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-          Dla uczniów, dla których polski nie jest pierwszym językiem. W domu robią dyktanda online, a na lekcji pracują z
-          zeszytem{' '}
+          Kurs pisowni dla uczniów, dla których polski nie jest pierwszym językiem: 10 lekcji, co poniedziałek nowa. Włącza się go
+          przy koncie ucznia (kolumna „Polski krok po kroku”). Na lekcji pracują z zeszytem{' '}
           <Link to="/lekcje?widok=polski-od-zera" className="font-medium text-accent-700 underline">
             „Mój polski od zera”
           </Link>
