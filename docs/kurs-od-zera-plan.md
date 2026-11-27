@@ -272,4 +272,6 @@ pliki w `public/audio/odzera/` (własne zdania, idą do repo).
 - 2026-11-27: silnik, logowanie, panel nauczyciela, migracja 0046, działy 1-12 (lekcje 1-72) z nagraniami.
   Działy 2-12 pisane według tego planu przez subagentów - tam, gdzie nie było emoji (gumka, ławka,
   spódnica, dywan), słowo wymieniono na inne z tematu. Działy 13-20 dopisać do marca (wzór: dowolny dzial-NN.json).
+- 2026-11-27 (wieczorem): działy 13-20 (lekcje 73-120) z nagraniami - cały kurs gotowy. Działy 18-20
+  biorą nazwy i pytania z notatek kl. 4 (części mowy, przypadki, wielka litera, ó/u, rz/ż, ch/h), przykłady własne.
 - Limit testu: najwyżej 35 ćwiczeń na lekcję (ok. 2 x słowa + 2 x zdania + 7), czyli przy 10 słowach 4 zdania.

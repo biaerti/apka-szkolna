@@ -1,0 +1,227 @@
+{
+  "nr": 14,
+  "tytul": { "pl": "Czas wolny", "ru": "Свободное время", "ua": "Вільний час" },
+  "e": "⚽",
+  "kolor": "#1e9e6a",
+  "lekcje": [
+    {
+      "nr": 79,
+      "tytul": { "pl": "Sport", "ru": "Спорт", "ua": "Спорт" },
+      "cel": { "ru": "Ты научишься называть виды спорта и говорить, какой спорт ты любишь.", "ua": "Ти навчишся називати види спорту і казати, який спорт ти любиш." },
+      "zasady": [
+        {
+          "litery": "-ówka",
+          "dzwiek": { "ru": "-увка", "ua": "-увка" },
+          "opis": {
+            "ru": "Многие виды спорта кончаются на -ówka: koszykówka, siatkówka. Буква ó читается как у.",
+            "ua": "Багато видів спорту закінчуються на -ówka: koszykówka, siatkówka. Літера ó читається як у."
+          },
+          "przyklady": ["koszykówka", "siatkówka"]
+        },
+        {
+          "litery": "-a → -ę",
+          "dzwiek": { "ru": "-а → -е", "ua": "-а → -е" },
+          "opis": {
+            "ru": "После lubię слово на -a меняет окончание: koszykówka → lubię koszykówkę.",
+            "ua": "Після lubię слово на -a змінює закінчення: koszykówka → lubię koszykówkę."
+          },
+          "przyklady": ["koszykówka", "Jaki sport lubisz? Lubię koszykówkę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "sport", "lektor": "Sport!", "e": "🏅", "ru": "спорт", "ua": "спорт" },
+        { "pl": "piłka nożna", "e": "⚽", "ru": "футбол", "ua": "футбол" },
+        { "pl": "koszykówka", "e": "🏀", "ru": "баскетбол", "ua": "баскетбол" },
+        { "pl": "siatkówka", "e": "🏐", "ru": "волейбол", "ua": "волейбол" },
+        { "pl": "tenis", "e": "🎾", "ru": "теннис", "ua": "теніс" },
+        { "pl": "pływanie", "e": "🩱", "ru": "плавание", "ua": "плавання" },
+        { "pl": "łyżwy", "lektor": "Łyżwy!", "e": "⛸️", "ru": "коньки", "ua": "ковзани" },
+        { "pl": "narty", "e": "🎿", "ru": "лыжи", "ua": "лижі" },
+        { "pl": "mecz", "lektor": "Mecz.", "e": "🏟️", "ru": "матч", "ua": "матч" }
+      ],
+      "zdania": [
+        { "pl": "Jaki sport lubisz? Lubię koszykówkę.", "e": "🏀", "ru": "Какой спорт ты любишь? Я люблю баскетбол.", "ua": "Який спорт ти любиш? Я люблю баскетбол." },
+        { "pl": "Piłka nożna to mój ulubiony sport.", "e": "⚽", "ru": "Футбол - мой любимый спорт.", "ua": "Футбол - мій улюблений спорт." },
+        { "pl": "Pływanie jest zdrowe.", "e": "🩱", "ru": "Плавание полезно для здоровья.", "ua": "Плавання корисне для здоров'я." },
+        { "pl": "Zimą lubię narty i łyżwy.", "e": "⛄", "ru": "Зимой я люблю лыжи и коньки.", "ua": "Взимку я люблю лижі і ковзани." },
+        { "pl": "Tata ogląda mecz w telewizji.", "e": "📺", "ru": "Папа смотрит матч по телевизору.", "ua": "Тато дивиться матч по телевізору." }
+      ],
+      "zeszyt": ["piłka nożna, koszykówka, siatkówka, tenis", "pływanie, łyżwy, narty, mecz", "koszykówka - lubię koszykówkę", "Piłka nożna to mój ulubiony sport.", "Zimą lubię narty i łyżwy."]
+    },
+    {
+      "nr": 80,
+      "tytul": { "pl": "Gram w..., gram na...", "ru": "Играю в..., играю на...", "ua": "Граю в..., граю на..." },
+      "cel": { "ru": "Ты научишься говорить, во что ты играешь и на чём ты играешь.", "ua": "Ти навчишся казати, у що ти граєш і на чому ти граєш." },
+      "zasady": [
+        {
+          "litery": "gram w + gra, sport",
+          "dzwiek": { "ru": "играю в", "ua": "граю в" },
+          "opis": {
+            "ru": "Игры и спорт - с w, как по-русски: gram w szachy. Слово на -a меняется: siatkówka → gram w siatkówkę.",
+            "ua": "Ігри і спорт - з w, як українською: gram w szachy. Слово на -a змінюється: siatkówka → gram w siatkówkę."
+          },
+          "przyklady": ["gram w szachy", "gram w siatkówkę", "gram w piłkę"]
+        },
+        {
+          "litery": "gram na + instrument",
+          "dzwiek": { "ru": "играю на", "ua": "граю на" },
+          "opis": {
+            "ru": "Музыкальные инструменты - с na, как по-русски. Окончание меняется: gitara → na gitarze, pianino → na pianinie.",
+            "ua": "Музичні інструменти - з na, як українською. Закінчення змінюється: gitara → na gitarze, pianino → na pianinie."
+          },
+          "przyklady": ["gram na gitarze", "gram na pianinie", "gram na bębnie"]
+        }
+      ],
+      "slowa": [
+        { "pl": "gram w szachy", "e": "♟️", "ru": "играю в шахматы", "ua": "граю в шахи" },
+        { "pl": "gram w karty", "e": "🃏", "ru": "играю в карты", "ua": "граю в карти" },
+        { "pl": "gram w siatkówkę", "e": "🙋🏐", "ru": "играю в волейбол", "ua": "граю у волейбол" },
+        { "pl": "gram w chowanego", "e": "🙈", "ru": "играю в прятки", "ua": "граю в хованки" },
+        { "pl": "gram na gitarze", "e": "🎸", "ru": "играю на гитаре", "ua": "граю на гітарі" },
+        { "pl": "gram na pianinie", "e": "🎹", "ru": "играю на пианино", "ua": "граю на піаніно" },
+        { "pl": "gram na skrzypcach", "e": "🎻", "ru": "играю на скрипке", "ua": "граю на скрипці" },
+        { "pl": "gram na bębnie", "e": "🥁", "ru": "играю на барабане", "ua": "граю на барабані" },
+        { "pl": "gram na trąbce", "e": "🎺", "ru": "играю на трубе", "ua": "граю на трубі" }
+      ],
+      "zdania": [
+        { "pl": "W co grasz? Gram w szachy z dziadkiem.", "e": "♟️", "ru": "Во что ты играешь? Я играю в шахматы с дедушкой.", "ua": "У що ти граєш? Я граю в шахи з дідусем." },
+        { "pl": "Na czym grasz? Gram na gitarze.", "e": "🎸", "ru": "На чём ты играешь? Я играю на гитаре.", "ua": "На чому ти граєш? Я граю на гітарі." },
+        { "pl": "Ola gra na pianinie, a Kuba na skrzypcach.", "lektor": "Ola gra na pianinie... a Kuba na skrzypcach.", "e": "🎹", "ru": "Оля играет на пианино, а Куба на скрипке.", "ua": "Оля грає на піаніно, а Куба на скрипці." },
+        { "pl": "Na podwórku gramy w chowanego.", "e": "🏡", "ru": "Во дворе мы играем в прятки.", "ua": "На подвір'ї ми граємо в хованки." },
+        { "pl": "Mój brat gra na bębnie.", "e": "🥁", "ru": "Мой брат играет на барабане.", "ua": "Мій брат грає на барабані." }
+      ],
+      "zeszyt": ["gram w szachy, gram w karty, gram w chowanego", "siatkówka - gram w siatkówkę", "gram na gitarze, gram na pianinie, gram na bębnie", "W co grasz? Gram w szachy z dziadkiem.", "Na czym grasz? Gram na gitarze."]
+    },
+    {
+      "nr": 81,
+      "tytul": { "pl": "Umiem, lubię + co robić", "ru": "Умею, люблю + что делать", "ua": "Вмію, люблю + що робити" },
+      "cel": { "ru": "Ты научишься говорить, что ты умеешь и что любишь делать: umiem pływać, lubię rysować.", "ua": "Ти навчишся казати, що ти вмієш і що любиш робити: umiem pływać, lubię rysować." },
+      "zasady": [
+        {
+          "litery": "-ć",
+          "dzwiek": { "ru": "-ть", "ua": "-ти" },
+          "opis": {
+            "ru": "Форма «что делать» по-польски кончается на -ć: pływać, rysować. После umiem и lubię ставим эту форму: umiem pływać.",
+            "ua": "Форма «що робити» польською закінчується на -ć: pływać, rysować. Після umiem і lubię ставимо цю форму: umiem pływać."
+          },
+          "przyklady": ["pływać", "rysować", "umiem", "lubię"]
+        },
+        {
+          "litery": "umiem  umiesz  umie",
+          "dzwiek": { "ru": "умею  умеешь  умеет", "ua": "вмію  вмієш  вміє" },
+          "opis": {
+            "ru": "Я - umiem, ты - umiesz, он и она - umie. Не умею - nie umiem.",
+            "ua": "Я - umiem, ти - umiesz, він і вона - umie. Не вмію - nie umiem."
+          },
+          "przyklady": ["umiem", "nie umiem", "Co umiesz robić?"]
+        }
+      ],
+      "slowa": [
+        { "pl": "umiem", "e": "💪", "ru": "я умею", "ua": "я вмію" },
+        { "pl": "nie umiem", "e": "🤷", "ru": "я не умею", "ua": "я не вмію" },
+        { "pl": "pływać", "e": "🏊‍♂️", "ru": "плавать", "ua": "плавати" },
+        { "pl": "jeździć na rowerze", "e": "🚲", "ru": "кататься на велосипеде", "ua": "кататися на велосипеді" },
+        { "pl": "rysować", "e": "🖍️", "ru": "рисовать", "ua": "малювати" },
+        { "pl": "śpiewać", "e": "🎤", "ru": "петь", "ua": "співати" },
+        { "pl": "tańczyć", "e": "💃", "ru": "танцевать", "ua": "танцювати" },
+        { "pl": "skakać", "e": "🤸", "ru": "прыгать", "ua": "стрибати" },
+        { "pl": "Co umiesz robić?", "e": "🤔", "ru": "Что ты умеешь делать?", "ua": "Що ти вмієш робити?" }
+      ],
+      "zdania": [
+        { "pl": "Umiem pływać, ale nie umiem tańczyć.", "lektor": "Umiem pływać... ale nie umiem tańczyć.", "e": "🏊‍♂️", "ru": "Я умею плавать, но не умею танцевать.", "ua": "Я вмію плавати, але не вмію танцювати." },
+        { "pl": "Umiesz jeździć na rowerze?", "e": "🚲", "ru": "Ты умеешь кататься на велосипеде?", "ua": "Ти вмієш кататися на велосипеді?" },
+        { "pl": "Lubię rysować i śpiewać.", "e": "🎨", "ru": "Я люблю рисовать и петь.", "ua": "Я люблю малювати і співати." },
+        { "pl": "Ola bardzo lubi tańczyć.", "e": "💃", "ru": "Оля очень любит танцевать.", "ua": "Оля дуже любить танцювати." },
+        { "pl": "Kuba umie skakać wysoko.", "e": "🤸", "ru": "Куба умеет высоко прыгать.", "ua": "Куба вміє високо стрибати." }
+      ],
+      "zeszyt": ["pływać, rysować, śpiewać, tańczyć, skakać", "umiem - nie umiem", "jeździć na rowerze", "Umiem pływać, ale nie umiem tańczyć.", "Lubię rysować i śpiewać."]
+    },
+    {
+      "nr": 82,
+      "tytul": { "pl": "Weekend", "ru": "Выходные", "ua": "Вихідні" },
+      "cel": { "ru": "Ты научишься рассказывать, что ты делаешь в субботу и в воскресенье.", "ua": "Ти навчишся розповідати, що ти робиш у суботу і в неділю." },
+      "zasady": [
+        {
+          "litery": "sobota → w sobotę",
+          "dzwiek": { "ru": "в субботу", "ua": "у суботу" },
+          "opis": {
+            "ru": "Когда? - w + день: w sobotę, w niedzielę. Окончание -a меняется на -ę, как по-русски «в субботу».",
+            "ua": "Коли? - w + день: w sobotę, w niedzielę. Закінчення -a змінюється на -ę, як українською «у суботу»."
+          },
+          "przyklady": ["sobota", "w sobotę", "niedziela", "w niedzielę"]
+        },
+        {
+          "litery": "do kina / na spacer",
+          "dzwiek": { "ru": "в кино / на прогулку", "ua": "в кіно / на прогулянку" },
+          "opis": {
+            "ru": "Куда идём: do + место (do kina, do szkoły), na + занятие (na spacer, na wycieczkę).",
+            "ua": "Куди йдемо: do + місце (do kina, do szkoły), na + заняття (na spacer, na wycieczkę)."
+          },
+          "przyklady": ["idę do kina", "idę na spacer", "jedziemy na wycieczkę"]
+        }
+      ],
+      "slowa": [
+        { "pl": "weekend", "e": "🗓️", "ru": "выходные", "ua": "вихідні", "wym": { "ru": "уи́кенд", "ua": "уі́кенд" } },
+        { "pl": "w sobotę", "e": "6️⃣📅", "ru": "в субботу", "ua": "у суботу" },
+        { "pl": "w niedzielę", "e": "7️⃣📅", "ru": "в воскресенье", "ua": "у неділю" },
+        { "pl": "idę do kina", "e": "🎬", "ru": "иду в кино", "ua": "іду в кіно" },
+        { "pl": "idę na spacer", "e": "🚶", "ru": "иду гулять", "ua": "іду на прогулянку" },
+        { "pl": "odwiedzam babcię", "e": "👵", "ru": "навещаю бабушку", "ua": "відвідую бабусю" },
+        { "pl": "śpię długo", "e": "😴", "ru": "долго сплю", "ua": "довго сплю" },
+        { "pl": "oglądam film", "e": "🍿", "ru": "смотрю фильм", "ua": "дивлюся фільм" },
+        { "pl": "jedziemy na wycieczkę", "e": "🏞️", "ru": "едем на экскурсию", "ua": "їдемо на екскурсію" }
+      ],
+      "zdania": [
+        { "pl": "Co robisz w weekend?", "e": "🗓️", "ru": "Что ты делаешь на выходных?", "ua": "Що ти робиш на вихідних?" },
+        { "pl": "W sobotę rano śpię długo.", "e": "😴", "ru": "В субботу утром я долго сплю.", "ua": "У суботу вранці я довго сплю." },
+        { "pl": "W sobotę idę z tatą do kina.", "e": "🎬", "ru": "В субботу я иду с папой в кино.", "ua": "У суботу я йду з татом у кіно." },
+        { "pl": "W niedzielę odwiedzam babcię i dziadka.", "e": "👵", "ru": "В воскресенье я навещаю бабушку и дедушку.", "ua": "У неділю я відвідую бабусю і дідуся." },
+        { "pl": "W parku jeżdżę na rowerze.", "e": "🌳", "ru": "В парке я катаюсь на велосипеде.", "ua": "У парку я катаюся на велосипеді." }
+      ],
+      "zeszyt": ["weekend: w sobotę, w niedzielę", "idę do kina, idę na spacer", "odwiedzam babcię, oglądam film, śpię długo", "W sobotę idę z tatą do kina.", "W niedzielę odwiedzam babcię i dziadka."]
+    },
+    {
+      "nr": 83,
+      "tytul": { "pl": "Pobawimy się? Rozmowa z kolegą", "ru": "Поиграем? Разговор с другом", "ua": "Пограємося? Розмова з другом" },
+      "cel": { "ru": "Ты научишься звать друга играть, соглашаться и отказываться.", "ua": "Ти навчишся кликати друга гратися, погоджуватися і відмовлятися." },
+      "zasady": [
+        {
+          "litery": "się",
+          "dzwiek": { "ru": "-ся", "ua": "-ся" },
+          "opis": {
+            "ru": "Słowo się - как русское -ся, но пишется отдельно: bawię się - я играю, Pobawimy się? - поиграем?",
+            "ua": "Слово się - як українське -ся, але пишеться окремо: bawię się - я граюся, Pobawimy się? - пограємося?"
+          },
+          "przyklady": ["bawię się", "Pobawimy się?", "Chcesz się pobawić?"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Chcesz się pobawić?", "e": "🧸", "ru": "Хочешь поиграть?", "ua": "Хочеш погратися?" },
+        { "pl": "Pobawimy się?", "e": "🤹", "ru": "Поиграем вместе?", "ua": "Пограємося?" },
+        { "pl": "Chodź do nas!", "e": "👋", "ru": "Иди к нам!", "ua": "Іди до нас!" },
+        { "pl": "Super!", "e": "🤩", "ru": "Супер! Здорово!", "ua": "Супер! Чудово!" },
+        { "pl": "Dobrze!", "e": "👍", "ru": "Хорошо! Ладно!", "ua": "Добре! Гаразд!" },
+        { "pl": "Nie mogę.", "e": "🙅", "ru": "Я не могу.", "ua": "Я не можу." },
+        { "pl": "Teraz ty!", "e": "👉", "ru": "Теперь ты!", "ua": "Тепер ти!" },
+        { "pl": "Moja kolej!", "e": "🙋", "ru": "Моя очередь!", "ua": "Моя черга!" },
+        { "pl": "Kto wygrywa?", "e": "🏆", "ru": "Кто выигрывает?", "ua": "Хто виграє?" }
+      ],
+      "zdania": [
+        { "pl": "Tomek, chcesz pograć w piłkę?", "e": "⚽", "ru": "Томек, хочешь поиграть в мяч?", "ua": "Томеку, хочеш пограти в м'яч?" },
+        { "pl": "Super! Idziemy na boisko!", "e": "🥅", "ru": "Супер! Идём на площадку!", "ua": "Супер! Ідемо на майданчик!" },
+        { "pl": "Przepraszam, nie mogę, odrabiam lekcje.", "lektor": "Przepraszam... nie mogę... odrabiam lekcje.", "e": "📚", "ru": "Извини, я не могу, я делаю уроки.", "ua": "Вибач, я не можу, я роблю уроки." },
+        { "pl": "Może pogramy w karty?", "e": "🃏", "ru": "Может, поиграем в карты?", "ua": "Може, пограємо в карти?" },
+        { "pl": "Dobrze, gramy razem!", "e": "🤝", "ru": "Хорошо, играем вместе!", "ua": "Добре, граємо разом!" }
+      ],
+      "zeszyt": ["Chcesz się pobawić? Pobawimy się?", "Super! Dobrze! Nie mogę.", "Teraz ty! Moja kolej!", "Tomek, chcesz pograć w piłkę?", "Przepraszam, nie mogę, odrabiam lekcje."]
+    },
+    {
+      "nr": 84,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: czas wolny", "ru": "Проверь себя: свободное время", "ua": "Перевір себе: вільний час" },
+      "cel": { "ru": "Повтори всё из раздела 14 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 14 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Mój ulubiony sport to ...", "Umiem ... (pływać, rysować, śpiewać).", "Gram w ... / Gram na ...", "W weekend ... (idę do kina, odwiedzam babcię)."]
+    }
+  ]
+}

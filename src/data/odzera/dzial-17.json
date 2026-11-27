@@ -1,0 +1,235 @@
+{
+  "nr": 17,
+  "tytul": { "pl": "Jutro", "ru": "Завтра (будущее время)", "ua": "Завтра (майбутній час)" },
+  "e": "⏩",
+  "kolor": "#0e8fa3",
+  "lekcje": [
+    {
+      "nr": 97,
+      "tytul": { "pl": "Będę + co robić", "ru": "Я буду + что делать", "ua": "Я буду + що робити" },
+      "cel": { "ru": "Ты научишься говорить, что будешь делать: będę czytać.", "ua": "Ти навчишся казати, що робитимеш: będę czytać." },
+      "zasady": [
+        {
+          "litery": "będę  będziesz  będzie,  będziemy  będziecie  będą",
+          "dzwiek": { "ru": "буду  будешь  будет / будем  будете  будут", "ua": "буду  будеш  буде / будемо  будете  будуть" },
+          "opis": {
+            "ru": "Это как русское «буду»: będę - я буду, będziesz - ты будешь, będą - они будут.",
+            "ua": "Це як українське «буду»: będę - я буду, będziesz - ти будеш, będą - вони будуть."
+          },
+          "przyklady": ["będę", "będziesz", "będzie", "będziemy", "będziecie", "będą"]
+        },
+        {
+          "litery": "będę + -ć",
+          "dzwiek": { "ru": "буду + -ть", "ua": "буду + -ти" },
+          "opis": {
+            "ru": "После będę ставим глагол на -ć (как русское -ть): będę czytać - буду читать.",
+            "ua": "Після będę ставимо дієслово на -ć (як українське -ти): będę czytać - буду читати."
+          },
+          "przyklady": ["czytać", "pisać", "uczyć się", "Będę czytać książkę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "będę", "e": "🙋", "ru": "я буду", "ua": "я буду" },
+        { "pl": "będziesz", "e": "👉", "ru": "ты будешь", "ua": "ти будеш" },
+        { "pl": "będzie", "e": "👦", "ru": "он / она будет", "ua": "він / вона буде" },
+        { "pl": "będziemy", "e": "👫", "ru": "мы будем", "ua": "ми будемо" },
+        { "pl": "będziecie", "e": "👥", "ru": "вы будете", "ua": "ви будете" },
+        { "pl": "będą", "e": "👨‍👩‍👧‍👦", "ru": "они будут", "ua": "вони будуть" },
+        { "pl": "czytać", "e": "📖", "ru": "читать", "ua": "читати" },
+        { "pl": "pisać", "e": "✍️", "ru": "писать", "ua": "писати" },
+        { "pl": "uczyć się", "e": "📚", "ru": "учиться, учить уроки", "ua": "вчитися" }
+      ],
+      "zdania": [
+        { "pl": "Będę czytać książkę.", "e": "📖", "ru": "Я буду читать книгу.", "ua": "Я читатиму книжку." },
+        { "pl": "Co będziesz robić?", "e": "🤔", "ru": "Что ты будешь делать?", "ua": "Що ти робитимеш?" },
+        { "pl": "Ola będzie rysować kota.", "e": "🐈", "ru": "Оля будет рисовать кота.", "ua": "Оля малюватиме кота." },
+        { "pl": "Będziemy grać w piłkę.", "e": "⚽", "ru": "Мы будем играть в мяч.", "ua": "Ми гратимемо в м'яча." },
+        { "pl": "Dzieci będą pisać dyktando.", "e": "📝", "ru": "Дети будут писать диктант.", "ua": "Діти писатимуть диктант." }
+      ],
+      "zeszyt": ["będę, będziesz, będzie", "będziemy, będziecie, będą", "czytać, pisać, uczyć się", "Będę czytać książkę.", "Co będziesz robić?"]
+    },
+    {
+      "nr": 98,
+      "tytul": { "pl": "Jutro, pojutrze, za tydzień", "ru": "Завтра, послезавтра, через неделю", "ua": "Завтра, післязавтра, через тиждень" },
+      "cel": { "ru": "Ты научишься говорить, когда что-то будет: jutro, za tydzień, za rok.", "ua": "Ти навчишся казати, коли щось буде: jutro, za tydzień, za rok." },
+      "zasady": [
+        {
+          "litery": "jutro → po + jutrze",
+          "dzwiek": { "ru": "завтра → послезавтра", "ua": "завтра → післязавтра" },
+          "opis": {
+            "ru": "Jutro - завтра. Pojutrze - послезавтра, через два дня.",
+            "ua": "Jutro - завтра. Pojutrze - післязавтра, через два дні."
+          },
+          "przyklady": ["jutro", "pojutrze"]
+        },
+        {
+          "litery": "za + ...",
+          "dzwiek": { "ru": "через ...", "ua": "через ..." },
+          "opis": {
+            "ru": "Za по-польски часто значит «через»: za tydzień - через неделю, za rok - через год.",
+            "ua": "Za польською часто означає «через»: za tydzień - через тиждень, za rok - через рік."
+          },
+          "przyklady": ["za chwilę", "za tydzień", "za miesiąc", "za rok"]
+        }
+      ],
+      "slowa": [
+        { "pl": "dzisiaj", "lektor": "Dzisiaj!", "e": "☀️", "ru": "сегодня", "ua": "сьогодні" },
+        { "pl": "jutro", "e": "🌅", "ru": "завтра", "ua": "завтра" },
+        { "pl": "pojutrze", "e": "🌅🌅", "ru": "послезавтра", "ua": "післязавтра" },
+        { "pl": "za chwilę", "e": "⏱️", "ru": "через минутку, сейчас", "ua": "за хвилинку, зараз" },
+        { "pl": "później", "e": "⏳", "ru": "позже, потом", "ua": "пізніше, потім" },
+        { "pl": "za tydzień", "e": "📅", "ru": "через неделю", "ua": "через тиждень" },
+        { "pl": "w przyszłym tygodniu", "e": "➡️📅", "ru": "на следующей неделе", "ua": "наступного тижня" },
+        { "pl": "za miesiąc", "e": "🌙", "ru": "через месяц", "ua": "через місяць" },
+        { "pl": "za rok", "e": "🌍", "ru": "через год", "ua": "через рік" }
+      ],
+      "zdania": [
+        { "pl": "Jutro będę grać w piłkę.", "e": "⚽", "ru": "Завтра я буду играть в мяч.", "ua": "Завтра я гратиму в м'яча." },
+        { "pl": "Pojutrze będzie sobota.", "e": "🎉", "ru": "Послезавтра будет суббота.", "ua": "Післязавтра буде субота." },
+        { "pl": "Za tydzień będą wakacje.", "e": "🏖️", "ru": "Через неделю будут каникулы.", "ua": "Через тиждень будуть канікули." },
+        { "pl": "Za rok będę w piątej klasie.", "e": "🏫", "ru": "Через год я буду в пятом классе.", "ua": "Через рік я буду в п'ятому класі." },
+        { "pl": "Co będziesz robić jutro?", "e": "🤔", "ru": "Что ты будешь делать завтра?", "ua": "Що ти робитимеш завтра?" }
+      ],
+      "zeszyt": ["dzisiaj, jutro, pojutrze", "za chwilę, później", "za tydzień, za miesiąc, za rok", "w przyszłym tygodniu", "Pojutrze będzie sobota."]
+    },
+    {
+      "nr": 99,
+      "tytul": { "pl": "Plany na wakacje", "ru": "Планы на каникулы", "ua": "Плани на канікули" },
+      "cel": { "ru": "Ты научишься рассказывать, куда поедешь и что будешь делать на каникулах.", "ua": "Ти навчишся розповідати, куди поїдеш і що робитимеш на канікулах." },
+      "zasady": [
+        {
+          "litery": "pojadę  pojedziemy",
+          "dzwiek": { "ru": "поеду  поедем", "ua": "поїду  поїдемо" },
+          "opis": {
+            "ru": "Pojadę - это уже будущее время, без będę. Как русское «поеду».",
+            "ua": "Pojadę - це вже майбутній час, без będę. Як українське «поїду»."
+          },
+          "przyklady": ["pojadę", "Pojedziemy pociągiem."]
+        },
+        {
+          "litery": "nad morze → nad morzem,  w góry → w górach",
+          "dzwiek": { "ru": "куда? → где?", "ua": "куди? → де?" },
+          "opis": {
+            "ru": "Куда? - nad morze, w góry. Где? - nad morzem, w górach.",
+            "ua": "Куди? - nad morze, w góry. Де? - nad morzem, w górach."
+          },
+          "przyklady": ["nad morzem", "w górach", "W wakacje pojadę nad morze."]
+        }
+      ],
+      "slowa": [
+        { "pl": "wakacje", "e": "☀️🎒", "ru": "каникулы", "ua": "канікули" },
+        { "pl": "nad morzem", "e": "🌊", "ru": "на море", "ua": "на морі" },
+        { "pl": "w górach", "e": "⛰️", "ru": "в горах", "ua": "у горах" },
+        { "pl": "plaża", "e": "🏖️", "ru": "пляж", "ua": "пляж" },
+        { "pl": "namiot", "e": "⛺", "ru": "палатка", "ua": "намет" },
+        { "pl": "opalać się", "e": "😎", "ru": "загорать", "ua": "засмагати" },
+        { "pl": "jezioro", "e": "🏞️", "ru": "озеро", "ua": "озеро" },
+        { "pl": "zamek z piasku", "e": "🏰", "ru": "замок из песка", "ua": "замок з піску" },
+        { "pl": "pojadę", "e": "🚗", "ru": "я поеду", "ua": "я поїду" }
+      ],
+      "zdania": [
+        { "pl": "W wakacje pojadę nad morze.", "e": "🌊", "ru": "На каникулах я поеду на море.", "ua": "На канікулах я поїду на море." },
+        { "pl": "Na plaży będę pływać.", "e": "🏊", "ru": "На пляже я буду плавать.", "ua": "На пляжі я плаватиму." },
+        { "pl": "W górach będziemy spać w namiocie.", "e": "⛺", "ru": "В горах мы будем спать в палатке.", "ua": "У горах ми спатимемо в наметі." },
+        { "pl": "Pojedziemy pociągiem.", "e": "🚆", "ru": "Мы поедем на поезде.", "ua": "Ми поїдемо поїздом." },
+        { "pl": "Ola pojedzie na wycieczkę w góry.", "e": "🥾", "ru": "Оля поедет на экскурсию в горы.", "ua": "Оля поїде на екскурсію в гори." }
+      ],
+      "zeszyt": ["wakacje, plaża, namiot, jezioro, zamek z piasku", "nad morze - nad morzem", "w góry - w górach", "pojadę, pojedziemy, będę pływać i opalać się", "W wakacje pojadę nad morze."]
+    },
+    {
+      "nr": 100,
+      "tytul": { "pl": "Umawiam się", "ru": "Договариваюсь о встрече", "ua": "Домовляюся про зустріч" },
+      "cel": { "ru": "Ты научишься договариваться с другом: когда, во сколько и где вы встретитесь.", "ua": "Ти навчишся домовлятися з другом: коли, о котрій і де ви зустрінетеся." },
+      "zasady": [
+        {
+          "litery": "Kiedy?  O której?  Gdzie?",
+          "dzwiek": { "ru": "Когда? Во сколько? Где?", "ua": "Коли? О котрій? Де?" },
+          "opis": {
+            "ru": "Три вопроса, когда договариваешься о встрече: когда, во сколько и где.",
+            "ua": "Три питання, коли домовляєшся про зустріч: коли, о котрій і де."
+          },
+          "przyklady": ["Kiedy?", "O której się spotkamy?", "Gdzie się spotkamy?"]
+        },
+        {
+          "litery": "Pasuje mi. / Nie mogę.",
+          "dzwiek": { "ru": "да / нет", "ua": "так / ні" },
+          "opis": {
+            "ru": "Если тебе удобно, скажи: Pasuje mi. Если нет: Nie mogę. Może jutro?",
+            "ua": "Якщо тобі зручно, скажи: Pasuje mi. Якщо ні: Nie mogę. Może jutro?"
+          },
+          "przyklady": ["Pasuje mi.", "Nie mogę.", "Może jutro?"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Spotkamy się?", "e": "🤝", "ru": "Встретимся?", "ua": "Зустрінемося?" },
+        { "pl": "O której się spotkamy?", "e": "🕒", "ru": "Во сколько встретимся?", "ua": "О котрій зустрінемося?" },
+        { "pl": "Gdzie się spotkamy?", "e": "📍", "ru": "Где встретимся?", "ua": "Де зустрінемося?" },
+        { "pl": "Pasuje mi.", "e": "👍", "ru": "Мне подходит.", "ua": "Мені підходить." },
+        { "pl": "Dzisiaj nie mogę.", "e": "🙅", "ru": "Сегодня я не могу.", "ua": "Сьогодні я не можу." },
+        { "pl": "Może jutro?", "e": "🤔", "ru": "Может, завтра?", "ua": "Може, завтра?" },
+        { "pl": "Zgoda!", "e": "✅", "ru": "Договорились!", "ua": "Домовилися!" },
+        { "pl": "Do zobaczenia jutro!", "e": "👋", "ru": "До встречи завтра!", "ua": "До зустрічі завтра!" }
+      ],
+      "zdania": [
+        { "pl": "Spotkamy się w sobotę?", "e": "📅", "ru": "Встретимся в субботу?", "ua": "Зустрінемося в суботу?" },
+        { "pl": "Gdzie? Przed szkołą.", "e": "🏫", "ru": "Где? Перед школой.", "ua": "Де? Перед школою." },
+        { "pl": "Przepraszam, jutro nie mogę.", "e": "🙅", "ru": "Извини, завтра я не могу.", "ua": "Вибач, завтра я не можу." },
+        { "pl": "Może w niedzielę? Pasuje mi!", "e": "👍", "ru": "Может, в воскресенье? Мне подходит!", "ua": "Може, в неділю? Мені підходить!" },
+        { "pl": "Spotkamy się o czwartej na boisku.", "e": "⚽", "ru": "Встретимся в четыре часа на спортплощадке.", "ua": "Зустрінемося о четвертій на спортмайданчику." }
+      ],
+      "zeszyt": ["Spotkamy się? Kiedy? Gdzie?", "O której się spotkamy?", "Pasuje mi. - Nie mogę.", "Może jutro? Zgoda!", "Do zobaczenia jutro!"]
+    },
+    {
+      "nr": 101,
+      "tytul": { "pl": "Piszę wiadomość", "ru": "Пишу сообщение", "ua": "Пишу повідомлення" },
+      "cel": { "ru": "Ты научишься писать короткое сообщение другу: Hej! Napisz do mnie! Pozdrawiam!", "ua": "Ти навчишся писати коротке повідомлення другові: Hej! Napisz do mnie! Pozdrawiam!" },
+      "zasady": [
+        {
+          "litery": "Cześć! Hej! → ... → Pozdrawiam! Do jutra!",
+          "dzwiek": { "ru": "начало → конец", "ua": "початок → кінець" },
+          "opis": {
+            "ru": "В начале сообщения пишем Cześć! или Hej!, в конце - Pozdrawiam! или Do jutra!",
+            "ua": "На початку повідомлення пишемо Cześć! або Hej!, наприкінці - Pozdrawiam! або Do jutra!"
+          },
+          "przyklady": ["Hej!", "Pozdrawiam!", "Do jutra!"]
+        },
+        {
+          "litery": "Napisz!  Zadzwoń!  Odpisz!",
+          "dzwiek": { "ru": "напиши! позвони! ответь!", "ua": "напиши! подзвони! відпиши!" },
+          "opis": {
+            "ru": "Так просим друга что-то сделать. Do mnie - мне, ко мне.",
+            "ua": "Так просимо друга щось зробити. Do mnie - мені, до мене."
+          },
+          "przyklady": ["Napisz do mnie!", "Zadzwoń do mnie!", "Odpisz!"]
+        }
+      ],
+      "slowa": [
+        { "pl": "wiadomość", "e": "💬", "ru": "сообщение", "ua": "повідомлення" },
+        { "pl": "wysyłam", "e": "📤", "ru": "отправляю", "ua": "надсилаю" },
+        { "pl": "Hej!", "e": "🙌", "ru": "Привет! (между друзьями)", "ua": "Привіт! (між друзями)" },
+        { "pl": "Napisz do mnie!", "e": "✉️", "ru": "Напиши мне!", "ua": "Напиши мені!" },
+        { "pl": "Zadzwoń do mnie!", "e": "📞", "ru": "Позвони мне!", "ua": "Подзвони мені!" },
+        { "pl": "Odpisz!", "e": "↩️", "ru": "Ответь! (на сообщение)", "ua": "Відпиши!" },
+        { "pl": "Pozdrawiam!", "e": "😊", "ru": "С приветом!", "ua": "З привітом!" },
+        { "pl": "Do jutra!", "e": "🌙", "ru": "До завтра!", "ua": "До завтра!" },
+        { "pl": "Buziaki!", "lektor": "Buziaki.", "e": "😘", "ru": "Целую!", "ua": "Цілую!" }
+      ],
+      "zdania": [
+        { "pl": "Cześć, Kuba! Grasz jutro w piłkę?", "e": "⚽", "ru": "Привет, Куба! Играешь завтра в мяч?", "ua": "Привіт, Кубо! Граєш завтра в м'яча?" },
+        { "pl": "Hej, Ola! Będę za chwilę.", "e": "🏃", "ru": "Привет, Оля! Я буду через минутку.", "ua": "Привіт, Олю! Я буду за хвилинку." },
+        { "pl": "Mamo, będę w domu o piątej.", "e": "🏠", "ru": "Мама, я буду дома в пять.", "ua": "Мамо, я буду вдома о п'ятій." },
+        { "pl": "Nie mogę, mam lekcje. Odpiszę wieczorem.", "lektor": "Nie mogę... mam lekcje. Odpiszę wieczorem.", "e": "📚", "ru": "Не могу, у меня уроки. Отвечу вечером.", "ua": "Не можу, маю уроки. Відпишу ввечері." },
+        { "pl": "Dzięki! Pozdrawiam, Tomek.", "e": "😊", "ru": "Спасибо! С приветом, Томек.", "ua": "Дякую! З привітом, Томек." }
+      ],
+      "zeszyt": ["wiadomość, wysyłam wiadomość", "Hej! Cześć!", "Napisz do mnie! Zadzwoń do mnie! Odpisz!", "Pozdrawiam! Do jutra! Buziaki!", "Hej, Ola! Będę za chwilę."]
+    },
+    {
+      "nr": 102,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: jutro", "ru": "Проверь себя: завтра", "ua": "Перевір себе: завтра" },
+      "cel": { "ru": "Повтори всё из раздела 17 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 17 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Jutro będę ... (czytać, grać, rysować).", "W przyszłym tygodniu będę ...", "W wakacje pojadę ... (nad morze, w góry).", "Cześć, ...! Spotkamy się ...?"]
+    }
+  ]
+}

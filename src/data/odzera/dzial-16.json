@@ -1,0 +1,223 @@
+{
+  "nr": 16,
+  "tytul": { "pl": "Wczoraj", "ru": "Вчера (прошедшее время)", "ua": "Учора (минулий час)" },
+  "e": "⏪",
+  "kolor": "#7a5cd6",
+  "lekcje": [
+    {
+      "nr": 91,
+      "tytul": { "pl": "Byłem, byłam", "ru": "Я был, я была", "ua": "Я був, я була" },
+      "cel": { "ru": "Ты научишься говорить, где ты был вчера: byłem, byłam.", "ua": "Ти навчишся казати, де ти був учора: byłem, byłam." },
+      "zasady": [
+        {
+          "litery": "byłem  byłam",
+          "dzwiek": { "ru": "я был  я была", "ua": "я був  я була" },
+          "opis": {
+            "ru": "Мальчик говорит byłem, девочка - byłam. Слово «я» не нужно: окончание уже показывает, кто говорит.",
+            "ua": "Хлопець каже byłem, дівчинка - byłam. Слово «я» не потрібне: закінчення вже показує, хто говорить."
+          },
+          "przyklady": ["byłem", "byłam", "byłem w kinie", "byłam w parku"]
+        },
+        {
+          "litery": "dzisiaj → wczoraj → przedwczoraj",
+          "dzwiek": { "ru": "сегодня → вчера → позавчера", "ua": "сьогодні → учора → позавчора" },
+          "opis": {
+            "ru": "Wczoraj - вчера, przedwczoraj - позавчера. После этих слов говорим о прошлом: byłem, byłam.",
+            "ua": "Wczoraj - учора, przedwczoraj - позавчора. Після цих слів говоримо про минуле: byłem, byłam."
+          },
+          "przyklady": ["wczoraj", "przedwczoraj"]
+        }
+      ],
+      "slowa": [
+        { "pl": "wczoraj", "e": "⬅️📅", "ru": "вчера", "ua": "учора" },
+        { "pl": "przedwczoraj", "e": "⏪📅", "ru": "позавчера", "ua": "позавчора" },
+        { "pl": "byłem", "e": "👦⬅️", "ru": "я был (мальчик)", "ua": "я був (хлопець)" },
+        { "pl": "byłam", "e": "👧⬅️", "ru": "я была (девочка)", "ua": "я була (дівчинка)" },
+        { "pl": "byłem w kinie", "e": "👦🎬", "ru": "я был в кино", "ua": "я був у кіно" },
+        { "pl": "byłam w parku", "e": "👧🌳", "ru": "я была в парке", "ua": "я була в парку" },
+        { "pl": "byłem u babci", "e": "👦👵", "ru": "я был у бабушки", "ua": "я був у бабусі" },
+        { "pl": "byłam na basenie", "e": "👧🏊", "ru": "я была в бассейне", "ua": "я була в басейні" }
+      ],
+      "zdania": [
+        { "pl": "Wczoraj byłem w szkole.", "e": "🏫", "ru": "Вчера я был в школе.", "ua": "Учора я був у школі." },
+        { "pl": "Przedwczoraj byłam u cioci.", "e": "👩", "ru": "Позавчера я была у тёти.", "ua": "Позавчора я була в тітки." },
+        { "pl": "W niedzielę byłem z tatą w kinie.", "e": "🍿", "ru": "В воскресенье я был с папой в кино.", "ua": "У неділю я був з татом у кіно." },
+        { "pl": "Byłam w parku z psem.", "e": "🐕", "ru": "Я была в парке с собакой.", "ua": "Я була в парку із собакою." },
+        { "pl": "Wczoraj nie byłem w szkole.", "e": "🏠", "ru": "Вчера я не был в школе.", "ua": "Учора я не був у школі." }
+      ],
+      "zeszyt": ["wczoraj, przedwczoraj", "byłem - byłam", "byłem w kinie, byłam w parku", "Wczoraj byłem w szkole.", "Przedwczoraj byłam u cioci."]
+    },
+    {
+      "nr": 92,
+      "tytul": { "pl": "Robiłem, robiłam", "ru": "Я делал, я делала", "ua": "Я робив, я робила" },
+      "cel": { "ru": "Ты научишься рассказывать, что ты делал: czytałem, czytałam, grałem, grałam.", "ua": "Ти навчишся розповідати, що ти робив: czytałem, czytałam, grałem, grałam." },
+      "zasady": [
+        {
+          "litery": "-łem  -łam",
+          "dzwiek": { "ru": "-ўэм  -ўам", "ua": "-ўем  -ўам" },
+          "opis": {
+            "ru": "Мальчик о себе в прошедшем времени: -łem (czytałem). Девочка: -łam (czytałam). Как «я читал / я читала».",
+            "ua": "Хлопець про себе в минулому часі: -łem (czytałem). Дівчинка: -łam (czytałam). Як «я читав / я читала»."
+          },
+          "przyklady": ["czytałem", "czytałam", "grałem", "grałam"]
+        },
+        {
+          "litery": "czytam → czyta + łem",
+          "dzwiek": { "ru": "читаю → читал", "ua": "читаю → читав" },
+          "opis": {
+            "ru": "Возьми форму «я» сейчас, убери -m и добавь -łem или -łam: czytam - czytałem. Внимание: piszę - pisałem.",
+            "ua": "Візьми форму «я» зараз, прибери -m і додай -łem або -łam: czytam - czytałem. Увага: piszę - pisałem."
+          },
+          "przyklady": ["Ja czytam.", "czytałem", "Ja piszę.", "pisałem"]
+        }
+      ],
+      "slowa": [
+        { "pl": "czytałem", "e": "👦📖", "ru": "я читал", "ua": "я читав" },
+        { "pl": "czytałam", "e": "👧📖", "ru": "я читала", "ua": "я читала" },
+        { "pl": "pisałem", "e": "👦✏️", "ru": "я писал", "ua": "я писав" },
+        { "pl": "pisałam", "e": "👧✏️", "ru": "я писала", "ua": "я писала" },
+        { "pl": "grałem", "e": "👦⚽", "ru": "я играл", "ua": "я грав" },
+        { "pl": "grałam", "e": "👧⚽", "ru": "я играла", "ua": "я грала" },
+        { "pl": "oglądałem", "e": "👦📺", "ru": "я смотрел", "ua": "я дивився" },
+        { "pl": "oglądałam", "e": "👧📺", "ru": "я смотрела", "ua": "я дивилася" }
+      ],
+      "zdania": [
+        { "pl": "Wczoraj czytałem książkę.", "e": "📖", "ru": "Вчера я читал книгу.", "ua": "Учора я читав книжку." },
+        { "pl": "Wieczorem czytałam bajkę.", "e": "🌙", "ru": "Вечером я читала сказку.", "ua": "Увечері я читала казку." },
+        { "pl": "Po szkole grałem w piłkę.", "e": "⚽", "ru": "После школы я играл в футбол.", "ua": "Після школи я грав у футбол." },
+        { "pl": "Pisałam list do babci.", "e": "✉️", "ru": "Я писала письмо бабушке.", "ua": "Я писала листа бабусі." },
+        { "pl": "Oglądałem bajki z siostrą.", "e": "📺", "ru": "Я смотрел мультики с сестрой.", "ua": "Я дивився мультики з сестрою." }
+      ],
+      "zeszyt": ["czytałem - czytałam", "pisałem - pisałam", "grałem - grałam", "oglądałem - oglądałam", "Po szkole grałem w piłkę."]
+    },
+    {
+      "nr": 93,
+      "tytul": { "pl": "On robił, ona robiła", "ru": "Он делал, она делала", "ua": "Він робив, вона робила" },
+      "cel": { "ru": "Ты научишься рассказывать, что делал он, она и они: czytał, czytała, grali.", "ua": "Ти навчишся розповідати, що робив він, вона і вони: czytał, czytała, grali." },
+      "zasady": [
+        {
+          "litery": "on: -ł   ona: -ła",
+          "dzwiek": { "ru": "-ў  -ўа", "ua": "-ў  -ўа" },
+          "opis": {
+            "ru": "О нём - окончание -ł: tata czytał. О ней - -ła: mama czytała. Как «он читал / она читала».",
+            "ua": "Про нього - закінчення -ł: tata czytał. Про неї - -ła: mama czytała. Як «він читав / вона читала»."
+          },
+          "przyklady": ["on był", "ona była", "on czytał", "ona czytała"]
+        },
+        {
+          "litery": "oni: -li",
+          "dzwiek": { "ru": "-ли", "ua": "-ли" },
+          "opis": {
+            "ru": "О нескольких людях - -li: oni byli, oni grali. Здесь пишем l, а не ł.",
+            "ua": "Про кількох людей - -li: oni byli, oni grali. Тут пишемо l, а не ł."
+          },
+          "przyklady": ["oni byli", "oni grali"]
+        }
+      ],
+      "slowa": [
+        { "pl": "on był", "e": "👨⬅️", "ru": "он был", "ua": "він був" },
+        { "pl": "ona była", "e": "👩⬅️", "ru": "она была", "ua": "вона була" },
+        { "pl": "oni byli", "e": "👨‍👩‍👦⬅️", "ru": "они были", "ua": "вони були" },
+        { "pl": "on czytał", "e": "👨📖", "ru": "он читал", "ua": "він читав" },
+        { "pl": "ona czytała", "e": "👩📖", "ru": "она читала", "ua": "вона читала" },
+        { "pl": "on gotował", "e": "👨‍🍳", "ru": "он готовил", "ua": "він готував" },
+        { "pl": "ona gotowała", "e": "👩‍🍳", "ru": "она готовила", "ua": "вона готувала" },
+        { "pl": "oni grali", "e": "👫⚽", "ru": "они играли", "ua": "вони грали" }
+      ],
+      "zdania": [
+        { "pl": "Wczoraj tata gotował obiad.", "e": "🍲", "ru": "Вчера папа готовил обед.", "ua": "Учора тато готував обід." },
+        { "pl": "Mama czytała książkę na kanapie.", "e": "🛋️", "ru": "Мама читала книгу на диване.", "ua": "Мама читала книжку на дивані." },
+        { "pl": "Kuba był chory.", "e": "🤒", "ru": "Куба болел.", "ua": "Куба хворів." },
+        { "pl": "Ola i Tomek grali w piłkę.", "e": "⚽", "ru": "Оля и Томек играли в футбол.", "ua": "Оля і Томек грали у футбол." },
+        { "pl": "Babcia była u nas w niedzielę.", "e": "👵", "ru": "Бабушка была у нас в воскресенье.", "ua": "Бабуся була в нас у неділю." }
+      ],
+      "zeszyt": ["on był, ona była, oni byli", "on czytał, ona czytała", "on gotował, ona gotowała, oni grali", "Wczoraj tata gotował obiad.", "Ola i Tomek grali w piłkę."]
+    },
+    {
+      "nr": 94,
+      "tytul": { "pl": "Co robiłeś w weekend?", "ru": "Что ты делал в выходные?", "ua": "Що ти робив на вихідних?" },
+      "cel": { "ru": "Ты научишься спрашивать друга о выходных и отвечать: Co robiłeś? Byłem w zoo.", "ua": "Ти навчишся питати друга про вихідні й відповідати: Co robiłeś? Byłem w zoo." },
+      "zasady": [
+        {
+          "litery": "ty: -łeś  -łaś",
+          "dzwiek": { "ru": "-ўэщь  -ўащь", "ua": "-ўесь  -ўась" },
+          "opis": {
+            "ru": "Спрашиваем мальчика: Co robiłeś? Девочку: Co robiłaś? Отвечаем о себе: robiłem / robiłam.",
+            "ua": "Питаємо хлопця: Co robiłeś? Дівчинку: Co robiłaś? Відповідаємо про себе: robiłem / robiłam."
+          },
+          "przyklady": ["Co robiłeś?", "Co robiłaś?", "Nic nie robiłem.", "Nic nie robiłam."]
+        },
+        {
+          "litery": "było",
+          "dzwiek": { "ru": "было", "ua": "було" },
+          "opis": {
+            "ru": "Jak było? - Как было? Отвечаем одним словом с było: Było super! Było nudno.",
+            "ua": "Jak było? - Як було? Відповідаємо одним словом з było: Było super! Było nudno."
+          },
+          "przyklady": ["Jak było?", "Było super!", "Było nudno."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Co robiłeś?", "e": "👦❓", "ru": "Что ты делал? (мальчику)", "ua": "Що ти робив? (хлопцю)" },
+        { "pl": "Co robiłaś?", "e": "👧❓", "ru": "Что ты делала? (девочке)", "ua": "Що ти робила? (дівчинці)" },
+        { "pl": "Gdzie byłeś?", "e": "👦🗺️", "ru": "Где ты был?", "ua": "Де ти був?" },
+        { "pl": "Gdzie byłaś?", "e": "👧🗺️", "ru": "Где ты была?", "ua": "Де ти була?" },
+        { "pl": "Jak było?", "e": "🤔", "ru": "Как было?", "ua": "Як було?" },
+        { "pl": "Było super!", "e": "🤩", "ru": "Было супер!", "ua": "Було супер!" },
+        { "pl": "Było nudno.", "e": "🥱", "ru": "Было скучно.", "ua": "Було нудно." },
+        { "pl": "Nic nie robiłem.", "e": "🤷‍♂️", "ru": "Я ничего не делал.", "ua": "Я нічого не робив." },
+        { "pl": "Nic nie robiłam.", "e": "🤷‍♀️", "ru": "Я ничего не делала.", "ua": "Я нічого не робила." }
+      ],
+      "zdania": [
+        { "pl": "Co robiłeś w weekend?", "e": "🗓️", "ru": "Что ты делал в выходные?", "ua": "Що ти робив на вихідних?" },
+        { "pl": "W sobotę byłem w zoo z kolegą.", "e": "🦁", "ru": "В субботу я был в зоопарке с другом.", "ua": "У суботу я був у зоопарку з другом." },
+        { "pl": "Gdzie byłaś w niedzielę? Byłam u babci.", "e": "👵", "ru": "Где ты была в воскресенье? Я была у бабушки.", "ua": "Де ти була в неділю? Я була в бабусі." },
+        { "pl": "Było nudno, bo padał deszcz.", "lektor": "Było nudno... bo padał deszcz.", "e": "🌧️", "ru": "Было скучно, потому что шёл дождь.", "ua": "Було нудно, бо йшов дощ." },
+        { "pl": "Odpoczywałam i grałam na komputerze.", "e": "🎮", "ru": "Я отдыхала и играла на компьютере.", "ua": "Я відпочивала і грала на комп'ютері." }
+      ],
+      "zeszyt": ["Co robiłeś? Co robiłaś?", "Gdzie byłeś? Gdzie byłaś?", "Jak było? Było super! Było nudno.", "Co robiłeś w weekend?", "W sobotę byłem w zoo z kolegą."]
+    },
+    {
+      "nr": 95,
+      "tytul": { "pl": "Czytam tekst w czasie przeszłym", "ru": "Читаю текст в прошедшем времени", "ua": "Читаю текст у минулому часі" },
+      "cel": { "ru": "Ты научишься читать короткий рассказ в прошедшем времени о школьной экскурсии.", "ua": "Ти навчишся читати коротку розповідь у минулому часі про шкільну екскурсію." },
+      "zasady": [
+        {
+          "litery": "my: -liśmy",
+          "dzwiek": { "ru": "-лищьмы", "ua": "-лісьми" },
+          "opis": {
+            "ru": "О нас (мы) в прошедшем времени: -liśmy. Klasa była - мы были: byliśmy, widzieliśmy, wróciliśmy.",
+            "ua": "Про нас (ми) в минулому часі: -liśmy. Klasa była - ми були: byliśmy, widzieliśmy, wróciliśmy."
+          },
+          "przyklady": ["byliśmy", "widzieliśmy", "wróciliśmy"]
+        }
+      ],
+      "slowa": [
+        { "pl": "na wycieczce", "e": "🎒🗺️", "ru": "на экскурсии", "ua": "на екскурсії" },
+        { "pl": "autokar", "e": "🚌", "ru": "туристический автобус", "ua": "туристичний автобус" },
+        { "pl": "muzeum", "e": "🏛️", "ru": "музей", "ua": "музей" },
+        { "pl": "dinozaur", "e": "🦖", "ru": "динозавр", "ua": "динозавр" },
+        { "pl": "zdjęcie", "lektor": "Zdjęcie!", "e": "📸", "ru": "фото, снимок", "ua": "фото, світлина" },
+        { "pl": "byliśmy", "e": "👫⬅️", "ru": "мы были", "ua": "ми були" },
+        { "pl": "widzieliśmy", "e": "👀", "ru": "мы видели", "ua": "ми бачили" },
+        { "pl": "wróciliśmy", "e": "🏠⬅️", "ru": "мы вернулись", "ua": "ми повернулися" }
+      ],
+      "zdania": [
+        { "pl": "W piątek nasza klasa była na wycieczce.", "e": "🎒", "ru": "В пятницу наш класс был на экскурсии.", "ua": "У п'ятницю наш клас був на екскурсії." },
+        { "pl": "Jechaliśmy autokarem do muzeum.", "e": "🚌", "ru": "Мы ехали в музей на автобусе.", "ua": "Ми їхали до музею автобусом." },
+        { "pl": "W muzeum widzieliśmy wielkiego dinozaura.", "e": "🦖", "ru": "В музее мы видели огромного динозавра.", "ua": "У музеї ми бачили величезного динозавра." },
+        { "pl": "Potem na Rynku robiliśmy zdjęcia krasnali.", "e": "🧙", "ru": "Потом на Рынке мы фотографировали гномиков.", "ua": "Потім на Ринку ми фотографували гномиків." },
+        { "pl": "Wróciliśmy do szkoły zmęczeni, ale wesoli.", "lektor": "Wróciliśmy do szkoły zmęczeni... ale wesoli.", "e": "😊", "ru": "Мы вернулись в школу усталые, но весёлые.", "ua": "Ми повернулися до школи втомлені, але веселі." }
+      ],
+      "zeszyt": ["byliśmy, widzieliśmy, wróciliśmy", "na wycieczce, autokar, muzeum, dinozaur, zdjęcie", "W muzeum widzieliśmy wielkiego dinozaura.", "Wróciliśmy do szkoły zmęczeni, ale wesoli."]
+    },
+    {
+      "nr": 96,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: wczoraj", "ru": "Проверь себя: вчера", "ua": "Перевір себе: учора" },
+      "cel": { "ru": "Повтори всё из раздела 16 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 16 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Wczoraj byłem / byłam ...", "Po szkole ... (czytałem, grałem / czytałam, grałam)", "W weekend byłem / byłam ...", "Wczoraj mama ... (czytała, gotowała)"]
+    }
+  ]
+}

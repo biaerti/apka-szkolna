@@ -1,0 +1,271 @@
+{
+  "nr": 20,
+  "tytul": {"pl": "Czytam i piszę", "ru": "Читаю и пишу", "ua": "Читаю і пишу"},
+  "e": "✍️",
+  "kolor": "#d4821b",
+  "lekcje": [
+    {
+      "nr": 115,
+      "tytul": {"pl": "Wielka litera", "ru": "Большая буква", "ua": "Велика літера"},
+      "cel": {"ru": "Ты научишься писать с большой буквы имена, города, реки, страны и начало предложения.", "ua": "Ти навчишся писати з великої літери імена, міста, річки, країни і початок речення."},
+      "zasady": [
+        {
+          "litery": "Ola  Kraków  Wisła  Polska",
+          "dzwiek": {"ru": "большая буква", "ua": "велика літера"},
+          "opis": {
+            "ru": "Имя, город, реку и страну пишем с большой буквы: Ola, Wrocław, Odra, Polska.",
+            "ua": "Ім'я, місто, річку і країну пишемо з великої літери: Ola, Wrocław, Odra, Polska."
+          },
+          "przyklady": ["Polska", "Ukraina", "Kraków", "Wisła"]
+        },
+        {
+          "litery": "rzeka - Wisła",
+          "dzwiek": {"ru": "маленькая буква", "ua": "мала літера"},
+          "opis": {
+            "ru": "Обычное слово (rzeka, kraj, miasto) - с маленькой буквы. Название одной реки или страны - с большой.",
+            "ua": "Звичайне слово (rzeka, kraj, miasto) - з малої літери. Назва однієї річки чи країни - з великої."
+          },
+          "przyklady": ["rzeka", "kraj", "imię"]
+        },
+        {
+          "litery": "Wrocław ... .",
+          "dzwiek": {"ru": "начало предложения", "ua": "початок речення"},
+          "opis": {
+            "ru": "Первое слово предложения - с большой буквы, в конце - точка.",
+            "ua": "Перше слово речення - з великої літери, в кінці - крапка."
+          },
+          "przyklady": ["Wrocław leży nad Odrą."]
+        }
+      ],
+      "slowa": [
+        {"pl": "Polska", "e": "🦅", "ru": "Польша", "ua": "Польща"},
+        {"pl": "Ukraina", "e": "🌻", "ru": "Украина", "ua": "Україна"},
+        {"pl": "kraj", "lektor": "Kraj!", "e": "🌍", "ru": "страна", "ua": "країна"},
+        {"pl": "Warszawa", "e": "🧜‍♀️", "ru": "Варшава", "ua": "Варшава"},
+        {"pl": "Kraków", "e": "🐉", "ru": "Краков", "ua": "Краків"},
+        {"pl": "Kijów", "e": "⛪", "ru": "Киев", "ua": "Київ"},
+        {"pl": "Wisła", "e": "🏞️", "ru": "Висла (река)", "ua": "Вісла (річка)"},
+        {"pl": "Dniepr", "e": "🌊", "ru": "Днепр", "ua": "Дніпро"},
+        {"pl": "imię", "e": "📛", "ru": "имя", "ua": "ім'я"}
+      ],
+      "zdania": [
+        {"pl": "Wrocław leży nad Odrą.", "e": "🌉", "ru": "Вроцлав стоит на Одре.", "ua": "Вроцлав лежить на Одрі."},
+        {"pl": "Warszawa to stolica Polski.", "e": "🧜‍♀️", "ru": "Варшава - столица Польши.", "ua": "Варшава - столиця Польщі."},
+        {"pl": "Kuba jest z Krakowa.", "e": "🐉", "ru": "Куба из Кракова.", "ua": "Куба з Кракова."},
+        {"pl": "Kijów leży nad Dnieprem.", "e": "⛪", "ru": "Киев стоит на Днепре.", "ua": "Київ лежить на Дніпрі."},
+        {"pl": "Ola i Tomek mieszkają w Polsce.", "e": "🦅", "ru": "Оля и Томек живут в Польше.", "ua": "Оля і Томек живуть у Польщі."}
+      ],
+      "zeszyt": ["Polska, Ukraina, Warszawa, Kraków, Kijów", "Wisła, Dniepr, Wrocław, Odra", "kraj - Polska, rzeka - Wisła, imię - Ola", "Wielka litera: imię, miasto, rzeka, kraj, początek zdania", "Wrocław leży nad Odrą."]
+    },
+    {
+      "nr": 116,
+      "tytul": {"pl": "Ó czy u? Rz czy ż?", "ru": "Ó или u? Rz или ż?", "ua": "Ó чи u? Rz чи ż?"},
+      "cel": {"ru": "Ты научишься проверять, где писать ó, а где u, где rz, а где ż.", "ua": "Ти навчишся перевіряти, де писати ó, а де u, де rz, а де ż."},
+      "zasady": [
+        {
+          "litery": "ó → o",
+          "dzwiek": {"ru": "у → о", "ua": "у → о"},
+          "opis": {
+            "ru": "Если в другой форме слова слышно o, пишем ó: lód - lody, nóż - noże. Окончание -unek - всегда с u: rysunek.",
+            "ua": "Якщо в іншій формі слова чути o, пишемо ó: lód - lody, nóż - noże. Закінчення -unek - завжди з u: rysunek."
+          },
+          "przyklady": ["lód", "nóż", "mróz", "ogród", "król", "rysunek"]
+        },
+        {
+          "litery": "rz → r",
+          "dzwiek": {"ru": "ж → р", "ua": "ж → р"},
+          "opis": {
+            "ru": "Если в другом слове слышно r, пишем rz: morze - morski. Профессии на -arz тоже с rz: lekarz.",
+            "ua": "Якщо в іншому слові чути r, пишемо rz: morze - morski. Професії на -arz теж з rz: lekarz."
+          },
+          "przyklady": ["morski", "lekarz"]
+        },
+        {
+          "litery": "ż → g",
+          "dzwiek": {"ru": "ж → г", "ua": "ж → г"},
+          "opis": {
+            "ru": "Если в другом слове слышно g, пишем ż: noga - nóżka. Остальные слова с ż просто запомни: żaba, żółw.",
+            "ua": "Якщо в іншому слові чути g, пишемо ż: noga - nóżka. Інші слова з ż просто запам'ятай: żaba, żółw."
+          },
+          "przyklady": ["nóżka", "żaba", "żółw"]
+        }
+      ],
+      "slowa": [
+        {"pl": "lód", "lektor": "Lód!", "e": "🧊", "ru": "лёд", "ua": "лід"},
+        {"pl": "nóż", "lektor": "Nóż!", "e": "🔪", "ru": "нож", "ua": "ніж"},
+        {"pl": "mróz", "lektor": "Mróz!", "e": "🥶", "ru": "мороз", "ua": "мороз"},
+        {"pl": "ogród", "e": "🌷", "ru": "сад, огород", "ua": "сад, город"},
+        {"pl": "król", "lektor": "Król!", "e": "👑", "ru": "король", "ua": "король"},
+        {"pl": "rysunek", "e": "🖍️", "ru": "рисунок", "ua": "малюнок"},
+        {"pl": "morski", "e": "⚓", "ru": "морской", "ua": "морський"},
+        {"pl": "lekarz", "e": "👨‍⚕️", "ru": "врач", "ua": "лікар"},
+        {"pl": "nóżka", "e": "🦶", "ru": "ножка", "ua": "ніжка"}
+      ],
+      "zdania": [
+        {"pl": "Lód jest zimny, a lody są słodkie.", "lektor": "Lód jest zimny... a lody są słodkie.", "e": "🧊", "ru": "Лёд холодный, а мороженое сладкое.", "ua": "Лід холодний, а морозиво солодке."},
+        {"pl": "Babcia ma duży ogród.", "e": "🌷", "ru": "У бабушки большой сад.", "ua": "У бабусі великий сад."},
+        {"pl": "W styczniu jest mróz.", "e": "🥶", "ru": "В январе мороз.", "ua": "У січні мороз."},
+        {"pl": "Mój tata jest lekarzem.", "e": "👨‍⚕️", "ru": "Мой папа - врач.", "ua": "Мій тато - лікар."},
+        {"pl": "Nóż leży na stole.", "e": "🔪", "ru": "Нож лежит на столе.", "ua": "Ніж лежить на столі."}
+      ],
+      "zeszyt": ["ó → o: lód - lody, nóż - noże, mróz - mrozy", "ogród - ogrody, król - królowa, rysunek (-unek)", "rz → r: morze - morski, lekarz", "ż → g: noga - nóżka", "Babcia ma duży ogród."]
+    },
+    {
+      "nr": 117,
+      "tytul": {"pl": "Ch czy h?", "ru": "Ch или h?", "ua": "Ch чи h?"},
+      "cel": {"ru": "Ты научишься угадывать, где писать ch, а где h.", "ua": "Ти навчишся вгадувати, де писати ch, а де h."},
+      "zasady": [
+        {
+          "litery": "ch  h",
+          "dzwiek": {"ru": "х", "ua": "х"},
+          "opis": {
+            "ru": "ch и h звучат одинаково - х. Слова с h надо запомнить: hamburger, hipopotam.",
+            "ua": "ch і h звучать однаково - х. Слова з h треба запам'ятати: hamburger, hipopotam."
+          },
+          "przyklady": ["chmura", "hamburger", "hipopotam"]
+        },
+        {
+          "litery": "-ch",
+          "dzwiek": {"ru": "х в конце", "ua": "х у кінці"},
+          "opis": {
+            "ru": "В конце слова почти всегда пишем ch: dach, mech.",
+            "ua": "У кінці слова майже завжди пишемо ch: dach, mech."
+          },
+          "przyklady": ["dach", "mech"]
+        },
+        {
+          "litery": "ch → sz",
+          "dzwiek": {"ru": "х → ш", "ua": "х → ш"},
+          "opis": {
+            "ru": "Если в другой форме слышно sz, пишем ch: ucho - uszy.",
+            "ua": "Якщо в іншій формі чути sz, пишемо ch: ucho - uszy."
+          },
+          "przyklady": ["ucho", "uszy"]
+        }
+      ],
+      "slowa": [
+        {"pl": "dach", "lektor": "Dach!", "e": "🏠", "ru": "крыша", "ua": "дах"},
+        {"pl": "mech", "lektor": "Mech!", "e": "🌿", "ru": "мох", "ua": "мох"},
+        {"pl": "ucho", "e": "👂", "ru": "ухо", "ua": "вухо"},
+        {"pl": "chmura", "e": "☁️", "ru": "туча, облако", "ua": "хмара"},
+        {"pl": "hamburger", "e": "🍔", "ru": "гамбургер", "ua": "гамбургер"},
+        {"pl": "hipopotam", "e": "🦛", "ru": "бегемот", "ua": "бегемот"},
+        {"pl": "hokej", "e": "🏒", "ru": "хоккей", "ua": "хокей"},
+        {"pl": "hałas", "e": "🔊", "ru": "шум", "ua": "шум, галас"}
+      ],
+      "zdania": [
+        {"pl": "Na dachu siedzi kot.", "e": "🏠", "ru": "На крыше сидит кот.", "ua": "На даху сидить кіт."},
+        {"pl": "W lesie rośnie zielony mech.", "e": "🌿", "ru": "В лесу растёт зелёный мох.", "ua": "У лісі росте зелений мох."},
+        {"pl": "Kuba jeździ na hulajnodze.", "e": "🛴", "ru": "Куба катается на самокате.", "ua": "Куба катається на самокаті."},
+        {"pl": "Hipopotam pływa w rzece.", "e": "🦛", "ru": "Бегемот плавает в реке.", "ua": "Бегемот плаває в річці."},
+        {"pl": "Nie lubię hałasu.", "e": "🔊", "ru": "Я не люблю шум.", "ua": "Я не люблю шуму."}
+      ],
+      "zeszyt": ["ch = h", "ch na końcu: dach, mech", "ch → sz: ucho - uszy", "h: hamburger, hipopotam, hokej, hałas", "Kuba jeździ na hulajnodze."]
+    },
+    {
+      "nr": 118,
+      "tytul": {"pl": "Opisuję osobę", "ru": "Описываю человека", "ua": "Описую людину"},
+      "cel": {"ru": "Ты научишься описывать человека: какой он и как выглядит.", "ua": "Ти навчишся описувати людину: яка вона і як виглядає."},
+      "zasady": [
+        {
+          "litery": "1. wzrost  2. włosy, oczy  3. jaki jest?",
+          "dzwiek": {"ru": "сверху вниз", "ua": "згори донизу"},
+          "opis": {
+            "ru": "Описываем человека сверху вниз: рост, волосы, глаза, очки. В конце - какой у него характер.",
+            "ua": "Описуємо людину згори донизу: зріст, волосся, очі, окуляри. В кінці - який у неї характер."
+          },
+          "przyklady": ["szczupły", "jasne włosy", "niebieskie oczy", "odważny"]
+        },
+        {
+          "litery": "jest ...  ma ...",
+          "dzwiek": {"ru": "он какой / у него есть", "ua": "він який / у нього є"},
+          "opis": {
+            "ru": "jest - какой человек: wysoki, odważny. ma - что у него есть: okulary, brodę.",
+            "ua": "jest - яка людина: wysoki, odważny. ma - що в неї є: okulary, brodę."
+          },
+          "przyklady": ["wysoki", "odważny", "okulary", "broda"]
+        },
+        {
+          "litery": "on -y   ona -a",
+          "dzwiek": {"ru": "-ы / -а", "ua": "-и / -а"},
+          "opis": {
+            "ru": "Мальчик - szczupły, mądry. Девочка - szczupła, mądra.",
+            "ua": "Хлопчик - szczupły, mądry. Дівчинка - szczupła, mądra."
+          },
+          "przyklady": ["szczupły", "mądry", "Pani Ania jest niska i szczupła."]
+        }
+      ],
+      "slowa": [
+        {"pl": "szczupły", "e": "🧍", "ru": "худой, стройный", "ua": "худий, стрункий"},
+        {"pl": "jasne włosy", "e": "👱", "ru": "светлые волосы", "ua": "світле волосся"},
+        {"pl": "kręcone włosy", "e": "👩‍🦱", "ru": "кудрявые волосы", "ua": "кучеряве волосся"},
+        {"pl": "niebieskie oczy", "e": "🔵👁️", "ru": "голубые глаза", "ua": "блакитні очі"},
+        {"pl": "okulary", "e": "👓", "ru": "очки", "ua": "окуляри"},
+        {"pl": "broda", "e": "🧔", "ru": "борода", "ua": "борода"},
+        {"pl": "odważny", "e": "🦸", "ru": "смелый", "ua": "сміливий"},
+        {"pl": "mądry", "e": "🧠", "ru": "умный", "ua": "розумний"},
+        {"pl": "zabawna", "e": "🤪", "ru": "смешная, весёлая", "ua": "кумедна"}
+      ],
+      "zdania": [
+        {"pl": "Mój dziadek ma brodę i okulary.", "e": "🧔", "ru": "У моего дедушки борода и очки.", "ua": "У мого дідуся борода і окуляри."},
+        {"pl": "Ola ma jasne, kręcone włosy.", "e": "👱‍♀️", "ru": "У Оли светлые кудрявые волосы.", "ua": "В Олі світле кучеряве волосся."},
+        {"pl": "Kuba ma niebieskie oczy.", "e": "👁️", "ru": "У Кубы голубые глаза.", "ua": "У Куби блакитні очі."},
+        {"pl": "Pani Ania jest niska i szczupła.", "e": "👩", "ru": "Пани Аня невысокая и стройная.", "ua": "Пані Аня невисока і струнка."},
+        {"pl": "Mój brat jest odważny i zabawny.", "e": "🦸", "ru": "Мой брат смелый и смешной.", "ua": "Мій брат сміливий і кумедний."}
+      ],
+      "zeszyt": ["szczupły, jasne włosy, kręcone włosy", "niebieskie oczy, okulary, broda", "jest: wysoki, odważny, mądry - ma: okulary, brodę", "Mój dziadek ma brodę i okulary.", "Mój brat jest odważny i zabawny."]
+    },
+    {
+      "nr": 119,
+      "tytul": {"pl": "Uczucia", "ru": "Чувства", "ua": "Почуття"},
+      "cel": {"ru": "Ты научишься называть чувства и говорить: boję się, cieszę się.", "ua": "Ти навчишся називати почуття і казати: boję się, cieszę się."},
+      "zasady": [
+        {
+          "litery": "on -y   ona -a",
+          "dzwiek": {"ru": "-ы / -а", "ua": "-и / -а"},
+          "opis": {
+            "ru": "Мальчик говорит: jestem szczęśliwy, zdziwiony. Девочка: jestem szczęśliwa, zdziwiona.",
+            "ua": "Хлопчик каже: jestem szczęśliwy, zdziwiony. Дівчинка: jestem szczęśliwa, zdziwiona."
+          },
+          "przyklady": ["Jestem szczęśliwy.", "Jestem zdziwiony."]
+        },
+        {
+          "litery": "się",
+          "dzwiek": {"ru": "-ся", "ua": "-ся"},
+          "opis": {
+            "ru": "Boję się, cieszę się - всегда со словом się, как русское «-ся».",
+            "ua": "Boję się, cieszę się - завжди зі словом się, як українське «-ся»."
+          },
+          "przyklady": ["Boję się.", "Cieszę się!"]
+        }
+      ],
+      "slowa": [
+        {"pl": "radość", "e": "😄", "ru": "радость", "ua": "радість"},
+        {"pl": "smutek", "e": "😢", "ru": "грусть, печаль", "ua": "смуток"},
+        {"pl": "złość", "lektor": "Złość!", "e": "😠", "ru": "злость", "ua": "злість"},
+        {"pl": "strach", "lektor": "Strach!", "e": "😱", "ru": "страх", "ua": "страх"},
+        {"pl": "wstyd", "lektor": "Wstyd!", "e": "😳", "ru": "стыд", "ua": "сором"},
+        {"pl": "Jestem szczęśliwy.", "e": "🥰", "ru": "Я счастлив.", "ua": "Я щасливий."},
+        {"pl": "Jestem zdziwiony.", "e": "😮", "ru": "Я удивлён.", "ua": "Я здивований."},
+        {"pl": "Boję się.", "e": "😰", "ru": "Я боюсь.", "ua": "Я боюся."},
+        {"pl": "Cieszę się!", "e": "🎉", "ru": "Я рад!", "ua": "Я радий!"}
+      ],
+      "zdania": [
+        {"pl": "Co czujesz? Czuję radość.", "e": "😄", "ru": "Что ты чувствуешь? Я чувствую радость.", "ua": "Що ти відчуваєш? Я відчуваю радість."},
+        {"pl": "Boję się burzy.", "e": "⛈️", "ru": "Я боюсь грозы.", "ua": "Я боюся грози."},
+        {"pl": "Ola jest szczęśliwa, bo ma psa.", "lektor": "Ola jest szczęśliwa... bo ma psa.", "e": "🐕", "ru": "Оля счастлива, потому что у неё есть собака.", "ua": "Оля щаслива, бо в неї є собака."},
+        {"pl": "Tata jest zdziwiony, bo pada śnieg.", "lektor": "Tata jest zdziwiony... bo pada śnieg.", "e": "🌨️", "ru": "Папа удивлён, потому что идёт снег.", "ua": "Тато здивований, бо йде сніг."},
+        {"pl": "Cieszę się, jutro są wakacje!", "lektor": "Cieszę się... jutro są wakacje!", "e": "🏖️", "ru": "Я рад, завтра каникулы!", "ua": "Я радий, завтра канікули!"}
+      ],
+      "zeszyt": ["radość, smutek, złość, strach, wstyd", "Jestem szczęśliwy. / Jestem szczęśliwa.", "Boję się. Cieszę się!", "Boję się burzy.", "Co czujesz? Czuję radość."]
+    },
+    {
+      "nr": 120,
+      "test": true,
+      "tytul": {"pl": "Wielki finał: czytam i piszę o sobie", "ru": "Большой финал: читаю и пишу о себе", "ua": "Великий фінал: читаю і пишу про себе"},
+      "cel": {"ru": "Повтори всё из раздела 20, проверь, что ты уже умеешь, и напиши о себе.", "ua": "Повтори все з розділу 20, перевір, що ти вже вмієш, і напиши про себе."},
+      "slowa": [],
+      "zeszyt": ["Mam na imię ...", "Mam ... lat.", "Jestem z ... (kraj, miasto).", "Mieszkam w ... (miasto).", "W mojej rodzinie są ...", "Lubię ... Nie lubię ..."]
+    }
+  ]
+}

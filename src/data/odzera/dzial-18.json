@@ -1,0 +1,260 @@
+{
+  "nr": 18,
+  "tytul": { "pl": "Części mowy", "ru": "Части речи", "ua": "Частини мови" },
+  "e": "🧩",
+  "kolor": "#c2453d",
+  "lekcje": [
+    {
+      "nr": 103,
+      "tytul": { "pl": "Rzeczownik: kto? co?", "ru": "Существительное: кто? что?", "ua": "Іменник: хто? що?" },
+      "cel": { "ru": "Ты научишься находить rzeczownik - слово, которое отвечает на вопросы kto? co?", "ua": "Ти навчишся знаходити rzeczownik - слово, яке відповідає на питання kto? co?" },
+      "zasady": [
+        {
+          "litery": "kto?  co?",
+          "dzwiek": { "ru": "кто?  что?", "ua": "хто?  що?" },
+          "opis": {
+            "ru": "Rzeczownik - это существительное. Он отвечает на вопросы kto? co?: kto? - uczeń, co? - parasol.",
+            "ua": "Rzeczownik - це іменник. Він відповідає на питання kto? co?: kto? - uczeń, co? - parasol."
+          },
+          "przyklady": ["rzeczownik", "uczeń", "parasol"]
+        },
+        {
+          "litery": "kto? osoba, zwierzę   co? rzecz, roślina",
+          "dzwiek": { "ru": "кто? - человек, животное   что? - вещь, растение", "ua": "хто? - людина, тварина   що? - річ, рослина" },
+          "opis": {
+            "ru": "Kto? спрашиваем о людях и животных: uczeń, pies. Co? - о вещах и растениях: parasol, tulipan.",
+            "ua": "Kto? питаємо про людей і тварин: uczeń, pies. Co? - про речі й рослини: parasol, tulipan."
+          },
+          "przyklady": ["osoba", "uczeń", "pies", "rzecz", "roślina", "tulipan"]
+        }
+      ],
+      "slowa": [
+        { "pl": "rzeczownik", "e": "🧩", "ru": "существительное", "ua": "іменник" },
+        { "pl": "pytanie", "e": "❓", "ru": "вопрос", "ua": "питання" },
+        { "pl": "osoba", "e": "🧑", "ru": "человек, лицо", "ua": "особа, людина" },
+        { "pl": "rzecz", "lektor": "Rzecz!", "e": "📦", "ru": "вещь", "ua": "річ" },
+        { "pl": "roślina", "e": "🌱", "ru": "растение", "ua": "рослина" },
+        { "pl": "uczeń", "e": "🧑‍🎓", "ru": "ученик", "ua": "учень" },
+        { "pl": "parasol", "e": "☂️", "ru": "зонт", "ua": "парасолька" },
+        { "pl": "tulipan", "e": "🌷", "ru": "тюльпан", "ua": "тюльпан" }
+      ],
+      "zdania": [
+        { "pl": "Kto to jest? To jest uczeń.", "e": "🧑‍🎓", "ru": "Кто это? Это ученик.", "ua": "Хто це? Це учень." },
+        { "pl": "Co to jest? To jest parasol.", "e": "☂️", "ru": "Что это? Это зонт.", "ua": "Що це? Це парасолька." },
+        { "pl": "Uczeń to osoba, a parasol to rzecz.", "lektor": "Uczeń to osoba... a parasol to rzecz.", "e": "📦", "ru": "Ученик - это человек, а зонт - это вещь.", "ua": "Учень - це людина, а парасолька - це річ." },
+        { "pl": "Tulipan to roślina.", "e": "🌷", "ru": "Тюльпан - это растение.", "ua": "Тюльпан - це рослина." },
+        { "pl": "Rzeczownik odpowiada na pytania kto? co?", "e": "🧩", "ru": "Существительное отвечает на вопросы кто? что?", "ua": "Іменник відповідає на питання хто? що?" }
+      ],
+      "zeszyt": ["rzeczownik - kto? co?", "kto? uczeń, osoba, pies", "co? parasol, rzecz, tulipan, roślina", "Rzeczownik odpowiada na pytania kto? co?", "Uczeń to osoba, a parasol to rzecz."]
+    },
+    {
+      "nr": 104,
+      "tytul": { "pl": "Czasownik: co robi?", "ru": "Глагол: что делает?", "ua": "Дієслово: що робить?" },
+      "cel": { "ru": "Ты научишься находить czasownik - слово, которое отвечает на вопрос co robi?", "ua": "Ти навчишся знаходити czasownik - слово, яке відповідає на питання co robi?" },
+      "zasady": [
+        {
+          "litery": "co robi?",
+          "dzwiek": { "ru": "что делает?", "ua": "що робить?" },
+          "opis": {
+            "ru": "Czasownik - это глагол. Он отвечает на вопрос co robi?: Ania śpiewa - co robi? śpiewa.",
+            "ua": "Czasownik - це дієслово. Він відповідає на питання co robi?: Ania śpiewa - co robi? śpiewa."
+          },
+          "przyklady": ["czasownik", "śpiewa", "tańczy", "maluje"]
+        },
+        {
+          "litery": "nie + czasownik",
+          "dzwiek": { "ru": "не + глагол", "ua": "не + дієслово" },
+          "opis": {
+            "ru": "Nie с czasownik пишем отдельно, как в русском: nie lubię, nie pije.",
+            "ua": "Nie з czasownik пишемо окремо, як в українській: nie lubię, nie pije."
+          },
+          "przyklady": ["nie lubię", "Kot nie pije mleka."]
+        }
+      ],
+      "slowa": [
+        { "pl": "czasownik", "e": "🎬", "ru": "глагол", "ua": "дієслово" },
+        { "pl": "śpiewa", "e": "🎤", "ru": "поёт", "ua": "співає" },
+        { "pl": "tańczy", "e": "💃", "ru": "танцует", "ua": "танцює" },
+        { "pl": "płacze", "e": "😢", "ru": "плачет", "ua": "плаче" },
+        { "pl": "śmieje się", "lektor": "Śmieje się!", "e": "😂", "ru": "смеётся", "ua": "сміється" },
+        { "pl": "maluje", "lektor": "Maluje!", "e": "🖌️", "ru": "рисует красками", "ua": "малює фарбами" },
+        { "pl": "pije", "lektor": "Pije!", "e": "🥤", "ru": "пьёт", "ua": "п'є" },
+        { "pl": "liczy", "lektor": "Liczy!", "e": "🧮", "ru": "считает", "ua": "рахує" }
+      ],
+      "zdania": [
+        { "pl": "Co robi Ania? Ania śpiewa.", "e": "🎤", "ru": "Что делает Аня? Аня поёт.", "ua": "Що робить Аня? Аня співає." },
+        { "pl": "Tomek tańczy na przerwie.", "e": "💃", "ru": "Томек танцует на перемене.", "ua": "Томек танцює на перерві." },
+        { "pl": "Mała siostra płacze.", "e": "😢", "ru": "Младшая сестрёнка плачет.", "ua": "Молодша сестричка плаче." },
+        { "pl": "Kot nie pije mleka.", "e": "🐈", "ru": "Кот не пьёт молоко.", "ua": "Кіт не п'є молока." },
+        { "pl": "Czasownik odpowiada na pytanie co robi?", "e": "🎬", "ru": "Глагол отвечает на вопрос что делает?", "ua": "Дієслово відповідає на питання що робить?" }
+      ],
+      "zeszyt": ["czasownik - co robi?", "śpiewa, tańczy, płacze, śmieje się", "maluje, pije, liczy", "nie pije, nie lubię", "Co robi Ania? Ania śpiewa."]
+    },
+    {
+      "nr": 105,
+      "tytul": { "pl": "Przymiotnik: jaki?", "ru": "Прилагательное: какой?", "ua": "Прикметник: який?" },
+      "cel": { "ru": "Ты научишься находить przymiotnik - слово, которое отвечает на вопрос jaki?", "ua": "Ти навчишся знаходити przymiotnik - слово, яке відповідає на питання jaki?" },
+      "zasady": [
+        {
+          "litery": "jaki?",
+          "dzwiek": { "ru": "какой?", "ua": "який?" },
+          "opis": {
+            "ru": "Przymiotnik - это прилагательное. Он говорит, какой предмет, и отвечает на вопрос jaki?: szybki rower.",
+            "ua": "Przymiotnik - це прикметник. Він каже, який предмет, і відповідає на питання jaki?: szybki rower."
+          },
+          "przyklady": ["przymiotnik", "szybki", "gorący"]
+        },
+        {
+          "litery": "rower → jaki? → szybki",
+          "dzwiek": { "ru": "велосипед → какой? → быстрый", "ua": "велосипед → який? → швидкий" },
+          "opis": {
+            "ru": "Сначала найди rzeczownik, потом спроси от него jaki?: rower - jaki? - szybki.",
+            "ua": "Спочатку знайди rzeczownik, потім запитай від нього jaki?: rower - jaki? - szybki."
+          },
+          "przyklady": ["szybki", "Jaki jest rower? Rower jest szybki."]
+        },
+        {
+          "litery": "szybki ↔ wolny",
+          "dzwiek": { "ru": "быстрый ↔ медленный", "ua": "швидкий ↔ повільний" },
+          "opis": {
+            "ru": "Многие przymiotnik живут парами: szybki - wolny, gorący - zimny, głośny - cichy.",
+            "ua": "Багато przymiotnik живуть парами: szybki - wolny, gorący - zimny, głośny - cichy."
+          },
+          "przyklady": ["szybki", "wolny", "gorący", "zimny", "głośny", "cichy"]
+        }
+      ],
+      "slowa": [
+        { "pl": "przymiotnik", "e": "🏷️", "ru": "прилагательное", "ua": "прикметник" },
+        { "pl": "szybki", "e": "🏎️", "ru": "быстрый", "ua": "швидкий" },
+        { "pl": "wolny", "e": "🐌", "ru": "медленный", "ua": "повільний" },
+        { "pl": "gorący", "e": "🔥", "ru": "горячий", "ua": "гарячий" },
+        { "pl": "zimny", "e": "🧊", "ru": "холодный", "ua": "холодний" },
+        { "pl": "głośny", "lektor": "Głośny.", "e": "📢", "ru": "громкий", "ua": "гучний" },
+        { "pl": "cichy", "lektor": "Cichyy!", "e": "🤫", "ru": "тихий", "ua": "тихий" },
+        { "pl": "słodki", "e": "🍬", "ru": "сладкий", "ua": "солодкий" },
+        { "pl": "kwaśny", "e": "🍋", "ru": "кислый", "ua": "кислий" }
+      ],
+      "zdania": [
+        { "pl": "Jaki jest rower? Rower jest szybki.", "e": "🚲", "ru": "Какой велосипед? Велосипед быстрый.", "ua": "Який велосипед? Велосипед швидкий." },
+        { "pl": "Ślimak jest bardzo wolny.", "e": "🐌", "ru": "Улитка очень медленная.", "ua": "Равлик дуже повільний." },
+        { "pl": "Lód jest zimny.", "e": "🧊", "ru": "Лёд холодный.", "ua": "Лід холодний." },
+        { "pl": "Ten cukierek jest słodki.", "e": "🍬", "ru": "Эта конфета сладкая.", "ua": "Ця цукерка солодка." },
+        { "pl": "Przymiotnik odpowiada na pytanie jaki?", "e": "🏷️", "ru": "Прилагательное отвечает на вопрос какой?", "ua": "Прикметник відповідає на питання який?" }
+      ],
+      "zeszyt": ["przymiotnik - jaki?", "szybki - wolny, gorący - zimny", "głośny - cichy, słodki, kwaśny", "rower - jaki? - szybki", "Jaki jest rower? Rower jest szybki."]
+    },
+    {
+      "nr": 106,
+      "tytul": { "pl": "Rodzaj i liczba", "ru": "Род и число", "ua": "Рід і число" },
+      "cel": { "ru": "Ты научишься узнавать rodzaj (ten, ta, to) и liczba (один или много).", "ua": "Ти навчишся впізнавати rodzaj (ten, ta, to) і liczba (один чи багато)." },
+      "zasady": [
+        {
+          "litery": "ten  ta  to",
+          "dzwiek": { "ru": "этот  эта  это", "ua": "цей  ця  це" },
+          "opis": {
+            "ru": "Поставь перед словом ten, ta или to: ten - rodzaj męski, ta - rodzaj żeński, to - rodzaj nijaki.",
+            "ua": "Постав перед словом ten, ta або to: ten - rodzaj męski, ta - rodzaj żeński, to - rodzaj nijaki."
+          },
+          "przyklady": ["ten telefon", "rodzaj męski", "ta torba", "rodzaj żeński", "to radio", "rodzaj nijaki"]
+        },
+        {
+          "litery": "1 → 2, 3, 4...",
+          "dzwiek": { "ru": "один → много", "ua": "один → багато" },
+          "opis": {
+            "ru": "Liczba pojedyncza - один предмет: telefon. Liczba mnoga - много: telefony. Во множественном числе говорим te: te telefony (о мальчиках и мужчинах - ci: ci chłopcy).",
+            "ua": "Liczba pojedyncza - один предмет: telefon. Liczba mnoga - багато: telefony. У множині кажемо te: te telefony (про хлопців і чоловіків - ci: ci chłopcy)."
+          },
+          "przyklady": ["liczba pojedyncza", "ten telefon", "liczba mnoga", "te telefony"]
+        },
+        {
+          "litery": "jaki?  jaka?  jakie?",
+          "dzwiek": { "ru": "какой?  какая?  какое?", "ua": "який?  яка?  яке?" },
+          "opis": {
+            "ru": "Przymiotnik берёт rodzaj от rzeczownik: ten telefon jest nowy, ta torba jest ciężka, to radio jest głośne.",
+            "ua": "Przymiotnik бере rodzaj від rzeczownik: ten telefon jest nowy, ta torba jest ciężka, to radio jest głośne."
+          },
+          "przyklady": ["Ten telefon jest nowy.", "Ta torba jest ciężka.", "To radio jest głośne."]
+        }
+      ],
+      "slowa": [
+        { "pl": "rodzaj męski", "e": "👨", "ru": "мужской род", "ua": "чоловічий рід" },
+        { "pl": "rodzaj żeński", "e": "👩", "ru": "женский род", "ua": "жіночий рід" },
+        { "pl": "rodzaj nijaki", "e": "👶", "ru": "средний род", "ua": "середній рід" },
+        { "pl": "liczba pojedyncza", "e": "☝️", "ru": "единственное число", "ua": "однина" },
+        { "pl": "liczba mnoga", "e": "🖐️", "ru": "множественное число", "ua": "множина" },
+        { "pl": "ten telefon", "e": "📱", "ru": "этот телефон", "ua": "цей телефон" },
+        { "pl": "ta torba", "e": "👜", "ru": "эта сумка", "ua": "ця сумка" },
+        { "pl": "to radio", "e": "📻", "ru": "это радио", "ua": "це радіо" },
+        { "pl": "te telefony", "e": "📱📱", "ru": "эти телефоны", "ua": "ці телефони" }
+      ],
+      "zdania": [
+        { "pl": "Ten telefon jest nowy.", "e": "📱", "ru": "Этот телефон новый.", "ua": "Цей телефон новий." },
+        { "pl": "Ta torba jest ciężka.", "e": "👜", "ru": "Эта сумка тяжёлая.", "ua": "Ця сумка важка." },
+        { "pl": "To radio jest głośne.", "e": "📻", "ru": "Это радио громкое.", "ua": "Це радіо гучне." },
+        { "pl": "Te telefony są stare.", "e": "📱", "ru": "Эти телефоны старые.", "ua": "Ці телефони старі." },
+        { "pl": "Radio ma rodzaj nijaki.", "e": "👶", "ru": "У слова «радио» средний род.", "ua": "Слово «радіо» має середній рід." }
+      ],
+      "zeszyt": ["ten telefon - rodzaj męski", "ta torba - rodzaj żeński", "to radio - rodzaj nijaki", "liczba pojedyncza: telefon - liczba mnoga: telefony", "Ta torba jest ciężka."]
+    },
+    {
+      "nr": 107,
+      "tytul": { "pl": "Zdanie: kto? co robi?", "ru": "Предложение: кто? что делает?", "ua": "Речення: хто? що робить?" },
+      "cel": { "ru": "Ты научишься строить короткое zdanie и находить в нём podmiot и orzeczenie.", "ua": "Ти навчишся складати коротке zdanie і знаходити в ньому podmiot і orzeczenie." },
+      "zasady": [
+        {
+          "litery": "kto? co? → podmiot",
+          "dzwiek": { "ru": "подлежащее", "ua": "підмет" },
+          "opis": {
+            "ru": "Podmiot - подлежащее. Обычно это rzeczownik, он отвечает на вопрос kto? co?: Ptak śpiewa. Kto śpiewa? Ptak.",
+            "ua": "Podmiot - підмет. Зазвичай це rzeczownik, він відповідає на питання kto? co?: Ptak śpiewa. Kto śpiewa? Ptak."
+          },
+          "przyklady": ["podmiot", "ptak", "Ptak śpiewa."]
+        },
+        {
+          "litery": "co robi? → orzeczenie",
+          "dzwiek": { "ru": "сказуемое", "ua": "присудок" },
+          "opis": {
+            "ru": "Orzeczenie - сказуемое. Обычно это czasownik, он отвечает на вопрос co robi?: Budzik dzwoni. Co robi budzik? Dzwoni.",
+            "ua": "Orzeczenie - присудок. Зазвичай це czasownik, він відповідає на питання co robi?: Budzik dzwoni. Co robi budzik? Dzwoni."
+          },
+          "przyklady": ["orzeczenie", "dzwoni", "Budzik dzwoni."]
+        },
+        {
+          "litery": "Deszcz | pada.",
+          "dzwiek": { "ru": "два слова", "ua": "два слова" },
+          "opis": {
+            "ru": "Zdanie состоит из слов (wyraz). Уже два слова - podmiot и orzeczenie - это zdanie. В начале большая буква, в конце точка.",
+            "ua": "Zdanie складається зі слів (wyraz). Уже два слова - podmiot і orzeczenie - це zdanie. На початку велика літера, у кінці крапка."
+          },
+          "przyklady": ["zdanie", "wyraz", "Deszcz pada."]
+        }
+      ],
+      "slowa": [
+        { "pl": "zdanie", "e": "📝", "ru": "предложение", "ua": "речення" },
+        { "pl": "wyraz", "e": "🔤", "ru": "слово", "ua": "слово" },
+        { "pl": "podmiot", "e": "👤", "ru": "подлежащее", "ua": "підмет" },
+        { "pl": "orzeczenie", "e": "⚡", "ru": "сказуемое", "ua": "присудок" },
+        { "pl": "ptak", "lektor": "Ptak!", "e": "🐦", "ru": "птица", "ua": "птах" },
+        { "pl": "budzik", "e": "⏰", "ru": "будильник", "ua": "будильник" },
+        { "pl": "dzwoni", "e": "🔔", "ru": "звонит", "ua": "дзвонить" },
+        { "pl": "deszcz", "lektor": "Deszcz!", "e": "🌧️", "ru": "дождь", "ua": "дощ" }
+      ],
+      "zdania": [
+        { "pl": "Ptak śpiewa.", "e": "🐦", "ru": "Птица поёт.", "ua": "Птах співає." },
+        { "pl": "Budzik dzwoni.", "e": "⏰", "ru": "Будильник звонит.", "ua": "Будильник дзвонить." },
+        { "pl": "Deszcz pada.", "e": "🌧️", "ru": "Дождь идёт.", "ua": "Дощ іде." },
+        { "pl": "Ola czyta książkę.", "e": "📖", "ru": "Оля читает книгу.", "ua": "Оля читає книжку." },
+        { "pl": "Zdanie ma podmiot i orzeczenie.", "e": "📝", "ru": "В предложении есть подлежащее и сказуемое.", "ua": "У реченні є підмет і присудок." }
+      ],
+      "zeszyt": ["zdanie, wyraz", "podmiot - kto? co?", "orzeczenie - co robi?", "Ptak śpiewa. Budzik dzwoni.", "Ola czyta książkę."]
+    },
+    {
+      "nr": 108,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: części mowy", "ru": "Проверь себя: части речи", "ua": "Перевір себе: частини мови" },
+      "cel": { "ru": "Повтори всё из раздела 18 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 18 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Jestem ... (jaki? jaka?).", "W plecaku mam ... (co?).", "Po szkole ... (co robię?).", "Mój pokój jest ... (jaki?)."]
+    }
+  ]
+}

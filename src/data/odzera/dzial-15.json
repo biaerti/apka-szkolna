@@ -1,0 +1,254 @@
+{
+  "nr": 15,
+  "tytul": { "pl": "Godziny i zakupy", "ru": "Время и покупки", "ua": "Час і покупки" },
+  "e": "🛒",
+  "kolor": "#e26a2c",
+  "lekcje": [
+    {
+      "nr": 85,
+      "tytul": { "pl": "Która godzina?", "ru": "Который час?", "ua": "Котра година?" },
+      "cel": { "ru": "Ты научишься спрашивать, который час, и отвечать: Jest ósma.", "ua": "Ти навчишся питати, котра година, і відповідати: Jest ósma." },
+      "zasady": [
+        {
+          "litery": "godzina → pierwsza, druga, ósma",
+          "dzwiek": { "ru": "первая, вторая, восьмая", "ua": "перша, друга, восьма" },
+          "opis": {
+            "ru": "Godzina (час) по-польски - «она». Поэтому номер часа кончается на -a: pierwsza, druga, ósma.",
+            "ua": "Godzina - «вона», як і в українській. Тому номер години закінчується на -a: pierwsza (перша), druga (друга), ósma (восьма)."
+          },
+          "przyklady": ["pierwsza", "druga", "ósma"]
+        },
+        {
+          "litery": "Która godzina? Jest ósma.",
+          "dzwiek": { "ru": "Который час? Восемь.", "ua": "Котра година? Восьма." },
+          "opis": {
+            "ru": "Отвечаем коротко: Jest + номер часа. Слово godzina можно не говорить.",
+            "ua": "Відповідаємо коротко: Jest + номер години. Слово godzina можна не казати."
+          },
+          "przyklady": ["Która godzina?", "Która godzina? Jest ósma."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Która godzina?", "e": "🕰️❓", "ru": "Который час?", "ua": "Котра година?" },
+        { "pl": "pierwsza", "e": "🕐", "ru": "первая - час (1:00)", "ua": "перша (1:00)" },
+        { "pl": "druga", "e": "🕑", "ru": "вторая - два часа (2:00)", "ua": "друга (2:00)" },
+        { "pl": "trzecia", "e": "🕒", "ru": "третья - три часа (3:00)", "ua": "третя (3:00)" },
+        { "pl": "czwarta", "e": "🕓", "ru": "четвёртая - четыре часа (4:00)", "ua": "четверта (4:00)" },
+        { "pl": "piąta", "e": "🕔", "ru": "пятая - пять часов (5:00)", "ua": "п'ята (5:00)" },
+        { "pl": "szósta", "e": "🕕", "ru": "шестая - шесть часов (6:00)", "ua": "шоста (6:00)" },
+        { "pl": "siódma", "e": "🕖", "ru": "седьмая - семь часов (7:00)", "ua": "сьома (7:00)" },
+        { "pl": "ósma", "e": "🕗", "ru": "восьмая - восемь часов (8:00)", "ua": "восьма (8:00)" }
+      ],
+      "zdania": [
+        { "pl": "Która godzina? Jest ósma.", "e": "🕗", "ru": "Который час? Восемь часов.", "ua": "Котра година? Восьма." },
+        { "pl": "Jest dziewiąta. Idę do szkoły.", "e": "🕘", "ru": "Девять часов. Я иду в школу.", "ua": "Дев'ята. Я йду до школи." },
+        { "pl": "Jest dziesiąta. Teraz jest przerwa.", "e": "🕙", "ru": "Десять часов. Сейчас перемена.", "ua": "Десята. Зараз перерва." },
+        { "pl": "Jest jedenasta. Mam matematykę.", "e": "🕚", "ru": "Одиннадцать часов. У меня математика.", "ua": "Одинадцята. У мене математика." },
+        { "pl": "Jest dwunasta. Idę na obiad.", "e": "🕛", "ru": "Двенадцать часов. Я иду обедать.", "ua": "Дванадцята. Я йду на обід." }
+      ],
+      "zeszyt": ["Która godzina?", "pierwsza, druga, trzecia, czwarta", "piąta, szósta, siódma, ósma", "dziewiąta, dziesiąta, jedenasta, dwunasta", "Która godzina? Jest ósma."]
+    },
+    {
+      "nr": 86,
+      "tytul": { "pl": "O której? Wpół do, kwadrans", "ru": "Во сколько? Половина и четверть", "ua": "О котрій? Половина і чверть" },
+      "cel": { "ru": "Ты научишься говорить, во сколько что-то бывает: o ósmej, wpół do dziewiątej, za kwadrans.", "ua": "Ти навчишся казати, о котрій щось буває: o ósmej, wpół do dziewiątej, za kwadrans." },
+      "zasady": [
+        {
+          "litery": "o + -ej: o ósmej, o pierwszej",
+          "dzwiek": { "ru": "в восемь, в час", "ua": "о восьмій, о першій" },
+          "opis": {
+            "ru": "На вопрос O której? (во сколько?) говорим o + номер часа на -ej: ósma → o ósmej.",
+            "ua": "На питання O której? (о котрій?) кажемо o + номер години на -ej: ósma → o ósmej. Як у нас: о восьмій."
+          },
+          "przyklady": ["O której?", "o ósmej", "o pierwszej"]
+        },
+        {
+          "litery": "8:30 wpół do dziewiątej   8:15 kwadrans po ósmej   8:45 za kwadrans dziewiąta",
+          "dzwiek": { "ru": "половина девятого, четверть девятого, без четверти девять", "ua": "пів на дев'яту, чверть на дев'яту, за чверть дев'ята" },
+          "opis": {
+            "ru": "Wpół do dziewiątej - это 8:30, как «половина девятого». Kwadrans - 15 минут: po - после, za - без.",
+            "ua": "Wpół do dziewiątej - це 8:30, як «пів на дев'яту». Kwadrans - 15 хвилин: po - після, za - за."
+          },
+          "przyklady": ["wpół do dziewiątej", "kwadrans", "kwadrans po ósmej", "za kwadrans dziewiąta"]
+        }
+      ],
+      "slowa": [
+        { "pl": "O której?", "e": "⏰❓", "ru": "Во сколько?", "ua": "О котрій?" },
+        { "pl": "o ósmej", "lektor": "O ósmej.", "e": "🕗", "ru": "в восемь (8:00)", "ua": "о восьмій (8:00)" },
+        { "pl": "o pierwszej", "e": "🕐", "ru": "в час (13:00)", "ua": "о першій (13:00)" },
+        { "pl": "wpół do dziewiątej", "e": "🕣", "ru": "половина девятого (8:30)", "ua": "пів на дев'яту (8:30)" },
+        { "pl": "kwadrans", "e": "⏱️", "ru": "четверть часа (15 минут)", "ua": "чверть години (15 хвилин)" },
+        { "pl": "kwadrans po ósmej", "e": "🕗➕", "ru": "четверть девятого (8:15)", "ua": "чверть на дев'яту (8:15)" },
+        { "pl": "za kwadrans dziewiąta", "e": "🕘➖", "ru": "без четверти девять (8:45)", "ua": "за чверть дев'ята (8:45)" },
+        { "pl": "zaczynam", "e": "▶️", "ru": "начинаю", "ua": "починаю" },
+        { "pl": "kończę", "e": "🏁", "ru": "заканчиваю", "ua": "закінчую" }
+      ],
+      "zdania": [
+        { "pl": "O ósmej zaczynam lekcje.", "e": "🏫", "ru": "В восемь я начинаю уроки.", "ua": "О восьмій я починаю уроки." },
+        { "pl": "O której kończysz lekcje?", "e": "❓", "ru": "Во сколько ты заканчиваешь уроки?", "ua": "О котрій ти закінчуєш уроки?" },
+        { "pl": "Kończę lekcje o pierwszej.", "e": "🎒", "ru": "Я заканчиваю уроки в час.", "ua": "Я закінчую уроки о першій." },
+        { "pl": "Wstaję za kwadrans siódma.", "e": "🛏️", "ru": "Я встаю без четверти семь.", "ua": "Я встаю за чверть сьома." },
+        { "pl": "O wpół do trzeciej jem obiad.", "e": "🍲", "ru": "В половине третьего я обедаю.", "ua": "О пів на третю я обідаю." }
+      ],
+      "zeszyt": ["O której? - o ósmej, o pierwszej", "8:30 - wpół do dziewiątej", "8:15 - kwadrans po ósmej", "8:45 - za kwadrans dziewiąta", "O ósmej zaczynam lekcje."]
+    },
+    {
+      "nr": 87,
+      "tytul": { "pl": "Złoty i grosz", "ru": "Злотый и грош", "ua": "Злотий і грош" },
+      "cel": { "ru": "Ты научишься считать польские деньги: złote i grosze.", "ua": "Ти навчишся рахувати польські гроші: złote i grosze." },
+      "zasady": [
+        {
+          "litery": "1 grosz   2-4 grosze   5+ groszy",
+          "dzwiek": { "ru": "грош, гроша, грошей", "ua": "грош, гроші, грошів" },
+          "opis": {
+            "ru": "Как с котами: jeden grosz, dwa grosze, pięć groszy. В злотом сто грошей.",
+            "ua": "Як з котами: jeden grosz, dwa grosze, pięć groszy. У злотому сто грошів."
+          },
+          "przyklady": ["grosz", "dwa grosze", "pięć groszy"]
+        },
+        {
+          "litery": "1 złoty   2-4 złote   5+ złotych",
+          "dzwiek": { "ru": "злотый, злотых", "ua": "злотий, злотих" },
+          "opis": {
+            "ru": "Так же со злотыми: jeden złoty, trzy złote, dziesięć złotych.",
+            "ua": "Так само зі злотими: jeden złoty, trzy złote, dziesięć złotych."
+          },
+          "przyklady": ["jeden złoty", "trzy złote", "dziesięć złotych"]
+        },
+        {
+          "litery": "zł = złoty   gr = grosz   1,20 zł",
+          "dzwiek": { "ru": "злотый, грош", "ua": "злотий, грош" },
+          "opis": {
+            "ru": "На ценнике пишут коротко: zł и gr. Цену 1,20 zł читаем: jeden złoty dwadzieścia groszy.",
+            "ua": "На ціннику пишуть коротко: zł і gr. Ціну 1,20 zł читаємо: jeden złoty dwadzieścia groszy."
+          },
+          "przyklady": ["Bułka kosztuje jeden złoty dwadzieścia groszy."]
+        }
+      ],
+      "slowa": [
+        { "pl": "grosz", "lektor": "Grosz!", "e": "🟤", "ru": "грош (как копейка)", "ua": "грош (як копійка)" },
+        { "pl": "dwa grosze", "e": "2️⃣🟤", "ru": "два гроша", "ua": "два гроші" },
+        { "pl": "pięć groszy", "e": "5️⃣🟤", "ru": "пять грошей", "ua": "п'ять грошів" },
+        { "pl": "pięćdziesiąt groszy", "e": "5️⃣0️⃣🟤", "ru": "пятьдесят грошей", "ua": "п'ятдесят грошів" },
+        { "pl": "trzy złote", "e": "3️⃣🪙", "ru": "три злотых", "ua": "три злотих" },
+        { "pl": "dziesięć złotych", "e": "🔟💵", "ru": "десять злотых", "ua": "десять злотих" },
+        { "pl": "dwadzieścia złotych", "e": "2️⃣0️⃣💵", "ru": "двадцать злотых", "ua": "двадцять злотих" },
+        { "pl": "banknot", "e": "💵", "ru": "банкнота, купюра", "ua": "банкнота, купюра" },
+        { "pl": "portfel", "e": "👛", "ru": "кошелёк", "ua": "гаманець" }
+      ],
+      "zdania": [
+        { "pl": "Mam w portfelu dziesięć złotych.", "e": "👛", "ru": "У меня в кошельке десять злотых.", "ua": "У мене в гаманці десять злотих." },
+        { "pl": "Lizak kosztuje pięćdziesiąt groszy.", "e": "🍭", "ru": "Леденец стоит пятьдесят грошей.", "ua": "Льодяник коштує п'ятдесят грошів." },
+        { "pl": "Bułka kosztuje jeden złoty dwadzieścia groszy.", "e": "🥯", "ru": "Булочка стоит один злотый двадцать грошей.", "ua": "Булочка коштує один злотий двадцять грошів." },
+        { "pl": "Zeszyt kosztuje trzy złote.", "e": "📒", "ru": "Тетрадь стоит три злотых.", "ua": "Зошит коштує три злотих." },
+        { "pl": "Mam tylko dwa grosze.", "e": "🟤", "ru": "У меня только два гроша.", "ua": "У мене тільки два гроші." }
+      ],
+      "zeszyt": ["grosz, dwa grosze, pięć groszy", "jeden złoty, trzy złote, dziesięć złotych", "banknot, portfel", "zł = złoty, gr = grosz", "Zeszyt kosztuje trzy złote."]
+    },
+    {
+      "nr": 88,
+      "tytul": { "pl": "W sklepie", "ru": "В магазине", "ua": "У магазині" },
+      "cel": { "ru": "Ты научишься делать покупки: взять корзинку, заплатить на кассе и забрать сдачу.", "ua": "Ти навчишся робити покупки: взяти кошик, заплатити на касі і забрати решту." },
+      "zasady": [
+        {
+          "litery": "w sklepie   do sklepu",
+          "dzwiek": { "ru": "в магазине, в магазин", "ua": "у магазині, до магазину" },
+          "opis": {
+            "ru": "Где? - w sklepie. Куда? - do sklepu: idę do sklepu.",
+            "ua": "Де? - w sklepie. Куди? - do sklepu: idę do sklepu."
+          },
+          "przyklady": ["sklep spożywczy", "Biorę koszyk i idę do sklepu."]
+        },
+        {
+          "litery": "-ą: kartą, gotówką",
+          "dzwiek": { "ru": "-ой: картой", "ua": "-ою: карткою" },
+          "opis": {
+            "ru": "Чем платишь? Окончание -ą: płacę kartą (картой), gotówką (наличными).",
+            "ua": "Чим платиш? Закінчення -ą: płacę kartą (карткою), gotówką (готівкою)."
+          },
+          "przyklady": ["płacę kartą", "Gotówką czy kartą? Kartą, proszę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "sklep spożywczy", "e": "🏪🥖", "ru": "продуктовый магазин", "ua": "продуктовий магазин" },
+        { "pl": "koszyk", "e": "🧺", "ru": "корзинка", "ua": "кошик" },
+        { "pl": "wózek", "e": "🛒", "ru": "тележка", "ua": "візок" },
+        { "pl": "kasa", "e": "💰", "ru": "касса", "ua": "каса" },
+        { "pl": "kasjerka", "e": "👩‍💼", "ru": "кассирша", "ua": "касирка" },
+        { "pl": "cena", "e": "💲🏷️", "ru": "цена", "ua": "ціна" },
+        { "pl": "paragon", "e": "🧾", "ru": "чек", "ua": "чек" },
+        { "pl": "reszta", "e": "🪙↩️", "ru": "сдача", "ua": "решта" },
+        { "pl": "płacę kartą", "e": "💳", "ru": "плачу картой", "ua": "плачу карткою" }
+      ],
+      "zdania": [
+        { "pl": "Biorę koszyk i idę do sklepu.", "e": "🧺", "ru": "Я беру корзинку и иду в магазин.", "ua": "Я беру кошик і йду до магазину." },
+        { "pl": "Ile płacę? Osiem złotych.", "e": "💰", "ru": "Сколько с меня? Восемь злотых.", "ua": "Скільки я плачу? Вісім злотих." },
+        { "pl": "Gotówką czy kartą? Kartą, proszę.", "e": "💳", "ru": "Наличными или картой? Картой, пожалуйста.", "ua": "Готівкою чи карткою? Карткою, будь ласка." },
+        { "pl": "Proszę, tu jest reszta.", "e": "🪙", "ru": "Пожалуйста, вот сдача.", "ua": "Прошу, ось решта." },
+        { "pl": "Poproszę paragon.", "e": "🧾", "ru": "Дайте, пожалуйста, чек.", "ua": "Дайте, будь ласка, чек." }
+      ],
+      "zeszyt": ["sklep spożywczy, koszyk, wózek", "kasa, kasjerka, cena, paragon, reszta", "w sklepie - do sklepu", "Biorę koszyk i idę do sklepu.", "Gotówką czy kartą? Kartą, proszę."]
+    },
+    {
+      "nr": 89,
+      "tytul": { "pl": "Lista zakupów", "ru": "Список покупок", "ua": "Список покупок" },
+      "cel": { "ru": "Ты научишься писать список покупок: butelka wody, paczka herbaty, kilogram jabłek.", "ua": "Ти навчишся писати список покупок: butelka wody, paczka herbaty, kilogram jabłek." },
+      "zasady": [
+        {
+          "litery": "woda → butelka wody",
+          "dzwiek": { "ru": "бутылка воды", "ua": "пляшка води" },
+          "opis": {
+            "ru": "После butelka, paczka, kilogram слово меняет окончание, как в русском: woda → wody, herbata → herbaty, chleb → chleba.",
+            "ua": "Після butelka, paczka, kilogram слово змінює закінчення, як в українській: woda → wody, herbata → herbaty, chleb → chleba."
+          },
+          "przyklady": ["butelka wody", "paczka herbaty", "bochenek chleba"]
+        },
+        {
+          "litery": "-o → -a: masło → masła",
+          "dzwiek": { "ru": "масло → масла", "ua": "масло → масла" },
+          "opis": {
+            "ru": "Слова на -o меняют -o на -a: masło → kostka masła, mleko → karton mleka.",
+            "ua": "Слова на -o змінюють -o на -a: masło → kostka masła, mleko → karton mleka."
+          },
+          "przyklady": ["kostka masła", "karton mleka"]
+        },
+        {
+          "litery": "nie ma + -a / -y",
+          "dzwiek": { "ru": "нет хлеба", "ua": "немає хліба" },
+          "opis": {
+            "ru": "После nie ma тоже другое окончание: jest chleb, ale nie ma chleba.",
+            "ua": "Після nie ma теж інше закінчення: jest chleb, ale nie ma chleba."
+          },
+          "przyklady": ["Czy jest chleb? Nie ma chleba."]
+        }
+      ],
+      "slowa": [
+        { "pl": "lista zakupów", "e": "📝", "ru": "список покупок", "ua": "список покупок" },
+        { "pl": "butelka wody", "e": "🍶💧", "ru": "бутылка воды", "ua": "пляшка води" },
+        { "pl": "paczka herbaty", "e": "📦🍵", "ru": "пачка чая", "ua": "пачка чаю" },
+        { "pl": "kilogram jabłek", "e": "⚖️🍎", "ru": "килограмм яблок", "ua": "кілограм яблук" },
+        { "pl": "bochenek chleba", "e": "🍞", "ru": "буханка хлеба", "ua": "буханка хліба" },
+        { "pl": "kostka masła", "e": "🧈", "ru": "брусок (пачка) масла", "ua": "брусок (пачка) масла" },
+        { "pl": "puszka kukurydzy", "e": "🥫🌽", "ru": "банка кукурузы", "ua": "банка кукурудзи" },
+        { "pl": "karton mleka", "e": "🥛📦", "ru": "пакет молока", "ua": "пакет молока" },
+        { "pl": "dziesięć jajek", "e": "🔟🥚", "ru": "десять яиц", "ua": "десять яєць" }
+      ],
+      "zdania": [
+        { "pl": "Mama pisze listę zakupów.", "e": "📝", "ru": "Мама пишет список покупок.", "ua": "Мама пише список покупок." },
+        { "pl": "Tata kupuje kilogram jabłek.", "e": "🍎", "ru": "Папа покупает килограмм яблок.", "ua": "Тато купує кілограм яблук." },
+        { "pl": "Poproszę dwie butelki wody.", "e": "💧", "ru": "Дайте, пожалуйста, две бутылки воды.", "ua": "Дайте, будь ласка, дві пляшки води." },
+        { "pl": "W koszyku jest karton mleka.", "e": "🧺", "ru": "В корзинке пакет молока.", "ua": "У кошику пакет молока." },
+        { "pl": "Czy jest chleb? Nie ma chleba.", "e": "🍞", "ru": "Есть хлеб? Хлеба нет.", "ua": "Є хліб? Хліба немає." }
+      ],
+      "zeszyt": ["lista zakupów", "butelka wody, paczka herbaty, kilogram jabłek", "bochenek chleba, kostka masła, karton mleka", "woda - butelka wody, masło - kostka masła", "Czy jest chleb? Nie ma chleba."]
+    },
+    {
+      "nr": 90,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: godziny i zakupy", "ru": "Проверь себя: время и покупки", "ua": "Перевір себе: час і покупки" },
+      "cel": { "ru": "Повтори всё из раздела 15 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 15 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Wstaję o ...", "Lekcje zaczynam o ... i kończę o ...", "Na mojej liście zakupów jest ...", "W sklepie płacę ... (kartą, gotówką)."]
+    }
+  ]
+}

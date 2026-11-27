@@ -1,0 +1,277 @@
+{
+  "nr": 19,
+  "tytul": { "pl": "Przypadki - prosto", "ru": "Падежи - просто", "ua": "Відмінки - просто" },
+  "e": "🔤",
+  "kolor": "#5662c9",
+  "lekcje": [
+    {
+      "nr": 109,
+      "tytul": { "pl": "Nie ma... (kogo? czego?)", "ru": "Нет... (кого? чего?)", "ua": "Немає... (кого? чого?)" },
+      "cel": { "ru": "Ты научишься говорить, кого или чего нет: nie ma mamy, nie ma chleba.", "ua": "Ти навчишся казати, кого чи чого немає: nie ma mamy, nie ma chleba." },
+      "zasady": [
+        {
+          "litery": "Dopełniacz: kogo? czego?",
+          "dzwiek": { "ru": "родительный падеж: кого? чего?", "ua": "родовий відмінок: кого? чого?" },
+          "opis": {
+            "ru": "Как в русском: нет кого? чего? После nie ma слово меняется: mama - nie ma mamy (нет мамы).",
+            "ua": "Як в українській: немає кого? чого? Після nie ma слово змінюється: mama - nie ma mamy (немає мами)."
+          },
+          "przyklady": ["nie ma mamy", "nie ma chleba"]
+        },
+        {
+          "litery": "-a → -y  -i",
+          "dzwiek": { "ru": "-а → -ы  -и", "ua": "-а → -и  -і" },
+          "opis": {
+            "ru": "Слова на -a: вместо -a пишем -y (mamy, wody). После k и g пишем -i: kredki, kolegi.",
+            "ua": "Слова на -a: замість -a пишемо -y (mamy, wody), звучить як українське и. Після k і g пишемо -i: kredki, kolegi."
+          },
+          "przyklady": ["nie ma mamy", "nie ma taty", "nie ma wody", "nie ma kredki", "nie ma kolegi"]
+        },
+        {
+          "litery": "kot → kota   sok → soku",
+          "dzwiek": { "ru": "-а  -у", "ua": "-а  -у" },
+          "opis": {
+            "ru": "Слова-«он» без -a на конце получают -a или -u: nie ma kota, nie ma soku. Это запоминаем вместе со словом.",
+            "ua": "Слова-«він» без -a в кінці отримують -a або -u: nie ma kota, nie ma soku. Це запам'ятовуємо разом зі словом."
+          },
+          "przyklady": ["nie ma kota", "nie ma chleba", "nie ma soku", "nie ma czasu"]
+        }
+      ],
+      "slowa": [
+        { "pl": "nie ma mamy", "e": "👩❌", "ru": "нет мамы", "ua": "немає мами" },
+        { "pl": "nie ma taty", "e": "👨❌", "ru": "нет папы", "ua": "немає тата" },
+        { "pl": "nie ma kolegi", "e": "🧒❌", "ru": "нет друга", "ua": "немає друга" },
+        { "pl": "nie ma kredki", "e": "🖍️❌", "ru": "нет цветного карандаша", "ua": "немає кольорового олівця" },
+        { "pl": "nie ma wody", "e": "💧❌", "ru": "нет воды", "ua": "немає води" },
+        { "pl": "nie ma kota", "e": "🐈❌", "ru": "нет кота", "ua": "немає кота" },
+        { "pl": "nie ma chleba", "e": "🍞❌", "ru": "нет хлеба", "ua": "немає хліба" },
+        { "pl": "nie ma soku", "e": "🧃❌", "ru": "нет сока", "ua": "немає соку" },
+        { "pl": "nie ma czasu", "e": "⏰❌", "ru": "нет времени", "ua": "немає часу" }
+      ],
+      "zdania": [
+        { "pl": "Kogo nie ma? Nie ma Kuby.", "e": "🙋", "ru": "Кого нет? Нет Кубы.", "ua": "Кого немає? Немає Куби." },
+        { "pl": "Mamy nie ma w domu.", "e": "🏠", "ru": "Мамы нет дома.", "ua": "Мами немає вдома." },
+        { "pl": "W lodówce nie ma mleka.", "e": "🥛", "ru": "В холодильнике нет молока.", "ua": "У холодильнику немає молока." },
+        { "pl": "Przepraszam, nie mam kredki.", "lektor": "Przepraszam... nie mam kredki.", "e": "🖍️", "ru": "Извините, у меня нет цветного карандаша.", "ua": "Вибачте, у мене немає кольорового олівця." },
+        { "pl": "Na boisku nie ma piłki.", "e": "⚽", "ru": "На стадионе нет мяча.", "ua": "На майданчику немає м'яча." }
+      ],
+      "zeszyt": ["Dopełniacz: kogo? czego? (nie ma)", "mama - nie ma mamy, kredka - nie ma kredki", "kot - nie ma kota, sok - nie ma soku", "Kogo nie ma? Nie ma Kuby.", "W lodówce nie ma mleka."]
+    },
+    {
+      "nr": 110,
+      "tytul": { "pl": "Daję... (komu? czemu?)", "ru": "Даю... (кому? чему?)", "ua": "Даю... (кому? чому?)" },
+      "cel": { "ru": "Ты научишься говорить, кому ты что-то даёшь: daję mamie, daję bratu.", "ua": "Ти навчишся казати, кому ти щось даєш: daję mamie, daję bratu." },
+      "zasady": [
+        {
+          "litery": "Celownik: komu? czemu?",
+          "dzwiek": { "ru": "дательный падеж: кому? чему?", "ua": "давальний відмінок: кому? чому?" },
+          "opis": {
+            "ru": "Как в русском: даю кому? - маме, брату. По-польски: daję mamie, daję bratu.",
+            "ua": "Як в українській: даю кому? - мамі, братові. По-польськи: daję mamie, daję bratu."
+          },
+          "przyklady": ["daję mamie", "daję bratu"]
+        },
+        {
+          "litery": "on: -owi  (-u)",
+          "dzwiek": { "ru": "-ови  (-у)", "ua": "-ові  (-у)" },
+          "opis": {
+            "ru": "Слова-«он» обычно получают -owi: dziadkowi, wujkowi. Короткие слова - -u, как в русском: bratu, psu.",
+            "ua": "Слова-«він» зазвичай отримують -owi, як українське -ові: dziadkowi, wujkowi. Короткі слова - -u: bratu, psu."
+          },
+          "przyklady": ["daję dziadkowi", "daję wujkowi", "daję bratu", "daję psu"]
+        },
+        {
+          "litery": "-a → -e  -i",
+          "dzwiek": { "ru": "-а → -е  -и", "ua": "-а → -е  -і" },
+          "opis": {
+            "ru": "Слова на -a получают -e: mamie, siostrze, tacie (буква перед -e может измениться). Слова на -ia - -i: babci.",
+            "ua": "Слова на -a отримують -e: mamie, siostrze, tacie (буква перед -e може змінитися). Слова на -ia - -i: babci."
+          },
+          "przyklady": ["daję mamie", "daję siostrze", "daję tacie", "daję babci"]
+        }
+      ],
+      "slowa": [
+        { "pl": "daję mamie", "e": "🎁👩", "ru": "даю маме", "ua": "даю мамі" },
+        { "pl": "daję tacie", "e": "🎁👨", "ru": "даю папе", "ua": "даю татові" },
+        { "pl": "daję siostrze", "e": "🎁👧", "ru": "даю сестре", "ua": "даю сестрі" },
+        { "pl": "daję bratu", "e": "🎁👦", "ru": "даю брату", "ua": "даю братові" },
+        { "pl": "daję babci", "e": "🎁👵", "ru": "даю бабушке", "ua": "даю бабусі" },
+        { "pl": "daję dziadkowi", "e": "🎁👴", "ru": "даю дедушке", "ua": "даю дідусеві" },
+        { "pl": "daję wujkowi", "e": "🎁🧔", "ru": "даю дяде", "ua": "даю дядькові" },
+        { "pl": "daję psu", "e": "🦴🐕", "ru": "даю собаке", "ua": "даю собаці" }
+      ],
+      "zdania": [
+        { "pl": "Daję mamie kwiaty.", "e": "💐", "ru": "Я дарю маме цветы.", "ua": "Я дарую мамі квіти." },
+        { "pl": "Komu dajesz prezent? Babci!", "e": "🎁", "ru": "Кому ты даришь подарок? Бабушке!", "ua": "Кому ти даруєш подарунок? Бабусі!" },
+        { "pl": "Daję psu kość.", "e": "🦴", "ru": "Я даю собаке кость.", "ua": "Я даю собаці кістку." },
+        { "pl": "Pomagam tacie w kuchni.", "e": "🍳", "ru": "Я помогаю папе на кухне.", "ua": "Я допомагаю татові на кухні." },
+        { "pl": "Kuba daje koledze piłkę.", "e": "⚽", "ru": "Куба даёт другу мяч.", "ua": "Куба дає другові м'яч." }
+      ],
+      "zeszyt": ["Celownik: komu? czemu? (daję)", "daję mamie, daję siostrze, daję babci", "daję bratu, daję dziadkowi, daję psu", "Daję mamie kwiaty.", "Komu dajesz prezent? Babci!"]
+    },
+    {
+      "nr": 111,
+      "tytul": { "pl": "Widzę... (kogo? co?)", "ru": "Вижу... (кого? что?)", "ua": "Бачу... (кого? що?)" },
+      "cel": { "ru": "Ты научишься говорить, кого или что ты видишь: widzę kota, widzę mamę.", "ua": "Ти навчишся казати, кого чи що ти бачиш: widzę kota, widzę mamę." },
+      "zasady": [
+        {
+          "litery": "Biernik: kogo? co?",
+          "dzwiek": { "ru": "винительный падеж: кого? что?", "ua": "знахідний відмінок: кого? що?" },
+          "opis": {
+            "ru": "Как в русском: вижу кого? что? Он идёт после widzę, mam, lubię, jem.",
+            "ua": "Як в українській: бачу кого? що? Він іде після widzę, mam, lubię, jem."
+          },
+          "przyklady": ["widzę mamę", "widzę kota"]
+        },
+        {
+          "litery": "-a → -ę",
+          "dzwiek": { "ru": "-у → -э", "ua": "-у → -е" },
+          "opis": {
+            "ru": "Где в русском -у (вижу маму), по-польски -ę: widzę mamę. На конце ę звучит как э.",
+            "ua": "Де в українській -у (бачу маму), по-польськи -ę: widzę mamę. У кінці ę звучить як е."
+          },
+          "przyklady": ["widzę mamę", "widzę babcię", "widzę piłkę"]
+        },
+        {
+          "litery": "kot → kota   autobus → autobus",
+          "dzwiek": { "ru": "-а  /  без изменений", "ua": "-а  /  без змін" },
+          "opis": {
+            "ru": "Живой «он» (человек, животное) получает -a: kota, psa, brata. Вещи не меняются: widzę autobus, widzę drzewo.",
+            "ua": "Живий «він» (людина, тварина) отримує -a: kota, psa, brata. Речі не змінюються: widzę autobus, widzę drzewo."
+          },
+          "przyklady": ["widzę kota", "widzę psa", "widzę brata", "widzę autobus", "widzę drzewo"]
+        }
+      ],
+      "slowa": [
+        { "pl": "widzę mamę", "e": "👀👩", "ru": "вижу маму", "ua": "бачу маму" },
+        { "pl": "widzę babcię", "e": "👀👵", "ru": "вижу бабушку", "ua": "бачу бабусю" },
+        { "pl": "widzę piłkę", "e": "👀⚽", "ru": "вижу мяч", "ua": "бачу м'яч" },
+        { "pl": "widzę kota", "e": "👀🐈", "ru": "вижу кота", "ua": "бачу кота" },
+        { "pl": "widzę psa", "e": "👀🐕", "ru": "вижу собаку", "ua": "бачу собаку" },
+        { "pl": "widzę brata", "e": "👀👦", "ru": "вижу брата", "ua": "бачу брата" },
+        { "pl": "widzę autobus", "e": "👀🚌", "ru": "вижу автобус", "ua": "бачу автобус" },
+        { "pl": "widzę drzewo", "e": "👀🌳", "ru": "вижу дерево", "ua": "бачу дерево" }
+      ],
+      "zdania": [
+        { "pl": "Widzę Olę na boisku.", "e": "👧", "ru": "Я вижу Олю на стадионе.", "ua": "Я бачу Олю на майданчику." },
+        { "pl": "Co widzisz? Widzę rzekę.", "e": "🏞️", "ru": "Что ты видишь? Я вижу реку.", "ua": "Що ти бачиш? Я бачу річку." },
+        { "pl": "Kuba ma psa i kota.", "e": "🐕", "ru": "У Кубы есть собака и кот.", "ua": "У Куби є собака і кіт." },
+        { "pl": "Lubię babcię i dziadka.", "e": "👵", "ru": "Я люблю бабушку и дедушку.", "ua": "Я люблю бабусю і дідуся." },
+        { "pl": "Na śniadanie jem kanapkę.", "e": "🥪", "ru": "На завтрак я ем бутерброд.", "ua": "На сніданок я їм бутерброд." }
+      ],
+      "zeszyt": ["Biernik: kogo? co? (widzę)", "mama - widzę mamę, piłka - widzę piłkę", "kot - widzę kota, pies - widzę psa", "autobus - widzę autobus", "Co widzisz? Widzę rzekę."]
+    },
+    {
+      "nr": 112,
+      "tytul": { "pl": "Z kim? z czym?", "ru": "С кем? с чем?", "ua": "З ким? з чим?" },
+      "cel": { "ru": "Ты научишься говорить, с кем ты и с чем: z tatą, z kolegą, z mlekiem.", "ua": "Ти навчишся казати, з ким ти і з чим: z tatą, z kolegą, z mlekiem." },
+      "zasady": [
+        {
+          "litery": "Narzędnik: z kim? z czym?",
+          "dzwiek": { "ru": "творительный падеж: с кем? с чем?", "ua": "орудний відмінок: з ким? з чим?" },
+          "opis": {
+            "ru": "Как в русском: с кем? с чем? Польское z - это русское «с»: z tatą = с папой.",
+            "ua": "Як в українській: з ким? з чим? Польське z - це українське «з»: z tatą = з татом."
+          },
+          "przyklady": ["z tatą", "z mlekiem"]
+        },
+        {
+          "litery": "-a → -ą",
+          "dzwiek": { "ru": "-ой → -он", "ua": "-ою → -он" },
+          "opis": {
+            "ru": "Где в русском -ой (с мамой), по-польски -ą: z siostrą, z babcią. Так же tata и kolega: z tatą, z kolegą.",
+            "ua": "Де в українській -ою (з мамою), по-польськи -ą: z siostrą, z babcią. Так само tata і kolega: z tatą, z kolegą."
+          },
+          "przyklady": ["z siostrą", "z babcią", "z tatą", "z kolegą", "z cytryną"]
+        },
+        {
+          "litery": "-em  (-iem)",
+          "dzwiek": { "ru": "-эм  (-ем)", "ua": "-ем  (-єм)" },
+          "opis": {
+            "ru": "Где в русском -ом (с братом), по-польски -em: z bratem, z psem. После k и g пишем -iem: z dziadkiem, z mlekiem.",
+            "ua": "Де в українській -ом (з братом), по-польськи -em: z bratem, z psem. Після k і g пишемо -iem: z dziadkiem, z mlekiem."
+          },
+          "przyklady": ["z bratem", "z psem", "z dziadkiem", "z mlekiem"]
+        }
+      ],
+      "slowa": [
+        { "pl": "z tatą", "e": "🤝👨", "ru": "с папой", "ua": "з татом" },
+        { "pl": "z siostrą", "e": "🤝👧", "ru": "с сестрой", "ua": "з сестрою" },
+        { "pl": "z babcią", "e": "🤝👵", "ru": "с бабушкой", "ua": "з бабусею" },
+        { "pl": "z kolegą", "e": "🤝🧒", "ru": "с другом", "ua": "з другом" },
+        { "pl": "z bratem", "e": "🤝👦", "ru": "с братом", "ua": "з братом" },
+        { "pl": "z dziadkiem", "e": "🤝👴", "ru": "с дедушкой", "ua": "з дідусем" },
+        { "pl": "z psem", "lektor": "Z psem!", "e": "🚶🐕", "ru": "с собакой", "ua": "з собакою" },
+        { "pl": "z mlekiem", "e": "☕🥛", "ru": "с молоком", "ua": "з молоком" },
+        { "pl": "z cytryną", "e": "🍵🍋", "ru": "с лимоном", "ua": "з лимоном" }
+      ],
+      "zdania": [
+        { "pl": "Gram w piłkę z tatą.", "e": "⚽", "ru": "Я играю в мяч с папой.", "ua": "Я граю в м'яч з татом." },
+        { "pl": "Jem bułkę z masłem.", "e": "🧈", "ru": "Я ем булочку с маслом.", "ua": "Я їм булочку з маслом." },
+        { "pl": "Z kim siedzisz w ławce? Z Olą.", "e": "👧", "ru": "С кем ты сидишь за партой? С Олей.", "ua": "З ким ти сидиш за партою? З Олею." },
+        { "pl": "Idę na spacer z psem.", "e": "🦮", "ru": "Я иду гулять с собакой.", "ua": "Я йду гуляти з собакою." }
+      ],
+      "zeszyt": ["Narzędnik: z kim? z czym? (idę z...)", "z tatą, z siostrą, z babcią, z kolegą", "z bratem, z psem, z dziadkiem, z mlekiem", "Gram w piłkę z tatą.", "Jem bułkę z masłem."]
+    },
+    {
+      "nr": 113,
+      "tytul": { "pl": "Gdzie? w szkole, na boisku (o kim? o czym?)", "ru": "Где? в школе, на стадионе (о ком? о чём?)", "ua": "Де? у школі, на майданчику (на кому? на чому?)" },
+      "cel": { "ru": "Ты научишься говорить, где ты и о ком говоришь: w szkole, na boisku, o babci.", "ua": "Ти навчишся казати, де ти і про кого говориш: w szkole, na boisku, o babci." },
+      "zasady": [
+        {
+          "litery": "Miejscownik: o kim? o czym?",
+          "dzwiek": { "ru": "предложный падеж: о ком? о чём? где?", "ua": "місцевий відмінок: на кому? на чому? де?" },
+          "opis": {
+            "ru": "Как русский предложный: где? - в школе, о ком? - о бабушке. Всегда с маленьким словом: w, na, o.",
+            "ua": "Як український місцевий: де? - у школі, на майданчику. Завжди з маленьким словом: w, na, o (o babci = про бабусю)."
+          },
+          "przyklady": ["w szkole", "na boisku", "o babci"]
+        },
+        {
+          "litery": "-e  (-ie)",
+          "dzwiek": { "ru": "-е", "ua": "-і" },
+          "opis": {
+            "ru": "Часто на конце -e или -ie: w szkole, w sklepie, w lesie, o mamie.",
+            "ua": "Часто в кінці -e або -ie: w szkole, w sklepie, w lesie, o mamie."
+          },
+          "przyklady": ["w szkole", "w sklepie", "w lesie", "o mamie"]
+        },
+        {
+          "litery": "-u   -i",
+          "dzwiek": { "ru": "-у  -и", "ua": "-у  -і" },
+          "opis": {
+            "ru": "После k и g - -u: na boisku, w parku. Слова на -ia и -nia - -i: o babci, w kuchni.",
+            "ua": "Після k і g - -u: na boisku, w parku. Слова на -ia і -nia - -i: o babci, w kuchni."
+          },
+          "przyklady": ["na boisku", "w parku", "we Wrocławiu", "o babci", "w kuchni"]
+        }
+      ],
+      "slowa": [
+        { "pl": "w szkole", "e": "🏫", "ru": "в школе", "ua": "у школі" },
+        { "pl": "w kuchni", "e": "🍳", "ru": "на кухне", "ua": "на кухні" },
+        { "pl": "na boisku", "e": "🥅", "ru": "на школьном стадионе", "ua": "на спортмайданчику" },
+        { "pl": "w parku", "e": "🏞️", "ru": "в парке", "ua": "у парку" },
+        { "pl": "w sklepie", "e": "🏪", "ru": "в магазине", "ua": "у магазині" },
+        { "pl": "w lesie", "e": "🌲", "ru": "в лесу", "ua": "у лісі" },
+        { "pl": "we Wrocławiu", "e": "🏙️", "ru": "во Вроцлаве", "ua": "у Вроцлаві" },
+        { "pl": "o babci", "e": "💬👵", "ru": "о бабушке", "ua": "про бабусю" },
+        { "pl": "o mamie", "lektor": "O mamie!", "e": "💬👩", "ru": "о маме", "ua": "про маму" }
+      ],
+      "zdania": [
+        { "pl": "Gdzie jesteś? Jestem w domu.", "e": "🏠", "ru": "Где ты? Я дома.", "ua": "Де ти? Я вдома." },
+        { "pl": "Moja ciocia mieszka we Wrocławiu.", "e": "🏙️", "ru": "Моя тётя живёт во Вроцлаве.", "ua": "Моя тітка живе у Вроцлаві." },
+        { "pl": "Tata pracuje w sklepie.", "e": "🏪", "ru": "Папа работает в магазине.", "ua": "Тато працює в магазині." },
+        { "pl": "Czytam bajkę o kocie.", "e": "📖", "ru": "Я читаю сказку о коте.", "ua": "Я читаю казку про кота." }
+      ],
+      "zeszyt": ["Miejscownik: o kim? o czym? (mówię o...)", "w szkole, w sklepie, w lesie, o mamie", "na boisku, w parku, o babci, w kuchni", "Moja ciocia mieszka we Wrocławiu.", "Gdzie jesteś? Jestem w domu."]
+    },
+    {
+      "nr": 114,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: przypadki", "ru": "Проверь себя: падежи", "ua": "Перевір себе: відмінки" },
+      "cel": { "ru": "Повтори всё из раздела 19 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 19 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Dzisiaj w klasie nie ma ... (kogo? czego?)", "Na urodziny daję prezent ... (komu? czemu?)", "Z okna widzę ... (kogo? co?)", "Po szkole jestem w ... (gdzie?) z ... (z kim?)"]
+    }
+  ]
+}

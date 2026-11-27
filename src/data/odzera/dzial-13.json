@@ -1,0 +1,223 @@
+{
+  "nr": 13,
+  "tytul": { "pl": "Moje miasto", "ru": "Мой город", "ua": "Моє місто" },
+  "e": "🚋",
+  "kolor": "#3f7fd8",
+  "lekcje": [
+    {
+      "nr": 73,
+      "tytul": { "pl": "Miejsca w mieście", "ru": "Места в городе", "ua": "Місця в місті" },
+      "cel": { "ru": "Ты научишься называть места в городе: парк, кино, аптека, почта.", "ua": "Ти навчишся називати місця в місті: парк, кіно, аптека, пошта." },
+      "zasady": [
+        {
+          "litery": "miasto → w mieście",
+          "dzwiek": { "ru": "в городе", "ua": "у місті" },
+          "opis": {
+            "ru": "Где? Слово меняет конец: miasto - w mieście, park - w parku.",
+            "ua": "Де? Слово змінює кінець: miasto - w mieście, park - w parku."
+          },
+          "przyklady": ["miasto", "W moim mieście jest duży park."]
+        }
+      ],
+      "slowa": [
+        { "pl": "miasto", "e": "🏙️", "ru": "город", "ua": "місто" },
+        { "pl": "ulica", "e": "🛣️", "ru": "улица", "ua": "вулиця" },
+        { "pl": "park", "lektor": "Park!", "e": "🌳", "ru": "парк", "ua": "парк" },
+        { "pl": "kino", "e": "🎬", "ru": "кино, кинотеатр", "ua": "кіно, кінотеатр" },
+        { "pl": "apteka", "e": "💊", "ru": "аптека", "ua": "аптека" },
+        { "pl": "poczta", "e": "📮", "ru": "почта", "ua": "пошта" },
+        { "pl": "szpital", "e": "🏥", "ru": "больница", "ua": "лікарня" },
+        { "pl": "kościół", "e": "⛪", "ru": "костёл, церковь", "ua": "костел, церква" },
+        { "pl": "plac zabaw", "e": "🛝", "ru": "детская площадка", "ua": "дитячий майданчик" }
+      ],
+      "zdania": [
+        { "pl": "W moim mieście jest duży park.", "e": "🌳", "ru": "В моём городе есть большой парк.", "ua": "У моєму місті є великий парк." },
+        { "pl": "Gdzie jest apteka?", "e": "💊", "ru": "Где аптека?", "ua": "Де аптека?" },
+        { "pl": "Kino jest obok poczty.", "e": "🎬", "ru": "Кинотеатр рядом с почтой.", "ua": "Кінотеатр поруч із поштою." },
+        { "pl": "Na placu zabaw są dzieci.", "e": "🛝", "ru": "На детской площадке дети.", "ua": "На дитячому майданчику діти." },
+        { "pl": "Ta ulica jest bardzo długa.", "e": "🛣️", "ru": "Эта улица очень длинная.", "ua": "Ця вулиця дуже довга." }
+      ],
+      "zeszyt": ["miasto, ulica, park, kino", "apteka, poczta, szpital, kościół", "miasto - w mieście", "W moim mieście jest duży park.", "Gdzie jest apteka?"]
+    },
+    {
+      "nr": 74,
+      "tytul": { "pl": "Jadę autobusem", "ru": "Я еду на автобусе", "ua": "Я їду автобусом" },
+      "cel": { "ru": "Ты научишься называть транспорт и говорить, на чём ты едешь: autobusem, tramwajem, rowerem.", "ua": "Ти навчишся називати транспорт і казати, чим ти їдеш: autobusem, tramwajem, rowerem." },
+      "zasady": [
+        {
+          "litery": "autobus → autobusem",
+          "dzwiek": { "ru": "-эм", "ua": "-ем" },
+          "opis": {
+            "ru": "На чём ты едешь? Добавляем -em: autobusem, tramwajem, rowerem. По-польски без «на».",
+            "ua": "Чим ти їдеш? Додаємо -em: autobusem, tramwajem, rowerem - як українською «автобусом»."
+          },
+          "przyklady": ["autobus", "tramwaj", "rower", "Jadę do szkoły autobusem."]
+        },
+        {
+          "litery": "samochód → samochodem",
+          "dzwiek": { "ru": "у → о", "ua": "у → о" },
+          "opis": {
+            "ru": "Внимание: ó меняется на o: jadę samochodem.",
+            "ua": "Увага: ó змінюється на o: jadę samochodem."
+          },
+          "przyklady": ["samochód"]
+        },
+        {
+          "litery": "hulajnoga → hulajnogą",
+          "dzwiek": { "ru": "-ом", "ua": "-ом" },
+          "opis": {
+            "ru": "Слово на -a: в конце пишем -ą (звучит почти как «ом»): jadę hulajnogą.",
+            "ua": "Слово на -a: у кінці пишемо -ą (звучить майже як «ом»): jadę hulajnogą."
+          },
+          "przyklady": ["hulajnoga"]
+        }
+      ],
+      "slowa": [
+        { "pl": "autobus", "e": "🚌", "ru": "автобус", "ua": "автобус" },
+        { "pl": "tramwaj", "e": "🚋", "ru": "трамвай", "ua": "трамвай" },
+        { "pl": "pociąg", "e": "🚆", "ru": "поезд", "ua": "поїзд" },
+        { "pl": "rower", "e": "🚲", "ru": "велосипед", "ua": "велосипед" },
+        { "pl": "samochód", "e": "🚗", "ru": "машина, автомобиль", "ua": "машина, автомобіль" },
+        { "pl": "hulajnoga", "e": "🛴", "ru": "самокат", "ua": "самокат" },
+        { "pl": "przystanek", "e": "🚏", "ru": "остановка", "ua": "зупинка" },
+        { "pl": "bilet", "e": "🎫", "ru": "билет", "ua": "квиток" },
+        { "pl": "pieszo", "e": "🚶", "ru": "пешком", "ua": "пішки" }
+      ],
+      "zdania": [
+        { "pl": "Jadę do szkoły autobusem.", "e": "🚌", "ru": "Я еду в школу на автобусе.", "ua": "Я їду до школи автобусом." },
+        { "pl": "Mama jedzie do pracy tramwajem.", "e": "🚋", "ru": "Мама едет на работу на трамвае.", "ua": "Мама їде на роботу трамваєм." },
+        { "pl": "W sobotę jadę rowerem do parku.", "e": "🚲", "ru": "В субботу я еду в парк на велосипеде.", "ua": "У суботу я їду до парку велосипедом." },
+        { "pl": "Czekam na autobus na przystanku.", "e": "🚏", "ru": "Я жду автобус на остановке.", "ua": "Я чекаю на автобус на зупинці." },
+        { "pl": "Do szkoły idę pieszo.", "e": "🚶", "ru": "В школу я иду пешком.", "ua": "До школи я йду пішки." }
+      ],
+      "zeszyt": ["autobus, tramwaj, pociąg, rower", "samochód, hulajnoga, przystanek, bilet", "autobusem, tramwajem, samochodem, hulajnogą", "Jadę do szkoły autobusem.", "Do szkoły idę pieszo."]
+    },
+    {
+      "nr": 75,
+      "tytul": { "pl": "Prosto, w lewo, w prawo", "ru": "Прямо, налево, направо", "ua": "Прямо, ліворуч, праворуч" },
+      "cel": { "ru": "Ты научишься спрашивать дорогу и объяснять, куда идти.", "ua": "Ти навчишся питати дорогу і пояснювати, куди йти." },
+      "zasady": [
+        {
+          "litery": "w lewo  w prawo  prosto",
+          "dzwiek": { "ru": "налево  направо  прямо", "ua": "ліворуч  праворуч  прямо" },
+          "opis": {
+            "ru": "w lewo, w prawo пишем двумя словами. А prosto - одно слово.",
+            "ua": "w lewo, w prawo пишемо двома словами. А prosto - одне слово."
+          },
+          "przyklady": ["w lewo", "w prawo", "prosto"]
+        }
+      ],
+      "slowa": [
+        { "pl": "prosto", "e": "⬆️", "ru": "прямо", "ua": "прямо" },
+        { "pl": "w lewo", "e": "⬅️", "ru": "налево", "ua": "ліворуч, вліво" },
+        { "pl": "w prawo", "e": "➡️", "ru": "направо", "ua": "праворуч, вправо" },
+        { "pl": "Skręć w lewo!", "e": "↩️", "ru": "Поверни налево!", "ua": "Поверни ліворуч!" },
+        { "pl": "skrzyżowanie", "e": "🔀", "ru": "перекрёсток", "ua": "перехрестя" },
+        { "pl": "światła", "e": "🚦", "ru": "светофор", "ua": "світлофор" },
+        { "pl": "przejście dla pieszych", "e": "🦓", "ru": "пешеходный переход", "ua": "пішохідний перехід" },
+        { "pl": "blisko", "e": "🤏", "ru": "близко", "ua": "близько" },
+        { "pl": "daleko", "e": "🔭", "ru": "далеко", "ua": "далеко" }
+      ],
+      "zdania": [
+        { "pl": "Idź prosto, a potem w prawo.", "lektor": "Idź prosto... a potem w prawo.", "e": "➡️", "ru": "Иди прямо, а потом направо.", "ua": "Іди прямо, а потім праворуч." },
+        { "pl": "Na skrzyżowaniu skręć w prawo.", "e": "↪️", "ru": "На перекрёстке поверни направо.", "ua": "На перехресті поверни праворуч." },
+        { "pl": "Czekaj na zielone światło!", "e": "🟢", "ru": "Жди зелёный свет!", "ua": "Чекай на зелене світло!" },
+        { "pl": "Przepraszam, jak dojść do parku?", "e": "🗺️", "ru": "Извините, как пройти к парку?", "ua": "Перепрошую, як пройти до парку?" },
+        { "pl": "Szkoła jest blisko, a kino jest daleko.", "lektor": "Szkoła jest blisko... a kino jest daleko.", "e": "🏫", "ru": "Школа близко, а кинотеатр далеко.", "ua": "Школа близько, а кінотеатр далеко." }
+      ],
+      "zeszyt": ["prosto, w lewo, w prawo", "skrzyżowanie, światła, przejście dla pieszych", "blisko - daleko", "Idź prosto, a potem w prawo.", "Na skrzyżowaniu skręć w prawo."]
+    },
+    {
+      "nr": 76,
+      "tytul": { "pl": "Gdzie mieszkasz?", "ru": "Где ты живёшь?", "ua": "Де ти живеш?" },
+      "cel": { "ru": "Ты научишься говорить, где ты живёшь: улица, номер дома, этаж.", "ua": "Ти навчишся казати, де ти живеш: вулиця, номер будинку, поверх." },
+      "zasady": [
+        {
+          "litery": "w bloku, w domu - na ulicy, na piętrze",
+          "dzwiek": { "ru": "в / на", "ua": "у / на" },
+          "opis": {
+            "ru": "В доме - w: w bloku, w domu. На улице, на этаже - na, как по-русски.",
+            "ua": "У будинку - w: w bloku, w domu. На вулиці, на поверсі - na, як українською."
+          },
+          "przyklady": ["w bloku", "w domu", "Mieszkam na ulicy Kwiatowej."]
+        },
+        {
+          "litery": "we Wrocławiu",
+          "dzwiek": { "ru": "вэ", "ua": "ве" },
+          "opis": {
+            "ru": "Перед словом на w- вместо w пишем we: we Wrocławiu, we wtorek.",
+            "ua": "Перед словом на w- замість w пишемо we: we Wrocławiu, we wtorek."
+          },
+          "przyklady": ["Mieszkam we Wrocławiu.", "we wtorek"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Gdzie mieszkasz?", "e": "❓🏠", "ru": "Где ты живёшь?", "ua": "Де ти живеш?" },
+        { "pl": "Mieszkam we Wrocławiu.", "e": "🏙️", "ru": "Я живу во Вроцлаве.", "ua": "Я живу у Вроцлаві." },
+        { "pl": "adres", "e": "📬", "ru": "адрес", "ua": "адреса" },
+        { "pl": "numer", "e": "🔢", "ru": "номер", "ua": "номер" },
+        { "pl": "piętro", "e": "⬆️🏢", "ru": "этаж", "ua": "поверх" },
+        { "pl": "winda", "e": "🛗", "ru": "лифт", "ua": "ліфт" },
+        { "pl": "w bloku", "e": "🏢", "ru": "в многоэтажном доме", "ua": "у багатоповерхівці" },
+        { "pl": "w domu", "e": "🏡", "ru": "в доме, дома", "ua": "у будинку, вдома" },
+        { "pl": "sąsiad", "e": "👋🚪", "ru": "сосед", "ua": "сусід" }
+      ],
+      "zdania": [
+        { "pl": "Mieszkam na ulicy Kwiatowej.", "e": "🌼", "ru": "Я живу на улице Цветочной.", "ua": "Я живу на вулиці Квітковій." },
+        { "pl": "Mój dom ma numer siedem.", "e": "7️⃣", "ru": "У моего дома номер семь.", "ua": "Мій будинок має номер сім." },
+        { "pl": "Mieszkam w bloku na drugim piętrze.", "e": "🏢", "ru": "Я живу в многоэтажке на втором этаже.", "ua": "Я живу в багатоповерхівці на другому поверсі." },
+        { "pl": "W bloku jest winda.", "e": "🛗", "ru": "В доме есть лифт.", "ua": "У будинку є ліфт." },
+        { "pl": "Mój sąsiad ma psa.", "e": "🐕", "ru": "У моего соседа есть собака.", "ua": "У мого сусіда є собака." }
+      ],
+      "zeszyt": ["adres, numer, piętro, winda, sąsiad", "w bloku, w domu - na ulicy, na piętrze", "Gdzie mieszkasz?", "Mieszkam we Wrocławiu.", "Mieszkam w bloku na drugim piętrze."]
+    },
+    {
+      "nr": 77,
+      "tytul": { "pl": "Wrocław - czytam krótki tekst", "ru": "Вроцлав - читаю короткий текст", "ua": "Вроцлав - читаю короткий текст" },
+      "cel": { "ru": "Ты научишься читать короткий текст о Вроцлаве: Рынок, гномы, Одра, мосты.", "ua": "Ти навчишся читати короткий текст про Вроцлав: Ринок, гноми, Одра, мости." },
+      "zasady": [
+        {
+          "litery": "Wrocław, Odra, Rynek",
+          "dzwiek": { "ru": "большая буква", "ua": "велика літера" },
+          "opis": {
+            "ru": "Названия городов, рек и площадей пишем с большой буквы.",
+            "ua": "Назви міст, річок і площ пишемо з великої літери."
+          },
+          "przyklady": ["Wrocław", "Odra", "Na Rynku stoi stary ratusz."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Wrocław", "e": "🌆", "ru": "Вроцлав", "ua": "Вроцлав" },
+        { "pl": "rynek", "e": "🏛️", "ru": "рыночная площадь", "ua": "ринкова площа" },
+        { "pl": "ratusz", "e": "🕰️", "ru": "ратуша", "ua": "ратуша" },
+        { "pl": "krasnal", "e": "🧙", "ru": "гном", "ua": "гном" },
+        { "pl": "Odra", "e": "🌊", "ru": "Одра (река)", "ua": "Одра (річка)" },
+        { "pl": "most", "lektor": "Most!", "e": "🌉", "ru": "мост", "ua": "міст" },
+        { "pl": "ogród zoologiczny", "e": "🦒", "ru": "зоопарк", "ua": "зоопарк" },
+        { "pl": "turysta", "e": "📸", "ru": "турист", "ua": "турист" }
+      ],
+      "zdania": [
+        { "pl": "Wrocław to duże i piękne miasto.", "e": "🌆", "ru": "Вроцлав - большой и красивый город.", "ua": "Вроцлав - велике і гарне місто." },
+        { "pl": "Na Rynku stoi stary ratusz.", "e": "🕰️", "ru": "На Рынке стоит старая ратуша.", "ua": "На Ринку стоїть стара ратуша." },
+        { "pl": "Na ulicach są małe krasnale.", "e": "🧙", "ru": "На улицах есть маленькие гномы.", "ua": "На вулицях є маленькі гноми." },
+        { "pl": "Przez miasto płynie rzeka Odra.", "e": "🌊", "ru": "Через город течёт река Одра.", "ua": "Через місто тече річка Одра." },
+        { "pl": "We Wrocławiu jest dużo mostów.", "e": "🌉", "ru": "Во Вроцлаве много мостов.", "ua": "У Вроцлаві багато мостів." },
+        { "pl": "Turyści lubią Rynek i zoo.", "e": "📸", "ru": "Туристы любят Рынок и зоопарк.", "ua": "Туристи люблять Ринок і зоопарк." }
+      ],
+      "zeszyt": ["Wrocław, rynek, ratusz, krasnal", "Odra, most, ogród zoologiczny (zoo), turysta", "Wrocław to duże i piękne miasto.", "Przez miasto płynie rzeka Odra.", "We Wrocławiu jest dużo mostów."]
+    },
+    {
+      "nr": 78,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: moje miasto", "ru": "Проверь себя: мой город", "ua": "Перевір себе: моє місто" },
+      "cel": { "ru": "Повтори всё из раздела 13 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 13 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": [
+        "Mieszkam ... (w mieście / na wsi).",
+        "Mieszkam na ulicy ...",
+        "Do szkoły jadę ... / idę pieszo.",
+        "W moim mieście jest ..."
+      ]
+    }
+  ]
+}
