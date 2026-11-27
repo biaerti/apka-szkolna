@@ -1,14 +1,18 @@
-// Kurs "Polski krok po kroku" - wyniki w zakladce Zadania domowe: kto zrobil
-// ktora lekcje, z jakim wynikiem i jakie byly bledy, plus jezyk podpowiedzi.
-// Konta, hasla i wlaczanie kursu: src/components/portal/KontaPanel.tsx.
-// Strona ucznia: /uczen (src/pages/portal/Portal.tsx).
+// Kurs "Polski krok po kroku" (zakladka Zadania domowe) - osobno od zadan calej
+// klasy: kto jest na kursie, login i haslo, kartki do rozdania (po polsku i w
+// jezyku ucznia), dodawanie ucznia, jezyk podpowiedzi, a pod spodem wyniki
+// lekcji i bledy. Konto ucznia jest jedno (to samo co do zadan domowych) -
+// kurs to tylko flaga `polski`. Strona ucznia: /uczen (src/pages/portal/Portal.tsx).
 
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../../data/supabase';
 import { useStore } from '../../data/store';
 import type { Student } from '../../data/types';
 import { JEZYKI, dostepneLekcje, DYKTANDA, type Jezyk } from '../../data/dyktanda';
 import { toDateKey } from '../../lib/dates';
+import { decryptStudentText } from '../../lib/studentCrypto';
+import { Select } from '../ui/Select';
+import { LINK_PORTALU, noweHasloPortalu, nowyLogin, zapiszKopieHasla } from '../portal/KontaPanel';
 
 interface UczenDyktanda {
   id: string;
@@ -20,6 +24,69 @@ interface UczenDyktanda {
   jezyk?: Jezyk;
   student_id?: string | null;
   class_id?: string | null;
+  haslo_szyfr?: string | null;
+}
+
+interface KartkaKursu {
+  imie: string;
+  login: string;
+  haslo: string;
+  jezyk: Jezyk;
+}
+
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+const NAPISY_KARTKI: Record<Jezyk, { tytul: string; wejdz: string; login: string; haslo: string; stopka: string }> = {
+  ua: {
+    tytul: 'Польська крок за кроком',
+    wejdz: 'Зайди на',
+    login: 'Логін',
+    haslo: 'Пароль',
+    stopka: 'Щопонеділка новий урок - зроби його вдома.',
+  },
+  es: {
+    tytul: 'Polaco paso a paso',
+    wejdz: 'Entra en',
+    login: 'Usuario',
+    haslo: 'Contraseña',
+    stopka: 'Cada lunes una lección nueva: hazla en casa.',
+  },
+};
+
+/** Kartki kursu A4 (2 x 4): po polsku i w jezyku ucznia. */
+function drukujKartkiKursu(kartki: KartkaKursu[]): void {
+  const okno = window.open('', '_blank');
+  if (!okno) return;
+  const html = kartki
+    .map((k) => {
+      const t = NAPISY_KARTKI[k.jezyk];
+      return `<div class="k">
+  <div class="n">${escapeHtml(k.imie)}</div>
+  <div class="t">Polski krok po kroku<span>${t.tytul}</span></div>
+  <div class="r"><span>Wejdź na · ${t.wejdz}:</span><b>${LINK_PORTALU.replace('https://', '')}</b></div>
+  <div class="r"><span>Login · ${t.login}:</span><b class="h">${escapeHtml(k.login)}</b></div>
+  <div class="r"><span>Hasło · ${t.haslo}:</span><b class="h">${escapeHtml(k.haslo)}</b></div>
+  <div class="s">Co poniedziałek nowa lekcja - zrób ją w domu.<br>${t.stopka}</div>
+</div>`;
+    })
+    .join('');
+  okno.document.write(`<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>Kartki - Polski krok po kroku</title>
+<style>
+@page { size: A4; margin: 10mm; }
+body { font-family: Arial, sans-serif; margin: 0; }
+.siatka { display: grid; grid-template-columns: 1fr 1fr; }
+.k { border: 1px dashed #999; padding: 6mm; height: 66mm; box-sizing: border-box; break-inside: avoid; position: relative; }
+.n { position: absolute; right: 6mm; top: 6mm; font-size: 9pt; color: #666; }
+.t { font-size: 14pt; font-weight: bold; margin-bottom: 3mm; }
+.t span { display: block; font-size: 10pt; font-weight: normal; color: #444; }
+.r { font-size: 10pt; margin: 1.8mm 0; display: flex; gap: 3mm; align-items: baseline; }
+.r b { font-size: 12pt; }
+.r b.h { font-size: 17pt; letter-spacing: 1px; font-family: 'Courier New', monospace; }
+.s { margin-top: 2mm; font-size: 8.5pt; color: #444; }
+</style></head><body><div class="siatka">${html}</div>
+<script>window.onload = () => window.print();</script></body></html>`);
+  okno.document.close();
 }
 
 interface WynikDyktanda {
@@ -51,7 +118,9 @@ const krotkaData = (iso: string) => {
   return `${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
 
-const btnMaly = 'text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline';
+const btnMaly = 'text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline disabled:opacity-50';
+const btn =
+  'inline-flex min-h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:cursor-not-allowed disabled:opacity-50';
 
 /** klasaId - pokazuj tylko uczniow tej klasy (null = wszystkich). */
 export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
@@ -59,8 +128,16 @@ export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
   const [wyniki, setWyniki] = useState<WynikDyktanda[]>([]);
   const [blad, setBlad] = useState<string | null>(null);
   const [otwarte, setOtwarte] = useState<string | null>(null);
+  const [hasla, setHasla] = useState<Record<string, string>>({});
+  const [pracuje, setPracuje] = useState(false);
+  const [nowyUczen, setNowyUczen] = useState('');
+  const [nowyJezyk, setNowyJezyk] = useState<Jezyk>('ua');
   const classes = useStore((s) => s.classes);
   const students = useStore((s) => s.students);
+  const uczniowieKlasy = useMemo(
+    () => students.filter((s) => s.classId === klasaId && s.active).sort((a, b) => a.number - b.number),
+    [students, klasaId],
+  );
 
   const wczytaj = useCallback(async () => {
     const sb = getSupabase();
@@ -73,8 +150,19 @@ export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
       return;
     }
     setBlad(null);
-    setUczniowie((u.data ?? []) as UczenDyktanda[]);
+    const lista = (u.data ?? []) as UczenDyktanda[];
+    setUczniowie(lista);
     setWyniki(((w.data ?? []) as WynikDyktanda[]).filter((x) => !x.lekcja.startsWith('zd:')));
+    const odszyfrowane: Record<string, string> = {};
+    for (const konto of lista) {
+      if (!konto.haslo_szyfr) continue;
+      try {
+        odszyfrowane[konto.id] = await decryptStudentText(konto.haslo_szyfr);
+      } catch {
+        // inny klucz - hasla nie pokazujemy
+      }
+    }
+    setHasla(odszyfrowane);
   }, []);
 
   useEffect(() => {
@@ -129,8 +217,110 @@ export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
     await wczytaj();
   }
 
+  const imie = (u: UczenDyktanda) => students.find((x) => x.id === u.student_id)?.firstName ?? '';
+
+  /** Kartki: znane hasla drukujemy, a kto ma haslo tylko na starej kartce - dostaje nowe. */
+  async function kartki(lista: UczenDyktanda[]) {
+    const bezHasla = lista.filter((u) => !hasla[u.id]);
+    if (bezHasla.length && !window.confirm(`Nowe hasło dostanie ${bezHasla.length} os. (stare kartki przestaną działać). Drukować?`)) return;
+    setPracuje(true);
+    const znane = { ...hasla };
+    for (const u of bezHasla) {
+      const haslo = noweHasloPortalu();
+      const { error } = await getSupabase().rpc('dyktando_ustaw_haslo', { p_id: u.id, p_haslo: haslo });
+      if (error) {
+        setBlad(`Nie udało się zmienić hasła: ${nazwa(u)}.`);
+        setPracuje(false);
+        return;
+      }
+      await zapiszKopieHasla(u.id, haslo);
+      znane[u.id] = haslo;
+    }
+    setHasla(znane);
+    setPracuje(false);
+    drukujKartkiKursu(
+      lista
+        .filter((u) => u.login && znane[u.id])
+        .map((u) => ({ imie: imie(u), login: u.login!, haslo: znane[u.id], jezyk: u.jezyk ?? 'ua' })),
+    );
+    await wczytaj();
+  }
+
+  /** Dodaje ucznia do kursu: wlacza kurs na jego koncie albo zaklada konto. */
+  async function dodajDoKursu() {
+    const uczen = uczniowieKlasy.find((s) => s.id === nowyUczen);
+    if (!uczen) return;
+    setPracuje(true);
+    const istniejace = (uczniowie ?? []).find((u) => u.student_id === uczen.id && u.aktywny);
+    if (istniejace) {
+      await getSupabase().from('dyktando_uczniowie').update({ polski: true, jezyk: nowyJezyk }).eq('id', istniejace.id);
+    } else {
+      const zajete = new Set((uczniowie ?? []).map((u) => (u.login ?? '').toLowerCase()).filter(Boolean));
+      const login = nowyLogin(zajete);
+      const haslo = noweHasloPortalu();
+      const { data: id, error } = await getSupabase().rpc('portal_dodaj_konto', {
+        p_login: login,
+        p_haslo: haslo,
+        p_student_id: uczen.id,
+        p_class_id: uczen.classId,
+        p_jezyk: nowyJezyk,
+        p_polski: true,
+      });
+      if (error) setBlad('Nie udało się założyć konta.');
+      else await zapiszKopieHasla(id as string, haslo);
+    }
+    setNowyUczen('');
+    setPracuje(false);
+    await wczytaj();
+  }
+
+  async function usunZKursu(u: UczenDyktanda) {
+    if (!window.confirm(`Wyłączyć kurs dla: ${nazwa(u)}? Konto do zadań domowych i wyniki zostają.`)) return;
+    await getSupabase().from('dyktando_uczniowie').update({ polski: false }).eq('id', u.id);
+    await wczytaj();
+  }
+
   return (
     <section className="max-w-4xl">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        {klasaId ? (
+          <div className="flex flex-wrap items-end gap-2">
+            <label className="text-sm text-gray-700">
+              Dodaj do kursu
+              <Select className="mt-1 min-w-56" value={nowyUczen} onChange={(e) => setNowyUczen(e.target.value)}>
+                <option value="">- wybierz ucznia -</option>
+                {uczniowieKlasy.map((s) => {
+                  const juz = aktywni.some((u) => u.student_id === s.id);
+                  return (
+                    <option key={s.id} value={s.id} disabled={juz}>
+                      {s.number}. {s.lastName} {s.firstName}
+                      {juz ? ' (już jest)' : ''}
+                    </option>
+                  );
+                })}
+              </Select>
+            </label>
+            <label className="text-sm text-gray-700">
+              Podpowiedzi
+              <Select className="mt-1" value={nowyJezyk} onChange={(e) => setNowyJezyk(e.target.value as Jezyk)}>
+                {JEZYKI.map((j) => (
+                  <option key={j.id} value={j.id}>
+                    {j.nazwa}
+                  </option>
+                ))}
+              </Select>
+            </label>
+            <button type="button" className={btn} disabled={!nowyUczen || pracuje} onClick={() => void dodajDoKursu()}>
+              Dodaj
+            </button>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Wybierz klasę na górze, żeby dodać ucznia do kursu.</p>
+        )}
+        <button type="button" className={btn} disabled={pracuje || aktywni.length === 0} onClick={() => void kartki(aktywni)}>
+          Kartki dla kursu ({aktywni.length})
+        </button>
+      </div>
       {blad && <p className="mb-3 text-sm text-red-700">{blad}</p>}
       {uczniowie && (
         <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
@@ -138,18 +328,21 @@ export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                 <th className="px-4 py-2">Uczeń</th>
+                <th className="px-3 py-2">Login</th>
+                <th className="px-3 py-2">Hasło</th>
                 <th className="px-3 py-2">Podpowiedzi</th>
                 {lekcje.map((l) => (
                   <th key={l.id} className="px-3 py-2">
                     {l.nr}. {l.temat}
                   </th>
                 ))}
+                <th className="px-3 py-2" />
               </tr>
             </thead>
             <tbody>
               {aktywni.length === 0 && (
                 <tr>
-                  <td colSpan={lekcje.length + 2} className="px-4 py-4 text-gray-500">
+                  <td colSpan={lekcje.length + 5} className="px-4 py-4 text-gray-500">
                     {klasaId ? 'Nikt z tej klasy nie ma kursu - włącz go przy koncie ucznia.' : 'Nikt nie ma jeszcze kursu.'}
                   </td>
                 </tr>
@@ -160,6 +353,10 @@ export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
                     <td className="px-4 py-2.5 font-medium text-gray-900">
                       {nazwa(u)}
                       {!klasaId && u.class_id && <span className="ml-2 text-xs font-normal text-gray-500">{nazwaKlasy(u.class_id)}</span>}
+                    </td>
+                    <td className="px-3 py-2.5 font-mono text-gray-700">{u.login ?? '-'}</td>
+                    <td className="px-3 py-2.5 font-mono text-gray-700">
+                      {hasla[u.id] ?? <span className="font-sans text-xs text-gray-400">stara kartka</span>}
                     </td>
                     <td className="px-3 py-2.5">
                       <select
@@ -201,13 +398,21 @@ export function DyktandaPanel({ klasaId = null }: { klasaId?: string | null }) {
                         </td>
                       );
                     })}
+                    <td className="space-x-3 whitespace-nowrap px-3 py-2.5 text-right">
+                      <button type="button" className={btnMaly} disabled={pracuje} onClick={() => void kartki([u])}>
+                        Kartka
+                      </button>
+                      <button type="button" className={btnMaly} onClick={() => void usunZKursu(u)}>
+                        Usuń z kursu
+                      </button>
+                    </td>
                   </tr>
                   {lekcje.map((l) => {
                     if (otwarte !== `${u.id}:${l.id}`) return null;
                     const proby = wyniki.filter((w) => w.uczen_id === u.id && w.lekcja === l.id);
                     return (
                       <tr key={`${l.id}-bledy`} className="border-b border-gray-100 bg-gray-50">
-                        <td colSpan={lekcje.length + 2} className="px-4 py-3">
+                        <td colSpan={lekcje.length + 5} className="px-4 py-3">
                           {proby.map((p) => (
                             <div key={p.id} className="mb-2 last:mb-0">
                               <p className="text-xs font-semibold text-gray-600">

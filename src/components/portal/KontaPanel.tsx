@@ -10,7 +10,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getSupabase, isSupabaseConfigured } from '../../data/supabase';
 import { useStore } from '../../data/store';
-import { JEZYKI, type Jezyk } from '../../data/dyktanda';
+import type { Jezyk } from '../../data/dyktanda';
 import { copyToClipboard } from '../../lib/clipboard';
 import { stanWyzwania, CEL_TYGODNIA } from '../../lib/wyzwanie';
 import { decryptStudentText, encryptStudentText, isEncrypted } from '../../lib/studentCrypto';
@@ -126,7 +126,7 @@ const btn =
 const btnMaly = 'text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline';
 
 /** Zapisuje kopie hasla zaszyfrowana kluczem Bartka - tylko gdy szyfrowanie dziala (nigdy jawnie). */
-async function zapiszKopieHasla(kontoId: string, haslo: string): Promise<void> {
+export async function zapiszKopieHasla(kontoId: string, haslo: string): Promise<void> {
   try {
     const szyfr = await encryptStudentText(haslo);
     if (!isEncrypted(szyfr)) return;
@@ -241,12 +241,6 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
       setHasla((h) => ({ ...h, [konto.id]: haslo }));
     }
     setPracuje(null);
-    await wczytaj();
-  }
-
-  async function ustaw(konto: KontoPortalu, zmiana: Partial<Pick<KontoPortalu, 'polski' | 'jezyk'>>) {
-    const { error } = await getSupabase().from('dyktando_uczniowie').update(zmiana).eq('id', konto.id);
-    if (error) setBlad('Nie udało się zapisać zmiany.');
     await wczytaj();
   }
 
@@ -383,7 +377,6 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
                 <th className="px-3 py-2">Hasło</th>
                 <th className="px-3 py-2">Ten tydzień</th>
                 <th className="px-3 py-2">Poziom</th>
-                <th className="px-3 py-2">Polski krok po kroku</th>
                 <th className="px-3 py-2" />
               </tr>
             </thead>
@@ -407,25 +400,6 @@ export function KontaPanel({ klasaId }: { klasaId: string | null }) {
                       )}
                     </td>
                     <td className="px-3 py-2 text-gray-700">{stan ? stan.zaliczone + 1 : ''}</td>
-                    <td className="px-3 py-2">
-                      {konto && (
-                        <span className="flex items-center gap-2">
-                          <input type="checkbox" checked={konto.polski} onChange={(e) => void ustaw(konto, { polski: e.target.checked })} aria-label={`Kurs polskiego: ${uczen.firstName}`} />
-                          {konto.polski && (
-                            <select
-                              aria-label={`Język podpowiedzi: ${uczen.firstName}`}
-                              value={konto.jezyk}
-                              onChange={(e) => void ustaw(konto, { jezyk: e.target.value as Jezyk })}
-                              className="rounded-md border border-gray-200 bg-white px-1.5 py-1 text-xs text-gray-700"
-                            >
-                              {JEZYKI.map((j) => (
-                                <option key={j.id} value={j.id}>{j.nazwa}</option>
-                              ))}
-                            </select>
-                          )}
-                        </span>
-                      )}
-                    </td>
                     <td className="space-x-3 whitespace-nowrap px-3 py-2 text-right">
                       {konto && konto.login && haslo && (
                         <button type="button" className={btnMaly} onClick={() => void kopiuj(wiadomoscDoRodzica(uczen, konto.login!, haslo), uczen.id)}>

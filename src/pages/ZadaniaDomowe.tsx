@@ -39,17 +39,14 @@ export function ZadaniaDomowe() {
         ))}
       </div>
 
-      <div className="mb-10">
-        <KontaPanel klasaId={klasaId} />
-      </div>
 
       <section aria-labelledby="modul-obcokrajowcy" className="max-w-4xl">
         <h2 id="modul-obcokrajowcy" className="text-lg font-semibold text-gray-900">
           Polski krok po kroku
         </h2>
         <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-          Kurs pisowni dla uczniów, dla których polski nie jest pierwszym językiem: 10 lekcji, co poniedziałek nowa. Włącza się go
-          przy koncie ucznia (kolumna „Polski krok po kroku”). Na lekcji pracują z zeszytem{' '}
+          Kurs pisowni dla uczniów, dla których polski nie jest pierwszym językiem: 10 lekcji, co poniedziałek nowa. Uczeń wchodzi na szkola.klippi.pl/uczen loginem
+          i hasłem z kartki (przycisk „Kartki dla kursu”). Na lekcji pracują z zeszytem{' '}
           <Link to="/lekcje?widok=polski-od-zera" className="font-medium text-accent-700 underline">
             „Mój polski od zera”
           </Link>
@@ -59,6 +56,18 @@ export function ZadaniaDomowe() {
           <DyktandaPanel klasaId={klasaId} />
         </div>
       </section>
+
+      <details className="mt-12 max-w-4xl rounded-xl border border-gray-200 bg-white p-4">
+        <summary className="cursor-pointer text-base font-semibold text-gray-900">
+          Zadania domowe dla całych klas <span className="font-normal text-gray-500">- od nowego semestru</span>
+        </summary>
+        <p className="mt-2 text-sm text-gray-600">
+          Uczniowie tego jeszcze nie widzą (włącza się w src/pages/portal/Portal.tsx, ZADANIA_Z_LEKCJI). Konta można założyć wcześniej.
+        </p>
+        <div className="mt-4">
+          <KontaPanel klasaId={klasaId} />
+        </div>
+      </details>
     </div>
   );
 }

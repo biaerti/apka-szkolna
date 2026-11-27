@@ -21,6 +21,13 @@ import { usunKonto, wczytajKonto, zapiszKonto, type KontoUcznia, type WynikUczni
 import { stanWyzwania } from '../../lib/wyzwanie';
 import { Ekran, Kafel, Karta, PasekWyzwania, Tydzien, btnCichy, btnGlowny } from './ui';
 
+/**
+ * Zadania domowe dla calych klas (z lekcji) i wyzwanie tygodnia - Bartek
+ * wlacza je od nowego semestru. Do tego czasu portal to sam kurs
+ * "Polski krok po kroku" (2026-11-27).
+ */
+export const ZADANIA_Z_LEKCJI = false;
+
 type Widok = { co: 'start' } | { co: 'zadania' } | { co: 'zadanie'; lekcja: LekcjaZadania } | { co: 'polski' };
 
 const pole =
@@ -191,22 +198,30 @@ function Start({
         <button type="button" onClick={onWyloguj} className={btnCichy}>Wyloguj</button>
       </div>
       <h1 className="mt-5 text-[2rem] font-extrabold leading-tight">Dla ciebie</h1>
-      <div className="mt-4">
-        <PasekWyzwania {...stanWyzwania(wyniki ?? [])} />
-      </div>
+      {ZADANIA_Z_LEKCJI && (
+        <div className="mt-4">
+          <PasekWyzwania {...stanWyzwania(wyniki ?? [])} />
+        </div>
+      )}
       <Karta className="mt-4">
         <p className="mb-3 text-sm font-bold text-[#5b5b57]">Dni z ćwiczeniami w tym tygodniu</p>
         <Tydzien aktywneDni={aktywneDni} dzis={new Date()} />
       </Karta>
       <div className="mt-6 space-y-5">
-        <Kafel
+        {ZADANIA_Z_LEKCJI && <Kafel
           kolor="pomarancz"
           ikona="✏️"
           tytul={<>Zadania domowe{tlum('Домашні завдання', 'Tareas')}</>}
           opis={zadania === null ? 'Chwileczkę…' : nowe.length ? `${nowe.length} do zrobienia z ostatnich lekcji` : 'Wszystko zrobione - możesz powtórzyć'}
           postep={zadania && zadania.length ? { zrobione: zadania.length - nowe.length, wszystkie: zadania.length } : undefined}
           onClick={() => onWidok({ co: 'zadania' })}
-        />
+        />}
+        {!ZADANIA_Z_LEKCJI && !konto.polski && (
+          <Karta className="text-center">
+            <p className="text-4xl" aria-hidden="true">🌤️</p>
+            <p className="mt-2 font-bold">Zadania z lekcji pojawią się od nowego semestru.</p>
+          </Karta>
+        )}
         {konto.polski && (
           <Kafel
             kolor="fiolet"
@@ -245,7 +260,7 @@ export function Portal() {
     const sb = getSupabase();
     const [w, z, k] = await Promise.all([
       sb.rpc('dyktando_moje_wyniki', { p_id: konto.id, p_haslo: konto.haslo }),
-      sb.rpc('portal_zadania', { p_id: konto.id, p_haslo: konto.haslo }),
+      ZADANIA_Z_LEKCJI ? sb.rpc('portal_zadania', { p_id: konto.id, p_haslo: konto.haslo }) : Promise.resolve({ data: [], error: null }),
       sb.rpc('portal_konto', { p_id: konto.id, p_haslo: konto.haslo }),
     ]);
     // Haslo zmienione przez nauczyciela - trzeba wpisac nowe z kartki.
