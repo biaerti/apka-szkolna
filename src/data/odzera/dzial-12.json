@@ -1,0 +1,226 @@
+{
+  "nr": 12,
+  "tytul": { "pl": "Zwierzęta", "ru": "Животные", "ua": "Тварини" },
+  "e": "🐾",
+  "kolor": "#9a6b2f",
+  "lekcje": [
+    {
+      "nr": 67,
+      "tytul": { "pl": "Zwierzęta w domu", "ru": "Домашние животные", "ua": "Домашні тварини" },
+      "cel": { "ru": "Ты научишься называть домашних животных и говорить: mój, moja, moje.", "ua": "Ти навчишся називати домашніх тварин і казати: mój, moja, moje." },
+      "zasady": [
+        {
+          "litery": "mój  moja  moje",
+          "dzwiek": { "ru": "мой  моя  моё", "ua": "мій  моя  моє" },
+          "opis": {
+            "ru": "mój pies - он, moja papuga - она (по-польски попугай - «она»!), moje zwierzę - оно.",
+            "ua": "mój pies - він, moja papuga - вона, moje zwierzę - воно."
+          },
+          "przyklady": ["pies", "papuga", "zwierzę"]
+        }
+      ],
+      "slowa": [
+        { "pl": "pies", "e": "🐕", "ru": "собака, пёс", "ua": "собака, пес" },
+        { "pl": "kot", "e": "🐈", "ru": "кот, кошка", "ua": "кіт, кішка" },
+        { "pl": "chomik", "e": "🐹", "ru": "хомяк", "ua": "хом'як" },
+        { "pl": "papuga", "e": "🦜", "ru": "попугай", "ua": "папуга" },
+        { "pl": "rybka", "e": "🐠", "ru": "рыбка", "ua": "рибка" },
+        { "pl": "królik", "e": "🐰", "ru": "кролик", "ua": "кролик" },
+        { "pl": "świnka morska", "e": "🐷🌊", "ru": "морская свинка", "ua": "морська свинка" },
+        { "pl": "zwierzę", "e": "🐾", "ru": "животное", "ua": "тварина" }
+      ],
+      "zdania": [
+        { "pl": "To jest mój pies Reksio.", "e": "🐕", "ru": "Это мой пёс Рексио.", "ua": "Це мій пес Рексіо." },
+        { "pl": "Czy masz kota? Nie, mam chomika.", "e": "🐹", "ru": "У тебя есть кот? Нет, у меня хомяк.", "ua": "У тебе є кіт? Ні, у мене хом'як." },
+        { "pl": "Papuga jest zielona, a rybka jest żółta.", "lektor": "Papuga jest zielona... a rybka jest żółta.", "e": "🦜", "ru": "Попугай зелёный, а рыбка жёлтая.", "ua": "Папуга зелений, а рибка жовта." },
+        { "pl": "Królik i świnka morska są małe.", "e": "🐰", "ru": "Кролик и морская свинка маленькие.", "ua": "Кролик і морська свинка маленькі." },
+        { "pl": "Mój kolega ma żółwia.", "e": "🐢", "ru": "У моего друга есть черепаха.", "ua": "У мого друга є черепаха." }
+      ],
+      "zeszyt": ["pies, kot, chomik, papuga", "rybka, królik, świnka morska", "mój pies, moja papuga, moje zwierzę", "To jest mój pies Reksio.", "Czy masz kota? Nie, mam chomika."]
+    },
+    {
+      "nr": 68,
+      "tytul": { "pl": "Na wsi", "ru": "В деревне", "ua": "У селі" },
+      "cel": { "ru": "Ты научишься называть животных, которые живут в деревне.", "ua": "Ти навчишся називати тварин, які живуть у селі." },
+      "zasady": [
+        {
+          "litery": "wieś → na wsi",
+          "dzwiek": { "ru": "в деревне", "ua": "у селі" },
+          "opis": {
+            "ru": "О деревне говорим na: mieszkam na wsi. А о городе - w: w mieście.",
+            "ua": "Про село кажемо na: mieszkam na wsi. А про місто - w: w mieście."
+          },
+          "przyklady": ["wieś", "Moja babcia ma gospodarstwo na wsi."]
+        }
+      ],
+      "slowa": [
+        { "pl": "krowa", "e": "🐄", "ru": "корова", "ua": "корова" },
+        { "pl": "świnia", "e": "🐖", "ru": "свинья", "ua": "свиня" },
+        { "pl": "owca", "e": "🐑", "ru": "овца", "ua": "вівця" },
+        { "pl": "koza", "e": "🐐", "ru": "коза", "ua": "коза" },
+        { "pl": "kura", "e": "🐔", "ru": "курица", "ua": "курка" },
+        { "pl": "kogut", "e": "🐓", "ru": "петух", "ua": "півень" },
+        { "pl": "kaczka", "e": "🦆", "ru": "утка", "ua": "качка" },
+        { "pl": "gęś", "lektor": "Gęś!", "e": "🪿", "ru": "гусь", "ua": "гуска" },
+        { "pl": "wieś", "lektor": "Wieś!", "e": "🏘️", "ru": "деревня, село", "ua": "село" },
+        { "pl": "gospodarstwo", "e": "🚜", "ru": "ферма, хозяйство", "ua": "господарство, ферма" }
+      ],
+      "zdania": [
+        { "pl": "Moja babcia ma gospodarstwo na wsi.", "e": "🚜", "ru": "У моей бабушки ферма в деревне.", "ua": "У моєї бабусі господарство в селі." },
+        { "pl": "Krowa daje mleko.", "e": "🥛", "ru": "Корова даёт молоко.", "ua": "Корова дає молоко." },
+        { "pl": "Rano kogut robi kukuryku!", "e": "🐓", "ru": "Утром петух кричит «кукареку»!", "ua": "Уранці півень кричить «кукуріку»!" },
+        { "pl": "Owca jest biała, a koza jest szara.", "lektor": "Owca jest biała... a koza jest szara.", "e": "🐑", "ru": "Овца белая, а коза серая.", "ua": "Вівця біла, а коза сіра." }
+      ],
+      "zeszyt": ["krowa, świnia, owca, koza", "kura, kogut, kaczka, gęś", "wieś - na wsi", "Moja babcia ma gospodarstwo na wsi.", "Krowa daje mleko."]
+    },
+    {
+      "nr": 69,
+      "tytul": { "pl": "W lesie i w zoo", "ru": "В лесу и в зоопарке", "ua": "У лісі і в зоопарку" },
+      "cel": { "ru": "Ты научишься называть животных из леса и зоопарка и узнаешь, где «он», а где «она».", "ua": "Ти навчишся називати тварин з лісу і зоопарку та дізнаєшся, де «він», а де «вона»." },
+      "zasady": [
+        {
+          "litery": "on: lis   ona: sowa",
+          "dzwiek": { "ru": "он / она", "ua": "він / вона" },
+          "opis": {
+            "ru": "Слово на -a - обычно «она»: sowa, żyrafa. Слово на согласную - «он»: lis, wilk. Внимание: lis - «он», хотя по-русски «лиса».",
+            "ua": "Слово на -a - зазвичай «вона»: sowa, żyrafa. Слово на приголосну - «він»: lis, wilk. Увага: żyrafa - «вона», як і в українській."
+          },
+          "przyklady": ["lis", "wilk", "sowa", "żyrafa"]
+        }
+      ],
+      "slowa": [
+        { "pl": "lis", "lektor": "Lis!", "e": "🦊", "ru": "лиса", "ua": "лис, лисиця" },
+        { "pl": "wilk", "e": "🐺", "ru": "волк", "ua": "вовк" },
+        { "pl": "zając", "e": "🐇", "ru": "заяц", "ua": "заєць" },
+        { "pl": "jeż", "lektor": "Jeż!", "e": "🦔", "ru": "ёж", "ua": "їжак" },
+        { "pl": "wiewiórka", "e": "🐿️", "ru": "белка", "ua": "білка" },
+        { "pl": "sowa", "e": "🦉", "ru": "сова", "ua": "сова" },
+        { "pl": "lew", "lektor": "Lew!", "e": "🦁", "ru": "лев", "ua": "лев" },
+        { "pl": "tygrys", "e": "🐯", "ru": "тигр", "ua": "тигр" },
+        { "pl": "małpa", "e": "🐒", "ru": "обезьяна", "ua": "мавпа" },
+        { "pl": "żyrafa", "e": "🦒", "ru": "жираф", "ua": "жирафа" }
+      ],
+      "zdania": [
+        { "pl": "W lesie mieszkają lis i wilk.", "e": "🌲", "ru": "В лесу живут лиса и волк.", "ua": "У лісі живуть лис і вовк." },
+        { "pl": "Jeż jest mały, ale ma kolce.", "lektor": "Jeż jest mały... ale ma kolce.", "e": "🦔", "ru": "Ёж маленький, но у него колючки.", "ua": "Їжак маленький, але в нього колючки." },
+        { "pl": "Sowa nie śpi w nocy.", "e": "🦉", "ru": "Сова не спит ночью.", "ua": "Сова не спить уночі." },
+        { "pl": "W zoo mieszkają lew, tygrys i żyrafa.", "lektor": "W zoo mieszkają lew... tygrys i żyrafa.", "e": "🦁", "ru": "В зоопарке живут лев, тигр и жираф.", "ua": "У зоопарку живуть лев, тигр і жирафа." }
+      ],
+      "zeszyt": ["lis, wilk, zając, jeż, wiewiórka, sowa", "lew, tygrys, małpa, żyrafa", "on: lis, wilk - ona: sowa, żyrafa", "W lesie mieszkają lis i wilk.", "Sowa nie śpi w nocy."]
+    },
+    {
+      "nr": 70,
+      "tytul": { "pl": "Co robi zwierzę?", "ru": "Что делает животное?", "ua": "Що робить тварина?" },
+      "cel": { "ru": "Ты научишься говорить, что делает животное: pływa, biega, śpi.", "ua": "Ти навчишся казати, що робить тварина: pływa, biega, śpi." },
+      "zasady": [
+        {
+          "litery": "on, ona, ono + -a",
+          "dzwiek": { "ru": "-а", "ua": "-а" },
+          "opis": {
+            "ru": "Когда говорим о животном (он, она, оно), многие глаголы кончаются на -a: pies biega, rybka pływa.",
+            "ua": "Коли говоримо про тварину (він, вона, воно), багато дієслів закінчуються на -a: pies biega, rybka pływa."
+          },
+          "przyklady": ["pływa", "lata", "biega", "szczeka"]
+        },
+        {
+          "litery": "-i  -y",
+          "dzwiek": { "ru": "-и  -ы", "ua": "-і  -и" },
+          "opis": {
+            "ru": "Другие глаголы кончаются на -i: kot śpi. После cz, sz, rz пишем -y: kot miauczy.",
+            "ua": "Інші дієслова закінчуються на -i: kot śpi. Після cz, sz, rz пишемо -y: kot miauczy."
+          },
+          "przyklady": ["śpi", "miauczy"]
+        },
+        {
+          "litery": "-e",
+          "dzwiek": { "ru": "-э", "ua": "-е" },
+          "opis": {
+            "ru": "А третьи - на -e: zając skacze, koza je.",
+            "ua": "А треті - на -e: zając skacze, koza je."
+          },
+          "przyklady": ["skacze", "je"]
+        }
+      ],
+      "slowa": [
+        { "pl": "pływa", "e": "🏊", "ru": "плавает", "ua": "плаває" },
+        { "pl": "lata", "e": "🕊️", "ru": "летает", "ua": "літає" },
+        { "pl": "biega", "e": "🏃", "ru": "бегает", "ua": "бігає" },
+        { "pl": "skacze", "e": "🦘", "ru": "прыгает", "ua": "стрибає" },
+        { "pl": "śpi", "e": "😴", "ru": "спит", "ua": "спить" },
+        { "pl": "je", "e": "🍽️", "ru": "ест", "ua": "їсть", "lektor": "Je." },
+        { "pl": "szczeka", "e": "🐕💬", "ru": "лает", "ua": "гавкає", "wym": { "ru": "шче́ка" } },
+        { "pl": "miauczy", "e": "🐈💬", "ru": "мяукает", "ua": "нявкає" }
+      ],
+      "zdania": [
+        { "pl": "Rybka pływa w akwarium.", "e": "🐠", "ru": "Рыбка плавает в аквариуме.", "ua": "Рибка плаває в акваріумі." },
+        { "pl": "Papuga lata po pokoju.", "e": "🦜", "ru": "Попугай летает по комнате.", "ua": "Папуга літає по кімнаті." },
+        { "pl": "Pies szczeka, a kot miauczy.", "lektor": "Pies szczeka... a kot miauczy.", "e": "🐕", "ru": "Собака лает, а кот мяукает.", "ua": "Собака гавкає, а кіт нявкає." },
+        { "pl": "Zając szybko biega i skacze.", "e": "🐇", "ru": "Заяц быстро бегает и прыгает.", "ua": "Заєць швидко бігає і стрибає." },
+        { "pl": "Niedźwiedź śpi całą zimę.", "e": "🐻", "ru": "Медведь спит всю зиму.", "ua": "Ведмідь спить усю зиму." },
+        { "pl": "Co je koza? Koza je trawę.", "e": "🐐", "ru": "Что ест коза? Коза ест траву.", "ua": "Що їсть коза? Коза їсть траву." }
+      ],
+      "zeszyt": ["pływa, lata, biega, szczeka", "śpi, miauczy", "skacze, je", "Pies szczeka, a kot miauczy.", "Co je koza? Koza je trawę."]
+    },
+    {
+      "nr": 71,
+      "tytul": { "pl": "Jeden kot, dwa koty, pięć kotów", "ru": "Один кот, два кота, пять котов", "ua": "Один кіт, два коти, п'ять котів" },
+      "cel": { "ru": "Ты научишься считать животных: jeden kot, dwa koty, pięć kotów.", "ua": "Ти навчишся рахувати тварин: jeden kot, dwa koty, pięć kotów." },
+      "zasady": [
+        {
+          "litery": "1",
+          "dzwiek": { "ru": "один, одна", "ua": "один, одна" },
+          "opis": {
+            "ru": "После jeden и jedna слово не меняется: jeden kot, jedna krowa. Jedna - для слов на -a.",
+            "ua": "Після jeden і jedna слово не змінюється: jeden kot, jedna krowa. Jedna - для слів на -a."
+          },
+          "przyklady": ["jeden kot", "jeden pies", "jedna krowa"]
+        },
+        {
+          "litery": "2  3  4",
+          "dzwiek": { "ru": "два, три, четыре", "ua": "два, три, чотири" },
+          "opis": {
+            "ru": "После 2, 3, 4 окончание -y или -i: dwa koty, trzy psy, cztery krowy. Как «два кота».",
+            "ua": "Після 2, 3, 4 закінчення -y або -i: dwa koty, trzy psy, cztery krowy. Як «два коти»."
+          },
+          "przyklady": ["dwa koty", "trzy psy", "cztery krowy"]
+        },
+        {
+          "litery": "5 ... 21",
+          "dzwiek": { "ru": "пять ... двадцать один", "ua": "п'ять ... двадцять один" },
+          "opis": {
+            "ru": "От 5 до 21 - окончание -ów: pięć kotów, sześć psów. Иногда слово просто короче: siedem krów. Как «пять котов».",
+            "ua": "Від 5 до 21 - закінчення -ów: pięć kotów, sześć psów. Іноді слово просто коротшає: siedem krów. Як «п'ять котів»."
+          },
+          "przyklady": ["pięć kotów", "sześć psów", "siedem krów"]
+        }
+      ],
+      "slowa": [
+        { "pl": "jeden kot", "e": "1️⃣🐈", "ru": "один кот", "ua": "один кіт" },
+        { "pl": "dwa koty", "e": "2️⃣🐈", "ru": "два кота", "ua": "два коти" },
+        { "pl": "pięć kotów", "e": "5️⃣🐈", "ru": "пять котов", "ua": "п'ять котів" },
+        { "pl": "jeden pies", "e": "1️⃣🐕", "ru": "одна собака", "ua": "один пес" },
+        { "pl": "trzy psy", "e": "3️⃣🐕", "ru": "три собаки", "ua": "три пси" },
+        { "pl": "sześć psów", "e": "6️⃣🐕", "ru": "шесть собак", "ua": "шість псів" },
+        { "pl": "jedna krowa", "e": "1️⃣🐄", "ru": "одна корова", "ua": "одна корова" },
+        { "pl": "cztery krowy", "e": "4️⃣🐄", "ru": "четыре коровы", "ua": "чотири корови" },
+        { "pl": "siedem krów", "e": "7️⃣🐄", "ru": "семь коров", "ua": "сім корів" }
+      ],
+      "zdania": [
+        { "pl": "Ile masz kotów? Mam dwa koty.", "e": "🐈", "ru": "Сколько у тебя котов? У меня два кота.", "ua": "Скільки в тебе котів? У мене два коти." },
+        { "pl": "Babcia ma trzy kury i cztery kaczki.", "e": "🐔", "ru": "У бабушки три курицы и четыре утки.", "ua": "У бабусі три курки і чотири качки." },
+        { "pl": "Kolega ma dwa chomiki.", "e": "🐹", "ru": "У друга два хомяка.", "ua": "У друга два хом'яки." },
+        { "pl": "W zoo jest pięć małp.", "e": "🐒", "ru": "В зоопарке пять обезьян.", "ua": "У зоопарку п'ять мавп." },
+        { "pl": "W akwarium pływa dziesięć rybek.", "e": "🐠", "ru": "В аквариуме плавают десять рыбок.", "ua": "В акваріумі плавають десять рибок." }
+      ],
+      "zeszyt": ["jeden kot, dwa koty, pięć kotów", "jeden pies, trzy psy, sześć psów", "jedna krowa, cztery krowy, siedem krów", "Ile masz kotów? Mam dwa koty.", "W zoo jest pięć małp."]
+    },
+    {
+      "nr": 72,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: zwierzęta", "ru": "Проверь себя: животные", "ua": "Перевір себе: тварини" },
+      "cel": { "ru": "Повтори всё из раздела 12 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 12 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Moje ulubione zwierzę to ...", "W domu mam ... / Nie mam zwierzęcia.", "Mój ... (pies, kot) lubi ...", "Moje zwierzę ... (pływa, lata, biega)."]
+    }
+  ]
+}

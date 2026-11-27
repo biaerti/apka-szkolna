@@ -1,0 +1,294 @@
+{
+  "nr": 3,
+  "tytul": { "pl": "Liczby i kolory", "ru": "Числа и цвета", "ua": "Числа і кольори" },
+  "e": "🎨",
+  "kolor": "#8b5cf6",
+  "lekcje": [
+    {
+      "nr": 13,
+      "tytul": { "pl": "Liczby 0-10", "ru": "Числа 0-10", "ua": "Числа 0-10" },
+      "cel": { "ru": "Ты научишься считать по-польски от нуля до десяти.", "ua": "Ти навчишся рахувати польською від нуля до десяти." },
+      "zasady": [
+        {
+          "litery": "trz",
+          "dzwiek": { "ru": "тш", "ua": "тш" },
+          "opis": {
+            "ru": "После t буквы rz звучат глухо, как ш: trzy = [тшы].",
+            "ua": "Після t літери rz звучать глухо, як ш: trzy = [тши]."
+          },
+          "przyklady": ["trzy"]
+        },
+        {
+          "litery": "ę + ć",
+          "dzwiek": { "ru": "ен + чь", "ua": "єн + ць" },
+          "opis": {
+            "ru": "ę перед ć звучит как «ен», а ć в конце - мягкое ч: pięć = [пенчь].",
+            "ua": "ę перед ć звучить як «єн», а ć у кінці - м'яке ць: pięć = [пєнць]."
+          },
+          "przyklady": ["pięć", "dziewięć", "dziesięć"]
+        }
+      ],
+      "slowa": [
+        { "pl": "jeden", "e": "1️⃣", "ru": "один", "ua": "один" },
+        { "pl": "dwa", "e": "2️⃣", "ru": "два", "ua": "два", "lektor": "Dwa." },
+        { "pl": "trzy", "e": "3️⃣", "ru": "три", "ua": "три" },
+        { "pl": "cztery", "e": "4️⃣", "ru": "четыре", "ua": "чотири" },
+        { "pl": "pięć", "e": "5️⃣", "ru": "пять", "ua": "п'ять" },
+        { "pl": "sześć", "e": "6️⃣", "ru": "шесть", "ua": "шість" },
+        { "pl": "siedem", "e": "7️⃣", "ru": "семь", "ua": "сім" },
+        { "pl": "osiem", "e": "8️⃣", "ru": "восемь", "ua": "вісім" },
+        { "pl": "dziewięć", "e": "9️⃣", "ru": "девять", "ua": "дев'ять" },
+        { "pl": "dziesięć", "e": "🔟", "ru": "десять", "ua": "десять" }
+      ],
+      "zdania": [
+        { "pl": "Jeden, dwa, trzy!", "e": "🏁", "ru": "Раз, два, три!", "ua": "Раз, два, три!" },
+        { "pl": "To jest pięć.", "e": "🖐️", "ru": "Это пять.", "ua": "Це п'ять." },
+        { "pl": "To jest zero.", "e": "0️⃣", "ru": "Это ноль.", "ua": "Це нуль." },
+        { "pl": "Tak, to jest dziesięć.", "e": "👐", "ru": "Да, это десять.", "ua": "Так, це десять." }
+      ],
+      "zeszyt": [
+        "0 zero, 1 jeden, 2 dwa, 3 trzy",
+        "4 cztery, 5 pięć, 6 sześć",
+        "7 siedem, 8 osiem, 9 dziewięć, 10 dziesięć",
+        "Jeden, dwa, trzy!",
+        "To jest pięć.",
+        "Tak, to jest dziesięć."
+      ]
+    },
+    {
+      "nr": 14,
+      "tytul": { "pl": "Liczby 11-20. Ile?", "ru": "Числа 11-20. Сколько?", "ua": "Числа 11-20. Скільки?" },
+      "cel": { "ru": "Ты научишься считать от 11 до 20 и спрашивать: Ile? (Сколько?)", "ua": "Ти навчишся рахувати від 11 до 20 і питати: Ile? (Скільки?)" },
+      "zasady": [
+        {
+          "litery": "-naście",
+          "dzwiek": { "ru": "-нащче", "ua": "-насьцє" },
+          "opis": {
+            "ru": "Числа от 11 до 19 кончаются на -naście - как русское «-надцать».",
+            "ua": "Числа від 11 до 19 закінчуються на -naście - як українське «-надцять»."
+          },
+          "przyklady": ["jedenaście", "dwanaście", "szesnaście"]
+        },
+        {
+          "litery": "pięć → piętnaście",
+          "dzwiek": { "ru": "ч → т", "ua": "ць → т" },
+          "opis": {
+            "ru": "Внимание: в 15 и 19 вместо ć пишем t: piętnaście, dziewiętnaście. А 14 - czternaście, без y.",
+            "ua": "Увага: у 15 і 19 замість ć пишемо t: piętnaście, dziewiętnaście. А 14 - czternaście, без y."
+          },
+          "przyklady": ["piętnaście", "dziewiętnaście", "czternaście"]
+        }
+      ],
+      "slowa": [
+        { "pl": "jedenaście", "e": "1️⃣1️⃣", "ru": "одиннадцать", "ua": "одинадцять" },
+        { "pl": "dwanaście", "e": "1️⃣2️⃣", "ru": "двенадцать", "ua": "дванадцять" },
+        { "pl": "trzynaście", "e": "1️⃣3️⃣", "ru": "тринадцать", "ua": "тринадцять" },
+        { "pl": "czternaście", "e": "1️⃣4️⃣", "ru": "четырнадцать", "ua": "чотирнадцять" },
+        { "pl": "piętnaście", "e": "1️⃣5️⃣", "ru": "пятнадцать", "ua": "п'ятнадцять" },
+        { "pl": "szesnaście", "e": "1️⃣6️⃣", "ru": "шестнадцать", "ua": "шістнадцять" },
+        { "pl": "siedemnaście", "e": "1️⃣7️⃣", "ru": "семнадцать", "ua": "сімнадцять" },
+        { "pl": "osiemnaście", "e": "1️⃣8️⃣", "ru": "восемнадцать", "ua": "вісімнадцять" },
+        { "pl": "dziewiętnaście", "e": "1️⃣9️⃣", "ru": "девятнадцать", "ua": "дев'ятнадцять" },
+        { "pl": "dwadzieścia", "e": "2️⃣0️⃣", "ru": "двадцать", "ua": "двадцять" }
+      ],
+      "zdania": [
+        { "pl": "Ile to jest? Trzynaście.", "e": "🔢", "ru": "Сколько это? Тринадцать.", "ua": "Скільки це? Тринадцять." },
+        { "pl": "Dwa plus dwa to cztery.", "e": "➕", "ru": "Два плюс два будет четыре.", "ua": "Два плюс два буде чотири." },
+        { "pl": "Pięć plus sześć to jedenaście.", "e": "🧮", "ru": "Пять плюс шесть будет одиннадцать.", "ua": "П'ять плюс шість буде одинадцять." },
+        { "pl": "Dziesięć plus dziesięć to dwadzieścia.", "e": "🙌", "ru": "Десять плюс десять будет двадцать.", "ua": "Десять плюс десять буде двадцять." }
+      ],
+      "zeszyt": [
+        "11 jedenaście, 12 dwanaście, 13 trzynaście",
+        "14 czternaście, 15 piętnaście, 16 szesnaście",
+        "17 siedemnaście, 18 osiemnaście, 19 dziewiętnaście",
+        "20 dwadzieścia",
+        "Ile to jest? Trzynaście.",
+        "Dwa plus dwa to cztery."
+      ]
+    },
+    {
+      "nr": 15,
+      "tytul": { "pl": "Kolory", "ru": "Цвета", "ua": "Кольори" },
+      "cel": { "ru": "Ты научишься называть по-польски десять цветов.", "ua": "Ти навчишся називати польською десять кольорів." },
+      "zasady": [
+        {
+          "litery": "-owy",
+          "dzwiek": { "ru": "-овы", "ua": "-ови" },
+          "opis": {
+            "ru": "Много цветов кончается на -owy: różowy, brązowy, fioletowy, pomarańczowy.",
+            "ua": "Багато кольорів закінчується на -owy: różowy, brązowy, fioletowy, pomarańczowy."
+          },
+          "przyklady": ["różowy", "brązowy", "fioletowy", "pomarańczowy"]
+        },
+        {
+          "litery": "ż ó ł",
+          "dzwiek": { "ru": "ж у ў", "ua": "ж у ў" },
+          "opis": {
+            "ru": "Вспомни трудные буквы: żółty = [жу́ўты], biały = [бя́ўы].",
+            "ua": "Згадай важкі літери: żółty = [жу́ўти], biały = [бя́ўи]."
+          },
+          "przyklady": ["żółty", "biały"]
+        }
+      ],
+      "slowa": [
+        { "pl": "czerwony", "e": "🔴", "ru": "красный", "ua": "червоний" },
+        { "pl": "niebieski", "e": "🔵", "ru": "синий, голубой", "ua": "синій, блакитний" },
+        { "pl": "zielony", "e": "🟢", "ru": "зелёный", "ua": "зелений" },
+        { "pl": "żółty", "e": "🟡", "ru": "жёлтый", "ua": "жовтий" },
+        { "pl": "czarny", "e": "⚫", "ru": "чёрный", "ua": "чорний" },
+        { "pl": "biały", "e": "⚪", "ru": "белый", "ua": "білий" },
+        { "pl": "różowy", "e": "💗", "ru": "розовый", "ua": "рожевий" },
+        { "pl": "pomarańczowy", "e": "🟠", "ru": "оранжевый", "ua": "помаранчевий" },
+        { "pl": "fioletowy", "e": "🟣", "ru": "фиолетовый", "ua": "фіолетовий" },
+        { "pl": "brązowy", "e": "🟤", "ru": "коричневый", "ua": "коричневий" }
+      ],
+      "zdania": [
+        { "pl": "Czerwony, żółty, zielony!", "e": "🚦", "ru": "Красный, жёлтый, зелёный!", "ua": "Червоний, жовтий, зелений!" },
+        { "pl": "Śnieg jest biały.", "e": "❄️", "ru": "Снег белый.", "ua": "Сніг білий." },
+        { "pl": "Żółw jest zielony.", "e": "🐢", "ru": "Черепаха зелёная.", "ua": "Черепаха зелена." },
+        { "pl": "Niedźwiedź jest brązowy.", "e": "🐻", "ru": "Медведь коричневый.", "ua": "Ведмідь коричневий." }
+      ],
+      "zeszyt": [
+        "czerwony, niebieski, zielony, żółty",
+        "czarny, biały, różowy",
+        "pomarańczowy, fioletowy, brązowy",
+        "Czerwony, żółty, zielony!",
+        "Śnieg jest biały.",
+        "Żółw jest zielony."
+      ]
+    },
+    {
+      "nr": 16,
+      "tytul": { "pl": "Jaki to kolor?", "ru": "Какой это цвет?", "ua": "Який це колір?" },
+      "cel": { "ru": "Ты научишься говорить, какого цвета вещь: czerwony, czerwona или czerwone.", "ua": "Ти навчишся казати, якого кольору річ: czerwony, czerwona чи czerwone." },
+      "zasady": [
+        {
+          "litery": "on: -y, -i",
+          "dzwiek": { "ru": "ы, и", "ua": "и, і" },
+          "opis": {
+            "ru": "Слово «он» (samochód, kot) - цвет кончается на -y или -i: czerwony, niebieski.",
+            "ua": "Слово «він» (samochód, kot) - колір закінчується на -y або -i: czerwony, niebieski."
+          },
+          "przyklady": ["czerwony samochód", "czarny kot", "żółty banan"]
+        },
+        {
+          "litery": "ona: -a",
+          "dzwiek": { "ru": "а", "ua": "а" },
+          "opis": {
+            "ru": "Слово «она» (róża, żaba) - цвет кончается на -a: czerwona, zielona.",
+            "ua": "Слово «вона» (róża, żaba) - колір закінчується на -a: czerwona, zielona."
+          },
+          "przyklady": ["czerwona róża", "zielona żaba", "pomarańczowa marchewka"]
+        },
+        {
+          "litery": "ono: -e",
+          "dzwiek": { "ru": "э", "ua": "е" },
+          "opis": {
+            "ru": "Слово «оно» (jabłko, drzewo) - цвет кончается на -e: czerwone, zielone.",
+            "ua": "Слово «воно» (jabłko, drzewo) - колір закінчується на -e: czerwone, zielone."
+          },
+          "przyklady": ["czerwone jabłko", "zielone drzewo", "białe mleko"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Jaki to kolor?", "e": "🎨", "ru": "Какой это цвет?", "ua": "Який це колір?" },
+        { "pl": "czerwony samochód", "e": "🚗", "ru": "красный автомобиль", "ua": "червоний автомобіль" },
+        { "pl": "czarny kot", "e": "🐈‍⬛", "ru": "чёрный кот", "ua": "чорний кіт" },
+        { "pl": "żółty banan", "e": "🍌", "ru": "жёлтый банан", "ua": "жовтий банан" },
+        { "pl": "czerwona róża", "e": "🌹", "ru": "красная роза", "ua": "червона троянда" },
+        { "pl": "zielona żaba", "e": "🐸", "ru": "зелёная лягушка", "ua": "зелена жаба" },
+        { "pl": "pomarańczowa marchewka", "e": "🥕", "ru": "оранжевая морковка", "ua": "помаранчева морквина" },
+        { "pl": "czerwone jabłko", "e": "🍎", "ru": "красное яблоко", "ua": "червоне яблуко" },
+        { "pl": "zielone drzewo", "e": "🌳", "ru": "зелёное дерево", "ua": "зелене дерево" },
+        { "pl": "białe mleko", "e": "🥛", "ru": "белое молоко", "ua": "біле молоко" }
+      ],
+      "zdania": [
+        { "pl": "To jest niebieski samochód.", "e": "🚙", "ru": "Это синий автомобиль.", "ua": "Це синій автомобіль." },
+        { "pl": "Jabłko jest zielone.", "e": "🍏", "ru": "Яблоко зелёное.", "ua": "Яблуко зелене." },
+        { "pl": "Czapka jest niebieska.", "e": "🧢", "ru": "Кепка синяя.", "ua": "Кепка синя." },
+        { "pl": "Jaki to kolor? Fioletowy!", "e": "💜", "ru": "Какой это цвет? Фиолетовый!", "ua": "Який це колір? Фіолетовий!" }
+      ],
+      "zeszyt": [
+        "on: czerwony samochód, czarny kot",
+        "ona: czerwona róża, zielona żaba",
+        "ono: czerwone jabłko, zielone drzewo",
+        "Jaki to kolor?",
+        "Jabłko jest zielone.",
+        "Czapka jest niebieska."
+      ]
+    },
+    {
+      "nr": 17,
+      "tytul": { "pl": "Liczby do 100. Strona w książce", "ru": "Числа до 100. Страница в книге", "ua": "Числа до 100. Сторінка в книжці" },
+      "cel": { "ru": "Ты научишься считать десятками до ста и называть страницу в книге.", "ua": "Ти навчишся рахувати десятками до ста і називати сторінку в книжці." },
+      "zasady": [
+        {
+          "litery": "-dzieści",
+          "dzwiek": { "ru": "-джещчи", "ua": "-дзєсьці" },
+          "opis": {
+            "ru": "30 и 40 кончаются на -dzieści: trzydzieści, czterdzieści. 20 - dwadzieścia.",
+            "ua": "30 і 40 закінчуються на -dzieści: trzydzieści, czterdzieści. 20 - dwadzieścia."
+          },
+          "przyklady": ["trzydzieści", "czterdzieści", "dwadzieścia"]
+        },
+        {
+          "litery": "-dziesiąt",
+          "dzwiek": { "ru": "-джещонт", "ua": "-дзєсьонт" },
+          "opis": {
+            "ru": "От 50 до 90 - на -dziesiąt: pięćdziesiąt, sześćdziesiąt.",
+            "ua": "Від 50 до 90 - на -dziesiąt: pięćdziesiąt, sześćdziesiąt."
+          },
+          "przyklady": ["pięćdziesiąt", "sześćdziesiąt", "dziewięćdziesiąt"]
+        },
+        {
+          "litery": "25 = 20 + 5",
+          "dzwiek": { "ru": "двадцать пять", "ua": "двадцять п'ять" },
+          "opis": {
+            "ru": "Сначала десятки, потом единицы - как по-русски: dwadzieścia pięć.",
+            "ua": "Спочатку десятки, потім одиниці - як українською: dwadzieścia pięć."
+          },
+          "przyklady": ["dwadzieścia", "pięć"]
+        }
+      ],
+      "slowa": [
+        { "pl": "trzydzieści", "e": "3️⃣0️⃣", "ru": "тридцать", "ua": "тридцять" },
+        { "pl": "czterdzieści", "e": "4️⃣0️⃣", "ru": "сорок", "ua": "сорок" },
+        { "pl": "pięćdziesiąt", "e": "5️⃣0️⃣", "ru": "пятьдесят", "ua": "п'ятдесят" },
+        { "pl": "sześćdziesiąt", "e": "6️⃣0️⃣", "ru": "шестьдесят", "ua": "шістдесят" },
+        { "pl": "siedemdziesiąt", "e": "7️⃣0️⃣", "ru": "семьдесят", "ua": "сімдесят" },
+        { "pl": "osiemdziesiąt", "e": "8️⃣0️⃣", "ru": "восемьдесят", "ua": "вісімдесят" },
+        { "pl": "dziewięćdziesiąt", "e": "9️⃣0️⃣", "ru": "девяносто", "ua": "дев'яносто" },
+        { "pl": "sto", "e": "💯", "ru": "сто", "ua": "сто", "lektor": "Sto." }
+      ],
+      "zdania": [
+        { "pl": "Strona dwadzieścia pięć.", "e": "📖", "ru": "Страница двадцать пять.", "ua": "Сторінка двадцять п'ять." },
+        { "pl": "Strona czterdzieści osiem.", "e": "📘", "ru": "Страница сорок восемь.", "ua": "Сторінка сорок вісім." },
+        { "pl": "Ile to jest? Siedemdziesiąt.", "e": "🤔", "ru": "Сколько это? Семьдесят.", "ua": "Скільки це? Сімдесят." },
+        { "pl": "Pięćdziesiąt plus pięćdziesiąt to sto.", "e": "➕", "ru": "Пятьдесят плюс пятьдесят будет сто.", "ua": "П'ятдесят плюс п'ятдесят буде сто." },
+        { "pl": "Osiemdziesiąt, dziewięćdziesiąt, sto!", "e": "🚀", "ru": "Восемьдесят, девяносто, сто!", "ua": "Вісімдесят, дев'яносто, сто!" }
+      ],
+      "zeszyt": [
+        "30 trzydzieści, 40 czterdzieści, 50 pięćdziesiąt",
+        "60 sześćdziesiąt, 70 siedemdziesiąt",
+        "80 osiemdziesiąt, 90 dziewięćdziesiąt, 100 sto",
+        "25 = dwadzieścia pięć",
+        "Strona dwadzieścia pięć.",
+        "Pięćdziesiąt plus pięćdziesiąt to sto."
+      ]
+    },
+    {
+      "nr": 18,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: liczby i kolory", "ru": "Проверь себя: числа и цвета", "ua": "Перевір себе: числа і кольори" },
+      "cel": { "ru": "Повтори всё из раздела 3 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 3 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": [
+        "1, 2, 3 ... 20: jeden, dwa, trzy ... dwadzieścia",
+        "Dwa plus dwa to cztery.",
+        "czerwony samochód, czerwona róża, czerwone jabłko",
+        "Jaki to kolor? To jest ...",
+        "Strona dwadzieścia pięć."
+      ]
+    }
+  ]
+}

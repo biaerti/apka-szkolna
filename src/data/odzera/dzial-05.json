@@ -1,0 +1,241 @@
+{
+  "nr": 5,
+  "tytul": { "pl": "Szkoła i tydzień", "ru": "Школа и неделя", "ua": "Школа і тиждень" },
+  "e": "📅",
+  "kolor": "#0f9d8a",
+  "lekcje": [
+    {
+      "nr": 25,
+      "tytul": { "pl": "Dni tygodnia", "ru": "Дни недели", "ua": "Дні тижня" },
+      "cel": { "ru": "Ты научишься называть дни недели и говорить, какой сегодня день.", "ua": "Ти навчишся називати дні тижня і казати, який сьогодні день." },
+      "zasady": [
+        {
+          "litery": "Dzisiaj jest ...",
+          "dzwiek": { "ru": "Сегодня ...", "ua": "Сьогодні ..." },
+          "opis": {
+            "ru": "Какой сегодня день? Dzisiaj jest + день: Dzisiaj jest poniedziałek.",
+            "ua": "Який сьогодні день? Dzisiaj jest + день: Dzisiaj jest poniedziałek."
+          },
+          "przyklady": ["Dzisiaj jest poniedziałek."]
+        },
+        {
+          "litery": "niedziela ≠ неделя",
+          "dzwiek": { "ru": "воскресенье", "ua": "неділя" },
+          "opis": {
+            "ru": "Осторожно: niedziela - это воскресенье. А неделя (7 дней) - tydzień.",
+            "ua": "Niedziela - це неділя, як українською. А тиждень (7 днів) - tydzień."
+          },
+          "przyklady": ["niedziela", "tydzień"]
+        },
+        {
+          "litery": "ą",
+          "dzwiek": { "ru": "он", "ua": "он" },
+          "opis": {
+            "ru": "Вспомни: ą звучит как «он». piątek читается почти как [пёнтэк].",
+            "ua": "Пригадай: ą звучить як «он». piątek читається майже як [пьонтек]."
+          },
+          "przyklady": ["piątek"]
+        }
+      ],
+      "slowa": [
+        { "pl": "poniedziałek", "e": "1️⃣", "ru": "понедельник", "ua": "понеділок" },
+        { "pl": "wtorek", "e": "2️⃣", "ru": "вторник", "ua": "вівторок" },
+        { "pl": "środa", "e": "3️⃣", "ru": "среда", "ua": "середа" },
+        { "pl": "czwartek", "e": "4️⃣", "ru": "четверг", "ua": "четвер" },
+        { "pl": "piątek", "e": "5️⃣", "ru": "пятница", "ua": "п'ятниця" },
+        { "pl": "sobota", "e": "6️⃣", "ru": "суббота", "ua": "субота" },
+        { "pl": "niedziela", "e": "7️⃣", "ru": "воскресенье", "ua": "неділя" },
+        { "pl": "tydzień", "e": "📅", "ru": "неделя (7 дней)", "ua": "тиждень" }
+      ],
+      "zdania": [
+        { "pl": "Dzisiaj jest poniedziałek.", "e": "☀️", "ru": "Сегодня понедельник.", "ua": "Сьогодні понеділок." },
+        { "pl": "Jutro jest wtorek.", "e": "⏭️", "ru": "Завтра вторник.", "ua": "Завтра вівторок." },
+        { "pl": "Hurra, jest piątek!", "e": "🥳", "ru": "Ура, пятница!", "ua": "Ура, п'ятниця!" },
+        { "pl": "Sobota i niedziela to weekend.", "e": "🛌", "ru": "Суббота и воскресенье - выходные.", "ua": "Субота і неділя - вихідні." },
+        { "pl": "Tydzień ma siedem dni.", "e": "📆", "ru": "В неделе семь дней.", "ua": "У тижні сім днів." }
+      ],
+      "zeszyt": ["poniedziałek, wtorek, środa, czwartek", "piątek, sobota, niedziela", "tydzień", "Dzisiaj jest poniedziałek.", "Jutro jest wtorek.", "Sobota i niedziela to weekend."]
+    },
+    {
+      "nr": 26,
+      "tytul": { "pl": "Przedmioty szkolne", "ru": "Школьные предметы", "ua": "Шкільні предмети" },
+      "cel": { "ru": "Ты научишься называть школьные предметы по-польски.", "ua": "Ти навчишся називати шкільні предмети польською." },
+      "zasady": [
+        {
+          "litery": "-yka  -ika",
+          "dzwiek": { "ru": "-ыка  -ика", "ua": "-ика  -іка" },
+          "opis": {
+            "ru": "Многие предметы похожи на русские слова: математика = matematyka, музыка = muzyka, информатика = informatyka.",
+            "ua": "Багато предметів схожі на українські слова: математика = matematyka, музика = muzyka, інформатика = informatyka."
+          },
+          "przyklady": ["matematyka", "muzyka", "informatyka", "technika"]
+        },
+        {
+          "litery": "mu-ZY-ka",
+          "dzwiek": { "ru": "уда́рение", "ua": "на́голос" },
+          "opis": {
+            "ru": "Ударение - на предпоследнем слоге: ma-te-ma-TY-ka, mu-ZY-ka. По-русски му́зыка, а по-польски mu-ZY-ka.",
+            "ua": "Наголос - на передостанньому складі: ma-te-ma-TY-ka, mu-ZY-ka. Українською му́зика, а польською mu-ZY-ka."
+          },
+          "przyklady": ["matematyka", "muzyka", "plastyka"]
+        }
+      ],
+      "slowa": [
+        { "pl": "polski", "e": "📖", "ru": "польский язык (урок)", "ua": "польська мова (урок)" },
+        { "pl": "matematyka", "e": "➗", "ru": "математика", "ua": "математика" },
+        { "pl": "angielski", "e": "💂", "ru": "английский язык", "ua": "англійська мова" },
+        { "pl": "przyroda", "e": "🌿", "ru": "природоведение", "ua": "природознавство" },
+        { "pl": "wychowanie fizyczne", "e": "🤸", "ru": "физкультура (в школе говорят коротко: «вуэф»)", "ua": "фізкультура (у школі кажуть коротко: «вуеф»)" },
+        { "pl": "plastyka", "e": "🎨", "ru": "рисование, изобразительное искусство", "ua": "малювання, образотворче мистецтво" },
+        { "pl": "muzyka", "e": "🎵", "ru": "музыка", "ua": "музика" },
+        { "pl": "informatyka", "e": "🖱️", "ru": "информатика", "ua": "інформатика" },
+        { "pl": "technika", "e": "🔧", "ru": "технология, труд", "ua": "трудове навчання, технології" }
+      ],
+      "zdania": [
+        { "pl": "Teraz jest matematyka.", "e": "👉", "ru": "Сейчас математика.", "ua": "Зараз математика." },
+        { "pl": "Angielski jest łatwy.", "e": "😊", "ru": "Английский - лёгкий.", "ua": "Англійська - легка." },
+        { "pl": "Przyroda jest ciekawa.", "e": "🔬", "ru": "Природоведение - интересный предмет.", "ua": "Природознавство - цікавий предмет." },
+        { "pl": "Muzyka jest super!", "e": "🎶", "ru": "Музыка - супер!", "ua": "Музика - супер!" }
+      ],
+      "zeszyt": ["polski, matematyka, angielski", "przyroda, wychowanie fizyczne (wuef)", "plastyka, muzyka, informatyka, technika", "Teraz jest matematyka.", "Muzyka jest super!"]
+    },
+    {
+      "nr": 27,
+      "tytul": { "pl": "Mój plan lekcji", "ru": "Моё расписание уроков", "ua": "Мій розклад уроків" },
+      "cel": { "ru": "Ты расскажешь, какие уроки у тебя в разные дни: w poniedziałek mam...", "ua": "Ти розкажеш, які уроки в тебе в різні дні: w poniedziałek mam..." },
+      "zasady": [
+        {
+          "litery": "w + dzień",
+          "dzwiek": { "ru": "в", "ua": "у / в" },
+          "opis": {
+            "ru": "Когда? w + день: w poniedziałek, w czwartek, w piątek. Перед wtorek говорим we: we wtorek.",
+            "ua": "Коли? w + день: w poniedziałek, w czwartek, w piątek. Перед wtorek кажемо we: we wtorek."
+          },
+          "przyklady": ["w poniedziałek", "we wtorek", "w czwartek", "w piątek"]
+        },
+        {
+          "litery": "-a → -ę",
+          "dzwiek": { "ru": "э", "ua": "е" },
+          "opis": {
+            "ru": "Если день кончается на -a, после w будет -ę: środa → w środę, sobota → w sobotę. Как по-русски: среда → в среду.",
+            "ua": "Якщо день закінчується на -a, після w буде -ę: środa → w środę, sobota → w sobotę. Як українською: середа → у середу."
+          },
+          "przyklady": ["środa", "w środę", "W sobotę nie ma szkoły."]
+        }
+      ],
+      "slowa": [
+        { "pl": "plan lekcji", "e": "🗓️", "ru": "расписание уроков", "ua": "розклад уроків" },
+        { "pl": "przerwa", "e": "🧃", "ru": "перемена", "ua": "перерва" },
+        { "pl": "dzwonek", "e": "🔔", "ru": "звонок", "ua": "дзвоник" },
+        { "pl": "w poniedziałek", "e": "1️⃣", "ru": "в понедельник", "ua": "у понеділок" },
+        { "pl": "we wtorek", "e": "2️⃣", "ru": "во вторник", "ua": "у вівторок" },
+        { "pl": "w środę", "e": "3️⃣", "ru": "в среду", "ua": "у середу" },
+        { "pl": "w czwartek", "e": "4️⃣", "ru": "в четверг", "ua": "у четвер" },
+        { "pl": "w piątek", "e": "5️⃣", "ru": "в пятницу", "ua": "у п'ятницю" }
+      ],
+      "zdania": [
+        { "pl": "W poniedziałek mam polski i matematykę.", "e": "📖", "ru": "В понедельник у меня польский и математика.", "ua": "У понеділок у мене польська і математика." },
+        { "pl": "We wtorek mam wychowanie fizyczne.", "e": "🤸", "ru": "Во вторник у меня физкультура.", "ua": "У вівторок у мене фізкультура." },
+        { "pl": "W czwartek mam pięć lekcji.", "e": "🖐️", "ru": "В четверг у меня пять уроков.", "ua": "У четвер у мене п'ять уроків." },
+        { "pl": "W sobotę nie ma szkoły.", "e": "🏡", "ru": "В субботу нет школы.", "ua": "У суботу немає школи." },
+        { "pl": "Dzwonek! Teraz jest przerwa.", "e": "🔔", "ru": "Звонок! Сейчас перемена.", "ua": "Дзвоник! Зараз перерва." }
+      ],
+      "zeszyt": ["plan lekcji", "w poniedziałek, we wtorek, w środę", "w czwartek, w piątek, w sobotę, w niedzielę", "W poniedziałek mam polski i matematykę.", "W sobotę nie ma szkoły.", "Dzwonek! Teraz jest przerwa."]
+    },
+    {
+      "nr": 28,
+      "tytul": { "pl": "Ludzie i miejsca w szkole", "ru": "Люди и места в школе", "ua": "Люди і місця в школі" },
+      "cel": { "ru": "Ты узнаешь, кто работает в школе и как называются места в школе.", "ua": "Ти дізнаєшся, хто працює в школі і як називаються місця в школі." },
+      "zasady": [
+        {
+          "litery": "-ka",
+          "dzwiek": { "ru": "-ница", "ua": "-ка" },
+          "opis": {
+            "ru": "Если это женщина, добавь -ka: nauczyciel → nauczycielka (учитель → учительница).",
+            "ua": "Якщо це жінка, додай -ka: nauczyciel → nauczycielka (учитель → вчителька)."
+          },
+          "przyklady": ["nauczyciel", "nauczycielka"]
+        },
+        {
+          "litery": "ł  ó",
+          "dzwiek": { "ru": "ў  у", "ua": "ў  у" },
+          "opis": {
+            "ru": "Вспомни: ł = ў, ó = у. В слове stołówka есть обе буквы.",
+            "ua": "Пригадай: ł = ў, ó = у. У слові stołówka є обидві літери."
+          },
+          "przyklady": ["stołówka", "szkoła"]
+        }
+      ],
+      "slowa": [
+        { "pl": "nauczyciel", "e": "👨‍🏫", "ru": "учитель", "ua": "учитель" },
+        { "pl": "nauczycielka", "e": "👩‍🏫", "ru": "учительница", "ua": "вчителька" },
+        { "pl": "dyrektor", "e": "👔", "ru": "директор", "ua": "директор" },
+        { "pl": "sekretariat", "e": "🗂️", "ru": "секретариат, канцелярия школы", "ua": "секретаріат, канцелярія школи" },
+        { "pl": "stołówka", "e": "🍽️", "ru": "столовая", "ua": "їдальня" },
+        { "pl": "szatnia", "e": "🧥", "ru": "раздевалка, гардероб", "ua": "роздягальня, гардероб" },
+        { "pl": "biblioteka", "e": "📚", "ru": "библиотека", "ua": "бібліотека" },
+        { "pl": "sala gimnastyczna", "e": "🏀", "ru": "спортивный зал", "ua": "спортивна зала" },
+        { "pl": "toaleta", "e": "🚻", "ru": "туалет", "ua": "туалет" },
+        { "pl": "boisko", "e": "🥅", "ru": "школьный стадион, спортплощадка", "ua": "шкільний стадіон, спортмайданчик" }
+      ],
+      "zdania": [
+        { "pl": "To jest nasza biblioteka.", "e": "📕", "ru": "Это наша библиотека.", "ua": "Це наша бібліотека." },
+        { "pl": "Pani nauczycielka jest miła.", "e": "😊", "ru": "Учительница добрая.", "ua": "Вчителька добра." },
+        { "pl": "Boisko jest duże.", "e": "🏟️", "ru": "Школьный стадион большой.", "ua": "Шкільний стадіон великий." },
+        { "pl": "Szatnia jest na dole.", "e": "⬇️", "ru": "Раздевалка внизу.", "ua": "Роздягальня внизу." }
+      ],
+      "zeszyt": ["nauczyciel, nauczycielka, dyrektor", "sekretariat, stołówka, szatnia", "biblioteka, sala gimnastyczna, toaleta, boisko", "To jest nasza biblioteka.", "Szatnia jest na dole."]
+    },
+    {
+      "nr": 29,
+      "tytul": { "pl": "Gdzie jest...? Idę do...", "ru": "Где...? Я иду в...", "ua": "Де...? Я йду до..." },
+      "cel": { "ru": "Ты спросишь, где что-то находится в школе, и скажешь, куда идёшь.", "ua": "Ти спитаєш, де щось є в школі, і скажеш, куди йдеш." },
+      "zasady": [
+        {
+          "litery": "do + ...",
+          "dzwiek": { "ru": "в", "ua": "до" },
+          "opis": {
+            "ru": "Иду в комнату или здание - do: Idę do szatni. Конец слова меняется (szatnia → do szatni), поэтому запоминай целиком.",
+            "ua": "Іду до кімнати чи будівлі - do: Idę do szatni. Кінець слова змінюється (szatnia → do szatni), тому запам'ятовуй цілим зворотом."
+          },
+          "przyklady": ["Idę do szatni.", "Idę do toalety.", "Idę do biblioteki."]
+        },
+        {
+          "litery": "na + ...",
+          "dzwiek": { "ru": "на", "ua": "на" },
+          "opis": {
+            "ru": "На стадион, на урок, на перемену - na: Idę na boisko, Idę na matematykę.",
+            "ua": "На стадіон, на урок, на перерву - na: Idę na boisko, Idę na matematykę."
+          },
+          "przyklady": ["Idę na boisko.", "Idę na matematykę.", "Idę na przerwę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Gdzie jest...?", "e": "🗺️", "ru": "Где...?", "ua": "Де...?", "lektor": "Gdzie jest?" },
+        { "pl": "Idę do szatni.", "e": "🧥", "ru": "Я иду в раздевалку.", "ua": "Я йду до роздягальні." },
+        { "pl": "Idę do toalety.", "e": "🚻", "ru": "Я иду в туалет.", "ua": "Я йду до туалету." },
+        { "pl": "Idę do biblioteki.", "e": "📚", "ru": "Я иду в библиотеку.", "ua": "Я йду до бібліотеки." },
+        { "pl": "Idę do stołówki.", "e": "🍽️", "ru": "Я иду в столовую.", "ua": "Я йду до їдальні." },
+        { "pl": "Idę na boisko.", "e": "🥅", "ru": "Я иду на школьный стадион.", "ua": "Я йду на шкільний стадіон." },
+        { "pl": "Idę na matematykę.", "e": "➗", "ru": "Я иду на математику.", "ua": "Я йду на математику." },
+        { "pl": "Idę na przerwę.", "e": "🧃", "ru": "Я иду на перемену.", "ua": "Я йду на перерву." }
+      ],
+      "zdania": [
+        { "pl": "Gdzie jest szatnia?", "e": "❓", "ru": "Где раздевалка?", "ua": "Де роздягальня?" },
+        { "pl": "Toaleta jest tam.", "e": "👉", "ru": "Туалет там.", "ua": "Туалет там." },
+        { "pl": "Przepraszam, gdzie jest sala gimnastyczna?", "e": "🙋", "ru": "Извините, где спортивный зал?", "ua": "Вибачте, де спортивна зала?" },
+        { "pl": "Po lekcjach idę na boisko.", "e": "⚽", "ru": "После уроков я иду на школьный стадион.", "ua": "Після уроків я йду на шкільний стадіон." },
+        { "pl": "W piątek idę do biblioteki.", "e": "📅", "ru": "В пятницу я иду в библиотеку.", "ua": "У п'ятницю я йду до бібліотеки." }
+      ],
+      "zeszyt": ["Gdzie jest szatnia?", "Idę do szatni. Idę do toalety.", "Idę do biblioteki. Idę do stołówki.", "Idę na boisko. Idę na przerwę.", "Przepraszam, gdzie jest sala gimnastyczna?"]
+    },
+    {
+      "nr": 30,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: szkoła i tydzień", "ru": "Проверь себя: школа и неделя", "ua": "Перевір себе: школа і тиждень" },
+      "cel": { "ru": "Повтори всё из раздела 5 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 5 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Dzisiaj jest ...", "W poniedziałek mam ...", "W piątek mam ...", "Po lekcjach idę ..."]
+    }
+  ]
+}

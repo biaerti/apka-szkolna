@@ -1,0 +1,221 @@
+{
+  "nr": 4,
+  "tytul": { "pl": "Moja rodzina", "ru": "Моя семья", "ua": "Моя сім'я" },
+  "e": "👨‍👩‍👧",
+  "kolor": "#e0457b",
+  "lekcje": [
+    {
+      "nr": 19,
+      "tytul": { "pl": "Mama, tata i ja", "ru": "Мама, папа и я", "ua": "Мама, тато і я" },
+      "cel": { "ru": "Ты научишься называть членов семьи: мама, папа, брат, сестра, бабушка, дедушка.", "ua": "Ти навчишся називати членів родини: мама, тато, брат, сестра, бабуся, дідусь." },
+      "zasady": [
+        {
+          "litery": "mój  moja",
+          "dzwiek": { "ru": "мой  моя", "ua": "мій  моя" },
+          "opis": {
+            "ru": "Mój - для мужчины или мальчика: mój tata, mój brat. Moja - для женщины или девочки: moja mama, moja siostra.",
+            "ua": "Mój - для чоловіка або хлопчика: mój tata, mój brat. Moja - для жінки або дівчинки: moja mama, moja siostra."
+          },
+          "przyklady": ["To jest mój tata.", "To jest moja mama."]
+        },
+        {
+          "litery": "ci  dzi",
+          "dzwiek": { "ru": "чь  джь", "ua": "ць  дзь" },
+          "opis": {
+            "ru": "Помнишь? ci и dzi читаются мягко: babcia, ciocia, dziadek.",
+            "ua": "Пам'ятаєш? ci і dzi читаються м'яко: babcia, ciocia, dziadek."
+          },
+          "przyklady": ["babcia", "ciocia", "dziadek"]
+        }
+      ],
+      "slowa": [
+        { "pl": "mama", "e": "👩", "ru": "мама", "ua": "мама" },
+        { "pl": "tata", "e": "👨", "ru": "папа", "ua": "тато" },
+        { "pl": "brat", "e": "👦", "ru": "брат", "ua": "брат" },
+        { "pl": "siostra", "e": "👧", "ru": "сестра", "ua": "сестра" },
+        { "pl": "babcia", "e": "👵", "ru": "бабушка", "ua": "бабуся" },
+        { "pl": "dziadek", "e": "👴", "ru": "дедушка", "ua": "дідусь" },
+        { "pl": "ciocia", "e": "👩‍🦰", "ru": "тётя", "ua": "тітка" },
+        { "pl": "wujek", "e": "🧔", "ru": "дядя", "ua": "дядько" },
+        { "pl": "rodzina", "e": "👨‍👩‍👧‍👦", "ru": "семья", "ua": "сім'я, родина" }
+      ],
+      "zdania": [
+        { "pl": "To jest moja mama.", "e": "👩", "ru": "Это моя мама.", "ua": "Це моя мама." },
+        { "pl": "To jest mój tata.", "e": "👨", "ru": "Это мой папа.", "ua": "Це мій тато." },
+        { "pl": "To jest babcia, a to jest dziadek.", "lektor": "To jest babcia... a to jest dziadek.", "e": "👵", "ru": "Это бабушка, а это дедушка.", "ua": "Це бабуся, а це дідусь." },
+        { "pl": "Ola to moja siostra.", "e": "👧", "ru": "Оля - моя сестра.", "ua": "Оля - моя сестра." },
+        { "pl": "To jest ciocia Ania.", "e": "👩‍🦰", "ru": "Это тётя Аня.", "ua": "Це тітка Аня." }
+      ],
+      "zeszyt": ["mama", "tata", "brat", "siostra", "babcia", "dziadek", "To jest moja mama.", "To jest mój tata."]
+    },
+    {
+      "nr": 20,
+      "tytul": { "pl": "Mam brata. Nie mam brata.", "ru": "У меня есть / у меня нет", "ua": "У мене є / у мене немає" },
+      "cel": { "ru": "Ты научишься говорить, кто есть в твоей семье: mam brata, nie mam siostry.", "ua": "Ти навчишся казати, хто є у твоїй родині: mam brata, nie mam siostry." },
+      "zasady": [
+        {
+          "litery": "mam  nie mam",
+          "dzwiek": { "ru": "у меня есть  у меня нет", "ua": "у мене є  у мене немає" },
+          "opis": {
+            "ru": "Mam = у меня есть, nie mam = у меня нет. Брат при этом не меняется: mam brata - nie mam brata.",
+            "ua": "Mam = у мене є, nie mam = у мене немає. Брат при цьому не змінюється: mam brata - nie mam brata."
+          },
+          "przyklady": ["Mam brata.", "Nie mam brata."]
+        },
+        {
+          "litery": "siostrę  siostry",
+          "dzwiek": { "ru": "э  ы", "ua": "е  и" },
+          "opis": {
+            "ru": "А сестра меняется: mam siostrę - nie mam siostry. Запомни эти фразы целиком.",
+            "ua": "А сестра змінюється: mam siostrę - nie mam siostry. Запам'ятай ці звороти цілком."
+          },
+          "przyklady": ["Mam siostrę.", "Nie mam siostry."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Mam brata.", "e": "👦", "ru": "У меня есть брат.", "ua": "У мене є брат." },
+        { "pl": "Nie mam brata.", "e": "🙅‍♂️", "ru": "У меня нет брата.", "ua": "У мене немає брата." },
+        { "pl": "Mam siostrę.", "e": "👧", "ru": "У меня есть сестра.", "ua": "У мене є сестра." },
+        { "pl": "Nie mam siostry.", "e": "🙅‍♀️", "ru": "У меня нет сестры.", "ua": "У мене немає сестри." },
+        { "pl": "Mam babcię.", "e": "👵", "ru": "У меня есть бабушка.", "ua": "У мене є бабуся." },
+        { "pl": "Mam dziadka.", "e": "👴", "ru": "У меня есть дедушка.", "ua": "У мене є дідусь." },
+        { "pl": "Mam ciocię.", "e": "👩‍🦰", "ru": "У меня есть тётя.", "ua": "У мене є тітка." },
+        { "pl": "Mam wujka.", "e": "🧔", "ru": "У меня есть дядя.", "ua": "У мене є дядько." }
+      ],
+      "zdania": [
+        { "pl": "Mam brata i siostrę.", "e": "👫", "ru": "У меня есть брат и сестра.", "ua": "У мене є брат і сестра." },
+        { "pl": "Masz siostrę? Nie, nie mam siostry.", "e": "🙅‍♀️", "ru": "У тебя есть сестра? Нет, у меня нет сестры.", "ua": "У тебе є сестра? Ні, у мене немає сестри." },
+        { "pl": "Mam babcię i dziadka.", "e": "👵", "ru": "У меня есть бабушка и дедушка.", "ua": "У мене є бабуся і дідусь." },
+        { "pl": "Ola ma brata.", "e": "👧", "ru": "У Оли есть брат.", "ua": "Оля має брата." },
+        { "pl": "Max nie ma siostry.", "e": "👦", "ru": "У Макса нет сестры.", "ua": "У Макса немає сестри." }
+      ],
+      "zeszyt": ["Mam brata.", "Nie mam brata.", "Mam siostrę.", "Nie mam siostry.", "Mam babcię i dziadka.", "Ola ma brata."]
+    },
+    {
+      "nr": 21,
+      "tytul": { "pl": "Ile masz lat?", "ru": "Сколько тебе лет?", "ua": "Скільки тобі років?" },
+      "cel": { "ru": "Ты научишься говорить, сколько лет тебе и твоей семье.", "ua": "Ти навчишся казати, скільки років тобі і твоїй родині." },
+      "zasady": [
+        {
+          "litery": "mam  masz  ma",
+          "dzwiek": { "ru": "мам  маш  ма", "ua": "мам  маш  ма" },
+          "opis": {
+            "ru": "Возраст по-польски «имеют»: ja mam, ty masz, on/ona ma. Mam dziesięć lat = мне десять лет.",
+            "ua": "Вік польською «мають»: ja mam, ty masz, on/ona ma. Mam dziesięć lat = мені десять років."
+          },
+          "przyklady": ["Ile masz lat?", "Mam dziesięć lat.", "Tata ma czterdzieści lat."]
+        },
+        {
+          "litery": "lata  lat",
+          "dzwiek": { "ru": "года  лет", "ua": "роки  років" },
+          "opis": {
+            "ru": "2, 3, 4 - lata (dwa lata). 5 и больше - lat (pięć lat, dziesięć lat).",
+            "ua": "2, 3, 4 - lata (dwa lata). 5 і більше - lat (pięć lat, dziesięć lat)."
+          },
+          "przyklady": ["Brat ma dwa lata.", "Siostra ma siedem lat."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Ile masz lat?", "e": "❓", "ru": "Сколько тебе лет?", "ua": "Скільки тобі років?" },
+        { "pl": "Mam dziesięć lat.", "e": "🔟", "ru": "Мне десять лет.", "ua": "Мені десять років." },
+        { "pl": "Brat ma dwa lata.", "e": "👶", "ru": "Брату два года.", "ua": "Братові два роки." },
+        { "pl": "Siostra ma siedem lat.", "e": "👧", "ru": "Сестре семь лет.", "ua": "Сестрі сім років." },
+        { "pl": "Mama ma trzydzieści pięć lat.", "e": "👩", "ru": "Маме тридцать пять лет.", "ua": "Мамі тридцять п'ять років." },
+        { "pl": "Tata ma czterdzieści lat.", "e": "👨", "ru": "Папе сорок лет.", "ua": "Татові сорок років." },
+        { "pl": "Ile lat ma babcia?", "e": "👵", "ru": "Сколько лет бабушке?", "ua": "Скільки років бабусі?" },
+        { "pl": "Dziadek ma siedemdziesiąt lat.", "e": "👴", "ru": "Дедушке семьдесят лет.", "ua": "Дідусеві сімдесят років." }
+      ],
+      "zdania": [
+        { "pl": "Max ma brata. On ma dwanaście lat.", "e": "👦", "ru": "У Макса есть брат. Ему двенадцать лет.", "ua": "У Макса є брат. Йому дванадцять років." },
+        { "pl": "Ola ma siostrę. Ona ma cztery lata.", "e": "👧", "ru": "У Оли есть сестра. Ей четыре года.", "ua": "Оля має сестру. Їй чотири роки." },
+        { "pl": "Ile lat ma twój tata?", "e": "👨", "ru": "Сколько лет твоему папе?", "ua": "Скільки років твоєму татові?" },
+        { "pl": "Ja mam dziesięć lat, a brat ma pięć lat.", "e": "🧒", "ru": "Мне десять лет, а брату пять лет.", "ua": "Мені десять років, а братові п'ять років." }
+      ],
+      "zeszyt": ["Ile masz lat?", "Mam dziesięć lat.", "Brat ma dwa lata.", "Tata ma czterdzieści lat.", "Max ma brata. On ma dwanaście lat."]
+    },
+    {
+      "nr": 22,
+      "tytul": { "pl": "Jaki jest? Jaka jest?", "ru": "Какой он? Какая она?", "ua": "Який він? Яка вона?" },
+      "cel": { "ru": "Ты научишься описывать людей: tata jest wysoki, mama jest wysoka.", "ua": "Ти навчишся описувати людей: tata jest wysoki, mama jest wysoka." },
+      "zasady": [
+        {
+          "litery": "-y, -i  →  -a",
+          "dzwiek": { "ru": "ы, и  →  а", "ua": "и, і  →  а" },
+          "opis": {
+            "ru": "Он какой? Слово кончается на -y или -i: wysoki, mały. Она какая? На -a: wysoka, mała.",
+            "ua": "Він який? Слово закінчується на -y або -i: wysoki, mały. Вона яка? На -a: wysoka, mała."
+          },
+          "przyklady": ["Tata jest wysoki.", "Mama jest wysoka."]
+        },
+        {
+          "litery": "jaki?  jaka?",
+          "dzwiek": { "ru": "какой?  какая?", "ua": "який?  яка?" },
+          "opis": {
+            "ru": "Jaki? - спрашиваем про мужчину или мальчика. Jaka? - про женщину или девочку.",
+            "ua": "Jaki? - питаємо про чоловіка або хлопчика. Jaka? - про жінку або дівчинку."
+          },
+          "przyklady": ["Jaki jest dziadek? Dziadek jest wesoły.", "Jaka jest babcia? Babcia jest miła."]
+        }
+      ],
+      "slowa": [
+        { "pl": "duży", "lektor": "Duży.", "e": "🐋", "ru": "большой", "ua": "великий" },
+        { "pl": "mały", "e": "🐜", "ru": "маленький", "ua": "маленький" },
+        { "pl": "młody", "e": "🐣", "ru": "молодой", "ua": "молодий" },
+        { "pl": "stary", "e": "🧓", "ru": "старый", "ua": "старий" },
+        { "pl": "wesoły", "e": "😄", "ru": "весёлый", "ua": "веселий" },
+        { "pl": "miły", "e": "🤗", "ru": "милый, добрый", "ua": "милий, добрий" },
+        { "pl": "wysoki", "e": "🦒", "ru": "высокий", "ua": "високий" },
+        { "pl": "niski", "e": "🐧", "ru": "низкий, невысокий", "ua": "низький, невисокий" }
+      ],
+      "zdania": [
+        { "pl": "Tata jest wysoki.", "e": "👨", "ru": "Папа высокий.", "ua": "Тато високий." },
+        { "pl": "Mama jest wysoka.", "e": "👩", "ru": "Мама высокая.", "ua": "Мама висока." },
+        { "pl": "Mój brat jest mały.", "e": "👦", "ru": "Мой брат маленький.", "ua": "Мій брат маленький." },
+        { "pl": "Ciocia jest młoda.", "e": "👩‍🦰", "ru": "Тётя молодая.", "ua": "Тітка молода." },
+        { "pl": "Jaki jest dziadek? Dziadek jest wesoły.", "e": "👴", "ru": "Какой дедушка? Дедушка весёлый.", "ua": "Який дідусь? Дідусь веселий." },
+        { "pl": "Jaka jest babcia? Babcia jest miła.", "e": "👵", "ru": "Какая бабушка? Бабушка добрая.", "ua": "Яка бабуся? Бабуся добра." }
+      ],
+      "zeszyt": ["wysoki - wysoka", "mały - mała", "Tata jest wysoki.", "Mama jest wysoka.", "Mój brat jest mały.", "Jaka jest babcia? Babcia jest miła."]
+    },
+    {
+      "nr": 23,
+      "tytul": { "pl": "Czytam i piszę o rodzinie", "ru": "Читаю и пишу о семье", "ua": "Читаю і пишу про родину" },
+      "cel": { "ru": "Ты прочитаешь короткий текст о семье и напишешь несколько предложений о своей.", "ua": "Ти прочитаєш короткий текст про родину і напишеш кілька речень про свою." },
+      "zasady": [
+        {
+          "litery": "Aa ... .",
+          "dzwiek": { "ru": "предложение", "ua": "речення" },
+          "opis": {
+            "ru": "Предложение начинается с большой буквы и кончается точкой. Несколько предложений вместе - это уже текст.",
+            "ua": "Речення починається з великої літери і закінчується крапкою. Кілька речень разом - це вже текст."
+          },
+          "przyklady": ["To jest moja rodzina.", "Mój brat ma osiem lat."]
+        }
+      ],
+      "slowa": [
+        { "pl": "To jest moja rodzina.", "e": "👨‍👩‍👧‍👦", "ru": "Это моя семья.", "ua": "Це моя родина." },
+        { "pl": "Mój brat ma osiem lat.", "e": "👦", "ru": "Моему брату восемь лет.", "ua": "Моєму братові вісім років." },
+        { "pl": "Moja siostra jest mała.", "e": "👧", "ru": "Моя сестра маленькая.", "ua": "Моя сестра маленька." },
+        { "pl": "Moja mama jest wesoła.", "e": "👩", "ru": "Моя мама весёлая.", "ua": "Моя мама весела." },
+        { "pl": "Mój tata jest wysoki.", "e": "👨", "ru": "Мой папа высокий.", "ua": "Мій тато високий." },
+        { "pl": "Moja babcia ma kota.", "e": "🐈", "ru": "У моей бабушки есть кот.", "ua": "У моєї бабусі є кіт." },
+        { "pl": "Kocham moją rodzinę.", "e": "❤️", "ru": "Я люблю свою семью.", "ua": "Я люблю свою родину.", "wym": { "ua": "ко́хам мо́йон родзі́не" } }
+      ],
+      "zdania": [
+        { "pl": "To jest Ola. Ola ma mamę, tatę i brata.", "e": "👧", "ru": "Это Оля. У Оли есть мама, папа и брат.", "ua": "Це Оля. Оля має маму, тата і брата." },
+        { "pl": "Jej brat ma pięć lat.", "e": "👦", "ru": "Её брату пять лет.", "ua": "Її братові п'ять років." },
+        { "pl": "Jej mama jest miła, a tata jest wesoły.", "e": "👩", "ru": "Её мама милая, а папа весёлый.", "ua": "Її мама мила, а тато веселий." },
+        { "pl": "Ola kocha babcię i dziadka.", "e": "👵", "ru": "Оля любит бабушку и дедушку.", "ua": "Оля любить бабусю і дідуся." }
+      ],
+      "zeszyt": ["To jest moja rodzina.", "Mam ... lat.", "Mam brata. / Nie mam brata.", "Mam siostrę. / Nie mam siostry.", "Kocham moją rodzinę."]
+    },
+    {
+      "nr": 24,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: moja rodzina", "ru": "Проверь себя: моя семья", "ua": "Перевір себе: моя родина" },
+      "cel": { "ru": "Повтори всё из раздела 4 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 4 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Mam na imię ...", "Mam ... lat.", "To jest moja rodzina.", "Mój ... jest ... . Moja ... jest ... ."]
+    }
+  ]
+}

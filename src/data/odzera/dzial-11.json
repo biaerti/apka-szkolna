@@ -1,0 +1,249 @@
+{
+  "nr": 11,
+  "tytul": { "pl": "Ubrania", "ru": "Одежда", "ua": "Одяг" },
+  "e": "🧥",
+  "kolor": "#b4569e",
+  "lekcje": [
+    {
+      "nr": 61,
+      "tytul": { "pl": "Ubrania", "ru": "Одежда", "ua": "Одяг" },
+      "cel": { "ru": "Ты научишься называть одежду по-польски.", "ua": "Ти навчишся називати одяг польською." },
+      "zasady": [
+        {
+          "litery": "-y  -i  -e",
+          "dzwiek": { "ru": "много", "ua": "багато" },
+          "opis": {
+            "ru": "Buty, skarpetki, rękawiczki - это пара, то есть много вещей. Spodnie - всегда «много», как русское «брюки».",
+            "ua": "Buty, skarpetki, rękawiczki - це пара, тобто багато речей. Spodnie - завжди «багато», як українське «штани»."
+          },
+          "przyklady": ["buty", "skarpetki", "rękawiczki", "spodnie"]
+        },
+        {
+          "litery": "koszulka",
+          "dzwiek": { "ru": "футболка", "ua": "футболка" },
+          "opis": {
+            "ru": "Koszulka - это футболка, а не рубашка. Szalik - это шарф.",
+            "ua": "Koszulka - це футболка, а не сорочка. Szalik - це шарф."
+          },
+          "przyklady": ["koszulka", "szalik"]
+        }
+      ],
+      "slowa": [
+        { "pl": "kurtka", "e": "🧥", "ru": "куртка", "ua": "куртка" },
+        { "pl": "spodnie", "e": "👖", "ru": "брюки, штаны", "ua": "штани" },
+        { "pl": "sukienka", "e": "👗", "ru": "платье", "ua": "сукня" },
+        { "pl": "bluzka", "e": "👚", "ru": "блузка, кофточка", "ua": "блузка" },
+        { "pl": "sweter", "e": "🧶", "ru": "свитер", "ua": "светр" },
+        { "pl": "koszulka", "e": "👕", "ru": "футболка", "ua": "футболка" },
+        { "pl": "buty", "e": "👟", "ru": "обувь, ботинки", "ua": "взуття, черевики" },
+        { "pl": "skarpetki", "e": "🧦", "ru": "носки", "ua": "шкарпетки" },
+        { "pl": "szalik", "e": "🧣", "ru": "шарф", "ua": "шарф" },
+        { "pl": "rękawiczki", "e": "🧤", "ru": "перчатки, варежки", "ua": "рукавички" }
+      ],
+      "zdania": [
+        { "pl": "To jest moja kurtka.", "e": "🧥", "ru": "Это моя куртка.", "ua": "Це моя куртка." },
+        { "pl": "Sweter jest w szafie.", "e": "🧶", "ru": "Свитер в шкафу.", "ua": "Светр у шафі." },
+        { "pl": "Gdzie jest mój szalik?", "e": "🧣", "ru": "Где мой шарф?", "ua": "Де мій шарф?" },
+        { "pl": "To nie jest moja koszulka.", "e": "👕", "ru": "Это не моя футболка.", "ua": "Це не моя футболка." }
+      ],
+      "zeszyt": ["kurtka", "spodnie", "sukienka", "sweter", "buty, skarpetki, rękawiczki", "To jest moja kurtka.", "Sweter jest w szafie."]
+    },
+    {
+      "nr": 62,
+      "tytul": { "pl": "Co masz na sobie?", "ru": "Что на тебе надето?", "ua": "Що на тобі одягнено?" },
+      "cel": { "ru": "Ты научишься говорить, что на тебе надето и что ты обычно носишь.", "ua": "Ти навчишся казати, що на тобі одягнено і що ти зазвичай носиш." },
+      "zasady": [
+        {
+          "litery": "mam na sobie  /  noszę",
+          "dzwiek": { "ru": "на мне (сейчас)  /  ношу (обычно)", "ua": "на мені (зараз)  /  ношу (зазвичай)" },
+          "opis": {
+            "ru": "Mam na sobie - что на тебе сейчас. Noszę - что ты носишь часто или всегда.",
+            "ua": "Mam na sobie - що на тобі зараз. Noszę - що ти носиш часто або завжди."
+          },
+          "przyklady": ["Mam na sobie kurtkę.", "Noszę okulary."]
+        },
+        {
+          "litery": "-a  →  -ę",
+          "dzwiek": { "ru": "куртка → куртку", "ua": "куртка → куртку" },
+          "opis": {
+            "ru": "После mam na sobie и noszę слово на -a меняет конец на -ę: kurtka → kurtkę. Sweter, buty, spodnie не меняются.",
+            "ua": "Після mam na sobie і noszę слово на -a змінює кінець на -ę: kurtka → kurtkę. Sweter, buty, spodnie не змінюються."
+          },
+          "przyklady": ["kurtka", "Mam na sobie kurtkę.", "koszulka", "Mam na sobie koszulkę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Co masz na sobie?", "e": "❓", "ru": "Что на тебе надето?", "ua": "Що на тобі одягнено?" },
+        { "pl": "Mam na sobie kurtkę.", "e": "🧥", "ru": "На мне куртка.", "ua": "На мені куртка." },
+        { "pl": "Mam na sobie koszulkę.", "e": "👕", "ru": "На мне футболка.", "ua": "На мені футболка." },
+        { "pl": "Noszę okulary.", "e": "👓", "ru": "Я ношу очки.", "ua": "Я ношу окуляри." },
+        { "pl": "spodenki", "e": "🩳", "ru": "шорты", "ua": "шорти" },
+        { "pl": "kapelusz", "e": "👒", "ru": "шляпа", "ua": "капелюх" },
+        { "pl": "kozaki", "e": "👢", "ru": "сапоги", "ua": "чоботи" }
+      ],
+      "zdania": [
+        { "pl": "Mam na sobie spodnie i sweter.", "e": "👖", "ru": "На мне брюки и свитер.", "ua": "На мені штани і светр." },
+        { "pl": "Ola ma na sobie sukienkę.", "e": "👗", "ru": "На Оле платье.", "ua": "На Олі сукня." },
+        { "pl": "Latem noszę spodenki.", "e": "☀️", "ru": "Летом я ношу шорты.", "ua": "Улітку я ношу шорти." },
+        { "pl": "Zimą noszę kozaki.", "e": "❄️", "ru": "Зимой я ношу сапоги.", "ua": "Узимку я ношу чоботи." },
+        { "pl": "Tata nosi kapelusz.", "e": "👨", "ru": "Папа носит шляпу.", "ua": "Тато носить капелюх." }
+      ],
+      "zeszyt": ["Co masz na sobie?", "Mam na sobie kurtkę.", "kurtka → kurtkę", "Noszę okulary.", "Latem noszę spodenki.", "Zimą noszę kozaki."]
+    },
+    {
+      "nr": 63,
+      "tytul": { "pl": "Ten, ta, to", "ru": "Ten, ta, to - этот, эта, это", "ua": "Ten, ta, to - цей, ця, це" },
+      "cel": { "ru": "Ты научишься выбирать ten, ta, to или te перед названием одежды.", "ua": "Ти навчишся вибирати ten, ta, to або te перед назвою одягу." },
+      "zasady": [
+        {
+          "litery": "ten",
+          "dzwiek": { "ru": "этот", "ua": "цей" },
+          "opis": {
+            "ru": "Ten - перед словом, которое кончается на согласную: sweter, szalik, kapelusz.",
+            "ua": "Ten - перед словом, яке закінчується на приголосну: sweter, szalik, kapelusz."
+          },
+          "przyklady": ["ten sweter", "ten szalik"]
+        },
+        {
+          "litery": "ta  ...-a",
+          "dzwiek": { "ru": "эта", "ua": "ця" },
+          "opis": {
+            "ru": "Ta - перед словом на -a: kurtka, sukienka, czapka.",
+            "ua": "Ta - перед словом на -a: kurtka, sukienka, czapka."
+          },
+          "przyklady": ["ta sukienka", "ta bluzka", "ta czapka"]
+        },
+        {
+          "litery": "to  ...-o, -e     te",
+          "dzwiek": { "ru": "это  /  эти", "ua": "це  /  ці" },
+          "opis": {
+            "ru": "To - перед словом на -o или -e: palto, kimono. Если вещей много (buty, spodnie) - te.",
+            "ua": "To - перед словом на -o або -e: palto, kimono. Якщо речей багато (buty, spodnie) - te."
+          },
+          "przyklady": ["to palto", "to kimono", "te skarpetki"]
+        }
+      ],
+      "slowa": [
+        { "pl": "ten sweter", "e": "🧶", "ru": "этот свитер", "ua": "цей светр" },
+        { "pl": "ten szalik", "e": "🧣", "ru": "этот шарф", "ua": "цей шарф" },
+        { "pl": "ta sukienka", "e": "👗", "ru": "это платье", "ua": "ця сукня" },
+        { "pl": "ta bluzka", "e": "👚", "ru": "эта блузка", "ua": "ця блузка" },
+        { "pl": "ta czapka", "e": "🧢", "ru": "эта шапка", "ua": "ця шапка" },
+        { "pl": "to palto", "e": "🧥", "ru": "это пальто", "ua": "це пальто" },
+        { "pl": "to kimono", "e": "🥋", "ru": "это кимоно (для дзюдо, карате)", "ua": "це кімоно (для дзюдо, карате)" },
+        { "pl": "te skarpetki", "e": "🧦", "ru": "эти носки", "ua": "ці шкарпетки" }
+      ],
+      "zdania": [
+        { "pl": "Ten sweter jest mój.", "e": "🧶", "ru": "Этот свитер мой.", "ua": "Цей светр мій." },
+        { "pl": "Ta kurtka jest moja.", "e": "🧥", "ru": "Эта куртка моя.", "ua": "Ця куртка моя." },
+        { "pl": "To kimono jest moje.", "e": "🥋", "ru": "Это кимоно моё.", "ua": "Це кімоно моє." },
+        { "pl": "Te buty są moje.", "e": "👟", "ru": "Эти ботинки мои.", "ua": "Ці черевики мої." },
+        { "pl": "Czy ta czapka jest twoja?", "e": "🧢", "ru": "Эта шапка твоя?", "ua": "Ця шапка твоя?" }
+      ],
+      "zeszyt": ["ten sweter, ten szalik", "ta sukienka, ta czapka", "to palto, to kimono", "te skarpetki, te buty", "Ten sweter jest mój.", "Ta kurtka jest moja.", "To kimono jest moje."]
+    },
+    {
+      "nr": 64,
+      "tytul": { "pl": "Jaki? Jaka? Jakie?", "ru": "Какой? Какая? Какие?", "ua": "Який? Яка? Які?" },
+      "cel": { "ru": "Ты научишься говорить, какая у тебя одежда - тёплая, новая, длинная - с правильным окончанием.", "ua": "Ти навчишся казати, який у тебе одяг - теплий, новий, довгий - з правильним закінченням." },
+      "zasady": [
+        {
+          "litery": "jaki?  →  -y  (-i)",
+          "dzwiek": { "ru": "какой?", "ua": "який?" },
+          "opis": {
+            "ru": "Ten sweter → ciepły sweter. После k и g пишем -i: długi, krótki.",
+            "ua": "Ten sweter → ciepły sweter. Після k і g пишемо -i: długi, krótki."
+          },
+          "przyklady": ["ciepły sweter", "długi szalik", "stary kapelusz"]
+        },
+        {
+          "litery": "jaka?  →  -a",
+          "dzwiek": { "ru": "какая?", "ua": "яка?" },
+          "opis": {
+            "ru": "Ta kurtka → ciepła kurtka. Слово про вещь тоже кончается на -a.",
+            "ua": "Ta kurtka → ciepła kurtka. Слово про річ теж закінчується на -a."
+          },
+          "przyklady": ["ciepła kurtka", "czysta koszulka"]
+        },
+        {
+          "litery": "jakie?  →  -e  (-ie)",
+          "dzwiek": { "ru": "какое? какие?", "ua": "яке? які?" },
+          "opis": {
+            "ru": "To palto, te buty → -e: ciepłe palto, nowe buty. После k и g: -ie (krótkie).",
+            "ua": "To palto, te buty → -e: ciepłe palto, nowe buty. Після k і g: -ie (krótkie)."
+          },
+          "przyklady": ["ciepłe skarpetki", "nowe buty", "krótkie spodenki", "brudne spodnie"]
+        }
+      ],
+      "slowa": [
+        { "pl": "ciepły sweter", "e": "🧶", "ru": "тёплый свитер", "ua": "теплий светр" },
+        { "pl": "ciepła kurtka", "e": "🧥", "ru": "тёплая куртка", "ua": "тепла куртка" },
+        { "pl": "ciepłe skarpetki", "e": "🧦", "ru": "тёплые носки", "ua": "теплі шкарпетки" },
+        { "pl": "nowe buty", "e": "👟", "ru": "новые ботинки", "ua": "нові черевики" },
+        { "pl": "stary kapelusz", "e": "👒", "ru": "старая шляпа", "ua": "старий капелюх" },
+        { "pl": "długi szalik", "e": "🧣", "ru": "длинный шарф", "ua": "довгий шарф" },
+        { "pl": "krótkie spodenki", "e": "🩳", "ru": "короткие шорты", "ua": "короткі шорти" },
+        { "pl": "czysta koszulka", "e": "👕", "ru": "чистая футболка", "ua": "чиста футболка" },
+        { "pl": "brudne spodnie", "e": "👖", "ru": "грязные брюки", "ua": "брудні штани" }
+      ],
+      "zdania": [
+        { "pl": "Moja kurtka jest nowa.", "e": "🆕", "ru": "Моя куртка новая.", "ua": "Моя куртка нова." },
+        { "pl": "Ten szalik jest bardzo długi.", "e": "🧣", "ru": "Этот шарф очень длинный.", "ua": "Цей шарф дуже довгий." },
+        { "pl": "Te spodnie są brudne.", "e": "👖", "ru": "Эти брюки грязные.", "ua": "Ці штани брудні." },
+        { "pl": "To palto jest stare, ale ciepłe.", "lektor": "To palto jest stare... ale ciepłe.", "e": "🧥", "ru": "Это пальто старое, но тёплое.", "ua": "Це пальто старе, але тепле." }
+      ],
+      "zeszyt": ["jaki? ciepły sweter", "jaka? ciepła kurtka", "jakie? ciepłe skarpetki", "nowe buty, krótkie spodenki", "Moja kurtka jest nowa.", "Te spodnie są brudne."]
+    },
+    {
+      "nr": 65,
+      "tytul": { "pl": "Ubieram się na pogodę", "ru": "Одеваюсь по погоде", "ua": "Одягаюся за погодою" },
+      "cel": { "ru": "Ты научишься одеваться по погоде и понимать, что говорят в раздевалке.", "ua": "Ти навчишся одягатися за погодою і розуміти, що кажуть у роздягальні." },
+      "zasady": [
+        {
+          "litery": "zakładam  ↔  zdejmuję",
+          "dzwiek": { "ru": "надеваю ↔ снимаю", "ua": "вдягаю ↔ знімаю" },
+          "opis": {
+            "ru": "Zakładam - надеваю, zdejmuję - снимаю. Слово на -a снова меняется на -ę: czapka → czapkę.",
+            "ua": "Zakładam - вдягаю, zdejmuję - знімаю. Слово на -a знову змінюється на -ę: czapka → czapkę."
+          },
+          "przyklady": ["Zakładam rękawiczki.", "Zdejmuję czapkę.", "Wieszam kurtkę."]
+        },
+        {
+          "litery": "Załóż!",
+          "dzwiek": { "ru": "надень!", "ua": "одягни!" },
+          "opis": {
+            "ru": "Так тебе говорят: Załóż kurtkę! Ты отвечаешь о себе: Zakładam kurtkę.",
+            "ua": "Так тобі кажуть: Załóż kurtkę! Ти відповідаєш про себе: Zakładam kurtkę."
+          },
+          "przyklady": ["Załóż kurtkę!", "Jest zimno, załóż szalik!"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Zakładam rękawiczki.", "e": "🧤", "ru": "Я надеваю перчатки.", "ua": "Я вдягаю рукавички." },
+        { "pl": "Załóż kurtkę!", "e": "🧥", "ru": "Надень куртку!", "ua": "Одягни куртку!" },
+        { "pl": "Zdejmuję czapkę.", "e": "🧢", "ru": "Я снимаю шапку.", "ua": "Я знімаю шапку." },
+        { "pl": "Wieszam kurtkę.", "e": "🪝", "ru": "Я вешаю куртку.", "ua": "Я вішаю куртку." },
+        { "pl": "Zmieniam buty.", "e": "👟", "ru": "Я переобуваюсь (меняю обувь).", "ua": "Я перевзуваюся (міняю взуття)." },
+        { "pl": "kapcie", "lektor": "Kapcie!", "e": "🥿", "ru": "тапочки (сменная обувь)", "ua": "капці (змінне взуття)" },
+        { "pl": "Gdzie są moje buty?", "e": "🔍", "ru": "Где мои ботинки?", "ua": "Де мої черевики?" }
+      ],
+      "zdania": [
+        { "pl": "Jest zimno, załóż szalik!", "lektor": "Jest zimno... załóż szalik!", "e": "❄️", "ru": "Холодно, надень шарф!", "ua": "Холодно, одягни шарф!" },
+        { "pl": "Pada deszcz, zakładam kurtkę.", "lektor": "Pada deszcz... zakładam kurtkę.", "e": "🌧️", "ru": "Идёт дождь, я надеваю куртку.", "ua": "Іде дощ, я вдягаю куртку." },
+        { "pl": "Jest ciepło, zdejmuję sweter.", "lektor": "Jest ciepło... zdejmuję sweter.", "e": "☀️", "ru": "Тепло, я снимаю свитер.", "ua": "Тепло, я знімаю светр." },
+        { "pl": "Wieszam kurtkę w szatni.", "e": "🏫", "ru": "Я вешаю куртку в раздевалке.", "ua": "Я вішаю куртку в роздягальні." },
+        { "pl": "W szkole zmieniam buty na kapcie.", "e": "🥿", "ru": "В школе я переобуваюсь в тапочки.", "ua": "У школі я перевзуваюся в капці." },
+        { "pl": "Twoje buty są pod ławką.", "e": "🪑", "ru": "Твои ботинки под скамейкой.", "ua": "Твої черевики під лавкою." }
+      ],
+      "zeszyt": ["Zakładam rękawiczki.", "Zdejmuję czapkę.", "Wieszam kurtkę.", "Załóż kurtkę!", "Gdzie są moje buty?", "W szkole zmieniam buty na kapcie."]
+    },
+    {
+      "nr": 66,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: ubrania", "ru": "Проверь себя: одежда", "ua": "Перевір себе: одяг" },
+      "cel": { "ru": "Повтори всё из раздела 11 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 11 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Dzisiaj mam na sobie ...", "Moja kurtka jest ...", "Zimą noszę ...", "W szkole zmieniam buty na kapcie."]
+    }
+  ]
+}

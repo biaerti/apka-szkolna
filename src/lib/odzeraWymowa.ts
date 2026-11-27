@@ -164,7 +164,7 @@ function jednostkiSlowa(slowo: string, j: JezykWymowy): Jednostka[] {
     if (reszta[0] === 'j' && jestSam(reszta[1]) && reszta[1] !== 'i' && reszta[1] !== 'y') {
       const z = reszta[1];
       const koniec = i + 2 >= s.length;
-      let sam = j === 'ru' ? JOTOWANE[z].ru : JOTOWANE[z].ua === 'ьо' ? 'йо' : JOTOWANE[z].ua;
+      let sam = j === 'ru' ? JOTOWANE[z].ru : JOTOWANE[z].ua.replace(/^ь/, 'й');
       if (z === 'ę' && koniec) sam = sam.replace(/н$/, '');
             out.push({ cyr: sam, sylaba: true });
       poprzednia = z;
@@ -224,9 +224,18 @@ function zAkcentem(cyr: string): string {
   return znaki.join('');
 }
 
+/** Dzwieczna spolgloska na koncu slowa brzmi bezdzwiecznie: chleb [хлеп], Pokaż [по́каш]. */
+const UBEZDZWIECZNIENIE: Record<string, string> = {
+  б: 'п', д: 'т', г: 'к', ґ: 'к', в: 'ф', з: 'с', ж: 'ш', дз: 'ц', дж: 'ч', жь: 'щ', зь: 'сь', дзь: 'ць', джь: 'чь',
+};
+
 /** Wymowa jednego slowa (bez interpunkcji) z akcentem na przedostatniej sylabie. */
 export function wymowaSlowa(slowo: string, j: JezykWymowy, akcent = true): string {
   const jedn = jednostkiSlowa(slowo, j);
+  const ost = jedn[jedn.length - 1];
+  if (ost && !ost.sylaba && jedn.length > 1 && UBEZDZWIECZNIENIE[ost.cyr]) {
+    jedn[jedn.length - 1] = { ...ost, cyr: UBEZDZWIECZNIENIE[ost.cyr] };
+  }
   const sylaby = jedn.map((x, i) => (x.sylaba ? i : -1)).filter((i) => i >= 0);
   if (akcent && sylaby.length >= 2) {
     const idx = sylaby[sylaby.length - 2];

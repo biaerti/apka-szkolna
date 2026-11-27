@@ -1,0 +1,243 @@
+{
+  "nr": 7,
+  "tytul": { "pl": "Ciało i zdrowie", "ru": "Тело и здоровье", "ua": "Тіло і здоров'я" },
+  "e": "🩺",
+  "kolor": "#d9443b",
+  "lekcje": [
+    {
+      "nr": 37,
+      "tytul": { "pl": "Głowa i twarz", "ru": "Голова и лицо", "ua": "Голова і обличчя" },
+      "cel": { "ru": "Ты научишься называть части головы и лица и скажешь: это мой нос, это мои глаза.", "ua": "Ти навчишся називати частини голови й обличчя і скажеш: це мій ніс, це мої очі." },
+      "zasady": [
+        {
+          "litery": "to jest  /  to są",
+          "dzwiek": { "ru": "это (одно)  /  это (много)", "ua": "це (одне)  /  це (багато)" },
+          "opis": {
+            "ru": "Об одном говорим to jest: to jest nos. О многих - to są: to są oczy. По-русски в обоих случаях просто «это».",
+            "ua": "Про одне кажемо to jest: to jest nos. Про багато - to są: to są oczy. Українською в обох випадках просто «це»."
+          },
+          "przyklady": ["To jest mój nos.", "To są moje oczy."]
+        },
+        {
+          "litery": "mój, moja, moje",
+          "dzwiek": { "ru": "мой, моя, мои", "ua": "мій, моя, мої" },
+          "opis": {
+            "ru": "Как в русском: mój nos (мой), moja głowa (моя), moje oczy (мои).",
+            "ua": "Як в українській: mój nos (мій), moja głowa (моя), moje oczy (мої)."
+          },
+          "przyklady": ["To jest mój nos.", "To jest moja głowa.", "To są moje oczy."]
+        }
+      ],
+      "slowa": [
+        { "pl": "głowa", "e": "👤", "ru": "голова", "ua": "голова" },
+        { "pl": "twarz", "e": "🙂", "ru": "лицо", "ua": "обличчя" },
+        { "pl": "oczy", "e": "👀", "ru": "глаза", "ua": "очі" },
+        { "pl": "uszy", "e": "👂", "ru": "уши", "ua": "вуха" },
+        { "pl": "nos", "e": "👃", "ru": "нос", "ua": "ніс" },
+        { "pl": "usta", "e": "👄", "ru": "рот, губы", "ua": "рот, губи" },
+        { "pl": "włosy", "e": "💇", "ru": "волосы", "ua": "волосся" },
+        { "pl": "zęby", "e": "🦷", "ru": "зубы", "ua": "зуби" }
+      ],
+      "zdania": [
+        { "pl": "To jest moja głowa.", "e": "👤", "ru": "Это моя голова.", "ua": "Це моя голова." },
+        { "pl": "To jest mój nos.", "e": "👃", "ru": "Это мой нос.", "ua": "Це мій ніс." },
+        { "pl": "To są moje oczy.", "e": "👀", "ru": "Это мои глаза.", "ua": "Це мої очі." },
+        { "pl": "Ola ma długie włosy.", "e": "👧", "ru": "У Оли длинные волосы.", "ua": "В Олі довге волосся." },
+        { "pl": "Pokaż zęby, proszę.", "e": "😁", "ru": "Покажи зубы, пожалуйста.", "ua": "Покажи зуби, будь ласка." },
+        { "pl": "Gdzie są uszy? Tu są uszy.", "e": "👂", "ru": "Где уши? Вот уши.", "ua": "Де вуха? Ось вуха." }
+      ],
+      "zeszyt": ["głowa, twarz, nos, usta", "oczy, uszy, włosy, zęby", "To jest moja głowa.", "To jest mój nos.", "To są moje oczy.", "Ola ma długie włosy."]
+    },
+    {
+      "nr": 38,
+      "tytul": { "pl": "Ciało", "ru": "Тело", "ua": "Тіло" },
+      "cel": { "ru": "Ты научишься называть части тела: ноги, спину, живот, шею.", "ua": "Ти навчишся називати частини тіла: ноги, спину, живіт, шию." },
+      "zasady": [
+        {
+          "litery": "noga → nogi",
+          "dzwiek": { "ru": "нога → ноги", "ua": "нога → ноги" },
+          "opis": {
+            "ru": "Много: noga - nogi, ręka - ręce. Глаза и уши надо запомнить: oko - oczy, ucho - uszy.",
+            "ua": "Багато: noga - nogi, ręka - ręce. Очі й вуха треба запам'ятати: oko - oczy, ucho - uszy."
+          },
+          "przyklady": ["noga", "ręka", "oczy", "uszy"]
+        },
+        {
+          "litery": "plecy",
+          "dzwiek": { "ru": "спина (всегда «много»)", "ua": "спина (завжди «багато»)" },
+          "opis": {
+            "ru": "Plecy - слово только во множественном числе, как «ножницы»: to są plecy.",
+            "ua": "Plecy - слово тільки в множині, як «ножиці»: to są plecy."
+          },
+          "przyklady": ["plecy"]
+        }
+      ],
+      "slowa": [
+        { "pl": "noga", "e": "🦵", "ru": "нога", "ua": "нога" },
+        { "pl": "stopa", "e": "🦶", "ru": "стопа, ступня", "ua": "стопа, ступня" },
+        { "pl": "kolano", "e": "🧎", "ru": "колено", "ua": "коліно" },
+        { "pl": "palec", "e": "☝️", "ru": "палец", "ua": "палець" },
+        { "pl": "ramię", "e": "💪", "ru": "плечо", "ua": "плече", "wym": { "ru": "ра́мье" } },
+        { "pl": "szyja", "e": "🧣", "ru": "шея", "ua": "шия" },
+        { "pl": "plecy", "e": "🎒", "ru": "спина", "ua": "спина" },
+        { "pl": "brzuch", "e": "🫃", "ru": "живот", "ua": "живіт" }
+      ],
+      "zdania": [
+        { "pl": "To jest moja noga.", "e": "🦵", "ru": "Это моя нога.", "ua": "Це моя нога." },
+        { "pl": "Mam dziesięć palców.", "e": "🖐️", "ru": "У меня десять пальцев.", "ua": "У мене десять пальців." },
+        { "pl": "Pokaż kolano, proszę.", "e": "🧎", "ru": "Покажи колено, пожалуйста.", "ua": "Покажи коліно, будь ласка." },
+        { "pl": "Noszę plecak na plecach.", "e": "🎒", "ru": "Я ношу рюкзак на спине.", "ua": "Я ношу рюкзак на спині." },
+        { "pl": "Mam zimne stopy.", "e": "🥶", "ru": "У меня холодные ноги (ступни).", "ua": "У мене холодні ноги (ступні)." }
+      ],
+      "zeszyt": ["noga, stopa, kolano, palec", "brzuch, plecy, szyja, ramię", "noga - nogi, ręka - ręce", "To jest moja noga.", "Mam dziesięć palców.", "Mam zimne stopy."]
+    },
+    {
+      "nr": 39,
+      "tytul": { "pl": "Boli mnie...", "ru": "У меня болит... (у медсестры)", "ua": "У мене болить... (у медсестри)" },
+      "cel": { "ru": "Ты научишься говорить медсестре, что у тебя болит и как ты себя чувствуешь.", "ua": "Ти навчишся казати медсестрі, що в тебе болить і як ти почуваєшся." },
+      "zasady": [
+        {
+          "litery": "boli mnie + ...",
+          "dzwiek": { "ru": "у меня болит ...", "ua": "у мене болить ..." },
+          "opis": {
+            "ru": "Говори: boli mnie + что болит. Слово после mnie не меняется: boli mnie głowa, boli mnie ząb.",
+            "ua": "Кажи: boli mnie + що болить. Слово після mnie не змінюється: boli mnie głowa, boli mnie ząb."
+          },
+          "przyklady": ["Boli mnie głowa.", "Boli mnie brzuch.", "Boli mnie ząb."]
+        },
+        {
+          "litery": "bolą mnie + nogi, oczy",
+          "dzwiek": { "ru": "у меня болят ...", "ua": "у мене болять ..." },
+          "opis": {
+            "ru": "Если болит много (ноги, глаза, уши), говори bolą: bolą mnie nogi.",
+            "ua": "Якщо болить багато (ноги, очі, вуха), кажи bolą: bolą mnie nogi."
+          },
+          "przyklady": ["Bolą mnie nogi."]
+        },
+        {
+          "litery": "mam + katar",
+          "dzwiek": { "ru": "у меня ...", "ua": "у мене ..." },
+          "opis": {
+            "ru": "«У меня насморк» по-польски - mam katar (дословно «я имею»). Так же: mam gorączkę.",
+            "ua": "«У мене нежить» польською - mam katar (дослівно «я маю»). Так само: mam gorączkę."
+          },
+          "przyklady": ["Mam katar.", "Mam gorączkę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Co cię boli?", "e": "🩺", "ru": "Что у тебя болит?", "ua": "Що в тебе болить?" },
+        { "pl": "Boli mnie głowa.", "e": "🤕", "ru": "У меня болит голова.", "ua": "У мене болить голова." },
+        { "pl": "Boli mnie brzuch.", "e": "🤢", "ru": "У меня болит живот.", "ua": "У мене болить живіт." },
+        { "pl": "Źle się czuję.", "e": "😣", "ru": "Мне плохо.", "ua": "Мені погано." },
+        { "pl": "Mam katar.", "e": "🤧", "ru": "У меня насморк.", "ua": "У мене нежить." },
+        { "pl": "Mam gorączkę.", "e": "🤒", "ru": "У меня температура.", "ua": "У мене температура." },
+        { "pl": "pielęgniarka", "e": "👩‍⚕️", "ru": "медсестра", "ua": "медсестра" },
+        { "pl": "termometr", "e": "🌡️", "ru": "градусник, термометр", "ua": "градусник, термометр" },
+        { "pl": "lekarstwo", "e": "💊", "ru": "лекарство", "ua": "ліки" }
+      ],
+      "zdania": [
+        { "pl": "Proszę pani, źle się czuję.", "e": "👩‍⚕️", "ru": "Извините (к женщине), мне плохо.", "ua": "Перепрошую (до жінки), мені погано." },
+        { "pl": "Boli mnie ząb.", "e": "🦷", "ru": "У меня болит зуб.", "ua": "У мене болить зуб." },
+        { "pl": "Bolą mnie nogi.", "e": "🦵", "ru": "У меня болят ноги.", "ua": "У мене болять ноги." },
+        { "pl": "Masz gorączkę, idź do domu.", "lektor": "Masz gorączkę... idź do domu.", "e": "🏠", "ru": "У тебя температура, иди домой.", "ua": "У тебе температура, йди додому." },
+        { "pl": "Pielęgniarka ma termometr.", "e": "🌡️", "ru": "У медсестры есть градусник.", "ua": "У медсестри є градусник." }
+      ],
+      "zeszyt": ["Co cię boli?", "Boli mnie głowa.", "Boli mnie brzuch.", "Bolą mnie nogi.", "Mam katar.", "Mam gorączkę.", "Źle się czuję."]
+    },
+    {
+      "nr": 40,
+      "tytul": { "pl": "Jak się czujesz?", "ru": "Как ты себя чувствуешь?", "ua": "Як ти почуваєшся?" },
+      "cel": { "ru": "Ты научишься говорить, как ты себя чувствуешь: хорошо, плохо, устал, грустно, весело.", "ua": "Ти навчишся казати, як ти почуваєшся: добре, погано, втомився, сумно, весело." },
+      "zasady": [
+        {
+          "litery": "czuję się + dobrze / źle",
+          "dzwiek": { "ru": "чувствую себя хорошо / плохо", "ua": "почуваюся добре / погано" },
+          "opis": {
+            "ru": "Ответ на вопрос «Jak się czujesz?»: czuję się dobrze или czuję się źle.",
+            "ua": "Відповідь на питання «Jak się czujesz?»: czuję się dobrze або czuję się źle."
+          },
+          "przyklady": ["Jak się czujesz?", "Czuję się dobrze.", "Czuję się źle."]
+        },
+        {
+          "litery": "on: -y   ona: -a",
+          "dzwiek": { "ru": "-ый → -ая", "ua": "-ий → -а" },
+          "opis": {
+            "ru": "Мальчик говорит: jestem zmęczony, девочка: jestem zmęczona. Так же: chory - chora, smutny - smutna, zły - zła.",
+            "ua": "Хлопчик каже: jestem zmęczony, дівчинка: jestem zmęczona. Так само: chory - chora, smutny - smutna, zły - zła."
+          },
+          "przyklady": ["Jestem zmęczony.", "Ola jest zmęczona.", "Jestem smutny.", "Ola jest smutna, a Max jest wesoły."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Jak się czujesz?", "e": "💬", "ru": "Как ты себя чувствуешь?", "ua": "Як ти почуваєшся?" },
+        { "pl": "Czuję się dobrze.", "e": "😊", "ru": "Я чувствую себя хорошо.", "ua": "Я почуваюся добре." },
+        { "pl": "Czuję się źle.", "e": "😞", "ru": "Я чувствую себя плохо.", "ua": "Я почуваюся погано." },
+        { "pl": "Jestem zmęczony.", "e": "😴", "ru": "Я устал.", "ua": "Я втомився." },
+        { "pl": "Jestem chory.", "e": "🛌", "ru": "Я болею.", "ua": "Я хворію." },
+        { "pl": "Jestem smutny.", "e": "😢", "ru": "Мне грустно.", "ua": "Мені сумно." },
+        { "pl": "Jestem wesoły.", "e": "😄", "ru": "Мне весело.", "ua": "Мені весело." },
+        { "pl": "Jestem zły.", "e": "😠", "ru": "Я злюсь.", "ua": "Я сержуся." }
+      ],
+      "zdania": [
+        { "pl": "Ola jest zmęczona.", "e": "😴", "ru": "Оля устала.", "ua": "Оля втомилася." },
+        { "pl": "Max jest chory.", "e": "🤒", "ru": "Макс болеет.", "ua": "Макс хворіє." },
+        { "pl": "Nie jestem zły, jestem zmęczony.", "lektor": "Nie jestem zły... jestem zmęczony.", "e": "🥱", "ru": "Я не злюсь, я устал.", "ua": "Я не сержуся, я втомився." },
+        { "pl": "Jak się czujesz, Ola? Dobrze, dziękuję.", "e": "😊", "ru": "Как ты себя чувствуешь, Оля? Хорошо, спасибо.", "ua": "Як ти почуваєшся, Олю? Добре, дякую." },
+        { "pl": "Ola jest smutna, a Max jest wesoły.", "lektor": "Ola jest smutna... a Max jest wesoły.", "e": "😢", "ru": "Оле грустно, а Максу весело.", "ua": "Олі сумно, а Максові весело." }
+      ],
+      "zeszyt": ["Jak się czujesz?", "Czuję się dobrze.", "Czuję się źle.", "Jestem zmęczony.", "Ola jest zmęczona.", "Nie jestem zły, jestem zmęczony."]
+    },
+    {
+      "nr": 41,
+      "tytul": { "pl": "Na wuefie", "ru": "На физкультуре", "ua": "На фізкультурі" },
+      "cel": { "ru": "Ты поймёшь команды учителя на физкультуре: беги, прыгай, встань, брось мяч.", "ua": "Ти зрозумієш команди вчителя на фізкультурі: біжи, стрибай, стань, кинь м'яч." },
+      "zasady": [
+        {
+          "litery": "Biegnij! → Biegnijcie!",
+          "dzwiek": { "ru": "беги! → бегите!", "ua": "біжи! → біжіть!" },
+          "opis": {
+            "ru": "Одному ученику: biegnij, skacz, stań. Всему классу добавляем -cie: biegnijcie, skaczcie, stańcie.",
+            "ua": "Одному учневі: biegnij, skacz, stań. Усьому класу додаємо -cie: biegnijcie, skaczcie, stańcie."
+          },
+          "przyklady": ["Biegnij!", "Dzieci, biegnijcie!", "Stań!", "Stańcie w rzędzie!"]
+        },
+        {
+          "litery": "WF = wuef",
+          "dzwiek": { "ru": "вуэф = физкультура", "ua": "вуеф = фізкультура" },
+          "opis": {
+            "ru": "WF - это физкультура. Читается «вуэф»: na wuefie = на физкультуре.",
+            "ua": "WF - це фізкультура. Читається «вуеф»: na wuefie = на фізкультурі."
+          },
+          "przyklady": ["strój na wuef", "Nie mam stroju na wuef."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Biegnij!", "e": "🏃", "ru": "Беги!", "ua": "Біжи!" },
+        { "pl": "Skacz!", "e": "🦘", "ru": "Прыгай!", "ua": "Стрибай!" },
+        { "pl": "Stań!", "e": "🧍", "ru": "Встань! (на место)", "ua": "Стань! (на місце)" },
+        { "pl": "Stój!", "e": "🛑", "ru": "Стой! (не двигайся)", "ua": "Стій! (не рухайся)" },
+        { "pl": "Usiądź na podłodze!", "e": "🧘", "ru": "Сядь на пол!", "ua": "Сядь на підлогу!", "wym": { "ru": "у́щёнчь на подўо́дзэ" } },
+        { "pl": "Rzuć piłkę!", "e": "🤾", "ru": "Брось мяч!", "ua": "Кинь м'яч!" },
+        { "pl": "Złap piłkę!", "e": "🥅", "ru": "Поймай мяч!", "ua": "Злови м'яч!" },
+        { "pl": "Raz, dwa, trzy!", "e": "🔢", "ru": "Раз, два, три!", "ua": "Раз, два, три!" },
+        { "pl": "strój na wuef", "e": "👕", "ru": "форма на физкультуру", "ua": "форма на фізкультуру" }
+      ],
+      "zdania": [
+        { "pl": "Dzieci, biegnijcie!", "e": "🏃‍♀️", "ru": "Дети, бегите!", "ua": "Діти, біжіть!" },
+        { "pl": "Stańcie w rzędzie!", "e": "🧍‍♂️", "ru": "Встаньте в ряд!", "ua": "Станьте в ряд!" },
+        { "pl": "Skaczcie wysoko!", "e": "🦘", "ru": "Прыгайте высоко!", "ua": "Стрибайте високо!" },
+        { "pl": "Rzuć piłkę do Oli!", "e": "🏐", "ru": "Брось мяч Оле!", "ua": "Кинь м'яч Олі!" },
+        { "pl": "Nie mam stroju na wuef.", "e": "👕", "ru": "У меня нет формы на физкультуру.", "ua": "У мене немає форми на фізкультуру." }
+      ],
+      "zeszyt": ["Biegnij! Skacz! Stań!", "Usiądź na podłodze!", "Rzuć piłkę! Złap piłkę!", "Dzieci, biegnijcie!", "Stańcie w rzędzie!", "Nie mam stroju na wuef."]
+    },
+    {
+      "nr": 42,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: ciało i zdrowie", "ru": "Проверь себя: тело и здоровье", "ua": "Перевір себе: тіло і здоров'я" },
+      "cel": { "ru": "Повтори всё из раздела 7 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 7 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Jak się czujesz? Czuję się ...", "Boli mnie ...", "Mam ... oczy i ... włosy.", "Na wuefie: biegnij, skacz, stań!"]
+    }
+  ]
+}

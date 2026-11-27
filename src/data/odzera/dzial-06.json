@@ -1,0 +1,233 @@
+{
+  "nr": 6,
+  "tytul": { "pl": "Jedzenie", "ru": "Еда", "ua": "Їжа" },
+  "e": "🍎",
+  "kolor": "#e8890c",
+  "lekcje": [
+    {
+      "nr": 31,
+      "tytul": { "pl": "Owoce i warzywa", "ru": "Фрукты и овощи", "ua": "Фрукти і овочі" },
+      "cel": { "ru": "Ты научишься называть фрукты и овощи по-польски.", "ua": "Ти навчишся називати фрукти і овочі польською." },
+      "zasady": [
+        {
+          "litery": "sz  cz",
+          "dzwiek": { "ru": "ш  ч", "ua": "ш  ч" },
+          "opis": {
+            "ru": "Повтори: sz = ш, cz = ч. Gruszka читается [гру́шка], pomarańcza - [помара́ньча].",
+            "ua": "Повтори: sz = ш, cz = ч. Gruszka читається [гру́шка], pomarańcza - [помара́ньча]."
+          },
+          "przyklady": ["gruszka", "pomarańcza", "czekolada"]
+        },
+        {
+          "litery": "ł  ó",
+          "dzwiek": { "ru": "ў  у", "ua": "ў  у" },
+          "opis": {
+            "ru": "ł - короткое у: jabłko [я́бўко]. ó - это у: ogórek [огу́рэк].",
+            "ua": "ł - коротке у: jabłko [я́бўко]. ó - це у: ogórek [огу́рек]."
+          },
+          "przyklady": ["jabłko", "ogórek", "góra"]
+        }
+      ],
+      "slowa": [
+        { "pl": "jabłko", "e": "🍎", "ru": "яблоко", "ua": "яблуко" },
+        { "pl": "gruszka", "e": "🍐", "ru": "груша", "ua": "груша" },
+        { "pl": "banan", "e": "🍌", "ru": "банан", "ua": "банан" },
+        { "pl": "truskawka", "e": "🍓", "ru": "клубника", "ua": "полуниця" },
+        { "pl": "pomarańcza", "e": "🍊", "ru": "апельсин", "ua": "апельсин" },
+        { "pl": "marchewka", "e": "🥕", "ru": "морковка", "ua": "морквина" },
+        { "pl": "pomidor", "e": "🍅", "ru": "помидор", "ua": "помідор" },
+        { "pl": "ogórek", "e": "🥒", "ru": "огурец", "ua": "огірок" },
+        { "pl": "ziemniak", "e": "🥔", "ru": "картофель, картошка", "ua": "картопля" }
+      ],
+      "zdania": [
+        { "pl": "To jest jabłko, a to jest gruszka.", "lektor": "To jest jabłko... a to jest gruszka.", "e": "🍐", "ru": "Это яблоко, а это груша.", "ua": "Це яблуко, а це груша." },
+        { "pl": "Banan jest żółty.", "e": "🍌", "ru": "Банан жёлтый.", "ua": "Банан жовтий." },
+        { "pl": "Tu są pomidory i ogórki.", "e": "🥗", "ru": "Здесь помидоры и огурцы.", "ua": "Тут помідори й огірки." },
+        { "pl": "To nie jest ziemniak, to jest marchewka.", "lektor": "To nie jest ziemniak... to jest marchewka.", "e": "🥕", "ru": "Это не картошка, это морковка.", "ua": "Це не картопля, це морквина." },
+        { "pl": "Pomarańcza jest duża.", "e": "🍊", "ru": "Апельсин большой.", "ua": "Апельсин великий." }
+      ],
+      "zeszyt": ["owoce: jabłko, gruszka, banan, truskawka, pomarańcza", "warzywa: marchewka, pomidor, ogórek, ziemniak", "jabłko", "ogórek", "To jest jabłko, a to jest gruszka.", "Banan jest żółty."]
+    },
+    {
+      "nr": 32,
+      "tytul": { "pl": "Śniadanie i obiad", "ru": "Завтрак и обед", "ua": "Сніданок і обід" },
+      "cel": { "ru": "Ты научишься говорить, что едят на завтрак и на обед.", "ua": "Ти навчишся казати, що їдять на сніданок і на обід." },
+      "zasady": [
+        {
+          "litery": "na śniadanie, na obiad",
+          "dzwiek": { "ru": "на щняда́не, на о́бьят", "ua": "на сьняда́нє, на о́бʼят" },
+          "opis": {
+            "ru": "Na śniadanie = на завтрак, na obiad = на обед. Запомни целиком: Na obiad jest zupa.",
+            "ua": "Na śniadanie = на сніданок, na obiad = на обід. Запам'ятай цілком: Na obiad jest zupa."
+          },
+          "przyklady": ["Na śniadanie jest jajko.", "Na obiad jest zupa."]
+        },
+        {
+          "litery": "ę  ż",
+          "dzwiek": { "ru": "эн  ж", "ua": "ен  ж" },
+          "opis": {
+            "ru": "ę в середине слова - как «эн»: mięso [ме́нсо]. ż - это ж: ryż [рыж].",
+            "ua": "ę у середині слова - як «ен»: mięso [ме́нсо]. ż - це ж: ryż [риж]."
+          },
+          "przyklady": ["mięso", "ryż", "żaba"]
+        }
+      ],
+      "slowa": [
+        { "pl": "kanapka", "e": "🥪", "ru": "бутерброд", "ua": "бутерброд" },
+        { "pl": "masło", "e": "🧈", "ru": "сливочное масло", "ua": "вершкове масло" },
+        { "pl": "ser", "e": "🧀", "ru": "сыр", "ua": "сир" },
+        { "pl": "jajko", "e": "🥚", "ru": "яйцо", "ua": "яйце" },
+        { "pl": "zupa", "e": "🍲", "ru": "суп", "ua": "суп" },
+        { "pl": "makaron", "e": "🍝", "ru": "макароны", "ua": "макарони" },
+        { "pl": "ryż", "e": "🍚", "ru": "рис", "ua": "рис" },
+        { "pl": "mięso", "e": "🥩", "ru": "мясо", "ua": "м'ясо" },
+        { "pl": "kurczak", "e": "🍗", "ru": "курица (еда)", "ua": "курка (їжа)" }
+      ],
+      "zdania": [
+        { "pl": "Na śniadanie jest jajko.", "e": "🍳", "ru": "На завтрак яйцо.", "ua": "На сніданок яйце." },
+        { "pl": "Na obiad jest zupa.", "e": "🍽️", "ru": "На обед суп.", "ua": "На обід суп." },
+        { "pl": "Kanapka z serem, proszę.", "e": "🥪", "ru": "Бутерброд с сыром, пожалуйста.", "ua": "Бутерброд із сиром, будь ласка." },
+        { "pl": "Chleb z masłem jest dobry.", "e": "🧈", "ru": "Хлеб с маслом вкусный.", "ua": "Хліб з маслом смачний." },
+        { "pl": "Dziś na obiad jest kurczak i ryż.", "e": "🍗", "ru": "Сегодня на обед курица и рис.", "ua": "Сьогодні на обід курка і рис." }
+      ],
+      "zeszyt": ["kanapka, masło, ser, jajko", "zupa, makaron, ryż, mięso, kurczak", "Na śniadanie jest jajko.", "Na obiad jest zupa.", "Kanapka z serem, proszę."]
+    },
+    {
+      "nr": 33,
+      "tytul": { "pl": "Picie. Jestem głodny!", "ru": "Напитки. Я голоден!", "ua": "Напої. Я голодний!" },
+      "cel": { "ru": "Ты научишься называть напитки и говорить, что хочешь есть или пить.", "ua": "Ти навчишся називати напої і казати, що хочеш їсти або пити." },
+      "zasady": [
+        {
+          "litery": "głodny  głodna",
+          "dzwiek": { "ru": "гўо́дны  гўо́дна", "ua": "гўо́дни  гўо́дна" },
+          "opis": {
+            "ru": "Мальчик говорит: Jestem głodny. Девочка говорит: Jestem głodna.",
+            "ua": "Хлопчик каже: Jestem głodny. Дівчинка каже: Jestem głodna."
+          },
+          "przyklady": ["Jestem głodny.", "Mamo, jestem głodna! Jest zupa?"]
+        },
+        {
+          "litery": "Chce mi się pić.",
+          "dzwiek": { "ru": "хцэ ми щэ пичь", "ua": "хце мі сє піць" },
+          "opis": {
+            "ru": "Готовая фраза: «хочется мне пить». Так говорят мальчики и девочки.",
+            "ua": "Готова фраза: «хочеться мені пити». Так кажуть хлопчики і дівчатка."
+          },
+          "przyklady": ["Chce mi się pić.", "Chce mi się pić. Gdzie jest woda?"]
+        }
+      ],
+      "slowa": [
+        { "pl": "woda", "e": "💧", "ru": "вода", "ua": "вода" },
+        { "pl": "sok", "e": "🧃", "ru": "сок", "ua": "сік" },
+        { "pl": "mleko", "e": "🥛", "ru": "молоко", "ua": "молоко" },
+        { "pl": "kakao", "e": "☕", "ru": "какао", "ua": "какао" },
+        { "pl": "szklanka", "e": "🥃", "ru": "стакан", "ua": "склянка" },
+        { "pl": "Jestem głodny.", "e": "🤤", "ru": "Я голоден. Я хочу есть.", "ua": "Я голодний. Я хочу їсти." },
+        { "pl": "Chce mi się pić.", "e": "🥵", "ru": "Я хочу пить.", "ua": "Я хочу пити." },
+        { "pl": "Smacznego!", "e": "😋", "ru": "Приятного аппетита!", "ua": "Смачного!" }
+      ],
+      "zdania": [
+        { "pl": "Mamo, jestem głodna! Jest zupa?", "e": "👧", "ru": "Мама, я голодна! Есть суп?", "ua": "Мамо, я голодна! Є суп?" },
+        { "pl": "Chce mi się pić. Gdzie jest woda?", "e": "🚰", "ru": "Я хочу пить. Где вода?", "ua": "Я хочу пити. Де вода?" },
+        { "pl": "Szklanka mleka, proszę.", "e": "🥛", "ru": "Стакан молока, пожалуйста.", "ua": "Склянку молока, будь ласка." },
+        { "pl": "Kakao jest gorące!", "e": "☕", "ru": "Какао горячее!", "ua": "Какао гаряче!" },
+        { "pl": "Sok jest zimny.", "e": "🧊", "ru": "Сок холодный.", "ua": "Сік холодний." }
+      ],
+      "zeszyt": ["woda, sok, mleko, kakao", "szklanka", "Jestem głodny. / Jestem głodna.", "Chce mi się pić.", "Smacznego!", "Szklanka mleka, proszę."]
+    },
+    {
+      "nr": 34,
+      "tytul": { "pl": "Lubię i nie lubię", "ru": "Люблю и не люблю", "ua": "Люблю і не люблю" },
+      "cel": { "ru": "Ты научишься говорить, какую еду ты любишь и какую не любишь.", "ua": "Ти навчишся казати, яку їжу ти любиш і яку не любиш." },
+      "zasady": [
+        {
+          "litery": "lubię + co",
+          "dzwiek": { "ru": "лю́бе", "ua": "лю́бє" },
+          "opis": {
+            "ru": "После lubię слово может поменять окончание: ryba → lubię rybę. Запоминай готовые фразы.",
+            "ua": "Після lubię слово може змінити закінчення: ryba → lubię rybę. Запам'ятовуй готові фрази."
+          },
+          "przyklady": ["Lubię jabłka.", "Lubię naleśniki.", "Bardzo lubię banany."]
+        },
+        {
+          "litery": "nie lubię + czego",
+          "dzwiek": { "ru": "не лю́бе", "ua": "нє лю́бє" },
+          "opis": {
+            "ru": "После nie lubię окончание другое: zupa → nie lubię zupy, ryba → nie lubię ryby.",
+            "ua": "Після nie lubię закінчення інше: zupa → nie lubię zupy, ryba → nie lubię ryby."
+          },
+          "przyklady": ["Nie lubię zupy.", "Nie lubię ryby."]
+        }
+      ],
+      "slowa": [
+        { "pl": "lubię", "e": "❤️", "ru": "я люблю, мне нравится", "ua": "я люблю, мені подобається", "wym": { "ru": "лю́бе", "ua": "лю́бє" } },
+        { "pl": "nie lubię", "e": "😖", "ru": "я не люблю, мне не нравится", "ua": "я не люблю, мені не подобається", "wym": { "ru": "не лю́бе", "ua": "нє лю́бє" } },
+        { "pl": "Co lubisz?", "e": "💭", "ru": "Что ты любишь?", "ua": "Що ти любиш?", "wym": { "ru": "цо лю́биш", "ua": "цо лю́біш" } },
+        { "pl": "Lubię jabłka.", "e": "🍏", "ru": "Я люблю яблоки.", "ua": "Я люблю яблука.", "wym": { "ru": "лю́бе я́бўка", "ua": "лю́бє я́бўка" } },
+        { "pl": "Lubię naleśniki.", "e": "🥞", "ru": "Я люблю блины.", "ua": "Я люблю млинці.", "wym": { "ru": "лю́бе налэщни́ки", "ua": "лю́бє налесьні́кі" } },
+        { "pl": "Bardzo lubię banany.", "e": "😍", "ru": "Я очень люблю бананы.", "ua": "Я дуже люблю банани.", "wym": { "ru": "ба́рдзо лю́бе бана́ны", "ua": "ба́рдзо лю́бє бана́ни" } },
+        { "pl": "Nie lubię zupy.", "e": "🤢", "ru": "Я не люблю суп.", "ua": "Я не люблю суп.", "wym": { "ru": "не лю́бе зу́пы", "ua": "нє лю́бє зу́пи" } },
+        { "pl": "Nie lubię ryby.", "e": "🐟", "ru": "Я не люблю рыбу.", "ua": "Я не люблю рибу.", "wym": { "ru": "не лю́бе ры́бы", "ua": "нє лю́бє ри́би" } }
+      ],
+      "zdania": [
+        { "pl": "Lubię kanapki z serem.", "e": "🥪", "ru": "Я люблю бутерброды с сыром.", "ua": "Я люблю бутерброди із сиром." },
+        { "pl": "Nie lubię pomidorów.", "e": "🍅", "ru": "Я не люблю помидоры.", "ua": "Я не люблю помідори." },
+        { "pl": "Co lubisz? Lubię truskawki.", "e": "🍓", "ru": "Что ты любишь? Я люблю клубнику.", "ua": "Що ти любиш? Я люблю полуниці." },
+        { "pl": "Mama lubi herbatę.", "e": "🍵", "ru": "Мама любит чай.", "ua": "Мама любить чай." },
+        { "pl": "Nie lubię mleka, lubię sok.", "e": "🧃", "ru": "Я не люблю молоко, я люблю сок.", "ua": "Я не люблю молоко, я люблю сік." }
+      ],
+      "zeszyt": ["lubię", "nie lubię", "Co lubisz?", "Lubię jabłka.", "Nie lubię zupy.", "Bardzo lubię banany.", "Nie lubię mleka, lubię sok."]
+    },
+    {
+      "nr": 35,
+      "tytul": { "pl": "Poproszę... Ile to kosztuje?", "ru": "Дайте, пожалуйста... Сколько это стоит?", "ua": "Дайте, будь ласка... Скільки це коштує?" },
+      "cel": { "ru": "Ты научишься покупать в школьном магазинчике и спрашивать цену.", "ua": "Ти навчишся купувати в шкільній крамничці і питати ціну." },
+      "zasady": [
+        {
+          "litery": "złoty  złote  złotych",
+          "dzwiek": { "ru": "зўо́ты  зўо́тэ  зўо́тых", "ua": "зўо́ти  зўо́те  зўо́тих" },
+          "opis": {
+            "ru": "1 - jeden złoty. 2, 3, 4 - złote (dwa złote). 5 и больше - złotych (pięć złotych).",
+            "ua": "1 - jeden złoty. 2, 3, 4 - złote (dwa złote). 5 і більше - złotych (pięć złotych)."
+          },
+          "przyklady": ["jeden złoty", "dwa złote", "pięć złotych"]
+        },
+        {
+          "litery": "poproszę + co",
+          "dzwiek": { "ru": "попро́ше", "ua": "попро́ше" },
+          "opis": {
+            "ru": "Poproszę = дайте, пожалуйста. Окончание -a меняется на -ę: bułka → poproszę bułkę.",
+            "ua": "Poproszę = дайте, будь ласка. Закінчення -a змінюється на -ę: bułka → poproszę bułkę."
+          },
+          "przyklady": ["poproszę", "bułka", "Poproszę bułkę."]
+        }
+      ],
+      "slowa": [
+        { "pl": "sklepik", "e": "🏪", "ru": "магазинчик (в школе)", "ua": "крамничка (у школі)" },
+        { "pl": "poproszę", "e": "🙋‍♂️", "ru": "дайте, пожалуйста; я бы хотел", "ua": "дайте, будь ласка; я б хотів" },
+        { "pl": "Ile to kosztuje?", "e": "🏷️", "ru": "Сколько это стоит?", "ua": "Скільки це коштує?" },
+        { "pl": "bułka", "e": "🥯", "ru": "булочка", "ua": "булочка" },
+        { "pl": "pieniądze", "e": "💰", "ru": "деньги", "ua": "гроші" },
+        { "pl": "jeden złoty", "e": "🪙", "ru": "один злотый", "ua": "один злотий" },
+        { "pl": "dwa złote", "e": "✌️", "ru": "два злотых", "ua": "два злотих" },
+        { "pl": "pięć złotych", "e": "🖐️", "ru": "пять злотых", "ua": "п'ять злотих" }
+      ],
+      "zdania": [
+        { "pl": "Poproszę bułkę.", "e": "🥯", "ru": "Дайте, пожалуйста, булочку.", "ua": "Дайте, будь ласка, булочку." },
+        { "pl": "Ile kosztuje sok?", "e": "🧃", "ru": "Сколько стоит сок?", "ua": "Скільки коштує сік?" },
+        { "pl": "Woda kosztuje dwa złote.", "e": "💧", "ru": "Вода стоит два злотых.", "ua": "Вода коштує два злотих." },
+        { "pl": "Kanapka kosztuje pięć złotych.", "e": "🥪", "ru": "Бутерброд стоит пять злотых.", "ua": "Бутерброд коштує п'ять злотих." },
+        { "pl": "Poproszę jabłko i wodę.", "e": "🍎", "ru": "Дайте, пожалуйста, яблоко и воду.", "ua": "Дайте, будь ласка, яблуко і воду." }
+      ],
+      "zeszyt": ["sklepik", "poproszę", "Ile to kosztuje?", "jeden złoty, dwa złote, pięć złotych", "Poproszę bułkę.", "Woda kosztuje dwa złote."]
+    },
+    {
+      "nr": 36,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: jedzenie", "ru": "Проверь себя: еда", "ua": "Перевір себе: їжа" },
+      "cel": { "ru": "Повтори всё из раздела 6 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 6 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Lubię ...", "Nie lubię ...", "Na śniadanie jest ...", "Poproszę ... Ile to kosztuje?"]
+    }
+  ]
+}

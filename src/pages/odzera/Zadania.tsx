@@ -114,7 +114,7 @@ export function ZZasada({ z, kolor, onDalej }: PropsZadania & { z: Extract<Zadan
       <PolecenieZadania typ="zasada" />
       <div className="rounded-[2rem] bg-white p-6 shadow-[0_1px_0_rgba(0,0,0,0.04),0_10px_30px_-14px_rgba(0,0,0,0.18)]">
         <div className="flex flex-wrap items-baseline justify-center gap-x-4 gap-y-1 text-center">
-          <span className="text-[3.4rem] font-bold leading-none tracking-wide" style={{ color: kolor }} lang="pl">
+          <span className={clsx('font-bold leading-none tracking-wide', zas.litery.length > 9 ? 'text-[2.3rem]' : 'text-[3.4rem]')} style={{ color: kolor }} lang="pl">
             {zas.litery}
           </span>
           {!akcent && (
@@ -131,7 +131,7 @@ export function ZZasada({ z, kolor, onDalej }: PropsZadania & { z: Extract<Zadan
         <ul className="mt-5 divide-y divide-[#efeee9]">
           {z.przyklady.map((k) => (
             <li key={k.id} className="flex items-center gap-3 py-2.5">
-              <span className="w-12 shrink-0 text-center text-[2.2rem] leading-none" aria-hidden="true">
+              <span className={clsx('min-w-12 shrink-0 text-center leading-none', [...k.e].length > 3 ? 'text-[1.6rem]' : 'text-[2.2rem]')} aria-hidden="true">
                 {k.e}
               </span>
               <span className="min-w-0 flex-1">
@@ -201,7 +201,7 @@ export function ZWybor({ z, kolor, pierwszyRaz, sprawdzone, onWynik }: PropsZada
           </div>
         )}
         {z.typ === 'obrazek' && (
-          <span className="flex h-40 w-40 items-center justify-center rounded-full text-[6rem] leading-none" style={{ background: jasniej(kolor, 0.82) }} aria-label="obrazek">
+          <span className={clsx('flex h-40 min-w-[10rem] items-center justify-center rounded-[5rem] px-5 leading-none', [...k.e].length > 3 ? 'text-[4.2rem]' : 'text-[6rem]')} style={{ background: jasniej(kolor, 0.82) }} aria-label="obrazek">
             {k.e}
           </span>
         )}

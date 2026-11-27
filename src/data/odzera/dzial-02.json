@@ -1,0 +1,250 @@
+{
+  "nr": 2,
+  "tytul": { "pl": "W klasie", "ru": "В классе", "ua": "У класі" },
+  "e": "🎒",
+  "kolor": "#1f8fe0",
+  "lekcje": [
+    {
+      "nr": 7,
+      "tytul": { "pl": "Co jest w plecaku?", "ru": "Что в рюкзаке?", "ua": "Що в рюкзаку?" },
+      "cel": { "ru": "Ты научишься называть вещи из рюкзака и спрашивать: что это?", "ua": "Ти навчишся називати речі з рюкзака і питати: що це?" },
+      "zasady": [
+        {
+          "litery": "Kto?  Co?",
+          "dzwiek": { "ru": "кто?  что?", "ua": "хто?  що?" },
+          "opis": {
+            "ru": "Kto? - о людях и животных, co? - о вещах. Co to jest? = Что это?",
+            "ua": "Kto? - про людей і тварин, co? - про речі. Co to jest? = Що це?"
+          },
+          "przyklady": ["Kto to jest?", "Co to jest? To jest zeszyt."]
+        },
+        {
+          "litery": "sz  cz  ż",
+          "dzwiek": { "ru": "ш  ч  ж", "ua": "ш  ч  ж" },
+          "opis": {
+            "ru": "Эти буквы ты уже знаешь. Найди их в новых словах: zeszyt, nożyczki, książka.",
+            "ua": "Ці літери ти вже знаєш. Знайди їх у нових словах: zeszyt, nożyczki, książka."
+          },
+          "przyklady": ["zeszyt", "nożyczki", "książka"]
+        },
+        {
+          "litery": "ł  ó",
+          "dzwiek": { "ru": "ў  у", "ua": "ў  у" },
+          "opis": {
+            "ru": "Ещё раз: ł - короткое у, ó - просто у. Ołówek = [оўу́вэк].",
+            "ua": "Ще раз: ł - коротке у, ó - просто у. Ołówek = [оўу́век]."
+          },
+          "przyklady": ["ołówek", "długopis", "piórnik"]
+        }
+      ],
+      "slowa": [
+        { "pl": "plecak", "e": "🎒", "ru": "рюкзак", "ua": "рюкзак" },
+        { "pl": "zeszyt", "e": "📓", "ru": "тетрадь", "ua": "зошит" },
+        { "pl": "książka", "e": "📕", "ru": "книга", "ua": "книжка" },
+        { "pl": "długopis", "e": "🖊️", "ru": "ручка", "ua": "ручка" },
+        { "pl": "ołówek", "e": "✏️", "ru": "карандаш", "ua": "олівець" },
+        { "pl": "linijka", "e": "📏", "ru": "линейка", "ua": "лінійка" },
+        { "pl": "piórnik", "e": "👝", "ru": "пенал", "ua": "пенал" },
+        { "pl": "nożyczki", "e": "✂️", "ru": "ножницы", "ua": "ножиці" },
+        { "pl": "kredki", "e": "🖍️", "ru": "цветные карандаши", "ua": "кольорові олівці" }
+      ],
+      "zdania": [
+        { "pl": "To jest mój plecak.", "e": "🎒", "ru": "Это мой рюкзак.", "ua": "Це мій рюкзак." },
+        { "pl": "Co to jest? To jest zeszyt.", "e": "📓", "ru": "Что это? Это тетрадь.", "ua": "Що це? Це зошит." },
+        { "pl": "W plecaku jest książka.", "e": "📕", "ru": "В рюкзаке лежит книга.", "ua": "У рюкзаку лежить книжка." },
+        { "pl": "Długopis, proszę.", "e": "🖊️", "ru": "Ручку, пожалуйста.", "ua": "Ручку, будь ласка." },
+        { "pl": "Tak, to jest ołówek.", "e": "✏️", "ru": "Да, это карандаш.", "ua": "Так, це олівець." }
+      ],
+      "zeszyt": ["plecak", "zeszyt", "książka", "długopis", "ołówek", "piórnik", "Co to jest? To jest zeszyt.", "W plecaku jest książka."]
+    },
+    {
+      "nr": 8,
+      "tytul": { "pl": "W klasie", "ru": "В классе", "ua": "У класі" },
+      "cel": { "ru": "Ты научишься называть то, что есть в классе.", "ua": "Ти навчишся називати те, що є в класі." },
+      "zasady": [
+        {
+          "litery": "krz  prz  trz",
+          "dzwiek": { "ru": "кш  пш  тш", "ua": "кш  пш  тш" },
+          "opis": {
+            "ru": "После k, p, t буквы rz звучат как ш: krzesło = [кше́сўо]. После других букв - как ж: drzwi, rzeka.",
+            "ua": "Після k, p, t літери rz звучать як ш: krzesło = [кше́сўо]. Після інших літер - як ж: drzwi, rzeka."
+          },
+          "przyklady": ["krzesło", "drzwi", "rzeka"]
+        },
+        {
+          "litery": "kom-PU-ter",
+          "dzwiek": { "ru": "уда́рение", "ua": "на́голос" },
+          "opis": {
+            "ru": "Многие слова похожи на русские: komputer, mapa, globus. Но ударение - на предпоследнем слоге.",
+            "ua": "Багато слів схожі на українські: komputer, mapa, globus. Але наголос - на передостанньому складі."
+          },
+          "przyklady": ["komputer", "mapa", "globus"]
+        }
+      ],
+      "slowa": [
+        { "pl": "krzesło", "e": "🪑", "ru": "стул", "ua": "стілець" },
+        { "pl": "okno", "e": "🪟", "ru": "окно", "ua": "вікно" },
+        { "pl": "drzwi", "lektor": "Drzwi!", "e": "🚪", "ru": "дверь", "ua": "двері" },
+        { "pl": "komputer", "e": "💻", "ru": "компьютер", "ua": "комп'ютер" },
+        { "pl": "kosz", "lektor": "Kosz!", "e": "🗑️", "ru": "мусорная корзина", "ua": "кошик для сміття" },
+        { "pl": "zegar", "e": "🕰️", "ru": "часы", "ua": "годинник" },
+        { "pl": "mapa", "e": "🗺️", "ru": "карта", "ua": "мапа" },
+        { "pl": "globus", "e": "🌍", "ru": "глобус", "ua": "глобус" }
+      ],
+      "zdania": [
+        { "pl": "W klasie jest mapa.", "e": "🗺️", "ru": "В классе есть карта.", "ua": "У класі є мапа." },
+        { "pl": "W klasie jest komputer.", "e": "💻", "ru": "В классе есть компьютер.", "ua": "У класі є комп'ютер." },
+        { "pl": "To są drzwi, a to jest okno.", "lektor": "To są drzwi... a to jest okno.", "e": "🚪", "ru": "Это дверь, а это окно.", "ua": "Це двері, а це вікно." },
+        { "pl": "Tu jest krzesło.", "e": "🪑", "ru": "Здесь стул.", "ua": "Тут стілець." },
+        { "pl": "Tu jest kosz.", "e": "🗑️", "ru": "Здесь мусорная корзина.", "ua": "Тут кошик для сміття." }
+      ],
+      "zeszyt": ["krzesło", "okno", "drzwi", "komputer", "zegar", "W klasie jest mapa.", "To są drzwi, a to jest okno."]
+    },
+    {
+      "nr": 9,
+      "tytul": { "pl": "Polecenia nauczyciela", "ru": "Команды учителя", "ua": "Команди вчителя" },
+      "cel": { "ru": "Ты научишься понимать, что учитель просит сделать.", "ua": "Ти навчишся розуміти, що вчитель просить зробити." },
+      "zasady": [
+        {
+          "litery": "-aj",
+          "dzwiek": { "ru": "-ай", "ua": "-ай" },
+          "opis": {
+            "ru": "Так часто звучит просьба или команда: przeczytaj = прочитай, posłuchaj = послушай.",
+            "ua": "Так часто звучить прохання або команда: przeczytaj = прочитай, posłuchaj = послухай."
+          },
+          "przyklady": ["Przeczytaj!", "Posłuchaj!"]
+        },
+        {
+          "litery": "-cie",
+          "dzwiek": { "ru": "-че", "ua": "-цє" },
+          "opis": {
+            "ru": "Когда учитель говорит всему классу, он добавляет -cie: Otwórz! → Otwórzcie!",
+            "ua": "Коли вчитель каже всьому класу, він додає -cie: Otwórz! → Otwórzcie!"
+          },
+          "przyklady": ["Otwórz!", "Otwórzcie zeszyty!"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Otwórz!", "e": "🔓", "ru": "Открой!", "ua": "Відкрий!" },
+        { "pl": "Zamknij!", "e": "🔒", "ru": "Закрой!", "ua": "Закрий!" },
+        { "pl": "Przeczytaj!", "e": "📖", "ru": "Прочитай!", "ua": "Прочитай!" },
+        { "pl": "Napisz!", "e": "✍️", "ru": "Напиши!", "ua": "Напиши!" },
+        { "pl": "Posłuchaj!", "e": "🎧", "ru": "Послушай!", "ua": "Послухай!" },
+        { "pl": "Powiedz!", "e": "🗣️", "ru": "Скажи!", "ua": "Скажи!" },
+        { "pl": "Pokaż!", "e": "👆", "ru": "Покажи!", "ua": "Покажи!" },
+        { "pl": "Usiądź!", "e": "💺", "ru": "Сядь!", "ua": "Сядь!" },
+        { "pl": "Wstań!", "e": "🧍", "ru": "Встань!", "ua": "Встань!" }
+      ],
+      "zdania": [
+        { "pl": "Otwórzcie zeszyty!", "e": "📓", "ru": "Откройте тетради!", "ua": "Відкрийте зошити!" },
+        { "pl": "Zamknij okno!", "e": "🪟", "ru": "Закрой окно!", "ua": "Зачини вікно!" },
+        { "pl": "Pokaż długopis!", "e": "🖊️", "ru": "Покажи ручку!", "ua": "Покажи ручку!" },
+        { "pl": "Idź do tablicy!", "e": "🧑‍🏫", "ru": "Иди к доске!", "ua": "Іди до дошки!" },
+        { "pl": "Usiądź, proszę.", "e": "💺", "ru": "Садись, пожалуйста.", "ua": "Сідай, будь ласка." }
+      ],
+      "zeszyt": ["Otwórz!", "Zamknij!", "Przeczytaj!", "Napisz!", "Posłuchaj!", "Powiedz!", "Otwórzcie zeszyty!", "Idź do tablicy!"]
+    },
+    {
+      "nr": 10,
+      "tytul": { "pl": "Zwroty ucznia", "ru": "Что говорит ученик", "ua": "Що каже учень" },
+      "cel": { "ru": "Ты научишься говорить учителю: не понимаю, повторите, можно выйти?", "ua": "Ти навчишся казати вчителеві: не розумію, повторіть, можна вийти?" },
+      "zasady": [
+        {
+          "litery": "-m",
+          "dzwiek": { "ru": "-м", "ua": "-м" },
+          "opis": {
+            "ru": "Когда говоришь о себе (я), слово часто кончается на -m: mam, wiem, rozumiem.",
+            "ua": "Коли кажеш про себе (я), слово часто закінчується на -m: mam, wiem, rozumiem."
+          },
+          "przyklady": ["Mam pytanie.", "Nie wiem.", "Nie rozumiem."]
+        },
+        {
+          "litery": "-ę",
+          "dzwiek": { "ru": "-э", "ua": "-е" },
+          "opis": {
+            "ru": "В конце слова ę звучит как простое э: proszę, mogę.",
+            "ua": "У кінці слова ę звучить як просте е: proszę, mogę."
+          },
+          "przyklady": ["Proszę powtórzyć.", "Czy mogę wyjść?", "Dziękuję."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Nie rozumiem.", "e": "😕", "ru": "Я не понимаю.", "ua": "Я не розумію." },
+        { "pl": "Nie wiem.", "e": "🤷", "ru": "Я не знаю.", "ua": "Я не знаю." },
+        { "pl": "Czy mogę wyjść?", "e": "🚻", "ru": "Можно выйти?", "ua": "Можна вийти?" },
+        { "pl": "Proszę powtórzyć.", "e": "🔁", "ru": "Повторите, пожалуйста.", "ua": "Повторіть, будь ласка." },
+        { "pl": "Proszę wolniej.", "e": "🐌", "ru": "Медленнее, пожалуйста.", "ua": "Повільніше, будь ласка." },
+        { "pl": "Mam pytanie.", "e": "❔", "ru": "У меня вопрос.", "ua": "У мене питання." },
+        { "pl": "Jak to jest po polsku?", "e": "💬", "ru": "Как это по-польски?", "ua": "Як це польською?" },
+        { "pl": "Gotowe!", "e": "✅", "ru": "Готово!", "ua": "Готово!" }
+      ],
+      "zdania": [
+        { "pl": "Proszę pani, nie rozumiem.", "e": "👩‍🏫", "ru": "Извините, я не понимаю. (учительнице)", "ua": "Вибачте, я не розумію. (до вчительки)" },
+        { "pl": "Proszę pana, czy mogę wyjść?", "e": "👨‍🏫", "ru": "Можно выйти? (учителю)", "ua": "Можна вийти? (до вчителя)" },
+        { "pl": "Przepraszam, mam pytanie.", "e": "🙋", "ru": "Извините, у меня вопрос.", "ua": "Вибачте, у мене питання." },
+        { "pl": "Tak, gotowe!", "e": "✅", "ru": "Да, готово!", "ua": "Так, готово!" }
+      ],
+      "zeszyt": ["Nie rozumiem.", "Nie wiem.", "Czy mogę wyjść?", "Proszę powtórzyć.", "Mam pytanie.", "Jak to jest po polsku?", "Proszę pani, nie rozumiem."]
+    },
+    {
+      "nr": 11,
+      "tytul": { "pl": "To jest... Czy to jest...?", "ru": "Это... Это...? Да / Нет", "ua": "Це... Чи це...? Так / Ні" },
+      "cel": { "ru": "Ты научишься спрашивать «Czy to jest...?» и отвечать: да или нет.", "ua": "Ти навчишся питати «Czy to jest...?» і відповідати: так або ні." },
+      "zasady": [
+        {
+          "litery": "Czy ...?",
+          "dzwiek": { "ru": "чы", "ua": "чи" },
+          "opis": {
+            "ru": "Czy в начале предложения - это вопрос. Ответ: tak или nie.",
+            "ua": "Czy на початку речення - це питання, як українське «чи». Відповідь: tak або nie."
+          },
+          "przyklady": ["Czy to jest zeszyt?", "Czy mogę wyjść?"]
+        },
+        {
+          "litery": "nie jest",
+          "dzwiek": { "ru": "не ест", "ua": "нє єст" },
+          "opis": {
+            "ru": "To nie jest... = Это не... Слово nie ставим перед jest.",
+            "ua": "To nie jest... = Це не... Слово nie ставимо перед jest."
+          },
+          "przyklady": ["Nie, to nie jest zeszyt, to jest teczka.", "Nie, to nie jest mysz."]
+        },
+        {
+          "litery": "jest  są",
+          "dzwiek": { "ru": "ест  сон", "ua": "єст  сон" },
+          "opis": {
+            "ru": "Одна вещь - to jest, много вещей - to są: to są farby, to są drzwi.",
+            "ua": "Одна річ - to jest, багато речей - to są: to są farby, to są drzwi."
+          },
+          "przyklady": ["To są farby, a to jest pędzel.", "To są drzwi, a to jest okno."]
+        }
+      ],
+      "slowa": [
+        { "pl": "kartka", "e": "📄", "ru": "листок бумаги", "ua": "аркуш паперу" },
+        { "pl": "teczka", "e": "📁", "ru": "папка", "ua": "папка" },
+        { "pl": "pędzel", "e": "🖌️", "ru": "кисточка", "ua": "пензлик" },
+        { "pl": "farby", "e": "🎨", "ru": "краски", "ua": "фарби" },
+        { "pl": "gąbka", "e": "🧽", "ru": "губка", "ua": "губка" },
+        { "pl": "obrazek", "e": "🖼️", "ru": "картинка", "ua": "малюнок" },
+        { "pl": "spinacz", "e": "📎", "ru": "скрепка", "ua": "скріпка" }
+      ],
+      "zdania": [
+        { "pl": "Czy to jest zeszyt?", "e": "📓", "ru": "Это тетрадь?", "ua": "Чи це зошит?" },
+        { "pl": "Nie, to nie jest zeszyt, to jest teczka.", "lektor": "Nie... to nie jest zeszyt... to jest teczka.", "e": "📁", "ru": "Нет, это не тетрадь, это папка.", "ua": "Ні, це не зошит, це папка." },
+        { "pl": "Czy to jest gąbka? Tak, to jest gąbka.", "lektor": "Czy to jest gąbka?... Tak. To jest gąbka.", "e": "🧽", "ru": "Это губка? Да, это губка.", "ua": "Чи це губка? Так, це губка." },
+        { "pl": "To są farby, a to jest pędzel.", "lektor": "To są farby... a to jest pędzel.", "e": "🎨", "ru": "Это краски, а это кисточка.", "ua": "Це фарби, а це пензлик." },
+        { "pl": "To jest mój obrazek.", "e": "🖼️", "ru": "Это моя картинка.", "ua": "Це мій малюнок." },
+        { "pl": "Czy to jest kartka? Nie, to jest obrazek.", "lektor": "Czy to jest kartka?... Nie. To jest obrazek.", "e": "📄", "ru": "Это листок? Нет, это картинка.", "ua": "Чи це аркуш? Ні, це малюнок." }
+      ],
+      "zeszyt": ["kartka", "teczka", "pędzel", "gąbka", "Czy to jest zeszyt?", "Nie, to nie jest zeszyt, to jest teczka.", "To są farby, a to jest pędzel."]
+    },
+    {
+      "nr": 12,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: w klasie", "ru": "Проверь себя: в классе", "ua": "Перевір себе: у класі" },
+      "cel": { "ru": "Повтори всё из раздела 2 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 2 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["To jest mój plecak.", "W plecaku jest książka.", "W klasie jest komputer.", "Proszę pani, nie rozumiem.", "Proszę powtórzyć."]
+    }
+  ]
+}

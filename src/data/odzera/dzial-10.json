@@ -1,0 +1,218 @@
+{
+  "nr": 10,
+  "tytul": { "pl": "Pogoda i kalendarz", "ru": "Погода и календарь", "ua": "Погода і календар" },
+  "e": "🌦️",
+  "kolor": "#2b8fbf",
+  "lekcje": [
+    {
+      "nr": 55,
+      "tytul": { "pl": "Pory roku", "ru": "Времена года", "ua": "Пори року" },
+      "cel": { "ru": "Ты научишься называть времена года и говорить, что бывает весной, летом, осенью и зимой.", "ua": "Ти навчишся називати пори року і говорити, що буває навесні, влітку, восени і взимку." },
+      "zasady": [
+        {
+          "litery": "wiosną  latem  jesienią  zimą",
+          "dzwiek": { "ru": "весной  летом  осенью  зимой", "ua": "навесні  влітку  восени  взимку" },
+          "opis": {
+            "ru": "На вопрос «kiedy?» (когда?) меняется окончание: wiosna → wiosną, lato → latem, jesień → jesienią, zima → zimą.",
+            "ua": "На питання «kiedy?» (коли?) змінюється закінчення: wiosna → wiosną, lato → latem, jesień → jesienią, zima → zimą."
+          },
+          "przyklady": ["Wiosną rosną kwiaty.", "Latem jedziemy nad morze.", "Jesienią liście są żółte.", "Zimą lepimy bałwana."]
+        }
+      ],
+      "slowa": [
+        { "pl": "wiosna", "e": "🌱", "ru": "весна", "ua": "весна" },
+        { "pl": "lato", "e": "🏖️", "ru": "лето", "ua": "літо" },
+        { "pl": "jesień", "e": "🍂", "ru": "осень", "ua": "осінь" },
+        { "pl": "kwiaty", "e": "💐", "ru": "цветы", "ua": "квіти" },
+        { "pl": "liście", "e": "🍃", "ru": "листья", "ua": "листя" },
+        { "pl": "słońce", "e": "☀️", "ru": "солнце", "ua": "сонце" },
+        { "pl": "morze", "e": "🌊", "ru": "море", "ua": "море" },
+        { "pl": "grzyby", "e": "🍄", "ru": "грибы", "ua": "гриби" }
+      ],
+      "zdania": [
+        { "pl": "Wiosną rosną kwiaty.", "e": "🌷", "ru": "Весной растут цветы.", "ua": "Навесні ростуть квіти." },
+        { "pl": "Latem jedziemy nad morze.", "e": "🏖️", "ru": "Летом мы едем на море.", "ua": "Влітку ми їдемо на море." },
+        { "pl": "Jesienią liście są żółte.", "e": "🍂", "ru": "Осенью листья жёлтые.", "ua": "Восени листя жовте." },
+        { "pl": "W lesie rosną grzyby.", "e": "🍄", "ru": "В лесу растут грибы.", "ua": "У лісі ростуть гриби." },
+        { "pl": "Zimą lepimy bałwana.", "e": "⛄", "ru": "Зимой мы лепим снеговика.", "ua": "Взимку ми ліпимо сніговика." },
+        { "pl": "Lubię lato i słońce.", "e": "😊", "ru": "Я люблю лето и солнце.", "ua": "Я люблю літо і сонце." }
+      ],
+      "zeszyt": ["wiosna, lato, jesień, zima", "Kiedy? wiosną, latem, jesienią, zimą", "kwiaty, liście, grzyby, słońce, morze", "Wiosną rosną kwiaty.", "Jesienią liście są żółte.", "Zimą lepimy bałwana."]
+    },
+    {
+      "nr": 56,
+      "tytul": { "pl": "Miesiące", "ru": "Месяцы", "ua": "Місяці" },
+      "cel": { "ru": "Ты научишься называть месяцы и говорить по-польски «в мае», «в июле».", "ua": "Ти навчишся називати місяці і казати польською «у травні», «у липні»." },
+      "zasady": [
+        {
+          "litery": "luty  kwiecień  lipiec  sierpień",
+          "dzwiek": { "ru": "февраль  апрель  июль  август", "ua": "лютий  квітень  липень  серпень" },
+          "opis": {
+            "ru": "Польские месяцы похожи на украинские: lipiec - липень, sierpień - серпень. Пишем их с маленькой буквы.",
+            "ua": "Польські місяці схожі на українські: lipiec - липень, sierpień - серпень. Пишемо їх з малої літери."
+          },
+          "przyklady": ["luty", "kwiecień", "lipiec", "sierpień"]
+        },
+        {
+          "litery": "w maju  w lipcu  w grudniu",
+          "dzwiek": { "ru": "в мае  в июле  в декабре", "ua": "у травні  у липні  у грудні" },
+          "opis": {
+            "ru": "На вопрос «kiedy?» говорим w + месяц, и окончание меняется: maj → w maju, lipiec → w lipcu. Перед wrz- пишем we: we wrześniu.",
+            "ua": "На питання «kiedy?» кажемо w + місяць, і закінчення змінюється: maj → w maju, lipiec → w lipcu. Перед wrz- пишемо we: we wrześniu."
+          },
+          "przyklady": ["W lipcu i w sierpniu są wakacje.", "We wrześniu idziemy do szkoły.", "W listopadzie i w grudniu jest zimno."]
+        }
+      ],
+      "slowa": [
+        { "pl": "styczeń", "e": "1️⃣", "ru": "январь", "ua": "січень" },
+        { "pl": "luty", "e": "2️⃣", "ru": "февраль", "ua": "лютий" },
+        { "pl": "marzec", "e": "3️⃣", "ru": "март", "ua": "березень" },
+        { "pl": "kwiecień", "e": "4️⃣", "ru": "апрель", "ua": "квітень" },
+        { "pl": "maj", "e": "5️⃣", "ru": "май", "ua": "травень" },
+        { "pl": "czerwiec", "e": "6️⃣", "ru": "июнь", "ua": "червень" },
+        { "pl": "lipiec", "e": "7️⃣", "ru": "июль", "ua": "липень" },
+        { "pl": "sierpień", "e": "8️⃣", "ru": "август", "ua": "серпень" },
+        { "pl": "wrzesień", "e": "9️⃣", "ru": "сентябрь", "ua": "вересень" },
+        { "pl": "październik", "e": "🔟", "ru": "октябрь", "ua": "жовтень" }
+      ],
+      "zdania": [
+        { "pl": "Styczeń to pierwszy miesiąc roku.", "e": "1️⃣", "ru": "Январь - первый месяц года.", "ua": "Січень - перший місяць року." },
+        { "pl": "W lipcu i w sierpniu są wakacje.", "e": "🏖️", "ru": "В июле и в августе каникулы.", "ua": "У липні і в серпні канікули." },
+        { "pl": "We wrześniu idziemy do szkoły.", "e": "🏫", "ru": "В сентябре мы идём в школу.", "ua": "У вересні ми йдемо до школи." },
+        { "pl": "W listopadzie i w grudniu jest zimno.", "e": "❄️", "ru": "В ноябре и в декабре холодно.", "ua": "У листопаді і в грудні холодно." }
+      ],
+      "zeszyt": ["styczeń, luty, marzec, kwiecień, maj, czerwiec", "lipiec, sierpień, wrzesień, październik, listopad, grudzień", "Styczeń to pierwszy miesiąc roku.", "W lipcu i w sierpniu są wakacje.", "We wrześniu idziemy do szkoły."]
+    },
+    {
+      "nr": 57,
+      "tytul": { "pl": "Jaka jest pogoda?", "ru": "Какая погода?", "ua": "Яка погода?" },
+      "cel": { "ru": "Ты научишься говорить о погоде: идёт дождь, светит солнце, холодно.", "ua": "Ти навчишся говорити про погоду: іде дощ, світить сонце, холодно." },
+      "zasady": [
+        {
+          "litery": "pada",
+          "dzwiek": { "ru": "идёт (дождь, снег)", "ua": "іде, падає (дощ, сніг)" },
+          "opis": {
+            "ru": "По-польски дождь и снег «падают»: pada deszcz, pada śnieg. А солнце «светит»: świeci słońce.",
+            "ua": "Польською дощ і сніг «падають»: pada deszcz, pada śnieg. А сонце «світить»: świeci słońce."
+          },
+          "przyklady": ["Pada deszcz.", "Pada śnieg.", "Świeci słońce."]
+        },
+        {
+          "litery": "jest ... -o",
+          "dzwiek": { "ru": "холодно, тепло", "ua": "холодно, тепло" },
+          "opis": {
+            "ru": "О погоде говорим jest + слово на -o: jest zimno (холодно), jest ciepło (тепло).",
+            "ua": "Про погоду кажемо jest + слово на -o: jest zimno (холодно), jest ciepło (тепло)."
+          },
+          "przyklady": ["Jest zimno.", "Jest ciepło.", "Jest gorąco.", "Jest pochmurno."]
+        }
+      ],
+      "slowa": [
+        { "pl": "Jaka jest pogoda?", "e": "🌦️", "ru": "Какая погода?", "ua": "Яка погода?" },
+        { "pl": "Pada deszcz.", "e": "🌧️", "ru": "Идёт дождь.", "ua": "Іде дощ.", "wym": { "ru": "па́да дэшч" } },
+        { "pl": "Pada śnieg.", "e": "🌨️", "ru": "Идёт снег.", "ua": "Падає сніг." },
+        { "pl": "Świeci słońce.", "e": "☀️", "ru": "Светит солнце.", "ua": "Світить сонце." },
+        { "pl": "Wieje wiatr.", "e": "💨", "ru": "Дует ветер.", "ua": "Дме вітер." },
+        { "pl": "Jest zimno.", "e": "🥶", "ru": "Холодно.", "ua": "Холодно." },
+        { "pl": "Jest ciepło.", "e": "🌤️", "ru": "Тепло.", "ua": "Тепло." },
+        { "pl": "Jest gorąco.", "e": "🥵", "ru": "Жарко.", "ua": "Спекотно." },
+        { "pl": "Jest pochmurno.", "e": "☁️", "ru": "Пасмурно.", "ua": "Хмарно." },
+        { "pl": "burza", "e": "⛈️", "ru": "гроза", "ua": "гроза" }
+      ],
+      "zdania": [
+        { "pl": "Dzisiaj pada deszcz i wieje wiatr.", "e": "🌧️", "ru": "Сегодня идёт дождь и дует ветер.", "ua": "Сьогодні йде дощ і дме вітер." },
+        { "pl": "Jest burza, mama zamyka okno.", "lektor": "Jest burza... mama zamyka okno.", "e": "⛈️", "ru": "Гроза, мама закрывает окно.", "ua": "Гроза, мама зачиняє вікно." },
+        { "pl": "Jest pochmurno, ale jest ciepło.", "lektor": "Jest pochmurno... ale jest ciepło.", "e": "⛅", "ru": "Пасмурно, но тепло.", "ua": "Хмарно, але тепло." },
+        { "pl": "Zimno mi!", "e": "🧣", "ru": "Мне холодно!", "ua": "Мені холодно!" }
+      ],
+      "zeszyt": ["Jaka jest pogoda?", "Pada deszcz.", "Pada śnieg.", "Świeci słońce.", "Wieje wiatr.", "Jest zimno. Jest ciepło. Jest gorąco.", "Dzisiaj pada deszcz i wieje wiatr."]
+    },
+    {
+      "nr": 58,
+      "tytul": { "pl": "Data i urodziny", "ru": "Дата и день рождения", "ua": "Дата і день народження" },
+      "cel": { "ru": "Ты научишься называть дату, говорить, когда у тебя день рождения, и поздравлять.", "ua": "Ти навчишся називати дату, казати, коли в тебе день народження, і вітати з днем народження." },
+      "zasady": [
+        {
+          "litery": "pierwszy grudnia",
+          "dzwiek": { "ru": "первое декабря", "ua": "перше грудня" },
+          "opis": {
+            "ru": "Дата: какой по счёту день (pierwszy, drugi, trzeci...) + месяц с другим окончанием: grudzień → grudnia, kwiecień → kwietnia.",
+            "ua": "Дата: котрий за рахунком день (pierwszy, drugi, trzeci...) + місяць з іншим закінченням: grudzień → grudnia, kwiecień → kwietnia."
+          },
+          "przyklady": ["Dzisiaj jest pierwszy grudnia.", "Dzisiaj jest drugi kwietnia."]
+        },
+        {
+          "litery": "Sto lat!",
+          "dzwiek": { "ru": "сто лет", "ua": "сто років" },
+          "opis": {
+            "ru": "В Польше на день рождения поют песню «Sto lat» - желают жить сто лет.",
+            "ua": "У Польщі на день народження співають пісню «Sto lat» - бажають жити сто років."
+          },
+          "przyklady": ["Sto lat!", "Wszystkiego najlepszego!"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Który dzisiaj jest?", "e": "📅", "ru": "Какое сегодня число?", "ua": "Яке сьогодні число?" },
+        { "pl": "urodziny", "e": "🥳", "ru": "день рождения", "ua": "день народження" },
+        { "pl": "Kiedy masz urodziny?", "e": "🎈", "ru": "Когда у тебя день рождения?", "ua": "Коли в тебе день народження?" },
+        { "pl": "tort", "e": "🎂", "ru": "торт", "ua": "торт" },
+        { "pl": "prezent", "e": "🎁", "ru": "подарок", "ua": "подарунок" },
+        { "pl": "świeczka", "e": "🕯️", "ru": "свечка", "ua": "свічка" },
+        { "pl": "Wszystkiego najlepszego!", "e": "🎉", "ru": "Всего наилучшего! (поздравление)", "ua": "Всього найкращого! (привітання)" },
+        { "pl": "Sto lat!", "e": "🎶", "ru": "Сто лет! (песня на день рождения)", "ua": "Сто років! (пісня на день народження)" }
+      ],
+      "zdania": [
+        { "pl": "Dzisiaj jest pierwszy grudnia.", "e": "📅", "ru": "Сегодня первое декабря.", "ua": "Сьогодні перше грудня." },
+        { "pl": "Dzisiaj jest drugi kwietnia.", "e": "🌷", "ru": "Сегодня второе апреля.", "ua": "Сьогодні друге квітня." },
+        { "pl": "Mam urodziny w maju.", "e": "🎈", "ru": "У меня день рождения в мае.", "ua": "У мене день народження в травні." },
+        { "pl": "Dzisiaj są moje urodziny!", "e": "🥳", "ru": "Сегодня мой день рождения!", "ua": "Сьогодні мій день народження!" },
+        { "pl": "Na torcie jest dziesięć świeczek.", "e": "🎂", "ru": "На торте десять свечек.", "ua": "На торті десять свічок." },
+        { "pl": "Dziękuję za prezent!", "e": "🎁", "ru": "Спасибо за подарок!", "ua": "Дякую за подарунок!" }
+      ],
+      "zeszyt": ["Który dzisiaj jest?", "Dzisiaj jest pierwszy grudnia.", "Kiedy masz urodziny?", "Mam urodziny w maju.", "tort, prezent, świeczka", "Wszystkiego najlepszego!"]
+    },
+    {
+      "nr": 59,
+      "tytul": { "pl": "Święta w Polsce", "ru": "Праздники в Польше", "ua": "Свята в Польщі" },
+      "cel": { "ru": "Ты научишься называть польские праздники и поздравлять с праздником.", "ua": "Ти навчишся називати польські свята і вітати зі святом." },
+      "zasady": [
+        {
+          "litery": "Wielkanoc  Sylwester",
+          "dzwiek": { "ru": "с большой буквы", "ua": "з великої літери" },
+          "opis": {
+            "ru": "Названия праздников пишем с большой буквы: Boże Narodzenie, Wielkanoc. А choinka и pisanka - с маленькой.",
+            "ua": "Назви свят пишемо з великої літери: Boże Narodzenie, Wielkanoc. А choinka і pisanka - з малої."
+          },
+          "przyklady": ["Boże Narodzenie", "Wielkanoc", "Sylwester", "choinka", "pisanka"]
+        }
+      ],
+      "slowa": [
+        { "pl": "Boże Narodzenie", "e": "🌟", "ru": "Рождество", "ua": "Різдво" },
+        { "pl": "Wigilia", "e": "🍽️", "wym": { "ru": "виги́лья", "ua": "віґі́лья" }, "ru": "Сочельник - праздничный ужин 24 декабря", "ua": "Святвечір - святкова вечеря 24 грудня" },
+        { "pl": "choinka", "e": "🎄", "ru": "ёлка", "ua": "ялинка" },
+        { "pl": "Święty Mikołaj", "e": "🎅", "ru": "Святой Николай, Санта", "ua": "Святий Миколай" },
+        { "pl": "Wielkanoc", "e": "🐣", "ru": "Пасха", "ua": "Великдень" },
+        { "pl": "pisanka", "e": "🥚", "ru": "крашеное пасхальное яйцо", "ua": "писанка" },
+        { "pl": "Sylwester", "e": "🎆", "ru": "новогодняя ночь, 31 декабря", "ua": "новорічна ніч, 31 грудня" },
+        { "pl": "Dzień Dziecka", "e": "🧒", "ru": "День защиты детей, 1 июня", "ua": "День захисту дітей, 1 червня" },
+        { "pl": "Wesołych Świąt!", "e": "🤗", "ru": "Весёлых праздников! (поздравление)", "ua": "Веселих свят! (привітання)" }
+      ],
+      "zdania": [
+        { "pl": "Na Boże Narodzenie ubieramy choinkę.", "e": "🎄", "ru": "На Рождество мы наряжаем ёлку.", "ua": "На Різдво ми прикрашаємо ялинку." },
+        { "pl": "W Wigilię czekamy na pierwszą gwiazdkę.", "e": "⭐", "ru": "В Сочельник мы ждём первую звезду.", "ua": "На Святвечір ми чекаємо першу зірку." },
+        { "pl": "Święty Mikołaj przynosi prezenty.", "e": "🎅", "ru": "Святой Николай приносит подарки.", "ua": "Святий Миколай приносить подарунки." },
+        { "pl": "Na Wielkanoc malujemy pisanki.", "e": "🥚", "ru": "На Пасху мы красим яйца.", "ua": "На Великдень ми розписуємо писанки." },
+        { "pl": "Pierwszego czerwca jest Dzień Dziecka.", "e": "🧒", "ru": "Первого июня - День защиты детей.", "ua": "Першого червня - День захисту дітей." }
+      ],
+      "zeszyt": ["Boże Narodzenie, Wigilia, choinka", "Wielkanoc, pisanka", "Sylwester, Dzień Dziecka", "Wesołych Świąt!", "Święty Mikołaj przynosi prezenty.", "Na Wielkanoc malujemy pisanki."]
+    },
+    {
+      "nr": 60,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: pogoda i kalendarz", "ru": "Проверь себя: погода и календарь", "ua": "Перевір себе: погода і календар" },
+      "cel": { "ru": "Повтори всё из раздела 10 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 10 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["Lubię ... (wiosnę, lato, jesień, zimę)", "Mam urodziny w ...", "Dzisiaj jest ...", "Dzisiaj pada deszcz / świeci słońce."]
+    }
+  ]
+}

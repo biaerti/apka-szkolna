@@ -1,0 +1,223 @@
+{
+  "nr": 8,
+  "tytul": { "pl": "Dom i mój pokój", "ru": "Дом и моя комната", "ua": "Дім і моя кімната" },
+  "e": "🏠",
+  "kolor": "#6d7cd9",
+  "lekcje": [
+    {
+      "nr": 43,
+      "tytul": { "pl": "Pokoje w domu", "ru": "Комнаты в доме", "ua": "Кімнати в домі" },
+      "cel": { "ru": "Ты научишься называть комнаты в доме и говорить: mój, moja, moje.", "ua": "Ти навчишся називати кімнати в домі і казати: mój, moja, moje." },
+      "zasady": [
+        {
+          "litery": "mój  moja  moje",
+          "dzwiek": { "ru": "мой  моя  моё", "ua": "мій  моя  моє" },
+          "opis": {
+            "ru": "Mój - если про слово можно сказать «он» (dom), moja - «она» (kuchnia), moje - «оно» (mieszkanie).",
+            "ua": "Mój - якщо про слово можна сказати «він» (dom), moja - «вона» (kuchnia), moje - «воно» (mieszkanie)."
+          },
+          "przyklady": ["To jest mój dom.", "Moja kuchnia jest mała.", "Moje mieszkanie jest duże."]
+        },
+        {
+          "litery": "ó",
+          "dzwiek": { "ru": "у", "ua": "у" },
+          "opis": { "ru": "Помни: ó читается как у. Pokój и przedpokój кончаются на «-куй».", "ua": "Пам'ятай: ó читається як у. Pokój і przedpokój закінчуються на «-куй»." },
+          "przyklady": ["pokój", "przedpokój"]
+        }
+      ],
+      "slowa": [
+        { "pl": "dom", "e": "🏠", "ru": "дом", "ua": "дім" },
+        { "pl": "mieszkanie", "e": "🏢", "ru": "квартира", "ua": "квартира" },
+        { "pl": "pokój", "e": "🚪", "ru": "комната", "ua": "кімната" },
+        { "pl": "kuchnia", "e": "🍳", "ru": "кухня", "ua": "кухня" },
+        { "pl": "łazienka", "e": "🛁", "ru": "ванная", "ua": "ванна кімната" },
+        { "pl": "sypialnia", "e": "🛌", "ru": "спальня", "ua": "спальня" },
+        { "pl": "przedpokój", "e": "🧥", "ru": "прихожая", "ua": "передпокій" },
+        { "pl": "balkon", "e": "🪴", "ru": "балкон", "ua": "балкон" },
+        { "pl": "schody", "e": "🪜", "ru": "лестница", "ua": "сходи" }
+      ],
+      "zdania": [
+        { "pl": "To jest mój dom.", "e": "🏠", "ru": "Это мой дом.", "ua": "Це мій дім." },
+        { "pl": "Moja kuchnia jest mała.", "e": "🍳", "ru": "Моя кухня маленькая.", "ua": "Моя кухня маленька." },
+        { "pl": "Moje mieszkanie jest duże.", "e": "🏢", "ru": "Моя квартира большая.", "ua": "Моя квартира велика." },
+        { "pl": "Mama jest w kuchni.", "e": "👩‍🍳", "ru": "Мама на кухне.", "ua": "Мама на кухні." },
+        { "pl": "Gdzie jest łazienka?", "e": "🛁", "ru": "Где ванная?", "ua": "Де ванна кімната?" }
+      ],
+      "zeszyt": ["dom, mieszkanie, pokój", "kuchnia, łazienka, sypialnia", "przedpokój, balkon, schody", "To jest mój dom.", "Mama jest w kuchni.", "Gdzie jest łazienka?"]
+    },
+    {
+      "nr": 44,
+      "tytul": { "pl": "Meble", "ru": "Мебель", "ua": "Меблі" },
+      "cel": { "ru": "Ты научишься называть мебель и говорить: duży, duża, duże.", "ua": "Ти навчишся називати меблі і казати: duży, duża, duże." },
+      "zasady": [
+        {
+          "litery": "duży  duża  duże",
+          "dzwiek": { "ru": "большой  большая  большое", "ua": "великий  велика  велике" },
+          "opis": {
+            "ru": "Как mój, moja, moje: stół - duży, szafa - duża, lustro - duże. Mały так же: mały, mała, małe.",
+            "ua": "Як mój, moja, moje: stół - duży, szafa - duża, lustro - duże. Mały так само: mały, mała, małe."
+          },
+          "przyklady": ["Stół jest duży.", "Szafa jest duża.", "Lustro jest duże."]
+        }
+      ],
+      "slowa": [
+        { "pl": "łóżko", "lektor": "Łóżko!", "e": "🛏️", "ru": "кровать", "ua": "ліжко" },
+        { "pl": "stół", "e": "🍽️", "ru": "стол", "ua": "стіл" },
+        { "pl": "szafa", "e": "🗄️", "ru": "шкаф", "ua": "шафа" },
+        { "pl": "biurko", "e": "🧑‍💻", "ru": "письменный стол", "ua": "письмовий стіл" },
+        { "pl": "lampa", "e": "💡", "ru": "лампа", "ua": "лампа" },
+        { "pl": "półka", "e": "📚", "ru": "полка", "ua": "полиця" },
+        { "pl": "kanapa", "e": "🛋️", "ru": "диван", "ua": "диван" },
+        { "pl": "telewizor", "e": "📺", "ru": "телевизор", "ua": "телевізор" },
+        { "pl": "lustro", "e": "🪞", "ru": "зеркало", "ua": "дзеркало" }
+      ],
+      "zdania": [
+        { "pl": "To jest moje łóżko.", "e": "🛏️", "ru": "Это моя кровать.", "ua": "Це моє ліжко." },
+        { "pl": "Stół jest duży.", "e": "🍽️", "ru": "Стол большой.", "ua": "Стіл великий." },
+        { "pl": "Szafa jest duża.", "e": "🗄️", "ru": "Шкаф большой.", "ua": "Шафа велика." },
+        { "pl": "Lustro jest duże.", "e": "🪞", "ru": "Зеркало большое.", "ua": "Дзеркало велике." },
+        { "pl": "Gdzie jest telewizor?", "e": "📺", "ru": "Где телевизор?", "ua": "Де телевізор?" }
+      ],
+      "zeszyt": ["łóżko, stół, szafa, biurko, lampa", "półka, kanapa, telewizor, lustro", "duży, duża, duże", "Stół jest duży.", "Szafa jest duża.", "Lustro jest duże."]
+    },
+    {
+      "nr": 45,
+      "tytul": { "pl": "Gdzie? Na stole, pod łóżkiem", "ru": "Где? На столе, под кроватью", "ua": "Де? На столі, під ліжком" },
+      "cel": { "ru": "Ты научишься говорить, где что находится: на столе, под кроватью, рядом с лампой.", "ua": "Ти навчишся казати, де що є: на столі, під ліжком, біля лампи." },
+      "zasady": [
+        {
+          "litery": "w  na  pod  obok  za  przed",
+          "dzwiek": { "ru": "в  на  под  рядом  за  перед", "ua": "в  на  під  біля  за  перед" },
+          "opis": {
+            "ru": "Так отвечаем на вопрос gdzie? (где?). После этих слов меняется конец слова: szafa → w szafie, stół → na stole.",
+            "ua": "Так відповідаємо на питання gdzie? (де?). Після цих слів змінюється кінець слова: szafa → w szafie, stół → na stole."
+          },
+          "przyklady": ["w szafie", "na stole", "na półce", "obok lampy"]
+        },
+        {
+          "litery": "pod  za  przed  + -em  -ą",
+          "dzwiek": { "ru": "-ом  -ой", "ua": "-ом  -ою" },
+          "opis": {
+            "ru": "После pod, za, przed конец как в русском «под столом»: łóżko → pod łóżkiem, kanapa → za kanapą.",
+            "ua": "Після pod, za, przed кінець як в українському «під столом»: łóżko → pod łóżkiem, kanapa → za kanapą."
+          },
+          "przyklady": ["pod łóżkiem", "za kanapą", "przed telewizorem"]
+        }
+      ],
+      "slowa": [
+        { "pl": "w szafie", "e": "👕", "ru": "в шкафу", "ua": "у шафі" },
+        { "pl": "na stole", "e": "🍽️", "ru": "на столе", "ua": "на столі" },
+        { "pl": "pod łóżkiem", "e": "🧦", "ru": "под кроватью", "ua": "під ліжком" },
+        { "pl": "na półce", "e": "📚", "ru": "на полке", "ua": "на полиці" },
+        { "pl": "obok lampy", "e": "💡", "ru": "рядом с лампой", "ua": "біля лампи" },
+        { "pl": "za kanapą", "e": "🛋️", "ru": "за диваном", "ua": "за диваном" },
+        { "pl": "przed telewizorem", "e": "📺", "ru": "перед телевизором", "ua": "перед телевізором" },
+        { "pl": "w łazience", "e": "🚿", "ru": "в ванной", "ua": "у ванній" }
+      ],
+      "zdania": [
+        { "pl": "Kot jest pod stołem.", "e": "🐱", "ru": "Кот под столом.", "ua": "Кіт під столом." },
+        { "pl": "Książka leży na półce.", "e": "📖", "ru": "Книга лежит на полке.", "ua": "Книжка лежить на полиці." },
+        { "pl": "Lampa stoi na biurku.", "e": "💡", "ru": "Лампа стоит на письменном столе.", "ua": "Лампа стоїть на письмовому столі." },
+        { "pl": "Plecak jest obok łóżka.", "e": "🎒", "ru": "Рюкзак рядом с кроватью.", "ua": "Рюкзак біля ліжка." },
+        { "pl": "Piłka jest za kanapą.", "e": "⚽", "ru": "Мяч за диваном.", "ua": "М'яч за диваном." }
+      ],
+      "zeszyt": ["Gdzie? w, na, pod, obok, za, przed", "w szafie, na stole, na półce, obok lampy", "pod łóżkiem, za kanapą, przed telewizorem", "Kot jest pod stołem.", "Książka leży na półce.", "Lampa stoi na biurku."]
+    },
+    {
+      "nr": 46,
+      "tytul": { "pl": "Mój pokój", "ru": "Моя комната", "ua": "Моя кімната" },
+      "cel": { "ru": "Ты прочитаешь и напишешь короткий рассказ о своей комнате.", "ua": "Ти прочитаєш і напишеш коротку розповідь про свою кімнату." },
+      "zasady": [
+        {
+          "litery": "jest  są",
+          "dzwiek": { "ru": "есть (одно)  есть (много)", "ua": "є (одне)  є (багато)" },
+          "opis": {
+            "ru": "Jest - когда вещь одна: jest łóżko. Są - когда вещей много: są zabawki.",
+            "ua": "Jest - коли річ одна: jest łóżko. Są - коли речей багато: są zabawki."
+          },
+          "przyklady": ["W moim pokoju jest łóżko.", "Pod łóżkiem są zabawki."]
+        },
+        {
+          "litery": "W moim pokoju...",
+          "dzwiek": { "ru": "в моей комнате...", "ua": "у моїй кімнаті..." },
+          "opis": {
+            "ru": "Готовое начало рассказа. Запомни целиком и добавь, что у тебя есть: W moim pokoju jest...",
+            "ua": "Готовий початок розповіді. Запам'ятай цілком і додай, що в тебе є: W moim pokoju jest..."
+          },
+          "przyklady": ["W moim pokoju jest łóżko."]
+        }
+      ],
+      "slowa": [
+        { "pl": "ściana", "e": "🧱", "ru": "стена", "ua": "стіна" },
+        { "pl": "obraz", "e": "🖼️", "ru": "картина", "ua": "картина" },
+        { "pl": "zabawki", "e": "🧸", "ru": "игрушки", "ua": "іграшки" },
+        { "pl": "jasny", "lektor": "Jasny!", "e": "☀️", "ru": "светлый", "ua": "світлий" },
+        { "pl": "ciemny", "e": "🌑", "ru": "тёмный", "ua": "темний" },
+        { "pl": "ładny", "lektor": "Ładny.", "e": "✨", "ru": "красивый", "ua": "гарний" },
+        { "pl": "czysty", "e": "🧼", "ru": "чистый", "ua": "чистий" },
+        { "pl": "bałagan", "e": "🌪️", "ru": "беспорядок", "ua": "безлад" }
+      ],
+      "zdania": [
+        { "pl": "To jest mój pokój.", "e": "🚪", "ru": "Это моя комната.", "ua": "Це моя кімната." },
+        { "pl": "W moim pokoju jest łóżko.", "e": "🛏️", "ru": "В моей комнате есть кровать.", "ua": "У моїй кімнаті є ліжко." },
+        { "pl": "Obok łóżka stoi biurko.", "e": "🧑‍💻", "ru": "Рядом с кроватью стоит письменный стол.", "ua": "Біля ліжка стоїть письмовий стіл." },
+        { "pl": "Na ścianie jest obraz.", "e": "🖼️", "ru": "На стене картина.", "ua": "На стіні картина." },
+        { "pl": "Pod łóżkiem są zabawki.", "e": "🧸", "ru": "Под кроватью игрушки.", "ua": "Під ліжком іграшки." },
+        { "pl": "Mój pokój jest jasny i ładny.", "e": "☀️", "ru": "Моя комната светлая и красивая.", "ua": "Моя кімната світла і гарна." }
+      ],
+      "zeszyt": ["To jest mój pokój.", "W moim pokoju jest łóżko.", "Obok łóżka stoi biurko.", "Na ścianie jest obraz.", "Pod łóżkiem są zabawki.", "Mój pokój jest jasny i ładny."]
+    },
+    {
+      "nr": 47,
+      "tytul": { "pl": "Prace domowe", "ru": "Домашние дела", "ua": "Хатні справи" },
+      "cel": { "ru": "Ты научишься рассказывать, как помогаешь дома: ja sprzątam, ja gotuję.", "ua": "Ти навчишся розповідати, як допомагаєш удома: ja sprzątam, ja gotuję." },
+      "zasady": [
+        {
+          "litery": "ja ... -am",
+          "dzwiek": { "ru": "-ам", "ua": "-ам" },
+          "opis": {
+            "ru": "Когда говоришь о себе (ja), часто конец -am: sprzątam, zmywam. Как в русском «я убираю».",
+            "ua": "Коли кажеш про себе (ja), часто кінець -am: sprzątam, zmywam. Як в українському «я прибираю»."
+          },
+          "przyklady": ["sprzątam", "zmywam", "odkurzam", "pomagam"]
+        },
+        {
+          "litery": "ja ... -ę",
+          "dzwiek": { "ru": "-э", "ua": "-е" },
+          "opis": {
+            "ru": "Другие такие слова кончаются на -ę: gotuję, ścielę, wynoszę. В конце слова ę звучит как э.",
+            "ua": "Інші такі слова закінчуються на -ę: gotuję, ścielę, wynoszę. У кінці слова ę звучить як е."
+          },
+          "przyklady": ["gotuję", "ścielę łóżko", "wynoszę śmieci"]
+        }
+      ],
+      "slowa": [
+        { "pl": "sprzątam", "e": "🧽", "ru": "убираю", "ua": "прибираю" },
+        { "pl": "gotuję", "e": "🍲", "ru": "готовлю", "ua": "готую" },
+        { "pl": "zmywam", "e": "🍽️", "ru": "мою посуду", "ua": "мию посуд" },
+        { "pl": "odkurzam", "e": "🧹", "ru": "пылесошу", "ua": "пилососю" },
+        { "pl": "ścielę łóżko", "e": "🛏️", "ru": "застилаю кровать", "ua": "застеляю ліжко" },
+        { "pl": "wynoszę śmieci", "e": "🗑️", "ru": "выношу мусор", "ua": "виношу сміття" },
+        { "pl": "podlewam kwiaty", "e": "🌷", "ru": "поливаю цветы", "ua": "поливаю квіти" },
+        { "pl": "pomagam", "e": "🤝", "ru": "помогаю", "ua": "допомагаю" }
+      ],
+      "zdania": [
+        { "pl": "W sobotę sprzątam pokój.", "e": "🧽", "ru": "В субботу я убираю комнату.", "ua": "У суботу я прибираю кімнату." },
+        { "pl": "Gotuję obiad z mamą.", "e": "🍲", "ru": "Я готовлю обед с мамой.", "ua": "Я готую обід з мамою." },
+        { "pl": "Po obiedzie zmywam naczynia.", "e": "🍽️", "ru": "После обеда я мою посуду.", "ua": "Після обіду я мию посуд." },
+        { "pl": "Rano ścielę łóżko.", "e": "🛏️", "ru": "Утром я застилаю кровать.", "ua": "Вранці я застеляю ліжко." },
+        { "pl": "Wieczorem wynoszę śmieci.", "e": "🗑️", "ru": "Вечером я выношу мусор.", "ua": "Увечері я виношу сміття." },
+        { "pl": "Pomagam mamie w domu.", "e": "🤝", "ru": "Я помогаю маме дома.", "ua": "Я допомагаю мамі вдома." }
+      ],
+      "zeszyt": ["ja: sprzątam, zmywam, odkurzam, pomagam", "ja: gotuję, ścielę łóżko, wynoszę śmieci", "podlewam kwiaty", "W sobotę sprzątam pokój.", "Rano ścielę łóżko.", "Pomagam mamie w domu."]
+    },
+    {
+      "nr": 48,
+      "test": true,
+      "tytul": { "pl": "Sprawdź się: mój dom", "ru": "Проверь себя: мой дом", "ua": "Перевір себе: мій дім" },
+      "cel": { "ru": "Повтори всё из раздела 8 и проверь, что ты уже умеешь.", "ua": "Повтори все з розділу 8 і перевір, що ти вже вмієш." },
+      "slowa": [],
+      "zeszyt": ["W moim pokoju jest ...", "Na ścianie jest ...", "Mój pokój jest ...", "W domu pomagam: ..."]
+    }
+  ]
+}
