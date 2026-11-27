@@ -57,7 +57,10 @@ const KOLORY = ['#8A4FD0', '#1FA58A', '#E0679A', '#D98A1F', '#2A8C9E', '#B5562B'
 
 /** Luki [[...]], wybór {{a|*b}}, podkreślenia ((...)), kółka <<...>> + zwykłe znaczniki. */
 function linia(tekst, rozw, wLinii = false) {
-  if (ekran && !rozw && tekst.includes('((')) return klikalne(tekst);
+  // Na ekranie słowa są klikane, a luki [[...]] w tej samej linii zostają polami do wpisania.
+  if (ekran && !rozw && tekst.includes('((')) {
+    return tekst.split(/(\[\[.+?\]\])/).map((k, i) => (i % 2 ? linia(k, rozw, wLinii) : k ? klikalne(k) : '')).join('');
+  }
   const czesci = [];
   const re = /\[\[(.+?)(?:\|(\d+))?\]\]|\{\{(.+?)\}\}|\(\((.+?)\)\)|<<(.+?)>>/g;
   let ostatni = 0;
