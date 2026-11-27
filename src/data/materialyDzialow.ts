@@ -19,6 +19,8 @@ export type MaterialyDzialu = {
   zeszyt?: boolean;
   /** Jest sprawdzian dostosowany dla uczniow z orzeczeniem (node materialy/sprawdzian.mjs <folder> --dostosowany). */
   sprawdzianDostosowany?: boolean;
+  /** false = dzial nie ma sprawdzianu (np. sama karta pracy) - bez przyciskow Sprawdzian i Klucz. */
+  sprawdzian?: boolean;
   /** Sa cwiczenia do domu przed sprawdzianem (materialy/<folder>/domowe.mjs) - link dla uczniow do VULCANA. */
   domowe?: boolean;
 };
@@ -26,6 +28,8 @@ export type MaterialyDzialu = {
 export const MATERIALY_DZIALOW: MaterialyDzialu[] = [
   { grade: 'IV', dzial: 'Rozdział I. Poznajemy siebie i innych', folder: 'klasa4-rozdzial1', karta: true },
   { grade: 'IV', dzial: 'Rozdział II. Pośród słów i znaczeń', folder: 'klasa4-rozdzial2', karta: true, domowe: true, sprawdzianProjektor: true },
+  // Rozdzial III: na razie tylko karta pracy (czesci mowy, przymiotnik i przyslowek, odmiana pary).
+  { grade: 'IV', dzial: 'Rozdział III. Od pomysłu do działania', folder: 'klasa4-rozdzial3', karta: true, zeszyt: false, sprawdzian: false },
   { grade: 'V', dzial: 'Dział 1 - W poszukiwaniu przyjaźni', folder: 'klasa5-dzial1', karta: true, zeszyt: false, sprawdzianProjektor: true },
   { grade: 'V', dzial: 'Dział 2 - Uwaga, uczucia!', folder: 'klasa5-dzial2', karta: true, domowe: true, sprawdzianProjektor: true },
 ];

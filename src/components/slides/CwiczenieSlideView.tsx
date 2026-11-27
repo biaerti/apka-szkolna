@@ -11,7 +11,10 @@
 //
 // - luki: lista przykladow ze stronami ("Kolejne przykłady"),
 // - tabela: odmiana jednego wyrazu ("Następny wyraz"), a "Własny wyraz" daje
-//   pusta tabele do wpisania czegokolwiek - bez sprawdzania.
+//   pusta tabele do wpisania czegokolwiek - bez sprawdzania,
+// - luki: "Własne zadanie" daje puste wiersze w tych samych kolumnach - w
+//   pierwszej nauczyciel wpisuje swoj przyklad, w kolejnych klasa odpowiada.
+//   Tez bez sprawdzania (Bartek 2026-11-26).
 //
 // Klik w slajd nie przewija prezentacji (stopPropagation), Enter przechodzi do
 // nastepnego pola, a w ostatnim sprawdza. Esc zdejmuje kursor z pola - wtedy
@@ -67,6 +70,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
 
   // Linie biezacego ekranu: przyklady albo komorki tabeli (wiersz po wierszu).
   const linie: Kawalek[][] = useMemo(() => {
+    if (cw.typ === 'luki' && wlasny) return Array.from({ length: naRaz }, () => wlasnaLinia(cw));
     if (cw.typ === 'luki') return stronaPrzykladow(cw.przyklady, strona, naRaz).map(parsujLinie);
     if (wlasny) return cw.wiersze.flatMap(() => cw.kolumny.map((): Kawalek[] => [{ t: 'luka', odp: [], otwarta: true }]));
     return cw.wyrazy[strona].komorki.flat().map(parsujLinie);
@@ -294,7 +298,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
 
       <div className="flex min-h-0 flex-1 items-center py-3">
         {cw.typ === 'luki' ? (
-          <ListaPrzykladow cw={cw} linie={linie} start={strona * naRaz} renderKomorka={renderKomorka} />
+          <ListaPrzykladow cw={cw} linie={linie} start={wlasny ? 0 : strona * naRaz} renderKomorka={renderKomorka} wlasny={wlasny} />
         ) : (
           <Tabela
             cw={cw}
@@ -347,7 +351,7 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
           </span>
         )}
         <span className="flex-1" />
-        {cw.typ === 'tabela' && !wlasny && <Przycisk onClick={() => idzDo(strona, true)}>Własny wyraz</Przycisk>}
+        {!wlasny && <Przycisk onClick={() => idzDo(strona, true)}>{cw.typ === 'tabela' ? 'Własny wyraz' : 'Własne zadanie'}</Przycisk>}
         {stron > 1 && strona > 0 && !wlasny && <Przycisk onClick={() => idzDo(strona - 1)}>←</Przycisk>}
         {stron > 1 && !wlasny && <span className="px-1 tabular-nums text-gray-400">{strona + 1}/{stron}</span>}
         {wlasny ? (
@@ -369,8 +373,8 @@ function Kanwa({ cw }: { cw: Cwiczenie }) {
  * wyborem w srodku) to tabela z jedna kolumna - ten sam rytm wierszy i linie.
  * `kolumny: 2` dzieli strone na dwie tabele obok siebie.
  */
-function ListaPrzykladow({ cw, linie, start, renderKomorka }: { cw: CwiczenieLuki; linie: Kawalek[][]; start: number; renderKomorka: RenderKomorka }) {
-  const szerokosci = useMemo(() => szerokosciKolumn(cw.przyklady), [cw.przyklady]);
+function ListaPrzykladow({ cw, linie, start, renderKomorka, wlasny = false }: { cw: CwiczenieLuki; linie: Kawalek[][]; start: number; renderKomorka: RenderKomorka; wlasny?: boolean }) {
+  const szerokosci = useMemo(() => (wlasny ? szerokosciWlasne(cw) : szerokosciKolumn(cw.przyklady)), [cw, wlasny]);
   const dwie = cw.kolumny === 2;
   const naRaz = cw.naRaz ?? 6;
   const wierszy = dwie ? Math.ceil(naRaz / 2) : naRaz;
@@ -487,6 +491,33 @@ function Tabela({ cw, haslo, linie, renderKomorka }: { cw: CwiczenieTabela; hasl
       </tbody>
     </table>
   );
+}
+
+/** Kolumny przykladow: z naglowkow, a bez nich z pierwszego przykladu. */
+function liczbaKolumn(cw: CwiczenieLuki): number {
+  return cw.naglowki?.length ?? podzielNaKomorki(parsujLinie(cw.przyklady[0] ?? '')).length;
+}
+
+/** Pusty wiersz "Własnego zadania": w kazdej kolumnie pole bez sprawdzania. */
+function wlasnaLinia(cw: CwiczenieLuki): Kawalek[] {
+  return Array.from({ length: liczbaKolumn(cw) }).flatMap((_, c): Kawalek[] => [
+    ...(c > 0 ? [{ t: 'sep' } as const] : []),
+    { t: 'luka', odp: [], otwarta: true },
+  ]);
+}
+
+/**
+ * Szerokosc pol "Własnego zadania" (w znakach): pierwsza kolumna tak szeroka
+ * jak tresc przykladow, bo tam nauczyciel wpisuje swoj przyklad; kolejne
+ * jak luki w przykladach (a przy wyborach - z najdluzszej opcji).
+ */
+function szerokosciWlasne(cw: CwiczenieLuki): number[] {
+  const luki = szerokosciKolumn(cw.przyklady);
+  const komorki = cw.przyklady.map((p) => podzielNaKomorki(parsujLinie(p)));
+  const dlugosc = (c: number) =>
+    Math.max(0, ...komorki.map((k) => (k[c] ?? []).reduce((n, x) => n + (x.t === 'tekst' ? [...x.v].length : x.t === 'wybor' ? Math.max(...x.opcje.map((o) => [...o].length)) + 2 : 8), 0)));
+  const kolumn = liczbaKolumn(cw);
+  return Array.from({ length: kolumn }, (_, c) => (c === 0 ? Math.min(Math.max(dlugosc(0), 14), kolumn === 1 ? 50 : 34) : luki[c] || Math.min(Math.max(dlugosc(c), 10), 24)));
 }
 
 /** Poprawna odpowiedz albo przyklad - na gornej krawedzi pola, bez przesuwania ukladu. */

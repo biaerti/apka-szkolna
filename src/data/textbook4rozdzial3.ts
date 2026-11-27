@@ -169,7 +169,7 @@ export const ROZDZIAL3_TOPICS: Topic[] = [
       ].join('\n')],
       ['Przebieg (45 min)', przebieg({
         film: '„Odmiana przymiotnika” (8:03) - rodzaje, liczby, przypadki, 3 zadania',
-        karty: '„Ten, ta, to”, „Ci czy te?”, „Odmieniamy parę”',
+        karty: '„Para w przypadku” (Info = ściąga z przypadkami), „Ci czy te?”, „Odmieniamy parę”',
       })],
       ['Jak wyjaśnić', [
         '- Test ten / ta / to: ten mądry, ta mądra, to mądre.',
@@ -189,7 +189,7 @@ export const ROZDZIAL3_TOPICS: Topic[] = [
       slideTopic('Odmiana przymiotnika'),
       ...kolo(previousSetId),
       slideVideo('przymiotnik-odmiana-film1'),
-      ...razem('k4-odmiana-rodzaj', 'k4-odmiana-mnoga', 'k4-odmiana-przypadki'),
+      ...razem('k4-odmiana-para-przypadek', 'k4-odmiana-mnoga', 'k4-odmiana-przypadki'),
       slideNote('Odmiana przymiotnika', 'Przymiotnik **odmienia się** razem z rzeczownikiem przez **rodzaje** (mądry, mądra, mądre), **liczby** (ci mądrzy chłopcy, te mądre psy) i **przypadki** (nie ma czerwonego autobusu).'),
     ],
   },
