@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { PageHeader } from '../components/ui/PageHeader';
 import { DyktandaPanel } from '../components/dyktanda/DyktandaPanel';
 import { KontaPanel } from '../components/portal/KontaPanel';
+import { OdZeraPanel } from '../components/odzera/OdZeraPanel';
 import { useStore } from '../data/store';
 
 export function ZadaniaDomowe() {
@@ -55,6 +56,20 @@ export function ZadaniaDomowe() {
         </p>
         <div className="mt-5">
           <DyktandaPanel klasaId={klasaId} />
+        </div>
+      </section>
+
+      <section aria-labelledby="modul-od-zera" className="mt-12 max-w-5xl">
+        <h2 id="modul-od-zera" className="text-lg font-semibold text-gray-900">
+          Polski od zera
+        </h2>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
+          Cały kurs polskiego od zera na telefon (szkola.klippi.pl/od-zera), na rok szkolny. Tryb „na lekcjach”: nowa lekcja kursu otwiera się
+          na każdej godzinie polskiego klasy, uczeń pracuje w słuchawkach. Tryb „w domu”: lekcja po lekcji, bez zegara. Gdy lekcji polskiego nie było
+          albo uczeń ma nadrobić, przesuń licznik przyciskami − / +.
+        </p>
+        <div className="mt-5">
+          <OdZeraPanel klasaId={klasaId} />
         </div>
       </section>
 

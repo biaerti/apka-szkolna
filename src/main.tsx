@@ -44,9 +44,19 @@ if (!rootEl) {
 // synchronizacji i bez reszty apki (osobny, maly kawalek JS na telefon ucznia).
 // Uczen loguje sie loginem i haslem z kartki (src/pages/portal/Portal.tsx).
 const jestPortal = /^\/(uczen|dyktando)(\/|$)/.test(window.location.pathname);
+// Kurs "Polski od zera" (/od-zera) - tak samo osobno, to samo konto co w portalu.
+const jestOdZera = /^\/od-zera(\/|$)/.test(window.location.pathname);
 const root = ReactDOM.createRoot(rootEl);
 
-if (jestPortal) {
+if (jestOdZera) {
+  void import('./pages/odzera/OdZera').then(({ OdZera }) => {
+    root.render(
+      <React.StrictMode>
+        <OdZera />
+      </React.StrictMode>,
+    );
+  });
+} else if (jestPortal) {
   void import('./pages/portal/Portal').then(({ Portal }) => {
     root.render(
       <React.StrictMode>

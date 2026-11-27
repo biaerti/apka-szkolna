@@ -48,6 +48,14 @@ Uczeń wchodzi na `szkola.klippi.pl/uczen` (stare `/dyktando` też) **loginem z 
 - **Rytm tygodnia i postępy kursu** (`src/lib/dyktandoPostepy.ts`, test pilnuje dat): `od` w JSON-ie to zawsze poniedziałek, termin lekcji = niedziela przed następną (lekcja 5 ma przerwę świąteczną, więc 2 tygodnie). Uczeń widzi „Lekcja tego tygodnia · Zrób do niedzieli”, starsze lekcje są otwarte („do nadrobienia”). Panel (`DyktandaPanel`): ten tydzień (kto zrobił, kto nie), „Co sprawia kłopot grupie” (błędy z ostatniej próby według reguły: ó / u, rz / ż, ł / l...), tabela uczniów z próbami, najlepszym i ostatnim wynikiem, czasem.
 - **Uwagi Bartka dla ucznia** (migracja 0047, `dyktando_uwagi`): jedna na ucznia i lekcję, w szczegółach ucznia. Gotowe szablony (`SZABLONY_UWAG`) mają tłumaczenie UA/ES, własny tekst idzie tylko po polsku. Uczeń widzi uwagę na starcie i pod lekcją; po przeczytaniu Bartek ma „przeczytana”. Kartki kursu: okno otwiera się od razu w kliknięciu (inaczej blokada wyskakujących okien), a gdy kopia hasła nie zapisze się w bazie, panel o tym mówi.
 
+## Kurs „Polski od zera” (/od-zera)
+Pełny kurs polskiego od zera na telefon (`szkola.klippi.pl/od-zera`), ten sam login i hasło co portal `/uczen`. Plan roku (20 działów po 6 lekcji, struktura lekcji 45 min, typy zadań): `docs/kurs-od-zera-plan.md`.
+- Kod: `src/pages/odzera/` (osobny bundle w `main.tsx`), silnik bez Reacta `src/lib/odzera.ts` (zadania robią się same ze słów i zdań lekcji, powtórki w pudełkach Leitnera 1-2-4-7-14 dni, XP, seria, gwiazdki), wymowa cyrylicą `src/lib/odzeraWymowa.ts`. Panel nauczyciela: `src/components/odzera/OdZeraPanel.tsx` w zakładce Zadania domowe.
+- Treść: `src/data/odzera/dzial-NN.json` (wczytują się same; lekcje działu N to 6N-5..6N, ostatnia `test: true`), kolor/emoji działu w `plan.ts`. Podpowiedzi `ru` i `ua` przy każdym słowie i zdaniu. Pilnuje `src/lib/odzera.test.ts`.
+- Nagrania: `python tools/odzera-audio.py` → `public/audio/odzera/` (idą do repo), potem `--sprawdz` (STT) i przy złym odczycie pole `lektor` + `--znowu slug`.
+- Baza (0046): kolumny `od_zera` ('lekcja' | 'dom'), `od_zera_jezyk`, `od_zera_start`, `od_zera_przesuniecie` na `dyktando_uczniowie`, tabele `od_zera_wyniki`, `od_zera_fiszki`, RPC `od_zera_stan` / `od_zera_zapisz` (anon, z hasłem), `od_zera_przeglad` (nauczyciel). Tryb `lekcja`: kolejna lekcja otwiera się na każdej godzinie polskiego klasy wg `timetable_entries` (bez zajęć z wychowawcą), licząc od `od_zera_start`; ręcznie `+`/`−` w panelu.
+- Podgląd w przeglądarce bez bazy: stub `window.fetch` na `/rest/v1/rpc/*` przed zalogowaniem; w dev `window.__ozZadanie` to bieżące zadanie.
+
 ## Handoff
 Stan bieżącej pracy jest w `session-logs/` (`/handoff`, `/pickup`).
 
