@@ -45,7 +45,8 @@ export function ZadaniaDomowe() {
           Polski krok po kroku
         </h2>
         <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-          Kurs pisowni dla uczniów, dla których polski nie jest pierwszym językiem: 10 lekcji, co poniedziałek nowa. Uczeń wchodzi na szkola.klippi.pl/uczen loginem
+          Kurs pisowni dla uczniów, dla których polski nie jest pierwszym językiem: 10 lekcji, co poniedziałek nowa, do zrobienia do niedzieli. Przy wyniku możesz
+          wpisać uczniowi uwagę - zobaczy ją w portalu. Uczeń wchodzi na szkola.klippi.pl/uczen loginem
           i hasłem z kartki (przycisk „Kartki dla kursu”). Na lekcji pracują z zeszytem{' '}
           <Link to="/lekcje?widok=polski-od-zera" className="font-medium text-accent-700 underline">
             „Mój polski od zera”

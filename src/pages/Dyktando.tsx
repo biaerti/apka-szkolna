@@ -37,6 +37,7 @@ import {
   type WynikSlowa,
 } from '../lib/dyktando';
 import { toDateKey } from '../lib/dates';
+import { doPoprawy, dzienMiesiac, lekcjaTygodnia, type UwagaUcznia } from '../lib/dyktandoPostepy';
 import { Arkusz, DolnyPrzycisk, GornyPasek, Karta as KartaPortalu, btnDrugi, btnGlowny, IkonaGlosnik } from './portal/ui';
 import type { KontoUcznia, WynikUcznia } from './portal/konto';
 
@@ -113,6 +114,19 @@ const N = {
   kurs: { pl: 'Polski krok po kroku', ua: 'Польська крок за кроком', es: 'Polaco paso a paso' },
   zablokowana: { pl: 'od', ua: 'з', es: 'desde' },
   wroc: { pl: 'Wróć', ua: 'Назад', es: 'Volver' },
+  tenTydzien: { pl: 'Lekcja tego tygodnia', ua: 'Урок цього тижня', es: 'Lección de esta semana' },
+  gotoweTydzien: { pl: 'Zrobione!', ua: 'Зроблено!', es: '¡Hecho!' },
+  nadrobienia: { pl: 'do nadrobienia', ua: 'надолужити', es: 'pendiente' },
+  doPoprawy: { pl: 'Do poprawy', ua: 'Треба виправити', es: 'Para corregir' },
+  zrobJeszczeRaz: { pl: 'Zrób jeszcze raz', ua: 'Зроби ще раз', es: 'Hazla otra vez' },
+  odNauczyciela: { pl: 'Od nauczyciela', ua: 'Від учителя', es: 'Del profesor' },
+  przeczytane: { pl: 'Przeczytane', ua: 'Прочитано', es: 'Leído' },
+  otworzLekcje: { pl: 'Otwórz lekcję', ua: 'Відкрити урок', es: 'Abrir la lección' },
+  powtorzKiedyChcesz: {
+    pl: 'Starsze lekcje możesz powtarzać, kiedy chcesz.',
+    ua: 'Старі уроки можна повторювати будь-коли.',
+    es: 'Puedes repetir las lecciones anteriores cuando quieras.',
+  },
 } satisfies Record<string, Tekst>;
 
 const licznik = (pl: string, ua: string, es: string, i: number, n: number): Tekst => ({
@@ -420,29 +434,133 @@ function Podkresl({ slowo, litery }: { slowo: string; litery: string }) {
 
 // ---------- lista lekcji kursu ----------
 
-const krotkaData = (key: string) => {
-  const [, m, d] = key.split('-');
-  return `${Number(d)}.${m}`;
-};
+const krotkaData = (key: string) => dzienMiesiac(key);
+
+/** "do niedzieli 29.11" w trzech jezykach. */
+export function doNiedzieli(termin: string): Tekst {
+  const d = dzienMiesiac(termin);
+  return { pl: `Zrób do niedzieli ${d}`, ua: `Зроби до неділі ${d}`, es: `Hazla antes del domingo ${d}` };
+}
+
+/** "Zostały 3 dni" / "Dziś ostatni dzień". */
+export function zostaloDni(n: number): Tekst {
+  if (n <= 1) return { pl: 'Dziś ostatni dzień', ua: 'Сьогодні останній день', es: 'Hoy es el último día' };
+  const pl = n < 5 ? `Zostały ${n} dni` : `Zostało ${n} dni`;
+  return { pl, ua: `Залишилось днів: ${n}`, es: `Quedan ${n} días` };
+}
+
+/** "Nowa lekcja w poniedziałek 30.11". */
+export function nowaWPoniedzialek(od: string): Tekst {
+  const d = dzienMiesiac(od);
+  return { pl: `Nowa lekcja w poniedziałek ${d}`, ua: `Новий урок у понеділок ${d}`, es: `Nueva lección el lunes ${d}` };
+}
+
+/** Dymek z uwaga nauczyciela (po polsku + tlumaczenie, gdy to gotowy szablon). */
+function DymekUwagi({ uwaga, maly = false }: { uwaga: UwagaUcznia; maly?: boolean }) {
+  const napis = useNapis();
+  return (
+    <div className={clsx('rounded-2xl bg-[#fff6d6] text-[#1d1d1f]', maly ? 'px-3.5 py-2.5' : 'px-4 py-3')}>
+      <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#8a6d00]">
+        <span aria-hidden="true">💬 </span>
+        {napis(N.odNauczyciela)}
+      </p>
+      <p className={clsx('mt-1 font-semibold leading-snug', maly ? 'text-[0.95rem]' : 'text-lg')}>{uwaga.tresc}</p>
+      {uwaga.przeklad && <p className={clsx('mt-0.5 leading-snug text-[#5b5b57]', maly ? 'text-sm' : 'text-[0.95rem]')}>{uwaga.przeklad}</p>}
+    </div>
+  );
+}
+
+/** Nieprzeczytane uwagi nauczyciela na stronie startowej portalu. */
+export function KartaUwag({
+  uwagi,
+  jezyk,
+  onOtworz,
+  onPrzeczytane,
+}: {
+  uwagi: UwagaUcznia[];
+  jezyk: Jezyk;
+  onOtworz: (lekcjaId: string) => void;
+  onPrzeczytane: (uwaga: UwagaUcznia) => void;
+}) {
+  return (
+    <JezykCtx.Provider value={jezyk}>
+      <KartaUwagWnetrze uwagi={uwagi} onOtworz={onOtworz} onPrzeczytane={onPrzeczytane} />
+    </JezykCtx.Provider>
+  );
+}
+
+function KartaUwagWnetrze({
+  uwagi,
+  onOtworz,
+  onPrzeczytane,
+}: {
+  uwagi: UwagaUcznia[];
+  onOtworz: (lekcjaId: string) => void;
+  onPrzeczytane: (uwaga: UwagaUcznia) => void;
+}) {
+  const napis = useNapis();
+  const dzis = toDateKey(new Date());
+  return (
+    <div className="space-y-3">
+      {uwagi.map((u) => {
+        const lekcja = DYKTANDA.find((l) => l.id === u.lekcja && l.od <= dzis);
+        return (
+          <KartaPortalu key={u.id} className="!p-4 sm:!p-5">
+            {lekcja && (
+              <p className="mb-2 text-sm font-bold text-[#5b5b57]">
+                {napis({ pl: `${N.lekcja.pl} ${lekcja.nr}`, ua: `${N.lekcja.ua} ${lekcja.nr}`, es: `${N.lekcja.es} ${lekcja.nr}` })} · {lekcja.temat}
+              </p>
+            )}
+            <DymekUwagi uwaga={u} />
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+              {lekcja && (
+                <button type="button" className={clsx(btnGlowny, 'flex-1')} onClick={() => onOtworz(u.lekcja)}>
+                  {napis(N.otworzLekcje)}
+                </button>
+              )}
+              <button type="button" className={clsx(btnDrugi, 'flex-1')} onClick={() => onPrzeczytane(u)}>
+                ✓ {napis(N.przeczytane)}
+              </button>
+            </div>
+          </KartaPortalu>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Lekcja, ktora uczen powinien zrobic teraz: tygodnia, a gdy zrobiona - najstarsza zalegla. */
+export function lekcjaDoZrobienia(dzis: string, zrobiona: (id: string) => boolean): DyktandoLekcja | undefined {
+  const tydzien = lekcjaTygodnia(dzis);
+  if (tydzien && !zrobiona(tydzien.lekcja.id)) return tydzien.lekcja;
+  return dostepneLekcje(dzis).dostepne.find((l) => !zrobiona(l.id));
+}
 
 function ListaKursu({
   wyniki,
+  uwagi,
   onStart,
   onWroc,
 }: {
   wyniki: WynikUcznia[] | null;
+  uwagi: UwagaUcznia[];
   onStart: (l: DyktandoLekcja) => void;
   onWroc: () => void;
 }) {
   const j = useJezyk();
   const napis = useNapis();
   const dzis = toDateKey(new Date());
-  const { dostepne } = dostepneLekcje(dzis);
+  const { nastepna } = dostepneLekcje(dzis);
+  const tydzien = lekcjaTygodnia(dzis);
   const najlepszy = (id: string) =>
     (wyniki ?? []).filter((w) => w.lekcja === id).sort((a, b) => b.punkty / b.maks - a.punkty / a.maks)[0];
   const zrobione = DYKTANDA.filter((l) => najlepszy(l.id)).length;
-  // Pierwsza dostepna i niezrobiona - na nia wskazuje "Zrób".
-  const teraz = dostepne.find((l) => !najlepszy(l.id));
+  const uwagaDo = (id: string) => uwagi.find((u) => u.lekcja === id);
+  // Nauczyciel prosi o poprawe (uwaga po ostatniej probie) - lekcja wraca do zrobienia.
+  const poprawa = (id: string) => doPoprawy(uwagaDo(id), (wyniki ?? []).filter((w) => w.lekcja === id));
+  const teraz = lekcjaDoZrobienia(dzis, (id) => !!najlepszy(id) && !poprawa(id));
+  const tygodniowa = tydzien && !poprawa(tydzien.lekcja.id) ? najlepszy(tydzien.lekcja.id) : undefined;
+  const tygodniowaDoPoprawy = tydzien ? poprawa(tydzien.lekcja.id) : false;
 
   return (
     <div>
@@ -451,11 +569,71 @@ function ListaKursu({
       <h1 className="text-[1.75rem] font-extrabold leading-tight">
         <Dwujezycznie t={N.kurs} />
       </h1>
+
+      {tydzien && (
+        <section
+          aria-label={napis(N.tenTydzien)}
+          className={clsx(
+            'mt-5 rounded-3xl p-5',
+            tygodniowa ? 'bg-[#e7f7ec] shadow-[0_4px_0_#b8e6c8]' : 'bg-[#8b5cf6] text-white shadow-[0_6px_0_#6a3fd1]',
+          )}
+        >
+          <p className={clsx('text-xs font-bold uppercase tracking-[0.08em]', tygodniowa ? 'text-[#17803f]' : 'text-white/80')}>
+            {napis(N.tenTydzien)}
+          </p>
+          <p className="mt-1 text-2xl font-extrabold leading-tight">
+            {tydzien.lekcja.nr}. {tydzien.lekcja.temat}
+          </p>
+          {tygodniowa ? (
+            <>
+              <p className="mt-1 font-bold text-[#17803f]">
+                ★ {napis(N.gotoweTydzien)} {tygodniowa.punkty}/{tygodniowa.maks}
+              </p>
+              {nastepna && <p className="text-sm font-medium text-[#3a6b4c]">{napis(nowaWPoniedzialek(nastepna.od))}</p>}
+            </>
+          ) : tygodniowaDoPoprawy ? (
+            <>
+              <p className="mt-2 text-lg font-bold leading-snug">
+                <Dwujezycznie t={N.doPoprawy} className="[&>span:last-child]:text-white/85" />
+              </p>
+              <div className="mt-3">
+                <DymekUwagi uwaga={uwagaDo(tydzien.lekcja.id)!} maly />
+              </div>
+              <button
+                type="button"
+                onClick={() => onStart(tydzien.lekcja)}
+                className="mt-4 flex min-h-[3.25rem] w-full items-center justify-center rounded-2xl bg-white px-4 py-2 text-base leading-tight font-bold text-[#4b2aa8] shadow-[0_4px_0_#d9ccff] transition-transform active:translate-y-[3px] active:shadow-none focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                {napis(N.zrobJeszczeRaz)} →
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="mt-2 text-lg font-bold leading-snug">{polski(doNiedzieli(tydzien.termin), j)}</p>
+              <p className="text-[0.95rem] font-medium text-white/85">{przeklad(doNiedzieli(tydzien.termin), j)}</p>
+              <p className="mt-2 inline-block rounded-full bg-white/20 px-3 py-1 text-sm font-bold">{napis(zostaloDni(tydzien.dniDoTerminu))}</p>
+              <button
+                type="button"
+                onClick={() => onStart(tydzien.lekcja)}
+                className="mt-4 flex min-h-[3.25rem] w-full items-center justify-center rounded-2xl bg-white px-6 text-lg font-bold text-[#4b2aa8] shadow-[0_4px_0_#d9ccff] transition-transform active:translate-y-[3px] active:shadow-none focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                {napis(N.zaczynamy)} →
+              </button>
+            </>
+          )}
+        </section>
+      )}
+
       <ol className="relative mt-6 space-y-3 before:absolute before:bottom-6 before:left-[1.85rem] before:top-6 before:w-1 before:rounded-full before:bg-[#e6e5df]">
         {DYKTANDA.map((l) => {
           const w = najlepszy(l.id);
           const otwarta = l.od <= dzis;
           const aktualna = teraz?.id === l.id;
+          const zalegla = otwarta && !w && tydzien?.lekcja.id !== l.id;
+          const uwaga = uwagaDo(l.id);
+          const popraw = poprawa(l.id);
+          // Dymek pod lekcja tygodnia "do poprawy" jest juz w karcie u gory.
+          const pokazDymek = uwaga && !(popraw && tydzien?.lekcja.id === l.id);
           return (
             <li key={l.id} className="relative">
               <button
@@ -471,30 +649,42 @@ function ListaKursu({
                 <span
                   className={clsx(
                     'relative z-10 flex h-[3.2rem] w-[3.2rem] shrink-0 items-center justify-center rounded-full text-xl font-extrabold',
-                    w ? 'bg-[#ffd43b] text-[#1d1d1f] shadow-[0_3px_0_#e0ac00]' : aktualna ? 'bg-[#8b5cf6] text-white shadow-[0_3px_0_#6a3fd1]' : otwarta ? 'bg-[#ecebe5] text-[#5b5b57]' : 'bg-[#ecebe5] text-[#b5b4ad]',
+                    popraw ? 'bg-[#fff1dc] text-[#b45309] shadow-[0_3px_0_#f3c98b]' : w ? 'bg-[#ffd43b] text-[#1d1d1f] shadow-[0_3px_0_#e0ac00]' : aktualna ? 'bg-[#8b5cf6] text-white shadow-[0_3px_0_#6a3fd1]' : otwarta ? 'bg-[#ecebe5] text-[#5b5b57]' : 'bg-[#ecebe5] text-[#b5b4ad]',
                   )}
                 >
-                  {w ? '★' : otwarta ? l.nr : '🔒'}
+                  {popraw ? '↻' : w ? '★' : otwarta ? l.nr : '🔒'}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className={clsx('block text-lg font-extrabold', !otwarta && 'text-[#9a9993]')}>{l.temat}</span>
                   <span className="block truncate text-sm text-[#8a8a85]">
-                    {tematLekcji(l, j)}
+                    {popraw ? (
+                      <span className="font-bold text-[#b45309]">{napis(N.doPoprawy)}</span>
+                    ) : zalegla ? (
+                      <span className="font-bold text-[#b45309]">{napis(N.nadrobienia)}</span>
+                    ) : (
+                      tematLekcji(l, j)
+                    )}
                     {!otwarta && ` · ${krotkaData(l.od)}`}
                   </span>
                 </span>
                 {w ? (
-                  <span className="shrink-0 text-right text-base font-extrabold text-[#17803f]">
+                  <span className={clsx('shrink-0 text-right text-base font-extrabold', popraw ? 'text-[#b45309]' : 'text-[#17803f]')}>
                     {w.punkty}/{w.maks}
                   </span>
-                ) : aktualna ? (
+                ) : aktualna && tydzien?.lekcja.id !== l.id ? (
                   <span className="shrink-0 rounded-full bg-[#8b5cf6] px-3.5 py-1.5 text-sm font-bold text-white">{napis(N.zrob)}</span>
                 ) : null}
               </button>
+              {pokazDymek && (
+                <div className="relative z-10 ml-[4.6rem] mt-2">
+                  <DymekUwagi uwaga={uwaga} maly />
+                </div>
+              )}
             </li>
           );
         })}
       </ol>
+      {zrobione > 0 && <p className="mt-6 text-center text-sm text-[#8a8a85]">{napis(N.powtorzKiedyChcesz)}</p>}
     </div>
   );
 }
@@ -1260,16 +1450,27 @@ function Lekcja({ lekcja, uczen, onKoniec }: { lekcja: DyktandoLekcja; uczen: Uc
 export function KursPolski({
   konto,
   wyniki,
+  uwagi = [],
+  startLekcja,
+  onPrzeczytane,
   onWroc,
   onZapisano,
 }: {
   konto: KontoUcznia;
   wyniki: WynikUcznia[] | null;
+  /** Uwagi nauczyciela (migracja 0047) - dymek pod lekcja. */
+  uwagi?: UwagaUcznia[];
+  /** Od razu otworz te lekcje (np. z uwagi na stronie startowej). */
+  startLekcja?: string;
+  /** Uczen otworzyl lekcje z uwaga - uwaga przeczytana. */
+  onPrzeczytane?: (u: UwagaUcznia[]) => void;
   onWroc: () => void;
   /** Po skonczonej lekcji - portal odswieza wyniki. */
   onZapisano: () => void;
 }) {
-  const [lekcja, setLekcja] = useState<DyktandoLekcja | null>(null);
+  const [lekcja, setLekcja] = useState<DyktandoLekcja | null>(
+    () => DYKTANDA.find((l) => l.id === startLekcja && l.od <= toDateKey(new Date())) ?? null,
+  );
   return (
     <JezykCtx.Provider value={konto.jezyk}>
       {lekcja ? (
@@ -1282,7 +1483,15 @@ export function KursPolski({
           }}
         />
       ) : (
-        <ListaKursu wyniki={wyniki} onStart={setLekcja} onWroc={onWroc} />
+        <ListaKursu
+          wyniki={wyniki}
+          uwagi={uwagi}
+          onStart={(l) => {
+            onPrzeczytane?.(uwagi.filter((u) => u.lekcja === l.id));
+            setLekcja(l);
+          }}
+          onWroc={onWroc}
+        />
       )}
     </JezykCtx.Provider>
   );

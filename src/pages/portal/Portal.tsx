@@ -7,7 +7,7 @@
 //   przyklady z kart "Ćwiczymy razem"), dla chetnych i dla nieobecnych,
 // - Polski krok po kroku: kurs pisowni dla uczniow z innym jezykiem ojczystym
 //   (tylko konta z polski = true), co tydzien nowa lekcja (src/pages/Dyktando.tsx).
-// Funkcje w Supabase: portal_* i dyktando_* (migracje 0042-0044).
+// Funkcje w Supabase: portal_* i dyktando_* (migracje 0042-0045, uwagi nauczyciela 0047).
 
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
@@ -15,7 +15,8 @@ import { getSupabase, isSupabaseConfigured } from '../../data/supabase';
 import { DYKTANDA, dostepneLekcje, type Jezyk } from '../../data/dyktanda';
 import { toDateKey } from '../../lib/dates';
 import { kluczZadania, maZadanie, type LekcjaZadania } from '../../lib/zadaniaDomowe';
-import { KursPolski } from '../Dyktando';
+import { KartaUwag, KursPolski, doNiedzieli, lekcjaDoZrobienia, nowaWPoniedzialek } from '../Dyktando';
+import { doPoprawy, dzienMiesiac, lekcjaTygodnia, type UwagaUcznia } from '../../lib/dyktandoPostepy';
 import { ZadanieDomowe } from './ZadanieDomowe';
 import { usunKonto, wczytajKonto, zapiszKonto, type KontoUcznia, type WynikUcznia } from './konto';
 import { stanWyzwania } from '../../lib/wyzwanie';
@@ -28,7 +29,7 @@ import { Ekran, Kafel, Karta, PasekWyzwania, Tydzien, btnCichy, btnGlowny } from
  */
 export const ZADANIA_Z_LEKCJI = false;
 
-type Widok = { co: 'start' } | { co: 'zadania' } | { co: 'zadanie'; lekcja: LekcjaZadania } | { co: 'polski' };
+type Widok = { co: 'start' } | { co: 'zadania' } | { co: 'zadanie'; lekcja: LekcjaZadania } | { co: 'polski'; lekcja?: string };
 
 const pole =
   'mt-1.5 w-full rounded-2xl border-2 border-[#d6d5cf] bg-white px-4 py-3 text-xl font-semibold tracking-wide outline-none focus:border-[#22a95b]';
@@ -172,21 +173,66 @@ function Start({
   konto,
   zadania,
   wyniki,
+  uwagi,
   onWidok,
+  onPrzeczytane,
   onWyloguj,
 }: {
   konto: KontoUcznia;
   zadania: LekcjaZadania[] | null;
   wyniki: WynikUcznia[] | null;
+  uwagi: UwagaUcznia[];
   onWidok: (w: Widok) => void;
+  onPrzeczytane: (u: UwagaUcznia) => void;
   onWyloguj: () => void;
 }) {
   const aktywneDni = new Set((wyniki ?? []).map((w) => toDateKey(new Date(w.created_at))));
   const nowe = (zadania ?? []).filter((l) => !najlepszy(wyniki, kluczZadania(l.lekcja_id)));
   const zrobionePolski = DYKTANDA.filter((l) => najlepszy(wyniki, l.id)).length;
-  const { dostepne } = dostepneLekcje(toDateKey(new Date()));
-  const czekaPolski = dostepne.filter((l) => !najlepszy(wyniki, l.id)).length;
+  const dzis = toDateKey(new Date());
+  const { dostepne, nastepna } = dostepneLekcje(dzis);
+  const tydzien = lekcjaTygodnia(dzis);
+  const zrobiona = (id: string) => !!najlepszy(wyniki, id);
+  const poprawa = (id: string) => doPoprawy(uwagi.find((u) => u.lekcja === id), (wyniki ?? []).filter((w) => w.lekcja === id));
+  const doZrobienia = lekcjaDoZrobienia(dzis, (id) => zrobiona(id) && !poprawa(id));
+  const zalegle = dostepne.filter((l) => !zrobiona(l.id) && l.id !== tydzien?.lekcja.id).length;
+  const es = konto.jezyk === 'es';
+  const opisPolski = (() => {
+    const doPoprawki = dostepne.find((l) => poprawa(l.id));
+    if (doPoprawki) {
+      return (
+        <>
+          ↻ Do poprawy: <b>{doPoprawki.temat}</b>
+          <span className="block text-white/80">{es ? 'Para corregir' : 'Треба виправити'}</span>
+        </>
+      );
+    }
+    if (tydzien && !zrobiona(tydzien.lekcja.id)) {
+      const t = doNiedzieli(tydzien.termin);
+      return (
+        <>
+          Lekcja tygodnia: <b>{tydzien.lekcja.temat}</b> · {t.pl}
+          <span className="block text-white/80">{es ? t.es : t.ua}</span>
+        </>
+      );
+    }
+    if (doZrobienia) return `Do nadrobienia: ${zalegle} · ${zrobionePolski}/${DYKTANDA.length}`;
+    if (nastepna) {
+      const t = nowaWPoniedzialek(nastepna.od);
+      return (
+        <>
+          ★ Wszystko zrobione · {t.pl}
+          <span className="block text-white/80">{es ? t.es : t.ua}</span>
+        </>
+      );
+    }
+    if (!dostepne.length) return `Start ${dzienMiesiac(DYKTANDA[0].od)}`;
+    return `Zrobione ${zrobionePolski}/${DYKTANDA.length}`;
+  })();
+  const nieprzeczytane = uwagi.filter((u) => !u.przeczytana_at);
   const tlum = (ua: string, es: string) => (konto.polski ? <span className="block text-sm font-medium text-white/80">{konto.jezyk === 'es' ? es : ua}</span> : null);
+  /** Tlumaczenie w jednej linii obok polskiego (tylko konta kursu). */
+  const obok = (ua: string, esTekst: string) => (konto.polski ? <span className="font-normal text-[#8a8a85]"> · {es ? esTekst : ua}</span> : null);
 
   return (
     <div>
@@ -195,19 +241,37 @@ function Start({
           {konto.login || 'uczeń'}
           {konto.klasa && <span className="font-normal text-[#9a9993]"> · {konto.klasa}</span>}
         </p>
-        <button type="button" onClick={onWyloguj} className={btnCichy}>Wyloguj</button>
+        <button type="button" onClick={onWyloguj} className={btnCichy}>
+          Wyloguj{obok('Вийти', 'Salir')}
+        </button>
       </div>
-      <h1 className="mt-5 text-[2rem] font-extrabold leading-tight">Dla ciebie</h1>
+      <h1 className="mt-5 text-[2rem] font-extrabold leading-tight">
+        Dla ciebie
+        {konto.polski && <span className="block text-lg font-semibold text-[#8a8a85]">{es ? 'Para ti' : 'Для тебе'}</span>}
+      </h1>
       {ZADANIA_Z_LEKCJI && (
         <div className="mt-4">
           <PasekWyzwania {...stanWyzwania(wyniki ?? [])} />
         </div>
       )}
       <Karta className="mt-4">
-        <p className="mb-3 text-sm font-bold text-[#5b5b57]">Dni z ćwiczeniami w tym tygodniu</p>
+        <p className="mb-3 text-sm font-bold text-[#5b5b57]">
+          Dni z ćwiczeniami w tym tygodniu{obok('Дні з вправами цього тижня', 'Días con ejercicios esta semana')}
+        </p>
         <Tydzien aktywneDni={aktywneDni} dzis={new Date()} />
       </Karta>
       <div className="mt-6 space-y-5">
+        {konto.polski && nieprzeczytane.length > 0 && (
+          <KartaUwag
+            uwagi={nieprzeczytane}
+            jezyk={konto.jezyk}
+            onOtworz={(lekcja) => {
+              nieprzeczytane.filter((u) => u.lekcja === lekcja).forEach(onPrzeczytane);
+              onWidok({ co: 'polski', lekcja });
+            }}
+            onPrzeczytane={onPrzeczytane}
+          />
+        )}
         {ZADANIA_Z_LEKCJI && <Kafel
           kolor="pomarancz"
           ikona="✏️"
@@ -227,7 +291,7 @@ function Start({
             kolor="fiolet"
             ikona="✍️"
             tytul={<>Polski krok po kroku{tlum('Польська крок за кроком', 'Polaco paso a paso')}</>}
-            opis={czekaPolski ? `Nowa lekcja czeka · ${zrobionePolski}/${DYKTANDA.length}` : `Zrobione ${zrobionePolski}/${DYKTANDA.length} - nowa w poniedziałek`}
+            opis={opisPolski}
             postep={{ zrobione: zrobionePolski, wszystkie: DYKTANDA.length }}
             onClick={() => onWidok({ co: 'polski' })}
           />
@@ -242,6 +306,7 @@ export function Portal() {
   const [widok, setWidok] = useState<Widok>({ co: 'start' });
   const [wyniki, setWyniki] = useState<WynikUcznia[] | null>(null);
   const [zadania, setZadania] = useState<LekcjaZadania[] | null>(null);
+  const [uwagi, setUwagi] = useState<UwagaUcznia[]>([]);
 
   useEffect(() => {
     document.title = 'Zadania domowe';
@@ -253,20 +318,24 @@ export function Portal() {
     setWidok({ co: 'start' });
     setWyniki(null);
     setZadania(null);
+    setUwagi([]);
   }, []);
 
   const odswiez = useCallback(async () => {
     if (!konto) return;
     const sb = getSupabase();
-    const [w, z, k] = await Promise.all([
+    const [w, z, k, u] = await Promise.all([
       sb.rpc('dyktando_moje_wyniki', { p_id: konto.id, p_haslo: konto.haslo }),
       ZADANIA_Z_LEKCJI ? sb.rpc('portal_zadania', { p_id: konto.id, p_haslo: konto.haslo }) : Promise.resolve({ data: [], error: null }),
       sb.rpc('portal_konto', { p_id: konto.id, p_haslo: konto.haslo }),
+      // Bez migracji 0047 funkcji nie ma - wtedy po prostu brak uwag.
+      sb.rpc('dyktando_moje_uwagi', { p_id: konto.id, p_haslo: konto.haslo }),
     ]);
     // Haslo zmienione przez nauczyciela - trzeba wpisac nowe z kartki.
     if (w.error?.code === '28P01' || k.error?.code === '28P01') return wyloguj();
     setWyniki((w.data ?? []) as WynikUcznia[]);
     setZadania(((z.data ?? []) as LekcjaZadania[]).filter(maZadanie));
+    setUwagi(u.error ? [] : ((u.data ?? []) as UwagaUcznia[]));
     const dane = (k.data as Array<{ login: string; jezyk: Jezyk; polski: boolean; klasa: string | null }> | null)?.[0];
     if (dane) {
       const nowe: KontoUcznia = { ...konto, login: dane.login ?? konto.login, jezyk: dane.jezyk === 'es' ? 'es' : 'ua', polski: dane.polski, klasa: dane.klasa };
@@ -276,6 +345,24 @@ export function Portal() {
       }
     }
   }, [konto, wyloguj]);
+
+  /** Uczen kliknal "Przeczytane" albo otworzyl lekcje z uwaga - Bartek widzi "przeczytana". */
+  const przeczytane = useCallback(
+    (lista: UwagaUcznia[]) => {
+      if (!konto) return;
+      const nowe = lista.filter((x) => !x.przeczytana_at);
+      if (nowe.length === 0) return;
+      const teraz = new Date().toISOString();
+      const ids = new Set(nowe.map((x) => x.id));
+      setUwagi((stare) => stare.map((x) => (ids.has(x.id) ? { ...x, przeczytana_at: teraz } : x)));
+      // Zapytanie Supabase rusza dopiero po then/await - samo wywolanie rpc() nic nie wysyla.
+      for (const x of nowe) {
+        void Promise.resolve(getSupabase().rpc('dyktando_uwaga_przeczytana', { p_id: konto.id, p_haslo: konto.haslo, p_uwaga: x.id }));
+      }
+    },
+    [konto],
+  );
+
 
   useEffect(() => {
     void odswiez();
@@ -304,7 +391,17 @@ export function Portal() {
 
   return (
     <Ekran>
-      {widok.co === 'start' && <Start konto={konto} zadania={zadania} wyniki={wyniki} onWidok={setWidok} onWyloguj={wyloguj} />}
+      {widok.co === 'start' && (
+        <Start
+          konto={konto}
+          zadania={zadania}
+          wyniki={wyniki}
+          uwagi={uwagi}
+          onWidok={setWidok}
+          onPrzeczytane={(u) => przeczytane([u])}
+          onWyloguj={wyloguj}
+        />
+      )}
       {widok.co === 'zadania' && (
         <ListaZadan zadania={zadania} wyniki={wyniki} onOtworz={(lekcja) => setWidok({ co: 'zadanie', lekcja })} onWroc={() => setWidok({ co: 'start' })} />
       )}
@@ -319,7 +416,15 @@ export function Portal() {
         />
       )}
       {widok.co === 'polski' && (
-        <KursPolski konto={konto} wyniki={wyniki} onWroc={() => setWidok({ co: 'start' })} onZapisano={() => void odswiez()} />
+        <KursPolski
+          konto={konto}
+          wyniki={wyniki}
+          uwagi={uwagi}
+          startLekcja={widok.lekcja}
+          onPrzeczytane={przeczytane}
+          onWroc={() => setWidok({ co: 'start' })}
+          onZapisano={() => void odswiez()}
+        />
       )}
     </Ekran>
   );
